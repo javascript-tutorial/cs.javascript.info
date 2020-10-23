@@ -1,121 +1,121 @@
-# An Introduction to JavaScript
+# Úvod do JavaScriptu
 
-Let's see what's so special about JavaScript, what we can achieve with it, and what other technologies play well with it.
+Podívejme se, co je na JavaScriptu tak zvláštního, čeho s ním můžeme dosáhnout a jaké další technologie s ním dobře hrají.
 
-## What is JavaScript?
+## Co je JavaScript?
 
-*JavaScript* was initially created to "make web pages alive".
+*JavaScript* byl původně vytvořen za účelem „oživení webových stránek“.
 
-The programs in this language are called *scripts*. They can be written right in a web page's HTML and run automatically as the page loads.
+Programy v tomto jazyce se nazývají *skripty*. Mohou být zapsány přímo do HTML webové stránky a spuštěny automaticky při načítání stránky.
 
-Scripts are provided and executed as plain text. They don't need special preparation or compilation to run.
+Skripty jsou poskytovány a spouštěny jako prostý text. Ke spuštění nepotřebují speciální přípravu ani kompilaci.
 
-In this aspect, JavaScript is very different from another language called [Java](https://en.wikipedia.org/wiki/Java_(programming_language)).
+V tomto ohledu se JavaScript velmi liší od jiného jazyka zvaného [Java](https://cs.wikipedia.org/wiki/Java_(programovací_jazyk)).
 
-```smart header="Why is it called <u>Java</u>Script?"
-When JavaScript was created, it initially had another name: "LiveScript". But Java was very popular at that time, so it was decided that positioning a new language as a "younger brother" of Java would help.
+```smart header="Proč se nazývá <u>Java</u>Script?"
+Když byl vytvořen JavaScript, měl zpočátku jiný název: „LiveScript“. Ale Java byla v té době velmi populární, takže bylo rozhodnuto, že umístění nového jazyka jako „mladšího bratra“ Javy pomůže.
 
-But as it evolved, JavaScript became a fully independent language with its own specification called [ECMAScript](http://en.wikipedia.org/wiki/ECMAScript), and now it has no relation to Java at all.
+Jak se ale vyvíjel, JavaScript se stal plně nezávislým jazykem s vlastní specifikací nazvanou [ECMAScript](http://cs.wikipedia.org/wiki/ECMAScript) a nyní již nemá vůbec žádný vztah k Javě.
 ```
 
-Today, JavaScript can execute not only in the browser, but also on the server, or actually on any device that has a special program called [the JavaScript engine](https://en.wikipedia.org/wiki/JavaScript_engine).
+Dnes se JavaScript může spouštět nejen v prohlížeči, ale také na serveru nebo ve skutečnosti na jakémkoli zařízení, které má speciální program s názvem [JavaScript engine](https://cs.wikipedia.org/wiki/JavaScript_engine).
 
-The browser has an embedded engine sometimes called a "JavaScript virtual machine".
+Prohlížeč má zabudovaný engine, který se někdy nazývá „virtuální stroj JavaScript“.
 
-Different engines have different "codenames". For example:
+Různé enginy mají různá „kódová jména“. Například:
 
-- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- in Chrome and Opera.
-- [SpiderMonkey](https://en.wikipedia.org/wiki/SpiderMonkey) -- in Firefox.
-- ...There are other codenames like "Chakra" for IE, "ChakraCore" for Microsoft Edge, "Nitro" and "SquirrelFish" for Safari, etc.
+- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) - v prohlížeči Chrome a Opera.
+- [SpiderMonkey](https://cs.wikipedia.org/wiki/SpiderMonkey) - ve Firefoxu.
+- ... Existují další kódová jména jako „Chakra“ pro IE, „ChakraCore“ pro Microsoft Edge, „Nitro“ a „SquirrelFish“ pro Safari atd.
 
-The terms above are good to remember because they are used in developer articles on the internet. We'll use them too. For instance, if "a feature X is supported by V8", then it probably works in Chrome and Opera.
+Výše uvedené výrazy je dobré si pamatovat, protože se používají v článcích pro vývojáře na internetu. Použijeme je také. Například pokud „funkce X je podporována ve V8“, tak pravděpodobně funguje v prohlížečích Chrome a Opera.
 
-```smart header="How do engines work?"
+```smart header="Jak fungují enginy?"
 
-Engines are complicated. But the basics are easy.
+Enginy jsou komplikované. Ale základy jsou snadné.
 
-1. The engine (embedded if it's a browser) reads ("parses") the script.
-2. Then it converts ("compiles") the script to the machine language.
-3. And then the machine code runs, pretty fast.
+1. Engine (vložený, pokud je to prohlížeč) čte („analyzuje“) skript.
+2. Poté převede („zkompiluje“) skript do jazyka stroje.
+3. A pak běží strojový kód, docela rychle.
 
-The engine applies optimizations at each step of the process. It even watches the compiled script as it runs, analyzes the data that flows through it, and further optimizes the machine code based on that knowledge.
+Engine aplikuje optimalizace v každém kroku procesu. Dokonce sleduje spuštěný kompilovaný skript, analyzuje data, která jím procházejí, a na základě těchto znalostí dále optimalizuje strojový kód.
 ```
 
-## What can in-browser JavaScript do?
+## Co může dělat JavaScript v prohlížeči?
 
-Modern JavaScript is a "safe" programming language. It does not provide low-level access to memory or CPU, because it was initially created for browsers which do not require it.
+Moderní JavaScript je „bezpečný“ programovací jazyk. Neposkytuje nízkoúrovňový přístup k paměti nebo CPU, protože byl původně vytvořen pro prohlížeče, které to nevyžadují.
 
-JavaScript's capabilities greatly depend on the environment it's running in. For instance, [Node.js](https://wikipedia.org/wiki/Node.js) supports functions that allow JavaScript to read/write arbitrary files, perform network requests, etc.
+Schopnosti JavaScriptu velmi závisí na prostředí, ve kterém běží. Například [Node.js](https://cs.wikipedia.org/wiki/Node.js) podporuje funkce, které umožňují JavaScriptu číst / zapisovat libovolné soubory, provádět síťové požadavky, atd.
 
-In-browser JavaScript can do everything related to webpage manipulation, interaction with the user, and the webserver.
+JavaScript v prohlížeči umožňuje vše, co souvisí s manipulací s webovými stránkami, interakcí s uživatelem a webovým serverem.
 
-For instance, in-browser JavaScript is able to:
+Například JavaScript v prohlížeči je schopen:
 
-- Add new HTML to the page, change the existing content, modify styles.
-- React to user actions, run on mouse clicks, pointer movements, key presses.
-- Send requests over the network to remote servers, download and upload files (so-called [AJAX](https://en.wikipedia.org/wiki/Ajax_(programming)) and [COMET](https://en.wikipedia.org/wiki/Comet_(programming)) technologies).
-- Get and set cookies, ask questions to the visitor, show messages.
-- Remember the data on the client-side ("local storage").
+- Přidat na stránku nový HTML, změnit stávající obsah, upravit styly.
+- Reagovat na akce uživatele, kliknutí myši, pohyby kurzoru, stisknutí kláves.
+- Odesílat požadavky přes síť na vzdálené servery, stahovat a nahrávat soubory (tzv. [AJAX](https://cs.wikipedia.org/wiki/AJAX) a [COMET](https://en.wikipedia.org/wiki/Comet_(programming)) technologie).
+- Získávat a nastavovat soubory cookie, klást návštěvníkovi dotazy, zobrazovat zprávy.
+- Pamatovat si data na straně klienta („místní úložiště“).
 
-## What CAN'T in-browser JavaScript do?
+## Co NEMŮŽE JavaScript v prohlížeči udělat?
 
-JavaScript's abilities in the browser are limited for the sake of the user's safety. The aim is to prevent an evil webpage from accessing private information or harming the user's data.
+Kvůli bezpečnosti uživatele jsou schopnosti JavaScriptu v prohlížeči omezené. Cílem je zabránit zlé webové stránce v přístupu k soukromým informacím nebo poškození dat uživatele.
 
-Examples of such restrictions include:
+Mezi příklady takových omezení patří:
 
-- JavaScript on a webpage may not read/write arbitrary files on the hard disk, copy them or execute programs. It has no direct access to OS functions.
+- JavaScript na webové stránce nemůže číst / zapisovat libovolné soubory na pevný disk, kopírovat je nebo spouštět programy. Nemá přímý přístup k funkcím OS.
 
-    Modern browsers allow it to work with files, but the access is limited and only provided if the user does certain actions, like "dropping" a file into a browser window or selecting it via an `<input>` tag.
+    Moderní prohlížeče umožňují práci se soubory, ale přístup je omezený a je k dispozici pouze v případě, že uživatel provede určité akce, například „přetažení“ souboru do okna prohlížeče nebo jeho výběr pomocí značky `<input>`.
 
-    There are ways to interact with camera/microphone and other devices, but they require a user's explicit permission. So a JavaScript-enabled page may not sneakily enable a web-camera, observe the surroundings and send the information to the [NSA](https://en.wikipedia.org/wiki/National_Security_Agency).
-- Different tabs/windows generally do not know about each other. Sometimes they do, for example when one window uses JavaScript to open the other one. But even in this case, JavaScript from one page may not access the other if they come from different sites (from a different domain, protocol or port).
+    Existují způsoby, jak komunikovat s kamerou / mikrofonem a jinými zařízeními, ale vyžadují výslovné povolení uživatele. Stránka s podporou JavaScriptu tedy nemůže tajně povolit webovou kameru, sledovat okolí a odesílat informace [NSA](https://cs.wikipedia.org/wiki/N%C3%A1rodn%C3%AD_bezpe%C4%8Dnostn%C3%AD_agentura).
+- Různé karty / okna o sobě obecně nevědí. Někdy ano, například když jedno okno používá JavaScript k otevření druhého. Ale i v tomto případě nemůže JavaScript z jedné stránky přistupovat na druhou, pokud pochází z různých webů (z jiné domény, protokolu nebo portu).
 
-    This is called the "Same Origin Policy". To work around that, *both pages* must agree for data exchange and contain a special JavaScript code that handles it. We'll cover that in the tutorial.
+    Toto se nazývá „politika stejného původu“. Aby to bylo možné obejít, musí *obě stránky* souhlasit s výměnou dat a musí obsahovat speciální JavaScript kód, který je zpracovává. Pokryjeme to v tutoriálu.
 
-    This limitation is, again, for the user's safety. A page from `http://anysite.com` which a user has opened must not be able to access another browser tab with the URL `http://gmail.com` and steal information from there.
-- JavaScript can easily communicate over the net to the server where the current page came from. But its ability to receive data from other sites/domains is crippled. Though possible, it requires explicit agreement (expressed in HTTP headers) from the remote side. Once again, that's a safety limitation.
+    Toto omezení je opět pro bezpečnost uživatele. Stránka z `http://anysite.com`, kterou si uživatel otevřel, nesmí mít přístup na jinou záložku prohlížeče s URL `http://gmail.com` a odtamtud si odnést informace.
+- JavaScript může snadno komunikovat přes síť na server, odkud pochází aktuální stránka. Ale jeho schopnost přijímat data z jiných webů / domén je omezená. I když je to možné, vyžaduje to ze vzdálené strany výslovný souhlas (vyjádřený v záhlavích HTTP). Opět je to bezpečnostní omezení.
 
 ![](limitations.svg)
 
-Such limits do not exist if JavaScript is used outside of the browser, for example on a server. Modern browsers also allow plugin/extensions which may ask for extended permissions.
+Taková omezení neexistují, pokud se JavaScript používá mimo prohlížeč, například na serveru. Moderní prohlížeče také umožňují zásuvné moduly / rozšíření, které mohou vyžadovat rozšířená oprávnění.
 
-## What makes JavaScript unique?
+## Čím je JavaScript jedinečný?
 
-There are at least *three* great things about JavaScript:
+V JavaScriptu jsou minimálně *tři* skvělé věci:
 
-```compare
-+ Full integration with HTML/CSS.
-+ Simple things are done simply.
-+ Support by all major browsers and enabled by default.
+```porovnej
++ Plná integrace s HTML / CSS.
++ Jednoduché věci se dělají jednoduše.
++ Podpora od všech hlavních prohlížečů a ve výchozím nastavení je povolen.
 ```
-JavaScript is the only browser technology that combines these three things.
+JavaScript je jediná technologie prohlížeče, která kombinuje tyto tři věci.
 
-That's what makes JavaScript unique. That's why it's the most widespread tool for creating browser interfaces.
+Díky tomu je JavaScript jedinečný. Proto je to nejrozšířenější nástroj pro vytváření rozhraní prohlížeče.
 
-That said, JavaScript also allows to create servers, mobile applications, etc.
+JavaScript také umožňuje vytvářet servery, mobilní aplikace atd.
 
-## Languages "over" JavaScript
+## Jazyky „oproti“ JavaScriptu
 
-The syntax of JavaScript does not suit everyone's needs. Different people want different features.
+Syntaxe JavaScriptu nevyhovuje potřebám každého. Různí lidé chtějí různé funkce.
 
-That's to be expected, because projects and requirements are different for everyone.
+To se dá očekávat, protože projekty a požadavky se u každého liší.
 
-So recently a plethora of new languages appeared, which are *transpiled* (converted) to JavaScript before they run in the browser.
+Nedávno se tedy objevila spousta nových jazyků, které jsou *transpilovány* (převedeny) na JavaScript před spuštěním v prohlížeči.
 
-Modern tools make the transpilation very fast and transparent, actually allowing developers to code in another language and auto-converting it "under the hood".
+Díky moderním nástrojům je transpilace velmi rychlá a transparentní, což vývojářům umožňuje kódovat v jiném jazyce a automaticky jej „pod kapotou“ převádět.
 
-Examples of such languages:
+Příklady takových jazyků:
 
-- [CoffeeScript](http://coffeescript.org/) is a "syntactic sugar" for JavaScript. It introduces shorter syntax, allowing us to write clearer and more precise code. Usually, Ruby devs like it.
-- [TypeScript](http://www.typescriptlang.org/) is concentrated on adding "strict data typing" to simplify the development and support of complex systems. It is developed by Microsoft.
-- [Flow](http://flow.org/) also adds data typing, but in a different way. Developed by Facebook.
-- [Dart](https://www.dartlang.org/) is a standalone language that has its own engine that runs in non-browser environments (like mobile apps), but also can be transpiled to JavaScript. Developed by Google.
-- [Brython](https://brython.info/) is a Python transpiler to JavaScript that allow to write application in pure Python without JavaScript.
+- [CoffeeScript](http://coffeescript.org/) je „syntaktický cukr“ pro JavaScript. Zavádí kratší syntaxi, což nám umožňuje psát jasnější a přesnější kód. Ruby vývojářům se to obvykle líbí.
+- [TypeScript](http://www.typescriptlang.org/) se soustředí na přidání „striktního silně typového systému“, aby se zjednodušil vývoj a podpora složitých systémů. Vyvinut společností Microsoft.
+- [Flow](http://flow.org/) také přidává typový systém, ale jiným způsobem. Vyvinut Facebookem.
+- [Dart](https://www.dartlang.org/) je samostatný jazyk, který má svůj vlastní engine, který běží mimo prohlížeč (třeba vývoj mobilní aplikace), ale lze jej také převést do JavaScriptu. Vyvinuto společností Google.
+- [Brython](https://brython.info/) je překladač Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
 
-There are more. Of course, even if we use one of transpiled languages, we should also know JavaScript to really understand what we're doing.
+Je jich více. Samozřejmě, i když používáme jeden z transpilovaných jazyků, měli bychom také znát JavaScript, abychom skutečně pochopili, co děláme.
 
-## Summary
+## Souhrn
 
-- JavaScript was initially created as a browser-only language, but it is now used in many other environments as well.
-- Today, JavaScript has a unique position as the most widely-adopted browser language with full integration in HTML/CSS.
-- There are many languages that get "transpiled" to JavaScript and provide certain features. It is recommended to take a look at them, at least briefly, after mastering JavaScript.
+- JavaScript byl původně vytvořen jako jazyk pouze pro prohlížeč, ale nyní se používá také v mnoha jiných prostředích.
+- JavaScript má dnes jedinečné postavení jako nejrozšířenější jazyk prohlížeče s plnou integrací do HTML / CSS.
+- Existuje mnoho jazyků, které jsou „převedeny“ do JavaScriptu a poskytují určité funkce. Po zvládnutí JavaScriptu je doporučeno se na ně alespoň krátce podívat.
