@@ -1,45 +1,60 @@
-# Editory kódu
+# Vývojářské konzole
 
-Editor kódu je místo, v němž programátoři tráví většinu času.
+Kód je náchylný k chybám. Je pravděpodobné, že budete dělat chyby... Eh, co to povídám? *Zaručeně* budete dělat chyby, aspoň jste-li člověk a ne [robot](https://cs.wikipedia.org/wiki/Bender_(Futurama)).
 
-Editory kódu se dělí na dva hlavní druhy: vývojová prostředí (IDE) a textové editory. Mnozí lidé používají jeden nástroj od každého druhu.
+V prohlížeči však uživatelé chyby standardně nevidí. Jestliže je tedy ve skriptu něco špatně, nevidíme co a nemůžeme to opravit.
 
-## IDE
+Abychom viděli chyby a získali spoustu dalších užitečných informací o skriptech, byly pro prohlížeče vyvinuty „vývojářské nástroje“.
 
-Pojem [vývojové prostředí](https://cs.wikipedia.org/wiki/Vývojové_prostředí), zkráceně IDE (z anglického Integrated Development Environment) označuje silný editor s mnoha schopnostmi, které obvykle fungují nad „celým projektem“. Jak název napovídá, není to pouhý editor, ale plnohodnotné „vývojové prostředí“.
+Většina vývojářů tíhne k vývoji v Chrome nebo Firefoxu, protože vývojářské nástroje v těchto prohlížečích jsou asi nejlepší. Jiné prohlížeče rovněž poskytují vývojářské nástroje, někdy se speciálními schopnostmi, ale obvykle jen „dohánějí“ Chrome nebo Firefox. Většina vývojářů tedy má svůj „oblíbený“ prohlížeč a k jinému se uchýlí jen tehdy, řeší-li problém specifický pro určitý prohlížeč.
 
-IDE načítá projekt (který se může skládat z mnoha souborů), umožňuje navigaci mezi soubory, poskytuje automatické doplňování založené na celém projektu (nejenom na právě otevřeném souboru) a spolupracuje se systémem správy verzí 
-(např. [git](https://git-scm.com/)), testovacím prostředím a dalšími pomůckami na „projektové úrovni“.
+Vývojářské nástroje jsou silné a mají mnoho funkcí. Pro začátek se naučíme, jak je otevřít, podívat se na chyby a spustit v nich příkazy JavaScriptu.
 
-Pokud jste si IDE ještě nevybrali, zvažte následující možnosti:
+## Google Chrome
 
-- [Visual Studio Code](https://code.visualstudio.com/) (různé platformy, zdarma).
-- [WebStorm](http://www.jetbrains.com/webstorm/) (různé platformy, placené).
+Otevřete si stránku [bug.html](bug.html).
 
-Pro Windows existuje také „Visual Studio“ (nezaměňovat s „Visual Studio Code“), což je placený, ale silný editor pouze pro Windows, velmi vhodný pro platformu .NET, který funguje dobře i pro JavaScript. Má i neplacenou verzi [Visual Studio Community](https://www.visualstudio.com/vs/community/).
+V JavaScriptovém kódu na této stránce je chyba. Před očima běžného uživatele je skrytá, a tak otevřeme vývojářské nástroje, abychom ji viděli.
 
-Mnoho IDE je placených, ale mají zkušební dobu. Jejich cena je obvykle zanedbatelná ve srovnání s platem kvalifikovaného vývojáře, takže si bez obav vyberte to, které se vám zdá nejlepší.
+Stiskněte `key:F12` nebo, používáte-li Macintosh, stiskněte `key:Cmd+Opt+J`.
+Na záložce „Console“ se otevřou vývojářské nástroje. Budou vypadat zhruba takto:
 
-## Textové editory
+![chrome](chrome.png)
 
-„Lehké“ textové editory (z anglického „lightweight editor“) nejsou tak silné jako IDE, ale jsou rychlé, elegantní a jednoduché. Používají se zejména k okamžitému otevření a editaci souboru.
+Přesný vzhled vývojářských nástrojů závisí na vaší verzi Chrome. Čas od času se mění, ale měl by se podobat obrázku.
 
-Hlavní rozdíl mezi „textovým editorem“ a „IDE“ je, že „IDE“ pracuje na projektové úrovni, takže si při spuštění načítá mnohem více dat, analyzuje strukturu projektu, je-li to zapotřebí, a podobně. Potřebujeme-li editovat pouze jeden soubor, textový editor bývá mnohem rychlejší.
+- Zde vidíte červenou chybovou zprávu. V tomto případě skript obsahuje neznámý příkaz „lalala“.
+- Napravo vidíte kliknutelný odkaz na zdrojový kód `bug.html:12` s číslem řádku, na němž se chyba vyskytla.
 
-V praxi mají textové editory obvykle množství nadstaveb včetně syntaktických analyzátorů a automatického doplňování podle souborů v celém adresáři, takže mezi textovými editory a vývojovými prostředími neexistuje ostrá hranice.
+Pod chybovou zprávou se nachází modrý symbol  `>`, který označuje „příkazový řádek“, na němž můžeme psát příkazy JavaScriptu. Stisknutím `key:Enter` je spustíte.
 
-Vaši pozornost si zasluhují následující možnosti:
+Nyní vidíme chyby a to pro začátek stačí. K vývojářským nástrojům se později vrátíme a ladění se budeme hlouběji věnovat v kapitole <info:debugging-chrome>.
 
-- [Atom](https://atom.io/) (různé platformy, zdarma).
-- [Visual Studio Code](https://code.visualstudio.com/) (různé platformy, zdarma).
-- [Sublime Text](http://www.sublimetext.com) (různé platformy, shareware).
-- [Notepad++](https://notepad-plus-plus.org/) (Windows, zdarma).
-- Také [Vim](http://www.vim.org/) a [Emacs](https://www.gnu.org/software/emacs/) jsou výborné, jestliže je umíte používat.
+```smart header="Víceřádkový vstup"
+Obvykle když napíšeme do konzole řádek kódu a stiskneme `key:Enter`, řádek se vykoná.
 
-## Nehádejme se
+Chcete-li vložit více řádků, stiskněte `key:Shift+Enter`. Tímto způsobem můžeme vkládat delší fragmenty JavaScriptového kódu.
+```
 
-Ve výše uvedených seznamech jsou zmíněny editory, které já nebo moji přátelé, které považuji za dobré vývojáře, dlouhou dobu používáme a jsme s nimi spokojeni.
+## Firefox, Edge a ostatní
 
-Svět je velký a existují v něm i jiné skvělé editory. Vyberte si prosím ten, který se vám nejvíce líbí.
+Většina ostatních prohlížečů rovněž využívá k otevření vývojářských nástrojů klávesu  `key:F12`.
 
-Výběr editoru, stejně jako výběr každého nástroje, je individuální záležitost a závisí na projektech, zvyklostech a osobním vkusu každého vývojáře.
+Jejich vzhled je vcelku podobný. Až budete vědět, jak používat nástroje v jednom prohlížeči (můžete začít s Chromem), budete moci snadno přejít na jiný.
+
+## Safari
+
+Safari (prohlížeč pro Macintosh, není podporován ve Windows nebo Linuxu) je v tomto ohledu trochu zvláštní. Nejprve musíme povolit „menu Vývoj“.
+
+Otevřete „Preferences“ a jděte na záložku „Advanced“. Dole uvidíte checkbox, který zaškrtněte:
+
+![safari](safari.png)
+
+Nyní můžete zapínat konzoli pomocí `key:Cmd+Opt+C`. Všimněte si také, že v horním menu se objevila nová položka s názvem „Develop“ („Vývoj“), která obsahuje mnoho příkazů a možností.
+
+## Shrnutí
+
+- Vývojářské nástroje nám umožňují vidět chyby, prozkoumávat proměnné a mnoho dalšího.
+- Ve většině prohlížečů ve Windows se otevírají klávesou `key:F12`. Chrome pro Mac vyžaduje `key:Cmd+Opt+J`, Safari `key:Cmd+Opt+C` (zde je třeba je napřed povolit).
+
+Nyní máme prostředí připraveno a v příští kapitole již přejdeme k samotnému JavaScriptu.
