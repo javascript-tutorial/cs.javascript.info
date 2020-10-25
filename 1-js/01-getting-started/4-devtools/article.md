@@ -1,12 +1,12 @@
-# Vývojářské konzole
+# Vývojářská konzole
 
-Kód je náchylný k chybám. Je pravděpodobné, že budete dělat chyby... Eh, co to povídám? *Zaručeně* budete dělat chyby, aspoň jste-li člověk a ne [robot](https://cs.wikipedia.org/wiki/Bender_(Futurama)).
+Kód je náchylný k chybám. Je pravděpodobné, že budete dělat chyby... Co to povídám? *Zaručeně* budete dělat chyby, jestliže jste člověk a ne [robot](https://cs.wikipedia.org/wiki/Bender_(Futurama)).
 
 V prohlížeči však uživatelé chyby standardně nevidí. Jestliže je tedy ve skriptu něco špatně, nevidíme co a nemůžeme to opravit.
 
-Abychom viděli chyby a získali spoustu dalších užitečných informací o skriptech, byly pro prohlížeče vyvinuty „vývojářské nástroje“.
+Abychom viděli chyby a získali spoustu dalších užitečných informací o skriptech, byly do prohlížečů zahrnuty „vývojářské nástroje“.
 
-Většina vývojářů tíhne k vývoji v Chrome nebo Firefoxu, protože vývojářské nástroje v těchto prohlížečích jsou asi nejlepší. Jiné prohlížeče rovněž poskytují vývojářské nástroje, někdy se speciálními schopnostmi, ale obvykle jen „dohánějí“ Chrome nebo Firefox. Většina vývojářů tedy má svůj „oblíbený“ prohlížeč a k jinému se uchýlí jen tehdy, řeší-li problém specifický pro určitý prohlížeč.
+Většina vývojářů tíhne k vývoji v Chrome nebo Firefoxu, protože mají vyhlášené vývojářské nástroje. Jiné prohlížeče rovněž poskytují vývojářské nástroje, někdy se speciálními vlastnostmi, ale obvykle jen „dohánějí“ Chrome nebo Firefox. Většina vývojářů tedy má svůj „oblíbený“ prohlížeč a k jinému se uchýlí jen tehdy, řeší-li problém specifický pro určitý prohlížeč.
 
 Vývojářské nástroje jsou silné a mají mnoho funkcí. Pro začátek se naučíme, jak je otevřít, podívat se na chyby a spustit v nich příkazy JavaScriptu.
 
@@ -16,17 +16,20 @@ Otevřete si stránku [bug.html](bug.html).
 
 V JavaScriptovém kódu na této stránce je chyba. Před očima běžného uživatele je skrytá, a tak otevřeme vývojářské nástroje, abychom ji viděli.
 
-Stiskněte `key:F12` nebo, používáte-li Macintosh, stiskněte `key:Cmd+Opt+J`.
-Na záložce „Console“ se otevřou vývojářské nástroje. Budou vypadat zhruba takto:
+Stiskněte `key:F12` nebo, máte-li Mac, stiskněte `key:Cmd+Opt+J`.
+
+Otevřou se vývojářské nástroje na záložce „Console“. 
+
+Budou vypadat zhruba takto:
 
 ![chrome](chrome.png)
 
-Přesný vzhled vývojářských nástrojů závisí na vaší verzi Chrome. Čas od času se mění, ale měl by se podobat obrázku.
+Vzhled vývojářských nástrojů závisí na vaší verzi Chrome. Čas od času se mění, ale měl by se podobat obrázku.
 
 - Zde vidíte červenou chybovou zprávu. V tomto případě skript obsahuje neznámý příkaz „lalala“.
 - Napravo vidíte kliknutelný odkaz na zdrojový kód `bug.html:12` s číslem řádku, na němž se chyba vyskytla.
 
-Pod chybovou zprávou se nachází modrý symbol  `>`, který označuje „příkazový řádek“, na němž můžeme psát příkazy JavaScriptu. Stisknutím `key:Enter` je spustíte.
+Pod chybovou zprávou se nachází modrý symbol `>`, který označuje „příkazový řádek“, na němž můžeme psát příkazy JavaScriptu. Stisknutím `key:Enter` je spustíte.
 
 Nyní vidíme chyby a to pro začátek stačí. K vývojářským nástrojům se později vrátíme a ladění se budeme hlouběji věnovat v kapitole <info:debugging-chrome>.
 
@@ -44,13 +47,13 @@ Jejich vzhled je vcelku podobný. Až budete vědět, jak používat nástroje v
 
 ## Safari
 
-Safari (prohlížeč pro Macintosh, není podporován ve Windows nebo Linuxu) je v tomto ohledu trochu zvláštní. Nejprve musíme povolit „menu Vývoj“.
+Safari (prohlížeč pro Mac, není podporován ve Windows nebo Linuxu) je v tomto ohledu trochu zvláštní. Nejprve musíme povolit „menu Vývoj“.
 
 Otevřete „Preferences“ a jděte na záložku „Advanced“. Dole uvidíte checkbox, který zaškrtněte:
 
 ![safari](safari.png)
 
-Nyní můžete zapínat konzoli pomocí `key:Cmd+Opt+C`. Všimněte si také, že v horním menu se objevila nová položka s názvem „Develop“ („Vývoj“), která obsahuje mnoho příkazů a možností.
+Nyní můžete zapínat konzoli pomocí `key:Cmd+Opt+C`. Všimněte si také, že v horním menu se objevila nová položka s názvem „Develop“ („Vývoj“), která obsahuje mnoho příkazů a nastavení.
 
 ## Shrnutí
 
