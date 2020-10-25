@@ -6,10 +6,9 @@ Editory kódu se dělí na dva hlavní druhy: vývojová prostředí (IDE) a tex
 
 ## IDE
 
-Pojem [vývojové prostředí](https://cs.wikipedia.org/wiki/Vývojové_prostředí), zkráceně IDE (z anglického Integrated Development Environment) označuje silný editor s mnoha schopnostmi, které obvykle fungují nad „celým projektem“. Jak název napovídá, není to pouhý editor, ale plnohodnotné „vývojové prostředí“.
+Pojem [vývojové prostředí](https://cs.wikipedia.org/wiki/Vývojové_prostředí), zkráceně IDE (z anglického Integrated Development Environment) označuje  specializovaný editor s rozšířenou funkčností, který obvykle pracuje s celým projektovým adresářem. Jak název napovídá, není to pouhý editor, ale plnohodnotné „vývojové prostředí“.
 
-IDE načítá projekt (který se může skládat z mnoha souborů), umožňuje navigaci mezi soubory, poskytuje automatické doplňování založené na celém projektu (nejenom na právě otevřeném souboru) a spolupracuje se systémem správy verzí 
-(např. [git](https://git-scm.com/)), testovacím prostředím a dalšími pomůckami na „projektové úrovni“.
+IDE načítá projekt (který se může skládat z mnoha souborů), umožňuje navigaci mezi soubory, radí vývojáři skrze automatické doplňování založené na celém projektu (nejenom na právě otevřeném souboru) a je propojen s verzovacím systémem (např. [git](https://git-scm.com/)), testovacím prostředím a dalšími pomůckami na „projektové úrovni“.
 
 Pokud jste si IDE ještě nevybrali, zvažte následující možnosti:
 
@@ -22,11 +21,13 @@ Mnoho IDE je placených, ale mají zkušební dobu. Jejich cena je obvykle zaned
 
 ## Textové editory
 
-„Lehké“ textové editory (z anglického „lightweight editor“) nejsou tak silné jako IDE, ale jsou rychlé, elegantní a jednoduché. Používají se zejména k okamžitému otevření a editaci souboru.
+„Lehké“ textové editory (z anglického „lightweight editor“) nejsou tak silné jako IDE, ale jsou rychlé, elegantní a jednoduché.
 
-Hlavní rozdíl mezi „textovým editorem“ a „IDE“ je, že „IDE“ pracuje na projektové úrovni, takže si při spuštění načítá mnohem více dat, analyzuje strukturu projektu, je-li to zapotřebí, a podobně. Potřebujeme-li editovat pouze jeden soubor, textový editor bývá mnohem rychlejší.
+Používají se zejména k okamžitému otevření a editaci souboru.
 
-V praxi mají textové editory obvykle množství nadstaveb včetně syntaktických analyzátorů a automatického doplňování podle souborů v celém adresáři, takže mezi textovými editory a vývojovými prostředími neexistuje ostrá hranice.
+Hlavní rozdíl mezi „textovým editorem“ a „IDE“ je, že „IDE“ pracuje na projektové úrovni, takže si při spuštění načítá mnohem více dat, analyzuje strukturu projektu, je-li to zapotřebí, a podobně. Potřebujeme-li editovat pouze jeden soubor, textový editor to zvládne mnohem rychleji.
+
+V praxi mají textové editory obvykle velké množství zásuvných modulů a rozšíření včetně syntaktických analyzátorů a automatického doplňování na adresářové úrovni, takže mezi textovými editory a vývojovými prostředími neexistuje pevně daná hranice.
 
 Vaši pozornost si zasluhují následující možnosti:
 
