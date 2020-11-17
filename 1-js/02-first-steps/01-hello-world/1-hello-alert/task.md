@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Show an alert
+# Zobrazte zprávu
 
-Create a page that shows a message "I'm JavaScript!".
+Vytvořte stránku, která zobrazí zprávu „Já jsem JavaScript!“.
 
-Do it in a sandbox, or on your hard drive, doesn't matter, just ensure that it works.
+Nezáleží na tom, zda to uděláte na pískovišti nebo na svém harddisku, jen se snažte, aby to fungovalo.
 
 [demo src="solution"]
 
