@@ -121,77 +121,78 @@ Nyní nastal čas *trasovat* skript.
 
 K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <!-- https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/src/largeIcons.svg -->
-<span class="devtools" style="background-position:-146px -168px"></span> -- "Resume": continue the execution, hotkey `key:F8`.
-: Resumes the execution. If there are no additional breakpoints, then the execution just continues and the debugger loses control.
+<span class="devtools" style="background-position:-146px -168px"></span> -- "Resume": pokračuje v provádění, klávesa `key:F8`.
 
-    Here's what we can see after a click on it:
+: Pokračuje v provádění programu. Nejsou-li další breakpointy, skript se bude provádět dál a debugger nad ním ztratí kontrolu.
+
+    Toto uvidíme poté, co na něj klikneme:
 
     ![](chrome-sources-debugger-trace-1.svg)
 
-    The execution has resumed, reached another breakpoint inside `say()` and paused there. Take a look at the "Call Stack" at the right. It has increased by one more call. We're inside `say()` now.
+    Výkon skriptu se obnovil, dosáhl dalšího breakpointu uvnitř `řekni()` a zastavil se tam. Podívejte se na volací zásobník („Call Stack“) vpravo. Zvětšil se o jedno volání. Nyní jsme uvnitř `say()`.
 
-<span class="devtools" style="background-position:-200px -190px"></span> -- "Step": run the next command, hotkey `key:F9`.
-: Run the next statement. If we click it now, `alert` will be shown.
+<span class="devtools" style="background-position:-200px -190px"></span> -- "Step": vykoná další příkaz, klávesa `key:F9`.
+: Spustí další příkaz. Když na něj nyní klikneme, zobrazí se `alert`.
 
-    Clicking this again and again will step through all script statements one by one.
+    Dalším a dalším klikáním můžeme procházet všechny příkazy skriptu jeden po druhém.
 
-<span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": run the next command, but *don't go into a function*, hotkey `key:F10`.
-: Similar to the previous the "Step" command, but behaves differently if the next statement is a function call. That is: not a built-in, like `alert`, but a function of our own.
+<span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": vykoná další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
+: Podobá se předchozímu příkazu „Step“, ale chová se jinak, jestliže dalším příkazem je volání funkce. Ne však vestavěné funkce jako `alert`, ale vlastní funkce.
 
-    The "Step" command goes into it and pauses the execution at its first line, while "Step over" executes the nested function call invisibly, skipping the function internals.
+    Příkaz „Step“ do ní vstoupí a pozastaví provádění na jejím prvním řádku, zatímco „Step over“ neviditelně zavolá funkci a přeskočí její vnitřek.
 
-    The execution is then paused immediately after that function.
+    Provádění se pak ihned po této funkci pozastaví.
 
-    That's good if we're not interested to see what happens inside the function call.
+    To se hodí, když nás nezajímá, co se děje uvnitř volané funkce.
 
-<span class="devtools" style="background-position:-4px -194px"></span> -- "Step into", hotkey `key:F11`.
-: That's similar to "Step", but behaves differently in case of asynchronous function calls. If you're only starting to learn JavaScript, then you can ignore the difference, as we don't have asynchronous calls yet.
+<span class="devtools" style="background-position:-4px -194px"></span> -- "Step into", klávesa `key:F11`.
+: Podobá se „Step“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož jsme asynchronní volání funkcí ještě neprobírali.
 
-    For the future, just note that "Step" command ignores async actions, such as `setTimeout` (scheduled function call), that execute later. The "Step into" goes into their code, waiting for them if necessary. See [DevTools manual](https://developers.google.com/web/updates/2018/01/devtools#async) for more details.
+    Do budoucna si jen pamatujte, že příkaz „Step“ ignoruje asynchronní akce, například `setTimeout` (volání funkce za určitou dobu), které spustí později. Příkaz „Step into“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz See [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
 
-<span class="devtools" style="background-position:-32px -194px"></span> -- "Step out": continue the execution till the end of the current function, hotkey `key:Shift+F11`.
-: Continue the execution and stop it at the very last line of the current function. That's handy when we accidentally entered a nested call using <span class="devtools" style="background-position:-200px -190px"></span>, but it does not interest us, and we want to continue to its end as soon as possible.
+<span class="devtools" style="background-position:-32px -194px"></span> -- "Step out": pokračuje v provádění až do konce právě prováděné funkce, klávesa `key:Shift+F11`.
+: Pokračuje v provádění a zastaví se až na posledním řádku právě prováděné funkce. To se hodí, když jsme omylem vstoupili do funkce pomocí <span class="devtools" style="background-position:-200px -190px"></span>, ale ta nás nezajímá, a tak chceme co nejrychleji dospět k jejímu konci.
 
-<span class="devtools" style="background-position:-61px -74px"></span> -- enable/disable all breakpoints.
-: That button does not move the execution. Just a mass on/off for breakpoints.
+<span class="devtools" style="background-position:-61px -74px"></span> -- povolí/zakáže všechny breakpointy.
+: Toto tlačítko nemá vliv na provádění, jen hromadně zapne/vypne všechny breakpointy.
 
-<span class="devtools" style="background-position:-90px -146px"></span> -- enable/disable automatic pause in case of an error.
-: When enabled, and the developer tools is open, a script error automatically pauses the execution. Then we can analyze variables to see what went wrong. So if our script dies with an error, we can open debugger, enable this option and reload the page to see where it dies and what's the context at that moment.
+<span class="devtools" style="background-position:-90px -146px"></span> -- povolí/zakáže automatické pozastavení v případě chyby.
+: Když je povoleno a vývojářské nástroje jsou otevřeny, chyba ve skriptu způsobí automatické pozastavení jeho výkonu. Pak můžeme analyzovat jeho proměnné, abychom viděli, co je špatně. Když tedy náš skript skončí s chybou, můžeme otevřít debugger, povolit tuto možnost a znovu načíst stránku, abychom viděli, kde spadl a jaký je v tom okamžiku jeho kontext.
 
-```smart header="Continue to here"
-Right click on a line of code opens the context menu with a great option called "Continue to here".
+```smart header="Pokračovat až sem"
+Po kliknutí pravým tlačítkem myši na řádek kódu se otevře kontextové menu s výtečnou možností „Pokračovat až sem“ („Continue to here“).
 
-That's handy when we want to move multiple steps forward to the line, but we're too lazy to set a breakpoint.
+To se hodí, když chceme překonat více kroků až k tomuto řádku, ale nechce se nám nastavovat breakpoint.
 ```
 
-## Logging
+## Logování
 
-To output something to console from our code, there's `console.log` function.
+Chceme-li vypsat něco z našeho kódu na konzoli, máme k tomu funkci `console.log`.
 
-For instance, this outputs values from `0` to `4` to console:
+Například tento kód vypíše na konzoli hodnoty od `0` do `4`:
 
 ```js run
-// open console to see
+// otevřete si konzoli a uvidíte
 for (let i = 0; i < 5; i++) {
-  console.log("value,", i);
+  console.log("hodnota,", i);
 }
 ```
 
-Regular users don't see that output, it is in the console. To see it, either open the Console panel of developer tools or press `key:Esc` while in another panel: that opens the console at the bottom.
+Běžní uživatelé tento výstup neuvidí, vypíše se na konzoli. Abyste jej viděli, otevřete panel Console vývojářských nástrojů nebo stiskněte `key:Esc`, když jste v jiném panelu: tím se dole otevře konzole.
 
-If we have enough logging in our code, then we can see what's going on from the records, without the debugger.
+Máme-li v kódu dostatek logování, uvidíme z těchto záznamů, co se děje, i bez debuggeru.
 
-## Summary
+## Shrnutí
 
-As we can see, there are three main ways to pause a script:
-1. A breakpoint.
-2. The `debugger` statements.
-3. An error (if dev tools are open and the button <span class="devtools" style="background-position:-90px -146px"></span> is "on").
+Jak vidíme, existují tři hlavní způsoby, jak pozastavit skript:
+1. Breakpoint.
+2. Příkazy `debugger`.
+3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
 
-When paused, we can debug - examine variables and trace the code to see where the execution goes wrong.
+Když je kód pozastaven, můžeme jej ladit - prozkoumávat proměnné a trasovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
 
-There are many more options in developer tools than covered here. The full manual is at <https://developers.google.com/web/tools/chrome-devtools>.
+Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 
-The information from this chapter is enough to begin debugging, but later, especially if you do a lot of browser stuff, please go there and look through more advanced capabilities of developer tools.
+Informace v této kapitole postačí k začátku ladění, ale později, zvláště budete-li vytvářet hodně materiálu v prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
 
-Oh, and also you can click at various places of dev tools and just see what's showing up. That's probably the fastest route to learn dev tools. Don't forget about the right click and context menus!
+A také můžete klikat na různá místa vývojářských nástrojů a jen se dívat, co se ukáže. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
