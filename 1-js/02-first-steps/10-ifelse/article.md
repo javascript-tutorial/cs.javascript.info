@@ -1,239 +1,237 @@
-# Conditional operators: if, '?'
+# Podmíněné operátory: if, „?“
 
-Sometimes, we need to perform different actions based on different conditions.
+Někdy potřebujeme provést různé akce v závislosti na platnosti různých podmínek. K tomu můžeme použít příkaz `if` a podmíněný operátor `?`, který se také nazývá operátor „otazníku“.
 
-To do that, we can use the `if` statement and the conditional operator `?`, that's also called a "question mark" operator.
+## Příkaz „if“
 
-## The "if" statement
+Příkaz `if(...)` vyhodnotí podmínku v závorkách a je-li výsledek `true`, vykoná blok kódu.
 
-The `if(...)` statement evaluates a condition in parentheses and, if the result is `true`, executes a block of code.
-
-For example:
+Příklad:
 
 ```js run
-let year = prompt('In which year was ECMAScript-2015 specification published?', '');
+let rok = prompt('Ve kterém roce byla publikována specifikace ECMAScript-2015?', '');
 
 *!*
-if (year == 2015) alert( 'You are right!' );
+if (rok == 2015) alert( 'Máte pravdu!' );
 */!*
 ```
 
-In the example above, the condition is a simple equality check (`year == 2015`), but it can be much more complex.
+V uvedeném příkladu je podmínkou jednoduchý test rovnosti (`rok == 2015`), ale může být i mnohem složitější.
 
-If we want to execute more than one statement, we have to wrap our code block inside curly braces:
+Jestliže chceme vykonat více než jeden příkaz, musíme náš blok kódu uzavřít do složených závorek:
 
 ```js
-if (year == 2015) {
-  alert( "That's correct!" );
-  alert( "You're so smart!" );
+if (rok == 2015) {
+  alert( "Správně!" );
+  alert( "Vy jste tak chytrý!" );
 }
 ```
 
-We recommend wrapping your code block with curly braces `{}` every time you use an `if` statement, even if there is only one statement to execute. Doing so improves readability.
+Doporučujeme uzavírat blok kódu do složených závorek `{}` vždy, když použijete příkaz `if`, i když má vykonat pouze jeden příkaz. Zlepšuje to čitelnost.
 
-## Boolean conversion
+## Konverze na boolean
 
-The `if (…)` statement evaluates the expression in its parentheses and converts the result to a boolean.
+Příkaz `if (…)` vyhodnotí výraz v závorkách a převede výsledek na typ boolean.
 
-Let's recall the conversion rules from the chapter <info:type-conversions>:
+Zopakujme si pravidla konverze z kapitoly <info:type-conversions>:
 
-- A number `0`, an empty string `""`, `null`, `undefined`, and `NaN` all become `false`. Because of that they are called "falsy" values.
-- Other values become `true`, so they are called "truthy".
+- Číslo `0`, prázdný řetězec `""`, `null`, `undefined` a `NaN` se převedou na `false`. Proto se jim také říká „nepravdivé“ hodnoty.
+- Ostatní hodnoty se převedou na `true`, proto se jim říká „pravdivé“.
 
-So, the code under this condition would never execute:
+Kód pod touto podmínkou se tedy nikdy nevykoná:
 
 ```js
-if (0) { // 0 is falsy
+if (0) { // 0 je nepravdivá
   ...
 }
 ```
 
-...and inside this condition -- it always will:
+...a pod touto podmínkou se naopak vykoná vždy:
 
 ```js
-if (1) { // 1 is truthy
+if (1) { // 1 je pravdivá
   ...
 }
 ```
 
-We can also pass a pre-evaluated boolean value to `if`, like this:
+Můžeme také do `if` předat předem vypočtenou hodnotu, například takto:
 
 ```js
-let cond = (year == 2015); // equality evaluates to true or false
+let podmínka = (rok == 2015); // rovnost se vyhodnotí jako true nebo false
 
-if (cond) {
+if (podmínka) {
   ...
 }
 ```
 
-## The "else" clause
+## Klauzule „else“
 
-The `if` statement may contain an optional "else" block. It executes when the condition is false.
+Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka není splněna.
 
-For example:
+Příklad:
 ```js run
-let year = prompt('In which year was the ECMAScript-2015 specification published?', '');
+let rok = prompt('Ve kterém roce byla publikována specifikace ECMAScript-2015?', '');
 
-if (year == 2015) {
-  alert( 'You guessed it right!' );
+if (rok == 2015) {
+  alert( 'Uhádl jste!' );
 } else {
-  alert( 'How can you be so wrong?' ); // any value except 2015
+  alert( 'Jak se můžete takhle zmýlit?' ); // jakákoli jiná hodnota než 2015
 }
 ```
 
-## Several conditions: "else if"
+## Více podmínek za sebou: „else if“
 
-Sometimes, we'd like to test several variants of a condition. The `else if` clause lets us do that.
+Někdy bychom chtěli otestovat několik variant podmínky. To nám umožní klauzule `else if`.
 
-For example:
+Příklad:
 
 ```js run
-let year = prompt('In which year was the ECMAScript-2015 specification published?', '');
+let rok = prompt('Ve kterém roce byla publikována specifikace ECMAScript-2015?', '');
 
-if (year < 2015) {
-  alert( 'Too early...' );
-} else if (year > 2015) {
-  alert( 'Too late' );
+if (rok < 2015) {
+  alert( 'Příliš brzy...' );
+} else if (rok > 2015) {
+  alert( 'Příliš pozdě...' );
 } else {
-  alert( 'Exactly!' );
+  alert( 'Přesně!' );
 }
 ```
 
-In the code above, JavaScript first checks `year < 2015`. If that is falsy, it goes to the next condition `year > 2015`. If that is also falsy, it shows the last `alert`.
+Ve výše uvedeném kódu JavaScript napřed ověří podmínku `rok < 2015`. Není-li splněna, pokračuje k další podmínce `rok > 2015`. Není-li splněna ani ta, zobrazí poslední `alert`.
 
-There can be more `else if` blocks. The final `else` is optional.
+Bloků `else if` může být více. Závěrečné `else` není povinné.
 
-## Conditional operator '?'
+## Podmíněný operátor „?“
 
-Sometimes, we need to assign a variable depending on a condition.
+Někdy potřebujeme přiřadit do proměnné různou hodnotu v závislosti na splnění určité podmínky.
 
-For instance:
+Příklad:
 
 ```js run no-beautify
-let accessAllowed;
-let age = prompt('How old are you?', '');
+let přístupPovolen;
+let věk = prompt('Kolik je vám let?', '');
 
 *!*
-if (age > 18) {
-  accessAllowed = true;
+if (věk > 18) {
+  přístupPovolen = true;
 } else {
-  accessAllowed = false;
+  přístupPovolen = false;
 }
 */!*
 
-alert(accessAllowed);
+alert(přístupPovolen);
 ```
 
-The so-called "conditional" or "question mark" operator lets us do that in a shorter and simpler way.
+Provést to kratším a jednodušším způsobem nám umožní tzv. „podmíněný“ operátor neboli operátor „otazníku“.
 
-The operator is represented by a question mark `?`. Sometimes it's called "ternary", because the operator has three operands. It is actually the one and only operator in JavaScript which has that many.
+Tento operátor je reprezentován otazníkem `?`. Někdy se nazývá „ternární“, protože má tři operandy. Je to v současnosti jediný operátor v JavaScriptu, který jich má tolik.
 
-The syntax is:
+Jeho syntaxe je:
 ```js
-let result = condition ? value1 : value2;
+let výsledek = podmínka ? hodnota1 : hodnota2;
 ```
 
-The `condition` is evaluated: if it's truthy then `value1` is returned, otherwise -- `value2`.
+Vyhodnotí se `podmínka`: je-li splněna, vrátí se `hodnota1`, jinak se vrátí `hodnota2`.
 
-For example:
-
-```js
-let accessAllowed = (age > 18) ? true : false;
-```
-
-Technically, we can omit the parentheses around `age > 18`. The question mark operator has a low precedence, so it executes after the comparison `>`.
-
-This example will do the same thing as the previous one:
+Příklad:
 
 ```js
-// the comparison operator "age > 18" executes first anyway
-// (no need to wrap it into parentheses)
-let accessAllowed = age > 18 ? true : false;
+let přístupPovolen = (věk > 18) ? true : false;
 ```
 
-But parentheses make the code more readable, so we recommend using them.
+Technicky můžeme závorky kolem `věk > 18` vynechat. Operátor otazníku má nízkou prioritu, a proto se vykoná až po porovnání `>`.
+
+Tento příklad provede totéž jako předchozí:
+
+```js
+// porovnávací operátor „věk > 18“ se vykoná jako první
+// (není třeba jej uzavírat do závorek)
+let přístupPovolen = věk > 18 ? true : false;
+```
+
+Závorky však zlepšují čitelnost kódu, a proto je doporučujeme používat.
 
 ````smart
-In the example above, you can avoid using the question mark operator because the comparison itself returns `true/false`:
+Ve výše uvedeném příkladu se můžeme operátoru otazníku úplně vyhnout, protože samo porovnání vrací `true/false`:
 
 ```js
-// the same
-let accessAllowed = age > 18;
+// totéž
+let přístupPovolen = věk > 18;
 ```
 ````
 
-## Multiple '?'
+## Více „?“ za sebou
 
-A sequence of question mark operators `?` can return a value that depends on more than one condition.
+Sekvence několika operátorů otazníku `?` může vrátit hodnotu, která závisí na více než jedné podmínce.
 
-For instance:
+Příklad:
 ```js run
-let age = prompt('age?', 18);
+let věk = prompt('Věk?', 18);
 
-let message = (age < 3) ? 'Hi, baby!' :
-  (age < 18) ? 'Hello!' :
-  (age < 100) ? 'Greetings!' :
-  'What an unusual age!';
+let zpráva = (věk < 3) ? 'Nazdar, mimino!' :
+  (věk < 18) ? 'Ahoj!' :
+  (věk < 100) ? 'Dobrý den!' :
+  'To je ale vysoký věk!';
 
-alert( message );
+alert( zpráva );
 ```
 
-It may be difficult at first to grasp what's going on. But after a closer look, we can see that it's just an ordinary sequence of tests:
+Na první pohled může být obtížné pochopit, o co tady jde. Po bližším prozkoumání však vidíme, že to je jen obyčejná posloupnost testů:
 
-1. The first question mark checks whether `age < 3`.
-2. If true -- it returns `'Hi, baby!'`. Otherwise, it continues to the expression after the colon '":"', checking `age < 18`.
-3. If that's true -- it returns `'Hello!'`. Otherwise, it continues to the expression after the next colon '":"', checking `age < 100`.
-4. If that's true -- it returns `'Greetings!'`. Otherwise, it continues to the expression after the last colon '":"', returning `'What an unusual age!'`.
+1. První otazník ověří, zda `věk < 3`.
+2. Pokud ano, vrátí `'Nazdar, mimino!'`. Jinak pokračuje výrazem za dvojtečkou `:` a ověří `věk < 18`.
+3. Pokud to platí, vrátí `'Ahoj!'`. Jinak pokračuje výrazem za další dvojtečkou `:` a ověří `věk < 100`.
+4. Pokud to platí, vrátí `'Dobrý den!'`. Jinak pokračuje výrazem za poslední dvojtečkou `:` a vrátí `'To je ale vysoký věk!'`.
 
-Here's how this looks using `if..else`:
+Při použití `if..else` by to vypadalo následovně:
 
 ```js
-if (age < 3) {
-  message = 'Hi, baby!';
-} else if (age < 18) {
-  message = 'Hello!';
-} else if (age < 100) {
-  message = 'Greetings!';
+if (věk < 3) {
+  zpráva = 'Nazdar, mimino!';
+} else if (věk < 18) {
+  zpráva = 'Ahoj!';
+} else if (věk < 100) {
+  zpráva = 'Dobrý den!';
 } else {
-  message = 'What an unusual age!';
+  zpráva = 'To je ale vysoký věk!';
 }
 ```
 
-## Non-traditional use of '?'
+## Netradiční použití „?“
 
-Sometimes the question mark `?` is used as a replacement for `if`:
+Někdy se otazník `?` používá jako náhrada za `if`:
 
 ```js run no-beautify
-let company = prompt('Which company created JavaScript?', '');
+let firma = prompt('Která firma vytvořila JavaScript?', '');
 
 *!*
-(company == 'Netscape') ?
-   alert('Right!') : alert('Wrong.');
+(firma == 'Netscape') ?
+   alert('Správně!') : alert('Špatně.');
 */!*
 ```
 
-Depending on the condition `company == 'Netscape'`, either the first or the second expression after the `?` gets executed and shows an alert.
+Podle platnosti podmínky `firma == 'Netscape'` se buď první, nebo druhý výraz za `?` vykoná a zobrazí zprávu.
 
-We don't assign a result to a variable here. Instead, we execute different code depending on the condition.
+Zde nepřiřazujeme výsledek žádné proměnné. Místo toho v závislosti na podmínce spouštíme různý kód.
 
-**It's not recommended to use the question mark operator in this way.**
+**Nedoporučuje se používat operátor otazníku tímto způsobem.**
 
-The notation is shorter than the equivalent `if` statement, which appeals to some programmers. But it is less readable.
+Zápis je sice kratší než odpovídající příkaz `if`, což může na některé programátory zapůsobit, ale je také méně čitelný.
 
-Here is the same code using `if` for comparison:
+Zde je stejný kód, který pro porovnání používá `if`:
 
 ```js run no-beautify
-let company = prompt('Which company created JavaScript?', '');
+let firma = prompt('Která firma vytvořila JavaScript?', '');
 
 *!*
-if (company == 'Netscape') {
-  alert('Right!');
+if (firma == 'Netscape') {
+  alert('Správně!');
 } else {
-  alert('Wrong.');
+  alert('Špatně.');
 }
 */!*
 ```
 
-Our eyes scan the code vertically. Code blocks which span several lines are easier to understand than a long, horizontal instruction set.
+Naše oči projíždějí kód shora dolů. Bloky kódu, které jsou roztaženy přes několik řádků, pochopíme snadněji než dlouhou vodorovnou řadu instrukcí.
 
-The purpose of the question mark operator `?` is to return one value or another depending on its condition. Please use it for exactly that. Use `if` when you need to execute different branches of code.
+Účelem operátoru otazníku `?` je vrátit jednu nebo druhou hodnotu podle platnosti jeho podmínky. Prosíme, používejte jej přesně takto. Když budete potřebovat vykonat různé větve kódu, použijte `if`.

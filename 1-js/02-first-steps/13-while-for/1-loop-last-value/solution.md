@@ -1,4 +1,4 @@
-The answer: `1`.
+Odpověď: `1`.
 
 ```js run
 let i = 3;
@@ -8,18 +8,18 @@ while (i) {
 }
 ```
 
-Every loop iteration decreases `i` by `1`. The check `while(i)` stops the loop when `i = 0`.
+Každá iterace cyklu sníží `i` o `1`. Ověření `while(i)` zastaví cyklus, když `i = 0`.
 
-Hence, the steps of the loop form the following sequence ("loop unrolled"):
+Jednotlivé kroky cyklu tedy vytvoří následující posloupnost:
 
 ```js
 let i = 3;
 
-alert(i--); // shows 3, decreases i to 2
+alert(i--); // zobrazí 3, sníží i na 2
 
-alert(i--) // shows 2, decreases i to 1
+alert(i--) // zobrazí 2, sníží i na 1
 
-alert(i--) // shows 1, decreases i to 0
+alert(i--) // zobrazí 1, sníží i na 0
 
-// done, while(i) check stops the loop
+// hotovo, ověření while(i) ukončí cyklus
 ```

@@ -1,42 +1,42 @@
 
-# Manuals and specifications
+# Manuály a specifikace
 
-This book is a *tutorial*. It aims to help you gradually learn the language. But once you're familiar with the basics, you'll need other sources.
+Tato kniha je *tutoriál*, jehož cílem je pomoci vám postupně se naučit jazyk. Až ovšem budete znát základy, budete potřebovat i jiné zdroje.
 
-## Specification
+## Specifikace
 
-[The ECMA-262 specification](https://www.ecma-international.org/publications/standards/Ecma-262.htm) contains the most in-depth, detailed and formalized information about JavaScript. It defines the language.
+[Specifikace ECMA-262](https://www.ecma-international.org/publications/standards/Ecma-262.htm) obsahuje nejhlubší, nejpodrobnější a nejformalizovanější informace o JavaScriptu. Ta definuje tento jazyk.
 
-But being that formalized, it's difficult to understand at first. So if you need the most trustworthy source of information about the language details, the specification is the right place. But it's not for everyday use.
+Avšak právě kvůli této vysoké formálnosti je obtížné jí na první pohled porozumět. Potřebujete-li tedy co nejdůvěryhodnější zdroj informací o detailech JavaScriptu, tato specifikace je správné místo. Ke každodennímu použití se však nehodí.
 
-A new specification version is released every year. In-between these releases, the latest specification draft is at <https://tc39.es/ecma262/>.
+Každý rok se vydává nová verze specifikace. Poslední návrh nového vydání specifikace najdete na <https://tc39.es/ecma262/>.
 
-To read about new bleeding-edge features, including those that are "almost standard" (so-called "stage 3"), see proposals at <https://github.com/tc39/proposals>.
+Chcete-li si přečíst o zbrusu nových vlastnostech, včetně těch, které jsou „téměř standardem“ (tzv. „3. stadium“), viz propozice na <https://github.com/tc39/proposals>.
 
-Also, if you're in developing for the browser, then there are other specs covered in the [second part](info:browser-environment) of the tutorial.
+Pokud vyvíjíte pro prohlížeč, existují i další specifikace uvedené ve [druhé části](info:browser-environment) tutoriálu.
 
-## Manuals
+## Manuály
 
-- **MDN (Mozilla) JavaScript Reference** is a manual with examples and other information. It's great to get in-depth information about individual language functions, methods etc.
+- **MDN (Mozilla) JavaScript Reference** je manuál s příklady a dalšími informacemi. Výborně poslouží pro získání podrobných informací o jednotlivých funkcích jazyka, metodách atd.
 
-    One can find it at <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference>.
+	Lze jej najít na <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference>.
+	
+	Často je však nejlepší použít obyčejné internetové vyhledávání. Do dotazu jednoduše napište „MDN [pojem]“, např. pro vyhledávání funkce `parseInt` zadejte <https://google.com/search?q=MDN+parseInt>.
 
-    Although, it's often best to use an internet search instead. Just use "MDN [term]" in the query, e.g. <https://google.com/search?q=MDN+parseInt> to search for `parseInt` function.
 
+- **MSDN** – Manuál od Microsoftu s mnoha informacemi včetně těch o JavaScriptu (v IE se mu říká JScript). Potřebujete-li něco specifického ohledně Internet Exploreru, je lepší zavítat na: <http://msdn.microsoft.com/>.
 
-- **MSDN** – Microsoft manual with a lot of information, including JavaScript (often referred to as JScript). If one needs something specific to Internet Explorer, better go there: <http://msdn.microsoft.com/>.
+	Můžete také použít internetové vyhledávání s frázemi jako „RegExp MSDN“ nebo „RegExp MSDN jscript“.
 
-    Also, we can use an internet search with phrases such as "RegExp MSDN" or "RegExp MSDN jscript".
+## Tabulky kompatibility
 
-## Compatibility tables
+JavaScript je neustále vyvíjen a pravidelně se do něj přidávají nové vlastnosti.
 
-JavaScript is a developing language, new features get added regularly.
+Chcete-li vědět, v jakých enginech jsou tyto vlastnosti už podporovány, podívejte se na:
 
-To see their support among browser-based and other engines, see:
+- <http://caniuse.com> - pro každou vlastnost obsahuje tabulku enginů, které ji podporují, např. chcete-li vidět, které enginy podporují moderní kryptografické funkce, jděte na <http://caniuse.com/#feat=cryptography>. 
+- <https://kangax.github.io/compat-table> - tabulka vlastností jazyka a enginů, které je podporují nebo nepodporují.
 
-- <http://caniuse.com> - per-feature tables of support, e.g. to see which engines support modern cryptography functions: <http://caniuse.com/#feat=cryptography>.
-- <https://kangax.github.io/compat-table> - a table with language features and engines that support those or don't support.
+Všechny tyto zdroje se vám budou při vývoji hodit, jelikož obsahují cenné informace o detailech jazyka, jejich podpoře apod.
 
-All these resources are useful in real-life development, as they contain valuable information about language details, their support etc.
-
-Please remember them (or this page) for the cases when you need in-depth information about a particular feature.
+Pamatujte si je (nebo tuto stránku) pro případ, že byste potřebovali podrobné informace o určité vlastnosti.

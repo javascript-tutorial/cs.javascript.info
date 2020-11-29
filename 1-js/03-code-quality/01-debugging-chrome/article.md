@@ -1,124 +1,125 @@
-# Debugging in Chrome
+# Ladění v Chrome
 
-Before writing more complex code, let's talk about debugging.
+Než začneme psát složitější kód, pohovořme si o ladění.
 
-[Debugging](https://en.wikipedia.org/wiki/Debugging) is the process of finding and fixing errors within a script. All modern browsers and most other environments support debugging tools -- a special UI in developer tools that makes debugging much easier. It also allows to trace the code step by step to see what exactly is going on.
+[Ladění](https://cs.wikipedia.org/wiki/Ladění_(programování)) je proces hledání a opravování chyb ve skriptu. Všechny moderní prohlížeče a většina ostatních prostředí podporují ladicí nástroje -- speciální uživatelské rozhraní ve vývojářských nástrojích, které ladění znatelně ulehčuje. Umožňuje také procházet kód krok za krokem, abychom viděli, co přesně se v něm děje.
 
-We'll be using Chrome here, because it has enough features, most other browsers have a similar process.
+Zde budeme používat Chrome, protože má dostatek vlastností. Většina ostatních prohlížečů má podobný proces.
 
-## The "Sources" panel
+## Panel „Zdroje“
 
-Your Chrome version may look a little bit different, but it still should be obvious what's there.
+Vaše verze Chrome může vypadat trochu odlišně, ale i tak by mělo být zřejmé, o co jde.
 
-- Open the [example page](debugging/index.html) in Chrome.
-- Turn on developer tools with `key:F12` (Mac: `key:Cmd+Opt+I`).
-- Select the `Sources` panel.
+- Otevřete v Chrome [stránku s příkladem](debugging/index.html).
+- Zapněte vývojářské nástroje klávesou `key:F12` (Mac: `key:Cmd+Opt+I`).
+- Zvolte panel `Sources` (`Zdroje`).
 
-Here's what you should see if you are doing it for the first time:
+Když to uděláte napoprvé, měli byste vidět toto:
 
 ![](chrome-open-sources.svg)
 
-The toggler button <span class="devtools" style="background-position:-172px -98px"></span> opens the tab with files.
+Přepínač <span class="devtools" style="background-position:-172px -98px"></span> otevírá záložku se soubory.
 
-Let's click it and select `hello.js` in the tree view. Here's what should show up:
+Klikněme na něj a a zvolme `hello.js` v zobrazení stromu. Mělo by se zobrazit toto:
 
 ![](chrome-tabs.svg)
 
-The Sources panel has 3 parts:
+Panel Sources má 3 části:
 
-1. The **File Navigator** pane lists HTML, JavaScript, CSS and other files, including images that are attached to the page. Chrome extensions may appear here too.
-2. The **Code Editor** pane shows the source code.
-3. The **JavaScript Debugging** pane is for debugging, we'll explore it soon.
+1. Záložka **File Navigator** zobrazuje soubory HTML, JavaScript, CSS a jiné, včetně obrázků, které jsou připojeny ke stránce. Zde se mohou objevit i rozšíření Chrome.
+2. Záložka **Code Editor** zobrazuje zdrojový kód.
+3. Záložka **JavaScript Debugging** slouží k ladění. Brzy ji prozkoumáme.
 
-Now you could click the same toggler <span class="devtools" style="background-position:-172px -122px"></span> again to hide the resources list and give the code some space.
+Nyní můžete kliknout na stejný přepínač <span class="devtools" style="background-position:-172px -122px"></span> znovu, abyste skryli seznam zdrojů a poskytli prostor kódu.
 
-## Console
+## Konzole
 
-If we press `key:Esc`, then a console opens below. We can type commands there and press `key:Enter` to execute.
+Pokud stiskneme `key:Esc`, otevře se dole konzole. Můžeme tam psát příkazy, které se po stisknutí `key:Enter` vykonají.
 
-After a statement is executed, its result is shown below.
+Poté, co se příkaz vykoná, se dole zobrazí jeho výsledek.
 
-For example, here `1+2` results in `3`, and `hello("debugger")` returns nothing, so the result is `undefined`:
+Například `1+2` zde vydá výsledek `3` a `hello("debugger")` nevrátí nic, takže výsledek bude `undefined`:
 
 ![](chrome-sources-console.svg)
 
-## Breakpoints
+## Breakpointy
 
-Let's examine what's going on within the code of the [example page](debugging/index.html). In `hello.js`, click at line number `4`. Yes, right on the `4` digit, not on the code.
+Nyní prozkoumáme, co se přesně děje v kódu na [stránce s příkladem](debugging/index.html). V `hello.js` klikněte na číslo řádku `4`. Ano, přímo na číslici `4`, ne na kód.
 
-Congratulations! You've set a breakpoint. Please also click on the number for line `8`.
+Gratulujeme! Právě jste nastavili breakpoint. Klikněte prosím také na číslo řádku `8`.
 
-It should look like this (blue is where you should click):
+Mělo by to vypadat takto (modrá barva označuje, kam byste měli kliknout):
 
 ![](chrome-sources-breakpoint.svg)
 
-A *breakpoint* is a point of code where the debugger will automatically pause the JavaScript execution.
+*Breakpoint* je bod, v němž debugger automaticky pozastaví výkon JavaScriptu.
 
-While the code is paused, we can examine current variables, execute commands in the console etc. In other words, we can debug it.
+Když je kód pozastaven, můžeme prozkoumávat aktuální proměnné, spouštět příkazy v konzoli apod. Jinými slovy, můžeme kód ladit.
 
-We can always find a list of breakpoints in the right panel. That's useful when we have many breakpoints in various files. It allows us to:
-- Quickly jump to the breakpoint in the code (by clicking on it in the right panel).
-- Temporarily disable the breakpoint by unchecking it.
-- Remove the breakpoint by right-clicking and selecting Remove.
-- ...And so on.
+V pravém panelu vždy najdeme seznam breakpointů. To je užitečné, když máme mnoho breakpointů v různých souborech. Umožňuje nám:
+- Rychle přeskočit na breakpoint v kódu (kliknutím na něj v pravém panelu).
+- Dočasně breakpoint zrušit tím, že jej odškrtneme.
+- Odstranit breakpoint tím, že na něj klikneme pravým tlačítkem myši a zvolíme Remove.
+- ...A tak dále.
 
-```smart header="Conditional breakpoints"
-*Right click* on the line number allows to create a *conditional* breakpoint. It only triggers when the given expression is truthy.
+```smart header="Podmíněné breakpointy"
+*Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněný* breakpoint. Ten se aktivuje, jen když je splněna zadaná podmínka.
 
-That's handy when we need to stop only for a certain variable value or for certain function parameters.
+To se hodí, když potřebujeme zastavit skript jen při určité hodnotě proměnné nebo pro určité parametry funkce.
 ```
 
-## Debugger command
+## Příkaz debugger
 
-We can also pause the code by using the `debugger` command in it, like this:
+Pozastavit kód můžeme také tím, že v něm použijeme příkaz `debugger`, například:
 
 ```js
-function hello(name) {
-  let phrase = `Hello, ${name}!`;
+function ahoj(jméno) {
+  let věta = `Ahoj, ${jméno}!`;
 
 *!*
-  debugger;  // <-- the debugger stops here
+  debugger;  // <-- debugger se tady zastaví
 */!*
 
-  say(phrase);
+  řekni(věta);
 }
 ```
 
-That's very convenient when we are in a code editor and don't want to switch to the browser and look up the script in developer tools to set the breakpoint.
+To je velmi užitečné, když se nacházíme v editoru kódu a nechceme se přepínat do prohlížeče a hledat skript ve vývojářských nástrojích, abychom nastavili breakpoint.
 
 
-## Pause and look around
+## Pozastavení a rozhlédnutí
 
-In our example, `hello()` is called during the page load, so the easiest way to activate the debugger (after we've set the breakpoints) is to reload the page. So let's press `key:F5` (Windows, Linux) or `key:Cmd+R` (Mac).
+V našem příkladu bylo během nahrání stránky zavoláno `hello()`, takže nejjednodušším způsobem, jak aktivovat debugger (po nastavení breakpointů), je znovu načíst stránku. Stiskneme tedy `key:F5` (Windows, Linux) nebo `key:Cmd+R` (Mac).
 
-As the breakpoint is set, the execution pauses at the 4th line:
+Když je breakpoint nastaven, výkon se pozastaví na 4. řádku:
 
 ![](chrome-sources-debugger-pause.svg)
 
-Please open the informational dropdowns to the right (labeled with arrows). They allow you to examine the current code state:
+Prosíme otevřete si informační dropdowny vpravo (označené šipkami), které vám umožní prozkoumávat aktuální stav kódu:
 
-1. **`Watch` -- shows current values for any expressions.**
+1. **`Watch` -- zobrazí aktuální hodnotu jakéhokoli výrazu.**
 
-    You can click the plus `+` and input an expression. The debugger will show its value at any moment, automatically recalculating it in the process of execution.
+    Můžete kliknout na plus `+` a zadat výraz. Debugger bude vždy zobrazovat jeho hodnotu, kterou při výkonu skriptu automaticky přepočítá.
 
-2. **`Call Stack` -- shows the nested calls chain.**
+2. **`Call Stack` -- zobrazí řetězec vnořených volání funkcí.**
 
-    At the current moment the debugger is inside `hello()` call, called by a script in `index.html` (no function there, so it's called "anonymous").
+    V aktuálním okamžiku je debugger uvnitř volání `hello()`, kterou zavolal skript v `index.html` (není zde žádná funkce, takže se nazývá „anonymní“).
 
-    If you click on a stack item (e.g. "anonymous"), the debugger jumps to the corresponding code, and all its variables can be examined as well.
-3. **`Scope` -- current variables.**
+    Když kliknete na prvek zásobníku (např. „anonymní“), debugger přeskočí na odpovídající kód a vy můžete prozkoumávat jeho proměnné.
+    
+3. **`Scope` -- aktuální proměnné.**
 
-    `Local` shows local function variables. You can also see their values highlighted right over the source.
+    `Local` zobrazuje lokální funkční proměnné. Vidíte také jejich hodnoty zvýrazněné přímo nad zdrojovým kódem.
 
-    `Global` has global variables (out of any functions).
+    `Global` obsahuje globální proměnné (mimo všechny funkce).
 
-    There's also `this` keyword there that we didn't study yet, but we'll do that soon.
+    Je zde také klíčové slovo `this`, které jsme zatím nestudovali, ale brzy tak učiníme.
 
-## Tracing the execution
+## Sledování výkonu skriptu
 
-Now it's time to *trace* the script.
+Nyní nastal čas *trasovat* skript.
 
-There are buttons for it at the top of the right panel. Let's engage them.
+K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <!-- https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/src/largeIcons.svg -->
 <span class="devtools" style="background-position:-146px -168px"></span> -- "Resume": continue the execution, hotkey `key:F8`.
 : Resumes the execution. If there are no additional breakpoints, then the execution just continues and the debugger loses control.

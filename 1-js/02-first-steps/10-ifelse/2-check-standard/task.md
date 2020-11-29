@@ -2,11 +2,11 @@ importance: 2
 
 ---
 
-# The name of JavaScript
+# Název JavaScriptu
 
-Using the `if..else` construct, write the code which asks: 'What is the "official" name of JavaScript?'
+Pomocí konstrukce `if..else` napište kód, který se zeptá: „Jaký je „oficiální“ název JavaScriptu?“
 
-If the visitor enters "ECMAScript", then output "Right!", otherwise -- output: "Didn't know? ECMAScript!"
+Pokud návštěvník zadá „ECMAScript“, vypište „Správně!“, jinak vypište „Vy to nevíte? ECMAScript!“
 
 ![](ifelse_task2.svg)
 

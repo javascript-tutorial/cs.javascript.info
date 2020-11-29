@@ -1,46 +1,46 @@
-# Code editors
+# Editory kódu
 
-A code editor is the place where programmers spend most of their time.
+Editor kódu je místo, v němž programátoři tráví většinu času.
 
-There are two main types of code editors: IDEs and lightweight editors. Many people use one tool of each type.
+Editory kódu se dělí na dva hlavní druhy: vývojová prostředí (IDE) a textové editory. Mnozí lidé používají jeden nástroj od každého druhu.
 
 ## IDE
 
-The term [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment) (Integrated Development Environment) refers to a powerful editor with many features that usually operates on a "whole project." As the name suggests, it's not just an editor, but a full-scale "development environment."
+Pojem [vývojové prostředí](https://cs.wikipedia.org/wiki/Vývojové_prostředí), zkráceně IDE (z anglického Integrated Development Environment) označuje  specializovaný editor s rozšířenou funkčností, který obvykle pracuje s celým projektovým adresářem. Jak název napovídá, není to pouhý editor, ale plnohodnotné „vývojové prostředí“.
 
-An IDE loads the project (which can be many files), allows navigation between files, provides autocompletion based on the whole project (not just the open file), and integrates with a version management system (like [git](https://git-scm.com/)), a testing environment, and other "project-level" stuff.
+IDE načítá projekt (který se může skládat z mnoha souborů), umožňuje navigaci mezi soubory, radí vývojáři skrze automatické doplňování založené na celém projektu (nejenom na právě otevřeném souboru) a je propojen s verzovacím systémem (např. [git](https://git-scm.com/)), testovacím prostředím a dalšími pomůckami na „projektové úrovni“.
 
-If you haven't selected an IDE yet, consider the following options:
+Pokud jste si IDE ještě nevybrali, zvažte následující možnosti:
 
-- [Visual Studio Code](https://code.visualstudio.com/) (cross-platform, free).
-- [WebStorm](http://www.jetbrains.com/webstorm/) (cross-platform, paid).
+- [Visual Studio Code](https://code.visualstudio.com/) (různé platformy, zdarma).
+- [WebStorm](http://www.jetbrains.com/webstorm/) (různé platformy, placené).
 
-For Windows, there's also "Visual Studio", not to be confused with "Visual Studio Code". "Visual Studio" is a paid and mighty Windows-only editor, well-suited for the .NET platform. It's also good at JavaScript. There's also a free version [Visual Studio Community](https://www.visualstudio.com/vs/community/).
+Pro Windows existuje také „Visual Studio“ (nezaměňovat s „Visual Studio Code“), což je placený, ale silný editor pouze pro Windows, velmi vhodný pro platformu .NET, který funguje dobře i pro JavaScript. Má i neplacenou verzi [Visual Studio Community](https://www.visualstudio.com/vs/community/).
 
-Many IDEs are paid, but have a trial period. Their cost is usually negligible compared to a qualified developer's salary, so just choose the best one for you.
+Mnoho IDE je placených, ale mají zkušební dobu. Jejich cena je obvykle zanedbatelná ve srovnání s platem kvalifikovaného vývojáře, takže si bez obav vyberte to, které se vám zdá nejlepší.
 
-## Lightweight editors
+## Textové editory
 
-"Lightweight editors" are not as powerful as IDEs, but they're fast, elegant and simple.
+„Lehké“ textové editory (z anglického „lightweight editor“) nejsou tak silné jako IDE, ale jsou rychlé, elegantní a jednoduché.
 
-They are mainly used to open and edit a file instantly.
+Používají se zejména k okamžitému otevření a editaci souboru.
 
-The main difference between a "lightweight editor" and an "IDE" is that an IDE works on a project-level, so it loads much more data on start, analyzes the project structure if needed and so on. A lightweight editor is much faster if we need only one file.
+Hlavní rozdíl mezi „textovým editorem“ a „IDE“ je, že „IDE“ pracuje na projektové úrovni, takže si při spuštění načítá mnohem více dat, analyzuje strukturu projektu, je-li to zapotřebí, a podobně. Potřebujeme-li editovat pouze jeden soubor, textový editor to zvládne mnohem rychleji.
 
-In practice, lightweight editors may have a lot of plugins including directory-level syntax analyzers and autocompleters, so there's no strict border between a lightweight editor and an IDE.
+V praxi mají textové editory obvykle velké množství zásuvných modulů a rozšíření včetně syntaktických analyzátorů a automatického doplňování na adresářové úrovni, takže mezi textovými editory a vývojovými prostředími neexistuje pevně daná hranice.
 
-The following options deserve your attention:
+Vaši pozornost si zasluhují následující možnosti:
 
-- [Atom](https://atom.io/) (cross-platform, free).
-- [Visual Studio Code](https://code.visualstudio.com/) (cross-platform, free).
-- [Sublime Text](http://www.sublimetext.com) (cross-platform, shareware).
-- [Notepad++](https://notepad-plus-plus.org/) (Windows, free).
-- [Vim](http://www.vim.org/) and [Emacs](https://www.gnu.org/software/emacs/) are also cool if you know how to use them.
+- [Atom](https://atom.io/) (různé platformy, zdarma).
+- [Visual Studio Code](https://code.visualstudio.com/) (různé platformy, zdarma).
+- [Sublime Text](http://www.sublimetext.com) (různé platformy, shareware).
+- [Notepad++](https://notepad-plus-plus.org/) (Windows, zdarma).
+- Také [Vim](http://www.vim.org/) a [Emacs](https://www.gnu.org/software/emacs/) jsou výborné, jestliže je umíte používat.
 
-## Let's not argue
+## Nehádejme se
 
-The editors in the lists above are those that either I or my friends whom I consider good developers have been using for a long time and are happy with.
+Ve výše uvedených seznamech jsou zmíněny editory, které já nebo moji přátelé, které považuji za dobré vývojáře, dlouhou dobu používáme a jsme s nimi spokojeni.
 
-There are other great editors in our big world. Please choose the one you like the most.
+Svět je velký a existují v něm i jiné skvělé editory. Vyberte si prosím ten, který se vám nejvíce líbí.
 
-The choice of an editor, like any other tool, is individual and depends on your projects, habits, and personal preferences.
+Výběr editoru, stejně jako výběr každého nástroje, je individuální záležitost a závisí na projektech, zvyklostech a osobním vkusu každého vývojáře.
