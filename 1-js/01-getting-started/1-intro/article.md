@@ -106,11 +106,19 @@ Moderní nástroje provádějí transpilaci velmi rychle a čistě. V podstatě 
 
 Příklady takových jazyků:
 
+<<<<<<< HEAD
 - [CoffeeScript](http://coffeescript.org/) je „syntaktický cukr“ pro JavaScript, který zavádí kratší syntaxi a tím nám umožňuje psát čistší a přesnější kód. Obvykle jej mají v oblibě vývojáři, kteří používají jazyk Ruby.
 - [TypeScript](http://www.typescriptlang.org/) se soustředí na přidání „striktního, silně typovaného systému“, aby zjednodušil vývoj a podporu složitých systémů. Vyvinula jej firma Microsoft.
 - [Flow](http://flow.org/) rovněž přidává typovací systém, ale jiným způsobem. Vyvinul jej Facebook.
 - [Dart](https://www.dartlang.org/) je samostatný jazyk se svým vlastním enginem, který běží v prostředích mimo prohlížeč (např. v mobilních aplikacích), ale i ten může být transpilován do JavaScriptu. Vyvinut firmou Google.
 - [Brython](https://brython.info/) je transpiler Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
+=======
+- [CoffeeScript](http://coffeescript.org/) is a "syntactic sugar" for JavaScript. It introduces shorter syntax, allowing us to write clearer and more precise code. Usually, Ruby devs like it.
+- [TypeScript](http://www.typescriptlang.org/) is concentrated on adding "strict data typing" to simplify the development and support of complex systems. It is developed by Microsoft.
+- [Flow](http://flow.org/) also adds data typing, but in a different way. Developed by Facebook.
+- [Dart](https://www.dartlang.org/) is a standalone language that has its own engine that runs in non-browser environments (like mobile apps), but also can be transpiled to JavaScript. Developed by Google.
+- [Brython](https://brython.info/) is a Python transpiler to JavaScript that enables the writing of applications in pure Python without JavaScript.
+>>>>>>> 23e85b3c33762347e26276ed869e491e959dd557
 
 Jsou i další. Samozřejmě i když používáme některý z transpilovaných jazyků, měli bychom znát i JavaScript, abychom skutečně porozuměli tomu, co se děje.
 
