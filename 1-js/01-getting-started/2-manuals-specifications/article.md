@@ -13,22 +13,34 @@ Každý rok se vydává nová verze specifikace. Poslední návrh nového vydán
 
 Chcete-li si přečíst o zbrusu nových vlastnostech, včetně těch, které jsou „téměř standardem“ (tzv. „3. stadium“), viz propozice na <https://github.com/tc39/proposals>.
 
+<<<<<<< HEAD
 Pokud vyvíjíte pro prohlížeč, existují i další specifikace uvedené ve [druhé části](info:browser-environment) tutoriálu.
+=======
+Also, if you're developing for the browser, then there are other specifications covered in the [second part](info:browser-environment) of the tutorial.
+>>>>>>> 7533c719fbf62ba57188d6d51fe4c038b282bd0c
 
 ## Manuály
 
+<<<<<<< HEAD
 - **MDN (Mozilla) JavaScript Reference** je manuál s příklady a dalšími informacemi. Výborně poslouží pro získání podrobných informací o jednotlivých funkcích jazyka, metodách atd.
+=======
+- **MDN (Mozilla) JavaScript Reference** is the main manual with examples and other information. It's great to get in-depth information about individual language functions, methods etc.
+>>>>>>> 7533c719fbf62ba57188d6d51fe4c038b282bd0c
 
 	Lze jej najít na <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference>.
 	
 	Často je však nejlepší použít obyčejné internetové vyhledávání. Do dotazu jednoduše napište „MDN [pojem]“, např. pro vyhledávání funkce `parseInt` zadejte <https://google.com/search?q=MDN+parseInt>.
 
+<<<<<<< HEAD
 
 - **MSDN** – Manuál od Microsoftu s mnoha informacemi včetně těch o JavaScriptu (v IE se mu říká JScript). Potřebujete-li něco specifického ohledně Internet Exploreru, je lepší zavítat na: <http://msdn.microsoft.com/>.
 
 	Můžete také použít internetové vyhledávání s frázemi jako „RegExp MSDN“ nebo „RegExp MSDN jscript“.
 
 ## Tabulky kompatibility
+=======
+Although, it's often best to use an internet search instead. Just use "MDN [term]" in the query, e.g. <https://google.com/search?q=MDN+parseInt> to search for `parseInt` function.
+>>>>>>> 7533c719fbf62ba57188d6d51fe4c038b282bd0c
 
 JavaScript je neustále vyvíjen a pravidelně se do něj přidávají nové vlastnosti.
 
