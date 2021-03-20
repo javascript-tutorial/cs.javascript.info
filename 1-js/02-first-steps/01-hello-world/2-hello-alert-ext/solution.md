@@ -5,4 +5,3 @@ HTML kód:
 Soubor `alert.js` ve stejné složce:
 
 [js src="alert.js"]
-

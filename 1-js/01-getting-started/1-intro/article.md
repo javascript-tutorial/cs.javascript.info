@@ -45,8 +45,7 @@ Při každém kroku procesu engine aplikuje optimalizace. Dokonce sleduje, jak z
 
 Moderní JavaScript je „bezpečný“ programovací jazyk. Neposkytuje přímý přístup k paměti nebo CPU na nejnižší úrovni, protože byl původně vytvořen pro prohlížeče, které jej nepotřebují.
 
-Schopnosti JavaScriptu značně závisejí na prostředí, v němž je spuštěn. Například prostředí [Node.js](https://wikipedia.org/wiki/Node.js)
-podporuje funkce, které umožňují JavaScriptu svévolně číst a zapisovat do souborů, provádět požadavky na síti a podobně.
+Schopnosti JavaScriptu značně závisejí na prostředí, v němž je spuštěn. Například prostředí [Node.js](https://cs.wikipedia.org/wiki/Node.js) podporuje funkce, které umožňují JavaScriptu svévolně číst a zapisovat do souborů, provádět požadavky na síti a podobně.
 
 JavaScript v prohlížeči umí dělat vše, co se týká manipulace s webovou stránkou, interakce s uživatelem a webového serveru.
 
@@ -54,7 +53,7 @@ Například JavaScript v prohlížeči může:
 
 - Přidat na stránku nový HTML kód, měnit existující obsah, modifikovat styly.
 - Reagovat na uživatelské akce, spouštět skript při kliknutí myší, pohybu kurzorem, stisku klávesy.
-- Posílat po síti požadavky na vzdálené servery, stahovat a uploadovat soubory (tzv. technologie [AJAX](https://en.wikipedia.org/wiki/Ajax_(programming)) a [COMET](https://en.wikipedia.org/wiki/Comet_(programming))).
+- Posílat po síti požadavky na vzdálené servery, stahovat a uploadovat soubory (tzv. technologie [AJAX](https://cs.wikipedia.org/wiki/AJAX) a [COMET](https://en.wikipedia.org/wiki/Comet_(programming))).
 - Číst a nastavovat cookies, pokládat návštěvníkovi otázky, zobrazovat zprávy.
 - Pamatovat si data na straně klienta („lokální úložiště“).
 
@@ -98,9 +97,11 @@ Při tom všem však JavaScript umožňuje vytvářet i servery, mobilní aplika
 ## Jazyky „nad“ JavaScriptem
 
 Syntaxe JavaScriptu samozřejmě neuspokojí každého, neboť různí lidé chtějí různé vlastnosti.
+
 To se dá očekávat, jelikož každý má jiné požadavky a pracuje na jiných projektech.
 
 Proto se začala objevovat spousta nových jazyků, které jsou před spuštěním v prohlížeči *transpilovány* (překládány) do JavaScriptu.
+
 Moderní nástroje provádějí transpilaci velmi rychle a čistě. V podstatě umožňují vývojářům programovat v jiném jazyce a automaticky jej převádět do JavaScriptu.
 
 Příklady takových jazyků:
@@ -109,6 +110,7 @@ Příklady takových jazyků:
 - [TypeScript](http://www.typescriptlang.org/) se soustředí na přidání „striktního, silně typovaného systému“, aby zjednodušil vývoj a podporu složitých systémů. Vyvinula jej firma Microsoft.
 - [Flow](http://flow.org/) rovněž přidává typovací systém, ale jiným způsobem. Vyvinul jej Facebook.
 - [Dart](https://www.dartlang.org/) je samostatný jazyk se svým vlastním enginem, který běží v prostředích mimo prohlížeč (např. v mobilních aplikacích), ale i ten může být transpilován do JavaScriptu. Vyvinut firmou Google.
+- [Brython](https://brython.info/) je transpiler Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
 
 Jsou i další. Samozřejmě i když používáme některý z transpilovaných jazyků, měli bychom znát i JavaScript, abychom skutečně porozuměli tomu, co se děje.
 

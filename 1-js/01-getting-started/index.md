@@ -1,3 +1,3 @@
 # Úvod
 
-O jazyku JavaScript a jeho vývojářském prostředí.
+O jazyku JavaScript a jeho vývojovém prostředí.

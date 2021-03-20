@@ -144,7 +144,7 @@ Přiřazení
 : Existuje jednoduché přiřazení `a = b` a kombinovaná přiřazení, např. `a *= 2`.
 
 Bitové
-: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Reference/Operators/Bitwise_Operators).
+: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Guide/Expressions_and_Operators#Bitwise).
 
 Podmíněný
 : Jediný operátor se třemi parametry: `podmínka ? výsledekA : výsledekB`. Je-li `podmínka` pravdivá, vrátí `výsledekA`, jinak vrátí `výsledekB`.

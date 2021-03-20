@@ -80,10 +80,13 @@ const bigInt = 1234567890123456789012345678901234567890n;
 Protože čísla typu `BigInt` potřebujeme jen málokdy, nebudeme je tady probírat, ale věnujeme jim zvláštní kapitolu <info:bigint>. Až budete tak velká čísla potřebovat, přečtěte si ji.
 
 ```smart header="Otázka kompatibility"
-Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge, ale ne v Safari/IE.
+Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v IE.
 ```
 
+Nahlédnutím do [*MDN* tabulky kompatibility BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
+
 ## Řetězec
+=======
 
 Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
 
@@ -125,7 +128,7 @@ alert( "výsledek je ${1 + 2}" ); // výsledek je ${1 + 2} (dvojité uvozovky s 
 ```smart header="V JavaScriptu není typ *znak*"
 V některých jazycích existuje speciální typ „znak“ pro jediný znak. Například v jazyce C nebo Java se nazývá „char“.
 
-V JavaScriptu žádný takový typ není. Je tady jen jeden typ: `string` (řetězec). Řetězec se může skládat z jediného znaku nebo z více znaků.
+V JavaScriptu žádný takový typ není. Je tady jen jeden typ: `string` (řetězec). Řetězec může být prázdný (neobsahovat žádný znak), může se skládat z jediného znaku nebo z více znaků.
 ```
 
 ## Boolean (logický typ)
@@ -249,7 +252,7 @@ Poslední tři řádky možná vyžadují podrobnější vysvětlení:
 
 V JavaScriptu existuje osm základních datových typů.
 
-- `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena do ±2<sup>53</sup>.
+- `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
 - `bigint` pro celá čísla libovolné délky.
 - `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje zvláštní typ pro jediný znak.
 - `boolean` pro `true`/`false`.

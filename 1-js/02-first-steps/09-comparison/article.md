@@ -9,6 +9,8 @@ Z matematiky známe mnoho porovnávacích operátorů. V JavaScriptu se píší 
 
 V tomto článku se dozvíme víc o různých druzích porovnání a o tom, jak s nimi JavaScript zachází, včetně důležitých zvláštností.
 
+Na konci najdete recept, jak se vyhnout různým problémům způsobeným JavaScriptovými „vtípky“.
+
 ## Výsledkem je typ boolean
 
 Všechny porovnávací operátory vracejí hodnotu typu boolean:
@@ -51,7 +53,9 @@ Algoritmus pro porovnání dvou řetězců je jednoduchý:
 4. Tento proces opakuj, dokud nedojdeš na konec některého z řetězců.
 5. Mají-li oba řetězce stejnou délku, jsou si rovny. V opačném případě je delší řetězec větší.
 
-Ve výše uvedených příkladech porovnání `'Z' > 'A'` dojde k výsledku hned v prvním kroku, zatímco řetězce `"Glow"` a `"Glee"` se porovnávají znak po znaku:
+Ve výše uvedených příkladech porovnání `'Z' > 'A'` dojde k výsledku hned v prvním kroku.
+
+Porovnání řetězců `"Glow"` a `"Glee"` však vyžaduje více kroků, jelikož řetězce se porovnávají znak po znaku:
 
 1. `G` je stejné jako `G`.
 2. `l` je stejné jako `l`.
@@ -196,9 +200,8 @@ Tyto výsledky jsme získali, protože:
 
 Jak se přes tyto příklady přenést? Měli bychom si tyto zvláštnosti neustále pamatovat? Vlastně ani ne. Ve skutečnosti se s těmito triky postupem času sžijete, ale existuje solidní způsob, jak se vyhnout problémům, které způsobují:
 
-Zacházejte s každým porovnáním s `undefined/null` kromě striktní rovnosti `===` výjimečně opatrně.
-
-Nepoužívejte porovnání `>= > < <=` na proměnnou, která by mohla být `null/undefined`, pokud si opravdu nejste jisti tím, co děláte. Může-li proměnná obsahovat tyto hodnoty, ověřte je zvlášť.
+- Zacházejte s každým porovnáním s `undefined/null` kromě striktní rovnosti `===` výjimečně opatrně.
+- Nepoužívejte porovnání `>= > < <=` na proměnnou, která by mohla být `null/undefined`, pokud si opravdu nejste jisti tím, co děláte. Může-li proměnná obsahovat tyto hodnoty, ověřte je zvlášť.
 
 ## Shrnutí
 

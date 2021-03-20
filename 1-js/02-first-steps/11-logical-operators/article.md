@@ -101,7 +101,7 @@ To umožňuje některé zajímavé způsoby použití ve srovnání s „čistý
 
 1. **Získání první pravdivé hodnoty ze seznamu proměnných nebo výrazů.**
 
-    Například máme proměnné `jméno`, `příjmení` a `přezdívka`, všechny jsou nepovinné.
+    Například máme proměnné `jméno`, `příjmení` a `přezdívka`, všechny jsou nepovinné (tj. mohou být `undefined` nebo obsahovat hodnoty nepravda).
     
     Vybereme pomocí OR `||` tu, která obsahuje data, a zobrazíme je (není-li nastaveno nic, zobrazíme `anonym`):
 
@@ -115,7 +115,7 @@ To umožňuje některé zajímavé způsoby použití ve srovnání s „čistý
     */!*
     ```
 
-    Kdyby byly všechny proměnné nepravdivé, zobrazil by se `anonym`.
+    Kdyby všechny proměnné obsahovaly hodnotu nepravda, zobrazil by se `anonym`.
 
 2. **Zkrácené vyhodnocení.**
 
@@ -244,7 +244,7 @@ let x = 1;
 if (x > 0) alert( 'Větší než nula!' );
 ```
 
-Ačkoli varianta s `&&` se zdá být kratší, `if` je jasnější a bývá trochu čitelnější. Doporučujeme tedy používat každou konstrukci k tomu, k čemu byla stvořena: používejte `if`, chcete-li „pokud“, a používejte `&&`, chcete-li AND.
+Ačkoli varianta s `&&` se zdá být kratší, `if` je zřejmější a obvykle bývá trochu čitelnější. Doporučujeme tedy používat každou konstrukci k tomu, k čemu byla stvořena: používejte `if`, chcete-li „pokud“, a používejte `&&`, chcete-li AND.
 ````
 
 
