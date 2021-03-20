@@ -1,0 +1,59 @@
+code-style.svg:
+  "No space":
+    text: "Без пробелов"
+    position: "center"
+  "between the function name and parentheses":
+    position: "center"
+    text: "между именем функции и скобками"
+  "between the parentheses and the parameter":
+    position: "center"
+    text: "между скобками и параметрами"
+  "Indentation":
+    position: "center"
+    text: "Отступ"
+  "2 spaces":
+    position: "center"
+    text: "2 пробела"
+  "A space ":
+    position: "center"
+    text: "Пробел"
+  "after for/if/while…":
+    position: "center"
+    text: "после for/if/while…"
+  "} else { without a line break": "} else { без перевода строки"
+  "Spaces around a nested call":
+    position: "center"
+    text: "Пробелы вокруг вложенного вызова"
+  "An empty line":
+    position: "center"
+    text: "Пустая строка"
+  "between logical blocks":
+    position: "center"
+    text: "Между логическими блоками"
+  "Lines are not very long": "Строки не очень длинные"
+  "A semicolon ;": "Точка с запятой ;"
+  "is mandatory": "обязательна"
+  "Spaces":
+    position: "center"
+    text: "Пробелы"
+  "around operators":
+    position: "center"
+    text: "вокруг операторов"
+  "Curly brace {":
+    position: "center"
+    text: "Фигурная скобка {"
+  "on the same line, after a space":
+    position: "center"
+    text: "на той же строке, после пробела"
+  "A space":
+    position: "center"
+    text: "Пробел"
+  "between":
+    position: "center"
+    text: "между"
+  "parameters":
+    position: "center"
+    text: "параметрами"
+  "A space between parameters":
+    position: "center"
+    text: "Пробел между параметрами"

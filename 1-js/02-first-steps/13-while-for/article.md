@@ -1,54 +1,52 @@
-# Loops: while and for
+# Cykly: while a for
 
-We often need to repeat actions.
+Často potřebujeme opakovat některé akce. Například vypsat ze seznamu jedno zboží po druhém nebo jen vykonat stejný kód pro každé z čísel od 1 do 10.
 
-For example, outputting goods from a list one after another or just running the same code for each number from 1 to 10.
+Způsob, jak opakovat stejný kód několikrát, poskytují *cykly* neboli *smyčky*.
 
-*Loops* are a way to repeat the same code multiple times.
+## Cyklus „while“
 
-## The "while" loop
-
-The `while` loop has the following syntax:
+Cyklus `while` má následující syntaxi:
 
 ```js
-while (condition) {
-  // code
-  // so-called "loop body"
+while (podmínka) {
+  // kód
+  // tzv. „tělo cyklu“
 }
 ```
 
-While the `condition` is truthy, the `code` from the loop body is executed.
+Dokud je `podmínka` pravdivá, `kód` z těla cyklu se bude vykonávat.
 
-For instance, the loop below outputs `i` while `i < 3`:
+Například tento cyklus vypisuje proměnnou `i` tak dlouho, dokud je `i < 3`:
 
 ```js run
 let i = 0;
-while (i < 3) { // shows 0, then 1, then 2
+while (i < 3) { // zobrazí 0, pak 1, pak 2
   alert( i );
   i++;
 }
 ```
 
-A single execution of the loop body is called *an iteration*. The loop in the example above makes three iterations.
+Jedno vykonání těla cyklu se nazývá *iterace*. Cyklus v uvedeném příkladu vykoná tři iterace.
 
-If `i++` was missing from the example above, the loop would repeat (in theory) forever. In practice, the browser provides ways to stop such loops, and in server-side JavaScript, we can kill the process.
+Kdyby v tomto příkladu chyběl příkaz `i++`, cyklus by se vykonával (teoreticky) donekonečna. V praxi prohlížeče poskytují způsoby, jak takový cyklus zastavit, a v JavaScriptu na serverové straně můžeme proces zastavit („shodit“) sami.
 
-Any expression or variable can be a loop condition, not just comparisons: the condition is evaluated and converted to a boolean by `while`.
+Platnou podmínkou cyklu může být jakákoli proměnná nebo výraz, nejenom porovnání: příkaz `while` podmínku vyhodnotí a převede na typ boolean.
 
-For instance, a shorter way to write `while (i != 0)` is `while (i)`:
+Například `while (i != 0)` se dá napsat kratším způsobem jako `while (i)`:
 
 ```js run
 let i = 3;
 *!*
-while (i) { // when i becomes 0, the condition becomes falsy, and the loop stops
+while (i) { // když i bude 0, podmínka bude nepravdivá a cyklus skončí
 */!*
   alert( i );
   i--;
 }
 ```
 
-````smart header="Curly braces are not required for a single-line body"
-If the loop body has a single statement, we can omit the curly braces `{…}`:
+````smart header="Tělo tvořené jedním příkazem nemusí mít složené závorky"
+Obsahuje-li tělo cyklu jen jediný příkaz, můžeme složené závorky `{…}` vynechat:
 
 ```js run
 let i = 3;
@@ -58,19 +56,19 @@ while (i) alert(i--);
 ```
 ````
 
-## The "do..while" loop
+## Cyklus „do..while“
 
-The condition check can be moved *below* the loop body using the `do..while` syntax:
+Ověření podmínky můžeme přesunout až *za* tělo cyklu, použijeme-li syntaxi `do..while`:
 
 ```js
 do {
-  // loop body
-} while (condition);
+  // tělo cyklu
+} while (podmínka);
 ```
 
-The loop will first execute the body, then check the condition, and, while it's truthy, execute it again and again.
+Cyklus nejprve vykoná tělo, pak ověří podmínku, a dokud je pravdivá, bude vykonávat tělo znovu a znovu.
 
-For example:
+Příklad:
 
 ```js run
 let i = 0;
@@ -80,109 +78,109 @@ do {
 } while (i < 3);
 ```
 
-This form of syntax should only be used when you want the body of the loop to execute **at least once** regardless of the condition being truthy. Usually, the other form is preferred: `while(…) {…}`.
+Tuto formu syntaxe byste měli používat jen tehdy, když chcete, aby se tělo cyklu vykonalo vždy **aspoň jednou**, bez ohledu na pravdivost podmínky. Obvykle se dává přednost předchozí formě: `while(…) {…}`.
 
-## The "for" loop
+## Cyklus „for“
 
-The `for` loop is more complex, but it's also the most commonly used loop.
+Cyklus `for` je složitější, ale také nejčastěji používaný.
 
-It looks like this:
+Vypadá takto:
 
 ```js
-for (begin; condition; step) {
-  // ... loop body ...
+for (začátek; podmínka; krok) {
+  // ... tělo cyklu ...
 }
 ```
 
-Let's learn the meaning of these parts by example. The loop below runs `alert(i)` for `i` from `0` up to (but not including) `3`:
+Význam jednotlivých částí si objasníme na příkladu. Níže uvedený cyklus vykoná `alert(i)` pro `i` od `0` až do (ale ne včetně) `3`:
 
 ```js run
-for (let i = 0; i < 3; i++) { // shows 0, then 1, then 2
+for (let i = 0; i < 3; i++) { // zobrazí 0, pak 1, pak 2
   alert(i);
 }
 ```
 
-Let's examine the `for` statement part-by-part:
+Prozkoumáme příkaz `for` po částech:
 
-| part  |          |                                                                            |
+| část  |          |                                                                            |
 |-------|----------|----------------------------------------------------------------------------|
-| begin | `i = 0`    | Executes once upon entering the loop.                                      |
-| condition | `i < 3`| Checked before every loop iteration. If false, the loop stops.              |
-| body | `alert(i)`| Runs again and again while the condition is truthy.                         |
-| step| `i++`      | Executes after the body on each iteration. |
+| začátek | `i = 0`    | Vykoná se jednou po vstupu do cyklu.                                      |
+| podmínka | `i < 3`| Kontroluje se před každou iterací cyklu. Je-li nepravdivá, cyklus skončí.              |
+| tělo | `alert(i)`| Vykonává se stále znovu, dokud je podmínka pravdivá.                         |
+| krok | `i++`      | Vykoná se po těle cyklu při každé iteraci. |
 
-The general loop algorithm works like this:
+Všeobecný algoritmus cyklu funguje takto:
 
 ```
-Run begin
-→ (if condition → run body and run step)
-→ (if condition → run body and run step)
-→ (if condition → run body and run step)
+Vykonej začátek
+→ (platí-li podmínka → vykonej tělo a vykonej krok)
+→ (platí-li podmínka → vykonej tělo a vykonej krok)
+→ (platí-li podmínka → vykonej tělo a vykonej krok)
 → ...
 ```
 
-That is, `begin` executes once, and then it iterates: after each `condition` test, `body` and `step` are executed.
+To znamená, že `začátek` se vykoná jednou a pak se iteruje: po každém testu `podmínky` se vykonají `tělo` a `krok`.
 
-If you are new to loops, it could help to go back to the example and reproduce how it runs step-by-step on a piece of paper.
+Jestliže s cykly teprve začínáte, pomůže vám vrátit se k příkladu a na papíře si krok po kroku projít, jak se vykoná.
 
-Here's exactly what happens in our case:
+V našem případě se stane přesně toto:
 
 ```js
 // for (let i = 0; i < 3; i++) alert(i)
 
-// run begin
+// vykonej začátek
 let i = 0
-// if condition → run body and run step
+// platí-li podmínka → vykonej tělo a vykonej krok
 if (i < 3) { alert(i); i++ }
-// if condition → run body and run step
+// platí-li podmínka → vykonej tělo a vykonej krok
 if (i < 3) { alert(i); i++ }
-// if condition → run body and run step
+// platí-li podmínka → vykonej tělo a vykonej krok
 if (i < 3) { alert(i); i++ }
-// ...finish, because now i == 3
+// ...konec, protože nyní je i == 3
 ```
 
-````smart header="Inline variable declaration"
-Here, the "counter" variable `i` is declared right in the loop. This is called an "inline" variable declaration. Such variables are visible only inside the loop.
+````smart header="Inline deklarace proměnné"
+„Čítačová“ proměnná `i` je zde deklarována rovnou v cyklu. To se nazývá „inline“ (na místě) deklarace proměnné. Takové proměnné jsou viditelné jen uvnitř cyklu.
 
 ```js run
 for (*!*let*/!* i = 0; i < 3; i++) {
   alert(i); // 0, 1, 2
 }
-alert(i); // error, no such variable
+alert(i); // chyba, tato proměnná neexistuje
 ```
 
-Instead of defining a variable, we could use an existing one:
+Namísto definice nové proměnné můžeme použít existující:
 
 ```js run
 let i = 0;
 
-for (i = 0; i < 3; i++) { // use an existing variable
+for (i = 0; i < 3; i++) { // použijeme existující proměnnou
   alert(i); // 0, 1, 2
 }
 
-alert(i); // 3, visible, because declared outside of the loop
+alert(i); // 3, je viditelná, protože byla deklarována mimo cyklus
 ```
 
 ````
 
 
-### Skipping parts
+### Vynechávání částí
 
-Any part of `for` can be skipped.
+Kteroukoli část `for` můžeme vynechat.
 
-For example, we can omit `begin` if we don't need to do anything at the loop start.
+Například můžeme vynechat `začátek`, jestliže nechceme na začátku cyklu nic provádět.
 
-Like here:
+Například zde:
 
 ```js run
-let i = 0; // we have i already declared and assigned
+let i = 0; // už máme proměnnou i deklarovanou a přiřazenou
 
-for (; i < 3; i++) { // no need for "begin"
+for (; i < 3; i++) { // nepotřebujeme „začátek“
   alert( i ); // 0, 1, 2
 }
 ```
 
-We can also remove the `step` part:
+Můžeme vynechat i část `krok`:
 
 ```js run
 let i = 0;
@@ -192,32 +190,32 @@ for (; i < 3;) {
 }
 ```
 
-This makes the loop identical to `while (i < 3)`.
+Pak bude cyklus identický jako `while (i < 3)`.
 
-We can actually remove everything, creating an infinite loop:
+Ve skutečnosti můžeme vynechat všechno a vytvořit tím nekonečnou smyčku:
 
 ```js
 for (;;) {
-  // repeats without limits
+  // opakuje se neustále
 }
 ```
 
-Please note that the two `for` semicolons `;` must be present. Otherwise, there would be a syntax error.
+Všimněte si, že dva středníky `;` ve `for` musejí být uvedeny, jinak nastane syntaktická chyba.
 
-## Breaking the loop
+## Opuštění smyčky
 
-Normally, a loop exits when its condition becomes falsy.
+Za běžných okolností se cyklus ukončí, když jeho podmínka přestane být splněna.
 
-But we can force the exit at any time using the special `break` directive.
+Kdykoli si však můžeme ukončení vynutit použitím speciální direktivy `break`.
 
-For example, the loop below asks the user for a series of numbers, "breaking" when no number is entered:
+Například níže uvedený cyklus se uživatele ptá na sérii čísel, a když uživatel žádné číslo nezadá, cyklus skončí:
 
 ```js run
 let sum = 0;
 
 while (true) {
 
-  let value = +prompt("Enter a number", '');
+  let value = +prompt("Zadejte číslo", '');
 
 *!*
   if (!value) break; // (*)
@@ -226,35 +224,35 @@ while (true) {
   sum += value;
 
 }
-alert( 'Sum: ' + sum );
+alert( 'Součet: ' + sum );
 ```
 
-The `break` directive is activated at the line `(*)` if the user enters an empty line or cancels the input. It stops the loop immediately, passing control to the first line after the loop. Namely, `alert`.
+Direktiva `break` na řádku `(*)` se aktivuje, jestliže uživatel zadá prázdný řádek nebo zruší vstup. Okamžitě ukončí cyklus a předá řízení na první řádek za cyklem, konkrétně `alert`.
 
-The combination "infinite loop + `break` as needed" is great for situations when a loop's condition must be checked not in the beginning or end of the loop, but in the middle or even in several places of its body.
+Kombinace „nekonečná smyčka + `break`, když je zapotřebí“ je výhodná v situacích, kdy potřebujeme podmínku cyklu ověřovat ne na začátku nebo na konci cyklu, ale uprostřed cyklu nebo dokonce na několika místech jeho těla.
 
-## Continue to the next iteration [#continue]
+## Pokračování k další iteraci [#continue]
 
-The `continue` directive is a "lighter version" of `break`. It doesn't stop the whole loop. Instead, it stops the current iteration and forces the loop to start a new one (if the condition allows).
+Direktiva `continue` je „slabší verzí“ `break`. Nezastaví celý cyklus, ale zastaví jen právě probíhající iteraci a přinutí cyklus začít novou (jestliže podmínka platí).
 
-We can use it if we're done with the current iteration and would like to move on to the next one.
+Můžeme ji použít, když jsme hotovi s právě probíhající iterací a rádi bychom okamžitě přešli k další.
 
-The loop below uses `continue` to output only odd values:
+Níže uvedený cyklus využívá `continue` k vypsání jen lichých hodnot:
 
 ```js run no-beautify
 for (let i = 0; i < 10; i++) {
 
-  // if true, skip the remaining part of the body
+  // je-li podmínka pravdivá, přeskočíme zbytek těla
   *!*if (i % 2 == 0) continue;*/!*
 
-  alert(i); // 1, then 3, 5, 7, 9
+  alert(i); // 1, pak 3, 5, 7, 9
 }
 ```
 
-For even values of `i`, the `continue` directive stops executing the body and passes control to the next iteration of `for` (with the next number). So the `alert` is only called for odd values.
+Pro sudé hodnoty `i` direktiva `continue` ukončí vykonávání těla a předá řízení další iteraci `for` (s dalším číslem). Proto se `alert` bude volat jedině pro liché hodnoty.
 
-````smart header="The `continue` directive helps decrease nesting"
-A loop that shows odd values could look like this:
+````smart header="Direktiva `continue` pomáhá redukovat vnoření"
+Cyklus, který zobrazuje liché hodnoty, by mohl vypadat i takto:
 
 ```js run
 for (let i = 0; i < 10; i++) {
@@ -266,15 +264,15 @@ for (let i = 0; i < 10; i++) {
 }
 ```
 
-From a technical point of view, this is identical to the example above. Surely, we can just wrap the code in an `if` block instead of using `continue`.
+Z technického pohledu je to stejné jako výše uvedený příklad. Bezpochyby můžeme namísto použití `continue` vnořit kód do bloku `if`.
 
-But as a side-effect, this created one more level of nesting (the `alert` call inside the curly braces). If the code inside of `if` is longer than a few lines, that may decrease the overall readability.
+Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (volání `alert` uvnitř složených závorek). Je-li kód uvnitř `if` delší než několik řádků, může to snížit jeho celkovou čitelnost.
 ````
 
-````warn header="No `break/continue` to the right side of '?'"
-Please note that syntax constructs that are not expressions cannot be used with the ternary operator `?`. In particular, directives such as `break/continue` aren't allowed there.
+````warn header="`break/continue` nesmějí být na pravé straně „?“"
+Všimněte si, že syntaktické konstrukce, které nejsou výrazy, nelze použít s ternárním operátorem „?“. Konkrétně tam nejsou povoleny direktivy jako `break/continue`.
 
-For example, if we take this code:
+Například vezměme si tento kód:
 
 ```js
 if (i > 5) {
@@ -284,103 +282,103 @@ if (i > 5) {
 }
 ```
 
-...and rewrite it using a question mark:
+...a přepišme jej pomocí otazníku:
 
 
 ```js no-beautify
-(i > 5) ? alert(i) : *!*continue*/!*; // continue isn't allowed here
+(i > 5) ? alert(i) : *!*continue*/!*; // continue tady nesmí být
 ```
 
-...it stops working: there's a syntax error.
+...přestane to fungovat: nastane syntaktická chyba.
 
-This is just another reason not to use the question mark operator `?` instead of `if`.
+To je další důvod, proč nepoužívat operátor otazníku `?` namísto `if`.
 ````
 
-## Labels for break/continue
+## Návěští pro break/continue
 
-Sometimes we need to break out from multiple nested loops at once.
+Někdy se potřebujeme dostat ven z několika vnořených cyklů najednou.
 
-For example, in the code below we loop over `i` and `j`, prompting for the coordinates `(i, j)` from `(0,0)` to `(2,2)`:
+Například v níže uvedeném kódu vykonáváme cyklus nad `i` a `j`, který se ptá na hodnoty `(i, j)` od `(0,0)` do `(2,2)`:
 
 ```js run no-beautify
 for (let i = 0; i < 3; i++) {
 
   for (let j = 0; j < 3; j++) {
 
-    let input = prompt(`Value at coords (${i},${j})`, '');
+    let vstup = prompt(`Hodnota na souřadnicích (${i},${j})`, '');
 
-    // what if we want to exit from here to Done (below)?
+    // co když chceme vyskočit odtud až na „Hotovo“ níže?
   }
 }
 
-alert('Done!');
+alert('Hotovo!');
 ```
 
-We need a way to stop the process if the user cancels the input.
+Potřebujeme způsob, jak tento proces zastavit, jestliže uživatel zruší vstup.
 
-The ordinary `break` after `input` would only break the inner loop. That's not sufficient--labels, come to the rescue!
+Pouhé `break` po `vstup` by ukončilo jen vnitřní cyklus. To nám však nestačí. Návěští, pojďte nám na pomoc!
 
-A *label* is an identifier with a colon before a loop:
+*Návěští* je identifikátor s dvojtečkou před cyklem:
 ```js
-labelName: for (...) {
+názevNávěští: for (...) {
   ...
 }
 ```
 
-The `break <labelName>` statement in the loop below breaks out to the label:
+Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí až z návěští:
 
 ```js run no-beautify
-*!*outer:*/!* for (let i = 0; i < 3; i++) {
+*!*vnější:*/!* for (let i = 0; i < 3; i++) {
 
   for (let j = 0; j < 3; j++) {
 
-    let input = prompt(`Value at coords (${i},${j})`, '');
+    let vstup = prompt(`Hodnota na souřadnicích (${i},${j})`, '');
 
-    // if an empty string or canceled, then break out of both loops
-    if (!input) *!*break outer*/!*; // (*)
+    // je-li zadán prázdný řetězec nebo zrušen vstup, vyskočí se z obou cyklů
+    if (!vstup) *!*break vnější*/!*; // (*)
 
-    // do something with the value...
+    // provedeme něco s hodnotou...
   }
 }
-alert('Done!');
+alert('Hotovo!');
 ```
 
-In the code above, `break outer` looks upwards for the label named `outer` and breaks out of that loop.
+Ve výše uvedeném kódu `break vnější` najde návěští s názvem `vnější` a vyskočí z jeho cyklu.
 
-So the control goes straight from `(*)` to `alert('Done!')`.
+Řízení se tedy předá přímo z `(*)` na `alert('Hotovo!')`.
 
-We can also move the label onto a separate line:
+Můžeme návěští umístit i na samostatný řádek:
 
 ```js no-beautify
-outer:
+vnější:
 for (let i = 0; i < 3; i++) { ... }
 ```
 
-The `continue` directive can also be used with a label. In this case, code execution jumps to the next iteration of the labeled loop.
+Návěští můžeme použít i v direktivě `continue`. V takovém případě výkon kódu přeskočí k další iteraci cyklu s uvedeným návěštím.
 
-````warn header="Labels do not allow to \"jump\" anywhere"
-Labels do not allow us to jump into an arbitrary place in the code.
+````warn header="Návěští nám neumožňují „skákat“ kamkoli!"
+Návěští nám neumožňují skákat na libovolné místo v kódu.
 
-For example, it is impossible to do this:
+Například nejde udělat toto:
 ```js
-break label; // doesn't jumps to the label below
+break návěští; // neskočí na návěští níže
 
-label: for (...)
+návěští: for (...)
 ```
 
-A call to `break/continue` is only possible from inside a loop and the label must be somewhere above the directive.
+Volat `break/continue` je možné jedině zevnitř cyklu a návěští se musí nacházet někde nad touto direktivou.
 ````
 
-## Summary
+## Shrnutí
 
-We covered 3 types of loops:
+Uvedli jsme tři druhy cyklů:
 
-- `while` -- The condition is checked before each iteration.
-- `do..while` -- The condition is checked after each iteration.
-- `for (;;)` -- The condition is checked before each iteration, additional settings available.
+- `while` -- Podmínka se ověří před každou iterací.
+- `do..while` -- Podmínka se ověří po každé iteraci.
+- `for (;;)` -- Podmínka se ověří před každou iterací, jsou možná i další nastavení.
 
-To make an "infinite" loop, usually the `while(true)` construct is used. Such a loop, just like any other, can be stopped with the `break` directive.
+K vytvoření „nekonečné“ smyčky se obvykle používá konstrukce `while(true)`. Takovou smyčku lze zastavit direktivou `break`, stejně jako každou jinou.
 
-If we don't want to do anything in the current iteration and would like to forward to the next one, we can use the `continue` directive.
+Pokud nechceme už nic provádět v současné iteraci a chceme rovnou přejít k další, použijeme direktivu `continue`.
 
-`break/continue` support labels before the loop. A label is the only way for `break/continue` to escape a nested loop to go to an outer one.
+`break/continue` podporují návěští před cyklem. Návěští je jediný způsob, jak může `break/continue` ve vnořeném cyklu vyskočit z vnějšího cyklu.

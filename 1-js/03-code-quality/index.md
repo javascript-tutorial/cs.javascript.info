@@ -1,3 +1,3 @@
-# Code quality
+# Kvalita kódu
 
-This chapter explains coding practices that we'll use further in the development. 
+Tato kapitola vysvětluje programovací praktiky, které budeme používat nadále při vývoji.

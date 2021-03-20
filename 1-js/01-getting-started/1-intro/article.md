@@ -26,7 +26,7 @@ Různé enginy mají různá „kódová označení“. Například:
 
 - [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- v Chrome a Opeře.
 - [SpiderMonkey](https://cs.wikipedia.org/wiki/SpiderMonkey) -- ve Firefoxu.
-- Existují i jiná krycí jména, například „Chakra“ pro Internet Explorer, „ChakraCore“ pro Microsoft Edge, „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
+- Existují i jiná krycí jména, například „Trident“ a „Chakra“ pro různé verze Internet Exploreru, „ChakraCore“ pro Microsoft Edge, „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
 
 Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývojářských článcích na internetu. Budeme je používat i my. Například „vlastnost X je podporována ve V8“ znamená, že pravděpodobně bude fungovat v Chrome a Opeře.
 

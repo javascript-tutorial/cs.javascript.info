@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Rewrite 'if..else' into '?'
+# Přepište „if..else“ na „?“
 
-Rewrite `if..else` using multiple ternary operators `'?'`.
+Přepište `if..else` pomocí několika ternárních operátorů `'?'`.
 
-For readability, it's recommended to split the code into multiple lines.
+Z důvodu čitelnosti doporučujeme rozdělit kód na více řádků.
 
 ```js
-let message;
+let zpráva;
 
-if (login == 'Employee') {
-  message = 'Hello';
-} else if (login == 'Director') {
-  message = 'Greetings';
+if (login == 'Zaměstnanec') {
+  zpráva = 'Ahoj';
+} else if (login == 'Ředitel') {
+  zpráva = 'Dobrý den';
 } else if (login == '') {
-  message = 'No login';
+  zpráva = 'Není login';
 } else {
-  message = '';
+  zpráva = '';
 }
 ```
