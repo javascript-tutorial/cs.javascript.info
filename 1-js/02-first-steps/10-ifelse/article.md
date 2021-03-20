@@ -66,7 +66,7 @@ if (podmínka) {
 
 ## Klauzule „else“
 
-Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka není splněna.
+Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka je nepravdivá.
 
 Příklad:
 ```js run

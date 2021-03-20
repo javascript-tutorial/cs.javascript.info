@@ -2,15 +2,15 @@
 
 [recent browser="new"]
 
-V tomto článku budeme říkat, že výraz je „definován“, pokud nemá hodnotu `null` ani `undefined`.
+Operátor koalescence se zapisuje dvěma otazníky za sebou `??`.
 
-Operátor koalescence `??` poskytuje zkrácenou syntaxi pro výběr první „definované“ proměnné ze seznamu.
+Protože tento operátor zachází s hodnotami `null` a `undefined` podobně, budeme v tomto článku používat speciální pojem. Řekněmě, že výraz je „definován“, pokud nemá hodnotu `null` ani `undefined`.
 
 Výsledkem `a ?? b` je:
 - pokud `a` je definovaný, pak `a`;
 - pokud `a` není definovaný, pak `b`;
 
-Jinými slovy, `??` vrátí první argument, jestliže ten nemá hodnotu `null/undefined`, jinak vrátí druhý argument.
+Jinými slovy, `??` vrátí první argument, jestliže ten nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
 
 Operátor koalescence není zcela nová věc. Je to jen pěkná syntaxe, jak vrátit první „definovanou“ hodnotu ze dvou.
 
@@ -20,6 +20,8 @@ Můžeme přepsat `result = a ?? b` pomocí operátorů, které již známe, nap
 result = (a !== null && a !== undefined) ? a : b;
 ```
 
+Nyní by mělo být naprosto zřejmé, co `??` umí. Podíváme se, kde nám pomůže.
+
 Operátor `??` se běžně používá k poskytnutí defaultní hodnoty proměnné, která může být nedefinovaná.
 
 Například zde zobrazíme `anonym`, jestliže proměnná `uživatel` není definována:
@@ -27,22 +29,22 @@ Například zde zobrazíme `anonym`, jestliže proměnná `uživatel` není defi
 ```js run
 let uživatel;
 
-alert(uživatel ?? "anonym"); // anonym
+alert(uživatel ?? "anonym"); // anonym (uživatel není definován)
 ```
 
-Pochopitelně kdyby proměnná `uživatel` měla kteroukoli jinou hodnotu než `null/undefined`, viděli bychom místo toho tuto hodnotu:
+Zde je příklad pro případ, že je proměnné `uživatel` přiřazena hodnota:
 
 ```js run
 let uživatel = "Jan";
 
-alert(uživatel ?? "anonym"); // Jan
+alert(uživatel ?? "anonym"); // Jan (uživatel je definován)
 ```
 
 Můžeme také použít sekvenci `??` k výběru první hodnoty ze seznamu, která není `null/undefined`.
 
 Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`, které obsahují jeho křestní jméno, příjmení a přezdívku. Všechny mohou být nedefinované, jestliže se uživatel rozhodl nezadat žádnou hodnotu.
 
-Rádi bychom zobrazili uživatelovo jméno: jednu z těchto tří proměnných, nebo „Anonym“, pokud nebylo nic zadáno.
+Rádi bychom zobrazili uživatelovo jméno: jednu z těchto tří proměnných, nebo „Anonym“, pokud žádná z nich není definována.
 
 Použijeme k tomu operátor `??`:
 
@@ -74,7 +76,7 @@ alert(jméno || příjmení || přezdívka || "Anonym"); // Supercoder
 */!*
 ```
 
-Operátor OR `||` existoval již od začátků JavaScriptu, takže jej vývojáři pro tyto účely dlouhou dobu skutečně používali.
+Historicky tu operátor OR `||` byl dříve. Existuje již od začátků JavaScriptu, takže jej vývojáři pro tyto účely dlouhou dobu skutečně používali.
 
 Naproti tomu operátor koalescence `??` byl do JavaScriptu přidán teprve nedávno a důvodem bylo, že lidé nebyli s operátorem `||` zcela spokojeni.
 
@@ -95,17 +97,18 @@ alert(výška || 100); // 100
 alert(výška ?? 100); // 0
 ```
 
-- `výška || 100` prověří, zda `výška` je nepravdivá hodnota, což opravdu je.
-  - výsledkem je tedy druhý argument `100`.
+- `výška || 100` prověří, zda `výška` je nepravdivá hodnota, a protože je `0`, je tomu tak.
+  - výsledkem `||` je tedy druhý argument `100`.
 - `výška ?? 100` prověří, zda `výška` je `null/undefined`, a to není.
   - výsledkem je tedy `výška` tak, jak je, tedy `0`.
 
-Je-li nulová výška platnou hodnotou, neměla by být nahrazena defaultní hodnotou, takže zde bude správně fungovat `??`.
+V praci je nulová výška často platnou hodnotou, takže by neměla být nahrazena defaultní hodnotou. Zde tedy bude správně fungovat `??`.
 
 ## Priorita
 
-Priorita operátoru `??` je poměrně nízká: `5` v [tabulce MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table).
-Proto se `??` vyhodnocuje před `=` a `?`, ale až po většině ostatních operací, například  `+`, `*`.
+Priorita operátoru `??` je přibližně stejná jako `||`, jen o něco nižší. Je rovna `5` v [tabulce MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table), zatímco `||` má prioritu `6`.
+
+To znamená, že operátor koalescence `??` se stejně jako `||` vyhodnocuje před `=` a `?`, ale až po většině ostatních operací, například  `+`, `*`.
 
 Jestliže tedy chcete vybrat hodnotu pomocí `??` ve výrazu obsahujícím i jiné operátory, zvažte použití závorek:
 
@@ -139,7 +142,7 @@ Následující kód vydá syntaktickou chybu:
 let x = 1 && 2 ?? 3; // Syntaktická chyba
 ```
 
-Toto omezení je bezpochyby diskutabilní, ale do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, až lidé začnou z `||` přecházet na `??`.
+Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, až lidé začnou z `||` přecházet na `??`.
 
 Dá se obejít pomocí závorek:
 

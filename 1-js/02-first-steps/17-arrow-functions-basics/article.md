@@ -5,7 +5,7 @@ Existuje ještě jedna velice jednoduchá a výstižná syntaxe vytváření fun
 Nazývá se „šipková funkce“, jelikož vypadá takto:
 
 ```js
-let funkce = (arg1, arg2, ...argN) => výraz
+let funkce = (arg1, arg2, ..., argN) => výraz
 ```
 
 ...Tím se vytvoří funkce `funkce`, která přijímá argumenty `arg1..argN`, pak s jejich použitím vyhodnotí `výraz` na pravé straně a vrátí jeho výsledek.
@@ -13,7 +13,7 @@ let funkce = (arg1, arg2, ...argN) => výraz
 Jinými slovy, je to kratší verze tohoto:
 
 ```js
-let funkce = function(arg1, arg2, ...argN) {
+let funkce = function(arg1, arg2, ..., argN) {
   return výraz;
 };
 ```

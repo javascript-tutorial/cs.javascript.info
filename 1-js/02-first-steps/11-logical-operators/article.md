@@ -1,6 +1,6 @@
 # Logické operátory
 
-V JavaScriptu jsou tři logické operátory: `||` (OR -- nebo), `&&` (AND -- a), `!` (NOT -- ne).
+V JavaScriptu jsou čtyři logické operátory: `||` (OR -- nebo), `&&` (AND -- a), `!` (NOT -- ne), `??` (koalescence). V tomto článku vysvětlíme první tři, operátor `??` bude vysvětlen v dalším článku.
 
 Ačkoli se nazývají „logické“, mohou být použity na hodnoty libovolného typu, nejenom boolean. Také jejich výsledek může být jakéhokoli typu.
 
@@ -64,7 +64,7 @@ if (hodina < 10 || hodina > 18 || jeVíkend) {
 }
 ```
 
-## OR „||“ najde první pravdivou hodnotu
+## OR „||“ najde první pravdivou hodnotu [#or-finds-the-first-truthy-value]
 
 Výše uvedená logika je vcelku klasická. Nyní se podívejme na „extra“ vlastnosti JavaScriptu.
 

@@ -361,12 +361,14 @@ Návěští nám neumožňují skákat na libovolné místo v kódu.
 
 Například nejde udělat toto:
 ```js
-break návěští; // neskočí na návěští níže
+break návěští; // skok na návěští níže (nebude fungovat)
 
 návěští: for (...)
 ```
 
-Volat `break/continue` je možné jedině zevnitř cyklu a návěští se musí nacházet někde nad touto direktivou.
+Volat `break/continue` je možné jedině zevnitř cyklu.
+
+Direktivu `break` můžeme umístit i před bloky kódu, jako `label: { ... }`, ale téměř nikdy se tak nepoužívá. Funguje to také jen směrem zevnitř ven.
 ````
 
 ## Shrnutí

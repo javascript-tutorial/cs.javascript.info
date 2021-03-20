@@ -104,6 +104,12 @@ alert(2 + 2 + '1' ); // "41", ne "221"
 
 Tady operátory fungují jeden za druhým. První `+` sečte dvě čísla, takže vrátí `4`, pak druhé `+` k němu přidá řetězec `1`, takže je to jako `4 + '1' = 41`.
 
+```js run
+alert('1' + 2 + 2); // "122" a ne "14"
+```
+
+První operand je zde řetězec, takže kompilátor zachází i s ostatními dvěma operandy jako s řetězci. `2` se zřetězí s `'1'`, takže to bude jako `'1' + 2 = "12"` a `"12" + 2 = "122"`.
+
 Binární `+` je jediný operátor, který takovýmto způsobem podporuje řetězce. Ostatní aritmetické operátory fungují jen s čísly a své operandy převádějí vždy na čísla.
 
 Ukázka odčítání a dělení:
@@ -212,7 +218,7 @@ alert( x ); // 5
 
 Skutečnost, že `=` je operátor a ne nějaký „magický“ jazykový konstrukt, má zajímavý důsledek.
 
-Většina operátorů v JavaScriptu vrací nějakou hodnotu. Pro `+` a `-` je to samozřejmé, ale platí to i pro `=`.
+Všechny operátory v JavaScriptu vracejí nějakou hodnotu. Pro `+` a `-` je to samozřejmé, ale platí to i pro `=`.
 
 Volání `x = hodnota` zapíše hodnotu `hodnota` do `x` *a pak ji vrátí*.
 
