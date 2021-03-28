@@ -2,11 +2,11 @@ importance: 1
 
 ---
 
-# Function min(a, b)
+# Funkce min(a, b)
 
-Write a function `min(a,b)` which returns the least of two numbers `a` and `b`.
+Napište funkci `min(a,b)`, která vrátí menší ze dvou čísel `a` a `b`.
 
-For instance:
+Příklady:
 
 ```js
 min(2, 5) == 2

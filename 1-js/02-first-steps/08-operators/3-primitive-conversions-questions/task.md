@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# Type conversions
+# Typová konverze
 
-What are results of these expressions?
+Jaké jsou výsledky následujících výrazů?
 
 ```js no-beautify
 "" + 1 + 0
@@ -23,4 +23,4 @@ undefined + 1
 " \t \n" - 2
 ```
 
-Think well, write down and then compare with the answer.
+Dobře si to promyslete, zapište si výsledky a pak je porovnejte s odpovědí.

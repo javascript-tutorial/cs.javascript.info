@@ -2,15 +2,15 @@ importance: 5
 
 ---
 
-# A question about "if"
+# Otázka na „if“
 
-Which of these `alert`s are going to execute?
+Který z těchto `alert`ů se vykoná?
 
-What will the results of the expressions be inside `if(...)`?
+Jaké budou výsledky výrazů uvnitř `if(...)`?
 
 ```js
-if (-1 || 0) alert( 'first' );
-if (-1 && 0) alert( 'second' );
-if (null || -1 && 1) alert( 'third' );
+if (-1 || 0) alert( 'první' );
+if (-1 && 0) alert( 'druhý' );
+if (null || -1 && 1) alert( 'třetí' );
 ```
 

@@ -2,7 +2,7 @@ importance: 3
 
 ---
 
-# Giving the right name
+# Správná volba názvu
 
-1. Create a variable with the name of our planet. How would you name such a variable?
-2. Create a variable to store the name of a current visitor to a website. How would you name that variable?
+1. Vytvořte proměnnou s názvem naší planety. Jak byste takovou proměnnou pojmenovali?
+2. Vytvořte proměnnou, v níž bude uloženo jméno aktuálního návštěvníka webové stránky. Jak byste takovou proměnnou pojmenovali?

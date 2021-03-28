@@ -1,12 +1,12 @@
-The first variant:
+První varianta:
 
 ```js
-if (!(age >= 14 && age <= 90))
+if (!(věk >= 14 && věk <= 90))
 ```
 
-The second variant:
+Druhá varianta:
 
 ```js
-if (age < 14 || age > 90)
+if (věk < 14 || věk > 90)
 ```
 

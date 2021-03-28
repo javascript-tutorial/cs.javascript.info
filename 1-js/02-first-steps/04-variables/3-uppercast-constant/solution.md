@@ -1,5 +1,5 @@
-We generally use upper case for constants that are "hard-coded". Or, in other words, when the value is known prior to execution and directly written into the code.
+Obecně používáme velká písmena pro konstanty, které jsou „zakódovány natvrdo“. Jinými slovy, když je jejich hodnota známa ještě před spuštěním programu a je přímo uvedena v kódu.
 
-In this code, `birthday` is exactly like that. So we could use the upper case for it.
+V tomto kódu je to přesně případ proměnné `datumNarození`. Pro ni bychom tedy mohli použít velká písmena.
 
-In contrast, `age` is evaluated in run-time. Today we have one age, a year after we'll have another one. It is constant in a sense that it does not change through the code execution. But it is a bit "less of a constant" than `birthday`: it is calculated, so we should keep the lower case for it.
+Naproti tomu `věk` se počítá až při běhu programu. Dnes máme jeden věk, za rok budeme mít jiný. Je to konstanta v tom smyslu, že se její hodnota nezmění při provádění kódu, ale je „trochu méně konstantní“ než `datumNarození`: její hodnota je vypočítávána, takže pro ni bychom měli nechat malá písmena.

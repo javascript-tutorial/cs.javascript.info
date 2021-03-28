@@ -1,17 +1,17 @@
 
-# Rewrite with arrow functions
+# Přepište na šipkové funkce
 
-Replace Function Expressions with arrow functions in the code below:
+Přepište funkční výrazy v následujícím kódu na šipkové funkce:
 
 ```js run
-function ask(question, yes, no) {
-  if (confirm(question)) yes()
-  else no();
+function zeptejSe(otázka, ano, ne) {
+  if (confirm(otázka)) ano()
+  else ne();
 }
 
-ask(
-  "Do you agree?",
-  function() { alert("You agreed."); },
-  function() { alert("You canceled the execution."); }
+zeptejSe(
+  "Souhlasíte?",
+  function() { alert("Souhlasil jste."); },
+  function() { alert("Zrušil jste provádění."); }
 );
 ```

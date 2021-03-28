@@ -1,20 +1,20 @@
-To precisely match the functionality of `switch`, the `if` must use a strict comparison `'==='`.
+Abychom dosáhli přesné funkcionality příkazu `switch`, musí `if` používat striktní rovnost `'==='`.
 
-For given strings though, a simple `'=='` works too.
+V tomto případě však pro zadané řetězce funguje i obyčejné `'=='`.
 
 ```js no-beautify
-if(browser == 'Edge') {
-  alert("You've got the Edge!");
-} else if (browser == 'Chrome'
- || browser == 'Firefox'
- || browser == 'Safari'
- || browser == 'Opera') {
-  alert( 'Okay we support these browsers too' );
+if(prohlížeč == 'Edge') {
+  alert("Vy máte Edge!");
+} else if (prohlížeč == 'Chrome'
+ || prohlížeč == 'Firefox'
+ || prohlížeč == 'Safari'
+ || prohlížeč == 'Opera') {
+  alert( 'Dobrá, tyto prohlížeče také podporujeme' );
 } else {
-  alert( 'We hope that this page looks ok!' );
+  alert( 'Doufáme, že tato stránka vypadá dobře!' );
 }
 ```
 
-Please note: the construct `browser == 'Chrome' || browser == 'Firefox' …` is split into multiple lines for better readability.
+Všimněte si, že konstrukce `prohlížeč == 'Chrome' || prohlížeč == 'Firefox' …` je pro lepší čitelnost rozdělena do několika řádků.
 
-But the `switch` construct is still cleaner and more descriptive.
+I tak je ovšem konstrukce `switch` jasnější a přehlednější.

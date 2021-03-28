@@ -2,25 +2,25 @@ importance: 5
 
 ---
 
-# Rewrite the "switch" into an "if"
+# Přepište „switch“ na „if“
 
-Write the code using `if..else` which would correspond to the following `switch`:
+Přepište tento kód pomocí `if..else`, které nahradí následující `switch`:
 
 ```js
-switch (browser) {
+switch (prohlížeč) {
   case 'Edge':
-    alert( "You've got the Edge!" );
+    alert( "Vy máte Edge!" );
     break;
 
   case 'Chrome':
   case 'Firefox':
   case 'Safari':
   case 'Opera':
-    alert( 'Okay we support these browsers too' );
+    alert( 'Dobrá, tyto prohlížeče také podporujeme' );
     break;
 
   default:
-    alert( 'We hope that this page looks ok!' );
+    alert( 'Doufáme, že tato stránka vypadá dobře!' );
 }
 ```
 

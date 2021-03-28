@@ -2,16 +2,16 @@ importance: 3
 
 ---
 
-# Output prime numbers
+# Vypište prvočísla
 
-An integer number greater than `1` is called a [prime](https://en.wikipedia.org/wiki/Prime_number) if it cannot be divided without a remainder by anything except `1` and itself.
+Celé číslo větší než `1` se nazývá [prvočíslo](https://cs.wikipedia.org/wiki/Prvočíslo), jestliže není dělitelné beze zbytku jiným celým číslem než `1` a sebou samým.
 
-In other words, `n > 1` is a prime if it can't be evenly divided by anything except `1` and `n`.
+Jinými slovy, číslo `n > 1` je prvočíslo, jestliže není dělitelné beze zbytku jiným číslem než `1` a `n`.
 
-For example, `5` is a prime, because it cannot be divided without a remainder by `2`, `3` and `4`.
+Například `5` je prvočíslo, protože není dělitelné beze zbytku číslem `2`, `3` ani `4`.
 
-**Write the code which outputs prime numbers in the interval from `2` to `n`.**
+**Napište kód, který vypíše všechna prvočísla v intervalu od `2` do `n`.**
 
-For `n = 10` the result will be `2,3,5,7`.
+Například pro `n = 10` bude výsledek `2,3,5,7`.
 
-P.S. The code should work for any `n`, not be hard-tuned for any fixed value.
+P.S. Kód by měl fungovat pro jakékoli `n`. Neměl by být vyladěn jen pro nějakou pevnou hodnotu.

@@ -1,89 +1,85 @@
-# The modern mode, "use strict"
+# Moderní režim, „use strict“
 
-For a long time, JavaScript evolved without compatibility issues. New features were added to the language while old functionality didn't change.
+Dlouhou dobu byl JavaScript vyvíjen bez problémů s kompatibilitou. Do jazyka byly přidávány nové prvky, zatímco stará funkcionalita se neměnila.
 
-That had the benefit of never breaking existing code. But the downside was that any mistake or an imperfect decision made by JavaScript's creators got stuck in the language forever.
+Mělo to tu výhodu, že se nerozbíjel již existující kód. Nevýhodou však bylo, že každá chyba nebo nedokonalé rozhodnutí tvůrců JavaScriptu zůstala v jazyce zakotvena navždy.
 
-This was the case until 2009 when ECMAScript 5 (ES5) appeared. It added new features to the language and modified some of the existing ones. To keep the old code working, most such modifications are off by default. You need to explicitly enable them with a special directive: `"use strict"`.
+To platilo až do roku 2009, kdy se objevil ECMAScript 5 (ES5), který do jazyka přidal nové vlastnosti a upravil některé již existující. Aby starý kód nepřestal fungovat, většina těchto úprav je defaultně vypnuta. Musíte je výslovně povolit speciální direktivou: `"use strict"`.
 
-## "use strict"
+## „use strict“
 
-The directive looks like a string: `"use strict"` or `'use strict'`. When it is located at the top of a script, the whole script works the "modern" way.
+Tato direktiva má podobu řetězce: `"use strict"` nebo `'use strict'`. Když je umístěna na začátku skriptu, celý skript bude fungovat „moderním“ způsobem.
 
-For example:
+Příklad:
 
 ```js
 "use strict";
 
-// this code works the modern way
+// tento kód funguje moderním způsobem
 ...
 ```
 
-Quite soon we're going to learn functions (a way to group commands), so let's note in advance that `"use strict"` can be put at the beginning of a function. Doing that enables strict mode in that function only. But usually people use it for the whole script.
+Brzy se naučíme používat funkce (způsob, jak seskupit příkazy), a tak s předstihem zmíníme, že `"use strict"` můžeme umístit i na začátek funkce. Když to uděláme, umožníme striktní režim pouze v této funkci. Většinou jej však lidé používají pro celý skript.
 
-````warn header="Ensure that \"use strict\" is at the top"
-Please make sure that `"use strict"` is at the top of your scripts, otherwise strict mode may not be enabled.
+````warn header="Zajistěte, aby „use strict“ bylo na začátku"
+Zajistěte, aby `"use strict"` bylo hned na samém začátku vašeho skriptu, jinak nebude striktní režim povolen.
 
-Strict mode isn't enabled here:
+Zde není striktní režim povolen:
 
 ```js no-strict
-alert("some code");
-// "use strict" below is ignored--it must be at the top
+alert("nějaký kód");
+// níže uvedený "use strict" se ignoruje - musí být na začátku
 
 "use strict";
 
-// strict mode is not activated
+// striktní režim není aktivován
 ```
 
-Only comments may appear above `"use strict"`.
+Nad `"use strict"` nesmí být nic jiného než komentáře.
 ````
 
-```warn header="There's no way to cancel `use strict`"
-There is no directive like `"no use strict"` that reverts the engine to old behavior.
-
-Once we enter strict mode, there's no going back.
+```warn header="`use strict` nelze nijak zrušit"
+Neexistuje žádná direktiva jako `"no use strict"`, která by vrátila engine ke starému chování. Jakmile jednou vstoupíme do striktního režimu, už není cesty zpět.
 ```
 
-## Browser console
+## Prohlížečová konzole
 
-When you use a [developer console](info:devtools) to run code, please note that it doesn't `use strict` by default.
+Všimněte si, že když spouštíte kód ve [vývojářské konzoli](info:devtools), nepoužívá `use strict` defaultně.
+Někdy, když `use strict` znamená rozdíl, dostanete nesprávné výsledky.
 
-Sometimes, when `use strict` makes a difference, you'll get incorrect results.
+Jak tedy vlastně používat `use strict` v konzoli?
 
-So, how to actually `use strict` in the console?
-
-First, you can try to press `key:Shift+Enter` to input multiple lines, and put `use strict` on top, like this:
+Za prvé, můžete zkusit vložit více řádků pomocí `key:Shift+Enter` a umístit `use strict` na začátek, například takto:
 
 ```js
-'use strict'; <Shift+Enter for a newline>
-//  ...your code
-<Enter to run>
+'use strict'; <Shift+Enter pro nový řádek>
+//  ...váš kód
+<Enter pro spuštění>
 ```
 
-It works in most browsers, namely Firefox and Chrome.
+Funguje to ve většině prohlížečů, konkrétně ve Firefoxu a Chrome.
 
-If it doesn't, e.g. in an old browser, there's an ugly, but reliable way to ensure `use strict`. Put it inside this kind of wrapper:
+Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nepěkný, ale spolehlivý způsob, jak zajistit `use strict`. Umístěte jej do tohoto wrapperu:
 
 ```js
 (function() {
   'use strict';
 
-  // ...your code here...
+  // ...zde je váš kód...
 })()
 ```
 
-## Should we "use strict"?
+## Měli bychom používat „use strict“?
 
-The question may sound obvious, but it's not so.
+Odpověď na tuto otázku se může zdát samozřejmá, ale není tomu tak.
 
-One could recommend to start scripts with `"use strict"`... But you know what's cool?
+Můžeme doporučit, abyste zahajovali skripty `"use strict"`... ale víte, co je fajn?
 
-Modern JavaScript supports "classes" and "modules" - advanced language structures (we'll surely get to them), that enable `use strict` automatically. So we don't need to add the `"use strict"` directive, if we use them.
+Moderní JavaScript podporuje „třídy“ a „moduly“ - pokročilé jazykové struktury (určitě se k nim dostaneme), které používají `use strict` automaticky. Pokud je tedy používáme, nemusíme direktivu `use strict` přidávat.
 
-**So, for now `"use strict";` is a welcome guest at the top of your scripts. Later, when your code is all in classes and modules, you may omit it.**
+**Prozatím tedy `"use strict"` používejte; na začátku vašich skriptů bývá vítaným hostem. Později, až budete mít celý svůj kód v třídách a modulech, jej můžete vypustit.**
 
-As of now, we've got to know about `use strict` in general.
+Prozatím tedy víme, jak obecně `use strict` používat.
+Až se v dalších kapitolách naučíme další vlastnosti jazyka, poznáme rozdíly mezi striktním a starším režimem. Naštěstí jich není mnoho a ve skutečnosti nám spíše zlepšují život.
 
-In the next chapters, as we learn language features, we'll see the differences between the strict and old modes. Luckily, there aren't many and they actually make our lives better.
-
-All examples in this tutorial assume strict mode unless (very rarely) specified otherwise.
+Všechny příklady v našem tutoriálu předpokládají striktní režim, pokud není (velmi zřídka) uvedeno jinak.
