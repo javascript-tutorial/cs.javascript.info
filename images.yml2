@@ -94,22 +94,25 @@ hello-world-render.svg:
 
 ifelse_task2.svg:
   "Begin":
-    text: "Начало"
+    text: "Začátek"
     position: "center"
   "Other":
-    text: "Другое"
+    text: "Jiné"
     position: "center"
   "You don't know?":
-    text: "Не знаете?"
+    text: "Vy to nevíte?"
     position: "center"
   "Right!":
-    text: "Правильно!"
+    text: "Správně!"
     position: "center"
   "What's the ":
-    text: "Каково"
+    text: "Jaký je"
     position: "center"
   "“official” name of":
-    text: "\"официальное название\""
+    text: "„oficiální“ název"
+    position: "center"
+  "“JavaScript?":
+    text: "JavaScriptu?"
     position: "center"
   "Иначе": ""
 

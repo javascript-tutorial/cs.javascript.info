@@ -4,11 +4,11 @@
 
 Operátor koalescence se zapisuje dvěma otazníky za sebou `??`.
 
-Protože tento operátor zachází s hodnotami `null` a `undefined` podobně, budeme v tomto článku používat speciální pojem. Řekněmě, že výraz je „definován“, pokud nemá hodnotu `null` ani `undefined`.
+Protože tento operátor zachází s hodnotami `null` a `undefined` podobně, budeme v tomto článku používat speciální pojem. Řekněme, že výraz je „definován“, pokud nemá hodnotu `null` ani `undefined`.
 
 Výsledkem `a ?? b` je:
 - pokud `a` je definovaný, pak `a`;
-- pokud `a` není definovaný, pak `b`;
+- pokud `a` není definovaný, pak `b`.
 
 Jinými slovy, `??` vrátí první argument, jestliže ten nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
 
@@ -102,7 +102,7 @@ alert(výška ?? 100); // 0
 - `výška ?? 100` prověří, zda `výška` je `null/undefined`, a to není.
   - výsledkem je tedy `výška` tak, jak je, tedy `0`.
 
-V praci je nulová výška často platnou hodnotou, takže by neměla být nahrazena defaultní hodnotou. Zde tedy bude správně fungovat `??`.
+V praxi je nulová výška často platnou hodnotou, takže by neměla být nahrazena defaultní hodnotou. Zde tedy bude správně fungovat `??`.
 
 ## Priorita
 
