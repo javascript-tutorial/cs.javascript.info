@@ -9,10 +9,14 @@ Abychom viděli chyby a získali spoustu dalších užitečných informací o sk
 Většina vývojářů tíhne k vývoji v Chrome nebo Firefoxu, protože mají vyhlášené vývojářské nástroje. Jiné prohlížeče rovněž poskytují vývojářské nástroje, někdy se speciálními vlastnostmi, ale obvykle jen „dohánějí“ Chrome nebo Firefox. Většina vývojářů tedy má svůj „oblíbený“ prohlížeč a k jinému se uchýlí jen tehdy, řeší-li problém specifický pro určitý prohlížeč.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Vývojářské nástroje jsou silné a mají mnoho funkcí. Pro začátek se naučíme, jak je otevřít, podívat se na chyby a spustit v nich příkazy JavaScriptu.
 =======
 Developer tools are potent, they have many features. To start, we'll learn how to open them, look at errors, and run JavaScript commands.
 >>>>>>> 99e59ba611ab11319ef9d0d66734b0bea2c3f058
+=======
+Developer tools are potent; they have many features. To start, we'll learn how to open them, look at errors, and run JavaScript commands.
+>>>>>>> 6ab384f2512902d74e4b0ff5a6be60e48ab52e96
 
 ## Google Chrome
 
