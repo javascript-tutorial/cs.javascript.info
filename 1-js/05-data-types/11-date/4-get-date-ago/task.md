@@ -2,20 +2,20 @@ importance: 4
 
 ---
 
-# Which day of month was many days ago?
+# Který den v měsíci byl před mnoha dny?
 
-Create a function `getDateAgo(date, days)` to return the day of month `days` ago from the `date`.
+Vytvořte funkci `vraťDenPřed(datum, dny)`, která vrátí den v měsíci, který byl `dny` dnů přede dnem `datum`.
 
-For instance, if today is 20th, then `getDateAgo(new Date(), 1)` should be 19th and `getDateAgo(new Date(), 2)` should be 18th.
+Například jestliže dnes je 20., pak `vraťDenPřed(new Date(), 1)` by měla vrátit 19. a `vraťDenPřed(new Date(), 2)` by měla vrátit 18.
 
-Should work reliably for `days=365` or more:
+Měla by spolehlivě fungovat i pro `dny=365` nebo více:
 
 ```js
-let date = new Date(2015, 0, 2);
+let datum = new Date(2015, 0, 2);
 
-alert( getDateAgo(date, 1) ); // 1, (1 Jan 2015)
-alert( getDateAgo(date, 2) ); // 31, (31 Dec 2014)
-alert( getDateAgo(date, 365) ); // 2, (2 Jan 2014)
+alert( vraťDenPřed(datum, 1) ); // 1, (1. leden 2015)
+alert( vraťDenPřed(datum, 2) ); // 31, (31. prosinec 2014)
+alert( vraťDenPřed(datum, 365) ); // 2, (2. leden 2014)
 ```
 
-P.S. The function should not modify the given `date`.
+P.S. Funkce by neměla modifikovat zadané `datum`.

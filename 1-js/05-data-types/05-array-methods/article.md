@@ -1,427 +1,427 @@
-# Array methods
+# Metody polí
 
-Arrays provide a lot of methods. To make things easier, in this chapter they are split into groups.
+Pole poskytují mnoho metod. Pro zjednodušení jsme je v této kapitole rozdělili do skupin.
 
-## Add/remove items
+## Přidávání a odebírání prvků
 
-We already know methods that add and remove items from the beginning or the end:
+Známe už metody, které přidávají a odebírají prvky na začátku nebo na konci pole:
 
-- `arr.push(...items)` -- adds items to the end,
-- `arr.pop()` -- extracts an item from the end,
-- `arr.shift()` -- extracts an item from the beginning,
-- `arr.unshift(...items)` -- adds items to the beginning.
+- `arr.push(...prvky)` -- přidává prvky na konec,
+- `arr.pop()` -- vybírá prvek z konce,
+- `arr.shift()` -- vybírá prvek ze začátku,
+- `arr.unshift(...items)` -- přidává prvky na začátek.
 
-Here are a few others.
+Zde uvedeme několik dalších.
 
 ### splice
 
-How to delete an element from the array?
+Jak smazat prvek z pole?
 
-The arrays are objects, so we can try to use `delete`:
+Pole jsou objekty, takže se můžeme pokusit použít `delete`:
 
 ```js run
-let arr = ["I", "go", "home"];
+let pole = ["Já", "jdu", "domů"];
 
-delete arr[1]; // remove "go"
+delete pole[1]; // odstraníme "jdu"
 
-alert( arr[1] ); // undefined
+alert( pole[1] ); // undefined
 
-// now arr = ["I",  , "home"];
-alert( arr.length ); // 3
+// nyní pole = ["Já",  , "domů"];
+alert( pole.length ); // 3
 ```
 
-The element was removed, but the array still has 3 elements, we can see that `arr.length == 3`.
+Prvek byl odstraněn, ale pole má stále 3 prvky. Vidíme, že `pole.length == 3`.
 
-That's natural, because `delete obj.key` removes a value by the `key`. It's all it does. Fine for objects. But for arrays we usually want the rest of elements to shift and occupy the freed place. We expect to have a shorter array now.
+To je přirozené, poněvadž `delete obj.klíč` odstraňuje hodnotu podle `klíč`. To je vše, co udělá. Pro objekty je to dobře. Ale u polí zpravidla chceme, aby se ostatní prvky posunuly a obsadily prázdné místo. Očekáváme, že nyní budeme mít kratší pole.
 
-So, special methods should be used.
+Měli bychom tedy použít speciální metody.
 
-The [arr.splice](mdn:js/Array/splice) method is a swiss army knife for arrays. It can do everything: insert, remove and replace elements.
+Metoda [pole.splice](mdn:js/Array/splice) je jako švýcarský nůž pro pole. Umí všechno: vkládat, odstraňovat i nahrazovat prvky.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-arr.splice(start[, deleteCount, elem1, ..., elemN])
+pole.splice(začátek[, početSmazaných, prvek1, ..., prvekN])
 ```
 
-It modifies `arr` starting from the index `start`: removes `deleteCount` elements and then inserts `elem1, ..., elemN` at their place. Returns the array of removed elements.
+Modifikuje `pole` od indexu `začátek`: napřed odstraní `početSmazaných` prvků a pak vloží na jejich místo `prvek1, ..., prvekN`. Vrátí pole odstraněných prvků.
 
-This method is easy to grasp by examples.
+Tato metoda je snadno pochopitelná na příkladech.
 
-Let's start with the deletion:
+Začněme s mazáním:
 
 ```js run
-let arr = ["I", "study", "JavaScript"];
+let pole = ["Já", "studuji", "JavaScript"];
 
 *!*
-arr.splice(1, 1); // from index 1 remove 1 element
+pole.splice(1, 1); // od indexu 1 odstraníme 1 prvek
 */!*
 
-alert( arr ); // ["I", "JavaScript"]
+alert( pole ); // ["Já", "JavaScript"]
 ```
 
-Easy, right? Starting from the index `1` it removed `1` element.
+Snadné, že? Počínajíc indexem `1` metoda odstranila `1` prvek.
 
-In the next example we remove 3 elements and replace them with the other two:
+V dalším příkladu odstraníme 3 prvky a nahradíme je dvěma jinými:
 
 ```js run
-let arr = [*!*"I", "study", "JavaScript",*/!* "right", "now"];
+let pole = [*!*"Já", "studuji", "JavaScript",*/!* "právě", "teď"];
 
-// remove 3 first elements and replace them with another
-arr.splice(0, 3, "Let's", "dance");
+// odstraníme první 3 prvky a nahradíme je dvěma jinými
+pole.splice(0, 3, "Zatancujme", "si");
 
-alert( arr ) // now [*!*"Let's", "dance"*/!*, "right", "now"]
+alert( pole ) // nyní [*!*"Zatancujme", "si"*/!*, "právě", "teď"]
 ```
 
-Here we can see that `splice` returns the array of removed elements:
+Zde vidíme, že `splice` vrací pole odstraněných prvků:
 
 ```js run
-let arr = [*!*"I", "study",*/!* "JavaScript", "right", "now"];
+let pole = [*!*"Já", "studuji",*/!* "JavaScript", "právě", "teď"];
 
-// remove 2 first elements
-let removed = arr.splice(0, 2);
+// odstraníme první 2 prvky
+let odstraněno = pole.splice(0, 2);
 
-alert( removed ); // "I", "study" <-- array of removed elements
+alert( odstraněno ); // "Já", "studuji" <-- pole odstraněných prvků
 ```
 
-The `splice` method is also able to insert the elements without any removals. For that we need to set `deleteCount` to `0`:
+Metoda `splice` dokáže také vkládat prvky bez odstraňování. K tomu musíme nastavit `početSmazaných` na `0`:
 
 ```js run
-let arr = ["I", "study", "JavaScript"];
+let pole = ["Já", "studuji", "JavaScript"];
 
-// from index 2
-// delete 0
-// then insert "complex" and "language"
-arr.splice(2, 0, "complex", "language");
+// od indexu 2
+// smažeme 0
+// pak vložíme "složitý" a "jazyk"
+pole.splice(2, 0, "složitý", "jazyk");
 
-alert( arr ); // "I", "study", "complex", "language", "JavaScript"
+alert( pole ); // "Já", "studuji", "složitý", "jazyk", "JavaScript"
 ```
 
-````smart header="Negative indexes allowed"
-Here and in other array methods, negative indexes are allowed. They specify the position from the end of the array, like here:
+````smart header="Záporné indexy jsou povoleny"
+Zde i v jiných metodách polí jsou povoleny záporné indexy. Ty specifikují pozici od konce pole, například:
 
 ```js run
-let arr = [1, 2, 5];
+let pole = [1, 2, 5];
 
-// from index -1 (one step from the end)
-// delete 0 elements,
-// then insert 3 and 4
-arr.splice(-1, 0, 3, 4);
+// od indexu -1 (jeden krok před koncem)
+// smažeme 0 prvků,
+// pak vložíme 3 a 4
+pole.splice(-1, 0, 3, 4);
 
-alert( arr ); // 1,2,3,4,5
+alert( pole ); // 1,2,3,4,5
 ```
 ````
 
 ### slice
 
-The method [arr.slice](mdn:js/Array/slice) is much simpler than similar-looking `arr.splice`.
+Metoda [pole.slice](mdn:js/Array/slice) je mnohem jednodušší než podobně vypadající `pole.splice`.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-arr.slice([start], [end])
+pole.slice([začátek], [konec])
 ```
 
-It returns a new array copying to it all items from index `start` to `end` (not including `end`). Both `start` and `end` can be negative, in that case position from array end is assumed.
+Vrátí nové pole, do něhož zkopíruje všechny prvky od indexu `začátek` do indexu `konec` (`konec` není zahrnut). Jak `začátek`, tak `konec` mohou být záporné. V tom případě se předpokládá pozice od konce pole.
 
-It's similar to a string method `str.slice`, but instead of substrings it makes subarrays.
+Podobá se řetězcové metodě `str.slice`, ale místo podřetězců vytváří podpole.
 
-For instance:
+Například:
 
 ```js run
-let arr = ["t", "e", "s", "t"];
+let pole = ["t", "e", "s", "t"];
 
-alert( arr.slice(1, 3) ); // e,s (copy from 1 to 3)
+alert( pole.slice(1, 3) ); // e,s (kopíruje od 1 do 3)
 
-alert( arr.slice(-2) ); // s,t (copy from -2 till the end)
+alert( pole.slice(-2) ); // s,t (kopíruje od -2 do konce)
 ```
 
-We can also call it without arguments: `arr.slice()` creates a copy of `arr`. That's often used to obtain a copy for further transformations that should not affect the original array.
+Můžeme ji volat i bez argumentů: `pole.slice()` vytvoří kopii `pole`. To se často používá k vytvoření kopie pro další transformace, které by neměly ovlivnit původní pole.
 
 ### concat
 
-The method [arr.concat](mdn:js/Array/concat) creates a new array that includes values from other arrays and additional items.
+Metoda [pole.concat](mdn:js/Array/concat) vytvoří nové pole, které obsahuje hodnoty z jiných polí a další prvky.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-arr.concat(arg1, arg2...)
+pole.concat(arg1, arg2...)
 ```
 
-It accepts any number of arguments -- either arrays or values.
+Přijímá libovolný počet argumentů -- mohou jimi být pole nebo hodnoty.
 
-The result is a new array containing items from `arr`, then `arg1`, `arg2` etc.
+Výsledkem je nové pole, které obsahuje prvky z `pole`, pak `arg1`, `arg2` atd.
 
-If an argument `argN` is an array, then all its elements are copied. Otherwise, the argument itself is copied.
+Je-li argument `argN` pole, pak se zkopírují všechny jeho prvky. V opačném případě se zkopíruje sám argument.
 
-For instance:
+Příklad:
 
 ```js run
-let arr = [1, 2];
+let pole = [1, 2];
 
-// create an array from: arr and [3,4]
-alert( arr.concat([3, 4]) ); // 1,2,3,4
+// vytvoříme pole z: pole a [3,4]
+alert( pole.concat([3, 4]) ); // 1,2,3,4
 
-// create an array from: arr and [3,4] and [5,6]
-alert( arr.concat([3, 4], [5, 6]) ); // 1,2,3,4,5,6
+// vytvoříme pole z: pole a [3,4] a [5,6]
+alert( pole.concat([3, 4], [5, 6]) ); // 1,2,3,4,5,6
 
-// create an array from: arr and [3,4], then add values 5 and 6
-alert( arr.concat([3, 4], 5, 6) ); // 1,2,3,4,5,6
+// vytvoříme pole z: pole a [3,4], pak přidáme hodnoty 5 a 6
+alert( pole.concat([3, 4], 5, 6) ); // 1,2,3,4,5,6
 ```
 
-Normally, it only copies elements from arrays. Other objects, even if they look like arrays, are added as a whole:
+Běžně kopíruje prvky jen z polí. Ostatní objekty, i ty, které vypadají jako pole, se přidají jako celek:
 
 ```js run
-let arr = [1, 2];
+let pole = [1, 2];
 
-let arrayLike = {
-  0: "something",
+let jakoPole = {
+  0: "něco",
   length: 1
 };
 
-alert( arr.concat(arrayLike) ); // 1,2,[object Object]
+alert( pole.concat(jakoPole) ); // 1,2,[object Object]
 ```
 
-...But if an array-like object has a special `Symbol.isConcatSpreadable` property, then it's treated as an array by `concat`: its elements are added instead:
+...Jestliže však objekt podobný poli má speciální vlastnost `Symbol.isConcatSpreadable`, pak s ním metoda `concat` zachází jako s polem -- místo objektu se přidají jeho prvky:
 
 ```js run
-let arr = [1, 2];
+let pole = [1, 2];
 
-let arrayLike = {
-  0: "something",
-  1: "else",
+let jakoPole = {
+  0: "něco",
+  1: "jiného",
 *!*
   [Symbol.isConcatSpreadable]: true,
 */!*
   length: 2
 };
 
-alert( arr.concat(arrayLike) ); // 1,2,something,else
+alert( pole.concat(jakoPole) ); // 1,2,něco,jiného
 ```
 
-## Iterate: forEach
+## Iterace: forEach
 
-The [arr.forEach](mdn:js/Array/forEach) method allows to run a function for every element of the array.
+Metoda [pole.forEach](mdn:js/Array/forEach) umožňuje pro každý prvek pole volat zadanou funkci.
 
-The syntax:
+Syntaxe:
 ```js
-arr.forEach(function(item, index, array) {
-  // ... do something with item
+pole.forEach(function(prvek, index, pole) {
+  // ... provádí něco s prvkem
 });
 ```
 
-For instance, this shows each element of the array:
+Například tohle zobrazí každý prvek pole:
 
 ```js run
-// for each element call alert
-["Bilbo", "Gandalf", "Nazgul"].forEach(alert);
+// pro každý prvek volá alert
+["Bilbo", "Gandalf", "Nazgúl"].forEach(alert);
 ```
 
-And this code is more elaborate about their positions in the target array:
+A tento kód vypíše podrobnosti o pozicích prvků v cílovém poli:
 
 ```js run
-["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
-  alert(`${item} is at index ${index} in ${array}`);
+["Bilbo", "Gandalf", "Nazgúl"].forEach((prvek, index, pole) => {
+  alert(`${prvek} je na indexu ${index} v poli ${pole}`);
 });
 ```
 
-The result of the function (if it returns any) is thrown away and ignored.
+Výsledek funkce (pokud funkce nějaký vrátí) je zahozen a ignorován.
 
 
-## Searching in array
+## Hledání v poli
 
-Now let's cover methods that search in an array.
+Uveďme nyní metody, které prohledávají pole.
 
-### indexOf/lastIndexOf and includes
+### indexOf/lastIndexOf a includes
 
-The methods [arr.indexOf](mdn:js/Array/indexOf), [arr.lastIndexOf](mdn:js/Array/lastIndexOf) and [arr.includes](mdn:js/Array/includes) have the same syntax and do essentially the same as their string counterparts, but operate on items instead of characters:
+Metody [pole.indexOf](mdn:js/Array/indexOf), [pole.lastIndexOf](mdn:js/Array/lastIndexOf) a [pole.includes](mdn:js/Array/includes) mají stejnou syntaxi a dělají v zásadě totéž, jako jejich řetězcové protějšky, ale místo znaků pracují nad prvky pole:
 
-- `arr.indexOf(item, from)` -- looks for `item` starting from index `from`, and returns the index where it was found, otherwise `-1`.
-- `arr.lastIndexOf(item, from)` -- same, but looks for from right to left.
-- `arr.includes(item, from)` -- looks for `item` starting from index `from`, returns `true` if found.
+- `pole.indexOf(prvek, odkud)` -- hledá `prvek` počínajíc indexem `odkud` a vrátí index, na němž byl prvek nalezen, anebo `-1`, když nalezen nebyl.
+- `pole.lastIndexOf(prvek, odkud)` -- totéž, ale hledá zprava doleva.
+- `pole.includes(prvek, odkud)` -- hledá `prvek` počínajíc indexem `odkud` a vrátí `true`, pokud byl nalezen.
 
-For instance:
-
-```js run
-let arr = [1, 0, false];
-
-alert( arr.indexOf(0) ); // 1
-alert( arr.indexOf(false) ); // 2
-alert( arr.indexOf(null) ); // -1
-
-alert( arr.includes(1) ); // true
-```
-
-Note that the methods use `===` comparison. So, if we look for `false`, it finds exactly `false` and not the zero.
-
-If we want to check for inclusion, and don't want to know the exact index, then `arr.includes` is preferred.
-
-Also, a very minor difference of `includes` is that it correctly handles `NaN`, unlike `indexOf/lastIndexOf`:
+Příklad:
 
 ```js run
-const arr = [NaN];
-alert( arr.indexOf(NaN) ); // -1 (should be 0, but === equality doesn't work for NaN)
-alert( arr.includes(NaN) );// true (correct)
+let pole = [1, 0, false];
+
+alert( pole.indexOf(0) ); // 1
+alert( pole.indexOf(false) ); // 2
+alert( pole.indexOf(null) ); // -1
+
+alert( pole.includes(1) ); // true
 ```
 
-### find and findIndex
+Všimněte si, že metody používají porovnávání `===`. Hledáme-li tedy `false`, najdou přesně `false` a ne nulu.
 
-Imagine we have an array of objects. How do we find an object with the specific condition?
+Chceme-li si jen ověřit, zda prvek je v poli, a nechceme znát jeho přesný index, dává se přednost metodě `pole.includes`.
 
-Here the [arr.find(fn)](mdn:js/Array/find) method comes in handy.
+Velmi nepatrný rozdíl metody `includes` je také v tom, že na rozdíl od `indexOf/lastIndexOf` správně zpracovává `NaN`:
 
-The syntax is:
+```js run
+const pole = [NaN];
+alert( pole.indexOf(NaN) ); // -1 (mělo by být 0, ale rovnost === pro NaN nefunguje)
+alert( pole.includes(NaN) );// true (správně)
+```
+
+### find a findIndex
+
+Představme si, že máme pole objektů. Jak najdeme objekt, pro který platí specifická podmínka?
+
+Tady se nám hodí metoda [pole.find(fn)](mdn:js/Array/find).
+
+Syntaxe je:
 ```js
-let result = arr.find(function(item, index, array) {
-  // if true is returned, item is returned and iteration is stopped
-  // for falsy scenario returns undefined
+let výsledek = pole.find(function(prvek, index, pole) {
+  // jestliže funkce vrátí true, bude vrácen prvek a iterace se zastaví
+  // pokud funkce vrátí samá false, bude vráceno undefined
 });
 ```
 
-The function is called for elements of the array, one after another:
+Funkce je volána na prvcích pole, na jednom po druhém:
 
-- `item` is the element.
-- `index` is its index.
-- `array` is the array itself.
+- `prvek` je prvek.
+- `index` je jeho index.
+- `pole` je samotné pole.
 
-If it returns `true`, the search is stopped, the `item` is returned. If nothing found, `undefined` is returned.
+Jestliže vrátí `true`, hledání se zastaví a vrátí se `prvek`. Není-li nic nalezeno, vrátí se `undefined`.
 
-For example, we have an array of users, each with the fields `id` and `name`. Let's find the one with `id == 1`:
+Například máme pole uživatelů, každý má vlastnosti `id` a `jméno`. Najděme toho, který má `id == 1`:
 
 ```js run
-let users = [
-  {id: 1, name: "John"},
-  {id: 2, name: "Pete"},
-  {id: 3, name: "Mary"}
+let uživatelé = [
+  {id: 1, jméno: "Jan"},
+  {id: 2, jméno: "Petr"},
+  {id: 3, jméno: "Marie"}
 ];
 
-let user = users.find(item => item.id == 1);
+let uživatel = uživatelé.find(prvek => prvek.id == 1);
 
-alert(user.name); // John
+alert(uživatel.jméno); // Jan
 ```
 
-In real life arrays of objects is a common thing, so the `find` method is very useful.
+V reálném životě jsou pole objektů běžnou věcí, takže metoda `find` je velmi užitečná.
 
-Note that in the example we provide to `find` the function `item => item.id == 1` with one argument. That's typical, other arguments of this function are rarely used.
+Všimněte si, že v tomto příkladu poskytujeme metodě `find` funkci `prvek => prvek.id == 1` s jedním argumentem. To je typické, ostatní argumenty této funkce se používají málokdy.
 
-The [arr.findIndex](mdn:js/Array/findIndex) method is essentially the same, but it returns the index where the element was found instead of the element itself and `-1` is returned when nothing is found.
+Metoda [pole.findIndex](mdn:js/Array/findIndex) je v zásadě stejná, ale namísto samotného prvku vrací index, na němž byl prvek nalezen, anebo `-1`, jestliže nebylo nalezeno nic.
 
 ### filter
 
-The `find` method looks for a single (first) element that makes the function return `true`.
+Metoda `find` najde jediný (první) prvek, který způsobí, že funkce vrátí `true`.
 
-If there may be many, we can use [arr.filter(fn)](mdn:js/Array/filter).
+Jestliže jich může být více, můžeme použít metodu [pole.filter(fn)](mdn:js/Array/filter).
 
-The syntax is similar to `find`, but `filter` returns an array of all matching elements:
+Její syntaxe je podobná `find`, ale `filter` vrací pole všech odpovídajících prvků:
 
 ```js
-let results = arr.filter(function(item, index, array) {
-  // if true item is pushed to results and the iteration continues
-  // returns empty array if nothing found
+let výsledky = pole.filter(function(prvek, index, pole) {
+  // vrátí-li true, prvek se vloží metodou push do výsledků a iterace pokračuje
+  // není-li nic nalezeno, je vráceno prázdné pole
 });
 ```
 
-For instance:
+Příklad:
 
 ```js run
-let users = [
-  {id: 1, name: "John"},
-  {id: 2, name: "Pete"},
-  {id: 3, name: "Mary"}
+let uživatelé = [
+  {id: 1, jméno: "Jan"},
+  {id: 2, jméno: "Petr"},
+  {id: 3, jméno: "Marie"}
 ];
 
-// returns array of the first two users
-let someUsers = users.filter(item => item.id < 3);
+// vrátí pole prvních dvou uživatelů
+let nějacíUživatelé = uživatelé.filter(prvek => prvek.id < 3);
 
-alert(someUsers.length); // 2
+alert(nějacíUživatelé.length); // 2
 ```
 
-## Transform an array
+## Transformace polí
 
-Let's move on to methods that transform and reorder an array.
+Přejděme nyní k metodám, které pole transformují a přeskupují.
 
 ### map
 
-The [arr.map](mdn:js/Array/map) method is one of the most useful and often used.
+Metoda [pole.map](mdn:js/Array/map) je jedna z nejužitečnějších a používá se často.
 
-It calls the function for each element of the array and returns the array of results.
+Volá zadanou funkci pro každý prvek pole a vrací pole výsledků.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-let result = arr.map(function(item, index, array) {
-  // returns the new value instead of item
+let výsledek = pole.map(function(prvek, index, pole) {
+  // vrátí novou hodnotu místo prvku
 });
 ```
 
-For instance, here we transform each element into its length:
+Například zde přetransformujeme každý prvek na jeho délku:
 
 ```js run
-let lengths = ["Bilbo", "Gandalf", "Nazgul"].map(item => item.length);
-alert(lengths); // 5,7,6
+let délky = ["Bilbo", "Gandalf", "Nazgúl"].map(prvek => prvek.length);
+alert(délky); // 5,7,6
 ```
 
 ### sort(fn)
 
-The call to [arr.sort()](mdn:js/Array/sort) sorts the array *in place*, changing its element order.
+Volání metody [pole.sort()](mdn:js/Array/sort) seřadí pole *uvnitř* a změní pořadí jeho prvků.
 
-It also returns the sorted array, but the returned value is usually ignored, as `arr` itself is modified.
+Vrací také seřazené pole, ale návratová hodnota se obvykle ignoruje, jelikož je modifikováno samotné `pole`.
 
-For instance:
+Příklad:
 
 ```js run
-let arr = [ 1, 2, 15 ];
+let pole = [ 1, 2, 15 ];
 
-// the method reorders the content of arr
-arr.sort();
+// metoda přehází obsah pole
+pole.sort();
 
-alert( arr );  // *!*1, 15, 2*/!*
+alert( pole );  // *!*1, 15, 2*/!*
 ```
 
-Did you notice anything strange in the outcome?
+Všimli jste si na výstupu něčeho divného?
 
-The order became `1, 15, 2`. Incorrect. But why?
+Seřazené pole je `1, 15, 2`. To není správně. Ale proč?
 
-**The items are sorted as strings by default.**
+**Prvky jsou standardně řazeny jako řetězce.**
 
-Literally, all elements are converted to strings for comparisons. For strings, lexicographic ordering is applied and indeed `"2" > "15"`.
+Doslova všechny prvky se při porovnávání převádějí na řetězce. Pro řetězce se použije lexikografické řazení a skutečně `"2" > "15"`.
 
-To use our own sorting order, we need to supply a function as the argument of `arr.sort()`.
+Abychom použili naše vlastní řazení, musíme jako argument `pole.sort()` poskytnout funkci.
 
-The function should compare two arbitrary values and return:
+Tato funkce by měla porovnávat dvě libovolné hodnoty a vracet:
 ```js
-function compare(a, b) {
-  if (a > b) return 1; // if the first value is greater than the second
-  if (a == b) return 0; // if values are equal
-  if (a < b) return -1; // if the first value is less than the second
+function porovnej(a, b) {
+  if (a > b) return 1; // je-li první hodnota větší než druhá
+  if (a == b) return 0; // jsou-li si hodnoty rovny
+  if (a < b) return -1; // je-li první hodnota menší než druhá
 }
 ```
 
-For instance, to sort as numbers:
+Například když řadíme čísla:
 
 ```js run
-function compareNumeric(a, b) {
+function porovnejČísla(a, b) {
   if (a > b) return 1;
   if (a == b) return 0;
   if (a < b) return -1;
 }
 
-let arr = [ 1, 2, 15 ];
+let pole = [ 1, 2, 15 ];
 
 *!*
-arr.sort(compareNumeric);
+pole.sort(porovnejČísla);
 */!*
 
-alert(arr);  // *!*1, 2, 15*/!*
+alert(pole);  // *!*1, 2, 15*/!*
 ```
 
-Now it works as intended.
+Nyní to funguje tak, jak jsme zamýšleli.
 
-Let's step aside and think what's happening. The `arr` can be array of anything, right? It may contain numbers or strings or objects or whatever. We have a set of *some items*. To sort it, we need an *ordering function* that knows how to compare its elements. The default is a string order.
+Pojďme teď stranou a zamysleme se nad tím, co se děje. `pole` může být pole čehokoli, že? Může obsahovat čísla, řetězce, objekty, zkrátka cokoli. Máme sadu *nějakých prvků*. Abychom ji seřadili, potřebujeme *řadicí funkci*, která umí porovnat své prvky. Standardní řazení je řetězcové.
 
-The `arr.sort(fn)` method implements a generic sorting algorithm. We don't need to care how it internally works (an optimized [quicksort](https://en.wikipedia.org/wiki/Quicksort) or [Timsort](https://en.wikipedia.org/wiki/Timsort) most of the time). It will walk the array, compare its elements using the provided function and reorder them, all we need is to provide the `fn` which does the comparison.
+Metoda `pole.sort(fn)` implementuje generický algoritmus řazení. Nemusíme se zajímat o to, jak vnitřně funguje (většinou je to optimalizovaný [quicksort](https://cs.wikipedia.org/wiki/Rychlé_řazení) nebo [Timsort](https://en.wikipedia.org/wiki/Timsort)). Projde pole, porovná jeho prvky poskytnutou funkcí a seřadí je. Vše, co potřebujeme, je poskytnout funkci `fn`, která provede porovnání.
 
-By the way, if we ever want to know which elements are compared -- nothing prevents from alerting them:
+Mimochodem, jestliže chceme vědět, které prvky se porovnávají -- nic nám nebrání je zobrazit:
 
 ```js run
 [1, -2, 15, 2, 0, 8].sort(function(a, b) {
@@ -430,91 +430,91 @@ By the way, if we ever want to know which elements are compared -- nothing preve
 });
 ```
 
-The algorithm may compare an element with multiple others in the process, but it tries to make as few comparisons as possible.
+Algoritmus může v tomto procesu porovnat jeden prvek s několika jinými, ale snaží se učinit co nejméně porovnání.
 
-````smart header="A comparison function may return any number"
-Actually, a comparison function is only required to return a positive number to say "greater" and a negative number to say "less".
+````smart header="Porovnávací funkce může vracet číslo"
+Ve skutečnosti se od porovnávací funkce vyžaduje jen to, aby vrátila kladné číslo, když říká „větší“, a záporné, když říká „menší“.
 
-That allows to write shorter functions:
+To nám umožňuje psát kratší funkce:
 
 ```js run
-let arr = [ 1, 2, 15 ];
+let pole = [ 1, 2, 15 ];
 
-arr.sort(function(a, b) { return a - b; });
+pole.sort(function(a, b) { return a - b; });
 
-alert(arr);  // *!*1, 2, 15*/!*
+alert(pole);  // *!*1, 2, 15*/!*
 ```
 ````
 
-````smart header="Arrow functions for the best"
-Remember [arrow functions](info:arrow-functions-basics)? We can use them here for neater sorting:
+````smart header="Nejlepší jsou šipkové funkce"
+Vzpomínáte si na [šipkové funkce](info:arrow-functions-basics)? Můžeme je zde použít pro úhlednější řazení:
 
 ```js
-arr.sort( (a, b) => a - b );
+pole.sort( (a, b) => a - b );
 ```
 
-This works exactly the same as the longer version above.
+Funguje to přesně stejně jako výše uvedená delší verze.
 ````
 
-````smart header="Use `localeCompare` for strings"
-Remember [strings](info:string#correct-comparisons) comparison algorithm? It compares letters by their codes by default.
+````smart header="Pro řetězce používejte `localeCompare`"
+Vzpomínáte si na porovnávací algoritmus [pro řetězce](info:string#correct-comparisons)? Standardně porovnává písmena podle jejich kódů.
 
-For many alphabets, it's better to use `str.localeCompare` method to correctly sort letters, such as `Ö`.
+Pro mnoho abeced je lepší používat metodu `str.localeCompare`, která seřadí správně písmena, např. `Č`.
 
-For example, let's sort a few countries in German:
+Například seřaďme několik států v češtině:
 
 ```js run
-let countries = ['Österreich', 'Andorra', 'Vietnam'];
+let státy = ['Česko', 'Andorra', 'Vietnam'];
 
-alert( countries.sort( (a, b) => a > b ? 1 : -1) ); // Andorra, Vietnam, Österreich (wrong)
+alert( státy.sort( (a, b) => a > b ? 1 : -1) ); // Andorra, Vietnam, Česko (špatně)
 
-alert( countries.sort( (a, b) => a.localeCompare(b) ) ); // Andorra,Österreich,Vietnam (correct!)
+alert( státy.sort( (a, b) => a.localeCompare(b) ) ); // Andorra, Česko, Vietnam (správně!)
 ```
 ````
 
 ### reverse
 
-The method [arr.reverse](mdn:js/Array/reverse) reverses the order of elements in `arr`.
+Metoda [pole.reverse](mdn:js/Array/reverse) převrátí pořadí prvků `pole`.
 
-For instance:
+Příklad:
 
 ```js run
-let arr = [1, 2, 3, 4, 5];
-arr.reverse();
+let pole = [1, 2, 3, 4, 5];
+pole.reverse();
 
-alert( arr ); // 5,4,3,2,1
+alert( pole ); // 5,4,3,2,1
 ```
 
-It also returns the array `arr` after the reversal.
+I ona vrací `pole` po převrácení.
 
-### split and join
+### split a join
 
-Here's the situation from real life. We are writing a messaging app, and the person enters the comma-delimited list of receivers: `John, Pete, Mary`. But for us an array of names would be much more comfortable than a single string. How to get it?
+Máme zde situaci z běžného života. Píšeme aplikaci pro posílání zpráv a uživatel zadá seznam příjemců oddělených čárkou: `Jan, Petr, Marie`. Pro nás by však bylo daleko pohodlnější mít pole jmen než jediný řetězec. Jak je získat?
 
-The [str.split(delim)](mdn:js/String/split) method does exactly that. It splits the string into an array by the given delimiter `delim`.
+Přesně tohle dělá metoda [str.split(oddělovač)](mdn:js/String/split), která rozdělí řetězec na pole podle zadaného oddělovače `oddělovač`.
 
-In the example below, we split by a comma followed by space:
+V níže uvedeném příkladu jsme oddělovali čárkou, po níž následuje mezera:
 
 ```js run
-let names = 'Bilbo, Gandalf, Nazgul';
+let jména = 'Bilbo, Gandalf, Nazgúl';
 
-let arr = names.split(', ');
+let pole = jména.split(', ');
 
-for (let name of arr) {
-  alert( `A message to ${name}.` ); // A message to Bilbo  (and other names)
+for (let jméno of pole) {
+  alert( `Zpráva pro ${jméno}.` ); // Zpráva pro Bilbo (a další jména)
 }
 ```
 
-The `split` method has an optional second numeric argument -- a limit on the array length. If it is provided, then the extra elements are ignored. In practice it is rarely used though:
+Metoda `split` má nepovinný druhý číselný argument -- limit délky pole. Pokud je uveden, pak se po dosažení tohoto limitu další prvky ignorují. V praxi se však používá jen zřídka:
 
 ```js run
-let arr = 'Bilbo, Gandalf, Nazgul, Saruman'.split(', ', 2);
+let pole = 'Bilbo, Gandalf, Nazgúl, Saruman'.split(', ', 2);
 
-alert(arr); // Bilbo, Gandalf
+alert(pole); // Bilbo, Gandalf
 ```
 
-````smart header="Split into letters"
-The call to `split(s)` with an empty `s` would split the string into an array of letters:
+````smart header="Rozdělení na písmena"
+Volání `split(s)` s prázdným `s` rozdělí řetězec na pole písmen:
 
 ```js run
 let str = "test";
@@ -523,129 +523,129 @@ alert( str.split('') ); // t,e,s,t
 ```
 ````
 
-The call [arr.join(glue)](mdn:js/Array/join) does the reverse to `split`. It creates a string of `arr` items joined by `glue` between them.
+Volání [pole.join(spojka)](mdn:js/Array/join) provádí opak metody `split`. Vytvoří řetězec z prvků `pole`, které budou spojeny řetězcem `spojka` mezi nimi.
 
-For instance:
+Příklad:
 
 ```js run
-let arr = ['Bilbo', 'Gandalf', 'Nazgul'];
+let pole = ['Bilbo', 'Gandalf', 'Nazgúl'];
 
-let str = arr.join(';'); // glue the array into a string using ;
+let str = pole.join(';'); // spojíme pole do řetězce pomocí ;
 
-alert( str ); // Bilbo;Gandalf;Nazgul
+alert( str ); // Bilbo;Gandalf;Nazgúl
 ```
 
 ### reduce/reduceRight
 
-When we need to iterate over an array -- we can use `forEach`, `for` or `for..of`.
+Když potřebujeme procházet prvky pole -- můžeme použít `forEach`, `for` nebo `for..of`.
 
-When we need to iterate and return the data for each element -- we can use `map`.
+Když potřebujeme procházet prvky a pro každý prvek vrátit nějaká data -- můžeme použít `map`.
 
-The methods [arr.reduce](mdn:js/Array/reduce) and [arr.reduceRight](mdn:js/Array/reduceRight) also belong to that breed, but are a little bit more intricate. They are used to calculate a single value based on the array.
+Do této skupiny patří i metody [pole.reduce](mdn:js/Array/reduce) a [pole.reduceRight](mdn:js/Array/reduceRight), ale ty jsou trochu záludnější. Používají se k výpočtu jediné hodnoty v závislosti na poli.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-let value = arr.reduce(function(accumulator, item, index, array) {
+let hodnota = pole.reduce(function(akumulátor, prvek, index, pole) {
   // ...
-}, [initial]);
+}, [počátečníHodnota]);
 ```
 
-The function is applied to all array elements one after another and "carries on" its result to the next call.
+Funkce se volá na všech prvcích pole za sebou a „přenáší“ svůj výsledek do dalšího volání.
 
-Arguments:
+Argumenty:
 
-- `accumulator` -- is the result of the previous function call, equals `initial` the first time (if `initial` is provided).
-- `item` -- is the current array item.
-- `index` -- is its position.
-- `array` -- is the array.
+- `akumulátor` -- výsledek předchozího volání funkce, napoprvé se rovná `počátečníHodnota` (je-li `počátečníHodnota` uvedena).
+- `prvek` -- je aktuální prvek pole.
+- `index` -- je jeho pozice.
+- `pole` -- je pole.
 
-As function is applied, the result of the previous function call is passed to the next one as the first argument.
+Poté, co je funkce provedena, se výsledek předchozího volání funkce předá jako první argument v dalším volání.
 
-So, the first argument is essentially the accumulator that stores the combined result of all previous executions. And at the end it becomes the result of `reduce`.
+První argument je tedy v podstatě akumulátor, do něhož se ukládá kombinovaný výsledek ze všech předchozích volání. Nakonec se stane výsledkem funkce `reduce`.
 
-Sounds complicated?
+Zní to složitě?
 
-The easiest way to grasp that is by example.
+Nejjednodušší způsob, jak to pochopit, je příklad.
 
-Here we get a sum of an array in one line:
+Zde získáme součet celého pole na jediném řádku:
 
 ```js run
-let arr = [1, 2, 3, 4, 5];
+let pole = [1, 2, 3, 4, 5];
 
-let result = arr.reduce((sum, current) => sum + current, 0);
+let výsledek = pole.reduce((součet, aktuální) => součet + aktuální, 0);
 
-alert(result); // 15
+alert(výsledek); // 15
 ```
 
-The function passed to `reduce` uses only 2 arguments, that's typically enough.
+Funkce předaná do `reduce` používá jen 2 argumenty, to zpravidla stačí.
 
-Let's see the details of what's going on.
+Podívejme se na podrobnosti toho, co se děje.
 
-1. On the first run, `sum` is the `initial` value (the last argument of `reduce`), equals `0`, and `current` is the first array element, equals `1`. So the function result is `1`.
-2. On the second run, `sum = 1`, we add the second array element (`2`) to it and return.
-3. On the 3rd run, `sum = 3` and we add one more element to it, and so on...
+1. Při prvním průběhu je `součet` roven hodnotě `počátečníHodnota` (poslední argument `reduce`), tedy `0`, a `aktuální` je první prvek pole, tedy `1`. Výsledek funkce je tedy `1`.
+2. Při druhém průběhu `součet = 1`, přičteme k tomu druhý prvek pole (`2`) a vrátíme výsledek.
+3. Při třetím průběhu `součet = 3`, přičteme k tomu další prvek, a tak dále...
 
-The calculation flow:
+Tok výpočtu:
 
 ![](reduce.svg)
 
-Or in the form of a table, where each row represents a function call on the next array element:
+Nebo ve formě tabulky, v níž každý řádek představuje volání funkce na dalším prvku pole:
 
-|   |`sum`|`current`|result|
+|   |`součet`|`aktuální`|výsledek|
 |---|-----|---------|---------|
-|the first call|`0`|`1`|`1`|
-|the second call|`1`|`2`|`3`|
-|the third call|`3`|`3`|`6`|
-|the fourth call|`6`|`4`|`10`|
-|the fifth call|`10`|`5`|`15`|
+|první volání|`0`|`1`|`1`|
+|druhé volání|`1`|`2`|`3`|
+|třetí volání|`3`|`3`|`6`|
+|čtvrté volání|`6`|`4`|`10`|
+|páté volání|`10`|`5`|`15`|
 
-Here we can clearly see how the result of the previous call becomes the first argument of the next one.
+Tady jasně vidíme, jak se výsledek předchozího volání stává prvním argumentem následujícího.
 
-We also can omit the initial value:
-
-```js run
-let arr = [1, 2, 3, 4, 5];
-
-// removed initial value from reduce (no 0)
-let result = arr.reduce((sum, current) => sum + current);
-
-alert( result ); // 15
-```
-
-The result is the same. That's because if there's no initial, then `reduce` takes the first element of the array as the initial value and starts the iteration from the 2nd element.
-
-The calculation table is the same as above, minus the first row.
-
-But such use requires an extreme care. If the array is empty, then `reduce` call without initial value gives an error.
-
-Here's an example:
+Můžeme také vypustit počáteční hodnotu:
 
 ```js run
-let arr = [];
+let pole = [1, 2, 3, 4, 5];
 
-// Error: Reduce of empty array with no initial value
-// if the initial value existed, reduce would return it for the empty arr.
-arr.reduce((sum, current) => sum + current);
+// z reduce je odstraněna počáteční hodnota (žádná 0)
+let výsledek = pole.reduce((součet, aktuální) => součet + aktuální);
+
+alert( výsledek  ); // 15
 ```
 
-So it's advised to always specify the initial value.
+Výsledek je stejný. Je to proto, že není-li uvedena počáteční hodnota, `reduce` vezme jako počáteční hodnotu první prvek pole a zahájí iteraci až od druhého.
 
-The method [arr.reduceRight](mdn:js/Array/reduceRight) does the same, but goes from right to left.
+Výpočetní tabulka je stejná jako výše uvedená, jen bez prvního řádku.
+
+Takové použití však vyžaduje extrémní pozornost. Je-li pole prázdné, pak volání `reduce` bez počáteční hodnoty ohlásí chybu.
+
+Příklad:
+
+```js run
+let pole = [];
+
+// Chyba: Reduce of empty array with no initial value
+// kdyby počáteční hodnota existovala, reduce by pro prázdné pole vrátila ji.
+pole.reduce((součet, aktuální) => součet + aktuální);
+```
+
+Doporučuje se tedy počáteční hodnotu vždy uvádět.
+
+Metoda [pole.reduceRight](mdn:js/Array/reduceRight) dělá totéž, ale postupuje zprava doleva.
 
 
 ## Array.isArray
 
-Arrays do not form a separate language type. They are based on objects.
+Pole netvoří samostatný jazykový typ, ale jsou založena na objektech.
 
-So `typeof` does not help to distinguish a plain object from an array:
+Proto `typeof` nedokáže rozlišit planý objekt od pole:
 
 ```js run
 alert(typeof {}); // object
-alert(typeof []); // same
+alert(typeof []); // totéž
 ```
 
-...But arrays are used so often that there's a special method for that: [Array.isArray(value)](mdn:js/Array/isArray). It returns `true` if the `value` is an array, and `false` otherwise.
+...Pole se však používají natolik často, že pro ně existuje speciální metoda: [Array.isArray(hodnota)](mdn:js/Array/isArray). Vrátí `true`, jestliže `hodnota` je pole, a `false` jinak.
 
 ```js run
 alert(Array.isArray({})); // false
@@ -653,117 +653,117 @@ alert(Array.isArray({})); // false
 alert(Array.isArray([])); // true
 ```
 
-## Most methods support "thisArg"
+## Většina metod podporuje „thisArg“
 
-Almost all array methods that call functions -- like `find`, `filter`, `map`, with a notable exception of `sort`, accept an optional additional parameter `thisArg`.
+Téměř všechny metody polí, které volají funkce -- např. `find`, `filter`, `map`, s významnou výjimkou metody `sort`, přijímají nepovinný další parametr `thisArg`.
 
-That parameter is not explained in the sections above, because it's rarely used. But for completeness we have to cover it.
+Tento parametr nebyl vysvětlen ve výše uvedených podkapitolách, protože se používá jen zřídka. Ale pro úplnost jej musíme uvést.
 
-Here's the full syntax of these methods:
+Zde je plná syntaxe těchto metod:
 
 ```js
-arr.find(func, thisArg);
-arr.filter(func, thisArg);
-arr.map(func, thisArg);
+pole.find(funkce, thisArg);
+pole.filter(funkce, thisArg);
+pole.map(funkce, thisArg);
 // ...
-// thisArg is the optional last argument
+// thisArg je nepovinný poslední argument
 ```
 
-The value of `thisArg` parameter becomes `this` for `func`.
+Hodnota parametru `thisArg` se ve funkci `funkce` stane `this`.
 
-For example, here we use a method of `army` object as a filter, and `thisArg` passes the context:
+Například zde použijeme metodu objektu `armáda` jako filtr a `thisArg` předá kontext:
 
 ```js run
-let army = {
-  minAge: 18,
-  maxAge: 27,
-  canJoin(user) {
-    return user.age >= this.minAge && user.age < this.maxAge;
+let armáda = {
+  minVěk: 18,
+  maxVěk: 27,
+  můžeVstoupit(uživatel) {
+    return uživatel.věk >= this.minVěk && uživatel.věk < this.maxVěk;
   }
 };
 
-let users = [
-  {age: 16},
-  {age: 20},
-  {age: 23},
-  {age: 30}
+let uživatelé = [
+  {věk: 16},
+  {věk: 20},
+  {věk: 23},
+  {věk: 30}
 ];
 
 *!*
-// find users, for who army.canJoin returns true
-let soldiers = users.filter(army.canJoin, army);
+// najdeme uživatele, pro které armáda.můžeVstoupit vrátí true
+let vojáci = uživatelé.filter(armáda.můžeVstoupit, armáda);
 */!*
 
-alert(soldiers.length); // 2
-alert(soldiers[0].age); // 20
-alert(soldiers[1].age); // 23
+alert(vojáci.length); // 2
+alert(vojáci[0].věk); // 20
+alert(vojáci[1].věk); // 23
 ```
 
-If in the example above we used `users.filter(army.canJoin)`, then `army.canJoin` would be called as a standalone function, with `this=undefined`, thus leading to an instant error.
+Kdybychom v uvedeném příkladu použili `uživatelé.filter(armáda.můžeVstoupit)`, pak by `armáda.můžeVstoupit` byla volána jako samostatná funkce, v níž by bylo `this=undefined`, což by okamžitě vedlo k chybě.
 
-A call to `users.filter(army.canJoin, army)` can be replaced with `users.filter(user => army.canJoin(user))`, that does the same. The latter is used more often, as it's a bit easier to understand for most people.
+Volání `uživatelé.filter(armáda.můžeVstoupit, armáda)` můžeme nahradit za `uživatelé.filter(uživatel => armáda.můžeVstoupit(uživatel))`, které by udělalo totéž. Tato druhá varianta se používá častěji, jelikož pro většinu lidí je trochu srozumitelnější.
 
-## Summary
+## Shrnutí
 
-A cheat sheet of array methods:
+Přehled metod polí:
 
-- To add/remove elements:
-  - `push(...items)` -- adds items to the end,
-  - `pop()` -- extracts an item from the end,
-  - `shift()` -- extracts an item from the beginning,
-  - `unshift(...items)` -- adds items to the beginning.
-  - `splice(pos, deleteCount, ...items)` -- at index `pos` deletes `deleteCount` elements and inserts `items`.
-  - `slice(start, end)` -- creates a new array, copies elements from index `start` till `end` (not inclusive) into it.
-  - `concat(...items)` -- returns a new array: copies all members of the current one and adds `items` to it. If any of `items` is an array, then its elements are taken.
+- Pro přidávání a odebírání prvků:
+  - `push(...prvky)` -- přidá prvky na konec.
+  - `pop()` -- vyjme prvek z konce.
+  - `shift()` -- vyjme prvek ze začátku.
+  - `unshift(...prvky)` -- přidá prvky na začátek.
+  - `splice(pozice, početSmazaných, ...prvky)` -- na indexu `pozice` smaže `početSmazaných` prvků a vloží `prvky`.
+  - `slice(začátek, konec)` -- vytvoří nové pole, zkopíruje do něj prvky od indexu `začátek` do indexu `konec` (kromě něj).
+  - `concat(...prvky)` -- vrátí nové pole: zkopíruje všechny prvky z aktuálního pole a přidá do něj `prvky`. Je-li kterýkoli prvek z `prvky` pole, pak se vezmou jeho prvky.
 
-- To search among elements:
-  - `indexOf/lastIndexOf(item, pos)` -- look for `item` starting from position `pos`, return the index or `-1` if not found.
-  - `includes(value)` -- returns `true` if the array has `value`, otherwise `false`.
-  - `find/filter(func)` -- filter elements through the function, return first/all values that make it return `true`.
-  - `findIndex` is like `find`, but returns the index instead of a value.
+- Pro hledání mezi prvky:
+  - `indexOf/lastIndexOf(prvek, pozice)` -- hledá `prvek` počínajíc pozicí `pozice`, vrátí jeho index nebo `-1`, pokud není nalezen.
+  - `includes(hodnota)` -- jestliže pole obsahuje hodnotu `hodnota`, vrátí `true`, jinak vrátí `false`.
+  - `find/filter(funkce)` -- filtruje prvky podle zadané funkce, vrátí první hodnotu/všechny hodnoty, na níž/nichž funkce vrátila `true`.
+  - `findIndex` je jako `find`, ale namísto hodnoty vrátí index.
 
-- To iterate over elements:
-  - `forEach(func)` -- calls `func` for every element, does not return anything.
+- Pro procházení prvků:
+  - `forEach(funkce)` -- volá `funkce` pro každý prvek, nic nevrací.
 
-- To transform the array:
-  - `map(func)` -- creates a new array from results of calling `func` for every element.
-  - `sort(func)` -- sorts the array in-place, then returns it.
-  - `reverse()` -- reverses the array in-place, then returns it.
-  - `split/join` -- convert a string to array and back.
-  - `reduce/reduceRight(func, initial)` -- calculate a single value over the array by calling `func` for each element and passing an intermediate result between the calls.
+- Pro transformaci pole:
+  - `map(funkce)` -- vytvoří nové pole z výsledků volání `funkce` pro každý prvek.
+  - `sort(funkce)` -- seřadí prvky uvnitř pole, pak toto pole vrátí.
+  - `reverse()` -- převrátí pořadí prvků uvnitř pole, pak toto pole vrátí.
+  - `split/join` -- převádí řetězec na pole a zpět.
+  - `reduce/reduceRight(funkce, počátečníHodnota)` -- vypočítá z pole jedinou hodnotu tak, že volá `funkce` pro každý prvek a předává mezivýsledek mezi voláními.
 
-- Additionally:
-  - `Array.isArray(arr)` checks `arr` for being an array.
+- Ostatní:
+  - `Array.isArray(pole)` ověří, zda `pole` je pole.
 
-Please note that methods `sort`, `reverse` and `splice` modify the array itself.
+Prosíme všimněte si, že metody `sort`, `reverse` a `splice` modifikují samotné pole.
 
-These methods are the most used ones, they cover 99% of use cases. But there are few others:
+Tyto metody jsou nejpoužívanější a v 99% případů dostačují. Existuje však i několik dalších:
 
-- [arr.some(fn)](mdn:js/Array/some)/[arr.every(fn)](mdn:js/Array/every) check the array.
+- [pole.some(fn)](mdn:js/Array/some)/[pole.every(fn)](mdn:js/Array/every) prověří pole.
 
-  The function `fn` is called on each element of the array similar to `map`. If any/all results are `true`, returns `true`, otherwise `false`.
+  Na každém prvku pole je volána funkce `fn`, podobně jako u funkce `map`. Jestliže některý výsledek je/všechny výsledky jsou `true`, vrátí `true`, jinak vrátí `false`.
 
-  These methods behave sort of like `||` and `&&` operators: if `fn` returns a truthy value, `arr.some()` immediately returns `true` and stops iterating over the rest of items; if `fn` returns a falsy value, `arr.every()` immediately returns `false` and stops iterating over the rest of items as well.
+  Tyto metody se chovají trochu jako operátory `||` a `&&`: jestliže `fn` vrátí pravdivou hodnotu, `pole.some()` okamžitě vrátí `true` a zastaví procházení zbývajících prvků; jestliže `fn` vrátí nepravdivou hodnotu, `pole.every()` okamžitě vrátí `false` a rovněž zastaví procházení zbývajících prvků.
 
-  We can use `every` to compare arrays:
+  Pomocí `every` můžeme porovnávat pole:
   ```js run
-  function arraysEqual(arr1, arr2) {
-    return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+  function poleSeRovnají(pole1, pole2) {
+    return pole1.length === pole2.length && pole1.every((hodnota, index) => hodnota === pole2[index]);
   }
 
-  alert( arraysEqual([1, 2], [1, 2])); // true
+  alert( poleSeRovnají([1, 2], [1, 2])); // true
   ```
 
-- [arr.fill(value, start, end)](mdn:js/Array/fill) -- fills the array with repeating `value` from index `start` to `end`.
+- [pole.fill(hodnota, začátek, konec)](mdn:js/Array/fill) -- vyplní pole opakující se hodnotou `hodnota` od indexu `začátek` do indexu `konec`.
 
-- [arr.copyWithin(target, start, end)](mdn:js/Array/copyWithin) -- copies its elements from position `start` till position `end` into *itself*, at position `target` (overwrites existing).
+- [pole.copyWithin(cíl, začátek, konec)](mdn:js/Array/copyWithin) -- zkopíruje prvky pole od pozice `začátek` do pozice `konec` *do téhož pole* na pozici `cíl` (existující prvky přepíše).
 
-- [arr.flat(depth)](mdn:js/Array/flat)/[arr.flatMap(fn)](mdn:js/Array/flatMap) create a new flat array from a multidimensional array.
+- [pole.flat(hloubka)](mdn:js/Array/flat)/[pole.flatMap(fn)](mdn:js/Array/flatMap) vytvoří nové jednorozměrné pole z vícerozměrného.
 
-For the full list, see the [manual](mdn:js/Array).
+Pro úplný seznam viz [manuál](mdn:js/Array).
 
-From the first sight it may seem that there are so many methods, quite difficult to remember. But actually that's much easier.
+Na první pohled se může zdát, že je tady spousta metod a je těžké si je pamatovat. Ve skutečnosti je to však mnohem snazší.
 
-Look through the cheat sheet just to be aware of them. Then solve the tasks of this chapter to practice, so that you have experience with array methods.
+Projděte si přehled metod, abyste o nich věděli. Pak vyřešte úlohy v této kapitole, abyste se pocvičili. Tak získáte s metodami polí zkušenosti.
 
-Afterwards whenever you need to do something with an array, and you don't know how -- come here, look at the cheat sheet and find the right method. Examples will help you to write it correctly. Soon you'll automatically remember the methods, without specific efforts from your side.
+Když později budete potřebovat udělat něco s polem a nebudete vědět jak -- přijďte sem, podívejte se do přehledu a najděte správnou metodu. Příklady vám pomohou napsat ji správně. Brzy si budete metody automaticky pamatovat, aniž by vás to stálo nějakou zvláštní námahu.

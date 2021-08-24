@@ -48,7 +48,7 @@ Moderní systémy pro vytváření projektů, například [webpack](http://webpa
 
 Mezi nové vlastnosti jazyka mohou patřit nejenom syntaktické konstrukce a operátory, ale také vestavěné funkce.
 
-Například `Math.trunc(n)` je funkce, která „odřízne“ desetinnou část čísla, např. `Math.trunc(1.23) = 1`.
+Například `Math.trunc(n)` je funkce, která „odřízne“ desetinnou část čísla, např. `Math.trunc(1.23)` vrátí `1`.
 
 V některých (velmi zastaralých) JavaScriptových enginech není funkce `Math.trunc`, takže takový kód selže.
 

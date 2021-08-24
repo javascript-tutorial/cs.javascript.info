@@ -1,51 +1,51 @@
 
 ```js run no-beautify
-let john = { name: "John", surname: "Smith", id: 1 };
-let pete = { name: "Pete", surname: "Hunt", id: 2 };
-let mary = { name: "Mary", surname: "Key", id: 3 };
+let jan = { jméno: "Jan", příjmení: "Novák", id: 1 };
+let petr = { jméno: "Petr", příjmení: "Horák", id: 2 };
+let marie = { jméno: "Marie", příjmení: "Králová", id: 3 };
 
-let users = [ john, pete, mary ];
+let uživatelé = [ jan, petr, marie ];
 
 *!*
-let usersMapped = users.map(user => ({
-  fullName: `${user.name} ${user.surname}`,
-  id: user.id
+let mapovaníUživatelé = uživatelé.map(uživatel => ({
+  celéJméno: `${uživatel.jméno} ${uživatel.příjmení}`,
+  id: uživatel.id
 }));
 */!*
 
 /*
-usersMapped = [
-  { fullName: "John Smith", id: 1 },
-  { fullName: "Pete Hunt", id: 2 },
-  { fullName: "Mary Key", id: 3 }
+mapovaníUživatelé = [
+  { celéJméno: "Jan Novák", id: 1 },
+  { celéJméno: "Petr Horák", id: 2 },
+  { celéJméno: "Marie Králová", id: 3 }
 ]
 */
 
-alert( usersMapped[0].id ); // 1
-alert( usersMapped[0].fullName ); // John Smith
+alert( mapovaníUživatelé[0].id ); // 1
+alert( mapovaníUživatelé[0].celéJméno ); // Jan Novák
 ```
 
-Please note that in the arrow functions we need to use additional brackets. 
+Prosíme všimněte si, že v šipkové funkci musíme použít závorky navíc.
 
-We can't write like this:
+Nemůžeme ji napsat takto:
 ```js
-let usersMapped = users.map(user => *!*{*/!*
-  fullName: `${user.name} ${user.surname}`,
-  id: user.id
+let mapovaníUživatelé = uživatelé.map(uživatel => *!*{*/!*
+  celéJméno: `${uživatel.jméno} ${uživatel.příjmení}`,
+  id: uživatel.id
 });
 ```
 
-As we remember, there are two arrow functions: without body `value => expr` and with body `value => {...}`.
+Jak si pamatujeme, existují dva druhy šipkových funkcí: bez těla `hodnota => výraz` a s tělem `hodnota => {...}`.
 
-Here JavaScript would treat `{` as the start of function body, not the start of the object. The workaround is to wrap them in the "normal" brackets:
+Zde JavaScript zachází s `{` jako se začátkem těla funkce, ne jako se začátkem objektu. Řešením je uzavřít objekt do „obyčejných“ závorek:
 
 ```js
-let usersMapped = users.map(user => *!*({*/!*
-  fullName: `${user.name} ${user.surname}`,
-  id: user.id
+let mapovaníUživatelé = uživatelé.map(uživatel => *!*({*/!*
+  celéJméno: `${uživatel.jméno} ${uživatel.příjmení}`,
+  id: uživatel.id
 }));
 ```
 
-Now fine.
+Nyní je to v pořádku.
 
 

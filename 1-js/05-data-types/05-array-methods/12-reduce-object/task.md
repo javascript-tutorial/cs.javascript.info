@@ -2,36 +2,36 @@ importance: 4
 
 ---
 
-# Create keyed object from array
+# Vytvoření klíčovaného objektu z pole
 
-Let's say we received an array of users in the form `{id:..., name:..., age... }`.
+Řekněme, že máme pole uživatelů ve formě `{id:..., jméno:..., věk... }`.
 
-Create a function `groupById(arr)` that creates an object from it, with `id` as the key, and array items as values.
+Vytvořte funkci `seskupPodleId(pole)`, která z něj vytvoří objekt, jehož klíči budou hodnoty `id` a hodnotami prvky pole.
 
-For example:
+Příklad:
 
 ```js
-let users = [
-  {id: 'john', name: "John Smith", age: 20},
-  {id: 'ann', name: "Ann Smith", age: 24},
-  {id: 'pete', name: "Pete Peterson", age: 31},
+let uživatelé = [
+  {id: 'jan', jméno: "Jan Novák", věk: 20},
+  {id: 'anna', jméno: "Anna Nováková", věk: 24},
+  {id: 'petr', jméno: "Petr Petřík", věk: 31},
 ];
 
-let usersById = groupById(users);
+let uživateléPodleId = seskupPodleId(uživatelé);
 
 /*
-// after the call we should have:
+// po volání bychom měli mít:
 
-usersById = {
-  john: {id: 'john', name: "John Smith", age: 20},
-  ann: {id: 'ann', name: "Ann Smith", age: 24},
-  pete: {id: 'pete', name: "Pete Peterson", age: 31},
+uživateléPodleId = {
+  jan: {id: 'jan', jméno: "Jan Novák", věk: 20},
+  anna: {id: 'anna', jméno: "Anna Nováková", věk: 24},
+  petr: {id: 'petr', jméno: "Petr Petřík", věk: 31},
 }
 */
 ```
 
-Such function is really handy when working with server data.
+Taková funkce se opravdu hodí, když pracujeme se serverovými daty.
 
-In this task we assume that `id` is unique. There may be no two array items with the same `id`.
+V této úloze předpokládáme, že `id` je unikátní. V poli nesmějí být dva prvky se stejným `id`.
 
-Please use array `.reduce` method in the solution.
+Prosíme použijte v řešení metodu pole `.reduce`.
