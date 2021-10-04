@@ -5,7 +5,7 @@ libs:
 
 # IndexedDB
 
-IndexedDB is a database that is built into browser, much more powerful than `localStorage`.
+IndexedDB is a database that is built into a browser, much more powerful than `localStorage`.
 
 - Stores almost any kind of values by keys, multiple key types.
 - Supports transactions for reliability.
@@ -50,7 +50,7 @@ Unlike server-side databases, IndexedDB is client-side, the data is stored in th
 
 If the local database version is less than specified in `open`, then a special event `upgradeneeded` is triggered, and we can compare versions and upgrade data structures as needed.
 
-The `upgradeneeded` event also triggers when the database doesn't yet exist (technically, it's version is `0`), so we can perform the initialization.
+The `upgradeneeded` event also triggers when the database doesn't yet exist (technically, its version is `0`), so we can perform the initialization.
 
 Let's say we published the first version of our app.
 
@@ -106,7 +106,7 @@ let deleteRequest = indexedDB.deleteDatabase(name)
 // deleteRequest.onsuccess/onerror tracks the result
 ```
 
-```warn header="We can't open an older version of the database"
+```warn header="We can't open a database using an older open call version"
 If the current user database has a higher version than in the `open` call, e.g. the existing DB version is `3`, and we try to `open(...2)`, then that's an error, `openRequest.onerror` triggers.
 
 That's rare, but such a thing may happen when a visitor loads outdated JavaScript code, e.g. from a proxy cache. So the code is old, but his database is new.

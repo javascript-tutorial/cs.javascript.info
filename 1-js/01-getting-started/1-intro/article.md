@@ -24,9 +24,15 @@ Prohlížeč má zabudovaný engine, který se někdy nazývá „virtuální st
 
 Různé enginy mají různá „kódová označení“. Například:
 
+<<<<<<< HEAD
 - [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- v Chrome a Opeře.
 - [SpiderMonkey](https://cs.wikipedia.org/wiki/SpiderMonkey) -- ve Firefoxu.
 - Existují i jiná krycí jména, například „Chakra“ pro Internet Explorer, „ChakraCore“ pro Microsoft Edge, „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
+=======
+- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- in Chrome and Opera.
+- [SpiderMonkey](https://en.wikipedia.org/wiki/SpiderMonkey) -- in Firefox.
+- ...There are other codenames like "Chakra" for IE, "JavaScriptCore", "Nitro" and "SquirrelFish" for Safari, etc.
+>>>>>>> b09e38c5573346c401a9f9f7410b4ff9be5f4115
 
 Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývojářských článcích na internetu. Budeme je používat i my. Například „vlastnost X je podporována ve V8“ znamená, že pravděpodobně bude fungovat v Chrome a Opeře.
 
