@@ -1,542 +1,550 @@
-# Recursion and stack
+# Rekurze a zásobník
 
-Let's return to functions and study them more in-depth.
+Vraťme se k funkcím a prostudujme je hlouběji.
 
-Our first topic will be *recursion*.
+Naším prvním tématem bude *rekurze*.
 
-If you are not new to programming, then it is probably familiar and you could skip this chapter.
+Jestliže nejste programátorský nováček, pak to již pravděpodobně znáte a můžete tuto kapitolu přeskočit.
 
-Recursion is a programming pattern that is useful in situations when a task can be naturally split into several tasks of the same kind, but simpler. Or when a task can be simplified into an easy action plus a simpler variant of the same task. Or, as we'll see soon, to deal with certain data structures.
+Rekurze je programovací schéma, které je užitečné v situacích, kdy nějakou úlohu můžeme přirozeně rozdělit na několik úloh stejného druhu, ale jednodušších. Nebo když můžeme úlohu zjednodušit na nějakou lehkou akci plus jednodušší variantu téže úlohy. Nebo, jak brzy uvidíme, pro práci s určitými datovými strukturami.
 
-When a function solves a task, in the process it can call many other functions. A partial case of this is when a function calls *itself*. That's called *recursion*.
+Když funkce řeší úlohu, může při tomto procesu volat mnoho jiných funkcí. Zvláštním případem je, když funkce volá *sebe sama*. To se nazývá *rekurze*.
 
-## Two ways of thinking
+## Dva způsoby myšlení
 
-For something simple to start with -- let's write a function `pow(x, n)` that raises `x` to a natural power of `n`. In other words, multiplies `x` by itself `n` times.
+Začneme něčím jednoduchým -- napišme funkci `mocnina(x, n)`, která umocní `x` na přirozené číslo `n`. Jinými slovy, vynásobí `x` sebou samým `n`-krát.
 
 ```js
-pow(2, 2) = 4
-pow(2, 3) = 8
-pow(2, 4) = 16
+mocnina(2, 2) = 4
+mocnina(2, 3) = 8
+mocnina(2, 4) = 16
 ```
 
-There are two ways to implement it.
+Existují dva způsoby, jak ji implementovat.
 
-1. Iterative thinking: the `for` loop:
+1. Iterativní myšlení: cyklus `for`:
 
     ```js run
-    function pow(x, n) {
-      let result = 1;
+    function mocnina(x, n) {
+      let výsledek = 1;
 
-      // multiply result by x n times in the loop
+      // vynásobíme výsledek číslem x v cyklu n-krát
       for (let i = 0; i < n; i++) {
-        result *= x;
+        výsledek *= x;
       }
 
-      return result;
+      return výsledek;
     }
 
-    alert( pow(2, 3) ); // 8
+    alert( mocnina(2, 3) ); // 8
     ```
 
-2. Recursive thinking: simplify the task and call self:
+2. Rekurzívní myšlení: zjednodušit úlohu a volat sebe samu:
 
     ```js run
-    function pow(x, n) {
+    function mocnina(x, n) {
       if (n == 1) {
         return x;
       } else {
-        return x * pow(x, n - 1);
+        return x * mocnina(x, n - 1);
       }
     }
 
-    alert( pow(2, 3) ); // 8
+    alert( mocnina(2, 3) ); // 8
     ```
 
-Please note how the recursive variant is fundamentally different.
+Prosíme všimněte si, jak je rekurzívní varianta diametrálně odlišná.
 
-When `pow(x, n)` is called, the execution splits into two branches:
+Když je volána `mocnina(x, n)`, její výkon se rozdělí do dvou větví:
 
 ```js
               if n==1  = x
              /
-pow(x, n) =
+mocnina(x, n) =
              \       
-              else     = x * pow(x, n - 1)
+              else     = x * mocnina(x, n - 1)
 ```
 
-1. If `n == 1`, then everything is trivial. It is called *the base* of recursion, because it immediately produces the obvious result: `pow(x, 1)` equals `x`.
-2. Otherwise, we can represent `pow(x, n)` as `x * pow(x, n - 1)`. In maths, one would write <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. This is called *a recursive step*: we transform the task into a simpler action (multiplication by `x`) and a simpler call of the same task (`pow` with lower `n`). Next steps simplify it further and further until `n` reaches `1`.
+1. Je-li `n == 1`, pak je vše triviální. To se nazývá *základ* rekurze, jelikož okamžitě vydá očividný výsledek: `mocnina(x, 1)` se rovná `x`.
+2. Jinak můžeme reprezentovat `mocnina(x, n)` jako `x * mocnina(x, n - 1)`. V matematice můžeme zapsat <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. 
+To se nazývá *rekurzívní krok*: převedeme úlohu na jednodušší akci (násobení číslem `x`) a jednodušší volání stejné úlohy (`mocnina` s nižším `n`). Další kroky ji budou stále zjednodušovat, až nakonec `n` dosáhne `1`.
 
-We can also say that `pow` *recursively calls itself* till `n == 1`.
+Můžeme také říci, že `mocnina` *rekurzívně volá sebe sama*, dokud není `n == 1`.
 
-![recursive diagram of pow](recursion-pow.svg)
+![rekurzívní diagram funkce mocnina](recursion-pow.svg)
 
 
-For example, to calculate `pow(2, 4)` the recursive variant does these steps:
+Například při výpočtu `mocnina(2, 4)` rekurzívní varianta provádí tyto kroky:
 
-1. `pow(2, 4) = 2 * pow(2, 3)`
-2. `pow(2, 3) = 2 * pow(2, 2)`
-3. `pow(2, 2) = 2 * pow(2, 1)`
-4. `pow(2, 1) = 2`
+1. `mocnina(2, 4) = 2 * mocnina(2, 3)`
+2. `mocnina(2, 3) = 2 * mocnina(2, 2)`
+3. `mocnina(2, 2) = 2 * mocnina(2, 1)`
+4. `mocnina(2, 1) = 2`
 
-So, the recursion reduces a function call to a simpler one, and then -- to even more simpler, and so on, until the result becomes obvious.
+Rekurze tedy zredukuje volání funkce na jednodušší, pak na ještě jednodušší a tak dále, dokud výsledek nebude očividný.
 
-````smart header="Recursion is usually shorter"
-A recursive solution is usually shorter than an iterative one.
+````smart header="Rekurze je obvykle kratší"
+Rekurzívní řešení bývá obvykle kratší než iterativní.
 
-Here we can rewrite the same using the conditional operator `?` instead of `if` to make `pow(x, n)` more terse and still very readable:
+Zde můžeme přepsat totéž pomocí podmíněného operátoru `?` místo příkazu `if`, aby byla `mocnina(x, n)` ještě stručnější, ale stále velmi čitelná:
 
 ```js run
-function pow(x, n) {
-  return (n == 1) ? x : (x * pow(x, n - 1));
+function mocnina(x, n) {
+  return (n == 1) ? x : (x * mocnina(x, n - 1));
 }
 ```
 ````
 
-The maximal number of nested calls (including the first one) is called *recursion depth*. In our case, it will be exactly `n`.
+Maximální počet vnořených volání (včetně prvního) se nazývá *hloubka rekurze*. V našem případě to bude přesně `n`.
 
-The maximal recursion depth is limited by JavaScript engine. We can rely on it being 10000, some engines allow more, but 100000 is probably out of limit for the majority of them. There are automatic optimizations that help alleviate this ("tail calls optimizations"), but they are not yet supported everywhere and work only in simple cases.
+Maximální možná hloubka rekurze je omezena enginem JavaScriptu. Můžeme se spolehnout, že to bude aspoň 10000, některé enginy umožňují víc, ale 100000 je pravděpodobně nad limit většiny z nich. Existují automatické optimalizace, které nám pomohou se s tím vyrovnat („optimalizace koncového volání“), ale ty zatím nejsou podporovány všude a fungují jen v jednoduchých případech.
 
-That limits the application of recursion, but it still remains very wide. There are many tasks where recursive way of thinking gives simpler code, easier to maintain.
+Použití rekurze je tím omezené, ale stále zůstává velmi široké. Existuje mnoho úloh, v nichž rekurzívní způsob myšlení dává jednodušší kód, snadnější na údržbu.
 
-## The execution context and stack
+## Prováděcí kontext a zásobník
 
-Now let's examine how recursive calls work. For that we'll look under the hood of functions.
+Nyní prozkoumejme, jak rekurzívní volání fungují. K tomu se podíváme funkcím pod čepici.
 
-The information about the process of execution of a running function is stored in its *execution context*.
+Informace o procesu spuštění právě běžící funkce je ukládána do jejího *prováděcího (exekučního) kontextu*.
 
-The [execution context](https://tc39.github.io/ecma262/#sec-execution-contexts) is an internal data structure that contains details about the execution of a function: where the control flow is now, the current variables, the value of `this` (we don't use it here) and few other internal details.
+[Prováděcí kontext](https://tc39.github.io/ecma262/#sec-execution-contexts) je interní datová struktura, která obsahuje podrobnosti o výkonu funkce: kde se nachází tok řízení právě teď, aktuální proměnné, hodnotu `this` (zde ji nepoužíváme) a některé další interní detaily.
 
-One function call has exactly one execution context associated with it.
+S každou funkcí je spojen právě jeden prováděcí kontext.
 
-When a function makes a nested call, the following happens:
+Když funkce vykoná vnořené volání, stane se následující:
 
-- The current function is paused.
-- The execution context associated with it is remembered in a special data structure called *execution context stack*.
-- The nested call executes.
-- After it ends, the old execution context is retrieved from the stack, and the outer function is resumed from where it stopped.
+- Aktuální funkce je pozastavena.
+- Prováděcí kontext s ní spojený se uloží do speciální datové struktury nazývané *zásobník prováděcích kontextů*.
+- Je spuštěno vnořené volání.
+- Až toto volání skončí, starý prováděcí kontext se vyjme ze zásobníku a vnější funkce se obnoví od místa, kde byla zastavena.
 
-Let's see what happens during the `pow(2, 3)` call.
+Podívejme se, co se děje během volání `mocnina(2, 3)`.
 
-### pow(2, 3)
+### mocnina(2, 3)
 
-In the beginning of the call `pow(2, 3)` the execution context will store variables: `x = 2, n = 3`, the execution flow is at line `1` of the function.
+Na začátku volání `mocnina(2, 3)` si prováděcí kontext uloží proměnné: `x = 2, n = 3`, tok řízení je na řádku `1` této funkce.
 
-We can sketch it as:
+Můžeme si to zapsat jako:
 
 <ul class="function-execution-context-list">
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 3, at line 1 }</span>
-    <span class="function-execution-context-call">pow(2, 3)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 3, na řádku 1 }</span>
+    <span class="function-execution-context-call">mocnina(2, 3)</span>
   </li>
 </ul>
 
+<<<<<<< Updated upstream
 That's when the function starts to execute. The condition `n == 1` is false, so the flow continues into the second branch of `if`:
+=======
+Na tomto místě začne výkon funkce. Podmínka `n == 1` není splněna, takže tok pokračuje druhou větví `if`:
+>>>>>>> Stashed changes
 
 ```js run
-function pow(x, n) {
+function mocnina(x, n) {
   if (n == 1) {
     return x;
   } else {
 *!*
-    return x * pow(x, n - 1);
+    return x * mocnina(x, n - 1);
 */!*
   }
 }
 
-alert( pow(2, 3) );
+alert( mocnina(2, 3) );
 ```
 
 
-The variables are same, but the line changes, so the context is now:
+Proměnné jsou stejné, ale řádek se změní, takže kontext nyní je:
 
 <ul class="function-execution-context-list">
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 3, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 3)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 3, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 3)</span>
   </li>
 </ul>
 
-To calculate `x * pow(x, n - 1)`, we need to make a subcall of `pow` with new arguments `pow(2, 2)`.
+K výpočtu `x * mocnina(x, n - 1)` musíme učinit vnořené volání funkce `mocnina` s novými argumenty: `mocnina(2, 2)`.
 
-### pow(2, 2)
+### mocnina(2, 2)
 
-To do a nested call, JavaScript remembers the current execution context in the *execution context stack*.
+Aby JavaScript mohl provést vnořené volání, zapamatuje si aktuální prováděcí kontext v *zásobníku prováděcích kontextů*.
 
-Here we call the same function `pow`, but it absolutely doesn't matter. The process is the same for all functions:
+Zde voláme stejnou funkci `mocnina`, ale na tom vůbec nezáleží. Proces je pro všechny funkce stejný:
 
-1. The current context is "remembered" on top of the stack.
-2. The new context is created for the subcall.
-3. When the subcall is finished -- the previous context is popped from the stack, and its execution continues.
+1. Aktuální kontext se uloží na vrchol zásobníku.
+2. Pro vnořené volání se vytvoří nový kontext.
+3. Až bude vnořené volání ukončeno -- předchozí kontext se vyjme ze zásobníku a jeho vykonávání bude pokračovat.
 
-Here's the context stack when we entered the subcall `pow(2, 2)`:
+Zde je zásobník kontextů ve chvíli, kdy jsme vstoupili do vnořeného volání `mocnina(2, 2)`:
 
 <ul class="function-execution-context-list">
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 2, at line 1 }</span>
-    <span class="function-execution-context-call">pow(2, 2)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 2, na řádku 1 }</span>
+    <span class="function-execution-context-call">mocnina(2, 2)</span>
   </li>
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 3, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 3)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 3, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 3)</span>
   </li>
 </ul>
 
-The new current execution context is on top (and bold), and previous remembered contexts are below.
+Nový aktuální prováděcí kontext je na vrcholu (a uveden tučně), předchozí uložené kontexty jsou níže.
 
-When we finish the subcall -- it is easy to resume the previous context, because it keeps both variables and the exact place of the code where it stopped.
+Až vnořené volání skončí -- bude snadné obnovit předchozí kontext, jelikož si udržuje obě proměnné i přesné místo kódu, na němž se zastavil.
 
 ```smart
+<<<<<<< Updated upstream
 Here in the picture we use the word "line", as our example there's only one subcall in line, but generally a single line of code may contain multiple subcalls, like `pow(…) + pow(…) + somethingElse(…)`.
+=======
+Na tomto obrázku používáme slovo „řádek“, protože v našem příkladu je na řádku jen jediné volání, ale obecně jeden řádek kódu může obsahovat několik volání, například `mocnina(…) + mocnina(…) + něcoJiného(…)`.
+>>>>>>> Stashed changes
 
-So it would be more precise to say that the execution resumes "immediately after the subcall".
+Bylo by tedy přesnější říkat, že provádění se obnoví „ihned po vnořeném volání“.
 ```
 
-### pow(2, 1)
+### mocnina(2, 1)
 
-The process repeats: a new subcall is made at line `5`, now with arguments `x=2`, `n=1`.
+Proces se opakuje: na řádku `5` se učiní nové vnořené volání, tentokrát s argumenty `x=2`, `n=1`.
 
-A new execution context is created, the previous one is pushed on top of the stack:
+Vytvoří se nový prováděcí kontext, předchozí se uloží na vrchol zásobníku:
 
 <ul class="function-execution-context-list">
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 1, at line 1 }</span>
-    <span class="function-execution-context-call">pow(2, 1)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 1, na řádku 1 }</span>
+    <span class="function-execution-context-call">mocnina(2, 1)</span>
   </li>
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 2, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 2)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 2, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 2)</span>
   </li>
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 3, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 3)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 3, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 3)</span>
   </li>
 </ul>
 
-There are 2 old contexts now and 1 currently running for `pow(2, 1)`.
+Nyní máme 2 staré kontexty a 1 právě probíhající pro `mocnina(2, 1)`.
 
-### The exit
+### Konec
 
-During the execution of `pow(2, 1)`, unlike before, the condition `n == 1` is truthy, so the first branch of `if` works:
+Během provádění `mocnina(2, 1)` je na rozdíl od předchozích případů podmínka `n == 1` splněna, takže bude pracovat první větev `if`:
 
 ```js
-function pow(x, n) {
+function mocnina(x, n) {
   if (n == 1) {
 *!*
     return x;
 */!*
   } else {
-    return x * pow(x, n - 1);
+    return x * mocnina(x, n - 1);
   }
 }
 ```
 
-There are no more nested calls, so the function finishes, returning `2`.
+Další vnořená volání už nejsou, takže funkce skončí a vrátí `2`.
 
-As the function finishes, its execution context is not needed anymore, so it's removed from the memory. The previous one is restored off the top of the stack:
-
-
-<ul class="function-execution-context-list">
-  <li>
-    <span class="function-execution-context">Context: { x: 2, n: 2, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 2)</span>
-  </li>
-  <li>
-    <span class="function-execution-context">Context: { x: 2, n: 3, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 3)</span>
-  </li>
-</ul>
-
-The execution of `pow(2, 2)` is resumed. It has the result of the subcall `pow(2, 1)`, so it also can finish the evaluation of `x * pow(x, n - 1)`, returning `4`.
-
-Then the previous context is restored:
+Až funkce skončí, její prováděcí kontext už nebude zapotřebí, takže bude odstraněn z paměti. Na vrcholu zásobníku se obnoví předchozí prováděcí kontext:
 
 <ul class="function-execution-context-list">
   <li>
-    <span class="function-execution-context">Context: { x: 2, n: 3, at line 5 }</span>
-    <span class="function-execution-context-call">pow(2, 3)</span>
+    <span class="function-execution-context">Kontext: { x: 2, n: 2, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 2)</span>
+  </li>
+  <li>
+    <span class="function-execution-context">Kontext: { x: 2, n: 3, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 3)</span>
   </li>
 </ul>
 
-When it finishes, we have a result of `pow(2, 3) = 8`.
+Obnoví se provádění `mocnina(2, 2)`. To zná výsledek vnořeného volání `mocnina(2, 1)`, takže může dokončit výpočet `x * mocnina(x, n - 1)` a vrátit `4`.
 
-The recursion depth in this case was: **3**.
+Pak se obnoví předchozí kontext:
 
-As we can see from the illustrations above, recursion depth equals the maximal number of context in the stack.
+<ul class="function-execution-context-list">
+  <li>
+    <span class="function-execution-context">Kontext: { x: 2, n: 3, na řádku 5 }</span>
+    <span class="function-execution-context-call">mocnina(2, 3)</span>
+  </li>
+</ul>
 
-Note the memory requirements. Contexts take memory. In our case, raising to the power of `n` actually requires the memory for `n` contexts, for all lower values of `n`.
+Až skončí, budeme mít výsledek `mocnina(2, 3) = 8`.
 
-A loop-based algorithm is more memory-saving:
+Hloubka rekurze v tomto případě byla **3**.
+
+Jak vidíme z výše uvedených ilustrací, hloubka rekurze se rovná nejvyššímu počtu kontextů v zásobníku.
+
+Všimněte si paměťových požadavků. Kontexty zabírají paměť. V našem případě umocnění na `n`-tou ve skutečnosti vyžaduje paměť pro `n` kontextů pro všechny nižší hodnoty `n`.
+
+Algoritmus založený na cyklu ušetří více paměti:
 
 ```js
-function pow(x, n) {
-  let result = 1;
+function mocnina(x, n) {
+  let výsledek = 1;
 
   for (let i = 0; i < n; i++) {
-    result *= x;
+    výsledek *= x;
   }
 
-  return result;
+  return výsledek;
 }
 ```
 
-The iterative `pow` uses a single context changing `i` and `result` in the process. Its memory requirements are small, fixed and do not depend on `n`.
+Iterativní `mocnina` používá jediný kontext, v jehož procesu se mění `i` a `výsledek`. Její paměťové požadavky jsou malé, pevné a nezávisejí na velikosti `n`.
 
-**Any recursion can be rewritten as a loop. The loop variant usually can be made more effective.**
+**Každou rekurzi lze přepsat do smyčky. Variantu se smyčkou lze obvykle napsat efektivněji.**
 
-...But sometimes the rewrite is non-trivial, especially when function uses different recursive subcalls depending on conditions and merges their results or when the branching is more intricate. And the optimization may be unneeded and totally not worth the efforts.
+...Toto přepsání však někdy není triviální, zvláště když funkce používá různá rekurzívní volání v závislosti na podmínkách a spojuje jejich výsledky, nebo když je větvení složitější. A optimalizace může být nepotřebná a nemusí stát za tu námahu.
 
-Recursion can give a shorter code, easier to understand and support. Optimizations are not required in every place, mostly we need a good code, that's why it's used.
+Rekurze mohou vydat kratší kód, jednodušší na porozumění a podporu. Optimalizace nejsou nutné všude, většinou potřebujeme dobrý kód, proto používáme rekurzi.   
 
-## Recursive traversals
+## Rekurzívní traversaly
 
-Another great application of the recursion is a recursive traversal.
+Další skvělé využití rekurze je rekurzívní traversal.
 
-Imagine, we have a company. The staff structure can be presented as an object:
+Představme si, že máme firmu. Struktura jejího personálu se dá vyjádřit jako objekt:
 
 ```js
-let company = {
-  sales: [{
-    name: 'John',
-    salary: 1000
+let firma = {
+  prodeje: [{
+    jméno: 'Jan',
+    plat: 1000
   }, {
-    name: 'Alice',
-    salary: 1600
+    jméno: 'Alice',
+    plat: 1600
   }],
 
-  development: {
-    sites: [{
-      name: 'Peter',
-      salary: 2000
+  vývoj: {
+    pobočky: [{
+      jméno: 'Petr',
+      plat: 2000
     }, {
-      name: 'Alex',
-      salary: 1800
+      jméno: 'Aleš',
+      plat: 1800
     }],
 
-    internals: [{
-      name: 'Jack',
-      salary: 1300
+    interní: [{
+      jméno: 'Kuba',
+      plat: 1300
     }]
   }
 };
 ```
 
-In other words, a company has departments.
+Jinými slovy, firma má různá oddělení.
 
-- A department may have an array of staff. For instance, `sales` department has 2 employees: John and Alice.
-- Or a department may split into subdepartments, like `development` has two branches: `sites` and `internals`. Each of them has their own staff.
-- It is also possible that when a subdepartment grows, it divides into subsubdepartments (or teams).
+- Oddělení může mít pole zaměstnanců. Například oddělení `prodeje` má 2 zaměstnance: Jana a Alici.
+- Nebo se oddělení může větvit na nižší oddělení, například `vývoj` má dvě větve: `pobočky` a `interní`. Každá z nich má své vlastní zaměstnance.
+- Je také možné, že když se nižší oddělení rozroste, rozdělí se na ještě nižší oddělení (nebo týmy).
 
-    For instance, the `sites` department in the future may be split into teams for `siteA` and `siteB`. And they, potentially, can split even more. That's not on the picture, just something to have in mind.
+    Například oddělení `pobočky` se v budoucnu může rozdělit na týmy pro `pobočkaA` a `pobočkaB`. A ty se mohou rozdělit ještě dál. To není na obrázku, je to jen něco, co musíme mít na paměti.
 
-Now let's say we want a function to get the sum of all salaries. How can we do that?
+Nyní řekněme, že chceme funkci, která vrátí součet všech platů. Jak ji můžeme napsat?
 
-An iterative approach is not easy, because the structure is not simple. The first idea may be to make a `for` loop over `company` with nested subloop over 1st level departments. But then we need more nested subloops to iterate over the staff in 2nd level departments like `sites`... And then another subloop inside those for 3rd level departments that might appear in the future? If we put 3-4 nested subloops in the code to traverse a single object, it becomes rather ugly.
+Iterativní přístup není snadný, protože struktura není jednoduchá. První myšlenkou může být vytvořit cyklus `for` nad objektem `firma` s vnořeným podcyklem nad odděleními 1. úrovně. Pak ale budeme potřebovat další vnořené podcykly, které budou iterovat nad personálem oddělení 2. úrovně, jako je `pobočky`... A v nich pak další podcyklus pro oddělení 3. úrovně, která se mohou objevit v budoucnu? Jestliže do kódu vložíme 3-4 vnořené podcykly, aby procházely jediný objekt, bude to poměrně ošklivé.
 
-Let's try recursion.
+Zkusme rekurzi.
 
-As we can see, when our function gets a department to sum, there are two possible cases:
+Jak vidíme, když naše funkce obdrží oddělení, které má sečíst, mohou nastat dva případy:
 
-1. Either it's a "simple" department with an *array* of people -- then we can sum the salaries in a simple loop.
-2. Or it's *an object* with `N` subdepartments -- then we can make `N` recursive calls to get the sum for each of the subdeps and combine the results.
+1. Buď je to „jednoduché“ oddělení s *polem* zaměstnanců -- pak můžeme sečíst jejich platy v jediném cyklu.
+2. Nebo je to *objekt* s `N` podřízenými odděleními -- pak můžeme učinit `N` rekurzívních volání, abychom získali součet pro každé nižší oddělení, a zkombinovat výsledky.
 
-The 1st case is the base of recursion, the trivial case, when we get an array.
+První případ je základem rekurze, triviální případ, když obdržíme pole.
 
-The 2nd case when we get an object is the recursive step. A complex task is split into subtasks for smaller departments. They may in turn split again, but sooner or later the split will finish at (1).
+Druhý případ, když obdržíme objekt, je rekurzívní krok. Složitý úkol rozdělíme na podúkoly pro menší oddělení. Ta se pak mohou opět rozdělit, ale dříve nebo později dělení skončí případem (1).
 
-The algorithm is probably even easier to read from the code:
+Algoritmus je pravděpodobně ještě snadnější vyčíst z kódu:
 
 
 ```js run
-let company = { // the same object, compressed for brevity
-  sales: [{name: 'John', salary: 1000}, {name: 'Alice', salary: 1600 }],
-  development: {
-    sites: [{name: 'Peter', salary: 2000}, {name: 'Alex', salary: 1800 }],
-    internals: [{name: 'Jack', salary: 1300}]
+let firma = { // stejný objekt, zkomprimovaný pro stručnost
+  platy: [{jméno: 'Jan', plat: 1000}, {jméno: 'Alice', plat: 1600 }],
+  vývoj: {
+    pobočky: [{jméno: 'Petr', plat: 2000}, {jméno: 'Aleš', plat: 1800 }],
+    interní: [{jméno: 'Kuba', plat: 1300}]
   }
 };
 
-// The function to do the job
+// Funkce, která odvede práci
 *!*
-function sumSalaries(department) {
-  if (Array.isArray(department)) { // case (1)
-    return department.reduce((prev, current) => prev + current.salary, 0); // sum the array
-  } else { // case (2)
-    let sum = 0;
-    for (let subdep of Object.values(department)) {
-      sum += sumSalaries(subdep); // recursively call for subdepartments, sum the results
+function sečtiPlaty(oddělení) {
+  if (Array.isArray(oddělení)) { // případ (1)
+    return oddělení.reduce((předchozí, aktuální) => předchozí + aktuální.plat, 0); // sečteme pole
+  } else { // případ (2)
+    let součet = 0;
+    for (let pododdělení of Object.values(oddělení)) {
+      součet += sečtiPlaty(pododdělení); // rekurzívní volání pro nižší oddělení, sečteme výsledky
     }
-    return sum;
+    return součet;
   }
 }
 */!*
 
-alert(sumSalaries(company)); // 7700
+alert(sečtiPlaty(firma)); // 7700
 ```
 
-The code is short and easy to understand (hopefully?). That's the power of recursion. It also works for any level of subdepartment nesting.
+Kód je krátký a snadno srozumitelný (doufejme?). V tom spočívá síla rekurze. Funguje pro jakoukoli úroveň vnoření oddělení.
 
-Here's the diagram of calls:
+Zde je diagram volání:
 
-![recursive salaries](recursive-salaries.svg)
+![rekurzívní platy](recursive-salaries.svg)
 
-We can easily see the principle: for an object `{...}` subcalls are made, while arrays `[...]` are the "leaves" of the recursion tree, they give immediate result.
+Snadno vidíme princip: pro objekty `{...}` se učiní volání, zatímco pole `[...]` jsou „listy“ rekurzívního stromu a dávají okamžitý výsledek.
 
-Note that the code uses smart features that we've covered before:
+Všimněte si, že kód využívá elegantní vlastnosti, které jsme uvedli již dříve:
 
-- Method `arr.reduce` explained in the chapter <info:array-methods> to get the sum of the array.
-- Loop `for(val of Object.values(obj))` to iterate over object values: `Object.values` returns an array of them.
+- Metodu `arr.reduce` vysvětlenou v kapitole <info:array-methods> k získání součtu pole.
+- Cyklus `for(hodnota of Object.values(obj))` k iteraci nad hodnotami objektu: `Object.values` vrací jejich pole.
 
 
-## Recursive structures
+## Rekurzívní struktury
 
-A recursive (recursively-defined) data structure is a structure that replicates itself in parts.
+Rekurzívní (rekurzívně definovaná) datová struktura je struktura, která částečně replikuje sama sebe.
 
-We've just seen it in the example of a company structure above.
+Právě jsme ji viděli ve výše uvedeném příkladu struktury firmy.
 
-A company *department* is:
-- Either an array of people.
-- Or an object with *departments*.
+Firemní *oddělení* je:
+- Buď pole lidí.
+- Nebo objekt s *odděleními*.
 
-For web-developers there are much better-known examples: HTML and XML documents.
+Pro vývojáře webů existují mnohem lépe známé příklady: HTML a XML dokumenty.
 
-In the HTML document, an *HTML-tag* may contain a list of:
-- Text pieces.
-- HTML-comments.
-- Other *HTML-tags* (that in turn may contain text pieces/comments or other tags etc).
+V HTML dokumentu může *HTML značka (tag)* obsahovat seznam:
+- úryvků textu,
+- HTML komentářů,
+- jiných *HTML značek* (které mohou opět obsahovat úryvky textu, komentáře nebo jiné značky atd.).
 
-That's once again a recursive definition.
+To je opět rekurzívní definice.
 
-For better understanding, we'll cover one more recursive structure named "Linked list" that might be a better alternative for arrays in some cases.
+Pro lepší porozumění uvedeme ještě jednu rekurzívní strukturu nazývanou „spojový seznam“, která by v některých případech mohla být lepší alternativou k polím.
 
-### Linked list
+### Spojový seznam
 
-Imagine, we want to store an ordered list of objects.
+Představme si, že si chceme uložit seřazený seznam objektů.
 
-The natural choice would be an array:
+Přirozenou volbou by bylo pole:
 
 ```js
-let arr = [obj1, obj2, obj3];
+let pole = [obj1, obj2, obj3];
 ```
 
-...But there's a problem with arrays. The "delete element" and "insert element" operations are expensive. For instance, `arr.unshift(obj)` operation has to renumber all elements to make room for a new `obj`, and if the array is big, it takes time. Same with `arr.shift()`.
+...S poli je však problém. Operace „smazání prvku“ a „vložení prvku“ jsou nákladné. Například operace `pole.unshift(obj)` musí přečíslovat všechny prvky, aby uvolnila místo pro nový objekt `obj`, a je-li pole velké, zabere to čas. Totéž platí pro  `arr.shift()`.
 
-The only structural modifications that do not require mass-renumbering are those that operate with the end of array: `arr.push/pop`. So an array can be quite slow for big queues, when we have to work with the beginning.
+Jediné strukturální modifikace, které nevyžadují masové přečíslování, jsou ty, které pracují s koncem pole: `pole.push/pop`. Pole tedy může být poměrně pomalé pro velké fronty, když musíme pracovat s jeho začátkem.
 
-Alternatively, if we really need fast insertion/deletion, we can choose another data structure called a [linked list](https://en.wikipedia.org/wiki/Linked_list).
+Alternativně, jestliže potřebujeme opravdu rychlé vkládání a mazání, si můžeme zvolit jinou datovou strukturu nazvanou [lineární spojový seznam](https://cs.wikipedia.org/wiki/Lineární_seznam).
 
-The *linked list element* is recursively defined as an object with:
-- `value`.
-- `next` property referencing the next *linked list element* or `null` if that's the end.
+*Prvek spojového seznamu* je rekurzívně definován jako objekt, který obsahuje:
+- hodnotu `hodnota`.
+- vlastnost `další`, která se odkazuje na další *prvek spojového seznamu* nebo *null*, jestliže tento prvek je poslední.
 
-For instance:
+Příklad:
 
 ```js
-let list = {
-  value: 1,
-  next: {
-    value: 2,
-    next: {
-      value: 3,
-      next: {
-        value: 4,
-        next: null
+let seznam = {
+  hodnota: 1,
+  další: {
+    hodnota: 2,
+    další: {
+      hodnota: 3,
+      další: {
+        hodnota: 4,
+        další: null
       }
     }
   }
 };
 ```
 
-Graphical representation of the list:
+Grafické zobrazení seznamu:
 
-![linked list](linked-list.svg)
+![spojový seznam](linked-list.svg)
 
-An alternative code for creation:
+Alternativní kód pro vytvoření:
 
 ```js no-beautify
-let list = { value: 1 };
-list.next = { value: 2 };
-list.next.next = { value: 3 };
-list.next.next.next = { value: 4 };
-list.next.next.next.next = null;
+let list = { hodnota: 1 };
+list.další = { hodnota: 2 };
+list.další.další = { hodnota: 3 };
+list.další.další.další = { hodnota: 4 };
+list.další.další.další.další = null;
 ```
 
-Here we can even more clearly see that there are multiple objects, each one has the `value` and `next` pointing to the neighbour. The `list` variable is the first object in the chain, so following `next` pointers from it we can reach any element.
+Tady můžeme jasně vidět, že zde je více objektů, každý z nich má hodnotu `hodnota` a prvek `další`, který ukazuje na souseda. Proměnná `seznam` je první objekt v řetězci, takže pomocí ukazatelů `další` se z ní můžeme dostat na kterýkoli prvek.
 
-The list can be easily split into multiple parts and later joined back:
+Seznam můžeme snadno rozdělit na více částí a pak znovu spojit:
 
 ```js
-let secondList = list.next.next;
-list.next.next = null;
+let druhýSeznam = seznam.další.další;
+seznam.další.další = null;
 ```
 
-![linked list split](linked-list-split.svg)
+![rozdělený spojový seznam](linked-list-split.svg)
 
-To join:
+Spojení:
 
 ```js
-list.next.next = secondList;
+seznam.další.další = druhýSeznam;
 ```
 
-And surely we can insert or remove items in any place.
+A samozřejmě můžeme na kterémkoli místě vkládat nebo odstraňovat prvky.
 
-For instance, to prepend a new value, we need to update the head of the list:
+Například chceme-li připojit novou hodnotu na začátek seznamu, musíme změnit jeho hlavičku:
 
 ```js
-let list = { value: 1 };
-list.next = { value: 2 };
-list.next.next = { value: 3 };
-list.next.next.next = { value: 4 };
+let seznam = { hodnota: 1 };
+seznam.další = { hodnota: 2 };
+seznam.další.další = { hodnota: 3 };
+seznam.další.další.další = { hodnota: 4 };
 
 *!*
-// prepend the new value to the list
-list = { value: "new item", next: list };
+// připojíme novou hodnotu na začátek seznamu
+seznam = { hodnota: "nový prvek", další: seznam };
 */!*
 ```
 
-![linked list](linked-list-0.svg)
+![spojový seznam](linked-list-0.svg)
 
-To remove a value from the middle, change `next` of the previous one:
+Abychom odstranili prvek zprostředka, změníme `další` u předchozího prvku:
 
 ```js
-list.next = list.next.next;
+seznam.další = seznam.další.další;
 ```
 
 ![linked list](linked-list-remove-1.svg)
 
-We made `list.next` jump over `1` to value `2`. The value `1` is now excluded from the chain. If it's not stored anywhere else, it will be automatically removed from the memory.
+Způsobili jsme, že `seznam.další` bude přeskakovat `1` rovnou na hodnotu `2`. Hodnota `1` je nyní z řetězce vyřazena. Pokud není uložena někde jinde, bude automaticky odstraněna z paměti.
 
-Unlike arrays, there's no mass-renumbering, we can easily rearrange elements.
+Na rozdíl od polí zde nedochází k masovému přečíslování, takže můžeme prvky snadno přeskupovat.
 
-Naturally, lists are not always better than arrays. Otherwise everyone would use only lists.
+Pochopitelně seznamy nejsou vždy lepší než pole, jinak by všichni používali jedině seznamy.
 
-The main drawback is that we can't easily access an element by its number. In an array that's easy: `arr[n]` is a direct reference. But in the list we need to start from the first item and go `next` `N` times to get the Nth element.
+Jejich hlavní nevýhodou je, že nemůžeme snadno přistupovat k prvku podle jeho čísla. V poli je to jednoduché: `pole[n]` je přímý odkaz. Ale v seznamu musíme začít od prvního prvku a jít na `další` celkem `N`-krát, abychom získali N-tý prvek.
 
-...But we don't always need such operations. For instance, when we need a queue or even a [deque](https://en.wikipedia.org/wiki/Double-ended_queue) -- the ordered structure that must allow very fast adding/removing elements from both ends, but access to its middle is not needed.
+...Takové operace však nepotřebujeme vždy. Například když potřebujeme frontu nebo dokonce [frontu s dvojitým koncem](https://en.wikipedia.org/wiki/Double-ended_queue) -- seřazenou strukturu, která musí umožňovat velmi rychlé přidávání a odstraňování prvků z obou konců, ale přístup doprostřed není nutný.
 
-Lists can be enhanced:
-- We can add property `prev` in addition to `next` to reference the previous element, to move back easily.
-- We can also add a variable named `tail` referencing the last element of the list (and update it when adding/removing elements from the end).
-- ...The data structure may vary according to our needs.
+Seznamy můžeme vylepšit:
+- Můžeme navíc k vlastnosti `další` přidat vlastnost `předchozí`, která bude odkazovat na předchozí prvek, abychom se mohli snadno vracet zpět.
+- Můžeme také přidat proměnnou `konec` odkazující se na poslední prvek seznamu (a aktualizovat ji, když budeme přidávat nebo odebírat prvky z konce).
+- ...Tato datová struktura se může lišit podle našich potřeb.
 
-## Summary
+## Shrnutí
 
-Terms:
-- *Recursion*  is a programming term that means calling a function from itself. Recursive functions can be used to solve tasks in elegant ways.
+Pojmy:
+- *Rekurze* je programátorský pojem, který znamená volání funkce sebou samotnou. Pomocí rekurzívních funkcí můžeme řešit úlohy elegantním způsobem.
 
-    When a function calls itself, that's called a *recursion step*. The *basis* of recursion is function arguments that make the task so simple that the function does not make further calls.
+    Když funkce volá sebe sama, nazývá se to *rekurzívní krok*. *Základ* rekurze jsou funkční argumenty, s nimiž je úloha natolik jednoduchá, že funkce už neučiní další volání.
 
-- A [recursively-defined](https://en.wikipedia.org/wiki/Recursive_data_type) data structure is a data structure that can be defined using itself.
+- [Rekurzívně definovaná](https://en.wikipedia.org/wiki/Recursive_data_type) datová struktura je datová struktura, která může být definována pomocí sebe sama.
 
-    For instance, the linked list can be defined as a data structure consisting of an object referencing a list (or null).
+    Například spojový seznam může být definován jako datová struktura, která se skládá z objektu odkazujícího se na seznam (nebo null).
 
     ```js
-    list = { value, next -> list }
+    seznam = { hodnota, další -> seznam }
     ```
 
-    Trees like HTML elements tree or the department tree from this chapter are also naturally recursive: they branch and every branch can have other branches.
+    Stromy jako strom HTML prvků nebo strom firemních oddělení z této kapitoly jsou rovněž přirozeně rekurzívní: větví se a každá větev může obsahovat další větve.
 
-    Recursive functions can be used to walk them as we've seen in the `sumSalary` example.
+    K procházení skrz ně mohou být použity rekurzívní funkce, jak jsme viděli v příkladu `sečtiPlaty`.
 
-Any recursive function can be rewritten into an iterative one. And that's sometimes required to optimize stuff. But for many tasks a recursive solution is fast enough and easier to write and support.
+Každou rekurzívní funkci můžeme přepsat na iterativní. Někdy je to nutné kvůli optimalizaci. Pro mnoho úloh je však rekurzívní řešení dostatečně rychlé a snadnější na napsání i údržbu.

@@ -2,50 +2,76 @@ importance: 5
 
 ---
 
-# Debounce decorator
+# Debouncový dekorátor
 
-The result of `debounce(f, ms)` decorator is a wrapper that suspends calls to `f` until there's `ms` milliseconds of inactivity (no calls, "cooldown period"), then invokes `f` once with the latest arguments.
+Výsledkem dekorátoru `debounce(f, ms)` je wrapper, který pozastaví volání `f`, dokud neuplyne `ms` milisekund neaktivity (žádná volání, „doba vychladnutí“), a pak zavolá `f` jednou s posledními argumenty.
 
+<<<<<<< Updated upstream
 For instance, we had a function `f` and replaced it with `f = debounce(f, 1000)`.
+=======
+Jinými slovy, `debounce` je jako sekretářka, která přijímá „telefonní hovory“ a čeká, až uplyne `ms` milisekund klidu. Teprve pak předá „šéfovi“ informaci z posledního volání (volá skutečnou funkci `f`).
 
-Then if the wrapped function is called at 0ms, 200ms and 500ms, and then there are no calls, then the actual `f` will be only called once, at 1500ms. That is: after the cooldown period of 1000ms from the last call.
+Například máme funkci `f` a nahradíme ji za `f = debounce(f, 1000)`.
+>>>>>>> Stashed changes
+
+Jestliže je pak obalená funkce volána za 0 ms, 200 ms a 500 ms a pak žádná volání nenastanou, bude skutečná funkce `f` volána jen jednou, a to za 1500 ms. Tedy: po době vychladnutí 1000 ms od posledního volání.
 
 ![](debounce.svg)
 
-...And it will get the arguments of the very last call, other calls are ignored.
+...A obdrží argumenty z posledního volání, ostatní volání jsou ignorována.
 
+<<<<<<< Updated upstream
 Here's the code for it (uses the debounce decorator from the [Lodash library](https://lodash.com/docs/4.17.15#debounce):
+=======
+Zde je kód pro něj (používá debouncový dekorátor z [knihovny Lodash](https://lodash.com/docs/4.17.15#debounce)):
+>>>>>>> Stashed changes
 
 ```js
 let f = _.debounce(alert, 1000);
 
 f("a"); 
 setTimeout( () => f("b"), 200);
+<<<<<<< Updated upstream
 setTimeout( () => f("c"), 500); 
 // debounced function waits 1000ms after the last call and then runs: alert("c")
 ```
 
 
 Now a practical example. Let's say, the user types something, and we'd like to send a request to the server when the input is finished.
+=======
+setTimeout( () => f("c"), 500);
+// debouncovaná funkce čeká 1000 ms po posledním volání a pak spustí: alert("c")
+```
 
-There's no point in sending the request for every character typed. Instead we'd like to wait, and then process the whole result.
+Nyní praktický příklad. Řekněme, že uživatel něco napíše a my bychom chtěli poslat požadavek na server, až bude vstup dokončen.
+>>>>>>> Stashed changes
 
-In a web-browser, we can setup an event handler -- a function that's called on every change of an input field. Normally, an event handler is called very often, for every typed key. But if we `debounce` it by 1000ms, then it will be only called once, after 1000ms after the last input.
+Nemá smysl posílat požadavek po každém napsaném znaku. Místo toho bychom chtěli počkat a pak zpracovat až celý výsledek.
+
+Ve webovém prohlížeči můžeme nastavit handler události -- funkci, která je volána po každé změně vstupního pole. Normálně je handler události volán velmi často, po každé stisknuté klávese. Když na něj však použijeme `debounce` na 1000 ms, pak bude volán jen jednou, a to 1000 ms po posledním vstupu.
 
 ```online
 
-In this live example, the handler puts the result into a box below, try it:
+V tomto živém příkladu handler umisťuje výsledek do boxu níže, zkuste si to:
 
 [iframe border=1 src="debounce" height=200]
 
-See? The second input calls the debounced function, so its content is processed after 1000ms from the last input.
+Vidíte? Druhý vstup volá debouncovanou funkci, takže jeho obsah je zpracován až 1000 ms po posledním vstupu.
 ```
 
-So, `debounce` is a great way to process a sequence of events: be it a sequence of key presses, mouse movements or something else.
+`debounce` je tedy skvělý způsob, jak zpracovat posloupnost událostí: ať už je to posloupnost stisků kláves, pohybů myši nebo cokoli jiného.
 
+<<<<<<< Updated upstream
 
 It waits the given time after the last call, and then runs its function, that can process the result.
+=======
+Po posledním volání napřed čeká zadanou dobu a poté spustí svou funkci, která může zpracovat výsledek.
+>>>>>>> Stashed changes
 
-The task is to implement `debounce` decorator.
+Úkolem je implementovat dekorátor `debounce`.
 
+<<<<<<< Updated upstream
 Hint: that's just a few lines if you think about it :)
+=======
+Rada: když se nad tím zamyslíte, je to pouhých několik řádků :)
+>>>>>>> Stashed changes
