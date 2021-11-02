@@ -4,8 +4,8 @@ Můžeme se rozhodnout, že funkci nespustíme právě teď, ale až za nějakou
 
 K tomu existují dvě metody:
 
-- `setTimeout` nám umožňuje spustit funkci jednou po zadaném časovém intervalu.
-- `setInterval` nám umožňuje spouštět funkci opakovaně, nejprve po zadaném časovém intervalu a pak ji neustále v tomto intervalu opakovat.
+- `setTimeout` nám umožňuje spustit funkci jednou po uplynutí zadaného časového intervalu.
+- `setInterval` nám umožňuje spouštět funkci opakovaně, nejprve po uplynutí zadaného časového intervalu a pak ji neustále v tomto intervalu opakovat.
 
 Tyto metody nejsou součástí specifikace JavaScriptu, ale většina prostředí obsahuje interní plánovač a tyto metody poskytuje. Konkrétně jsou podporovány ve všech prohlížečích a v Node.js.
 
@@ -100,7 +100,7 @@ alert(idČasovače); // stejný identifikátor (po zrušení se nevynuloval)
 
 Jak vidíme z výstupu `alert`, v prohlížeči je identifikátorem časovače číslo. V jiných prostředích to může být něco jiného, například Node.js vrací objekt časovače s dalšími metodami.
 
-Opakujeme, že pro tyto metody není žádná univerzální specifikace, takže je to v pořádku.
+Opakujeme, že pro tyto metody neexistuje žádná univerzální specifikace, takže je to v pořádku.
 
 Pro prohlížeče jsou časovače popsány v [sekci časovačů](https://www.w3.org/TR/html5/webappapis.html#timers) standardu HTML5.
 
@@ -129,11 +129,7 @@ setTimeout(() => { clearInterval(idČasovače); alert('stop'); }, 5000);
 ```smart header="Zatímco je zobrazen `alert`, čas plyne dál"
 Ve většině prohlížečů včetně Chrome a Firefoxu interní časovač „tiká“ dál, zatímco je zobrazeno `alert/confirm/prompt`.
 
-<<<<<<< Updated upstream
-So if you run the code above and don't dismiss the `alert` window for some time, then in the next `alert` will be shown immediately as you do it. The actual interval between alerts will be shorter than 2 seconds.
-=======
 Když si tedy spustíte výše uvedený kód a okno `alert` nějakou dobu nezrušíte, pak bude následující `alert` zobrazen hned, jakmile to uděláte. Skutečný interval mezi zobrazeními tedy bude kratší než 2 sekundy.
->>>>>>> Stashed changes
 ```
 
 ## Vnořený setTimeout
@@ -207,7 +203,7 @@ Pro `setInterval` vnitřní plánovač spustí `funkce(i++)` každých 100 ms:
 
 Všimli jste si?
 
-**Skutečná prodleva mezi voláními `funkce` pro `setInterval` je nižší než v kódu!**
+**Skutečná prodleva mezi voláními `funkce` pro `setInterval` je nižší, než uvedená v kódu!**
 
 To je normální, protože doba, kterou zabere výkon `funkce`, „zkonzumuje“ část intervalu.
 
@@ -285,28 +281,16 @@ Podobná věc se stane, jestliže použijeme `setInterval` namísto `setTimeout`
 
 Toto omezení pochází z prastarých časů a mnoho skriptů na něm závisí, takže existuje z historických důvodů.
 
-<<<<<<< Updated upstream
-For server-side JavaScript, that limitation does not exist, and there exist other ways to schedule an immediate asynchronous job, like [setImmediate](https://nodejs.org/api/timers.html) for Node.js. So this note is browser-specific.
-=======
-Pro JavaScript na straně serveru toto omezení neexistuje a jsou tam i jiné způsoby, jak načasovat okamžitou asynchronní činnost, například [setImmediate](https://nodejs.org/api/timers.html#timers_setimmediate_callback_args) pro Node.js. Tato poznámka je tedy specifická pro prohlížeče.
->>>>>>> Stashed changes
+Pro JavaScript na straně serveru toto omezení neexistuje a jsou tam jiné způsoby, jak načasovat okamžitou asynchronní činnost, například [setImmediate](https://nodejs.org/api/timers.html#timers_setimmediate_callback_args) pro Node.js. Tato poznámka je tedy specifická pro prohlížeče.
 ````
 
 ## Shrnutí
 
-<<<<<<< Updated upstream
-- Methods `setTimeout(func, delay, ...args)` and `setInterval(func, delay, ...args)` allow us to run the `func` once/regularly after `delay` milliseconds.
-- To cancel the execution, we should call `clearTimeout/clearInterval` with the value returned by `setTimeout/setInterval`.
-- Nested `setTimeout` calls are a more flexible alternative to `setInterval`, allowing us to set the time *between* executions more precisely.
-- Zero delay scheduling with `setTimeout(func, 0)` (the same as `setTimeout(func)`) is used to schedule the call "as soon as possible, but after the current script is complete".
-- The browser limits the minimal delay for five or more nested call of `setTimeout` or for `setInterval` (after 5th call) to 4ms. That's for historical reasons.
-=======
 - Metody `setTimeout(funkce, prodleva, ...argumenty)` a `setInterval(funkce, prodleva, ...argumenty)` nám umožňují spustit funkci `funkce` jednou/pravidelně po `prodleva` milisekundách.
 - Chceme-li spuštění zrušit, měli bychom volat `clearTimeout/clearInterval` s hodnotou, kterou vrátila funkce   `setTimeout/setInterval`.
 - Flexibilnější alternativou k `setInterval` jsou vnořená volání `setTimeout`, která nám umožňují nastavit čas *mezi* voláními přesněji.
 - Nulová prodleva v `setTimeout(funkce, 0)` (totéž jako `setTimeout(funkce)`) se používá k načasování volání „co nejdříve, ale až poté, co bude dokončen aktuální skript“.
 - Prohlížeč omezuje minimální prodlevu pro pět nebo více vnořených volání `setTimeout` nebo pro `setInterval` (po 5. volání) na 4 ms. Je tomu tak z historických důvodů.
->>>>>>> Stashed changes
 
 Prosíme všimněte si, že žádná časovací metoda *nezaručuje* přesnou prodlevu.
 

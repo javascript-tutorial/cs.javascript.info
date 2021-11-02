@@ -5,13 +5,8 @@
 
 Nyní kód:
 
-<<<<<<< Updated upstream
-```js run
-function sum(a) {
-=======
 ```js demo run
 function součet(a) {
->>>>>>> Stashed changes
 
   let aktuálníSoučet = a;
 

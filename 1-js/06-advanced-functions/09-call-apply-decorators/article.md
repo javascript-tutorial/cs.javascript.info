@@ -36,19 +36,11 @@ function cachovacíDekorátor(funkce) {
 
 pomalá = cachovacíDekorátor(pomalá);
 
-<<<<<<< Updated upstream
-alert( slow(1) ); // slow(1) is cached
-alert( "Again: " + slow(1) ); // the same
-
-alert( slow(2) ); // slow(2) is cached
-alert( "Again: " + slow(2) ); // the same as the previous line
-=======
 alert( pomalá(1) ); // pomalá(1) se uloží do cache a výsledek se vrátí
 alert( "Znovu: " + pomalá(1) ); // výsledek funkce pomalá(1) vrácený z cache
 
 alert( pomalá(2) ); // pomalá(2) se uloží do cache a výsledek se vrátí
 alert( "Znovu: " + pomalá(2) ); // výsledek funkce pomalá(2) vrácený z cache
->>>>>>> Stashed changes
 ```
 
 Funkce `cachovacíDekorátor` ve výše uvedeném kódu je *dekorátor*: speciální funkce, která přebírá jinou funkci a mění její chování.
@@ -213,11 +205,11 @@ Nyní je všechno v pořádku.
 
 Abychom to všechno objasnili, podívejme se hlouběji na to, jak se `this` předává:
 
-1. Po dekoraci je `pracovník.pomalá` nyní wrapper `function (x) { ... }`.
-2. Když je tedy `pracovník.pomalá(2)` spuštěn, wrapper obdrží `2` jako argument a `this=pracovník` (je to objekt před tečkou).
+1. Funkce `pracovník.pomalá` je po dekoraci wrapper `function (x) { ... }`.
+2. Když je tedy spuštěn `pracovník.pomalá(2)`, wrapper obdrží `2` jako argument a `this=pracovník` (je to objekt před tečkou).
 3. Uvnitř wrapperu za předpokladu, že výsledek ještě není v cache, `funkce.call(this, x)` předá původní metodě aktuální `this` (`=pracovník`) a aktuální argument (`=2`).
 
-## Buďme víceargumentoví
+## Buďme multi  argumentoví
 
 Učiňme nyní `cachovacíDekorátor` ještě univerzálnější. Prozatím funguje jen pro funkce s jediným argumentem.
 
@@ -242,9 +234,9 @@ Možných řešení je mnoho:
 2. Použít vnořené mapy: `cache.set(min)` bude `Map`, v níž bude uložena dvojice `(max, výsledek)`. Pak můžeme získat `výsledek` pomocí `cache.get(min).get(max)`.
 3. Spojit dvě hodnoty do jedné. V našem konkrétním případě bychom jako klíč pro `Map` mohli použít jednoduše řetězec `"min,max"`. Pro flexibilitu můžeme umožnit dekorátoru poskytnout *hashovací funkci*, která umí vytvořit z mnoha hodnot jedinou.
 
-Pro mnoho praktických aplikací postačí třetí varianta, takže se zaměříme na ni.
+Pro řadu praktických aplikací postačí třetí varianta, takže se zaměříme na ni.
 
-Také do `funkce.call` potřebujeme předávat nejen `x`, ale všechny argumenty. Vzpomeňme si, že ve `function()` můžeme získat pseudopole jejích argumentů jako `arguments`, takže `funkce.call(this, x)` můžeme nahradit za `funkce.call(this, ...arguments)`.
+Také do `funkce.call` potřebujeme předávat nejen `x`, ale všechny argumenty. Vzpomeňme si, že ve `function()` můžeme získat pseudopole argumentů této funkce jako `arguments`, takže `funkce.call(this, x)` můžeme nahradit za `funkce.call(this, ...arguments)`.
 
 Zde je silnější `cachovacíDekorátor`:
 
@@ -344,7 +336,7 @@ function hash(argumenty) {
 }
 ```
 
-Prozatím funguje jen na dvou argumentech. Bylo by lepší, kdyby dokázala zvládnout jakýkoli počet argumentů v `argumenty`.
+Prozatím funguje jen na dvou argumentech. Bylo by lepší, kdyby dokázala v `argumenty` zvládnout jakýkoli počet argumentů.
 
 Přirozené řešení by bylo použít metodu [arr.join](mdn:js/Array/join):
 

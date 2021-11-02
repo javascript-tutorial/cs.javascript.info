@@ -23,7 +23,6 @@ Pokud vyvíjíte pro prohlížeč, existují i další specifikace uvedené ve [
 	
 	Často je však nejlepší použít obyčejné internetové vyhledávání. Do dotazu jednoduše napište „MDN [pojem]“, např. pro vyhledávání funkce `parseInt` zadejte <https://google.com/search?q=MDN+parseInt>.
 
-
 - **MSDN** – Manuál od Microsoftu s mnoha informacemi včetně těch o JavaScriptu (v IE se mu říká JScript). Potřebujete-li něco specifického ohledně Internet Exploreru, je lepší zavítat na: <http://msdn.microsoft.com/>.
 
 	Můžete také použít internetové vyhledávání s frázemi jako „RegExp MSDN“ nebo „RegExp MSDN jscript“.

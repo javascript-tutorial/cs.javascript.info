@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-By definition, a factorial is `n!` can be written as `n * (n-1)!`.
-=======
 Podle definice můžeme faktoriál `n!` zapsat jako `n * (n-1)!`.
->>>>>>> Stashed changes
 
 Jinými slovy, výsledek funkce `faktoriál(n)` můžeme vypočítat jako `n` vynásobené výsledkem `faktoriál(n-1)`. A volání pro `n-1` může rekurzívně klesat níž a níž až k `1`.
 

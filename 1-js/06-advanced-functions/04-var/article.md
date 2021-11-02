@@ -28,11 +28,7 @@ Na druhou stranu je důležité porozumět rozdílům, když převádíte staré
 
 ## „var“ nemá blokovou platnost
 
-<<<<<<< Updated upstream
-Variables, declared with `var`, are either function-wide or global. They are visible through blocks.
-=======
 Proměnné deklarované pomocí `var` mají rozsah platnosti buď funkční, nebo globální. Jsou viditelné i skrz bloky.
->>>>>>> Stashed changes
 
 Například:
 
@@ -56,11 +52,7 @@ if (true) {
 }
 
 *!*
-<<<<<<< Updated upstream
-alert(test); // Error: test is not defined
-=======
 alert(test); // ReferenceError: test není definován
->>>>>>> Stashed changes
 */!*
 ```
 
@@ -68,24 +60,17 @@ Totéž platí pro cykly: `var` nemůže být lokální v bloku nebo ve smyčce:
 
 ```js run
 for (var i = 0; i < 10; i++) {
-<<<<<<< Updated upstream
-=======
   var jedna = 1;
->>>>>>> Stashed changes
   // ...
 }
 
 *!*
-<<<<<<< Updated upstream
-alert(i); // 10, "i" is visible after loop, it's a global variable
-=======
-alert(i);   // 10, "i" je viditelná i za cyklem, je to globální proměnná
-alert(jedna); // 1, "jedna" je viditelná i za cyklem, je to globální proměnná
->>>>>>> Stashed changes
+alert(i);   // 10, „i“ je viditelná i za cyklem, je to globální proměnná
+alert(jedna); // 1, „jedna“ je viditelná i za cyklem, je to globální proměnná
 */!*
 ```
 
-Nachází-li se kódový blok uvnitř funkce, pak se `var` stane proměnnou na úrovni funkce:
+Nachází-li se kódový blok uvnitř funkce, pak `var` deklaruje proměnnou na úrovni funkce:
 
 ```js run
 function řekniAhoj() {
@@ -96,19 +81,11 @@ function řekniAhoj() {
   alert(věta); // funguje
 }
 
-<<<<<<< Updated upstream
-sayHi();
-alert(phrase); // Error: phrase is not defined (Check the Developer Console)
-```
-
-As we can see, `var` pierces through `if`, `for` or other code blocks. That's because a long time ago in JavaScript blocks had no Lexical Environments. And `var` is a remnant of that.
-=======
 řekniAhoj();
 alert(věta); // ReferenceError: věta není definována
 ```
 
 Jak vidíme, `var` se probije skrz `if`, `for` a jiné kódové bloky. Je to proto, že v dávných časech JavaScriptu bloky neměly lexikální prostředí a `var` je toho pozůstatkem.
->>>>>>> Stashed changes
 
 ## „var“ toleruje opakované deklarace
 
@@ -228,19 +205,11 @@ function řekniAhoj() {
 
 Protože všechny deklarace `var` se zpracovávají na začátku funkce, můžeme se na ně odkazovat kdekoli. Ale proměnné jsou nedefinované až do přiřazení.
 
-<<<<<<< Updated upstream
-In both examples above `alert` runs without an error, because the variable `phrase` exists. But its value is not yet assigned, so it shows `undefined`.
-=======
 V obou příkladech se `alert` spustí bez chyby, protože proměnná `věta` existuje. Ale ještě jí není přiřazena hodnota, takže se zobrazí `undefined`.
->>>>>>> Stashed changes
 
-### IIFE
+## IIFE
 
-<<<<<<< Updated upstream
-As in the past there was only `var`, and it has no block-level visibility, programmers invented a way to emulate it. What they did was called "immediately-invoked function expressions" (abbreviated as IIFE).
-=======
 V minulosti, kdy bylo jenom `var` a neexistovala viditelnost na úrovni bloku, programátoři vymysleli způsob, jak ji emulovat. To, co vynalezli, nazvali „okamžitě volané funkční výrazy“, zkráceně IIFE *(z anglického „immediately-invoked function expressions“ - pozn. překl.)*.
->>>>>>> Stashed changes
 
 Není to nic, co bychom měli používat v současnosti, ale ve starých skriptech je stále můžete najít.
 
@@ -249,28 +218,13 @@ IIFE vypadá následovně:
 ```js run
 (function() {
 
-<<<<<<< Updated upstream
-  let message = "Hello";
-=======
   var zpráva = "Ahoj";
->>>>>>> Stashed changes
 
   alert(zpráva); // Ahoj
 
 })();
 ```
 
-<<<<<<< Updated upstream
-Here a Function Expression is created and immediately called. So the code executes right away and has its own private variables.
-
-The Function Expression is wrapped with parenthesis `(function {...})`, because when JavaScript meets `"function"` in the main code flow, it understands it as the start of a Function Declaration. But a Function Declaration must have a name, so this kind of code will give an error:
-
-```js run
-// Try to declare and immediately call a function
-function() { // <-- Error: Function statements require a function name
-
-  let message = "Hello";
-=======
 Zde se vytvoří a okamžitě zavolá funkční výraz. Kód se tedy okamžitě spustí a má své vlastní soukromé proměnné.
 
 Funkční výraz je uzavřen do závorek `(function {...})`, protože když engine JavaScriptu narazí v hlavním kódu na `„function“`, chápe to jako začátek deklarace funkce. Avšak deklarace funkce musí mít svůj název, takže tento kód vyvolá chybu:
@@ -280,7 +234,6 @@ Funkční výraz je uzavřen do závorek `(function {...})`, protože když engi
 function() { // <-- SyntaxError: Deklarace funkce vyžaduje název funkce
 
   var zpráva = "Ahoj";
->>>>>>> Stashed changes
 
   alert(zpráva); // Ahoj
 
@@ -326,13 +279,8 @@ Ve všech výše uvedených případech deklarujeme funkční výraz a okamžit�
 
 Existují dva hlavní rozdíly `var` ve srovnání s `let/const`:
 
-<<<<<<< Updated upstream
-1. `var` variables have no block scope, they are visible minimum at the function level.
-2. `var` declarations are processed at function start (script start for globals).
-=======
 1. Proměnné `var` nemají blokovou platnost a oblast jejich viditelnosti je celá aktuální funkce. Jsou-li deklarovány mimo funkci, jsou globální.
-2. Deklarace `var` se zpracovávají na začátku funkce (  globální deklarace na začátku skriptu).
->>>>>>> Stashed changes
+2. Deklarace `var` se zpracovávají na začátku funkce (globální deklarace na začátku skriptu).
 
 Existuje ještě jeden velmi drobný rozdíl vztahující se ke globálnímu objektu, který probereme v příští kapitole.
 

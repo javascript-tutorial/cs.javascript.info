@@ -65,7 +65,7 @@ mocnina(x, n) =
               else     = x * mocnina(x, n - 1)
 ```
 
-1. Je-li `n == 1`, pak je vše triviální. To se nazývá *základ* rekurze, jelikož okamžitě vydá očividný výsledek: `mocnina(x, 1)` se rovná `x`.
+1. Je-li `n == 1`, pak je vše triviální. To se nazývá *základ* rekurze, jelikož okamžitě vydá zřejmý výsledek: `mocnina(x, 1)` se rovná `x`.
 2. Jinak můžeme reprezentovat `mocnina(x, n)` jako `x * mocnina(x, n - 1)`. V matematice můžeme zapsat <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. 
 To se nazývá *rekurzívní krok*: převedeme úlohu na jednodušší akci (násobení číslem `x`) a jednodušší volání stejné úlohy (`mocnina` s nižším `n`). Další kroky ji budou stále zjednodušovat, až nakonec `n` dosáhne `1`.
 
@@ -81,7 +81,7 @@ Například při výpočtu `mocnina(2, 4)` rekurzívní varianta provádí tyto 
 3. `mocnina(2, 2) = 2 * mocnina(2, 1)`
 4. `mocnina(2, 1) = 2`
 
-Rekurze tedy zredukuje volání funkce na jednodušší, pak na ještě jednodušší a tak dále, dokud výsledek nebude očividný.
+Rekurze tedy zredukuje volání funkce na jednodušší, pak na ještě jednodušší a tak dále, dokud výsledek nebude zřejmý.
 
 ````smart header="Rekurze je obvykle kratší"
 Rekurzívní řešení bývá obvykle kratší než iterativní.
@@ -133,11 +133,7 @@ Můžeme si to zapsat jako:
   </li>
 </ul>
 
-<<<<<<< Updated upstream
-That's when the function starts to execute. The condition `n == 1` is false, so the flow continues into the second branch of `if`:
-=======
 Na tomto místě začne výkon funkce. Podmínka `n == 1` není splněna, takže tok pokračuje druhou větví `if`:
->>>>>>> Stashed changes
 
 ```js run
 function mocnina(x, n) {
@@ -173,7 +169,7 @@ Zde voláme stejnou funkci `mocnina`, ale na tom vůbec nezáleží. Proces je p
 
 1. Aktuální kontext se uloží na vrchol zásobníku.
 2. Pro vnořené volání se vytvoří nový kontext.
-3. Až bude vnořené volání ukončeno -- předchozí kontext se vyjme ze zásobníku a jeho vykonávání bude pokračovat.
+3. Až bude vnořené volání ukončeno, předchozí kontext se vyjme ze zásobníku a jeho vykonávání bude pokračovat.
 
 Zde je zásobník kontextů ve chvíli, kdy jsme vstoupili do vnořeného volání `mocnina(2, 2)`:
 
@@ -193,11 +189,7 @@ Nový aktuální prováděcí kontext je na vrcholu (a uveden tučně), předcho
 Až vnořené volání skončí -- bude snadné obnovit předchozí kontext, jelikož si udržuje obě proměnné i přesné místo kódu, na němž se zastavil.
 
 ```smart
-<<<<<<< Updated upstream
-Here in the picture we use the word "line", as our example there's only one subcall in line, but generally a single line of code may contain multiple subcalls, like `pow(…) + pow(…) + somethingElse(…)`.
-=======
 Na tomto obrázku používáme slovo „řádek“, protože v našem příkladu je na řádku jen jediné volání, ale obecně jeden řádek kódu může obsahovat několik volání, například `mocnina(…) + mocnina(…) + něcoJiného(…)`.
->>>>>>> Stashed changes
 
 Bylo by tedy přesnější říkat, že provádění se obnoví „ihned po vnořeném volání“.
 ```

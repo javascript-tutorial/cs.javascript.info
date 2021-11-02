@@ -323,13 +323,9 @@ let vítej = řekniAhoj;
 vítej(); // Ahoj, Host (vnořené volání funguje)
 ```
 
-Nyní to funguje, protože název `"funkce"` je funkčně lokální. Nepřebírá se zvnějšku (a není tam viditelný). Specifikace zaručuje, že se bude vždy odkazovat na aktuální funkci.
+Nyní to funguje, protože název `„funkce“` je funkčně lokální. Nepřebírá se zvnějšku (a není tam viditelný). Specifikace zaručuje, že se bude vždy odkazovat na aktuální funkci.
 
-<<<<<<< Updated upstream
-The outer code still has it's variable `sayHi` or `welcome`. And `func` is an "internal function name", how the function can call itself internally.
-=======
 Vnější kód stále má svou proměnnou `řekniAhoj` nebo `vítej`. A `funkce` je „interní funkční název“, jakým tato funkce může interně volat sama sebe.
->>>>>>> Stashed changes
 
 ```smart header="Pro deklarace funkce nic takového neexistuje"
 Zde popsaná vlastnost „interní název“ je k dispozici jen pro funkční výrazy, ne pro deklarace funkcí. V deklaracích funkcí neexistuje žádná syntaxe, jak přidat „interní“ název.
@@ -348,11 +344,7 @@ Zde jsme probrali jejich vlastnosti:
 
 Je-li funkce deklarována jako funkční výraz (ne v hlavním toku kódu) a ten obsahuje název, nazývá se pojmenovaný funkční výraz. Název lze používat uvnitř funkce, aby se na ni odkazoval, pro rekurzívní volání a podobně.
 
-<<<<<<< Updated upstream
-They create a "main" function and attach many other "helper" functions to it. For instance, the [jQuery](https://jquery.com) library creates a function named `$`. The [lodash](https://lodash.com) library creates a function `_`, and then adds `_.clone`, `_.keyBy` and other properties to it (see the [docs](https://lodash.com/docs) when you want learn more about them). Actually, they do it to lessen their pollution of the global space, so that a single library gives only one global variable. That reduces the possibility of naming conflicts.
-=======
 Funkce si také může uchovávat přidané vlastnosti. Tuto vlastnost zhusta využívá mnoho dobře známých JavaScriptových knihoven.
->>>>>>> Stashed changes
 
 Vytvářejí „hlavní“ funkci a přidávají k ní mnoho dalších „pomocných“ funkcí. Například knihovna [jQuery](https://jquery.com) vytváří funkci jménem `$`. Knihovna [lodash](https://lodash.com) vytváří funkci jménem `_` a pak do ní přidává `_.clone`, `_.keyBy` a jiné vlastnosti (pokud se o nich chcete dozvědět víc, viz [dokumentaci](https://lodash.com/docs)). Ve skutečnosti to dělají proto, aby snížily zamoření globálního prostoru, takže jedna knihovna vytváří pouze jednu globální proměnnou. Tím se snižuje pravděpodobnost konfliktů názvů.
 

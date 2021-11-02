@@ -27,13 +27,13 @@ Kvůli „přebytečným“ argumentům nenastane chyba, ale do výsledku se sam
 
 Zbytek parametrů můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi ostatní parametry do pole“.
 
-Například abychom shromáždili všechny argumenty do pole `args`:
+Například abychom shromáždili všechny argumenty do pole `argumenty`:
 
 ```js run
-function sečtiVše(...args) { // args je název pole
+function sečtiVše(...argumenty) { // argumenty je název pole
   let součet = 0;
 
-  for (let arg of args) součet += arg;
+  for (let arg of argumenty) součet += arg;
 
   return součet;
 }
@@ -96,15 +96,15 @@ zobrazJméno("Julius", "Caesar");
 zobrazJméno("Ilja");
 ```
 
-Za starých časů v jazyce ostatní parametry neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starém kódu.
+Za starých časů ostatní parametry v jazyce neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starém kódu.
 
 Nevýhodou však je, že ačkoli objekt `arguments` je podobný poli a iterovatelný, není to pole. Nepodporuje metody polí, takže nemůžeme volat například `arguments.map(...)`.
 
 Navíc obsahuje vždy všechny argumenty. Nemůžeme je zachytit jen částečně, jak to můžeme udělat u ostatních parametrů.
 
-Když tedy tento prvek potřebujeme, dáváme přednost ostatním parametrům.
+Když tedy tuto vlastnost potřebujeme, dáváme přednost ostatním parametrům.
 
-````smart header="Šipkové funkce nemají `\"arguments\"`"
+````smart header="Šipkové funkce nemají `„arguments“`"
 Jestliže přistoupíme k objektu `arguments` v šipkové funkci, vezme jej z vnější „normální“ funkce.
 
 Příklad:
@@ -146,7 +146,7 @@ alert( Math.max(pole) ); // NaN
 */!*
 ```
 
-A samozřejmě nemůžeme ručně vyjmenovat prvky pole v kódu `Math.max(pole[0], pole[1], pole[2])`, protože nevíme jistě, kolik jich tam bude. Když se náš skript spustí, může jich tam být mnoho a nemusí tam být žádný. A to by bylo ošklivé.
+A samozřejmě nemůžeme ručně vyjmenovat prvky pole v kódu `Math.max(pole[0], pole[1], pole[2])`, protože nevíme jistě, kolik jich tam bude. Když se náš skript spustí, může jich tam být mnoho a nemusí tam být žádný. A bylo by to ošklivé.
 
 Zachrání nás *roztažená (spread) syntaxe*! Podobá se ostatním parametrům v tom, že také používá `...`, ale činí to přesně naopak.
 
@@ -224,30 +224,19 @@ Existuje však drobný rozdíl mezi `Array.from(obj)` a `[...obj]`:
 
 Pro účel převedení něčeho na pole tedy `Array.from` bývá univerzálnější.
 
-
-<<<<<<< Updated upstream
-## Get a new copy of an array/object
-=======
 ## Kopírování pole/objektu
->>>>>>> Stashed changes
 
 Pamatujete si, jak jsme [dříve](info:object-copy#cloning-and-merging-object-assign) hovořili o `Object.assign()`?
 
 S roztaženou syntaxí můžeme udělat totéž.
 
 ```js run
-<<<<<<< Updated upstream
-let arr = [1, 2, 3];
-let arrCopy = [...arr]; // spread the array into a list of parameters
-                        // then put the result into a new array
-=======
 let pole = [1, 2, 3];
 
 *!*
 let kopiePole = [...pole]; // roztáhneme pole do seznamu parametrů
                            // pak uložíme výsledek do nového pole
 */!*
->>>>>>> Stashed changes
 
 // mají tato pole stejný obsah?
 alert(JSON.stringify(pole) === JSON.stringify(kopiePole)); // true
@@ -264,18 +253,12 @@ alert(kopiePole); // 1, 2, 3
 Všimněte si, že můžeme udělat totéž, abychom vytvořili kopii objektu:
 
 ```js run
-<<<<<<< Updated upstream
-let obj = { a: 1, b: 2, c: 3 };
-let objCopy = { ...obj }; // spread the object into a list of parameters
-                          // then return the result in a new object
-=======
 let objekt = { a: 1, b: 2, c: 3 };
 
 *!*
 let kopieObjektu = { ...objekt }; // roztáhneme objekt do seznamu parametrů
                                   // pak vrátíme výsledek v novém objektu
 */!*
->>>>>>> Stashed changes
 
 // mají tyto objekty stejný obsah?
 alert(JSON.stringify(objekt) === JSON.stringify(kopieObjektu)); // true
@@ -289,11 +272,7 @@ alert(JSON.stringify(objekt)); // {"a":1,"b":2,"c":3,"d":4}
 alert(JSON.stringify(kopieObjektu)); // {"a":1,"b":2,"c":3}
 ```
 
-<<<<<<< Updated upstream
-This way of copying an object is much shorter than `let objCopy = Object.assign({}, obj);` or for an array `let arrCopy = Object.assign([], arr);` so we prefer to use it whenever we can.
-=======
 Tento způsob kopírování objektu je mnohem kratší než `let kopieObjektu = Object.assign({}, objekt)` nebo pro pole `let kopiePole = Object.assign([], pole)`, takže mu dáváme přednost, kde jen můžeme.
->>>>>>> Stashed changes
 
 
 ## Shrnutí

@@ -4,25 +4,17 @@ importance: 5
 
 # Tlumící dekorátor
 
-Vytvořte „tlumící“ dekorátor `tlumič(f, ms)` -- který bude vracet wrapper.
+Vytvořte „tlumící“ dekorátor `tlumič(f, ms)`, který bude vracet wrapper.
 
-<<<<<<< Updated upstream
-When it's called multiple times, it passes the call to `f` at maximum once per `ms` milliseconds. 
-=======
 Když je zavolán vícekrát, předá volání funkci `f` nejvýše jednou za `ms` milisekund.
->>>>>>> Stashed changes
 
 Rozdíl oproti debounce je v tom, že je to zcela odlišný dekorátor:
 - `debounce` spustí funkci jednou po „době vychladnutí“. To je dobré pro zpracování konečného výsledku.
 - `tlumič` spustí funkci nejvýše jednou za čas `ms`. To je dobré pro pravidelné aktualizace, které by se neměly dít příliš často.
 
-<<<<<<< Updated upstream
-Let's check the real-life application to better understand that requirement and to see where it comes from.
-=======
 Jinými slovy, `tlumič` je jako sekretářka, která přijímá telefonní hovory, ale neobtěžuje šéfa (nevolá skutečnou funkci `f`) častěji než jednou za `ms` milisekund.
 
 Podívejme se na aplikaci z reálného života, abychom tomuto požadavku lépe porozuměli a viděli, odkud přichází.
->>>>>>> Stashed changes
 
 **Například chceme trasovat pohyby myši.**
 

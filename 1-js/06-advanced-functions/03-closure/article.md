@@ -1,14 +1,5 @@
 # Oblast platnosti proměnné, uzávěr
 
-<<<<<<< Updated upstream
-# Variable scope
-
-JavaScript is a very function-oriented language. It gives us a lot of freedom. A function can be created dynamically, passed as an argument to another function and called from a totally different place of code later.
-
-We already know that a function can access variables outside of it.
-
-Now let's expand our knowledge to include more complex scenarios.
-=======
 JavaScript je velmi funkcionálně orientovaný jazyk. Dává nám velké množství svobody. Funkci můžeme vytvořit kdykoli, předat ji jako argument jiné funkci a později ji volat ze zcela odlišného místa kódu.
 
 Víme již, že funkce může přistupovat k proměnným, které leží mimo ni (k „vnějším“ proměnným).
@@ -21,7 +12,6 @@ Rozšiřme si znalosti, abychom porozuměli těmto i složitějším scénářů
 
 ```smart header="Zde budeme hovořit o proměnných deklarovaných pomocí `let/const`"
 V JavaScriptu jsou 3 způsoby, jak deklarovat proměnnou: `let`, `const` (tyto dva jsou moderní) a `var` (pozůstatek minulosti).
->>>>>>> Stashed changes
 
 - V tomto článku budeme v příkladech používat proměnné deklarované pomocí `let`.
 - Proměnné deklarované pomocí `const` se chovají stejně, takže tento článek je i o `const`.
@@ -194,19 +184,11 @@ Zde je trochu delší kód:
 
 Obdélníky napravo ukazují, jak se globální lexikální prostředí mění během výkonu kódu:
 
-<<<<<<< Updated upstream
-1. When the script starts, the Lexical Environment is pre-populated with all declared variables.
-    - Initially, they are in the "Uninitialized" state. That's a special internal state, it means that the engine knows about the variable, but it cannot be referenced until it has been declared with `let`. It's almost the same as if the variable didn't exist.
-2. Then `let phrase` definition appears. There's no assignment yet, so its value is `undefined`. We can use the variable since this moment.
-3. `phrase` is assigned a value.
-4. `phrase` changes the value.
-=======
 1. Když se skript spustí, lexikální prostředí se obsadí všemi deklarovanými proměnnými.
     - Na začátku jsou ve stavu „neinicializováno“. To je speciální interní stav, který znamená, že engine ví o proměnné, ale ta nemůže být odkazována, dokud nebude deklarována pomocí `let`. Je to skoro totéž, jako by proměnná neexistovala.
 2. Pak se objeví definice `let věta`. Zatím zde není žádné přiřazení, takže její hodnota je `undefined`. Od této chvíle můžeme tuto proměnnou používat.
 3. Do proměnné `věta` je přiřazena hodnota.
 4. Hodnota proměnné `věta` se změní.
->>>>>>> Stashed changes
 
 Prozatím to všechno vypadá jednoduše, že?
 
@@ -225,7 +207,7 @@ Funkce je také hodnota, stejně jako proměnná.
 
 **Rozdíl je v tom, že deklarace funkce je okamžitě plně inicializována.**
 
-Když je vytvořeno lexikální prostředí, deklarace funkce se okamžitě stane funkcí připravenou k použití (na rozdíl od proměnné v `let`, která je až do deklarace nepoužitelná).
+Když je vytvořeno lexikální prostředí, funkce z deklarace se okamžitě stane funkcí připravenou k použití (na rozdíl od proměnné v `let`, která je až do deklarace nepoužitelná).
 
 Z tohoto důvodu můžeme používat funkci, deklarovanou deklarací funkce, ještě před samotnou deklarací.
 
@@ -307,11 +289,7 @@ Když je později volán `čítač()`, vytvoří se pro toto volání nové lexi
 
 ![](closure-makecounter-nested-call.svg)
 
-<<<<<<< Updated upstream
-Now when the code inside `counter()` looks for `count` variable, it first searches its own Lexical Environment (empty, as there are no local variables there), then the Lexical Environment of the outer `makeCounter()` call, where finds it and changes.
-=======
 Když nyní kód uvnitř funkce `čítač()` hledá proměnnou `počet`, nejprve prohledá své vlastní lexikální prostředí (prázdné, jelikož tady nejsou žádné lokální proměnné), pak lexikální prostředí vnějšího volání `vytvořČítač()`, kde ji najde a změní.
->>>>>>> Stashed changes
 
 **Proměnná je změněna v lexikálním prostředí, v němž přebývá.**
 
@@ -324,7 +302,7 @@ Jestliže voláme `čítač()` vícekrát, proměnná `počet` se zvýší na `2
 ```smart header="Uzávěr"
 Existuje obecný programovací pojem „uzávěr“, který by vývojáři obecně měli znát.
 
-[Uzávěr](https://en.wikipedia.org/wiki/Closure_(computer_programming)) je funkce, která si pamatuje své vnější proměnné a může k nim přistupovat. V některých jazycích to není možné nebo funkce musí být napsána speciálním způsobem, aby se to mohlo stát. Ale jak bylo vysvětleno výše, v JavaScriptu jsou všechny funkce přirozeně uzávěry (je tady jen jedna výjimka, kterou probereme v kapitole <info:new-function>).
+[Uzávěr](https://en.wikipedia.org/wiki/Closure_(computer_programming)) je funkce, která si pamatuje své vnější proměnné a může k nim přistupovat. V některých jazycích to není možné nebo funkce musí být napsána speciálním způsobem, aby se to mohlo dít. Ale jak bylo vysvětleno výše, v JavaScriptu jsou všechny funkce přirozeně uzávěry (je tady jen jedna výjimka, kterou probereme v kapitole <info:new-function>).
 
 To znamená: automaticky si pamatují, kde byly vytvořeny, pomocí skryté vlastnosti `[[Environment]]`, a jejich kód pak může přistupovat k vnějším proměnným.
 
@@ -335,11 +313,7 @@ Kdyby front-end vývojář v rozhovoru dostal otázku „co je to uzávěr?“, 
 
 Lexikální prostředí je zpravidla odstraněno z paměti i se všemi proměnnými poté, co volání funkce skončí. Je to proto, že pak už na něj nejsou žádné odkazy. Stejně jako jiné objekty v JavaScriptu je udržováno v paměti, jen dokud je dosažitelné.
 
-<<<<<<< Updated upstream
-...But if there's a nested function that is still reachable after the end of a function, then it has `[[Environment]]` property that references the lexical environment.
-=======
 Jestliže však existuje vnořená funkce, která je po skončení funkce stále dostupná, pak tato funkce má vlastnost `[[Environment]]`, která se odkazuje na lexikální prostředí.
->>>>>>> Stashed changes
 
 V takovém případě je lexikální prostředí stále dostupné i po dokončení funkce, takže zůstane naživu.
 
@@ -358,11 +332,7 @@ let g = f(); // g.[[Environment]] si uloží odkaz na lexikální prostředí
              // příslušného volání f()
 ```
 
-<<<<<<< Updated upstream
-Please note that if `f()` is called many times, and resulting functions are saved, then all corresponding Lexical Environment objects will also be retained in memory. All 3 of them in the code below:
-=======
 Prosíme všimněte si, že je-li `f()` volána mnohokrát a výsledné funkce jsou někam uloženy, pak zůstanou v paměti i všechny příslušné objekty lexikálních prostředí. V níže uvedeném kódu všechny tři:
->>>>>>> Stashed changes
 
 ```js
 function f() {
@@ -400,11 +370,7 @@ Jak jsme viděli, teoreticky dokud je funkce naživu, jsou udržovány i všechn
 
 V praxi se však JavaScriptové enginy snaží o optimalizaci. Analyzují používání proměnných, a je-li z kódu zřejmé, že vnější proměnná není nikde použita, bude odstraněna.
 
-<<<<<<< Updated upstream
-**An important side effect in V8 (Chrome, Opera) is that such variable will become unavailable in debugging.**
-=======
 **Důležitý vedlejší efekt ve V8 (Chrome, Edge, Opera) je, že taková proměnná přestane být dostupná při ladění.**
->>>>>>> Stashed changes
 
 Zkuste si spustit níže uvedený příklad v Chrome s otevřenými ladicími nástroji.
 
@@ -446,12 +412,6 @@ let g = f();
 g();
 ```
 
-<<<<<<< Updated upstream
-This feature of V8 is good to know. If you are debugging with Chrome/Opera, sooner or later you will meet it.
-
-That is not a bug in the debugger, but rather a special feature of V8. Perhaps it will be changed sometime. You always can check for it by running the examples on this page.
-=======
 Tuto vlastnost V8 je dobré znát. Jestliže ladíte s Chrome/Edge/Operou, dříve nebo později se s ní setkáte.
 
 Není to chyba debuggeru, ale spíše speciální vlastnost V8. Možná bude časem změněna. Vždy si ji můžete ověřit spuštěním příkladů na této stránce.
->>>>>>> Stashed changes

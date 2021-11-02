@@ -1,6 +1,6 @@
 # Logické operátory
 
-V JavaScriptu jsou tři logické operátory: `||` (OR -- nebo), `&&` (AND -- a), `!` (NOT -- ne).
+V JavaScriptu jsou čtyři logické operátory: `||` (OR -- nebo), `&&` (AND -- a), `!` (NOT -- ne), `??` (koalescence). V tomto článku vysvětlíme první tři, operátor `??` bude vysvětlen v dalším článku.
 
 Ačkoli se nazývají „logické“, mohou být použity na hodnoty libovolného typu, nejenom boolean. Také jejich výsledek může být jakéhokoli typu.
 
@@ -64,7 +64,7 @@ if (hodina < 10 || hodina > 18 || jeVíkend) {
 }
 ```
 
-## OR „||“ najde první pravdivou hodnotu
+## OR „||“ najde první pravdivou hodnotu [#or-finds-the-first-truthy-value]
 
 Výše uvedená logika je vcelku klasická. Nyní se podívejme na „extra“ vlastnosti JavaScriptu.
 
@@ -101,7 +101,7 @@ To umožňuje některé zajímavé způsoby použití ve srovnání s „čistý
 
 1. **Získání první pravdivé hodnoty ze seznamu proměnných nebo výrazů.**
 
-    Například máme proměnné `jméno`, `příjmení` a `přezdívka`, všechny jsou nepovinné.
+    Například máme proměnné `jméno`, `příjmení` a `přezdívka`, všechny jsou nepovinné (tj. mohou být `undefined` nebo obsahovat hodnoty nepravda).
     
     Vybereme pomocí OR `||` tu, která obsahuje data, a zobrazíme je (není-li nastaveno nic, zobrazíme `anonym`):
 
@@ -115,7 +115,7 @@ To umožňuje některé zajímavé způsoby použití ve srovnání s „čistý
     */!*
     ```
 
-    Kdyby byly všechny proměnné nepravdivé, zobrazil by se `anonym`.
+    Kdyby všechny proměnné obsahovaly hodnotu nepravda, zobrazil by se `anonym`.
 
 2. **Zkrácené vyhodnocení.**
 
@@ -244,7 +244,7 @@ let x = 1;
 if (x > 0) alert( 'Větší než nula!' );
 ```
 
-Ačkoli varianta s `&&` se zdá být kratší, `if` je jasnější a bývá trochu čitelnější. Doporučujeme tedy používat každou konstrukci k tomu, k čemu byla stvořena: používejte `if`, chcete-li „pokud“, a používejte `&&`, chcete-li AND.
+Ačkoli varianta s `&&` se zdá být kratší, `if` je zřejmější a obvykle bývá trochu čitelnější. Doporučujeme tedy používat každou konstrukci k tomu, k čemu byla stvořena: používejte `if`, chcete-li „pokud“, a používejte `&&`, chcete-li AND.
 ````
 
 

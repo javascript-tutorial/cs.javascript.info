@@ -104,6 +104,12 @@ alert(2 + 2 + '1' ); // "41", ne "221"
 
 Tady operátory fungují jeden za druhým. První `+` sečte dvě čísla, takže vrátí `4`, pak druhé `+` k němu přidá řetězec `1`, takže je to jako `4 + '1' = 41`.
 
+```js run
+alert('1' + 2 + 2); // "122" a ne "14"
+```
+
+První operand je zde řetězec, takže kompilátor zachází i s ostatními dvěma operandy jako s řetězci. `2` se zřetězí s `'1'`, takže to bude jako `'1' + 2 = "12"` a `"12" + 2 = "122"`.
+
 Binární `+` je jediný operátor, který takovýmto způsobem podporuje řetězce. Ostatní aritmetické operátory fungují jen s čísly a své operandy převádějí vždy na čísla.
 
 Ukázka odčítání a dělení:
@@ -178,7 +184,7 @@ Závorky mají přednost před veškerou prioritou, takže nejsme-li spokojeni s
 
 JavaScript obsahuje mnoho operátorů. Každému z nich odpovídá hodnota jeho priority. Dříve se vykoná ten, jehož priorita je vyšší. Je-li priorita více operátorů stejná, vykonávají se v pořadí zleva doprava.
 
-Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en/JavaScript/Reference/operators/operator_precedence) (nemusíte si ji celou pamatovat, ale všimněte si, že unární operátory mají vyšší prioritu než odpovídající binární):
+Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence) (nemusíte si ji celou pamatovat, ale všimněte si, že unární operátory mají vyšší prioritu než odpovídající binární):
 
 | Priorita | Název | Znak |
 |----------|-------|------|
@@ -212,7 +218,7 @@ alert( x ); // 5
 
 Skutečnost, že `=` je operátor a ne nějaký „magický“ jazykový konstrukt, má zajímavý důsledek.
 
-Většina operátorů v JavaScriptu vrací nějakou hodnotu. Pro `+` a `-` je to samozřejmé, ale platí to i pro `=`.
+Všechny operátory v JavaScriptu vracejí nějakou hodnotu. Pro `+` a `-` je to samozřejmé, ale platí to i pro `=`.
 
 Volání `x = hodnota` zapíše hodnotu `hodnota` do `x` *a pak ji vrátí*.
 
@@ -424,7 +430,7 @@ Seznam operátorů:
 - RIGHT SHIFT (posun doprava) ( `>>` )
 - ZERO-FILL RIGHT SHIFT (posun doprava s doplněním nul) ( `>>>` )
 
-Tyto operátory se používají jen velmi zřídka, když potřebujeme pracovat s čísly na naprosto nejnižší (bitové) úrovni. Nebudeme je v dohledné době potřebovat, jelikož při vývoji webů se využívají jen málokdy, ale jsou užitečné v některých speciálních oblastech, například v kryptografii. Až je budete potřebovat, můžete si o nich přečíst [článek](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators) na MDN.
+Tyto operátory se používají jen velmi zřídka, když potřebujeme pracovat s čísly na naprosto nejnižší (bitové) úrovni. Nebudeme je v dohledné době potřebovat, jelikož při vývoji webů se využívají jen málokdy, ale jsou užitečné v některých speciálních oblastech, například v kryptografii. Až je budete potřebovat, můžete si o nich přečíst [článek](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Bitwise) na MDN.
 
 ## Čárka
 

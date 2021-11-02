@@ -3,19 +3,19 @@
 ```js run demo
 let uživatelskéJméno = prompt("Kdo je tam?", '');
 
-if (uživatelskéJméno == 'Správce') {
+if (uživatelskéJméno === 'Správce') {
 
   let pass = prompt('Heslo?', '');
 
-  if (pass == 'Mistr') {
+  if (pass === 'Mistr') {
     alert( 'Vítáme vás!' );
-  } else if (pass == '' || pass == null) {
+  } else if (pass === '' || pass === null) {
     alert( 'Zrušeno' );
   } else {
     alert( 'Špatné heslo' );
   }
 
-} else if (uživatelskéJméno == '' || uživatelskéJméno == null) {
+} else if (uživatelskéJméno === '' || uživatelskéJméno === null) {
   alert( 'Zrušeno' );
 } else {
   alert( "Neznám vás" );

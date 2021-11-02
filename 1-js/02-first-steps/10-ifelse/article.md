@@ -1,4 +1,4 @@
-# Podmíněné operátory: if, „?“
+# Podmíněné větvení: if, „?“
 
 Někdy potřebujeme provést různé akce v závislosti na platnosti různých podmínek. K tomu můžeme použít příkaz `if` a podmíněný operátor `?`, který se také nazývá operátor „otazníku“.
 
@@ -66,7 +66,7 @@ if (podmínka) {
 
 ## Klauzule „else“
 
-Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka není splněna.
+Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka je nepravdivá.
 
 Příklad:
 ```js run

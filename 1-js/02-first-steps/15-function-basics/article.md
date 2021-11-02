@@ -340,7 +340,7 @@ Je-li za `return` dlouhý výraz, může to svádět k jeho umístění na samos
 return
  (nějaký + dlouhý + výraz + nebo + co * f(a) + f(b))
 ```
-To však nebude fungovat, neboť JavaScript za `return` vloží středník. Bude to tedy stejném jako:
+To však nebude fungovat, neboť JavaScript za `return` vloží středník. Bude to tedy stejné jako:
 
 ```js
 return*!*;*/!*

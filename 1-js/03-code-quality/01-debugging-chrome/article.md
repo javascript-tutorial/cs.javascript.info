@@ -2,7 +2,7 @@
 
 Než začneme psát složitější kód, pohovořme si o ladění.
 
-[Ladění](https://cs.wikipedia.org/wiki/Ladění_(programování)) je proces hledání a opravování chyb ve skriptu. Všechny moderní prohlížeče a většina ostatních prostředí podporují ladicí nástroje -- speciální uživatelské rozhraní ve vývojářských nástrojích, které ladění znatelně ulehčuje. Umožňuje také procházet kód krok za krokem, abychom viděli, co přesně se v něm děje.
+[Ladění](https://cs.wikipedia.org/wiki/Ladění_(programování)) je proces hledání a opravování chyb ve skriptu. Ve všech moderních prohlížečích i ve většině ostatních prostředí jsou podporovány ladicí nástroje -- speciální uživatelské rozhraní ve vývojářských nástrojích, které ladění znatelně ulehčuje. Umožňuje také procházet kód krok za krokem, abychom viděli, co přesně se v něm děje.
 
 Zde budeme používat Chrome, protože má dostatek vlastností. Většina ostatních prohlížečů má podobný proces.
 
@@ -38,7 +38,7 @@ Pokud stiskneme `key:Esc`, otevře se dole konzole. Můžeme tam psát příkazy
 
 Poté, co se příkaz vykoná, se dole zobrazí jeho výsledek.
 
-Například `1+2` zde vydá výsledek `3` a `hello("debugger")` nevrátí nic, takže výsledek bude `undefined`:
+Například `1+2` zde vydá výsledek `3` a `ahoj("debugger")` nevrátí nic, takže výsledek bude `undefined`:
 
 ![](chrome-sources-console.svg)
 
@@ -52,11 +52,11 @@ Mělo by to vypadat takto (modrá barva označuje, kam byste měli kliknout):
 
 ![](chrome-sources-breakpoint.svg)
 
-*Breakpoint* je bod, v němž debugger automaticky pozastaví výkon JavaScriptu.
+*Breakpoint* (z anglického *break* - rozbití a *point* - bod -- pozn. překl.) je místo, na němž debugger automaticky pozastaví výkon JavaScriptu.
 
 Když je kód pozastaven, můžeme prozkoumávat aktuální proměnné, spouštět příkazy v konzoli apod. Jinými slovy, můžeme kód ladit.
 
-V pravém panelu vždy najdeme seznam breakpointů. To je užitečné, když máme mnoho breakpointů v různých souborech. Umožňuje nám:
+V pravém panelu vždy najdeme seznam breakpointů. Ten je užitečný, když máme mnoho breakpointů v různých souborech. Umožňuje nám:
 - Rychle přeskočit na breakpoint v kódu (kliknutím na něj v pravém panelu).
 - Dočasně breakpoint zrušit tím, že jej odškrtneme.
 - Odstranit breakpoint tím, že na něj klikneme pravým tlačítkem myši a zvolíme Remove.
@@ -89,7 +89,7 @@ To je velmi užitečné, když se nacházíme v editoru kódu a nechceme se pře
 
 ## Pozastavení a rozhlédnutí
 
-V našem příkladu bylo během nahrání stránky zavoláno `hello()`, takže nejjednodušším způsobem, jak aktivovat debugger (po nastavení breakpointů), je znovu načíst stránku. Stiskneme tedy `key:F5` (Windows, Linux) nebo `key:Cmd+R` (Mac).
+V našem příkladu bylo během nahrání stránky zavoláno `ahoj()`, takže nejjednodušším způsobem, jak aktivovat debugger (po nastavení breakpointů), je znovu načíst stránku. Stiskneme tedy `key:F5` (Windows, Linux) nebo `key:Cmd+R` (Mac).
 
 Když je breakpoint nastaven, výkon se pozastaví na 4. řádku:
 
@@ -103,7 +103,7 @@ Prosíme otevřete si informační dropdowny vpravo (označené šipkami), kter�
 
 2. **`Call Stack` -- zobrazí řetězec vnořených volání funkcí.**
 
-    V aktuálním okamžiku je debugger uvnitř volání `hello()`, kterou zavolal skript v `index.html` (není zde žádná funkce, takže se nazývá „anonymní“).
+    V aktuálním okamžiku je debugger uvnitř volání `ahoj()`, kterou zavolal skript v `index.html` (není zde žádná funkce, takže se nazývá „anonymní“).
 
     Když kliknete na prvek zásobníku (např. „anonymní“), debugger přeskočí na odpovídající kód a vy můžete prozkoumávat jeho proměnné.
     
@@ -129,7 +129,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 
     ![](chrome-sources-debugger-trace-1.svg)
 
-    Výkon skriptu se obnovil, dosáhl dalšího breakpointu uvnitř `řekni()` a zastavil se tam. Podívejte se na volací zásobník („Call Stack“) vpravo. Zvětšil se o jedno volání. Nyní jsme uvnitř `say()`.
+    Výkon skriptu se obnovil, dosáhl dalšího breakpointu uvnitř `řekni()` a zastavil se tam. Podívejte se na volací zásobník („Call Stack“) vpravo. Zvětšil se o jedno volání. Nyní jsme uvnitř `řekni()`.
 
 <span class="devtools" style="background-position:-200px -190px"></span> -- "Step": vykoná další příkaz, klávesa `key:F9`.
 : Spustí další příkaz. Když na něj nyní klikneme, zobrazí se `alert`.
@@ -137,7 +137,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
     Dalším a dalším klikáním můžeme procházet všechny příkazy skriptu jeden po druhém.
 
 <span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": vykoná další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
-: Podobá se předchozímu příkazu „Step“, ale chová se jinak, jestliže dalším příkazem je volání funkce. Ne však vestavěné funkce jako `alert`, ale vlastní funkce.
+: Podobá se předchozímu příkazu „Step“, ale chová se jinak, jestliže dalším příkazem je volání funkce. Ne však vestavěné funkce jako `alert`, ale námi nadefinované funkce.
 
     Příkaz „Step“ do ní vstoupí a pozastaví provádění na jejím prvním řádku, zatímco „Step over“ neviditelně zavolá funkci a přeskočí její vnitřek.
 
@@ -148,7 +148,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <span class="devtools" style="background-position:-4px -194px"></span> -- "Step into", klávesa `key:F11`.
 : Podobá se „Step“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož jsme asynchronní volání funkcí ještě neprobírali.
 
-    Do budoucna si jen pamatujte, že příkaz „Step“ ignoruje asynchronní akce, například `setTimeout` (volání funkce za určitou dobu), které spustí později. Příkaz „Step into“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz See [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
+    Do budoucna si jen pamatujte, že příkaz „Step“ ignoruje asynchronní akce, například `setTimeout` (volání funkce za určitou dobu), které spustí později. Příkaz „Step into“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
 
 <span class="devtools" style="background-position:-32px -194px"></span> -- "Step out": pokračuje v provádění až do konce právě prováděné funkce, klávesa `key:Shift+F11`.
 : Pokračuje v provádění a zastaví se až na posledním řádku právě prováděné funkce. To se hodí, když jsme omylem vstoupili do funkce pomocí <span class="devtools" style="background-position:-200px -190px"></span>, ale ta nás nezajímá, a tak chceme co nejrychleji dospět k jejímu konci.

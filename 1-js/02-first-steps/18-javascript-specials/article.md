@@ -144,7 +144,7 @@ Přiřazení
 : Existuje jednoduché přiřazení `a = b` a kombinovaná přiřazení, např. `a *= 2`.
 
 Bitové
-: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Reference/Operators/Bitwise_Operators).
+: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Guide/Expressions_and_Operators#Bitwise).
 
 Podmíněný
 : Jediný operátor se třemi parametry: `podmínka ? výsledekA : výsledekB`. Je-li `podmínka` pravdivá, vrátí `výsledekA`, jinak vrátí `výsledekB`.
@@ -272,7 +272,7 @@ Uvedli jsme tři způsoby, jakými lze v JavaScriptu vytvořit funkci:
     let dvojnásobek = n => n * 2;
     ```
 
-- Funkce mohou obsahovat lokální proměnné: ty jsou deklarovány uvnitř jejich těla. Takové proměnné jsou viditelné jen uvnitř funkce.
+- Funkce mohou obsahovat lokální proměnné: ty jsou deklarovány uvnitř jejich těla nebo v seznamu parametrů. Tyto proměnné jsou viditelné jen uvnitř funkce.
 - Parametry mohou mít předem nastavené hodnoty: `function součet(a = 1, b = 2) {...}`.
 - Funkce vždy něco vrátí. Neobsahuje-li příkaz `return`, jejím výsledkem je `undefined`.
 
