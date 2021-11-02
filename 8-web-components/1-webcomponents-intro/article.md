@@ -26,9 +26,9 @@ The International Space Station:
 
 ...And this thing flies, keeps humans alive in space!
 
-How are such complex devices created?
+How such complex devices are created?
 
-Which principles could we borrow to make our development same-level reliable and scalable? Or, at least, close to it?
+Which principles we could borrow to make our development same-level reliable and scalable? Or, at least, close to it.
 
 ## Component architecture
 

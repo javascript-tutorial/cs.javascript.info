@@ -1,103 +1,102 @@
 
-# Object.keys, values, entries
+# Metody Object.keys, values, entries
 
-Let's step away from the individual data structures and talk about the iterations over them.
+Odhlédněme nyní od individuálních datových struktur a promluvme si o iteracích nad nimi.
 
-In the previous chapter we saw methods `map.keys()`, `map.values()`, `map.entries()`.
+V předchozí kapitole jsme viděli metody `mapa.keys()`, `mapa.values()`, `mapa.entries()`.
 
-These methods are generic, there is a common agreement to use them for data structures. If we ever create a data structure of our own, we should implement them too.
+Tyto metody jsou generické, existuje společná dohoda ohledně jejich používání pro datové struktury. Jestliže si sami vytvoříme vlastní datovou strukturu, měli bychom je implementovat také.
 
-They are supported for:
+Jsou podporovány v:
 
 - `Map`
 - `Set`
 - `Array`
 
-Plain objects also support similar methods, but the syntax is a bit different.
+Plané objekty rovněž podporují podobné metody, ale jejich syntaxe je trochu jiná.
 
 ## Object.keys, values, entries
 
-For plain objects, the following methods are available:
+Pro plané objekty jsou k dispozici následující metody:
 
-- [Object.keys(obj)](mdn:js/Object/keys) -- returns an array of keys.
-- [Object.values(obj)](mdn:js/Object/values) -- returns an array of values.
-- [Object.entries(obj)](mdn:js/Object/entries) -- returns an array of `[key, value]` pairs.
+- [Object.keys(obj)](mdn:js/Object/keys) -- vrací pole klíčů.
+- [Object.values(obj)](mdn:js/Object/values) -- vrací pole hodnot.
+- [Object.entries(obj)](mdn:js/Object/entries) -- vrací pole dvojic `[klíč, hodnota]`.
 
-Please note the distinctions (compared to map for example):
+Prosíme, všimněte si rozdílů (například ve srovnání s mapou):
 
-|             | Map              | Object       |
-|-------------|------------------|--------------|
-| Call syntax | `map.keys()`  | `Object.keys(obj)`, but not `obj.keys()` |
-| Returns     | iterable    | "real" Array                     |
+|                | Mapa                | Objekt                                  |
+|----------------|---------------------|-----------------------------------------|
+| Syntaxe volání | `mapa.keys()`       | `Object.keys(obj)`, ale ne `obj.keys()` |
+| Vrací          | iterovatelný objekt | „skutečné“ pole                         |
 
-The first difference is that we have to call `Object.keys(obj)`, and not `obj.keys()`.
+Prvním rozdílem je, že musíme volat `Object.keys(obj)`, ne `obj.keys()`.
 
-Why so? The main reason is flexibility. Remember, objects are a base of all complex structures in JavaScript. So we may have an object of our own like `data` that implements its own `data.values()` method. And we still can call `Object.values(data)` on it.
+Proč tomu tak je? Hlavním důvodem je flexibilita. Pamatujte, že objekty jsou základem všech složitých struktur v JavaScriptu. Můžeme tedy mít svůj vlastní objekt, např. `data`, který implementuje svou vlastní metodu `data.values()`. A přesto na něm můžeme volat `Object.values(data)`.
 
-The second difference is that `Object.*` methods return "real" array objects, not just an iterable. That's mainly for historical reasons.
+Druhým rozdílem je, že metody `Object.*` vracejí „opravdová“ pole, ne jen iterovatelné objekty. Tak tomu je zejména z historických důvodů.
 
-For instance:
+Příklad:
 
 ```js
-let user = {
-  name: "John",
-  age: 30
+let uživatel = {
+  jméno: "Jan",
+  věk: 30
 };
 ```
 
-- `Object.keys(user) = ["name", "age"]`
-- `Object.values(user) = ["John", 30]`
-- `Object.entries(user) = [ ["name","John"], ["age",30] ]`
+- `Object.keys(uživatel) = ["jméno", "věk"]`
+- `Object.values(uživatel) = ["Jan", 30]`
+- `Object.entries(uživatel) = [ ["jméno","Jan"], ["věk",30] ]`
 
-Here's an example of using `Object.values` to loop over property values:
+Zde je příklad použití `Object.values` k procházení hodnot vlastností:
 
 ```js run
-let user = {
-  name: "John",
-  age: 30
+let uživatel = {
+  jméno: "Jan",
+  věk: 30
 };
 
-// loop over values
-for (let value of Object.values(user)) {
-  alert(value); // John, then 30
+// cyklus nad hodnotami
+for (let hodnota of Object.values(uživatel)) {
+  alert(hodnota); // Jan, poté 30
 }
 ```
 
-```warn header="Object.keys/values/entries ignore symbolic properties"
-Just like a `for..in` loop, these methods ignore properties that use `Symbol(...)` as keys.
+```warn header="Object.keys/values/entries ignorují symbolické vlastnosti"
+Stejně jako cyklus `for..in`, i tyto metody ignorují vlastnosti, jejichž klíčem je `Symbol(...)`.
 
-Usually that's convenient. But if we want symbolic keys too, then there's a separate method [Object.getOwnPropertySymbols](mdn:js/Object/getOwnPropertySymbols) that returns an array of only symbolic keys. Also, there exist a method [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys) that returns *all* keys.
+Zpravidla nám to vyhovuje. Jestliže však chceme i symbolické klíče, existuje samostatná metoda [Object.getOwnPropertySymbols](mdn:js/Object/getOwnPropertySymbols), která vrací pole výhradně symbolických klíčů. Existuje i metoda [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys), která vrací *všechny* klíče.
 ```
 
 
-## Transforming objects
+## Transformace objektů
 
-Objects lack many methods that exist for arrays, e.g. `map`, `filter` and others.
+Objekty postrádají mnohé metody, které existují pro pole, např. `map`, `filter` a jiné.
 
-If we'd like to apply them, then we can use `Object.entries` followed by `Object.fromEntries`:
+Pokud je chceme použít, můžeme použít `Object.entries`, po níž bude následovat `Object.fromEntries`:
 
-1. Use `Object.entries(obj)` to get an array of key/value pairs from `obj`.
-2. Use array methods on that array, e.g. `map`, to transform these key/value pairs.
-3. Use `Object.fromEntries(array)` on the resulting array to turn it back into an object.
+1. Použijte `Object.entries(obj)` k získání pole dvojic klíč/hodnota z `obj`.
+2. Na tomto poli použijte metody polí, např. `map`.
+3. Na výsledné pole volejte `Object.fromEntries(pole)`, která z něj opět udělá objekt.
 
-For example, we have an object with prices, and would like to double them:
+Například máme objekt s cenami a rádi bychom je zdvojnásobili:
 
 ```js run
-let prices = {
-  banana: 1,
-  orange: 2,
-  meat: 4,
+let ceny = {
+  banány: 1,
+  pomeranče: 2,
+  maso: 4,
 };
 
 *!*
-let doublePrices = Object.fromEntries(
-  // convert prices to array, map each key/value pair into another pair
-  // and then fromEntries gives back the object
-  Object.entries(prices).map(entry => [entry[0], entry[1] * 2])
+let dvojnásobnéCeny = Object.fromEntries(
+  // převedeme na pole, zmapujeme a pak nám funkce fromEntries znovu vytvoří objekt
+  Object.entries(ceny).map(([klíč, hodnota]) => [klíč, hodnota * 2])
 );
 */!*
 
-alert(doublePrices.meat); // 8
-```
+alert(dvojnásobnéCeny.maso); // 8
+```   
 
-It may look difficult at first sight, but becomes easy to understand after you use it once or twice. We can make powerful chains of transforms this way.
+Na první pohled to může vypadat obtížně, ale jakmile to jednou nebo dvakrát použijete, bude snadné tomu porozumět. Tímto způsobem můžeme vytvořit silné řetězce transformací.

@@ -111,7 +111,22 @@ customElements.define('custom-dialog', class extends HTMLElement {
 
 Now the additional centering styles are only applied to the first dialog: `<custom-dialog centered>`.
 
-To summarize, we can use `:host`-family of selectors to style the main element of the component. These styles (unless `!important`) can be overridden by the document.
+## :host-context(selector)
+
+Same as `:host`, but applied only if the shadow host or any of its ancestors in the outer document matches the `selector`.
+
+E.g. `:host-context(.dark-theme)` matches only if there's `dark-theme` class on `<custom-dialog>` on anywhere above it:
+
+```html
+<body class="dark-theme">
+  <!--
+    :host-context(.dark-theme) applies to custom-dialogs inside .dark-theme
+  -->
+  <custom-dialog>...</custom-dialog>
+</body>
+```
+
+To summarize, we can use `:host`-family of selectors to style the main element of the component, depending on the context. These styles (unless `!important`) can be overridden by the document.
 
 ## Styling slotted content
 
@@ -244,6 +259,7 @@ For example, in shadow DOM we can use `--user-card-field-color` CSS variable to 
 </style>
 <div class="field">Name: <slot name="username"></slot></div>
 <div class="field">Birthday: <slot name="birthday"></slot></div>
+</style>
 ```
 
 Then, we can declare this property in the outer document for `<user-card>`:
@@ -302,7 +318,7 @@ Shadow DOM can include styles, such as `<style>` or `<link rel="stylesheet">`.
 
 Local styles can affect:
 - shadow tree,
-- shadow host with `:host` and `:host()` pseudoclasses,
+- shadow host with `:host`-family pseudoclasses,
 - slotted elements (coming from light DOM), `::slotted(selector)` allows to select  slotted elements themselves, but not their children.
 
 Document styles can affect:

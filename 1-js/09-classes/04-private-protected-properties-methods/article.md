@@ -96,9 +96,7 @@ class CoffeeMachine {
   _waterAmount = 0;
 
   set waterAmount(value) {
-    if (value < 0) {
-      value = 0;
-    }
+    if (value < 0) throw new Error("Negative water");
     this._waterAmount = value;
   }
 
@@ -116,10 +114,10 @@ class CoffeeMachine {
 let coffeeMachine = new CoffeeMachine(100);
 
 // add water
-coffeeMachine.waterAmount = -10; // _waterAmount will become 0, not -10
+coffeeMachine.waterAmount = -10; // Error: Negative water
 ```
 
-Now the access is under control, so setting the water amount below zero becomes impossible.
+Now the access is under control, so setting the water below zero fails.
 
 ## Read-only "power"
 
@@ -161,7 +159,7 @@ class CoffeeMachine {
   _waterAmount = 0;
 
   *!*setWaterAmount(value)*/!* {
-    if (value < 0) value = 0;
+    if (value < 0) throw new Error("Negative water");
     this._waterAmount = value;
   }
 
@@ -192,7 +190,7 @@ There's a finished JavaScript proposal, almost in the standard, that provides la
 
 Privates should start with `#`. They are only accessible from inside the class.
 
-For instance, here's a private `#waterLimit` property and the water-checking private method `#fixWaterAmount`:
+For instance, here's a private `#waterLimit` property and the water-checking private method `#checkWater`:
 
 ```js run
 class CoffeeMachine {
@@ -201,15 +199,11 @@ class CoffeeMachine {
 */!*
 
 *!*
-  #fixWaterAmount(value) {
-    if (value < 0) return 0;
-    if (value > this.#waterLimit) return this.#waterLimit;
+  #checkWater(value) {
+    if (value < 0) throw new Error("Negative water");
+    if (value > this.#waterLimit) throw new Error("Too much water");
   }
 */!*
-
-  setWaterAmount(value) {
-    this.#waterLimit = this.#fixWaterAmount(value);
-  }
 
 }
 
@@ -217,7 +211,7 @@ let coffeeMachine = new CoffeeMachine();
 
 *!*
 // can't access privates from outside of the class
-coffeeMachine.#fixWaterAmount(123); // Error
+coffeeMachine.#checkWater(); // Error
 coffeeMachine.#waterLimit = 1000; // Error
 */!*
 ```
@@ -238,7 +232,7 @@ class CoffeeMachine {
   }
 
   set waterAmount(value) {
-    if (value < 0) value = 0;
+    if (value < 0) throw new Error("Negative water");
     this.#waterAmount = value;
   }
 }

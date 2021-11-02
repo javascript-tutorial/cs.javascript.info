@@ -3,5 +3,5 @@
 What's the match here?
 
 ```js
-alert( "123 456".match(/\d+? \d+?/g) ); // ?
+"123 456".match(/\d+? \d+?/g) ); // ?
 ```

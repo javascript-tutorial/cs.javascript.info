@@ -1,39 +1,39 @@
-The solution is to return the object itself from every call.
+Řešením je v každém volání vrátit tento objekt samotný.
 
 ```js run demo
-let ladder = {
-  step: 0,
-  up() {
-    this.step++;
+let žebřík = {
+  stupeň: 0,
+  nahoru() {
+    this.stupeň++;
 *!*
     return this;
 */!*
   },
-  down() {
-    this.step--;
+  dolů() {
+    this.stupeň--;
 *!*
     return this;
 */!*
   },
-  showStep() {
-    alert( this.step );
+  zobrazStupeň() {
+    alert( this.stupeň );
 *!*
     return this;
 */!*
   }
 };
 
-ladder.up().up().down().up().down().showStep(); // 1
+žebřík.nahoru().nahoru().dolů().nahoru().dolů().zobrazStupeň(); // 1
 ```
 
-We also can write a single call per line. For long chains it's more readable:
+Můžeme také psát každé volání na nový řádek. U delšího zřetězení je to čitelnější:
 
 ```js
-ladder
-  .up()
-  .up()
-  .down()
-  .up()
-  .down()
-  .showStep(); // 1
+žebřík
+  .nahoru()
+  .nahoru()
+  .dolů()
+  .nahoru()
+  .dolů()
+  .zobrazStupeň(); // 1
 ```

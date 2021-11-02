@@ -38,7 +38,7 @@ function vypišČísla(začátek, konec) {
 vypišČísla(5, 10);
 ```
 
-Všimněte si, že v obou řešeních je úvodní prodleva před prvním výstupem. Funkce je poprvé volána po `1000 ms`.
+Všimněte si, že v obou řešeních je úvodní prodleva před prvním výstupem. Funkce je poprvé volána za `1000 ms`.
 
 Jestliže chceme, aby se funkce spustila okamžitě, můžeme přidat další volání na samostatný řádek, například takto:
 

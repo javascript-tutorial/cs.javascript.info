@@ -1,92 +1,92 @@
 
-# Polyfills and transpilers
+# Polyfilly a transpilery
 
-The JavaScript language steadily evolves. New proposals to the language appear regularly, they are analyzed and, if considered worthy, are appended to the list at <https://tc39.github.io/ecma262/> and then progress to the [specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm).
+Jazyk JavaScript se neustále vyvíjí. Pravidelně se pro tento jazyk objevují nové návrhy, ty jsou analyzovány a jsou-li shledány užitečnými, přidají se na seznam na <https://tc39.github.io/ecma262/> a pak pokračují do [specifikace](http://www.ecma-international.org/publications/standards/Ecma-262.htm).
 
-Teams behind JavaScript engines have their own ideas about what to implement first. They may decide to implement proposals that are in draft and postpone things that are already in the spec, because they are less interesting or just harder to do.
+Týmy vyvíjející JavaScriptové enginy mají své vlastní mínění o tom, co implementovat jako první. Mohou se rozhodnout implementovat návrhy, které jsou teprve načrtnuty, a odložit věci, které jsou už ve specifikaci, protože jsou méně zajímavé nebo je jen těžší je implementovat.
 
-So it's quite common for an engine to implement only the part of the standard.
+Je tedy poměrně běžné, že engine implementuje jen část standardu.
 
-A good page to see the current state of support for language features is <https://kangax.github.io/compat-table/es6/> (it's big, we have a lot to study yet).
+Dobrá stránka, na které uvidíte aktuální stav podpory vlastností jazyka, je <https://kangax.github.io/compat-table/es6/> (je to velká tabulka, máme ještě hodně co studovat).
 
-As programmers, we'd like to use most recent features. The more good stuff - the better!
+Jako programátoři rádi používáme nejnovější vlastnosti. Čím více dobrých věcí, tím lépe!
 
-On the other hand, how to make our modern code work on older engines that don't understand recent features yet?
+Na druhou stranu, jak přimět náš moderní kód, aby fungoval na starších enginech, které ještě nerozumějí vlastnostem přidaným teprve nedávno?
 
-There are two tools for that:
+Jsou dva druhy nástrojů, které to zajistí:
 
-1. Transpilers.
-2. Polyfills.
+1. Transpilery.
+2. Polyfilly.
 
-Here, in this chapter, our purpose is to get the gist of how they work, and their place in web development.
+V této kapitole je naším cílem získat náhled na to, jak fungují a jaké je jejich místo při vývoji webů.
 
-## Transpilers
+## Transpilery
 
-A [transpiler](https://en.wikipedia.org/wiki/Source-to-source_compiler) is a special piece of software that translates source code to another source code. It can parse ("read and understand") modern code and rewrite it using older syntax constructs, so that it'll also work in outdated engines.
+[Transpiler](https://cs.wikipedia.org/wiki/Transpiler) *(v češtině se někdy používá výraz „transpilátor“ -- pozn. překl.)* je zvláštní druh softwaru, který umí parsovat („přečíst a pochopit“) moderní kód a přepsat jej pomocí starších syntaktických konstrukcí tak, aby výsledek byl stejný.
 
-E.g. JavaScript before year 2020 didn't have the "nullish coalescing operator" `??`. So, if a visitor uses an outdated browser, it may fail to understand the code like `height = height ?? 100`.
+Například JavaScript před rokem 2020 neměl „operátor koalescence“ `??`. Jestliže tedy návštěvník používá zastaralý prohlížeč, nemusí porozumět kódu `výška = výška ?? 100`.
 
-A transpiler would analyze our code and rewrite `height ?? 100` into `(height !== undefined && height !== null) ? height : 100`.
+Transpiler analyzuje náš kód a přepíše `výška ?? 100` na `(výška !== undefined && výška !== null) ? výška : 100`.
 
 ```js
-// before running the transpiler
-height = height ?? 100;
+// před spuštěním transpileru
+výška = výška ?? 100;
 
-// after running the transpiler
-height = (height !== undefined && height !== null) ? height : 100;
+// po spuštění transpileru
+výška = (výška !== undefined && výška !== null) ? výška : 100;
 ```
 
-Now the rewritten code is suitable for older JavaScript engines.
+Nyní je přepsaný kód vhodný i pro starší JavaScriptové enginy.
 
-Usually, a developer runs the transpiler on their own computer, and then deploys the transpiled code to the server.
+Vývojář si obvykle spustí transpiler na svém vlastním počítači a pak umístí transpilovaný kód na server.
 
-Speaking of names, [Babel](https://babeljs.io) is one of the most prominent transpilers out there. 
+Když hovoříme o názvech, jedním z nejvýznamnějších transpilerů je [Babel](https://babeljs.io).
 
-Modern project build systems, such as [webpack](http://webpack.github.io/), provide means to run transpiler automatically on every code change, so it's very easy to integrate into development process.
+Moderní systémy pro vytváření projektů, například [webpack](http://webpack.github.io/), poskytují způsoby, jak spouštět transpiler automaticky při každé změně kódu, takže je velmi jednoduché jej integrovat do procesu vývoje.
 
-## Polyfills
+## Polyfilly
 
-New language features may include not only syntax constructs and operators, but also built-in functions.
+Mezi nové vlastnosti jazyka mohou patřit nejenom syntaktické konstrukce a operátory, ale také vestavěné funkce.
 
-For example, `Math.trunc(n)` is a function that "cuts off" the decimal part of a number, e.g `Math.trunc(1.23)` returns `1`.
+Například `Math.trunc(n)` je funkce, která „odřízne“ desetinnou část čísla, např. `Math.trunc(1.23)` vrátí `1`.
 
-In some (very outdated) JavaScript engines, there's no `Math.trunc`, so such code will fail.
+V některých (velmi zastaralých) JavaScriptových enginech není funkce `Math.trunc`, takže takový kód selže.
 
-As we're talking about new functions, not syntax changes, there's no need to transpile anything here. We just need to declare the missing function.
+Hovoříme-li o nových funkcích a ne o syntaktických změnách, není tady potřeba nic transpilovat. Potřebujeme jenom deklarovat chybějící funkci.
 
-A script that updates/adds new functions is called "polyfill". It "fills in" the gap and adds missing implementations.
+Skript, který vylepšuje nebo přidává nové funkce, se nazývá „polyfill“. „Vyplní“ (anglicky „fill“) mezeru a přidá chybějící implementace.
 
-For this particular case, the polyfill for `Math.trunc` is a script that implements it, like this:
+V tomto konkrétním případě je polyfill pro `Math.trunc` skript, který ji implementuje, například takto:
 
 ```js
-if (!Math.trunc) { // if no such function
-  // implement it
-  Math.trunc = function(number) {
-    // Math.ceil and Math.floor exist even in ancient JavaScript engines
-    // they are covered later in the tutorial
-    return number < 0 ? Math.ceil(number) : Math.floor(number);
+if (!Math.trunc) { // není-li taková funkce
+  // implementuje ji
+  Math.trunc = function(číslo) {
+    // Math.ceil a Math.floor existují i v nejstarších JavaScriptových enginech
+    // budou vysvětleny později v tomto tutoriálu
+    return číslo < 0 ? Math.ceil(číslo) : Math.floor(číslo);
   };
 }
 ```
 
-JavaScript is a highly dynamic language, scripts may add/modify any functions, even including built-in ones. 
+JavaScript je vysoce dynamický jazyk a skripty mohou přidávat nebo modifikovat libovolné funkce, dokonce i vestavěné.
 
-Two interesting libraries of polyfills are:
-- [core js](https://github.com/zloirock/core-js) that supports a lot, allows to include only needed features.
-- [polyfill.io](http://polyfill.io) service that provides a script with polyfills, depending on the features and user's browser.
+Dvě zajímavé knihovny polyfillů jsou:
+- [core js](https://github.com/zloirock/core-js), která toho podporuje mnoho a umožňuje přidávat jen potřebné vlastnosti.
+- [polyfill.io](http://polyfill.io) je služba, která poskytuje skript s polyfilly podle vlastností a uživatelova prohlížeče.
 
 
-## Summary
+## Shrnutí
 
-In this chapter we'd like to motivate you to study modern and even "bleeding-edge" language features, even if they aren't yet well-supported by JavaScript engines.
+V této kapitole jsme vás chtěli motivovat k prostudování moderních vlastností jazyka, včetně těch „za hranou“, i když ještě nejsou příliš podporovány v enginech JavaScriptu.
 
-Just don't forget to use transpiler (if using modern syntax or operators) and polyfills (to add functions that may be missing). And they'll ensure that the code works.
+Jen nezapomínejte používat transpiler (používáte-li moderní syntaxi nebo operátory) a polyfilly (abyste přidali funkce, které mohou chybět). Ty zajistí, že váš kód bude fungovat.
 
-For example, later when you're familiar with JavaScript, you can setup a code build system based on [webpack](http://webpack.github.io/) with [babel-loader](https://github.com/babel/babel-loader) plugin.
+Například později, až budete JavaScript dobře znát, si můžete nastavit systém pro vytváření kódu založený na [webpacku](http://webpack.github.io/) s pluginem [babel-loader](https://github.com/babel/babel-loader).
 
-Good resources that show the current state of support for various features:
-- <https://kangax.github.io/compat-table/es6/> - for pure JavaScript.
-- <https://caniuse.com/> - for browser-related functions.
+Dobré zdroje, které ukazují aktuální stav podpory různých vlastností:
+- <https://kangax.github.io/compat-table/es6/> - pro čistý JavaScript.
+- <https://caniuse.com/> - pro funkce vztahující se k prohlížeči.
 
-P.S. Google Chrome is usually the most up-to-date with language features, try it if a tutorial demo fails. Most tutorial demos work with any modern browser though.
+P.S. Google Chrome je obvykle co do vlastností jazyka nejaktuálnější. Pokud vám některé demo v tomto tutoriálu selže, zkuste ho. Většina dem v tutoriálu však funguje na kterémkoli moderním prohlížeči.
 

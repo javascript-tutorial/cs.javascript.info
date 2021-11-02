@@ -1,43 +1,43 @@
-Let's store read messages in `WeakSet`:
+Uložme přečtené zprávy do `WeakSet`:
 
 ```js run
-let messages = [
-  {text: "Hello", from: "John"},
-  {text: "How goes?", from: "John"},
-  {text: "See you soon", from: "Alice"}
+let zprávy = [
+  {text: "Ahoj", od: "Jan"},
+  {text: "Jak se máš?", od: "Jan"},
+  {text: "Brzy se uvidíme", od: "Alice"}
 ];
 
-let readMessages = new WeakSet();
+let přečtenéZprávy = new WeakSet();
 
-// two messages have been read
-readMessages.add(messages[0]);
-readMessages.add(messages[1]);
-// readMessages has 2 elements
+// dvě zprávy byly přečteny
+přečtenéZprávy.add(zprávy[0]);
+přečtenéZprávy.add(zprávy[1]);
+// přečtenéZprávy obsahuje 2 prvky
 
-// ...let's read the first message again!
-readMessages.add(messages[0]);
-// readMessages still has 2 unique elements
+// ...znovu přečteme první zprávu!
+přečtenéZprávy.add(zprávy[0]);
+// přečtenéZprávy stále obsahuje 2 unikátní prvky
 
-// answer: was the message[0] read?
-alert("Read message 0: " + readMessages.has(messages[0])); // true
+// odpověď: byla zpráva s indexem 0 přečtena?
+alert("Zpráva 0 přečtena: " + přečtenéZprávy.has(zprávy[0])); // true
 
-messages.shift();
-// now readMessages has 1 element (technically memory may be cleaned later)
+zprávy.shift();
+// nyní přečtenéZprávy obsahuje 1 prvek (technicky může být paměť vyčištěna později)
 ```
 
-The `WeakSet` allows to store a set of messages and easily check for the existence of a message in it.
+`WeakSet` nám umožňuje uložit množinu zpráv a snadno ověřovat přítomnost zprávy v ní.
 
-It cleans up itself automatically. The tradeoff is that we can't iterate over it,  can't get "all read messages" from it directly. But we can do it by iterating over all messages and filtering those that are in the set.
+Automaticky se vyčistí. Nevýhodou je, že nad ní nemůžeme iterovat, nemůžeme získat „všechny přečtené zprávy“ přímo z ní. Můžeme to však udělat iterací nad všemi zprávami a filtrováním těch, které nejsou v této množině.
 
-Another, different solution could be to add a property like `message.isRead=true` to a message after it's read. As messages objects are managed by another code, that's generally discouraged, but we can use a symbolic property to avoid conflicts.
+Jiným řešením by bylo přidání vlastnosti, např. `zpráva.jePřečtena=true`, do zprávy poté, co bude přečtena. Protože objekty zpráv spravuje jiný kód, obecně se to nedoporučuje, ale můžeme se vyhnout konfliktům použitím symbolické vlastnosti.
 
-Like this:
+Třeba takto:
 ```js
-// the symbolic property is only known to our code
-let isRead = Symbol("isRead");
-messages[0][isRead] = true;
+// symbolickou vlastnost zná pouze náš kód
+let jePřečtena = Symbol("jePřečtena");
+zprávy[0][jePřečtena] = true;
 ```
 
-Now third-party code probably won't see our extra property.
+Nyní kód třetí strany naši přidanou vlastnost neuvidí.
 
-Although symbols allow to lower the probability of problems, using `WeakSet` is better from the architectural point of view.
+Přestože symboly mohou snížit pravděpodobnost problémů, z architektonického hlediska je lepší použít `WeakSet`.
