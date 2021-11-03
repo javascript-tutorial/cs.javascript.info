@@ -31,18 +31,10 @@ V praxi mají textové editory obvykle velké množství zásuvných modulů a r
 
 Vaši pozornost si zasluhují následující možnosti:
 
-<<<<<<< HEAD
 - [Atom](https://atom.io/) (různé platformy, zdarma).
-- [Visual Studio Code](https://code.visualstudio.com/) (různé platformy, zdarma).
 - [Sublime Text](http://www.sublimetext.com) (různé platformy, shareware).
 - [Notepad++](https://notepad-plus-plus.org/) (Windows, zdarma).
 - Také [Vim](http://www.vim.org/) a [Emacs](https://www.gnu.org/software/emacs/) jsou výborné, jestliže je umíte používat.
-=======
-- [Atom](https://atom.io/) (cross-platform, free).
-- [Sublime Text](http://www.sublimetext.com) (cross-platform, shareware).
-- [Notepad++](https://notepad-plus-plus.org/) (Windows, free).
-- [Vim](http://www.vim.org/) and [Emacs](https://www.gnu.org/software/emacs/) are also cool if you know how to use them.
->>>>>>> 193319c963b9ba86ac7d9590f7261a36ecdcc4d2
 
 ## Nehádejme se
 
