@@ -24,25 +24,11 @@ Prohlížeč má zabudovaný engine, který se někdy nazývá „virtuální st
 
 Různé enginy mají různá „kódová označení“. Například:
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- v Chrome a Opeře.
+- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- v Chrome, Opeře a Edge.
 - [SpiderMonkey](https://cs.wikipedia.org/wiki/SpiderMonkey) -- ve Firefoxu.
-- Existují i jiná krycí jména, například „Chakra“ pro Internet Explorer, „ChakraCore“ pro Microsoft Edge, „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
-=======
-- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- in Chrome and Opera.
-=======
-- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- in Chrome, Opera and Edge.
->>>>>>> 193319c963b9ba86ac7d9590f7261a36ecdcc4d2
-- [SpiderMonkey](https://en.wikipedia.org/wiki/SpiderMonkey) -- in Firefox.
-- ...There are other codenames like "Chakra" for IE, "JavaScriptCore", "Nitro" and "SquirrelFish" for Safari, etc.
->>>>>>> b09e38c5573346c401a9f9f7410b4ff9be5f4115
+- Existují i jiná krycí jména, například „Chakra“ pro Internet Explorer, "JavaScriptCore", „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
 
-<<<<<<< HEAD
-Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývojářských článcích na internetu. Budeme je používat i my. Například „vlastnost X je podporována ve V8“ znamená, že pravděpodobně bude fungovat v Chrome a Opeře.
-=======
-The terms above are good to remember because they are used in developer articles on the internet. We'll use them too. For instance, if "a feature X is supported by V8", then it probably works in Chrome, Opera and Edge.
->>>>>>> 193319c963b9ba86ac7d9590f7261a36ecdcc4d2
+Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývojářských článcích na internetu. Budeme je používat i my. Například je-li uvedeno „vlastnost X je podporována ve V8“, znamená to, že pravděpodobně bude fungovat v Chrome, Opeře a Edge.
 
 ```smart header="Jak enginy fungují?"
 
@@ -120,20 +106,12 @@ Moderní nástroje provádějí transpilaci velmi rychle a čistě. V podstatě 
 
 Příklady takových jazyků:
 
-<<<<<<< HEAD
 - [CoffeeScript](http://coffeescript.org/) je „syntaktický cukr“ pro JavaScript, který zavádí kratší syntaxi a tím nám umožňuje psát čistší a přesnější kód. Obvykle jej mají v oblibě vývojáři, kteří používají jazyk Ruby.
 - [TypeScript](http://www.typescriptlang.org/) se soustředí na přidání „striktního, silně typovaného systému“, aby zjednodušil vývoj a podporu složitých systémů. Vyvinula jej firma Microsoft.
 - [Flow](http://flow.org/) rovněž přidává typovací systém, ale jiným způsobem. Vyvinul jej Facebook.
 - [Dart](https://www.dartlang.org/) je samostatný jazyk se svým vlastním enginem, který běží v prostředích mimo prohlížeč (např. v mobilních aplikacích), ale i ten může být transpilován do JavaScriptu. Vyvinut firmou Google.
 - [Brython](https://brython.info/) je transpiler Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
-=======
-- [CoffeeScript](http://coffeescript.org/) is a "syntactic sugar" for JavaScript. It introduces shorter syntax, allowing us to write clearer and more precise code. Usually, Ruby devs like it.
-- [TypeScript](http://www.typescriptlang.org/) is concentrated on adding "strict data typing" to simplify the development and support of complex systems. It is developed by Microsoft.
-- [Flow](http://flow.org/) also adds data typing, but in a different way. Developed by Facebook.
-- [Dart](https://www.dartlang.org/) is a standalone language that has its own engine that runs in non-browser environments (like mobile apps), but also can be transpiled to JavaScript. Developed by Google.
-- [Brython](https://brython.info/) is a Python transpiler to JavaScript that enables the writing of applications in pure Python without JavaScript.
-- [Kotlin](https://kotlinlang.org/docs/reference/js-overview.html) is a modern, concise and safe programming language that can target the browser or Node.
->>>>>>> e01998baf8f85d9d6cef9f1add6c81b901f16d69
+- [Kotlin](https://kotlinlang.org/docs/reference/js-overview.html) je moderní, stručný a bezpečný programovací jazyk, jehož cílem může být prohlížeč nebo Node.
 
 Jsou i další. Samozřejmě i když používáme některý z transpilovaných jazyků, měli bychom znát i JavaScript, abychom skutečně porozuměli tomu, co se děje.
 
