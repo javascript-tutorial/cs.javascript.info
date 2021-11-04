@@ -64,7 +64,7 @@ Speciální číselné hodnoty formálně patří k typu „číslo“. Samozře
 
 O práci s čísly si povíme víc v kapitole <info:number>.
 
-## BigInt
+## BigInt [#bigint-type]
 
 Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>. Toto technické omezení je dáno jeho vnitřní reprezentací.
 

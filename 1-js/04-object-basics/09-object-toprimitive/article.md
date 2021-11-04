@@ -3,7 +3,24 @@
 
 Co se stane, když se objekty sečtou `obj1 + obj2`, odečtou `obj1 - obj2` nebo zobrazí pomocí `alert(obj)`?
 
-V takovém případě se objekty automaticky konvertují na primitivy a pak se vykoná operace.
+JavaScript neumožňuje přesně nastavit způsob, jakým operátory pracují nad objekty. Na rozdíl od některých jiných programovacích jazyků, např. Ruby nebo C++, nemůžeme implementovat speciální objektovou metodu, která bude zpracovávat sčítání (nebo jiné operátory).
+
+Při takovýchto operacích se objekty automaticky konvertují na primitivy a pak se nad těmito primitivy vykoná operace, jejímž výsledkem je primitivní hodnota.
+
+To je důležité omezení, jelikož výsledkem `obj1 + obj2` nemůže být jiný objekt!
+
+Například nemůžeme vytvořit objekty představující vektory nebo matice (nebo úspěchy či cokoli jiného), sečíst je a jako výsledek očekávat „sečtený“ objekt. Takové architektonické výkony jsou automaticky „mimo mísu“.
+
+Protože zde tedy nemůžeme mnoho udělat, v reálných projektech nebývá žádné počítání s objekty. Když se objeví, je to obvykle důsledkem chyby v kódu.
+
+V této kapitole probereme, jak převést objekt na primitiv a jak si to přizpůsobit.
+
+Má to dva účely:
+
+1. Umožní nám to porozumět, co se děje v případě chyby v kódu, když k takové operaci neúmyslně dojde.
+2. Existují výjimky, kdy jsou takové operace možné a vypadají dobře. Například odečítání nebo porovnávání dat (objekty `Date`). Narazíme na ně později.
+
+## Pravidla konverze
 
 V kapitole <info:type-conversions> jsme viděli pravidla číselných, řetězcových a booleanových konverzí primitivů. Objekty jsme však vynechali. Nyní, když známe metody a symboly, můžeme tuto mezeru zaplnit.
 
@@ -11,11 +28,11 @@ V kapitole <info:type-conversions> jsme viděli pravidla číselných, řetězco
 2. Konverze na číslo se odehrává, když objekty odečítáme nebo s nimi provádíme matematické funkce. Například objekty `Date` (vysvětlíme je v kapitole <info:date>) můžeme od sebe odečíst a výsledkem `datum1 - datum2` je časový rozdíl mezi těmito dvěma daty.
 3. Co se týče konverze na řetězec -- ta se zpravidla odehrává, když pošleme objekt na výstup, např. `alert(obj)`, a v podobných kontextech.
 
-## ToPrimitive
-
 Konverze na řetězec a na číslo můžeme vyladit použitím speciálních objektových metod.
 
-Existují tři varianty typové konverze, nazývané „hinty“ *(česky „rady“ nebo „náznaky“ -- pozn. překl.)*, které jsou popsány ve [specifikaci](https://tc39.github.io/ecma262/#sec-toprimitive):
+Existují tři varianty typové konverze, k nimž dochází v různých situacích.
+
+Nazývají se „hinty“ *(česky „rady“ nebo „náznaky“ -- pozn. překl.)* a jsou popsány ve [specifikaci](https://tc39.github.io/ecma262/#sec-toprimitive):
 
 `"string"`
 : Pro konverzi objektu na řetězec, když nad objektem provádíme operaci, která očekává řetězec, např. `alert`:
@@ -82,10 +99,13 @@ Začněme první metodou. V JavaScriptu je vestavěný symbol jménem `Symbol.to
 
 ```js
 obj[Symbol.toPrimitive] = function(hint) {
+  // sem přijde kód, který převede tento objekt na primitiv
   // musí vrátit primitivní hodnotu
   // hint = jeden ze "string", "number", "default"
 };
 ```
+
+Jestliže metoda `Symbol.toPrimitive` existuje, bude použita pro všechny hinty a žádné další metody nejsou zapotřebí.
 
 Například zde ji implementuje objekt `uživatel`:
 
@@ -111,12 +131,12 @@ Jak vidíme z kódu, `uživatel` se stane sebepopisujícím řetězcem nebo pen�
 
 ## toString/valueOf
 
+Neexistuje-li `Symbol.toPrimitive`, pak se JavaScript pokusí najít metody `toString` a `valueOf`:
+
+- Pro hint "string": `toString`, a jestliže neexistuje, pak `valueOf` (při konverzi na řetězec má tedy přednost `toString`).
+- Pro jiné hinty: `valueOf`, a jestliže neexistuje, pak `toString` (při výpočtech má tedy přednost `valueOf`).
+
 Metody `toString` a `valueOf` pocházejí z dávných časů. Nejsou to symboly (symboly tak dávno ještě neexistovaly), ale „obvyklé“ metody pojmenované řetězcem. Poskytují alternativní způsob „ve starém stylu“, jak implementovat konverzi.
-
-Neexistuje-li `Symbol.toPrimitive`, pak se je JavaScript pokusí najít a spustit v tomto pořadí:
-
-- `toString -> valueOf` pro hint `"string"`.
-- `valueOf -> toString` jinak.
 
 Tyto metody musejí vracet primitivní hodnotu. Jestliže `toString` nebo `valueOf` vrátí objekt, jsou ignorovány (tak, jako by taková metoda neexistovala).
 
@@ -138,7 +158,7 @@ Jestliže se tedy pokusíme použít objekt jako řetězec, např. ve volání `
 
 Standardní `valueOf` je zde zmíněna jen pro úplnost, abychom se vyhnuli zmatkům. Jak vidíte, vrací objekt samotný, a proto je ignorována. Neptejte se mě proč, je tomu tak z historických důvodů. Můžeme tedy předpokládat, že ani neexistuje.
 
-Implementujme tyto metody.
+Implementujme tyto metody, abychom si konverzi přizpůsobili.
 
 Například zde `uživatel` dělá totéž jako výše pomocí kombinace `toString` a `valueOf` namísto `Symbol.toPrimitive`:
 
@@ -183,7 +203,7 @@ alert(uživatel + 500); // toString -> Jan500
 
 Není-li přítomna `Symbol.toPrimitive` a `valueOf`, obstará všechny konverze na primitivy metoda `toString`.
 
-## Návratové typy
+### Konverze může vrátit jakýkoli primitivní typ
 
 O všech metodách konverze na primitivy je důležité vědět, že nemusejí nutně vracet „naznačený“ primitiv.
 
@@ -252,4 +272,6 @@ Algoritmus konverze je:
 3. V opačném případě, je-li hint `"number"` nebo `"default"`:
     - pokusí se zavolat `obj.valueOf()` nebo `obj.toString()`, první z nich, která existuje.
 
-V praxi často postačí implementovat jen `obj.toString()` jako „zachytávací“ metodu pro všechny konverze, která vrací „člověkem čitelnou“ reprezentaci objektu, pro účely logování nebo ladění.
+V praxi často postačí implementovat jen `obj.toString()` jako „zachytávací“ metodu pro všechny konverze, která by měla vracet „člověkem čitelnou“ reprezentaci objektu, pro účely logování nebo ladění.
+
+Stejně jako u matematických operátorů JavaScript neposkytuje způsob, jak je „přetížit“ pomocí metod, takže projekty z reálného života je používají na objekty jen zřídka.

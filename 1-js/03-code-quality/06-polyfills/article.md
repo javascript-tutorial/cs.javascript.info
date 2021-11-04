@@ -22,7 +22,7 @@ V této kapitole je naším cílem získat náhled na to, jak fungují a jaké j
 
 ## Transpilery
 
-[Transpiler](https://cs.wikipedia.org/wiki/Transpiler) *(v češtině se někdy používá výraz „transpilátor“ -- pozn. překl.)* je zvláštní druh softwaru, který umí parsovat („přečíst a pochopit“) moderní kód a přepsat jej pomocí starších syntaktických konstrukcí tak, aby výsledek byl stejný.
+[Transpiler](https://cs.wikipedia.org/wiki/Transpiler) *(v češtině se někdy používá výraz „transpilátor“ -- pozn. překl.)* je zvláštní druh softwaru, který překládá zdrojový kód do jiného zdrojového kódu. Umí parsovat („přečíst a pochopit“) moderní kód a přepsat jej pomocí starších syntaktických konstrukcí tak, aby kód fungoval i na zastaralých enginech.
 
 Například JavaScript před rokem 2020 neměl „operátor koalescence“ `??`. Jestliže tedy návštěvník používá zastaralý prohlížeč, nemusí porozumět kódu `výška = výška ?? 100`.
 

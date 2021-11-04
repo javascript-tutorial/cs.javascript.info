@@ -56,17 +56,21 @@ alert( 8 % 3 ); // 2, zbytek po dělení 8 děleno 3
 
 ### Umocňování **
 
-Operátor umocňování `a ** b` vynásobí `a` sebou samým `b`-krát.
+Operátor umocňování `a ** b` umocní `a` na `b`-tou.
+
+Ve školní matematice to zapisujeme a<sup>b</sup>.
 
 Příklad:
 
 ```js run
-alert( 2 ** 2 ); // 4  (2 násobeno sebou samým 2-krát)
-alert( 2 ** 3 ); // 8  (2 * 2 * 2, 3-krát)
-alert( 2 ** 4 ); // 16 (2 * 2 * 2 * 2, 4-krát)
+alert( 2 ** 2 ); // 2² = 4
+alert( 2 ** 3 ); // 2³ = 8
+alert( 2 ** 4 ); // 2⁴ = 16
 ```
 
-V matematice je umocňování definováno i pro necelá čísla. Například odmocnina je umocnění na `1/2`:
+Stejně jako v matematice je operátor umocňování definován i pro necelá čísla. 
+
+Například odmocnina je umocnění na ½:
 
 ```js run
 alert( 4 ** (1/2) ); // 2 (umocnění na 1/2 je totéž jako druhá odmocnina)

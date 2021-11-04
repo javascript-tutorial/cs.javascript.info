@@ -301,11 +301,11 @@ Výborné na nich je, že tato kontrola stylu umí najít i některé chyby, nap
 
 Zde jsou některé dobře známé lintery:
 
-- [JSLint](http://www.jslint.com/) -- jeden z prvních linterů.
-- [JSHint](http://www.jshint.com/) -- více nastavení než JSLint.
-- [ESLint](http://eslint.org/) -- pravděpodobně nejnovější.
+- [JSLint](https://www.jslint.com/) -- jeden z prvních linterů.
+- [JSHint](https://www.jshint.com/) -- více nastavení než JSLint.
+- [ESLint](https://eslint.org/) -- pravděpodobně nejnovější.
 
-Všechny umějí tuto práci vykonat. Autor používá [ESLint](http://eslint.org/).
+Všechny tuto práci odvedou. Autor používá [ESLint](http://eslint.org/).
 
 Většina linterů je integrována s mnoha oblíbenými editory: jednoduše povolte plugin v editoru a nakonfigurujte styl.
 
@@ -335,7 +335,7 @@ Uvádíme příklad souboru `.eslintrc`:
 
 Zde direktiva `"extends"` oznamuje, že konfigurace je založena na sadě nastavení „eslint:recommended“. Poté si specifikujeme vlastní.
 
-Je také možné si místo toho stáhnout sady stylových pravidel z webu a pak je rozšířit. Pro podrobnosti ohledně instalace viz <http://eslint.org/docs/user-guide/getting-started>.
+Je také možné si místo toho stáhnout sady stylových pravidel z webu a pak je rozšířit. Pro podrobnosti ohledně instalace viz <https://eslint.org/docs/user-guide/getting-started>.
 
 Také některá IDE obsahují zabudovaný linting, který je vyhovující, ale ne tak nastavitelný jako ESLint.
 

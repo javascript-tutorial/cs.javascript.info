@@ -25,7 +25,7 @@ zprávy.shift();
 // nyní přečtenéZprávy obsahuje 1 prvek (technicky může být paměť vyčištěna později)
 ```
 
-`WeakSet` nám umožňuje uložit množinu zpráv a snadno ověřovat přítomnost zprávy v ní.
+`WeakSet` nám umožňuje uložit množinu zpráv a snadno ověřovat, zda v ní zpráva existuje.
 
 Automaticky se vyčistí. Nevýhodou je, že nad ní nemůžeme iterovat, nemůžeme získat „všechny přečtené zprávy“ přímo z ní. Můžeme to však udělat iterací nad všemi zprávami a filtrováním těch, které nejsou v této množině.
 

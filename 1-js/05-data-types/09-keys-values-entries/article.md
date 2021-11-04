@@ -77,7 +77,7 @@ Objekty postrádají mnohé metody, které existují pro pole, např. `map`, `fi
 Pokud je chceme použít, můžeme použít `Object.entries`, po níž bude následovat `Object.fromEntries`:
 
 1. Použijte `Object.entries(obj)` k získání pole dvojic klíč/hodnota z `obj`.
-2. Na tomto poli použijte metody polí, např. `map`.
+2. Na tomto poli použijte metody polí, např. `map`, která tyto dvojice klíč/hodnota transformuje.
 3. Na výsledné pole volejte `Object.fromEntries(pole)`, která z něj opět udělá objekt.
 
 Například máme objekt s cenami a rádi bychom je zdvojnásobili:
@@ -91,8 +91,9 @@ let ceny = {
 
 *!*
 let dvojnásobnéCeny = Object.fromEntries(
-  // převedeme na pole, zmapujeme a pak nám funkce fromEntries znovu vytvoří objekt
-  Object.entries(ceny).map(([klíč, hodnota]) => [klíč, hodnota * 2])
+  // převedeme na pole, zmapujeme každou dvojici klíč/hodnota na jinou dvojici
+  // a pak nám funkce fromEntries znovu vytvoří objekt
+  Object.entries(ceny).map(prvek => [prvek[0], prvek[1] * 2])
 );
 */!*
 
@@ -100,3 +101,5 @@ alert(dvojnásobnéCeny.maso); // 8
 ```   
 
 Na první pohled to může vypadat obtížně, ale jakmile to jednou nebo dvakrát použijete, bude snadné tomu porozumět. Tímto způsobem můžeme vytvořit silné řetězce transformací.
+
+It may look difficult at first sight, but becomes easy to understand after you use it once or twice. We can make powerful chains of transforms this way.

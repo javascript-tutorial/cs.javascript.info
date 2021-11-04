@@ -18,10 +18,10 @@ function zobrazZprávu() {
 }
 ```
 
-Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, pak v závorkách seznam *parametrů* (jsou odděleny čárkami, v uvedeném příkladu je seznam prázdný) a nakonec ve složených závorkách kód funkce, nazývaný také „tělo funkce“.
+Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, pak v závorkách seznam *parametrů* (jsou odděleny čárkami, v uvedeném příkladu je seznam prázdný, jeho příklady uvidíme později) a nakonec ve složených závorkách kód funkce, nazývaný také „tělo funkce“.
 
 ```js
-function název(parametry) {
+function název(parametr1, parametr2, ... parametrN) {
   ...tělo...
 }
 ```
@@ -133,12 +133,12 @@ Je dobrým zvykem minimalizovat používání globálních proměnných. Modern�
 
 ## Parametry
 
-Do funkcí můžeme předávat jakákoli data pomocí parametrů (ty se také nazývají *argumenty funkce*).
+Do funkcí můžeme předávat jakákoli data pomocí parametrů.
 
 V níže uvedeném příkladu má funkce dva parametry: `odKoho` a `text`.
 
 ```js run
-function zobrazZprávu(*!*odKoho, text*/!*) { // argumenty: odKoho, text
+function zobrazZprávu(*!*odKoho, text*/!*) { // parametry: odKoho, text
   alert(odKoho + ': ' + text);
 }
 
@@ -151,7 +151,6 @@ zobrazZprávu('Anna', "Co se děje?"); // Anna: Co se děje? (**)
 Když se na řádcích `(*)` a `(**)` volá funkce, zadané hodnoty se zkopírují do lokálních proměnných `odKoho` a `text`. Pak je funkce použije.
 
 Další příklad: máme proměnnou `odKoho` a předáme ji funkci. Všimněte si, že funkce změní hodnotu `odKoho`, ale tato změna není vidět zvnějšku, jelikož funkce obdrží vždy kopii hodnoty:
-
 
 ```js run
 function zobrazZprávu(odKoho, text) {
@@ -171,9 +170,20 @@ zobrazZprávu(odKoho, "Ahoj"); // *Anna*: Ahoj
 alert( odKoho ); // Anna
 ```
 
+Když je nějaká hodnota předána jako parametr funkce, nazývá se také *argument*.
+
+Jinými slovy, abychom tyto pojmy upřesnili:
+
+- Parametr je hodnota uvedená v závorkách v deklaraci funkce (pojem používaný v okamžiku deklarace).
+- Argument je hodnota, která je předána funkci, když je volána (pojem používaný v okamžiku volání).
+
+Když funkce deklarujeme, vypisujeme jejich parametry, a pak je voláme předáním argumentů.
+
+Ve výše uvedeném příkladu bychom mohli říci: „funkce `zobrazZprávu` je deklarována se dvěma parametry a pak je volána se dvěma argumenty: `odKoho` a `"Ahoj"`.“
+
 ## Defaultní hodnoty
 
-Jestliže parametr není poskytnut, jeho hodnota bude `undefined`.
+Jestliže je volána funkce, ale některý argument není poskytnut, pak odpovídající hodnota bude `undefined`.
 
 Například výše uvedenou funkci `zobrazZprávu(odKoho, text)` lze volat jen s jediným argumentem:
 
@@ -181,9 +191,9 @@ Například výše uvedenou funkci `zobrazZprávu(odKoho, text)` lze volat jen s
 zobrazZprávu("Anna");
 ```
 
-To není chyba. Takové volání vypíše `"Anna: undefined"`. Není zadán žádný `text`, takže se předpokládá, že `text === undefined`.
+To není chyba. Takové volání vypíše `"*Anna*: undefined"`. Protože hodnota `text` nebyla předána, stane se `undefined`.
 
-Pokud v takovém případě chceme použít nějaký „defaultní“ `text`, můžeme jej specifikovat za znakem `=`:
+V deklaraci funkce můžeme specifikovat tzv. „defaultní“ (používanou, není-li uvedena) hodnotu parametru pomocí `=`:
 
 ```js run
 function zobrazZprávu(odKoho, *!*text = "text není zadán"*/!*) {
@@ -207,19 +217,23 @@ function zobrazZprávu(odKoho, text = jináFunkce()) {
 ```smart header="Vyhodnocení defaultních parametrů"
 V JavaScriptu bude defaultní parametr vyhodnocen pokaždé, když bude funkce volána bez příslušného parametru.
 
-Ve výše uvedeném příkladu bude `jináFunkce()` volána pokaždé, když bude volána funkce `zobrazZprávu()` bez parametru `text`.
+Ve výše uvedeném příkladu nebude `jináFunkce()` vůbec volána, jestliže bude parametr `text` poskytnut.
+
+Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude `text` chybět.
 ```
 
 ### Alternativní defaultní parametry
 
-Někdy má smysl nenastavovat defaultní hodnoty parametrů v deklaraci funkce, ale až později během jejího vykonávání.
+Někdy má smysl nenastavovat defaultní hodnoty parametrů v deklaraci funkce, ale až později.
 
-Abychom ověřili, zda parametr nebyl uveden, můžeme jej porovnat s `undefined`:
+Abychom během provádění funkce ověřili, zda parametr byl předán, můžeme jej porovnat s `undefined`:
 
 ```js run
 function zobrazZprávu(text) {
+  // ...
+
 *!*
-  if (text === undefined) {
+  if (text === undefined) { // jestliže parametr chybí
     text = 'prázdná zpráva';
   }
 */!*
@@ -233,18 +247,18 @@ zobrazZprávu(); // prázdná zpráva
 ...Nebo můžeme použít operátor `||`:
 
 ```js
-// je-li parametr text neuveden nebo je předáno "", nastaví se na 'prázdný'
 function zobrazZprávu(text) {
+  // je-li parametr text neuveden nebo je nepravdivý, nastaví se na 'prázdný'
   text = text || 'prázdný';
   ...
 }
 ```
 
-Moderní enginy JavaScriptu podporují [operátor koalescence](info:nullish-coalescing-operator) `??`, který je lepší použít, když chceme mít možnost zadat nepravdivé hodnoty, například `0`:
+Moderní enginy JavaScriptu podporují [operátor koalescence](info:nullish-coalescing-operator) `??`, který je lepší použít, když by většina nepravdivých hodnot, například `0`, měla být zpracována „normálně“:
 
 ```js run
-// není-li předán parametr "počet", zobrazíme "neznámý"
 function zobrazPočet(počet) {
+  // je-li počet undefined nebo null, zobrazí se "neznámý"
   alert(počet ?? "neznámý");
 }
 
@@ -407,7 +421,7 @@ Funkce, které se používají *velmi často*, mají někdy ultrakrátké názvy
 
 Například rozhraní [jQuery](http://jquery.com) definuje funkci s názvem `$`. Knihovna [Lodash](http://lodash.com/) má svou ústřední funkci pojmenovanou `_`.
 
-To jsou však výjimky. Obecně by názvy funkcí měly být výstižné a popisné.
+To jsou však výjimky. Obecně by názvy funkcí měly být stručné a popisné.
 ```
 
 ## Funkce == komentáře

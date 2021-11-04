@@ -4,7 +4,7 @@ Z matematiky známe mnoho porovnávacích operátorů. V JavaScriptu se píší 
 
 - Větší/menší než: <code>a &gt; b</code>, <code>a &lt; b</code>.
 - Větší/menší nebo rovno: <code>a &gt;= b</code>, <code>a &lt;= b</code>.
-- Rovno: `a == b`. Všimněte si, že dvě rovnítka `=` za sebou znamenají test rovnosti, zatímco jediné rovnítko `a = b` znamená přiřazení.
+- Rovno: `a == b`. Prosíme všimněte si, že znak dvou rovnítek za sebou `==` znamená test rovnosti, zatímco jediné rovnítko `a = b` znamená přiřazení.
 - Nerovno: v matematice se používá znak <code>&ne;</code>, ale v JavaScriptu se píše <code>a != b</code>.
 
 V tomto článku se dozvíme víc o různých druzích porovnání a o tom, jak s nimi JavaScript zachází, včetně důležitých zvláštností.

@@ -46,7 +46,7 @@ alert(3 +
 + 2);
 ```
 
-Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je intuitivně zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník není zapotřebí. V tomto případě to bude fungovat tak, jak očekáváme.
+Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je intuitivně zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník by byl nesprávný. V tomto případě to bude fungovat tak, jak očekáváme.
 
 **Existují však situace, v nichž JavaScript „nedokáže“ vložit středník tam, kde je opravdu zapotřebí.**
 
@@ -56,40 +56,36 @@ V takových případech nastanou chyby, které je poměrně těžké najít a op
 Pokud jste zvědaví na konkrétní příklad takové chyby, zkuste si tento kód:
 
 ```js run
-[1, 2].forEach(alert)
+alert("Hello");
+
+[1, 2].forEach(alert);
 ```
 
-O významu hranatých závorek `[]` a klíčového slova `forEach` zatím nemusíte přemýšlet. To probereme později. Nyní si jen zapamatujte výsledek kódu: zobrazí `1`, pak `2`.
+O významu hranatých závorek `[]` a klíčového slova `forEach` zatím nemusíte přemýšlet. To probereme později. Nyní si jen zapamatujte výsledek kódu: zobrazí `Ahoj`, pak `1`, pak `2`.
 
-Nyní přidáme před kód `alert` a *neukončíme* jej středníkem:
+Nyní odstraníme středník před `alert`:
 
 ```js run no-beautify
-alert("Tohle bude chyba")
+alert("Ahoj")
 
-[1, 2].forEach(alert)
+[1, 2].forEach(alert);
 ```
 
-Když tento kód nyní spustíme, zobrazí se jen první `alert` a pak nastane chyba!
+Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku zmizel.
 
-Ale jakmile přidáme středník za `alert`, bude znovu všechno v pořádku:
-```js run
-alert("Teď je vše v pořádku");
+Když tento kód nyní spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
 
-[1, 2].forEach(alert)  
-```
+Je to proto, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`. S kódem v prvním příkladu se tedy zachází jako s jediným příkazem.
 
-Nyní dostaneme zprávu „Teď je vše v pořádku“, po níž bude následovat `1` a `2`.
-
-
-Chyba ve variantě bez středníku spočívá v tom, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`.
-
-Protože tedy středník nebyl automaticky vložen, s kódem v prvním příkladu se zacházelo jako s jediným příkazem. Takto jej vidí engine:
+Takto jej vidí engine:
 
 ```js run no-beautify
-alert("Tohle bude chyba")[1, 2].forEach(alert)
+alert("Ahoj")[1, 2].forEach(alert);
 ```
 
-Měly by to však být dva oddělené příkazy, ne jeden. Spojení v takovém případě je špatně, proto nastala chyba. To se může stát i v jiných situacích.
+Vypadá to divně, že? Sloučení řádků v tomto případě je prostě špatně. Za `alert` musíme vložit středník, aby kód správně fungoval.
+
+To se může stát i v jiných situacích.
 ````
 
 Doporučujeme vám psát středníky mezi příkazy i tehdy, když je odděluje konec řádku. Toto pravidlo je v komunitě všeobecně přijímáno. Zmíníme to ještě jednou -- ve většině případů *je možné* středník vypustit. Je však bezpečnější -- zejména pro začátečníky -- jej používat.

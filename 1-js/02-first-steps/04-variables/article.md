@@ -24,7 +24,7 @@ Nyní do ní můžeme uložit nějaká data pomocí operátoru `=`:
 let zpráva;
 
 *!*
-zpráva = 'Ahoj'; // uložíme řetězec
+zpráva = 'Ahoj'; // uložíme řetězec 'Ahoj' do proměnné jménem zpráva
 */!*
 ```
 

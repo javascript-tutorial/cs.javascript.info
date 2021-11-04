@@ -64,14 +64,15 @@ Když nyní budeme chtít vytvořit jiné uživatele, můžeme volat `new Uživa
 
 To je hlavní smysl konstruktorů -- implementovat opakovaně použitelný kód pro vytváření objektů.
 
-Znovu poznamenejme, že technicky může být libovolná funkce použita jako konstruktor. To znamená, že kterákoli funkce může být volána pomocí `new` a pak se vykoná výše uvedený algoritmus. „Velké první písmeno“ je obvyklá úmluva, z níž bude zřejmé, že funkce má být volána pomocí `new`.
+Znovu poznamenejme, že technicky může být libovolná funkce (s výjimkou šipkových funkcí, jelikož ty nemají `this`) použita jako konstruktor. Může být volána pomocí `new` a pak se vykoná výše uvedený algoritmus. „Velké první písmeno“ je obvyklá úmluva, aby bylo zřejmé, že funkce má být volána pomocí `new`.
 
 ````smart header="new function() { ... }"
-Máme-li mnoho řádků kódu a všechny se týkají vytvoření jediného složitého objektu, můžeme je zapouzdřit do konstruktoru, například:
+Máme-li mnoho řádků kódu a všechny se týkají vytvoření jediného složitého objektu, můžeme je zapouzdřit do konstruktoru, který okamžitě zavoláme, například:
 
 ```js
+// vytvoříme funkci a okamžitě ji zavoláme pomocí new
 let uživatel = new function() {
-  this.jméno = "John";
+  this.jméno = "Jan";
   this.jeAdmin = false;
 
   // ...další kód pro vytváření uživatele
@@ -80,7 +81,7 @@ let uživatel = new function() {
 };
 ```
 
-Tento konstruktor nemůžeme opakovaně volat, protože není nikde uložen. Jen se vytvoří a zavolá. Smyslem tohoto triku tedy je zapouzdřit kód, který vytvoří jediný objekt a dále se nepoužívá.
+Tento konstruktor nemůžeme opakovaně volat, protože není nikde uložen. Jen se vytvoří a zavolá. Smyslem tohoto triku je tedy zapouzdřit kód, který vytvoří jediný objekt a dále se nepoužívá.
 ````
 
 ## Test režimu konstruktoru: new.target

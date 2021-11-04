@@ -1,4 +1,4 @@
-# Ladění v Chrome
+# Ladění v prohlížeči
 
 Než začneme psát složitější kód, pohovořme si o ladění.
 

@@ -4,7 +4,7 @@ importance: 4
 
 # Vytvoření klíčovaného objektu z pole
 
-Řekněme, že máme pole uživatelů ve formě `{id:..., jméno:..., věk... }`.
+Řekněme, že jsme získali pole uživatelů ve formě `{id:..., jméno:..., věk... }`.
 
 Vytvořte funkci `seskupPodleId(pole)`, která z něj vytvoří objekt, jehož klíči budou hodnoty `id` a hodnotami prvky pole.
 

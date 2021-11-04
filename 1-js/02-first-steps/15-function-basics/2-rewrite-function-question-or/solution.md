@@ -14,4 +14,4 @@ function ověřVěk(věk) {
 }
 ```
 
-Všimněte si, že závorky okolo `věk > 18` zde nejsou nutné. Byly přidány jen pro lepší čitelnost.
+Všimněte si, že závorky okolo `věk > 18` zde nejsou nutné. Slouží jen k lepší čitelnosti.

@@ -379,8 +379,6 @@ alert( pole[0] ); // undefined! bez prvků.
 alert( pole.length ); // délka 2
 ```
 
-Ve výše uvedeném kódu má `new Array(číslo)` všechny prvky `undefined`.
-
 Abychom předešli takovým překvapením, používáme zpravidla hranaté závorky, pokud opravdu dobře nevíme, co děláme.
 
 ## Vícerozměrná pole

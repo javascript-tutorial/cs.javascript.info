@@ -123,7 +123,7 @@ To umožňuje některé zajímavé způsoby použití ve srovnání s „čistý
 
     Znamená to, že `||` zpracovává své argumenty, dokud nenarazí na první pravdivou hodnotu, a pak tuto hodnotu okamžitě vrátí, aniž by se byť jen dotkl dalších argumentů.
 
-    Tato jeho vlastnost nabude na významu, jestliže operandem nebude pouhá hodnota, ale výraz s vedlejším efektem, například přiřazení proměnné nebo volání funkce.
+    Důležitost této vlastnosti se projeví, jestliže operandem nebude pouhá hodnota, ale výraz s vedlejším efektem, například přiřazení proměnné nebo volání funkce.
 
     V níže uvedeném příkladu se zobrazí jen druhá zpráva:
 

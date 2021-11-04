@@ -4,7 +4,7 @@ V moderním JavaScriptu jsou dva druhy čísel:
 
 1. Běžná čísla v JavaScriptu jsou uložena v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754-2008_revision). Jsou známa také jako „čísla s pohyblivou řádovou čárkou s dvojnásobnou přesností“. To jsou čísla, která budeme většinou používat a v této kapitole o nich budeme hovořit.
 
-2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné číslo nemůže překročit <code>2<sup>53</sup></code> nebo být menší než <code>-2<sup>53</sup></code>. Jelikož biginty se používají jen v několika speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
+2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné číslo nemůže bezpečně překročit <code>2<sup>53</sup></code> nebo být menší než <code>-2<sup>53</sup></code>. Jelikož biginty se používají jen v několika speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
 
 Zde tedy budeme hovořit o běžných číslech. Rozšiřme si své znalosti o nich.
 
@@ -37,8 +37,8 @@ alert( 7.3e9 );  // 7.3 miliard (totéž jako 7300000000 nebo 7_300_000_000)
 Jinými slovy, `e` toto číslo násobí číslem `1` se zadaným počtem nul.
 
 ```js
-1e3 = 1 * 1000 // e3 znamená *1000
-1.23e6 = 1.23 * 1000000 // e6 znamená *1000000
+1e3 === 1 * 1000 // e3 znamená *1000
+1.23e6 === 1.23 * 1000000 // e6 znamená *1000000
 ```
 
 Nyní zapišme něco velmi malého. Třeba 1 mikrosekundu (jednu milióntinu sekundy):
@@ -59,10 +59,10 @@ Jinými slovy, záporné číslo za `"e"` znamená dělení číslem 1 se zadan�
 
 ```js
 // -3 znamená dělení číslem 1 se 3 nulami
-1e-3 = 1 / 1000 (=0.001)
+1e-3 === 1 / 1000; // 0.001
 
 // -6 znamená dělení číslem 1 se 6 nulami
-1.23e-6 = 1.23 / 1000000 (=0.00000123)
+1.23e-6 === 1.23 / 1000000; // 0.00000123
 ```
 
 ### Hexadecimální, binární a oktální čísla
@@ -328,7 +328,7 @@ let číslo = +prompt("Zadejte číslo", '');
 alert( isFinite(číslo) );
 ```
 
-Všimněte si, že s prázdným řetězcem nebo s řetězcem složeným pouze z mezer se zachází jako s `0` ve všech číselných funkcích včetně `isFinite`.
+Prosíme všimněte si, že s prázdným řetězcem nebo s řetězcem složeným pouze z mezer se zachází jako s `0` ve všech číselných funkcích včetně `isFinite`.
 
 ```smart header="Srovnání s `Object.is`"
 

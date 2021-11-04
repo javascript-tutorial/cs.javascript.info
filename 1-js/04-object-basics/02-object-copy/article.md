@@ -133,7 +133,7 @@ klon.jméno = "Petr"; // změníme data uvnitř
 alert( uživatel.jméno ); // v původním objektu je stále Jan
 ```
 
-Můžeme k tomu také použít metodu [Object.assign](mdn:js/Object/assign).
+Můžeme k tomu také použít metodu [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
 Její syntaxe je:
 

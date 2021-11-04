@@ -1,7 +1,7 @@
 
 ```js run
 function zeptejSe(otázka, ano, ne) {
-  if (confirm(otázka)) ano()
+  if (confirm(otázka)) ano();
   else ne();
 }
 

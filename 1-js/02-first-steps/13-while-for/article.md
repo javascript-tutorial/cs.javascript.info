@@ -366,9 +366,18 @@ break návěští; // skok na návěští níže (nebude fungovat)
 návěští: for (...)
 ```
 
-Volat `break/continue` je možné jedině zevnitř cyklu.
+Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být jakýkoli kódový blok s návěštím, např.:
+```js
+návěští: {
+  // ...
+  break návěští; // funguje to
+  // ...
+}
+```
 
-Direktivu `break` můžeme umístit i před bloky kódu, jako `label: { ... }`, ale téměř nikdy se tak nepoužívá. Funguje to také jen směrem zevnitř ven.
+...Avšak v 99,9% případů se `break` používá uvnitř cyklů, jak jsme viděli ve výše uvedených příkladech.
+
+Direktiva `continue` může být jedině uvnitř cyklu.
 ````
 
 ## Shrnutí

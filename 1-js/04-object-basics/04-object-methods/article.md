@@ -81,7 +81,7 @@ uživatel = {
 // zkratka metody vypadá lépe, že?
 uživatel = {
 *!*
-  řekniAhoj() { // totéž jako „řekniAhoj: function() {...}“
+  řekniAhoj() { // totéž jako „řekniAhoj: function(){...}“
 */!*
     alert("Ahoj");
   }

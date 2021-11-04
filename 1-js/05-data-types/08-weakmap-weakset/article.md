@@ -1,6 +1,6 @@
 # Slabá mapa a slabá množina
 
-Jak víme z kapitoly <info:garbage-collection>, engine JavaScriptu si udržuje hodnotu v paměti, dokud je dosažitelná (a může tedy být použita).
+Jak víme z kapitoly <info:garbage-collection>, engine JavaScriptu si udržuje hodnotu v paměti, dokud je „dosažitelná“ a může být použita.
 
 Příklad:
 ```js

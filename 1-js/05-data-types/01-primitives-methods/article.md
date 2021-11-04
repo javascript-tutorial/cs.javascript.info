@@ -39,7 +39,7 @@ Objekty jsou „těžší“ než primitivy. Vyžadují více zdrojů, které za
 
 Tvůrce JavaScriptu čelil následujícímu paradoxu:
 
-- Existuje mnoho věcí, které člověk chce dělat s primitivy, jakými jsou řetězec nebo číslo. Bylo by skvělé přistupovat k nim jako k metodám.
+- Existuje mnoho věcí, které člověk chce dělat s primitivy, jakými jsou řetězec nebo číslo. Bylo by skvělé přistupovat k nim pomocí metod.
 - Primitivy musejí být co nejrychlejší a co nejlehčí.
 
 Řešení vypadá trochu těžkopádně, ale je zde:
@@ -48,7 +48,7 @@ Tvůrce JavaScriptu čelil následujícímu paradoxu:
 2. Jazyk umožňuje přístup k metodám a vlastnostem řetězců, čísel, booleanů a symbolů.
 3. Aby to fungovalo, vytvoří se speciální objekt zvaný „wrapper“ *(česky se mu někdy říká „obal“ -- pozn. překl.)*, který poskytne tuto přídavnou funkcionalitu a pak bude zničen.
 
-Tyto „wrappery“ jsou pro každý primitivní typ jiné a nazývají se `String`, `Number`, `Boolean` a `Symbol`. Poskytují tedy různé sady metod.
+Tyto „objektové wrappery“ jsou pro každý primitivní typ jiné a nazývají se: `String`, `Number`, `Boolean`, `Symbol` a `BigInt`. Poskytují tedy různé sady metod.
 
 Například existuje řetězcová metoda [str.toUpperCase()](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase), která vrací řetězec `str` velkými písmeny.
 
