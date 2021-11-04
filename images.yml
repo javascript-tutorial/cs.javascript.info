@@ -1,404 +1,404 @@
 code-style.svg:
   "No space":
-    text: "Без пробелов"
+    text: "Bez mezer"
     position: "center"
   "between the function name and parentheses":
     position: "center"
-    text: "между именем функции и скобками"
+    text: "mezi názvem funkcí a závorkami"
   "between the parentheses and the parameter":
     position: "center"
-    text: "между скобками и параметрами"
+    text: "mezi závorkami a parametrem"
   "Indentation":
     position: "center"
-    text: "Отступ"
+    text: "Odsazení"
   "2 spaces":
     position: "center"
-    text: "2 пробела"
+    text: "2 mezery"
   "A space ":
     position: "center"
-    text: "Пробел"
+    text: "Mezera"
   "after for/if/while…":
     position: "center"
-    text: "после for/if/while…"
-  "} else { without a line break": "} else { без перевода строки"
+    text: "za for/if/while…"
+  "} else { without a line break": "} else { bez konce řádku"
   "Spaces around a nested call":
     position: "center"
-    text: "Пробелы вокруг вложенного вызова"
+    text: "Mezery kolem vnořeného volání"
   "An empty line":
     position: "center"
-    text: "Пустая строка"
+    text: "Prázdný řádek"
   "between logical blocks":
     position: "center"
-    text: "Между логическими блоками"
-  "Lines are not very long": "Строки не очень длинные"
-  "A semicolon ;": "Точка с запятой ;"
-  "is mandatory": "обязательна"
+    text: "mezi logickými bloky"
+  "Lines are not very long": "Řádky nejsou příliš dlouhé"
+  "A semicolon ;": "Středník ;"
+  "is mandatory": "je povinná"
   "Spaces":
     position: "center"
-    text: "Пробелы"
+    text: "Mezery"
   "around operators":
     position: "center"
-    text: "вокруг операторов"
+    text: "kolem operátorů"
   "Curly brace {":
     position: "center"
-    text: "Фигурная скобка {"
+    text: "Složená závorka {"
   "on the same line, after a space":
     position: "center"
-    text: "на той же строке, после пробела"
+    text: "na stejném řádku za mezerou"
   "A space":
     position: "center"
-    text: "Пробел"
+    text: "Mezera"
   "between":
     position: "center"
-    text: "между"
+    text: "mezi"
   "parameters":
     position: "center"
-    text: "параметрами"
+    text: "parametry"
   "arguments":
     position: "center"
-    text: "аргументами"
+    text: "argumenty"
   "A space between arguments":
     position: "center"
-    text: "Пробел между аргументами"
+    text: "Mezera mezi argumenty"
 
 try-catch-flow.svg:
   "Begin":
-    text: "Начало"
+    text: "Začátek"
     position: "center"
   "No Errors":
-    text: "Нет ошибок"
+    text: "Bez chyb"
     position: "center"
   "An error occured in the code":
-    text: "В коде произошла ошибка"
+    text: "V kódu nastala chyba"
     position: "center"
-  "// code...": "// код..."
+  "// code...": "// kód..."
   "Ignore catch block":
-    text: "Игнорировать блок catch"
+    text: "Ignorovat blok catch"
     position: "center"
   "Ignore the rest of try":
-    text: "Игнорировать остаток try"
+    text: "Ignorovat zbytek try"
     position: "center"
   "Execute catch block":
-    text: "Выполнить блок catch"
+    text: "Vykonat blok catch"
     position: "center"
 
 recursion-pow.svg:
   "Yes":
-    text: "Да"
+    text: "Ano"
     position: "center"
   "No":
-    text: "Нет"
-  "recursive call until n==1": "рекурсивный вызов до n==1"
+    text: "Ne"
+  "recursive call until n==1": "rekurzívní volání až do n==1"
 
 hello-world-render.svg:
-  "1. The browser shows this part": "1. Браузер показывает эту часть"
-  "2. Then runs the script": "2. Затем запускает скрипт"
-  "3. Then shows the rest": "3. Затем показывает остальное"
+  "1. The browser shows this part": "1. Prohlížeč zobrazí tuto část"
+  "2. Then runs the script": "2. Pak spustí skript"
+  "3. Then shows the rest": "3. Pak zobrazí zbytek"
 
 ifelse_task2.svg:
   "Begin":
-    text: "Начало"
+    text: "Začátek"
     position: "center"
   "Other":
-    text: "Другое"
+    text: "Jiné"
     position: "center"
   "You don't know?":
-    text: "Не знаете?"
+    text: "Vy to nevíte?"
     position: "center"
   "Right!":
-    text: "Правильно!"
+    text: "Správně!"
     position: "center"
   "What's the ":
-    text: "Каково"
+    text: "Jaký je"
     position: "center"
   "“official” name of":
-    text: "\"официальное название\""
+    text: "\"oficiální\" název"
     position: "center"
   "Иначе": ""
 
 ifelse_task.svg:
-  "Begin": "Начало"
+  "Begin": "Začátek"
   "Canceled":
     position: "center"
-    text: "Отменено"
+    text: "Zrušeno"
   "Welcome!":
-    text: "Здравствуйте!"
+    text: "Vítejte!"
     position: "center"
-  "I don't know you": "Я вас не знаю"
+  "I don't know you": "Neznám vás"
   "Wrong password":
     position: "center"
-    text: "Неверный пароль"
+    text: "Chybné heslo"
   "Who's there?":
     position: "center"
-    text: "Кто там?"
-  "Password?": "Пароль?"
-  "Cancel": "Отмена"
-  "Admin": "Админ"
-  "TheMaster": "Я Главный"
-  "Other": "Другое"
+    text: "Kdo je tam?"
+  "Password?": "Heslo?"
+  "Cancel": "Zrušeno"
+  "Admin": "Admin"
+  "TheMaster": "Mistr"
+  "Other": "Jiné"
 
 chrome-sources-breakpoint.svg:
   "here's the list":
-    text: "вот список"
+    text: "zde je seznam"
     position: "right"
   "breakpoints":
-    text: "точки останова"
+    text: "breakpointy"
 
 chrome-sources-debugger-pause.svg:
   "see the outer call details":
-    text: "посмотреть детали внешнего вызова"
+    text: "viz detaily vnějšího volání"
     position: "right"
   "watch expressions":
-    text: "смотреть за выражениями"
+    text: "sledovat výrazy"
     position: "right"
   "current variables":
-    text: "текущие переменные"
+    text: "aktuální proměnné"
     position: "right"
 
 chrome-sources-debugger-trace-1.svg:
   "nested calls":
-    text: "вложенные вызовы"
+    text: "vnořená volání"
     position: "right"
 
 chrome-open-sources.svg:
-  open sources: 'открыть исходные файлы'
+  open sources: 'otevřený zdrojový kód'
 
 object-user-empty.svg:
   empty:
-    text: пусто
+    text: prázdný
     position: "center"
 
 garbage-collection-5.svg:
   unreachables:
-    text: недостижимые
+    text: nedosažitelný
 
 array-shift.svg:
   clear:
-    text: очистить
+    text: vymazat
     position: "center"
-  move: передвинуть
-  elements: элементы
-  to the left: влево
+  move: posunout
+  elements: prvky
+  to the left: doleva
 
 array-pop.svg:
   clear:
-    text: очистить
+    text: vymazat
     position: "center"
 
 decorator-makecaching-wrapper.svg:
-  wrapper: 'обёртка'
-  around the function: 'вокруг функции'
+  wrapper: 'wrapper'
+  around the function: 'kolem funkce'
 
 xhr-another-domain.svg:
   _defaults:
     position: "center"
-  Browser: 'Браузер'
-  Server: 'Сервер'
-  HTTP-request: 'HTTP-запрос'
-  HTTP-response: 'HTTP-ответ'
-  '* OR https://javascript.info': '* ИЛИ https://javascript.info'
-  'if the header allows, then success,': 'если заголовок разрешает, то успех'
-  otherwise fail: 'иначе ошибка'
+  Browser: 'Prohlížeč'
+  Server: 'Server'
+  HTTP-request: 'HTTP požadavek'
+  HTTP-response: 'HTTP odpověď'
+  '* OR https://javascript.info': '* NEBO https://javascript.info'
+  'if the header allows, then success,': 'pokud to hlavička umožní, pak úspěch,'
+  otherwise fail: 'jinak chyba'
 
 xhr-preflight.svg:
   _defaults:
     position: "center"
-  Browser: 'Браузер'
-  Server: 'Сервер'
-  Main HTTP-response: 'Основной HTTP-ответ'
-  otherwise error: 'иначе ошибка'
-  'if allowed: success,': 'если разрешено, то успех,'
-  Main HTTP-request: 'Основной HTTP-запрос'
+  Browser: 'Prohlížeč'
+  Server: 'Server'
+  Main HTTP-response: 'Hlavní HTTP odpověď'
+  otherwise error: 'jinak chyba'
+  'if allowed: success,': 'je-li povoleno, úspěch,'
+  Main HTTP-request: 'Hlavní HTTP požadavek'
   preflight:
-    text: 'предзапрос'
+    text: 'předlet'
     position: 'right'
   if allowed:
-    text: 'если разрешено'
+    text: 'je-li povoleno'
     position: 'right'
 
 cors-gmail-messages.svg:
   _defaults:
     position: "center"
-  got the cookie?: 'есть куки?'
-  okay!: 'ок!'
+  got the cookie?: 'máme cookie?'
+  okay!: 'ok!'
 
 websocket-handshake.svg:
   _defaults:
     position: "center"
-  Browser: 'Браузер'
-  Server: 'Сервер'
-  HTTP-request: 'HTTP-запрос'
-  '"Hey, server, let''s talk WebSocket?"': '"Сервер, давай поговорим на WebSocket?"'
-  HTTP-response: 'HTTP-ответ'
-  '"Okay!"': 'Давай!'
-  WebSocket protocol: 'Протокол WebSocket'
+  Browser: 'Prohlížeč'
+  Server: 'Server'
+  HTTP-request: 'HTTP požadavek'
+  '"Hey, server, let''s talk WebSocket?"': '„Servere, popovídáme si na WebSocketu?“'
+  HTTP-response: 'HTTP odpověď'
+  '"Okay!"': 'Dobře!'
+  WebSocket protocol: 'Protokol WebSocket'
 
 long-polling.svg:
   _defaults:
     position: "center"
-  Browser: 'Браузер'
-  Server: 'Сервер'
-  request: 'запрос'
-  connection: 'соединение'
-  hangs: 'висит'
-  connection breaks: 'соединение разорвано'
-  end of request: 'конец запроса'
-  data: 'данные'
+  Browser: 'Prohlížeč'
+  Server: 'Server'
+  request: 'požadavek'
+  connection: 'spojení'
+  hangs: 'visí'
+  connection breaks: 'spojení přerušeno'
+  end of request: 'konec požadavku'
+  data: 'data'
 
 genYield2-2.svg:
   _defaults:
     position: "center"
-  Generator: 'Генератор'
-  Calling code: 'Вызывающий код'
+  Generator: 'Generátor'
+  Calling code: 'Volající kód'
 
 genYield2.svg:
   _defaults:
     position: "center"
-  Generator: 'Генератор'
-  Calling code: 'Вызывающий код'
+  Generator: 'Generátor'
+  Calling code: 'Volající kód'
 
 promise-handler-variants.svg:
   _defaults:
     position: "center"
-  ...with the result: '...с результатом'
-  of the new promise...: 'нового промиса...'
-  'the call of .then(handler) always returns a promise:': 'вызов .then(handler) всегда возвращает промис:'
-  if handler ends with…: 'если handler заканчивается…'
-  return value: 'возвратом значения'
-  return promise: 'возвратом промиса'
-  throw error: 'ошибкой'
-  'that promise settles with:': 'этот промис завершается с:'
+  ...with the result: '...s výsledkem'
+  of the new promise...: 'nového příslibu...'
+  'the call of .then(handler) always returns a promise:': 'volání .then(handler) vždy vrátí příslib:'
+  if handler ends with…: 'pokud handler skončí…'
+  return value: 'vrácením hodnoty'
+  return promise: 'vrácením příslibu'
+  throw error: 'chybou'
+  'that promise settles with:': 'tento příslib se usadí s:'
 
 promiseQueue.svg:
-  '"code finished"': '"код завершён"'
-  handler enqueued: 'handler в очереди'
-  queued handler runs: 'запускается handler из очереди'
-  script execution finished: 'выполнение скрипта завершено'
+  '"code finished"': '„kód ukončen“'
+  handler enqueued: 'handler ve frontě'
+  queued handler runs: 'spouští se handler z fronty'
+  script execution finished: 'výkon skriptu ukončen'
 
 eventLoop-full.svg:
-  script: 'скрипт'
+  script: 'skript'
   event:
-    text: 'событийный'
+    text: 'událost'
     position: 'center'
   loop:
-    text: 'цикл'
+    text: 'cyklus'
     position: 'center'
-  microtasks: 'микрозадачи'
-  render: 'рендеринг'
+  microtasks: 'mikroúlohy'
+  render: 'renderování'
 
 eventLoop.svg:
-  script: 'скрипт'
+  script: 'skript'
   event:
-    text: 'событийный'
+    text: 'událost'
     position: 'center'
   loop:
-    text: 'цикл'
+    text: 'cyklus'
     position: 'center'
   macrotask:
-    text: 'очередь'
+    text: 'makroúloha'
     position: 'center'
   queue:
-    text: 'макрозадач'
+    text: 'fronta'
     position: 'center'
 
 cookie-xsrf.svg:
   _defaults:
     position: "center"
-  got the cookie?: 'есть куки?'
-  okay!: 'отлично!'
+  got the cookie?: 'máme cookie?'
+  okay!: 'ok!'
 
 lexical-environment-global-3.svg:
-  execution start: 'начало выполнения'
+  execution start: 'začátek výkonu'
 
 lexenv-nested-makecounter-5.svg:
   '&lt;empty&gt;':
-    text: '&lt;пусто&gt;'
+    text: '&lt;prázdno&gt;'
     position: 'center'
 
 lexical-environment-global-2.svg:
-  execution start: 'начало выполнения'
-  '&lt;empty&gt;': '&lt;пусто&gt;'
+  execution start: 'začátek výkonu'
+  '&lt;empty&gt;': '&lt;prázdno&gt;'
 
 lexenv-makearmy.svg:
-  for block: 'блочный'
+  for block: 'pro blok'
 
 lexical-environment-simple.svg:
-  'LexicalEnvironment for the call': 'LexicalEnvironment вызова'
+  'LexicalEnvironment for the call': 'LexicalEnvironment pro toto volání'
 
 lexenv-nested-makecounter-2.svg:
-  global LexicalEnvironment: 'глобальное LexicalEnvironment'
-  'of makeCounter() call': 'вызова makeCounter()'
+  global LexicalEnvironment: 'globální LexicalEnvironment'
+  'of makeCounter() call': 'volání makeCounter()'
 
 lexenv-nested-makecounter-6.svg:
-  modified here: 'изменено здесь'
+  modified here: 'zde změněno'
 
 proxy-inherit.svg:
-  '_name: &quot;Guest&quot;': '_name: "Гость"'
+  '_name: &quot;Guest&quot;': '_name: "Host"'
   user (proxied):
-    text: 'user (прокси)'
+    text: 'uživatel (proxy)'
     position: "center"
   original user:
-    text: 'исходный user'
+    text: 'původní uživatel'
     position: "center"
 
 
 proxy-inherit-admin.svg:
-  '_name: &quot;Guest&quot;': '_name: "Гость"'
-  '_name: &quot;Admin&quot;': '_name: "Админ"'
+  '_name: &quot;Guest&quot;': '_name: "Host"'
+  '_name: &quot;Admin&quot;': '_name: "Admin"'
   user (proxied):
-    text: 'user (прокси)'
+    text: 'uživatel (proxy)'
     position: "center"
   original user:
-    text: 'исходный user'
+    text: 'původní uživatel'
     position: "center"
 
 
 selection-firefox.svg:
-  selection: 'выделение'
+  selection: 'výběr'
 
 selection-direction-backward.svg:
-  focus: 'фокус'
-  anchor: 'якорь'
+  focus: 'zaměření'
+  anchor: 'kotva'
 
 selection-direction-forward.svg:
-  focus: 'фокус'
-  anchor: 'якорь'
+  focus: 'zaměření'
+  anchor: 'kotva'
 
 object-prototype-empty.svg:
-  'prototype object': 'прототип object'
+  'prototype object': 'prototypový objekt'
 
 rabbit-prototype-constructor.svg:
-  'default "prototype"': '"prototype" по умолчанию'
+  'default "prototype"': 'defaultně "prototype"'
 
 function-prototype-constructor.svg:
-  'default "prototype"': '"prototype" по умолчанию'
+  'default "prototype"': 'defaultně "prototype"'
 
 rabbit-animal-independent-animal.svg:
-  'name: "My animal"': 'name: "Мой питомец"'
+  'name: "My animal"': 'jméno: "Moje zvíře"'
 
 rabbit-animal-independent-rabbit.svg:
-  'name: "My rabbit"': 'name: "Мой кролик"'
+  'name: "My rabbit"': 'jméno: "Můj králík"'
 
 animal-rabbit-extends.svg:
-  'name: "White Rabbit"': 'name: "Белый кролик"'
+  'name: "White Rabbit"': 'jméno: "Bílý králík"'
 
 animal-rabbit-static.svg:
-  'name: "White Rabbit"': 'name: "Белый кролик"'
+  'name: "White Rabbit"': 'jméno: "Bílý králík"'
 
 class-inheritance-rabbit-animal.svg:
-  'methods of Animal': 'методы Animal'
-  'methods of Rabbit': 'методы Rabbit'
-  'properties of rabbit': 'свойства rabbit'
+  'methods of Animal': 'metody Zvířete'
+  'methods of Rabbit': 'metody Králíka'
+  'properties of rabbit': 'vlastnosti králíka'
 
 proto-animal-rabbit-walk-3.svg:
-  'name: "White Rabbit"': 'name: "Белый кролик"'
+  'name: "White Rabbit"': 'jméno: "Bílý králík'
 
 class-inheritance-rabbit-animal-2.svg:
-  'name: "White Rabbit"': 'name: "Белый кролик"'
+  'name: "White Rabbit"': 'jméno: "Bílý králík"'
 
 event-order-bubbling.svg:
   _defaults:
     position: "center"
-  'Most deeply': 'Самый глубоко'
-  'nested element': 'вложенный элемент'
+  'Most deeply': 'Nejhlouběji'
+  'nested element': 'vnořený prvek'
     
