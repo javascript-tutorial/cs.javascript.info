@@ -24,11 +24,11 @@ Prohlížeč má zabudovaný engine, který se někdy nazývá „virtuální st
 
 Různé enginy mají různá „kódová označení“. Například:
 
-- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- v Chrome a Opeře.
+- [V8](https://en.wikipedia.org/wiki/V8_(JavaScript_engine)) -- v Chrome, Opeře a Edge.
 - [SpiderMonkey](https://cs.wikipedia.org/wiki/SpiderMonkey) -- ve Firefoxu.
-- Existují i jiná krycí jména, například „Trident“ a „Chakra“ pro různé verze Internet Exploreru, „JavaScriptCore“, „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
+- Existují i jiná krycí jména, například „Chakra“ pro Internet Explorer, "JavaScriptCore", „Nitro“ a „SquirrelFish“ pro Safari, a tak dále.
 
-Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývojářských článcích na internetu. Budeme je používat i my. Například „vlastnost X je podporována ve V8“ znamená, že pravděpodobně bude fungovat v Chrome a Opeře.
+Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývojářských článcích na internetu. Budeme je používat i my. Například je-li uvedeno „vlastnost X je podporována ve V8“, znamená to, že pravděpodobně bude fungovat v Chrome, Opeře a Edge.
 
 ```smart header="Jak enginy fungují?"
 
@@ -111,7 +111,7 @@ Příklady takových jazyků:
 - [Flow](http://flow.org/) rovněž přidává typovací systém, ale jiným způsobem. Vyvinul jej Facebook.
 - [Dart](https://www.dartlang.org/) je samostatný jazyk se svým vlastním enginem, který běží v prostředích mimo prohlížeč (např. v mobilních aplikacích), ale i ten může být transpilován do JavaScriptu. Vyvinut firmou Google.
 - [Brython](https://brython.info/) je transpiler Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
-- [Kotlin](https://kotlinlang.org/docs/reference/js-overview.html) je moderní, stručný a bezpečný programovací jazyk, jehož cílem může být prohlížeč i Node.
+- [Kotlin](https://kotlinlang.org/docs/reference/js-overview.html) je moderní, stručný a bezpečný programovací jazyk, jehož cílem může být prohlížeč nebo Node.
 
 Jsou i další. Samozřejmě i když používáme některý z transpilovaných jazyků, měli bychom znát i JavaScript, abychom skutečně porozuměli tomu, co se děje.
 
