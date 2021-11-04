@@ -1,366 +1,366 @@
-# Decorators and forwarding, call/apply
+# Dekorátory a forwarding, call/apply
 
-JavaScript gives exceptional flexibility when dealing with functions. They can be passed around, used as objects, and now we'll see how to *forward* calls between them and *decorate* them.
+JavaScript poskytuje při práci s funkcemi výjimečnou flexibilitu. Funkce mohou být předávány, používány jako objekty a nyní uvidíme, jak *předávat* volání mezi nimi a jak je *dekorovat*.
 
-## Transparent caching
+## Transparentní cachování
 
-Let's say we have a function `slow(x)` which is CPU-heavy, but its results are stable. In other words, for the same `x` it always returns the same result.
+Řekněme, že máme funkci `pomalá(x)`, která značně zatěžuje CPU, ale její výsledky jsou stabilní. Jinými slovy, pro stejná `x` vždy vrací stejný výsledek.
 
-If the function is called often, we may want to cache (remember) the results to avoid spending extra-time on recalculations.
+Je-li funkce volána často, můžeme si její výsledky ukládat do cache (pamatovat), abychom se vyhnuli spotřebování dalšího času při opakovaných výpočtech.
 
-But instead of adding that functionality into `slow()` we'll create a wrapper function, that adds caching. As we'll see, there are many benefits of doing so.
+Místo přidání této funkcionality do `pomalá()` však vytvoříme wrapperovou (obalovou) funkci, která umožní cachování. Jak uvidíme, přinese nám to mnoho výhod.
 
-Here's the code, and explanations follow:
+Zde je kód a vysvětlení bude následovat:
 
 ```js run
-function slow(x) {
-  // there can be a heavy CPU-intensive job here
-  alert(`Called with ${x}`);
+function pomalá(x) {
+  // zde může být výpočet značně zatěžující CPU
+  alert(`Voláno s ${x}`);
   return x;
 }
 
-function cachingDecorator(func) {
+function cachovacíDekorátor(funkce) {
   let cache = new Map();
 
   return function(x) {
-    if (cache.has(x)) {    // if there's such key in cache
-      return cache.get(x); // read the result from it
+    if (cache.has(x)) {    // je-li v cache takový klíč
+      return cache.get(x); // načteme výsledek z cache
     }
 
-    let result = func(x);  // otherwise call func
+    let výsledek = funkce(x);  // jinak zavoláme funkci
 
-    cache.set(x, result);  // and cache (remember) the result
-    return result;
+    cache.set(x, výsledek);  // a výsledek uložíme do cache (zapamatujeme)
+    return výsledek;
   };
 }
 
-slow = cachingDecorator(slow);
+pomalá = cachovacíDekorátor(pomalá);
 
-alert( slow(1) ); // slow(1) is cached and the result returned
-alert( "Again: " + slow(1) ); // slow(1) result returned from cache
+alert( pomalá(1) ); // pomalá(1) se uloží do cache a výsledek se vrátí
+alert( "Znovu: " + pomalá(1) ); // výsledek funkce pomalá(1) vrácený z cache
 
-alert( slow(2) ); // slow(2) is cached and the result returned
-alert( "Again: " + slow(2) ); // slow(2) result returned from cache
+alert( pomalá(2) ); // pomalá(2) se uloží do cache a výsledek se vrátí
+alert( "Znovu: " + pomalá(2) ); // výsledek funkce pomalá(2) vrácený z cache
 ```
 
-In the code above `cachingDecorator` is a *decorator*: a special function that takes another function and alters its behavior.
+Funkce `cachovacíDekorátor` ve výše uvedeném kódu je *dekorátor*: speciální funkce, která přebírá jinou funkci a mění její chování.
 
-The idea is that we can call `cachingDecorator` for any function, and it will return the caching wrapper. That's great, because we can have many functions that could use such a feature, and all we need to do is to apply `cachingDecorator` to them.
+Myšlenkou je, že můžeme volat `cachovacíDekorátor` na kteroukoli funkci a ona nám vrátí cachovací wrapper. To je skvělé, protože můžeme mít mnoho funkcí, které takové chování využijí, a nebudeme potřebovat nic víc než aplikovat na ně `cachovacíDekorátor`.
 
-By separating caching from the main function code we also keep the main code simpler.
+Oddělením cachování od hlavního kódu funkce navíc udržujeme hlavní kód jednodušší.
 
-The result of `cachingDecorator(func)` is a "wrapper": `function(x)` that "wraps" the call of `func(x)` into caching logic:
+Výsledek `cachovacíDekorátor(funkce)` je „wrapper“: `function(x)`, která „obalí“ volání `funkce(x)` do logiky cachování:
 
 ![](decorator-makecaching-wrapper.svg)
 
-From an outside code, the wrapped `slow` function still does the same. It just got a caching aspect added to its behavior.
+Obalená funkce `pomalá` z vnějšího kódu provádí stále totéž, jen byl k jejímu chování přidán aspekt cachování.
 
-To summarize, there are several benefits of using a separate `cachingDecorator` instead of altering the code of `slow` itself:
+Když to tedy shrneme, existuje několik výhod používání oddělené funkce `cachovacíDekorátor` namísto změny kódu samotné funkce `pomalá`:
 
-- The `cachingDecorator` is reusable. We can apply it to another function.
-- The caching logic is separate, it did not increase the complexity of `slow` itself (if there was any).
-- We can combine multiple decorators if needed (other decorators will follow).
+- Funkce `cachovacíDekorátor` je opakovaně použitelná. Můžeme ji aplikovat na další funkci.
+- Logika cachování je oddělená a nezvyšuje složitost samotné funkce `pomalá` (pokud tam nějaká byla).
+- V případě potřeby můžeme zkombinovat více dekorátorů (jiné dekorátory budou následovat).
 
-## Using "func.call" for the context
+## Použití „funkce.call“ pro kontext
 
-The caching decorator mentioned above is not suited to work with object methods.
+Výše uvedený dekorátor cachování není vhodný pro práci s objektovými metodami.
 
-For instance, in the code below `worker.slow()` stops working after the decoration:
+Například v níže uvedeném kódu metoda `pracovník.pomalá()` přestane po dekoraci fungovat:
 
 ```js run
-// we'll make worker.slow caching
-let worker = {
-  someMethod() {
+// přidáme do metody pracovník.pomalá cachování
+let pracovník = {
+  nějakáMetoda() {
     return 1;
   },
 
-  slow(x) {
-    // scary CPU-heavy task here  
-    alert("Called with " + x);
-    return x * this.someMethod(); // (*)
+  pomalá(x) {
+    // zde je úloha značně zatěžující CPU
+    alert("Voláno s " + x);
+    return x * this.nějakáMetoda(); // (*)
   }
 };
 
-// same code as before
-function cachingDecorator(func) {
+// stejný kód jako předtím
+function cachovacíDekorátor(funkce) {
   let cache = new Map();
   return function(x) {
     if (cache.has(x)) {
       return cache.get(x);
     }
 *!*
-    let result = func(x); // (**)
+    let výsledek = funkce(x); // (**)
 */!*
-    cache.set(x, result);
-    return result;
+    cache.set(x, výsledek);
+    return výsledek;
   };
 }
 
-alert( worker.slow(1) ); // the original method works
+alert( pracovník.pomalá(1) ); // původní metoda funguje
 
-worker.slow = cachingDecorator(worker.slow); // now make it caching
+pracovník.pomalá = cachovacíDekorátor(pracovník.pomalá); // nyní přidáme cachování
 
 *!*
-alert( worker.slow(2) ); // Whoops! Error: Cannot read property 'someMethod' of undefined
+alert( pracovník.pomalá(2) ); // Ouha! Chyba: Nelze načíst vlastnost 'nějakáMetoda' z undefined
 */!*
 ```
 
-The error occurs in the line `(*)` that tries to access `this.someMethod` and fails. Can you see why?
+Chyba nastane na řádku `(*)`, který se pokusí přistoupit k `this.nějakáMetoda` a selže. Vidíte proč?
 
-The reason is that the wrapper calls the original function as `func(x)` in the line `(**)`. And, when called like that, the function gets `this = undefined`.
+Důvodem je, že wrapper volá původní funkci jako `funkce(x)` na řádku `(**)`. A když je funkce takto volána, obdrží `this = undefined`.
 
-We would observe a similar symptom if we tried to run:
-
-```js
-let func = worker.slow;
-func(2);
-```
-
-So, the wrapper passes the call to the original method, but without the context `this`. Hence the error.
-
-Let's fix it.
-
-There's a special built-in function method [func.call(context, ...args)](mdn:js/Function/call) that allows to call a function explicitly setting `this`.
-
-The syntax is:
+Podobný problém uvidíme, pokud se pokusíme spustit:
 
 ```js
-func.call(context, arg1, arg2, ...)
+let funkce = pracovník.pomalá;
+funkce(2);
 ```
 
-It runs `func` providing the first argument as `this`, and the next as the arguments.
+Wrapper tedy předá volání původní metodě, ale bez kontextového `this`. Proto nastane chyba.
 
-To put it simply, these two calls do almost the same:
+Opravme to.
+
+Existuje speciální vestavěná funkční metoda [funkce.call(kontext, ...argumenty)](mdn:js/Function/call), která nám umožňuje volat funkci s výslovným nastavením `this`.
+
+Syntaxe je:
+
 ```js
-func(1, 2, 3);
-func.call(obj, 1, 2, 3)
+funkce.call(kontext, arg1, arg2, ...)
 ```
 
-They both call `func` with arguments `1`, `2` and `3`. The only difference is that `func.call` also sets `this` to `obj`.
+Spustí funkci `funkce`, které poskytne první argument jako `this` a další jako její argumenty.
 
-As an example, in the code below we call `sayHi` in the context of different objects: `sayHi.call(user)` runs `sayHi` providing `this=user`, and the next line sets `this=admin`:
+Abychom to zjednodušili, tato dvě volání provádějí skoro totéž:
+```js
+funkce(1, 2, 3);
+funkce.call(obj, 1, 2, 3)
+```
+
+Obě volají funkci `funkce` s argumenty `1`, `2` a `3`. Jediný rozdíl je v tom, že `funkce.call` také nastaví `this` na `obj`.
+
+Jako příklad v níže uvedeném kódu zavoláme `řekniAhoj` v kontextu různých objektů: `řekniAhoj.call(uživatel)` spustí funkci `řekniAhoj`, které poskytne `this=uživatel`, a další řádek nastaví `this=admin`:
 
 ```js run
-function sayHi() {
-  alert(this.name);
+function řekniAhoj() {
+  alert(this.jméno);
 }
 
-let user = { name: "John" };
-let admin = { name: "Admin" };
+let uživatel = { jméno: "Jan" };
+let admin = { jméno: "Admin" };
 
-// use call to pass different objects as "this"
-sayHi.call( user ); // John
-sayHi.call( admin ); // Admin
+// použitím call předáme různé objekty jako „this“
+řekniAhoj.call( uživatel ); // Jan
+řekniAhoj.call( admin ); // Admin
 ```
 
-And here we use `call` to call `say` with the given context and phrase:
+A zde použijeme `call`, abychom zavolali `řekni` se zadaným kontextem a větou:
 
 
 ```js run
-function say(phrase) {
-  alert(this.name + ': ' + phrase);
+function řekni(věta) {
+  alert(this.jméno + ': ' + věta);
 }
 
-let user = { name: "John" };
+let uživatel = { jméno: "Jan" };
 
-// user becomes this, and "Hello" becomes the first argument
-say.call( user, "Hello" ); // John: Hello
+// uživatel se stane this a "Ahoj" se stane prvním argumentem
+řekni.call( uživatel, "Ahoj" ); // Jan: Ahoj
 ```
 
-In our case, we can use `call` in the wrapper to pass the context to the original function:
+V našem případě můžeme použít `call` ve wrapperu, abychom předali kontext původní funkci:
 
 ```js run
-let worker = {
-  someMethod() {
+let pracovník = {
+  nějakáMetoda() {
     return 1;
   },
 
-  slow(x) {
-    alert("Called with " + x);
-    return x * this.someMethod(); // (*)
+  pomalá(x) {
+    alert("Voláno s " + x);
+    return x * this.nějakáMetoda(); // (*)
   }
 };
 
-function cachingDecorator(func) {
+function cachovacíDekorátor(funkce) {
   let cache = new Map();
   return function(x) {
     if (cache.has(x)) {
       return cache.get(x);
     }
 *!*
-    let result = func.call(this, x); // "this" is passed correctly now
+    let výsledek = funkce.call(this, x); // „this“ se nyní předá správně
 */!*
-    cache.set(x, result);
-    return result;
+    cache.set(x, výsledek);
+    return výsledek;
   };
 }
 
-worker.slow = cachingDecorator(worker.slow); // now make it caching
+pracovník.pomalá = cachovacíDekorátor(pracovník.pomalá); // nyní do ní přidejme cachování
 
-alert( worker.slow(2) ); // works
-alert( worker.slow(2) ); // works, doesn't call the original (cached)
+alert( pracovník.pomalá(2) ); // funguje
+alert( pracovník.pomalá(2) ); // funguje, nevolá originál (výsledek je v cache)
 ```
 
-Now everything is fine.
+Nyní je všechno v pořádku.
 
-To make it all clear, let's see more deeply how `this` is passed along:
+Abychom to všechno objasnili, podívejme se hlouběji na to, jak se `this` předává:
 
-1. After the decoration `worker.slow` is now the wrapper `function (x) { ... }`.
-2. So when `worker.slow(2)` is executed, the wrapper gets `2` as an argument and `this=worker` (it's the object before dot).
-3. Inside the wrapper, assuming the result is not yet cached, `func.call(this, x)` passes the current `this` (`=worker`) and the current argument (`=2`) to the original method.
+1. Funkce `pracovník.pomalá` je po dekoraci wrapper `function (x) { ... }`.
+2. Když je tedy spuštěn `pracovník.pomalá(2)`, wrapper obdrží `2` jako argument a `this=pracovník` (je to objekt před tečkou).
+3. Uvnitř wrapperu za předpokladu, že výsledek ještě není v cache, `funkce.call(this, x)` předá původní metodě aktuální `this` (`=pracovník`) a aktuální argument (`=2`).
 
-## Going multi-argument
+## Buďme multi  argumentoví
 
-Now let's make `cachingDecorator` even more universal. Till now it was working only with single-argument functions.
+Učiňme nyní `cachovacíDekorátor` ještě univerzálnější. Prozatím funguje jen pro funkce s jediným argumentem.
 
-Now how to cache the multi-argument `worker.slow` method?
+Jak nyní cachovat metodu `pracovník.pomalá` s více argumenty?
 
 ```js
-let worker = {
-  slow(min, max) {
-    return min + max; // scary CPU-hogger is assumed
+let pracovník = {
+  pomalá(min, max) {
+    return min + max; // předpokládáme velkou zátěž CPU
   }
 };
 
-// should remember same-argument calls
-worker.slow = cachingDecorator(worker.slow);
+// měla by si pamatovat volání se stejnými argumenty
+pracovník.pomalá = cachovacíDekorátor(pracovník.pomalá);
 ```
 
-Previously, for a single argument `x` we could just `cache.set(x, result)` to save the result and `cache.get(x)` to retrieve it. But now we need to remember the result for a *combination of arguments* `(min,max)`. The native `Map` takes single value only as the key.
+Předtím jsme pro jediný argument `x` mohli jednoduše volat `cache.set(x, výsledek)` pro uložení výsledku a `cache.get(x)` pro jeho získání. Nyní si však musíme pamatovat výsledek pro *kombinaci argumentů* `(min,max)`. Nativní `Map` přijímá jako klíč pouze jedinou hodnotu.
 
-There are many solutions possible:
+Možných řešení je mnoho:
 
-1. Implement a new (or use a third-party) map-like data structure that is more versatile and allows multi-keys.
-2. Use nested maps: `cache.set(min)` will be a `Map` that stores the pair `(max, result)`. So we can get `result` as `cache.get(min).get(max)`.
-3. Join two values into one. In our particular case we can just use a string `"min,max"` as the `Map` key. For flexibility, we can allow to provide a *hashing function* for the decorator, that knows how to make one value from many.
+1. Implementovat novou datovou strukturu podobnou mapě (nebo použít nějakou od třetí strany), která je univerzálnější a umožňuje vícenásobné klíče.
+2. Použít vnořené mapy: `cache.set(min)` bude `Map`, v níž bude uložena dvojice `(max, výsledek)`. Pak můžeme získat `výsledek` pomocí `cache.get(min).get(max)`.
+3. Spojit dvě hodnoty do jedné. V našem konkrétním případě bychom jako klíč pro `Map` mohli použít jednoduše řetězec `"min,max"`. Pro flexibilitu můžeme umožnit dekorátoru poskytnout *hashovací funkci*, která umí vytvořit z mnoha hodnot jedinou.
 
-For many practical applications, the 3rd variant is good enough, so we'll stick to it.
+Pro řadu praktických aplikací postačí třetí varianta, takže se zaměříme na ni.
 
-Also we need to pass not just `x`, but all arguments in `func.call`. Let's recall that in a `function()` we can get a pseudo-array of its arguments as `arguments`, so `func.call(this, x)` should be replaced with `func.call(this, ...arguments)`.
+Také do `funkce.call` potřebujeme předávat nejen `x`, ale všechny argumenty. Vzpomeňme si, že ve `function()` můžeme získat pseudopole argumentů této funkce jako `arguments`, takže `funkce.call(this, x)` můžeme nahradit za `funkce.call(this, ...arguments)`.
 
-Here's a more powerful `cachingDecorator`:
+Zde je silnější `cachovacíDekorátor`:
 
 ```js run
-let worker = {
-  slow(min, max) {
-    alert(`Called with ${min},${max}`);
+let pracovník = {
+  pomalá(min, max) {
+    alert(`Voláno s ${min},${max}`);
     return min + max;
   }
 };
 
-function cachingDecorator(func, hash) {
+function cachovacíDekorátor(funkce, hash) {
   let cache = new Map();
   return function() {
 *!*
-    let key = hash(arguments); // (*)
+    let klíč = hash(arguments); // (*)
 */!*
-    if (cache.has(key)) {
-      return cache.get(key);
+    if (cache.has(klíč)) {
+      return cache.get(klíč);
     }
 
 *!*
-    let result = func.call(this, ...arguments); // (**)
+    let výsledek = funkce.call(this, ...arguments); // (**)
 */!*
 
-    cache.set(key, result);
-    return result;
+    cache.set(klíč, výsledek);
+    return výsledek;
   };
 }
 
-function hash(args) {
-  return args[0] + ',' + args[1];
+function hash(argumenty) {
+  return argumenty[0] + ',' + argumenty[1];
 }
 
-worker.slow = cachingDecorator(worker.slow, hash);
+pracovník.pomalá = cachovacíDekorátor(pracovník.pomalá, hash);
 
-alert( worker.slow(3, 5) ); // works
-alert( "Again " + worker.slow(3, 5) ); // same (cached)
+alert( pracovník.pomalá(3, 5) ); // funguje
+alert( "Znovu " + pracovník.pomalá(3, 5) ); // totéž (v cache)
 ```
 
-Now it works with any number of arguments (though the hash function would also need to be adjusted to allow any number of arguments. An interesting way to handle this will be covered below).
+Nyní to funguje pro libovolný počet argumentů (ačkoli bychom museli přizpůsobit libovolnému počtu argumentů i hashovací funkci. Zajímavý způsob, jak to zvládnout, bude probrán níže).
 
-There are two changes:
+Jsou tady dvě změny:
 
-- In the line `(*)` it calls `hash` to create a single key from `arguments`. Here we use a simple "joining" function that turns arguments `(3, 5)` into the key `"3,5"`. More complex cases may require other hashing functions.
-- Then `(**)` uses `func.call(this, ...arguments)` to pass both the context and all arguments the wrapper got (not just the first one) to the original function.
+- Na řádku `(*)` voláme `hash` k vytvoření jediného klíče z `arguments`. Zde použijeme jednoduchou „spojovací“ funkci, která převede argumenty `(3, 5)` na klíč `"3,5"`. Složitější případy mohou vyžadovat jiné hashovací funkce.
+- Pak `(**)` používá `funkce.call(this, ...arguments)` k předání kontextu i všech argumentů, které wrapper obdržel (nejen prvního), původní funkci.
 
-## func.apply
+## funkce.apply
 
-Instead of `func.call(this, ...arguments)` we could use `func.apply(this, arguments)`.
+Místo `funkce.call(this, ...arguments)` můžeme použít `funkce.apply(this, arguments)`.
 
-The syntax of built-in method [func.apply](mdn:js/Function/apply) is:
+Syntaxe vestavěné metody [funkce.apply](mdn:js/Function/apply) je:
 
 ```js
-func.apply(context, args)
+funkce.apply(kontext, argumenty)
 ```
 
-It runs the `func` setting `this=context` and using an array-like object `args` as the list of arguments.
+Metoda spustí funkci `funkce` tak, že nastaví `this=kontext` a použije objekt podobný poli `argumenty` jako seznam argumentů.
 
-The only syntax difference between `call` and `apply` is that `call` expects a list of arguments, while `apply` takes an array-like object with them.
+Jediný syntaktický rozdíl mezi `call` a `apply` je, že `call` očekává seznam argumentů, zatímco `apply` přebírá objekt podobný poli, který je obsahuje.
 
-So these two calls are almost equivalent:
+Tato dvě volání jsou tedy téměř ekvivalentní:
 
 ```js
-func.call(context, ...args);
-func.apply(context, args);
+funkce.call(kontext, ...argumenty);
+funkce.apply(kontext, argumenty);
 ```
 
-They perform the same call of `func` with given context and arguments.
+Obě provádějí stejné volání `funkce` se zadaným kontextem a argumenty.
 
-There's only a subtle difference regarding `args`:
+Je tady jen jeden drobný rozdíl týkající se objektu `argumenty`:
 
-- The spread syntax `...` allows to pass *iterable* `args` as the list to `call`.
-- The `apply` accepts only *array-like* `args`.
+- Roztažená syntaxe `...` umožňuje přidat *iterovatelný* objekt `argumenty` jako seznam do `call`.
+- `apply` přijímá jako `argumenty` jedině *objekt podobný poli*.
 
-...And for objects that are both iterable and array-like, such as a real array, we can use any of them, but `apply` will probably be faster, because most JavaScript engines internally optimize it better.
+...A pro objekty, které jsou současně iterovatelné a podobné poli, například skutečné pole, můžeme použít kteroukoli z nich, ale `apply` bude pravděpodobně rychlejší, jelikož většina enginů JavaScriptu ji interně lépe optimalizuje.
 
-Passing all arguments along with the context to another function is called *call forwarding*.
+Předávání všech argumentů společně s kontextem do jiné funkce se nazývá *call forwarding* (nenašel jsem odpovídající český výraz a žádný mě nenapadá -- pozn. překl.).
 
-That's the simplest form of it:
+Toto je jeho nejjednodušší forma:
 
 ```js
 let wrapper = function() {
-  return func.apply(this, arguments);
+  return funkce.apply(this, arguments);
 };
 ```
 
-When an external code calls such `wrapper`, it is indistinguishable from the call of the original function `func`.
+Když externí kód zavolá takový `wrapper`, je to nerozlišitelné od volání původní funkce `funkce`.
 
-## Borrowing a method [#method-borrowing]
+## Vypůjčení metody [#method-borrowing]
 
-Now let's make one more minor improvement in the hashing function:
+Proveďme nyní ještě jedno malé vylepšení hashovací funkce:
 
 ```js
-function hash(args) {
-  return args[0] + ',' + args[1];
+function hash(argumenty) {
+  return argumenty[0] + ',' + argumenty[1];
 }
 ```
 
-As of now, it works only on two arguments. It would be better if it could glue any number of `args`.
+Prozatím funguje jen na dvou argumentech. Bylo by lepší, kdyby dokázala v `argumenty` zvládnout jakýkoli počet argumentů.
 
-The natural solution would be to use [arr.join](mdn:js/Array/join) method:
+Přirozené řešení by bylo použít metodu [arr.join](mdn:js/Array/join):
 
 ```js
-function hash(args) {
-  return args.join();
+function hash(argumenty) {
+  return argumenty.join();
 }
 ```
 
-...Unfortunately, that won't work. Because we are calling `hash(arguments)`, and `arguments` object is both iterable and array-like, but not a real array.
+...Naneštěstí to nebude fungovat. Je to proto, že voláme `hash(arguments)` a objekt `arguments` je sice iterovatelný i podobný poli, ale není to skutečné pole.
 
-So calling `join` on it would fail, as we can see below:
+Volání `join` na něm tedy selže, jak vidíme níže:
 
 ```js run
 function hash() {
 *!*
-  alert( arguments.join() ); // Error: arguments.join is not a function
+  alert( arguments.join() ); // Chyba: arguments.join není funkce
 */!*
 }
 
 hash(1, 2);
 ```
 
-Still, there's an easy way to use array join:
+Stále je tady však snadný způsob, jak použít spojení polí:
 
 ```js run
 function hash() {
@@ -372,55 +372,55 @@ function hash() {
 hash(1, 2);
 ```
 
-The trick is called *method borrowing*.
+Tento trik se nazývá *vypůjčení metody*.
 
-We take (borrow) a join method from a regular array (`[].join`) and use `[].join.call` to run it in the context of `arguments`.
+Vezmeme (vypůjčíme si) spojovací metodu z běžného pole (`[].join`) a použijeme `[].join.call`, abychom ji spustili v kontextu `arguments`.
 
-Why does it work?
+Proč to funguje?
 
-That's because the internal algorithm of the native method `arr.join(glue)` is very simple.
+Je to proto, že interní algoritmus nativní metody `pole.join(spojka)` je velmi jednoduchý.
 
-Taken from the specification almost "as-is":
+Převezmeme jej ze specifikace téměř „tak, jak tam je“:
 
-1. Let `glue` be the first argument or, if no arguments, then a comma `","`.
-2. Let `result` be an empty string.
-3. Append `this[0]` to `result`.
-4. Append `glue` and `this[1]`.
-5. Append `glue` and `this[2]`.
-6. ...Do so until `this.length` items are glued.
-7. Return `result`.
+1. Nechť `spojka` je první argument, nebo nejsou-li argumenty, pak to bude čárka `","`.
+2. Nechť `výsledek` je prázdný řetězec.
+3. Připojíme `this[0]` k `výsledek`.
+4. Připojíme `spojka` a `this[1]`.
+5. Připojíme `spojka` a `this[2]`.
+6. ...Budeme to dělat tak dlouho, než bude spojeno `this.length` prvků.
+7. Vrátíme `výsledek`.
 
-So, technically it takes `this` and joins `this[0]`, `this[1]` ...etc together. It's intentionally written in a way that allows any array-like `this` (not a coincidence, many methods follow this practice). That's why it also works with `this=arguments`.
+Technicky to tedy vezme `this` a spojí dohromady `this[0]`, `this[1]` atd. Je to úmyslně napsáno způsobem, který umožňuje jakékoli `this` podobné poli (to není náhoda, tuto praktiku používá mnoho metod). To je také důvod, proč to funguje s `this=arguments`.
 
-## Decorators and function properties
+## Dekorátory a vlastnosti funkcí
 
-It is generally safe to replace a function or a method with a decorated one, except for one little thing. If the original function had properties on it, like `func.calledCount` or whatever, then the decorated one will not provide them. Because that is a wrapper. So one needs to be careful if one uses them.
+Nahradit funkci nebo metodu dekorovanou funkcí či metodou je obecně bezpečné až na jednu drobnost. Má-li původní funkce v sobě vlastnosti, např. `funkce.početVolání` nebo cokoli jiného, dekorovaná funkce je neposkytne, protože to je wrapper. Člověk tedy musí být opatrný, jestliže je používá.
 
-E.g. in the example above if `slow` function had any properties on it, then `cachingDecorator(slow)` is a wrapper without them.
+Například jestliže ve výše uvedeném příkladu má funkce `pomalá` v sobě nějaké vlastnosti, pak `cachovacíDekorátor(pomalá)` je wrapper a tyto vlastnosti nemá.
 
-Some decorators may provide their own properties. E.g. a decorator may count how many times a function was invoked and how much time it took, and expose this information via wrapper properties.
+Některé dekorátory mohou poskytnout své vlastní vlastnosti. Např. dekorátor může počítat, kolikrát byla funkce volána a jak dlouhou dobu zabrala, a poskytnout tuto informaci jako vlastnost wrapperu.
 
-There exists a way to create decorators that keep access to function properties, but this requires using a special `Proxy` object to wrap a function. We'll discuss it later in the article <info:proxy#proxy-apply>.
+Existuje způsob, jak vytvářet dekorátory, které zachovávají přístup k vlastnostem funkcí, ale to vyžaduje použití speciálního objektu `Proxy` k obalení funkce. Probereme to později v článku <info:proxy#proxy-apply>.
 
-## Summary
+## Shrnutí
 
-*Decorator* is a wrapper around a function that alters its behavior. The main job is still carried out by the function.
+*Dekorátor* je obal okolo funkce, který mění její chování. Funkce stále odvádí svou hlavní práci.
 
-Decorators can be seen as "features" or "aspects" that can be added to a function. We can add one or add many. And all this without changing its code!
+Na dekorátory lze pohlížet jako na „prvky“ nebo „aspekty“, které lze přidávat do funkce. Můžeme přidat jeden nebo mnoho. A to všechno beze změny kódu funkce!
 
-To implement `cachingDecorator`, we studied methods:
+Pro implementaci dekorátoru `cachovacíDekorátor` jsme prostudovali metody:
 
-- [func.call(context, arg1, arg2...)](mdn:js/Function/call) -- calls `func` with given context and arguments.
-- [func.apply(context, args)](mdn:js/Function/apply) -- calls `func` passing `context` as `this` and array-like `args` into a list of arguments.
+- [funkce.call(kontext, arg1, arg2...)](mdn:js/Function/call) -- volá funkci `funkce` se zadaným kontextem a argumenty.
+- [funkce.apply(kontext, argumenty)](mdn:js/Function/apply) -- volá funkci `funkce`, které předá `kontext` jako `this` a objekt podobný poli `argumenty` do seznamu argumentů.
 
-The generic *call forwarding* is usually done with `apply`:
+Generický *call forwarding* se obvykle provádí pomocí `apply`:
 
 ```js
 let wrapper = function() {
-  return original.apply(this, arguments);
+  return původníFunkce.apply(this, arguments);
 };
 ```
 
-We also saw an example of *method borrowing* when we take a method from an object and `call` it in the context of another object. It is quite common to take array methods and apply them to `arguments`. The alternative is to use rest parameters object that is a real array.
+Viděli jsme také příklad *vypůjčení funkce*, když jsme vzali metodu z objektu a volali ji pomocí `call` v kontextu jiného objektu. Brát metody polí a aplikovat je na `arguments` je poměrně běžné. Alternativou je použít objekt ostatních parametrů, který je skutečným polem.
 
-There are many decorators there in the wild. Check how well you got them by solving the tasks of this chapter.
+V divočině číhá mnoho dekorátorů. Řešením úloh v této kapitole si ověřte, jak dobře jste je pochopili.

@@ -1,295 +1,294 @@
-# Rest parameters and spread syntax
+# Ostatní parametry a roztažená syntaxe
 
-Many JavaScript built-in functions support an arbitrary number of arguments.
+Mnoho vestavěných funkcí v JavaScriptu podporuje volitelný počet argumentů.
 
-For instance:
+Například:
 
-- `Math.max(arg1, arg2, ..., argN)` -- returns the greatest of the arguments.
-- `Object.assign(dest, src1, ..., srcN)` -- copies properties from `src1..N` into `dest`.
-- ...and so on.
+- `Math.max(arg1, arg2, ..., argN)` -- vrátí největší z argumentů.
+- `Object.assign(cíl, zdroj1, ..., zdrojN)` -- zkopíruje vlastnosti ze `zdroj1..N` do `cíl`.
+- ...a tak dále.
 
-In this chapter we'll learn how to do the same. And also, how to pass arrays to such functions as parameters.
+V této kapitole se naučíme, jak udělat totéž a také jak předávat do takových funkcí pole jako parametry.
 
-## Rest parameters `...`
+## Ostatní parametry `...`
 
-A function can be called with any number of arguments, no matter how it is defined.
+Funkci můžeme volat s libovolným počtem argumentů, bez ohledu na to, jak je definována.
 
-Like here:
+Například zde:
 ```js run
-function sum(a, b) {
+function součet(a, b) {
   return a + b;
 }
 
-alert( sum(1, 2, 3, 4, 5) );
+alert( součet(1, 2, 3, 4, 5) );
 ```
 
-There will be no error because of "excessive" arguments. But of course in the result only the first two will be counted.
+Kvůli „přebytečným“ argumentům nenastane chyba, ale do výsledku se samozřejmě budou počítat jen první dva.
 
-The rest of the parameters can be included in the function definition by using three dots `...` followed by the name of the array that will contain them. The dots literally mean "gather the remaining parameters into an array".
+Zbytek parametrů můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi ostatní parametry do pole“.
 
-For instance, to gather all arguments into array `args`:
+Například abychom shromáždili všechny argumenty do pole `argumenty`:
 
 ```js run
-function sumAll(...args) { // args is the name for the array
-  let sum = 0;
+function sečtiVše(...argumenty) { // argumenty je název pole
+  let součet = 0;
 
-  for (let arg of args) sum += arg;
+  for (let arg of argumenty) součet += arg;
 
-  return sum;
+  return součet;
 }
 
-alert( sumAll(1) ); // 1
-alert( sumAll(1, 2) ); // 3
-alert( sumAll(1, 2, 3) ); // 6
+alert( sečtiVše(1) ); // 1
+alert( sečtiVše(1, 2) ); // 3
+alert( sečtiVše(1, 2, 3) ); // 6
 ```
 
-We can choose to get the first parameters as variables, and gather only the rest.
+Můžeme se rozhodnout, že první parametry uložíme do proměnných a shromáždíme pouze ty ostatní.
 
-Here the first two arguments go into variables and the rest go into `titles` array:
+Zde budou první dva argumenty uloženy do proměnných a ostatní se uloží do pole `tituly`:
 
 ```js run
-function showName(firstName, lastName, ...titles) {
-  alert( firstName + ' ' + lastName ); // Julius Caesar
+function zobrazJméno(křestníJméno, příjmení, ...tituly) {
+  alert( křestníJméno + ' ' + příjmení ); // Julius Caesar
 
-  // the rest go into titles array
-  // i.e. titles = ["Consul", "Imperator"]
-  alert( titles[0] ); // Consul
-  alert( titles[1] ); // Imperator
-  alert( titles.length ); // 2
+  // ostatní přijdou do pole tituly
+  // tj. tituly = ["Konzul", "Imperátor"]
+  alert( tituly[0] ); // Konzul
+  alert( tituly[1] ); // Imperátor
+  alert( tituly.length ); // 2
 }
 
-showName("Julius", "Caesar", "Consul", "Imperator");
+zobrazJméno("Julius", "Caesar", "Konzul", "Imperátor");
 ```
 
-````warn header="The rest parameters must be at the end"
-The rest parameters gather all remaining arguments, so the following does not make sense and causes an error:
+````warn header="Ostatní parametry musejí být na konci"
+Ostatní parametry shromažďují všechny zbývající argumenty, takže následující zápis nedává smysl a vyvolá chybu:
 
 ```js
-function f(arg1, ...rest, arg2) { // arg2 after ...rest ?!
-  // error
+function f(arg1, ...zbytek, arg2) { // arg2 po ...zbytek ?!
+  // chyba
 }
 ```
 
-The `...rest` must always be last.
+`...zbytek` musí být vždy poslední.
 ````
 
-## The "arguments" variable
+## Proměnná „arguments“
 
-There is also a special array-like object named `arguments` that contains all arguments by their index.
+Existuje také speciální objekt podobný poli nazvaný `arguments`, který obsahuje všechny argumenty podle jejich indexu.
 
-For instance:
+Například:
 
 ```js run
-function showName() {
+function zobrazJméno() {
   alert( arguments.length );
   alert( arguments[0] );
   alert( arguments[1] );
 
-  // it's iterable
+  // je iterovatelný
   // for(let arg of arguments) alert(arg);
 }
 
-// shows: 2, Julius, Caesar
-showName("Julius", "Caesar");
+// zobrazí: 2, Julius, Caesar
+zobrazJméno("Julius", "Caesar");
 
-// shows: 1, Ilya, undefined (no second argument)
-showName("Ilya");
+// zobrazí: 1, Ilja, undefined (druhý argument není)
+zobrazJméno("Ilja");
 ```
 
-In old times, rest parameters did not exist in the language, and using `arguments` was the only way to get all arguments of the function. And it still works, we can find it in the old code.
+Za starých časů ostatní parametry v jazyce neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starém kódu.
 
-But the downside is that although `arguments` is both array-like and iterable, it's not an array. It does not support array methods, so we can't call `arguments.map(...)` for example.
+Nevýhodou však je, že ačkoli objekt `arguments` je podobný poli a iterovatelný, není to pole. Nepodporuje metody polí, takže nemůžeme volat například `arguments.map(...)`.
 
-Also, it always contains all arguments. We can't capture them partially, like we did with rest parameters.
+Navíc obsahuje vždy všechny argumenty. Nemůžeme je zachytit jen částečně, jak to můžeme udělat u ostatních parametrů.
 
-So when we need these features, then rest parameters are preferred.
+Když tedy tuto vlastnost potřebujeme, dáváme přednost ostatním parametrům.
 
-````smart header="Arrow functions do not have `\"arguments\"`"
-If we access the `arguments` object from an arrow function, it takes them from the outer "normal" function.
+````smart header="Šipkové funkce nemají `„arguments“`"
+Jestliže přistoupíme k objektu `arguments` v šipkové funkci, vezme jej z vnější „normální“ funkce.
 
-Here's an example:
+Příklad:
 
 ```js run
 function f() {
-  let showArg = () => alert(arguments[0]);
-  showArg();
+  let zobrazArgumenty = () => alert(arguments[0]);
+  zobrazArgumenty();
 }
 
 f(1); // 1
 ```
 
-As we remember, arrow functions don't have their own `this`. Now we know they don't have the special `arguments` object either.
+Jak si pamatujeme, šipkové funkce nemají vlastní `this`. Nyní víme, že nemají ani speciální objekt `arguments`.
 ````
 
 
-## Spread syntax [#spread-syntax]
+## Roztažená syntaxe [#spread-syntax]
 
-We've just seen how to get an array from the list of parameters.
+Právě jsme viděli, jak vytvořit pole ze seznamu parametrů.
 
-But sometimes we need to do exactly the reverse.
+Někdy však potřebujeme udělat pravý opak.
 
-For instance, there's a built-in function [Math.max](mdn:js/Math/max) that returns the greatest number from a list:
+Například existuje vestavěná funkce [Math.max](mdn:js/Math/max), která vrací největší číslo ze seznamu:
 
 ```js run
 alert( Math.max(3, 5, 1) ); // 5
 ```
 
-Now let's say we have an array `[3, 5, 1]`. How do we call `Math.max` with it?
+Nyní řekněme, že máme pole `[3, 5, 1]`. Jak na ně zavoláme `Math.max`?
 
-Passing it "as is" won't work, because `Math.max` expects a list of numeric arguments, not a single array:
+Předat pole „tak, jak je“ nebude fungovat, protože `Math.max` očekává seznam číselných argumentů, ne jediné pole:
 
 ```js run
-let arr = [3, 5, 1];
+let pole = [3, 5, 1];
 
 *!*
-alert( Math.max(arr) ); // NaN
+alert( Math.max(pole) ); // NaN
 */!*
 ```
 
-And surely we can't manually list items in the code `Math.max(arr[0], arr[1], arr[2])`, because we may be unsure how many there are. As our script executes, there could be a lot, or there could be none. And that would get ugly.
+A samozřejmě nemůžeme ručně vyjmenovat prvky pole v kódu `Math.max(pole[0], pole[1], pole[2])`, protože nevíme jistě, kolik jich tam bude. Když se náš skript spustí, může jich tam být mnoho a nemusí tam být žádný. A bylo by to ošklivé.
 
-*Spread syntax* to the rescue! It looks similar to rest parameters, also using `...`, but does quite the opposite.
+Zachrání nás *roztažená (spread) syntaxe*! Podobá se ostatním parametrům v tom, že také používá `...`, ale činí to přesně naopak.
 
-When `...arr` is used in the function call, it "expands" an iterable object `arr` into the list of arguments.
+Když ve volání funkce použijeme `...pole`, „roztáhne“ iterovatelný objekt `pole` do seznamu argumentů.
 
-For `Math.max`:
+Pro `Math.max`:
 
 ```js run
-let arr = [3, 5, 1];
+let pole = [3, 5, 1];
 
-alert( Math.max(...arr) ); // 5 (spread turns array into a list of arguments)
+alert( Math.max(...pole) ); // 5 (roztažení přetvoří pole na seznam argumentů)
 ```
 
-We also can pass multiple iterables this way:
+Tímto způsobem můžeme předat i více iterovatelných objektů:
 
 ```js run
-let arr1 = [1, -2, 3, 4];
-let arr2 = [8, 3, -8, 1];
+let pole1 = [1, -2, 3, 4];
+let pole2 = [8, 3, -8, 1];
 
-alert( Math.max(...arr1, ...arr2) ); // 8
+alert( Math.max(...pole1, ...pole2) ); // 8
 ```
 
-We can even combine the spread syntax with normal values:
+Můžeme dokonce kombinovat roztaženou syntaxi s běžnými hodnotami:
 
 
 ```js run
-let arr1 = [1, -2, 3, 4];
-let arr2 = [8, 3, -8, 1];
+let pole1 = [1, -2, 3, 4];
+let pole2 = [8, 3, -8, 1];
 
-alert( Math.max(1, ...arr1, 2, ...arr2, 25) ); // 25
+alert( Math.max(1, ...pole1, 2, ...pole2, 25) ); // 25
 ```
 
-Also, the spread syntax can be used to merge arrays:
+Roztaženou syntaxi můžeme použít i ke spojení polí:
 
 ```js run
-let arr = [3, 5, 1];
-let arr2 = [8, 9, 15];
+let pole = [3, 5, 1];
+let pole2 = [8, 9, 15];
 
 *!*
-let merged = [0, ...arr, 2, ...arr2];
+let spojené = [0, ...pole, 2, ...pole2];
 */!*
 
-alert(merged); // 0,3,5,1,2,8,9,15 (0, then arr, then 2, then arr2)
+alert(spojené); // 0,3,5,1,2,8,9,15 (0, pak pole, pak 2, pak pole2)
 ```
 
-In the examples above we used an array to demonstrate the spread syntax, but any iterable will do.
+Ve výše uvedených příkladech jsme k předvedení roztažené syntaxe použili pole, ale funguje to na jakémkoli iterovatelném objektu.
 
-For instance, here we use the spread syntax to turn the string into array of characters:
+Například zde použijeme roztaženou syntaxi k převedení řetězce na pole znaků:
 
 ```js run
-let str = "Hello";
+let řetězec = "Ahoj";
 
-alert( [...str] ); // H,e,l,l,o
+alert( [...řetězec] ); // A,h,o,j
 ```
 
-The spread syntax internally uses iterators to gather elements, the same way as `for..of` does.
+Roztažená syntaxe interně využívá iterátory ke shromažďování prvků stejným způsobem, jako cyklus `for..of`.
 
-So, for a string, `for..of` returns characters and `...str` becomes `"H","e","l","l","o"`. The list of characters is passed to array initializer `[...str]`.
+Takže pro řetězec `for..of` vrátí znaky a `...řetězec` se převede na `"A","h","o","j"`. Seznam znaků se předá do inicializátoru pole `[...řetězec]`.
 
-For this particular task we could also use `Array.from`, because it converts an iterable (like a string) into an array:
+Pro tento konkrétní úkol bychom mohli použít i `Array.from`, protože tato metoda převádí iterovatelný objekt (např. řetězec) na pole:
 
 ```js run
-let str = "Hello";
+let řetězec = "Ahoj";
 
-// Array.from converts an iterable into an array
-alert( Array.from(str) ); // H,e,l,l,o
+// Array.from převede iterovatelný objekt na pole
+alert( Array.from(řetězec) ); // A,h,o,j
 ```
 
-The result is the same as `[...str]`.
+Výsledek je stejný jako u `[...řetězec]`.
 
-But there's a subtle difference between `Array.from(obj)` and `[...obj]`:
+Existuje však drobný rozdíl mezi `Array.from(obj)` a `[...obj]`:
 
-- `Array.from` operates on both array-likes and iterables.
-- The spread syntax works only with iterables.
+- `Array.from` funguje na poli podobných objektech i na iterovatelných objektech.
+- Roztažená syntaxe funguje jen na iterovatelných objektech.
 
-So, for the task of turning something into an array, `Array.from` tends to be more universal.
+Pro účel převedení něčeho na pole tedy `Array.from` bývá univerzálnější.
 
+## Kopírování pole/objektu
 
-## Copy an array/object
+Pamatujete si, jak jsme [dříve](info:object-copy#cloning-and-merging-object-assign) hovořili o `Object.assign()`?
 
-Remember when we talked about `Object.assign()` [in the past](info:object-copy#cloning-and-merging-object-assign)?
-
-It is possible to do the same thing with the spread syntax.
+S roztaženou syntaxí můžeme udělat totéž.
 
 ```js run
-let arr = [1, 2, 3];
+let pole = [1, 2, 3];
 
 *!*
-let arrCopy = [...arr]; // spread the array into a list of parameters
-                        // then put the result into a new array
+let kopiePole = [...pole]; // roztáhneme pole do seznamu parametrů
+                           // pak uložíme výsledek do nového pole
 */!*
 
-// do the arrays have the same contents?
-alert(JSON.stringify(arr) === JSON.stringify(arrCopy)); // true
+// mají tato pole stejný obsah?
+alert(JSON.stringify(pole) === JSON.stringify(kopiePole)); // true
 
-// are the arrays equal?
-alert(arr === arrCopy); // false (not same reference)
+// jsou si tato pole rovna?
+alert(pole === kopiePole); // false (není to stejný odkaz)
 
-// modifying our initial array does not modify the copy:
-arr.push(4);
-alert(arr); // 1, 2, 3, 4
-alert(arrCopy); // 1, 2, 3
+// modifikace našeho původního pole nezmění kopii:
+pole.push(4);
+alert(pole); // 1, 2, 3, 4
+alert(kopiePole); // 1, 2, 3
 ```
 
-Note that it is possible to do the same thing to make a copy of an object:
+Všimněte si, že můžeme udělat totéž, abychom vytvořili kopii objektu:
 
 ```js run
-let obj = { a: 1, b: 2, c: 3 };
+let objekt = { a: 1, b: 2, c: 3 };
 
 *!*
-let objCopy = { ...obj }; // spread the object into a list of parameters
-                          // then return the result in a new object
+let kopieObjektu = { ...objekt }; // roztáhneme objekt do seznamu parametrů
+                                  // pak vrátíme výsledek v novém objektu
 */!*
 
-// do the objects have the same contents?
-alert(JSON.stringify(obj) === JSON.stringify(objCopy)); // true
+// mají tyto objekty stejný obsah?
+alert(JSON.stringify(objekt) === JSON.stringify(kopieObjektu)); // true
 
-// are the objects equal?
-alert(obj === objCopy); // false (not same reference)
+// jsou si tyto objekty rovny?
+alert(objekt === kopieObjektu); // false (není to stejný odkaz)
 
-// modifying our initial object does not modify the copy:
-obj.d = 4;
-alert(JSON.stringify(obj)); // {"a":1,"b":2,"c":3,"d":4}
-alert(JSON.stringify(objCopy)); // {"a":1,"b":2,"c":3}
+// modifikace našeho původního objektu nezmění kopii:
+objekt.d = 4;
+alert(JSON.stringify(objekt)); // {"a":1,"b":2,"c":3,"d":4}
+alert(JSON.stringify(kopieObjektu)); // {"a":1,"b":2,"c":3}
 ```
 
-This way of copying an object is much shorter than `let objCopy = Object.assign({}, obj)` or for an array `let arrCopy = Object.assign([], arr)` so we prefer to use it whenever we can.
+Tento způsob kopírování objektu je mnohem kratší než `let kopieObjektu = Object.assign({}, objekt)` nebo pro pole `let kopiePole = Object.assign([], pole)`, takže mu dáváme přednost, kde jen můžeme.
 
 
-## Summary
+## Shrnutí
 
-When we see `"..."` in the code, it is either rest parameters or the spread syntax.
+Když v kódu vidíme `"..."`, jsou to buď ostatní parametry, nebo roztažená syntaxe.
 
-There's an easy way to distinguish between them:
+Je možné mezi nimi snadno rozlišovat:
 
-- When `...` is at the end of function parameters, it's "rest parameters" and gathers the rest of the list of arguments into an array.
-- When `...` occurs in a function call or alike, it's called a "spread syntax" and expands an array into a list.
+- Když je `...` na konci funkčních parametrů, jsou to „ostatní parametry“ a shromažďují zbytek seznamu argumentů do pole.
+- Když se `...` vyskytuje ve volání funkce nebo něčem podobném, nazývá se „roztažená syntaxe“ a roztáhne pole do seznamu.
 
-Use patterns:
+Vzory použití:
 
-- Rest parameters are used to create functions that accept any number of arguments.
-- The spread syntax is used to pass an array to functions that normally require a list of many arguments.
+- Ostatní parametry se používají k vytváření funkcí, které přijímají volitelný počet argumentů.
+- Roztažená syntaxe se používá k předání pole do funkcí, které normálně vyžadují seznam mnoha argumentů.
 
-Together they help to travel between a list and an array of parameters with ease.
+Společně nám pomáhají snadno přepínat mezi seznamem a polem parametrů.
 
-All arguments of a function call are also available in "old-style" `arguments`: array-like iterable object.
+Všechny argumenty volání funkce jsou rovněž k dispozici v objektu `arguments` ve starém stylu: iterovatelném objektu podobném poli.
