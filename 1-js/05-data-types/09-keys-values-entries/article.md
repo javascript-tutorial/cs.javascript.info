@@ -101,5 +101,3 @@ alert(dvojnásobnéCeny.maso); // 8
 ```   
 
 Na první pohled to může vypadat obtížně, ale jakmile to jednou nebo dvakrát použijete, bude snadné tomu porozumět. Tímto způsobem můžeme vytvořit silné řetězce transformací.
-
-It may look difficult at first sight, but becomes easy to understand after you use it once or twice. We can make powerful chains of transforms this way.
