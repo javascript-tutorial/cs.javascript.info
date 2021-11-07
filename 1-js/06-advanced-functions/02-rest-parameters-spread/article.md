@@ -1,4 +1,4 @@
-# Ostatní parametry a roztažená syntaxe
+# Zbytkové parametry a roztažená syntaxe
 
 Mnoho vestavěných funkcí v JavaScriptu podporuje volitelný počet argumentů.
 
@@ -10,7 +10,7 @@ Například:
 
 V této kapitole se naučíme, jak udělat totéž a také jak předávat do takových funkcí pole jako parametry.
 
-## Ostatní parametry `...`
+## Zbytkové parametry `...`
 
 Funkci můžeme volat s libovolným počtem argumentů, bez ohledu na to, jak je definována.
 
@@ -25,7 +25,7 @@ alert( součet(1, 2, 3, 4, 5) );
 
 Kvůli „přebytečným“ argumentům nenastane chyba, ale do výsledku se samozřejmě budou počítat jen první dva.
 
-Zbytek parametrů můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi ostatní parametry do pole“.
+Zbytek parametrů můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi zbytek parametrů do pole“.
 
 Například abychom shromáždili všechny argumenty do pole `argumenty`:
 
@@ -61,8 +61,8 @@ function zobrazJméno(křestníJméno, příjmení, ...tituly) {
 zobrazJméno("Julius", "Caesar", "Konzul", "Imperátor");
 ```
 
-````warn header="Ostatní parametry musejí být na konci"
-Ostatní parametry shromažďují všechny zbývající argumenty, takže následující zápis nedává smysl a vyvolá chybu:
+````warn header="Zbytkové parametry musejí být na konci"
+Zbytkové parametry shromažďují všechny zbývající argumenty, takže následující zápis nedává smysl a vyvolá chybu:
 
 ```js
 function f(arg1, ...zbytek, arg2) { // arg2 po ...zbytek ?!
@@ -96,13 +96,13 @@ zobrazJméno("Julius", "Caesar");
 zobrazJméno("Ilja");
 ```
 
-Za starých časů ostatní parametry v jazyce neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starém kódu.
+Za starých časů zbytkové parametry v jazyce neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starém kódu.
 
 Nevýhodou však je, že ačkoli objekt `arguments` je podobný poli a iterovatelný, není to pole. Nepodporuje metody polí, takže nemůžeme volat například `arguments.map(...)`.
 
-Navíc obsahuje vždy všechny argumenty. Nemůžeme je zachytit jen částečně, jak to můžeme udělat u ostatních parametrů.
+Navíc obsahuje vždy všechny argumenty. Nemůžeme je zachytit jen částečně, jak to můžeme udělat u zbytkových parametrů.
 
-Když tedy tuto vlastnost potřebujeme, dáváme přednost ostatním parametrům.
+Když tedy tuto vlastnost potřebujeme, dáváme přednost zbytkovým parametrům.
 
 ````smart header="Šipkové funkce nemají `„arguments“`"
 Jestliže přistoupíme k objektu `arguments` v šipkové funkci, vezme jej z vnější „normální“ funkce.
@@ -148,7 +148,7 @@ alert( Math.max(pole) ); // NaN
 
 A samozřejmě nemůžeme ručně vyjmenovat prvky pole v kódu `Math.max(pole[0], pole[1], pole[2])`, protože nevíme jistě, kolik jich tam bude. Když se náš skript spustí, může jich tam být mnoho a nemusí tam být žádný. A bylo by to ošklivé.
 
-Zachrání nás *roztažená (spread) syntaxe*! Podobá se ostatním parametrům v tom, že také používá `...`, ale činí to přesně naopak.
+Zachrání nás *roztažená (spread) syntaxe*! Podobá se zbytkovým parametrům v tom, že také používá `...`, ale činí to přesně naopak.
 
 Když ve volání funkce použijeme `...pole`, „roztáhne“ iterovatelný objekt `pole` do seznamu argumentů.
 
@@ -277,16 +277,16 @@ Tento způsob kopírování objektu je mnohem kratší než `let kopieObjektu = 
 
 ## Shrnutí
 
-Když v kódu vidíme `"..."`, jsou to buď ostatní parametry, nebo roztažená syntaxe.
+Když v kódu vidíme `"..."`, jsou to buď zbytkové parametry, nebo roztažená syntaxe.
 
 Je možné mezi nimi snadno rozlišovat:
 
-- Když je `...` na konci funkčních parametrů, jsou to „ostatní parametry“ a shromažďují zbytek seznamu argumentů do pole.
+- Když je `...` na konci funkčních parametrů, jsou to „zbytkové parametry“ a shromažďují zbytek seznamu argumentů do pole.
 - Když se `...` vyskytuje ve volání funkce nebo něčem podobném, nazývá se „roztažená syntaxe“ a roztáhne pole do seznamu.
 
 Vzory použití:
 
-- Ostatní parametry se používají k vytváření funkcí, které přijímají volitelný počet argumentů.
+- Zbytkové parametry se používají k vytváření funkcí, které přijímají volitelný počet argumentů.
 - Roztažená syntaxe se používá k předání pole do funkcí, které normálně vyžadují seznam mnoha argumentů.
 
 Společně nám pomáhají snadno přepínat mezi seznamem a polem parametrů.

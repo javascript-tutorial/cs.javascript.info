@@ -365,6 +365,7 @@ selection-direction-forward.svg:
   anchor: 'kotva'
 
 object-prototype-empty.svg:
+  'object': 'objekt'
   'prototype object': 'prototypový objekt'
 
 rabbit-prototype-constructor.svg:

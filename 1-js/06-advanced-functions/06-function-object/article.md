@@ -91,7 +91,7 @@ alert(f2.length); // 2
 alert(mnoho.length); // 2
 ```
 
-Zde vidíme, že ostatní parametry se nepočítají.
+Zde vidíme, že zbytkové parametry se nepočítají.
 
 Vlastnost `length` se někdy používá pro [introspekci](https://en.wikipedia.org/wiki/Type_introspection) ve funkcích, které operují s jinými funkcemi.
 
@@ -340,7 +340,7 @@ Funkce jsou objekty.
 Zde jsme probrali jejich vlastnosti:
 
 - `name` -- název funkce. Obvykle se přebírá z definice funkce, ale pokud tam není, JavaScript se pokusí odhadnout jej z kontextu (tj. z přiřazení).
-- `length` -- počet argumentů v definici funkce. Ostatní parametry se nepočítají.
+- `length` -- počet argumentů v definici funkce. Zbytkové parametry se nepočítají.
 
 Je-li funkce deklarována jako funkční výraz (ne v hlavním toku kódu) a ten obsahuje název, nazývá se pojmenovaný funkční výraz. Název lze používat uvnitř funkce, aby se na ni odkazoval, pro rekurzívní volání a podobně.
 

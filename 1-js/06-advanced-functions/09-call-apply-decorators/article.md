@@ -421,6 +421,6 @@ let wrapper = function() {
 };
 ```
 
-Viděli jsme také příklad *vypůjčení funkce*, když jsme vzali metodu z objektu a volali ji pomocí `call` v kontextu jiného objektu. Brát metody polí a aplikovat je na `arguments` je poměrně běžné. Alternativou je použít objekt ostatních parametrů, který je skutečným polem.
+Viděli jsme také příklad *vypůjčení funkce*, když jsme vzali metodu z objektu a volali ji pomocí `call` v kontextu jiného objektu. Brát metody polí a aplikovat je na `arguments` je poměrně běžné. Alternativou je použít objekt zbytkových parametrů, který je skutečným polem.
 
 V divočině číhá mnoho dekorátorů. Řešením úloh v této kapitole si ověřte, jak dobře jste je pochopili.
