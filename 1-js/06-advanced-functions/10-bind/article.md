@@ -187,8 +187,8 @@ let uživatel = {
 
 let řekni = uživatel.řekni.bind(uživatel);
 
-řekni("Ahoj"); // Ahoj, Jan (argument "Ahoj" je předán do řekni)
-řekni("Nashle"); // Nashle, Jan ("Nashle" je předán do řekni)
+řekni("Ahoj"); // Ahoj, Jan! (argument "Ahoj" je předán do řekni)
+řekni("Nashle"); // Nashle, Jan! ("Nashle" je předán do řekni)
 ```
 
 ````smart header="Pohodlná metoda: `bindAll`"

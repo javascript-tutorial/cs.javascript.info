@@ -23,7 +23,7 @@ describe("podleVlastnosti", function(){
       { jméno: "Jan", věk: 20, příjmení: "Janík"},
     ];
     let seřazeníPodleVěkuOdpověď = uživatelé.sort(podleVlastnosti("věk"));
-    assert.deepEqual(seřazeníPodleVěkuKlíč, seřazeníPodleVěkuKlíč);
+    assert.deepEqual(seřazeníPodleVěkuKlíč, seřazeníPodleVěkuOdpověď);
   });
 
   it("seřadíme uživatele podle příjmení", function(){

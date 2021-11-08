@@ -73,7 +73,7 @@ Soubory se skripty se přidávají do HTML pomocí atributu `src`:
 <script src="/cesta/ke/skriptu.js"></script>
 ```
 
-Zde `/cesta/ke/skriptu.js` je absolutní cesta ke skriptu z kořenové složky webového sídla. Můžeme uvést i relativní cestu od aktuální stránky, např. `src="script.js"` by znamenalo soubor `"script.js"` v aktuální složce.
+Zde `/cesta/ke/skriptu.js` je absolutní cesta ke skriptu z kořenové složky webového sídla. Můžeme uvést i relativní cestu od aktuální stránky. Například `src="script.js"`, stejně jako `src="./script.js"`, by znamenalo soubor `"script.js"` v aktuální složce.
 
 Můžeme poskytnout i úplné URL. Například:
 

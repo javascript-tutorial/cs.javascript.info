@@ -81,7 +81,7 @@ Následuje jejich úplný seznam:
 | Znak | Popis |
 |------|-------|
 |`\n`|Nový řádek|
-|`\r`|Návrat vozíku: samostatně se nepoužívá. Textové soubory ve Windows používají k reprezentaci konce řádku kombinaci dvou znaků `\r\n`. |
+|`\r`|V textových souborech ve Windows reprezentuje konec řádku kombinace dvou znaků `\r\n`, zatímco v jiných OS je to pouze `\n`. Je to z historických důvodů, většina softwaru pod Windows rozumí i `\n`.|
 |`\'`, `\"`|Apostrof, uvozovky|
 |`\\`|Zpětné lomítko|
 |`\t`|Tabulátor|
