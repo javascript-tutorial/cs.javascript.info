@@ -10,35 +10,35 @@ JavaScript had prototypal inheritance from the beginning. It was one of the core
 But in the old times, there was no direct access to it. The only thing that worked reliably was a `"prototype"` property of the constructor function, described in this chapter. So there are many scripts that still use it.
 ```
 
-Please note that `F.prototype` here means a regular property named `"prototype"` on `F`. It sounds something similar to the term "prototype", but here we really mean a regular property with this name.
+Please note that `F.prototype` here means a regular property named `"prototype"` on `F`. It sounds something similar to the term "prototype", but here we really mean a regular property with this jméno.
 
 Here's the example:
 
 ```js run
-let animal = {
-  eats: true
+let zvíře = {
+  žere: true
 };
 
-function Rabbit(name) {
-  this.name = name;
+function Rabbit(jméno) {
+  this.jméno = jméno;
 }
 
 *!*
-Rabbit.prototype = animal;
+Rabbit.prototype = zvíře;
 */!*
 
-let rabbit = new Rabbit("White Rabbit"); //  rabbit.__proto__ == animal
+let králík = new Rabbit("Bílý králík"); //  králík.__proto__ == zvíře
 
-alert( rabbit.eats ); // true
+alert( králík.žere ); // true
 ```
 
-Setting `Rabbit.prototype = animal` literally states the following: "When a `new Rabbit` is created, assign its `[[Prototype]]` to `animal`".
+Setting `Rabbit.prototype = zvíře` literally states the following: "When a `new Rabbit` is created, assign its `[[Prototype]]` to `zvíře`".
 
 That's the resulting picture:
 
-![](proto-constructor-animal-rabbit.svg)
+![](proto-constructor-zvíře-králík.svg)
 
-On the picture, `"prototype"` is a horizontal arrow, meaning a regular property, and `[[Prototype]]` is vertical, meaning the inheritance of `rabbit` from `animal`.
+On the picture, `"prototype"` is a horizontal arrow, meaning a regular property, and `[[Prototype]]` is vertical, meaning the inheritance of `králík` from `zvíře`.
 
 ```smart header="`F.prototype` only used at `new F` time"
 `F.prototype` property is only used when `new F` is called, it assigns `[[Prototype]]` of the new object.
@@ -81,27 +81,27 @@ function Rabbit() {}
 // by default:
 // Rabbit.prototype = { constructor: Rabbit }
 
-let rabbit = new Rabbit(); // inherits from {constructor: Rabbit}
+let králík = new Rabbit(); // inherits from {constructor: Rabbit}
 
-alert(rabbit.constructor == Rabbit); // true (from prototype)
+alert(králík.constructor == Rabbit); // true (from prototype)
 ```
 
-![](rabbit-prototype-constructor.svg)
+![](králík-prototype-constructor.svg)
 
 We can use `constructor` property to create a new object using the same constructor as the existing one.
 
 Like here:
 
 ```js run
-function Rabbit(name) {
-  this.name = name;
-  alert(name);
+function Rabbit(jméno) {
+  this.jméno = jméno;
+  alert(jméno);
 }
 
-let rabbit = new Rabbit("White Rabbit");
+let králík = new Rabbit("Bílý králík");
 
 *!*
-let rabbit2 = new rabbit.constructor("Black Rabbit");
+let rabbit2 = new králík.constructor("Black Rabbit");
 */!*
 ```
 
@@ -120,12 +120,12 @@ For instance:
 ```js run
 function Rabbit() {}
 Rabbit.prototype = {
-  jumps: true
+  skáče: true
 };
 
-let rabbit = new Rabbit();
+let králík = new Rabbit();
 *!*
-alert(rabbit.constructor === Rabbit); // false
+alert(králík.constructor === Rabbit); // false
 */!*
 ```
 
@@ -136,7 +136,7 @@ function Rabbit() {}
 
 // Not overwrite Rabbit.prototype totally
 // just add to it
-Rabbit.prototype.jumps = true
+Rabbit.prototype.skáče = true
 // the default Rabbit.prototype.constructor is preserved
 ```
 
@@ -144,7 +144,7 @@ Or, alternatively, recreate the `constructor` property manually:
 
 ```js
 Rabbit.prototype = {
-  jumps: true,
+  skáče: true,
 *!*
   constructor: Rabbit
 */!*
@@ -167,7 +167,7 @@ Everything is quite simple, just a few notes to make things clear:
 On regular objects the `prototype` is nothing special:
 ```js
 let user = {
-  name: "John",
+  jméno: "Jan",
   prototype: "Bla-bla" // no magic at all
 };
 ```

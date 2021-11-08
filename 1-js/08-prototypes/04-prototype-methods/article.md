@@ -16,40 +16,40 @@ These should be used instead of `__proto__`.
 For instance:
 
 ```js run
-let animal = {
-  eats: true
+let zvíře = {
+  žere: true
 };
 
-// create a new object with animal as a prototype
+// create a new object with zvíře as a prototype
 *!*
-let rabbit = Object.create(animal);
+let králík = Object.create(zvíře);
 */!*
 
-alert(rabbit.eats); // true
+alert(králík.žere); // true
 
 *!*
-alert(Object.getPrototypeOf(rabbit) === animal); // true
+alert(Object.getPrototypeOf(králík) === zvíře); // true
 */!*
 
 *!*
-Object.setPrototypeOf(rabbit, {}); // change the prototype of rabbit to {}
+Object.setPrototypeOf(králík, {}); // change the prototype of králík to {}
 */!*
 ```
 
 `Object.create` has an optional second argument: property descriptors. We can provide additional properties to the new object there, like this:
 
 ```js run
-let animal = {
-  eats: true
+let zvíře = {
+  žere: true
 };
 
-let rabbit = Object.create(animal, {
-  jumps: {
+let králík = Object.create(zvíře, {
+  skáče: {
     value: true
   }
 });
 
-alert(rabbit.jumps); // true
+alert(králík.skáče); // true
 ```
 
 The descriptors are in the same format as described in the chapter <info:property-descriptors>.
@@ -79,7 +79,7 @@ As of now we have all these ways at our disposal.
 Why was `__proto__` replaced by the functions `getPrototypeOf/setPrototypeOf`? That's an interesting question, requiring us to understand why `__proto__` is bad. Read on to get the answer.
 
 ```warn header="Don't change `[[Prototype]]` on existing objects if speed matters"
-Technically, we can get/set `[[Prototype]]` at any time. But usually we only set it once at the object creation time and don't modify it anymore: `rabbit` inherits from `animal`, and that is not going to change.
+Technically, we can get/set `[[Prototype]]` at any time. But usually we only set it once at the object creation time and don't modify it anymore: `králík` inherits from `zvíře`, and that is not going to change.
 
 And JavaScript engines are highly optimized for this. Changing a prototype "on-the-fly" with `Object.setPrototypeOf` or `obj.__proto__=` is a very slow operation as it breaks internal optimizations for object property access operations. So avoid it unless you know what you're doing, or JavaScript speed totally doesn't matter for you.
 ```
