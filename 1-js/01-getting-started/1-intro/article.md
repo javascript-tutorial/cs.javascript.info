@@ -59,7 +59,11 @@ Například JavaScript v prohlížeči může:
 
 ## Co NEMŮŽE JavaScript v prohlížeči dělat?
 
+<<<<<<< HEAD
 Schopnosti JavaScriptu v prohlížeči jsou omezeny v zájmu bezpečnosti uživatele. Cílem je zabránit zlé webové stránce v přístupu k soukromým informacím nebo v poškození uživatelových dat.
+=======
+JavaScript's abilities in the browser are limited for the sake of a user's safety. The aim is to prevent an evil webpage from accessing private information or harming the user's data.
+>>>>>>> 4541b7af7584014a676da731f6e8774da5e059f6
 
 Příklady takových omezení:
 
@@ -84,9 +88,15 @@ Jestliže použijete JavaScript mimo prohlížeč, např. na serveru, tato omeze
 Na JavaScriptu jsou nejméně *tři* skvělé věci:
 
 ```compare
+<<<<<<< HEAD
 + Plná integrace s HTML/CSS.
 + Jednoduché věci se v něm dělají jednoduše.
 + Je podporován ve všech významných prohlížečích a standardně bývá povolen.
+=======
++ Full integration with HTML/CSS.
++ Simple things are done simply.
++ Supported by all major browsers and enabled by default.
+>>>>>>> 4541b7af7584014a676da731f6e8774da5e059f6
 ```
 JavaScript je jediná prohlížečová technologie, která má všechny tyto tři vlastnosti současně.
 
@@ -117,6 +127,12 @@ Jsou i další. Samozřejmě i když používáme některý z transpilovaných j
 
 ## Shrnutí
 
+<<<<<<< HEAD
 - JavaScript byl původně vytvořen jako jazyk určený výhradně pro prohlížeč, ale dnes se používá i v mnoha jiných prostředích.
 - Dnes si JavaScript vydobyl unikátní postavení jako nejrozsáhleji přijímaný prohlížečový jazyk s plnou integrací s HTML/CSS.
 - Existuje mnoho jazyků, které jsou „transpilovány“ do JavaScriptu a poskytují určité vlastnosti. Až zvládnete JavaScript, doporučujeme vám, abyste se na ně alespoň krátce podívali.
+=======
+- JavaScript was initially created as a browser-only language, but it is now used in many other environments as well.
+- Today, JavaScript has a unique position as the most widely-adopted browser language, fully integrated with HTML/CSS.
+- There are many languages that get "transpiled" to JavaScript and provide certain features. It is recommended to take a look at them, at least briefly, after mastering JavaScript.
+>>>>>>> 4541b7af7584014a676da731f6e8774da5e059f6
