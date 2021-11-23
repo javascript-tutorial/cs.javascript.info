@@ -2,7 +2,7 @@
 
 V programování často chceme něco vzít a rozšířit.
 
-Například máme objekt `uživatel` s jeho vlastnostmi a metodai a chceme vytvořit objekty `admin` a `host` jako jeho mírně pozměněné varianty. Rádi bychom použili to, co máme v objektu `uživatel`, nekopírovali ani znovu neimplementovali jeho metody, jen postavili nový objekt na jeho základu.
+Například máme objekt `uživatel` s jeho vlastnostmi a metodami a chceme vytvořit objekty `admin` a `host` jako jeho mírně pozměněné varianty. Rádi bychom použili to, co máme v objektu `uživatel`, nekopírovali ani znovu neimplementovali jeho metody, jen postavili nový objekt na jeho základu.
 
 *Prototypová dědičnost* je prvek jazyka, který nám s tím pomůže.
 
@@ -12,7 +12,7 @@ V JavaScriptu mají objekty speciální skrytou vlastnost `[[Prototype]]` (jak j
 
 ![prototype](object-prototype-empty.svg)
 
-Když načítáme vlastnost z objektu a ta tam není, JavaScript ji automaticky převezme z prototypu. V programování se to nazývá „prototypová dědičnost“. Brzy prostudujeme mnoho příkladů této dědičnosti, stejně jako lepší jazykové prvky, které jsou na ní postaveny.
+Když načítáme vlastnost z objektu a ta tam není, JavaScript ji automaticky převezme z prototypu. V programování se to nazývá „prototypová dědičnost“. Brzy prostudujeme mnoho příkladů této dědičnosti i chytřejší jazykové prvky, které jsou na ní postaveny.
 
 Vlastnost `[[Prototype]]` je interní a skrytá, ale je mnoho způsobů, jak ji nastavit.
 
@@ -31,11 +31,11 @@ králík.__proto__ = zvíře; // nastaví králík.[[Prototype]] = zvíře
 */!*
 ```
 
-Když nyní načteme nějakou vlastnost z objektu `králík` a ta bude chybět, JavaScript ji automaticky převezme z objektu `zvíře`.
+Když nyní budeme načítat nějakou vlastnost z objektu `králík` a ta tam nebude, JavaScript ji automaticky převezme z objektu `zvíře`.
 
 Například:
 
-```js
+```js run
 let zvíře = {
   žere: true
 };
@@ -60,9 +60,9 @@ Když se pak `alert` pokusí načíst vlastnost `králík.žere` `(**)`, v objek
 
 ![](proto-animal-rabbit.svg)
 
-Zde můžeme říci, že „`zvíře` je prototyp objektu `králík`“ nebo že „`králík` prototypově dědí z objektu `zvíře`“.
+Zde můžeme říci, že „objekt `zvíře` je prototyp objektu `králík`“ nebo že „objekt `králík` je prototypově zděděn z objektu `zvíře`“.
 
-Má-li tedy `zvíře` mnoho užitečných vlastností a metod, pak se stanou automaticky dostupnými i v objektu `králík`. Takové vlastnosti se nazývají „zděděné“.
+Má-li tedy `zvíře` množství užitečných vlastností a metod, pak se stanou automaticky dostupnými i v objektu `králík`. Takové vlastnosti se nazývají „zděděné“.
 
 Máme-li metodu v objektu `zvíře`, můžeme ji volat na objektu `králík`:
 
@@ -132,9 +132,9 @@ Existují jen dvě omezení:
 Možná je to zřejmé, ale přesto: `[[Prototype]]` může být pouze jeden. Objekt nemůže dědit ze dvou jiných objektů.
 
 ```smart header="`__proto__` je historický getter/setter pro `[[Prototype]]`"
-Je běžnou chybou začínajících vývojářů neznat rozdíl mezi nimi dvěma.
+Je běžnou chybou začínajících vývojářů neznat mezi těmito dvěma rozdíl.
 
-Prosíme všimněte si, že `__proto__` *není totéž* jako interní vlastnost `[[Prototype]]`. Je to getter/setter pro `[[Prototype]]`. Později uvidíme situace, v nichž na tom záleží. Prozatím to jen mějme na paměti, když si budujeme porozumění jazyku JavaScript.
+Prosíme všimněte si, že `__proto__` *není totéž* jako interní vlastnost `[[Prototype]]`. Je to getter/setter vlastnosti `[[Prototype]]`. Později uvidíme situace, v nichž na tom záleží. Prozatím to jen mějme na paměti, když se snažíme porozumět jazyku JavaScript.
 
 Vlastnost `__proto__` je poněkud zastaralá. Existuje z historických důvodů, moderní JavaScript naznačuje, že bychom místo čtení/nastavování prototypu měli používat funkce `Object.getPrototypeOf/Object.setPrototypeOf`. Tyto funkce rovněž probereme později.
 
@@ -218,7 +218,7 @@ Odpověď je jednoduchá: na `this` prototyp vůbec nepůsobí.
 
 **Nezáleží na tom, kde je metoda nalezena: zda v objektu nebo v prototypu. Při volání metody je `this` vždy objekt před tečkou.**
 
-Volání setteru `admin.celéJméno=` tedy jako `this` použije `admin`, ne `uživatel`.
+Volání setteru `admin.celéJméno=` tedy jako `this` použije objekt `admin`, ne `uživatel`.
 
 To je ve skutečnosti nesmírně důležitá věc, neboť můžeme mít velký objekt s mnoha metodami a objekty, které z něj budou dědit. A když budou dědící objekty spouštět zděděné metody, budou modifikovat jen svůj vlastní stav a ne stav onoho velkého objektu.
 
@@ -324,13 +324,13 @@ Odpověď je jednoduchá: není enumerovatelná. Stejně jako všechny ostatní 
 ```smart header="Téměř všechny ostatní metody pro získávání klíčů/hodnot ignorují zděděné vlastnosti"
 Téměř všechny ostatní metody pro získávání klíčů/hodnot, například `Object.keys`, `Object.values` a tak dále, zděděné vlastnosti ignorují.
 
-Operují pouze na samotném objektu. Vlastnosti z prototypu se *neberou* v úvahu.
+Pracují pouze nad samotným objektem. Vlastnosti z prototypu se *neberou* v úvahu.
 ```
 
 ## Shrnutí
 
 - V JavaScriptu mají všechny vlastnosti skrytou vlastnost `[[Prototype]]`, která je buď jiný objekt, nebo `null`.
-- K přístupu k ni můžeme použít `obj.__proto__` (je to historický getter/setter, existují i jiné způsoby, které brzy probereme).
+- K přístupu k ní můžeme použít `obj.__proto__` (je to historický getter/setter, existují i jiné způsoby, které brzy probereme).
 - Objekt, na který odkazuje `[[Prototype]]`, se nazývá „prototyp“.
 - Chceme-li načíst vlastnost `obj` nebo volat metodu a ta neexistuje, pak se JavaScript pokusí najít ji v prototypu.
 - Operace zápisu a mazání pracují přímo nad objektem a nepoužívají prototyp (za předpokladu, že je to datová vlastnost a ne setter).

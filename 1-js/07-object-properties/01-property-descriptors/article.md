@@ -12,7 +12,7 @@ V této kapitole prostudujeme další možnosti konfigurace a v další se podí
 Vlastnosti objektů mají kromě hodnoty **`value`** tři speciální atributy (tzv. „vlajky“ nebo „přepínače“):
 
 - **`writable`** *(zapisovatelná)* -- je-li `true`, může být hodnota vlastnosti změněna, jinak je jen pro čtení.
-- **`enumerable`** *(enumerovatelná)* -- je-li `true`, vlastnost se objevuje v cyklech, jinak se v nich neobjeví.
+- **`enumerable`** *(enumerovatelná)* -- je-li `true`, vlastnost se ukazuje v cyklech, jinak se v nich neukáže.
 - **`configurable`** *(konfigurovatelná)* -- je-li `true`, vlastnost může být smazána a tyto atributy mohou být měněny, jinak ne.
 
 Prozatím jsme je neviděli, protože se obecně neukazují. Když vytvoříme vlastnost „obvyklým způsobem“, všechny jsou `true`. Můžeme je však kdykoli změnit.
@@ -98,7 +98,7 @@ alert( JSON.stringify(deskriptor, null, 2 ) );
 
 Porovnejte si ji s výše uvedenou vlastností `uživatel.jméno` „vytvořenou normálně“: nyní jsou všechny přepínače nepravdivé. Pokud to není to, co chceme, můžeme je v objektu `deskriptor` nastavit na `true`.
 
-Nyní se v příkladu podívejme na efekty přepínačů.
+Nyní se na efekty přepínačů podívejme na příkladu.
 
 ## Nezapisovatelná
 

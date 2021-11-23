@@ -370,9 +370,12 @@ object-prototype-empty.svg:
 
 rabbit-prototype-constructor.svg:
   'default "prototype"': 'defaultně "prototype"'
+  'Rabbit': 'Králík'
+  'rabbit': 'králík'
 
 function-prototype-constructor.svg:
-  'default "prototype"': 'defaultně "prototype"'
+  'default "prototype"': 'defaultní "prototype"'
+  'Rabbit': 'Králík'
 
 rabbit-animal-independent-animal.svg:
   'name: "My animal"': 'jméno: "Moje zvíře"'
@@ -392,7 +395,12 @@ class-inheritance-rabbit-animal.svg:
   'properties of rabbit': 'vlastnosti králíka'
 
 proto-animal-rabbit-walk-3.svg:
-  'name: "White Rabbit"': 'jméno: "Bílý králík'
+  'name: "White Rabbit"': 'jméno: "Bílý králík"'
+  'animal': 'zvíře'
+  'walk: function': 'jdi: function'
+  'sleep: function': 'spi: function'
+  'rabbit': 'králík'
+  'isSleeping: true': 'jeSpící: true'
 
 class-inheritance-rabbit-animal-2.svg:
   'name: "White Rabbit"': 'jméno: "Bílý králík"'
@@ -405,3 +413,47 @@ event-order-bubbling.svg:
     
 proto-animal-rabbit.svg:
   'animal': 'zvíře'
+  'rabbit': 'králík'
+  'eats: true': 'žere: true'
+  'jumps: true': 'skáče: true'
+  
+proto-constructor-animal-rabbit.svg:
+  'Rabbit': 'Králík'
+  'animal': 'zvíře'
+  'eats: true': 'žere: true'
+  'rabbit': 'králík'
+  'name: "White Rabbit"': 'jméno: "Bílý králík"'
+  
+native-prototypes-classes.svg:
+  'other object methods': 'jiné metody objektů'
+  'other array methods': 'jiné metody polí'
+  'other function methods': 'jiné metody funkcí'
+  'other number methods': 'jiné metody čísel'
+
+proto-animal-rabbit-walk.svg:
+  'animal': 'zvíře'
+  'eats: true': 'žere: true'
+  'walk: function': 'jdi: function'
+  'rabbit': 'králík'
+  'jumps: true': 'skáče: true'
+  
+proto-animal-rabbit-chain.svg:
+  'animal': 'zvíře'
+  'eats: true': 'žere: true'
+  'walk: function': 'jdi: function'
+  'rabbit': 'králík'
+  'jumps: true': 'skáče: true'
+  'longEar': 'dlouhouchý'
+  'earLength': 'délkaUcha'
+  
+proto-animal-rabbit-walk-2.svg:
+  'animal': 'zvíře'
+  'eats: true': 'žere: true'
+  'walk: function': 'jdi: function'
+  'rabbit': 'králík'
+
+rabbit-animal-object.svg:
+  'animal': 'zvíře'
+  'eats: true': 'žere: true'
+  'rabbit': 'králík'
+  'jumps: true': 'skáče: true'

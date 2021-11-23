@@ -12,7 +12,7 @@ Všichni křečci tedy sdílejí jediný žaludek!
 
 Jak pro `líný.žaludek.push(...)`, tak pro `rychlý.žaludek.push()` je vlastnost `žaludek` nalezena v prototypu (protože není v samotném objektu) a pak jsou do ní vložena nová data.
 
-Prosíme všimněte si, že toto se nestane při jednoduchém přiřazení `this.žaludek=`:
+Prosíme všimněte si, že při jednoduchém přiřazení `this.žaludek=` se to nestane:
 
 ```js run
 let křeček = {

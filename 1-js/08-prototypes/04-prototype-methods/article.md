@@ -1,26 +1,26 @@
 
-# Prototype methods, objects without __proto__
+# Prototypové metody, objekty bez __proto__
 
-In the first chapter of this section, we mentioned that there are modern methods to setup a prototype.
+V první kapitole této sekce jsme se zmínili, že existují moderní metody, jak nastavit prototyp.
 
-The `__proto__` is considered outdated and somewhat deprecated (in browser-only part of the JavaScript standard).
+Vlastnost `__proto__` je považována za zastaralou a trochu odmítanou (ve výhradně prohlížečové části standardu JavaScriptu).
 
-The modern methods are:
+Moderní metody jsou:
 
-- [Object.create(proto, [descriptors])](mdn:js/Object/create) -- creates an empty object with given `proto` as `[[Prototype]]` and optional property descriptors.
-- [Object.getPrototypeOf(obj)](mdn:js/Object/getPrototypeOf) -- returns the `[[Prototype]]` of `obj`.
-- [Object.setPrototypeOf(obj, proto)](mdn:js/Object/setPrototypeOf) -- sets the `[[Prototype]]` of `obj` to `proto`.
+- [Object.create(proto, [deskriptory])](mdn:js/Object/create) -- vytvoří prázdný objekt, jehož `[[Prototype]]` bude `proto`, s nepovinnými deskriptory vlastností.
+- [Object.getPrototypeOf(obj)](mdn:js/Object/getPrototypeOf) -- vrátí `[[Prototype]]` objektu `obj`.
+- [Object.setPrototypeOf(obj, proto)](mdn:js/Object/setPrototypeOf) -- nastaví `[[Prototype]]` objektu `obj` na `proto`.
 
-These should be used instead of `__proto__`.
+Tyto metody by se měly používat místo `__proto__`.
 
-For instance:
+Například:
 
 ```js run
 let zvíře = {
   žere: true
 };
 
-// create a new object with zvíře as a prototype
+// vytvoří nový objekt, jehož prototypem je zvíře
 *!*
 let králík = Object.create(zvíře);
 */!*
@@ -32,11 +32,11 @@ alert(Object.getPrototypeOf(králík) === zvíře); // true
 */!*
 
 *!*
-Object.setPrototypeOf(králík, {}); // change the prototype of králík to {}
+Object.setPrototypeOf(králík, {}); // změní prototyp objektu králík na {}
 */!*
 ```
 
-`Object.create` has an optional second argument: property descriptors. We can provide additional properties to the new object there, like this:
+`Object.create` má nepovinný druhý argument: deskriptory vlastností. Těmi můžeme poskytnout objektu další vlastnosti, například:
 
 ```js run
 let zvíře = {
@@ -52,153 +52,153 @@ let králík = Object.create(zvíře, {
 alert(králík.skáče); // true
 ```
 
-The descriptors are in the same format as described in the chapter <info:property-descriptors>.
+Deskriptory jsou ve stejném formátu, jaký byl popsán v kapitole <info:property-descriptors>.
 
-We can use `Object.create` to perform an object cloning more powerful than copying properties in `for..in`:
+Pomocí `Object.create` můžeme provádět klonování objektů, které je silnější než kopírování vlastností v cyklu `for..in`:
 
 ```js
-let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
+let klon = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
 ```
 
-This call makes a truly exact copy of `obj`, including all properties: enumerable and non-enumerable, data properties and setters/getters -- everything, and with the right `[[Prototype]]`.
+Toto volání vytvoří opravdu přesnou kopii `obj`, včetně všech vlastností: enumerovatelných i neenumerovatelných, datových vlastností i setterů/getterů -- všechno a ještě navíc se správným `[[Prototype]]`.
 
-## Brief history
+## Krátká historie
 
-If we count all the ways to manage `[[Prototype]]`, there are a lot! Many ways to do the same thing!
+Spočítáme-li všechny způsoby, jak spravovat `[[Prototype]]`, zjistíme, že jich je spousta! Mnoho způsobů, jak udělat jednu věc!
 
-Why?
+Proč?
 
-That's for historical reasons.
+Je tomu tak z historických důvodů.
 
-- The `"prototype"` property of a constructor function has worked since very ancient times.
-- Later, in the year 2012, `Object.create` appeared in the standard. It gave the ability to create objects with a given prototype, but did not provide the ability to get/set it. So browsers implemented the non-standard `__proto__` accessor that allowed the user to get/set a prototype at any time.
-- Later, in the year 2015, `Object.setPrototypeOf` and `Object.getPrototypeOf` were added to the standard, to perform the same functionality as `__proto__`. As `__proto__` was de-facto implemented everywhere, it was kind-of deprecated and made its way to the Annex B of the standard, that is: optional for non-browser environments.
+- Vlastnost konstruktoru `„prototype“` fungovala již od pradávných časů.
+- Později, v roce 2012, se ve standardu objevila metoda `Object.create`, která poskytla možnost vytvářet objekty se zadaným prototypem, ale neposkytla možnost jej získávat nebo nastavovat. Prohlížeče tedy implementovaly nestandardní přístupovou vlastnost `__proto__`, která umožňovala uživateli kdykoli získávat a nastavovat prototyp.
+- Později, v roce 2015, byly do standardu přidány `Object.setPrototypeOf` a `Object.getPrototypeOf`, které poskytují stejnou funkcionalitu jako `__proto__`. Jelikož `__proto__` bylo implementováno de facto všude, bylo tak trochu zavrženo a dostalo se do Přílohy B standardu, což je: volitelné pro neprohlížečová prostředí.
 
-As of now we have all these ways at our disposal.
+Nyní máme tedy k dispozici všechny tyto způsoby.
 
-Why was `__proto__` replaced by the functions `getPrototypeOf/setPrototypeOf`? That's an interesting question, requiring us to understand why `__proto__` is bad. Read on to get the answer.
+Proč bylo `__proto__` nahrazeno funkcemi `getPrototypeOf/setPrototypeOf`? To je zajímavá otázka, která od nás vyžaduje, abychom pochopili, proč je `__proto__` špatné. Čtěte dál, abyste získali odpověď.
 
-```warn header="Don't change `[[Prototype]]` on existing objects if speed matters"
-Technically, we can get/set `[[Prototype]]` at any time. But usually we only set it once at the object creation time and don't modify it anymore: `králík` inherits from `zvíře`, and that is not going to change.
+```warn header="Pokud vám záleží na rychlosti, neměňte `[[Prototype]]` na existujících objektech"
+Technicky můžeme `[[Prototype]]` nastavit nebo změnit kdykoli. Obvykle jej však nastavujeme jen jednou v okamžiku vytvoření objektu a pak už jej neměníme: `králík` dědí ze `zvíře` a to se nebude měnit.
 
-And JavaScript engines are highly optimized for this. Changing a prototype "on-the-fly" with `Object.setPrototypeOf` or `obj.__proto__=` is a very slow operation as it breaks internal optimizations for object property access operations. So avoid it unless you know what you're doing, or JavaScript speed totally doesn't matter for you.
+A JavaScriptové enginy jsou na to vysoce optimalizované. Změna prototypu „za běhu“ pomocí `Object.setPrototypeOf` nebo `obj.__proto__=` je velmi pomalá operace, jelikož rozbíjí interní optimalizace operací přístupu k objektovým vlastnostem. Proto se jí zdržte, ledaže dobře víte, co děláte, nebo pokud vám na rychlosti JavaScriptu vůbec nezáleží.
 ```
 
-## "Very plain" objects [#very-plain]
+## „Velmi plané“ objekty [#very-plain]
 
-As we know, objects can be used as associative arrays to store key/value pairs.
+Jak víme, objekty můžeme používat jako asociativní pole k ukládání dvojic klíč/hodnota.
 
-...But if we try to store *user-provided* keys in it (for instance, a user-entered dictionary), we can see an interesting glitch: all keys work fine except `"__proto__"`.
+...Pokud se do něj však pokusíme uložit *uživatelem poskytnuté* klíče (například slovník s uživatelskými vstupy), uvidíme zajímavou závadu: všechny klíče fungují správně až na `"__proto__"`.
 
-Check out the example:
+Ověřte si to na příkladu:
 
 ```js run
 let obj = {};
 
-let key = prompt("What's the key?", "__proto__");
-obj[key] = "some value";
+let klíč = prompt("Jaký je klíč?", "__proto__");
+obj[klíč] = "nějaká hodnota";
 
-alert(obj[key]); // [object Object], not "some value"!
+alert(obj[klíč]); // [object Object], ne "nějaká hodnota"!
 ```
 
-Here, if the user types in `__proto__`, the assignment is ignored!
+Když zde uživatel napíše `__proto__`, přiřazení je ignorováno!
 
-That shouldn't surprise us. The `__proto__` property is special: it must be either an object or `null`. A string can not become a prototype.
+To by nás nemělo překvapovat. Vlastnost `__proto__` je speciální: musí to být buď objekt, nebo `null`. Řetězec nemůže být prototypem.
 
-But we didn't *intend* to implement such behavior, right? We want to store key/value pairs, and the key named `"__proto__"` was not properly saved. So that's a bug!
+Takové chování jsme však *nezamýšleli* implementovat, že? Chceme ukládat dvojice klíč/hodnota a klíč jménem `"__proto__"` nebyl správně uložen. Takže je to chyba!
 
-Here the consequences are not terrible. But in other cases we may be assigning object values, and then the prototype may indeed be changed. As a result, the execution will go wrong in totally unexpected ways.
+Zde důsledky nejsou hrozivé. V jiných případech však můžeme přiřazovat objektové hodnoty a pak se prototyp může změnit. Výsledkem bude, že se provádění pokazí naprosto nečekanými způsoby.
 
-What's worse -- usually developers do not think about such possibility at all. That makes such bugs hard to notice and even turn them into vulnerabilities, especially when JavaScript is used on server-side.
+Co je horší -- vývojáři o takové možnosti většinou vůbec nepřemýšlejí. To činí takové chyby obtížně zaznamenatelnými a dokonce je mění na zranitelnost, zvláště když je JavaScript použit na straně serveru.
 
-Unexpected things also may happen when assigning to `toString`, which is a function by default, and to other built-in methods.
+Nečekané věci se mohou dít i tehdy, když přiřazujeme do `toString`, což je defaultně funkce, a do jiných vestavěných metod.
 
-How can we avoid this problem?
+Jak se můžeme tomuto problému vyhnout?
 
-First, we can just switch to using `Map` for storage instead of plain objects, then everything's fine.
+Za prvé, můžeme namísto do planých objektů jednoduše ukládat do `Map`, pak bude všechno v pořádku.
 
-But `Object` can also serve us well here, because language creators gave thought to that problem long ago.
+Ale i `Object` nám zde může dobře posloužit, protože autoři jazyka na tento problém mysleli už před dlouhou dobou.
 
-`__proto__` is not a property of an object, but an accessor property of `Object.prototype`:
+`__proto__` není vlastnost objektu, ale přístupová vlastnost `Object.prototype`:
 
 ![](object-prototype-2.svg)
 
-So, if `obj.__proto__` is read or set, the corresponding getter/setter is called from its prototype, and it gets/sets `[[Prototype]]`.
+Jestliže je tedy `obj.__proto__` čtena nebo nastavována, z jeho prototypu se volá odpovídající getter/setter a ten nastaví `[[Prototype]]`.
 
-As it was said in the beginning of this tutorial section: `__proto__` is a way to access `[[Prototype]]`, it is not `[[Prototype]]` itself.
+Jak bylo řečeno na začátku této sekce tutoriálu: `__proto__` je způsob přístupu k `[[Prototype]]`, není to samotný `[[Prototype]]`.
 
-Now, if we intend to use an object as an associative array and be free of such problems, we can do it with a little trick:
+Jestliže tedy zamýšlíme používat objekt jako asociativní pole a takovým problémům se vyhnout, můžeme to udělat malým trikem:
 
 ```js run
 *!*
 let obj = Object.create(null);
 */!*
 
-let key = prompt("What's the key?", "__proto__");
-obj[key] = "some value";
+let klíč = prompt("Jaký je klíč?", "__proto__");
+obj[klíč] = "nějaká hodnota";
 
-alert(obj[key]); // "some value"
+alert(obj[klíč]); // "nějaká hodnota"
 ```
 
-`Object.create(null)` creates an empty object without a prototype (`[[Prototype]]` is `null`):
+`Object.create(null)` vytvoří prázdný objekt bez prototypu (`[[Prototype]]` je `null`):
 
 ![](object-prototype-null.svg)
 
-So, there is no inherited getter/setter for `__proto__`. Now it is processed as a regular data property, so the example above works right.
+Pro `__proto__` tedy nebude zděděn žádný getter/setter. Nyní se bude zpracovávat jako běžná datová vlastnost, takže uvedený příklad bude fungovat správně.
 
-We can call such objects "very plain" or "pure dictionary" objects, because they are even simpler than the regular plain object `{...}`.
+Takové objekty můžeme nazývat „velmi plané“ nebo „čistě slovníkové“ objekty, protože jsou ještě jednodušší než obvyklý planý objekt `{...}`.
 
-A downside is that such objects lack any built-in object methods, e.g. `toString`:
+Nevýhodou je, že takový objekt postrádá veškeré vestavěné objektové metody, např. `toString`:
 
 ```js run
 *!*
 let obj = Object.create(null);
 */!*
 
-alert(obj); // Error (no toString)
+alert(obj); // Chyba (není toString)
 ```
 
-...But that's usually fine for associative arrays.
+...To je však u asociativních polí zpravidla dobře.
 
-Note that most object-related methods are `Object.something(...)`, like `Object.keys(obj)` -- they are not in the prototype, so they will keep working on such objects:
+Všimněte si, že většina metod vztahujících se k objektům jsou `Object.něco(...)`, např. `Object.keys(obj)` -- nejsou v prototypu, takže budou na takových objektech fungovat:
 
 
 ```js run
-let chineseDictionary = Object.create(null);
-chineseDictionary.hello = "你好";
-chineseDictionary.bye = "再见";
+let čínskýSlovník = Object.create(null);
+čínskýSlovník.ahoj = "你好";
+čínskýSlovník.sbohem = "再见";
 
-alert(Object.keys(chineseDictionary)); // hello,bye
+alert(Object.keys(čínskýSlovník)); // ahoj,sbohem
 ```
 
-## Summary
+## Shrnutí
 
-Modern methods to set up and directly access the prototype are:
+Moderní metody pro nastavení prototypu a přímý přístup k němu jsou:
 
-- [Object.create(proto, [descriptors])](mdn:js/Object/create) -- creates an empty object with a given `proto` as `[[Prototype]]` (can be `null`) and optional property descriptors.
-- [Object.getPrototypeOf(obj)](mdn:js/Object/getPrototypeOf) -- returns the `[[Prototype]]` of `obj` (same as `__proto__` getter).
-- [Object.setPrototypeOf(obj, proto)](mdn:js/Object/setPrototypeOf) -- sets the `[[Prototype]]` of `obj` to `proto` (same as `__proto__` setter).
+- [Object.create(proto, [deskriptory])](mdn:js/Object/create) -- vytvoří prázdný objekt se zadaným `proto` jako `[[Prototype]]` (může být `null`) a nepovinnými deskriptory vlastností.
+- [Object.getPrototypeOf(obj)](mdn:js/Object/getPrototypeOf) -- vrátí `[[Prototype]]` objektu `obj` (totéž jako getter `__proto__`).
+- [Object.setPrototypeOf(obj, proto)](mdn:js/Object/setPrototypeOf) -- nastaví `[[Prototype]]` objektu `obj` na hodnotu `proto` (totéž jako setter `__proto__`).
 
-The built-in `__proto__` getter/setter is unsafe if we'd want to put user-generated keys into an object. Just because a user may enter `"__proto__"` as the key, and there'll be an error, with hopefully light, but generally unpredictable consequences.
+Vestavěný getter/setter `__proto__` není bezpečný, jestliže chceme do objektu vkládat uživatelem vygenerované klíče. Je to proto, že uživatel může zadat `"__proto__"` jako klíč a pak nastane chyba, snad s lehkými, ale obecně s nepředvídatelnými důsledky.
 
-So we can either use `Object.create(null)` to create a "very plain" object without `__proto__`, or stick to `Map` objects for that.
+Můžeme tedy buď použít `Object.create(null)` k vytvoření „velmi planého“ objektu bez `__proto__`, nebo se pro tento účel upnout k objektům `Map`.
 
-Also, `Object.create` provides an easy way to shallow-copy an object with all descriptors:
+`Object.create` také poskytuje snadný způsob, jak vytvořit mělkou kopii objektu se všemi deskriptory:
 
 ```js
-let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
+let klon = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
 ```
 
-We also made it clear that `__proto__` is a getter/setter for `[[Prototype]]` and resides in `Object.prototype`, just like other methods.
+Ujasnili jsme si také, že `__proto__` je getter/setter pro `[[Prototype]]` a přebývá v `Object.prototype`, stejně jako jiné metody.
 
-We can create an object without a prototype by `Object.create(null)`. Such objects are used as "pure dictionaries", they have no issues with `"__proto__"` as the key.
+Můžeme vytvořit objekt bez prototypu pomocí `Object.create(null)`. Takové objekty se používají jako „čistě slovníkové“ a nemají žádné problémy, je-li `"__proto__"` použito jako klíč.
 
-Other methods:
+Další metody:
 
-- [Object.keys(obj)](mdn:js/Object/keys) / [Object.values(obj)](mdn:js/Object/values) / [Object.entries(obj)](mdn:js/Object/entries) -- returns an array of enumerable own string property names/values/key-value pairs.
-- [Object.getOwnPropertySymbols(obj)](mdn:js/Object/getOwnPropertySymbols) -- returns an array of all own symbolic keys.
-- [Object.getOwnPropertyNames(obj)](mdn:js/Object/getOwnPropertyNames) -- returns an array of all own string keys.
-- [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys) -- returns an array of all own keys.
-- [obj.hasOwnProperty(key)](mdn:js/Object/hasOwnProperty): returns `true` if `obj` has its own (not inherited) key named `key`.
+- [Object.keys(obj)](mdn:js/Object/keys) / [Object.values(obj)](mdn:js/Object/values) / [Object.entries(obj)](mdn:js/Object/entries) -- vrátí pole vlastních enumerovatelných řetězcových názvů/hodnot/dvojic klíč-hodnota vlastností.
+- [Object.getOwnPropertySymbols(obj)](mdn:js/Object/getOwnPropertySymbols) -- vrátí pole všech našich symbolických klíčů.
+- [Object.getOwnPropertyNames(obj)](mdn:js/Object/getOwnPropertyNames) -- vrátí pole všech našich řetězcových klíčů.
+- [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys) -- vrátí pole všech našich klíčů.
+- [obj.hasOwnProperty(klíč)](mdn:js/Object/hasOwnProperty) -- vrátí `true`, jestliže `obj` má svůj vlastní (nezděděný) klíč jménem `klíč`.
 
-All methods that return object properties (like `Object.keys` and others) -- return "own" properties. If we want inherited ones, we can use `for..in`.
+Všechny metody, které vracejí vlastnosti objektu (např. `Object.keys` a jiné), vracejí „vlastní“ vlastnosti. Chceme-li zděděné, můžeme použít cyklus `for..in`.
