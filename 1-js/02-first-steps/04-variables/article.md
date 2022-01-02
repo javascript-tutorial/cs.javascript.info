@@ -221,7 +221,7 @@ let return = 5; // nelze ji ani pojmenovat "return", chyba!
 
 ````warn header="Přiřazení bez `use strict`"
 
-Obvykle musíme proměnnou před použitím definovat. Ve starých časech však bylo technicky možné vytvořit proměnnou pouze přiřazením hodnoty bez použití `let`. Aby byla zaručena kompatibilita se starými skripty, funguje to dodnes, pokud v našich skriptech neuvedeme `use script`.
+Obvykle musíme proměnnou před použitím definovat. Ve starých časech však bylo technicky možné vytvořit proměnnou pouze přiřazením hodnoty bez použití `let`. Aby byla zaručena kompatibilita se starými skripty, funguje to dodnes, pokud v našich skriptech neuvedeme `use strict`.
 
 ```js run no-strict
 // poznámka: v tomto příkladu není "use strict"

@@ -379,15 +379,41 @@ function-prototype-constructor.svg:
 
 rabbit-animal-independent-animal.svg:
   'name: "My animal"': 'jméno: "Moje zvíře"'
+  'Animal': 'Zvíře'
+  'Animal.prototype': 'Zvíře.prototype'
+  'constructor: Animal': 'constructor: Zvíře'
+  'run: function': 'běž: function'
+  'stop: function': 'stůj: function'
+  'new Animal': 'new Zvíře'
 
 rabbit-animal-independent-rabbit.svg:
   'name: "My rabbit"': 'jméno: "Můj králík"'
 
 animal-rabbit-extends.svg:
   'name: "White Rabbit"': 'jméno: "Bílý králík"'
+  'Animal': 'Zvíře'
+  'Animal.prototype': 'Zvíře.prototype'
+  'Rabbit': 'Králík'
+  'Rabbit.prototype': 'Králík.prototype'
+  'constructor: Animal': 'constructor: Zvíře'
+  'run: function': 'běž: function'
+  'stop: function': 'stůj: function'
+  'constructor: Rabbit': 'constructor: Králík'
+  'hide: function': 'schovejSe: function'
+  'new Rabbit': 'new Králík'
 
 animal-rabbit-static.svg:
   'name: "White Rabbit"': 'jméno: "Bílý králík"'
+  'Animal': 'Zvíře'
+  'Animal.prototype': 'Zvíře.prototype'
+  'Rabbit': 'Králík'
+  'Rabbit.prototype': 'Králík.prototype'
+  'constructor: Animal': 'constructor: Zvíře'
+  'run: function': 'běž: function'
+  'constructor: Rabbit': 'constructor: Králík'
+  'hide: function': 'schovejSe: function'
+  'compare': 'porovnej'
+  'rabbit': 'králík'
 
 class-inheritance-rabbit-animal.svg:
   'methods of Animal': 'metody Zvířete'
@@ -457,3 +483,66 @@ rabbit-animal-object.svg:
   'eats: true': 'žere: true'
   'rabbit': 'králík'
   'jumps: true': 'skáče: true'
+
+class-user.svg:
+  'User': 'Uživatel'
+  'name': 'jméno'
+  'sayHi: function': 'řekniAhoj: function'
+  'constructor(name) {': 'constructor(jméno) {'
+  '  this.name = name;': '  this.jméno = jméno;'
+  'constructor: User': 'constructor: Uživatel'
+  'User.prototype': 'Uživatel.prototype'
+  
+this-super-loop.svg:
+  'rabbit': 'králík'
+  'animal': 'zvíře'
+  'eat': 'žer'
+  'longEar': 'dlouhouchý'
+  'let rabbit = {': 'let králík = {'
+  '  __proto__: animal': '  __proto__: zvíře'
+  '  __proto__: rabbit': '  __proto__: králík'
+  '  eat() {': '  žer() {'
+  '  this.__proto__.žer.call(this); (*)': '  this.__proto__.eat.call(this); (*)'
+  '  this.__proto__.žer.call(this); (**)': '  this.__proto__.eat.call(this); (**)'
+  
+super-homeobject-wrong.svg:
+  'animal': 'zvíře'
+  'plant': 'rostlina'
+  'sayHi': 'řekniAhoj'
+  'rabbit': 'králík'
+  'tree': 'strom'
+  
+variable.svg:
+  '"Hello!"': '"Ahoj!"'
+  'message': 'zpráva'
+  
+variable-change.svg:
+  '"Hello!"': '"Ahoj!"'
+  '"World!"': '"světe!"'
+  'message': 'zpráva'
+
+rabbit-extends-object.svg:
+  'class Rabbit': 'class Králík'
+  'class Rabbit extends Object': 'class Králík extends Object'
+  'Rabbit': 'Králík'
+  
+object-date-inheritance.svg:
+  '1 Jan 2019': '1. leden 2019'
+  
+instanceof.svg:
+  'Animal.prototype': 'Zvíře.prototype'
+  '= Animal.prototype?': '= Zvíře.prototype?'
+  'rabbit': 'králík'
+  'Rabbit.prototype': 'Králík.prototype'
+   
+mixin-inheritance.svg:
+  'sayMixin': 'mixinŘekni'
+  'say: function': 'řekni: function'
+  'User.prototype': 'Uživatel: prototype'
+  'constructor: User': 'constructor: Uživatel'
+  'sayHi: function': 'řekniAhoj: function'
+  'sayBye: function': 'řekniNashle: function'
+  'user': 'uživatel'
+  'name: ...': 'jméno: ...'
+  'sayHiMixin': 'mixinŘekniAhoj'
+  
