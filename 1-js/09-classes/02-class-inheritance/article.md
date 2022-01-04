@@ -363,8 +363,8 @@ A to je to, co přirozeně očekáváme. Když je v odvozené třídě volán ro
 Proč je zde tento rozdíl?
 
 Důvod spočívá v pořadí inicializace polí. Třídní pole je inicializováno:
-- Před konstruktorem rodičovské třídy (který nic nerozšiřuje).
-- Ihned po `super()` pro odvozenou třídu.
+- Před konstruktorem rodičovské třídy (který nic nerozšiřuje),
+- ihned po `super()` pro odvozenou třídu.
 
 V našem případě je `Králík` odvozená třída. Není v ní žádný `constructor()`. Jak bylo dříve uvedeno, je to totéž, jako by tam byl prázdný konstruktor obsahující pouze `super(...argumenty)`.
 

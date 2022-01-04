@@ -207,13 +207,6 @@ Typ `symbol` se používá k vytváření unikátních identifikátorů pro obje
 
 Operátor `typeof` vrací typ argumentu. Je užitečný, když chceme hodnoty různých typů zpracovávat různě anebo si jen chceme typ rychle ověřit.
 
-Má dvě formy syntaxe:
-
-1. Jako operátor: `typeof x`.
-2. Jako funkce: `typeof(x)`.
-
-Jinými slovy, funguje se závorkami i bez nich. Výsledek je stejný.
-
 Volání `typeof x` vrátí řetězec s názvem typu:
 
 ```js
@@ -248,6 +241,16 @@ Poslední tři řádky možná vyžadují podrobnější vysvětlení:
 2. Výsledkem `typeof null` je `"object"`. Toto je oficiálně přiznaná chyba chování `typeof`, která pochází z pravěku JavaScriptu a byla v něm ponechána kvůli kompatibilitě. Ve skutečnosti `null` není objekt. Je to speciální hodnota, která má svůj vlastní typ.
 3. Výsledkem `typeof alert` je `"function"`, protože `alert` je funkce. Funkce prostudujeme v dalších kapitolách, kde také uvidíme, že v JavaScriptu není žádný speciální typ „funkce“. Funkce jsou typu objekt. Avšak `typeof` s nimi zachází jinak a vrátí `"function"`. To také pochází z pravěku JavaScriptu. Technicky není toto chování korektní, ale v praxi může být užitečné.
 
+```smart header="Syntaxe `typeof(x)` syntax"
+Můžete narazit i na jinou syntaxi: `typeof(x)`. To je totéž jako `typeof x`.
+
+Abychom to objasnili: `typeof` je operátor, ne funkce. Závorky zde uvedené nejsou součástí `typeof`. Je to druh závorek používaný pro seskupování v matematice.
+
+Zpravidla takové závorky obsahují matematický výraz, např. `(2 + 2)`, ale zde obsahují jen jediný argument `(x)`. Syntakticky umožňují vyhnout se mezeře mezi operátorem `typeof` a jeho argumentem. Některým lidem se to líbí.
+
+Někteří lidé dávají přednost `typeof(x)`, ačkoli syntaxe `typeof x` je mnohem běžnější.
+```
+
 ## Shrnutí
 
 V JavaScriptu existuje osm základních datových typů.
@@ -263,7 +266,7 @@ V JavaScriptu existuje osm základních datových typů.
 
 Operátor `typeof` nám umožní zjistit, jaký typ byl uložen do proměnné.
 
-- Má dvě podoby: `typeof x` nebo `typeof(x)`.
+- Obvykle se používá jako `typeof x`, ale je možné i `typeof(x)`.
 - Vrátí řetězec s názvem typu, např. `"string"`.
 - Pro `null` vrátí `"object"` -- to je chyba jazyka, ve skutečnosti to není objekt.
 

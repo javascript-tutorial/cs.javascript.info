@@ -12,7 +12,9 @@ function řekniAhoj() {
 
 Existuje i jiná syntaxe pro vytváření funkce, která se nazývá *funkční výraz*.
 
-Vypadá takto:
+Ten nám umožňuje vytvořit novou funkci uprostřed libovolného výrazu.
+
+Například:
 
 ```js
 let řekniAhoj = function() {
@@ -23,6 +25,20 @@ let řekniAhoj = function() {
 Zde je funkce vytvořena a výslovně přiřazena do proměnné jako kterákoli jiná hodnota. Nezáleží na tom, jak je funkce definována. Je to jen hodnota uložená do proměnné `řekniAhoj`.
 
 Význam obou částí kódu je stejný: „vytvořit funkci a uložit ji do proměnné `řekniAhoj`“.
+
+Zde vidíme proměnnou `řekniAhoj`, do níž je uložena hodnota, kterou je nová funkce, vytvořená jako `function() { alert("Ahoj"); }`.
+
+Protože k vytvoření funkce dochází v kontextu přiřazovacího výrazu (na pravé straně `=`), je to *funkční výraz*.
+
+Prosíme všimněte si, že za klíčovým slovem `function` není žádný název. Ve funkčních výrazech je vynechání názvu dovoleno.
+
+Zde okamžitě přiřazujeme funkci proměnné, takže význam tohoto příkladu kódu je stejný: „vytvoř funkci a ulož ji do proměnné `řekniAhoj`“.
+
+V pokročilejších situacích, na které narazíme později, můžeme funkci vytvořit a okamžitě volat nebo naplánovat její pozdější spuštění, aniž bychom ji někam uložili, takže funkce zůstane anonymní.
+
+## Funkce je hodnota
+
+Zopakujme si: bez ohledu na to, jak je funkce vytvořena, funkce je hodnota. V obou výše uvedených příkladech je funkce uložena do proměnné `řekniAhoj`.
 
 Tuto hodnotu dokonce můžeme zobrazit pomocí `alert`:
 
@@ -61,10 +77,10 @@ Co se v uvedeném příkladu přesně stane:
 2. Řádek `(2)` ji zkopíruje do proměnné `funkce`. Opět si všimněte, že za `řekniAhoj` nejsou závorky. Kdyby tam byly, příkaz `funkce = řekniAhoj()` by zapsal do proměnné `funkce` *výsledek volání* `řekniAhoj`, ne samotnou *funkci* `řekniAhoj`.
 3. Nyní můžeme tuto funkci volat pomocí `řekniAhoj()` i pomocí `funkce()`.
 
-Všimněte si, že na prvním řádku jsme mohli deklarovat `řekniAhoj` i pomocí funkčního výrazu:
+Na prvním řádku jsme mohli deklarovat `řekniAhoj` i pomocí funkčního výrazu:
 
 ```js
-let řekniAhoj = function() {
+let řekniAhoj = function() { // (1) vytvoření
   alert( "Ahoj" );
 };
 
@@ -88,9 +104,9 @@ let řekniAhoj = function() {
 }*!*;*/!*
 ```
 
-Odpověď je jednoduchá:
-- Na konci bloků kódu a syntaktických struktur, které je používají, např. `if { ... }`, `for {  }`, `function f { }` atd., není středník `;` zapotřebí.
-- Funkční výraz však byl použit uprostřed příkazu `let řekniAhoj = ...;` jako hodnota. Není to blok kódu, ale přiřazení. Na konci příkazů je doporučován středník `;` bez ohledu na to, jakou hodnotu obsahuje. Tento středník tedy nemá vztah k samotnému funkčnímu výrazu, jen ukončuje příkaz.
+Odpověď je jednoduchá: funkční výraz je zde vytvořen jako `function(…) {…}` uvnitř příkazu přiřazení: `let řekniAhoj = …;`. Středník `;` se doporučuje uvádět na konci příkazu, není to součást syntaxe funkce.
+
+Středník by zde byl i u jednoduššího přiřazení, například `let řekniAhoj = 5;`, a je zde také u přiřazení funkce.
 ````
 
 ## Callbackové funkce
