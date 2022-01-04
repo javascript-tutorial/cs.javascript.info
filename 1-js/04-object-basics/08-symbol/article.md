@@ -161,7 +161,7 @@ for (let klíč in uživatel) alert(klíč); // jméno, věk (žádné symboly)
 alert( "Přímo: " + uživatel[id] );
 ```
 
-Ignoruje je i metoda `Object.keys(uživatel)`. To je součást obecného principu „skrývání symbolických vlastností“. Jestliže jiný skript nebo knihovna provádí cyklus nad naším objektem, nepřistoupí nečekaně k symbolické vlastnosti.
+Ignoruje je i metoda [Object.keys(uživatel)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys). To je součást obecného principu „skrývání symbolických vlastností“. Jestliže jiný skript nebo knihovna provádí cyklus nad naším objektem, nepřistoupí nečekaně k symbolické vlastnosti.
 
 Naproti tomu [Object.assign](mdn:js/Object/assign) zkopíruje řetězcové i symbolické vlastnosti:
 

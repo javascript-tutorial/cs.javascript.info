@@ -23,7 +23,7 @@ let žebřík = {
   }
 };
 
-žebřík.nahoru().nahoru().dolů().nahoru().dolů().zobrazStupeň(); // 1
+žebřík.nahoru().nahoru().dolů().zobrazStupeň().dolů().zobrazStupeň(); // zobrazí 1, pak 0
 ```
 
 Můžeme také psát každé volání na nový řádek. U delšího zřetězení je to čitelnější:
@@ -33,7 +33,7 @@ Můžeme také psát každé volání na nový řádek. U delšího zřetězení
   .nahoru()
   .nahoru()
   .dolů()
-  .nahoru()
+  .zobrazStupeň() // 1
   .dolů()
-  .zobrazStupeň(); // 1
+  .zobrazStupeň(); // 0
 ```

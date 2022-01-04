@@ -256,11 +256,11 @@ Kromě závorek existují i jiné způsoby, jak oznámit JavaScriptu, že máme 
 ```js run
 // Způsoby vytvoření IIFE
 
-(function() {
+*!*(*/!*function() {
   alert("Závorky okolo funkce");
 }*!*)*/!*();
 
-(function() {
+*!*(*/!*function() {
   alert("Závorky okolo toho všeho");
 }()*!*)*/!*;
 

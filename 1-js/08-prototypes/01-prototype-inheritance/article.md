@@ -286,7 +286,7 @@ for(let vlastnost in králík) alert(vlastnost); // skáče, pak žere
 */!*
 ```
 
-Pokud to není to, co chceme, a rádi bychom zděděné vlastnosti vyloučili, existuje zabudovaná metoda [obj.hasOwnProperty(klíč)](mdn:js/Object/hasOwnProperty): vrátí `true`, jestliže `obj` má svou vlastní (ne zděděnou) vlastnost jménem `klíč`.
+Pokud to není to, co chceme, a rádi bychom zděděné vlastnosti vyloučili, existuje zabudovaná metoda [obj.hasOwnProperty(klíč)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty): vrátí `true`, jestliže `obj` má svou vlastní (ne zděděnou) vlastnost jménem `klíč`.
 
 Můžeme tedy zděděné vlastnosti odfiltrovat (nebo s nimi udělat něco jiného):
 
