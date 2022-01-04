@@ -59,11 +59,7 @@ Například JavaScript v prohlížeči může:
 
 ## Co NEMŮŽE JavaScript v prohlížeči dělat?
 
-<<<<<<< HEAD
 Schopnosti JavaScriptu v prohlížeči jsou omezeny v zájmu bezpečnosti uživatele. Cílem je zabránit zlé webové stránce v přístupu k soukromým informacím nebo v poškození uživatelových dat.
-=======
-JavaScript's abilities in the browser are limited for the sake of a user's safety. The aim is to prevent an evil webpage from accessing private information or harming the user's data.
->>>>>>> 4541b7af7584014a676da731f6e8774da5e059f6
 
 Příklady takových omezení:
 
@@ -88,15 +84,9 @@ Jestliže použijete JavaScript mimo prohlížeč, např. na serveru, tato omeze
 Na JavaScriptu jsou nejméně *tři* skvělé věci:
 
 ```compare
-<<<<<<< HEAD
 + Plná integrace s HTML/CSS.
 + Jednoduché věci se v něm dělají jednoduše.
 + Je podporován ve všech významných prohlížečích a standardně bývá povolen.
-=======
-+ Full integration with HTML/CSS.
-+ Simple things are done simply.
-+ Supported by all major browsers and enabled by default.
->>>>>>> 4541b7af7584014a676da731f6e8774da5e059f6
 ```
 JavaScript je jediná prohlížečová technologie, která má všechny tyto tři vlastnosti současně.
 
