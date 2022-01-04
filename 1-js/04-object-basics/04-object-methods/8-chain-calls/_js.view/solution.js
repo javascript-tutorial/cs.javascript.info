@@ -1,15 +1,15 @@
 
-let ladder = {
-  step: 0,
-  up: function() { 
-    this.step++;
+let žebřík = {
+  stupeň: 0,
+  nahoru: function() { 
+    this.stupeň++;
     return this;
   },
-  down: function() { 
-    this.step--;
+  dolů: function() { 
+    this.stupeň--;
     return this;
   },
-  showStep: function() { 
-    alert(this.step);
+  zobrazStupeň: function() { 
+    alert(this.stupeň);
   }
 };

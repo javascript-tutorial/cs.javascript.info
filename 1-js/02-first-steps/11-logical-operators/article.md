@@ -1,24 +1,24 @@
-# Logical operators
+# Logické operátory
 
-There are four logical operators in JavaScript: `||` (OR), `&&` (AND), `!` (NOT), `??` (Nullish Coalescing). Here we cover the first three, the `??` operator is in the next article.
+V JavaScriptu jsou čtyři logické operátory: `||` (OR -- nebo), `&&` (AND -- a), `!` (NOT -- ne), `??` (koalescence). V tomto článku vysvětlíme první tři, operátor `??` bude vysvětlen v dalším článku.
 
-Although they are called "logical", they can be applied to values of any type, not only boolean. Their result can also be of any type.
+Ačkoli se nazývají „logické“, mohou být použity na hodnoty libovolného typu, nejenom boolean. Také jejich výsledek může být jakéhokoli typu.
 
-Let's see the details.
+Podívejme se na podrobnosti.
 
 ## || (OR)
 
-The "OR" operator is represented with two vertical line symbols:
+Operátor „OR“ („nebo“) je reprezentován dvěma svislými čarami za sebou:
 
 ```js
-result = a || b;
+výsledek = a || b;
 ```
 
-In classical programming, the logical OR is meant to manipulate boolean values only. If any of its arguments are `true`, it returns `true`, otherwise it returns `false`.
+V klasickém programování je logické OR určeno pouze k manipulaci s booleovskými hodnotami. Je-li některý z jeho argumentů `true`, vrátí `true`, jinak vrátí `false`.
 
-In JavaScript, the operator is a little bit trickier and more powerful. But first, let's see what happens with boolean values.
+V JavaScriptu je tento operátor trochu rafinovanější a silnější. Nejprve se však podívejme, co se stane s hodnotami typu boolean.
 
-There are four possible logical combinations:
+Existují čtyři možné logické kombinace:
 
 ```js run
 alert( true || true );   // true
@@ -27,124 +27,124 @@ alert( true || false );  // true
 alert( false || false ); // false
 ```
 
-As we can see, the result is always `true` except for the case when both operands are `false`.
+Jak vidíme, výsledek je vždy `true` kromě případu, kdy jsou oba operandy `false`.
 
-If an operand is not a boolean, it's converted to a boolean for the evaluation.
+Není-li operand typu boolean, je pro účel vyhodnocení převeden na boolean.
 
-For instance, the number `1` is treated as `true`, the number `0` as `false`:
+Například číslo `1` se převede na `true`, číslo `0` na `false`:
 
 ```js run
-if (1 || 0) { // works just like if( true || false )
-  alert( 'truthy!' );
+if (1 || 0) { // funguje stejně jako if ( true || false )
+  alert( 'pravda!' );
 }
 ```
 
-Most of the time, OR `||` is used in an `if` statement to test if *any* of the given conditions is `true`.
+Většinou se OR `||` používá v příkazu `if` k otestování, zda *některá* ze zadaných podmínek je `true`.
 
-For example:
+Příklad:
 
 ```js run
-let hour = 9;
+let hodina = 9;
 
 *!*
-if (hour < 10 || hour > 18) {
+if (hodina < 10 || hodina > 18) {
 */!*
-  alert( 'The office is closed.' );
+  alert( 'Úřad má zavřeno.' );
 }
 ```
 
-We can pass more conditions:
+Můžeme předat další podmínky:
 
 ```js run
-let hour = 12;
-let isWeekend = true;
+let hodina = 12;
+let jeVíkend = true;
 
-if (hour < 10 || hour > 18 || isWeekend) {
-  alert( 'The office is closed.' ); // it is the weekend
+if (hodina < 10 || hodina > 18 || jeVíkend) {
+  alert( 'Úřad má zavřeno.' ); // je víkend
 }
 ```
 
-## OR "||" finds the first truthy value [#or-finds-the-first-truthy-value]
+## OR „||“ najde první pravdivou hodnotu [#or-finds-the-first-truthy-value]
 
-The logic described above is somewhat classical. Now, let's bring in the "extra" features of JavaScript.
+Výše uvedená logika je vcelku klasická. Nyní se podívejme na „extra“ vlastnosti JavaScriptu.
 
-The extended algorithm works as follows.
+Rozšířený algoritmus funguje následovně.
 
-Given multiple OR'ed values:
+Zadáme více hodnot, spojených ORem:
 
 ```js
-result = value1 || value2 || value3;
+výsledek = hodnota1 || hodnota2 || hodnota3;
 ```
 
-The OR `||` operator does the following:
+Operátor OR `||` provádí následující:
 
-- Evaluates operands from left to right.
-- For each operand, converts it to boolean. If the result is `true`, stops and returns the original value of that operand.
-- If all operands have been evaluated (i.e. all were `false`), returns the last operand.
+- Vyhodnocuje operandy zleva doprava.
+- Každý operand převede na typ boolean. Je-li výsledek `true`, zastaví se a vrátí původní hodnotu tohoto operandu.
+- Pokud byly vyhodnoceny všechny operandy (tj. všechny byly `false`), vrátí poslední operand.
 
-A value is returned in its original form, without the conversion.
+Hodnota se vrátí ve své původní podobě bez konverze.
 
-In other words, a chain of OR `||` returns the first truthy value or the last one if no truthy value is found.
+Jinými slovy, řetězec ORů `"||"` vrátí první pravdivou hodnotu, a pokud není žádná pravdivá hodnota nalezena, vrátí poslední hodnotu.
 
-For instance:
+Příklad:
 
 ```js run
-alert( 1 || 0 ); // 1 (1 is truthy)
+alert( 1 || 0 ); // 1 (1 je pravdivá)
 
-alert( null || 1 ); // 1 (1 is the first truthy value)
-alert( null || 0 || 1 ); // 1 (the first truthy value)
+alert( null || 1 ); // 1 (1 je první pravdivá hodnota)
+alert( null || 0 || 1 ); // 1 (první pravdivá hodnota)
 
-alert( undefined || null || 0 ); // 0 (all falsy, returns the last value)
+alert( undefined || null || 0 ); // 0 (všechny jsou nepravdivé, vrátí poslední hodnotu)
 ```
 
-This leads to some interesting usage compared to a "pure, classical, boolean-only OR".
+To umožňuje některé zajímavé způsoby použití ve srovnání s „čistým, klasickým, pouze booleovským ORem“.
 
-1. **Getting the first truthy value from a list of variables or expressions.**
+1. **Získání první pravdivé hodnoty ze seznamu proměnných nebo výrazů.**
 
-    For instance, we have `firstName`, `lastName` and `nickName` variables, all optional (i.e. can be undefined or have falsy values).
-
-    Let's use OR `||` to choose the one that has the data and show it (or `"Anonymous"` if nothing set):
+    Například máme proměnné `jméno`, `příjmení` a `přezdívka`, všechny jsou nepovinné (tj. mohou být `undefined` nebo obsahovat hodnoty nepravda).
+    
+    Vybereme pomocí OR `||` tu, která obsahuje data, a zobrazíme je (není-li nastaveno nic, zobrazíme `anonym`):
 
     ```js run
-    let firstName = "";
-    let lastName = "";
-    let nickName = "SuperCoder";
+    let jméno = "";
+    let příjmení = "";
+    let přezdívka = "SuperCoder";
 
     *!*
-    alert( firstName || lastName || nickName || "Anonymous"); // SuperCoder
+    alert( jméno || příjmení || přezdívka || "anonym"); // SuperCoder
     */!*
     ```
 
-    If all variables were falsy, `"Anonymous"` would show up.
+    Kdyby všechny proměnné obsahovaly hodnotu nepravda, zobrazil by se `anonym`.
 
-2. **Short-circuit evaluation.**
+2. **Zkrácené vyhodnocení.**
 
-    Another feature of OR `||` operator is the so-called "short-circuit" evaluation.
+    Další vlastností operátoru OR `||` je tzv. „zkrácené“ vyhodnocení.
 
-    It means that `||` processes its arguments until the first truthy value is reached, and then the value is returned immediately, without even touching the other argument.
+    Znamená to, že `||` zpracovává své argumenty, dokud nenarazí na první pravdivou hodnotu, a pak tuto hodnotu okamžitě vrátí, aniž by se byť jen dotkl dalších argumentů.
 
-    The importance of this feature becomes obvious if an operand isn't just a value, but an expression with a side effect, such as a variable assignment or a function call.
+    Důležitost této vlastnosti se projeví, jestliže operandem nebude pouhá hodnota, ale výraz s vedlejším efektem, například přiřazení proměnné nebo volání funkce.
 
-    In the example below, only the second message is printed:
+    V níže uvedeném příkladu se zobrazí jen druhá zpráva:
 
     ```js run no-beautify
-    *!*true*/!* || alert("not printed");
-    *!*false*/!* || alert("printed");
+    *!*true*/!* || alert("nezobrazí se");
+    *!*false*/!* || alert("zobrazí se");
     ```
 
-    In the first line, the OR `||` operator stops the evaluation immediately upon seeing `true`, so the `alert` isn't run.
+    Operátor OR `||` na prvním řádku se přestane vyhodnocovat ihned poté, co narazí na `true`, takže `alert` se nevykoná.
 
-    Sometimes, people use this feature to execute commands only if the condition on the left part is falsy.
+    Někdy lidé využívají tuto vlastnost k tomu, aby vykonali příkaz jen tehdy, není-li splněna podmínka na levé straně.
 
 ## && (AND)
 
-The AND operator is represented with two ampersands `&&`:
+Operátor „AND“ („a“) je reprezentován dvěma znaky „ampersand“ `&&`:
 
 ```js
-result = a && b;
+výsledek = a && b;
 ```
 
-In classical programming, AND returns `true` if both operands are truthy and `false` otherwise:
+V klasickém programování AND vrací `true`, jsou-li oba operandy pravdivé, a `false` jinak:
 
 ```js run
 alert( true && true );   // true
@@ -153,137 +153,137 @@ alert( true && false );  // false
 alert( false && false ); // false
 ```
 
-An example with `if`:
+Příklad s `if`:
 
 ```js run
-let hour = 12;
-let minute = 30;
+let hodina = 12;
+let minuta = 30;
 
-if (hour == 12 && minute == 30) {
-  alert( 'The time is 12:30' );
+if (hodina == 12 && minuta == 30) {
+  alert( 'Je právě 12:30' );
 }
 ```
 
-Just as with OR, any value is allowed as an operand of AND:
+Stejně jako u OR může být operandem AND jakákoli hodnota:
 
 ```js run
-if (1 && 0) { // evaluated as true && false
-  alert( "won't work, because the result is falsy" );
+if (1 && 0) { // vyhodnotí se jako true && false
+  alert( "nevykoná se, protože výsledkem je nepravda" );
 }
 ```
 
 
-## AND "&&" finds the first falsy value
+## AND „&&“ najde první nepravdivou hodnotu
 
-Given multiple AND'ed values:
+Mějme několik hodnot spojených ANDem:
 
 ```js
-result = value1 && value2 && value3;
+výsledek = hodnota1 && hodnota2 && hodnota3;
 ```
 
-The AND `&&` operator does the following:
+Operátor AND `&&` provádí následující:
 
-- Evaluates operands from left to right.
-- For each operand, converts it to a boolean. If the result is `false`, stops and returns the original value of that operand.
-- If all operands have been evaluated (i.e. all were truthy), returns the last operand.
+- Vyhodnocuje operandy zleva doprava.
+- Každý operand převede na typ boolean. Je-li výsledek `false`, zastaví se a vrátí původní hodnotu tohoto operandu.
+- Pokud byly vyhodnoceny všechny operandy (tj. všechny byly pravdivé), vrátí poslední operand.
 
-In other words, AND returns the first falsy value or the last value if none were found.
+Jinými slovy, řetězec ANDů `"||"` vrátí první nepravdivou hodnotu, a pokud není žádná nepravdivá hodnota nalezena, vrátí poslední hodnotu.
 
-The rules above are similar to OR. The difference is that AND returns the first *falsy* value while OR returns the first *truthy* one.
+Výše uvedená pravidla se podobají operátoru OR. Rozdíl spočívá v tom, že AND najde první *nepravdivou* hodnotu, zatímco OR najde první *pravdivou*.
 
-Examples:
+Příklady:
 
 ```js run
-// if the first operand is truthy,
-// AND returns the second operand:
+// je-li první operand pravdivý,
+// AND vrátí druhý operand:
 alert( 1 && 0 ); // 0
 alert( 1 && 5 ); // 5
 
-// if the first operand is falsy,
-// AND returns it. The second operand is ignored
+// je-li první operand nepravdivý,
+// AND ho vrátí. Druhý operand se pak ignoruje.
 alert( null && 5 ); // null
-alert( 0 && "no matter what" ); // 0
+alert( 0 && "je jedno co" ); // 0
 ```
 
-We can also pass several values in a row. See how the first falsy one is returned:
+Můžeme předat i více hodnot za sebou. Podívejme se, jak se vrátí první nepravdivá:
 
 ```js run
 alert( 1 && 2 && null && 3 ); // null
 ```
 
-When all values are truthy, the last value is returned:
+Když jsou všechny hodnoty pravdivé, vrátí se poslední z nich:
 
 ```js run
-alert( 1 && 2 && 3 ); // 3, the last one
+alert( 1 && 2 && 3 ); // 3, poslední hodnota
 ```
 
-````smart header="Precedence of AND `&&` is higher than OR `||`"
-The precedence of AND `&&` operator is higher than OR `||`.
+````smart header="Priorita AND `&&` je vyšší než priorita OR `||`"
+Priorita operátoru AND `&&` je vyšší než priorita operátoru OR `||`.
 
-So the code `a && b || c && d` is essentially the same as if the `&&` expressions were in parentheses: `(a && b) || (c && d)`.
+Kód `a && b || c && d` je tedy v zásadě stejný, jako kdyby výrazy s `&&` byly uzavřeny do závorek: `(a && b) || (c && d)`.
 ````
 
-````warn header="Don't replace `if` with `||` or `&&`"
-Sometimes, people use the AND `&&` operator as a "shorter way to write `if`".
+````warn header="Nenahrazujte příkaz `if` operátorem || nebo &&"
+Někdy lidé používají operátor AND `&&` jako „kratší variantu `if`“.
 
-For instance:
-
-```js run
-let x = 1;
-
-(x > 0) && alert( 'Greater than zero!' );
-```
-
-The action in the right part of `&&` would execute only if the evaluation reaches it. That is, only if `(x > 0)` is true.
-
-So we basically have an analogue for:
+Příklad:
 
 ```js run
 let x = 1;
 
-if (x > 0) alert( 'Greater than zero!' );
+(x > 0) && alert( 'Větší než nula!' );
 ```
 
-Although, the variant with `&&` appears shorter, `if` is more obvious and tends to be a little bit more readable. So we recommend using every construct for its purpose: use `if` if we want `if` and use `&&` if we want AND.
+Akce napravo od `&&` se vykoná jen tehdy, když k ní dospěje vyhodnocování, tedy jen když `(x > 0)` platí.
+
+Máme tedy v zásadě analogii k:
+
+```js run
+let x = 1;
+
+if (x > 0) alert( 'Větší než nula!' );
+```
+
+Ačkoli varianta s `&&` se zdá být kratší, `if` je zřejmější a obvykle bývá trochu čitelnější. Doporučujeme tedy používat každou konstrukci k tomu, k čemu byla stvořena: používejte `if`, chcete-li „pokud“, a používejte `&&`, chcete-li AND.
 ````
 
 
 ## ! (NOT)
 
-The boolean NOT operator is represented with an exclamation sign `!`.
+Booleovský operátor „NOT“ („ne“) je reprezentován vykřičníkem `!`.
 
-The syntax is pretty simple:
+Jeho syntaxe je velice jednoduchá:
 
 ```js
-result = !value;
+výsledek = !hodnota;
 ```
 
-The operator accepts a single argument and does the following:
+Tento operátor přijímá jediný argument a provádí následující:
 
-1. Converts the operand to boolean type: `true/false`.
-2. Returns the inverse value.
+1. Převede operand na typ boolean: `true/false`.
+2. Vrátí opačnou hodnotu.
 
-For instance:
+Příklad:
 
 ```js run
 alert( !true ); // false
 alert( !0 ); // true
 ```
 
-A double NOT `!!` is sometimes used for converting a value to boolean type:
+Někdy se používá dvojité NOT `!!` ke konverzi hodnoty na typ boolean:
 
 ```js run
-alert( !!"non-empty string" ); // true
+alert( !!"neprázdný řetězec" ); // true
 alert( !!null ); // false
 ```
 
-That is, the first NOT converts the value to boolean and returns the inverse, and the second NOT inverses it again. In the end, we have a plain value-to-boolean conversion.
+Znamená to, že první NOT převede hodnotu na boolean a vrátí opak, druhý NOT jej znovu převrátí. Na konci tedy máme planou konverzi na boolean.
 
-There's a little more verbose way to do the same thing -- a built-in `Boolean` function:
+Existuje trochu výmluvnější způsob, jak udělat totéž -- vestavěná funkce `Boolean`:
 
 ```js run
-alert( Boolean("non-empty string") ); // true
+alert( Boolean("neprázdný řetězec") ); // true
 alert( Boolean(null) ); // false
 ```
 
-The precedence of NOT `!` is the highest of all logical operators, so it always executes first, before `&&` or `||`.
+Operátor NOT `!` má nejvyšší prioritu ze všech logických operátorů, takže se vždy vykoná jako první, dříve než `&&` nebo `||`.

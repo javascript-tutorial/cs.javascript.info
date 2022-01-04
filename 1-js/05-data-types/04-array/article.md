@@ -1,415 +1,415 @@
-# Arrays
+# Pole
 
-Objects allow you to store keyed collections of values. That's fine.
+Objekty nám umožňují ukládat kolekci hodnot roztříděnou podle klíčů. To je pěkné.
 
-But quite often we find that we need an *ordered collection*, where we have a 1st, a 2nd, a 3rd element and so on. For example, we need that to store a list of something: users, goods, HTML elements etc.
+Poměrně často však zjišťujeme, že potřebujeme *seřazenou kolekci*, v níž máme první, druhý, třetí prvek a tak dále. Například do ní potřebujeme uložit seznam nějakých věcí: uživatelů, zboží, HTML prvků a podobně.
 
-It is not convenient to use an object here, because it provides no methods to manage the order of elements. We can’t insert a new property “between” the existing ones. Objects are just not meant for such use.
+Použít k tomu objekt se nehodí, protože ten neposkytuje žádné metody, jak ovládat pořadí prvků. Nemůžeme vložit novou vlastnost „mezi“ existující. Objekty k takovému použití prostě nejsou stavěny.
 
-There exists a special data structure named `Array`, to store ordered collections.
+K uložení seřazených kolekcí však existuje speciální datová struktura nazvaná `Array`, česky „pole“.
 
-## Declaration
+## Deklarace
 
-There are two syntaxes for creating an empty array:
-
-```js
-let arr = new Array();
-let arr = [];
-```
-
-Almost all the time, the second syntax is used. We can supply initial elements in the brackets:
+K vytvoření prázdného pole existují dvě syntaxe:
 
 ```js
-let fruits = ["Apple", "Orange", "Plum"];
+let pole = new Array();
+let pole = [];
 ```
 
-Array elements are numbered, starting with zero.
+Téměř vždy se používá ta druhá. Do hranatých závorek můžeme uvést počáteční prvky pole:
 
-We can get an element by its number in square brackets:
+```js
+let ovoce = ["Jablko", "Pomeranč", "Švestka"];
+```
+
+Prvky pole jsou očíslovány a začínají nulou.
+
+Získat prvek pole můžeme tak, že uvedeme jeho číslo v hranatých závorkách:
 
 ```js run
-let fruits = ["Apple", "Orange", "Plum"];
+let ovoce = ["Jablko", "Pomeranč", "Švestka"];
 
-alert( fruits[0] ); // Apple
-alert( fruits[1] ); // Orange
-alert( fruits[2] ); // Plum
+alert( ovoce[0] ); // Jablko
+alert( ovoce[1] ); // Pomeranč
+alert( ovoce[2] ); // Švestka
 ```
 
-We can replace an element:
+Můžeme nahradit prvek jiným:
 
 ```js
-fruits[2] = 'Pear'; // now ["Apple", "Orange", "Pear"]
+ovoce[2] = 'Hruška'; // nyní ["Jablko", "Pomeranč", "Hruška"]
 ```
 
-...Or add a new one to the array:
+...Nebo přidat do pole nový prvek:
 
 ```js
-fruits[3] = 'Lemon'; // now ["Apple", "Orange", "Pear", "Lemon"]
+ovoce[3] = 'Citrón'; // nyní ["Jablko", "Pomeranč", "Hruška", "Citrón"]
 ```
 
-The total count of the elements in the array is its `length`:
+Celkový počet prvků pole představuje jeho délku, která je uložena ve vlastnosti `length`:
 
 ```js run
-let fruits = ["Apple", "Orange", "Plum"];
+let ovoce = ["Jablko", "Pomeranč", "Švestka"];
 
-alert( fruits.length ); // 3
+alert( ovoce.length ); // 3
 ```
 
-We can also use `alert` to show the whole array.
+Můžeme také použít `alert` k zobrazení celého pole.
 
 ```js run
-let fruits = ["Apple", "Orange", "Plum"];
+let ovoce = ["Jablko", "Pomeranč", "Švestka"];
 
-alert( fruits ); // Apple,Orange,Plum
+alert( ovoce ); // Jablko,Pomeranč,Švestka
 ```
 
-An array can store elements of any type.
+Do pole lze uložit prvky jakéhokoli typu.
 
-For instance:
+Například:
 
 ```js run no-beautify
-// mix of values
-let arr = [ 'Apple', { name: 'John' }, true, function() { alert('hello'); } ];
+// směs hodnot
+let pole = [ 'Jablko', { jméno: 'Jan' }, true, function() { alert('ahoj'); } ];
 
-// get the object at index 1 and then show its name
-alert( arr[1].name ); // John
+// získáme objekt na indexu 1 a zobrazíme jeho jméno
+alert( pole[1].jméno ); // Jan
 
-// get the function at index 3 and run it
-arr[3](); // hello
+// získáme funkci na indexu 3 a zavoláme ji
+pole[3](); // ahoj
 ```
 
 
-````smart header="Trailing comma"
-An array, just like an object, may end with a comma:
+````smart header="Koncová čárka"
+Pole, stejně jako objekt, může končit čárkou:
 ```js
-let fruits = [
-  "Apple",
-  "Orange",
-  "Plum"*!*,*/!*
+let ovoce = [
+  "Jablko",
+  "Pomeranč",
+  "Švestka"*!*,*/!*
 ];
 ```
 
-The "trailing comma" style makes it easier to insert/remove items, because all lines become alike.
+Styl „koncové *(trailing)* čárky“ zjednodušuje přidávání a odstraňování prvků, protože všechny řádky vypadají podobně.
 ````
 
 
-## Methods pop/push, shift/unshift
+## Metody pop/push, shift/unshift
 
-A [queue](https://en.wikipedia.org/wiki/Queue_(abstract_data_type)) is one of the most common uses of an array. In computer science, this means an ordered collection of elements which supports two operations:
+Jedním z nejběžnějších využití pole je [fronta](https://cs.wikipedia.org/wiki/Fronta_(datová_struktura)). V informatice znamená seřazenou kolekci prvků, která podporuje dvě operace:
 
-- `push` appends an element to the end.
-- `shift` get an element from the beginning, advancing the queue, so that the 2nd element becomes the 1st.
+- `push` připojí prvek na konec.
+- `shift` vezme prvek ze začátku a posune frontu, takže druhý prvek se stane prvním.
 
 ![](queue.svg)
 
-Arrays support both operations.
+Pole podporují obě operace.
 
-In practice we need it very often. For example, a queue of messages that need to be shown on-screen.
+V praxi ji potřebujeme velmi často. Například frontu zpráv, které musíme zobrazit na obrazovce.
 
-There's another use case for arrays -- the data structure named [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)).
+Dalším využitím polí je datová struktura nazvaná [zásobník](https://cs.wikipedia.org/wiki/Zásobník_(datová_struktura)).
 
-It supports two operations:
+Podporuje dvě operace:
 
-- `push` adds an element to the end.
-- `pop` takes an element from the end.
+- `push` přidá prvek na konec.
+- `pop` vezme prvek z konce.
 
-So new elements are added or taken always from the "end".
+Nové prvky se tedy vždy přidávají a odebírají z „konce“.
 
-A stack is usually illustrated as a pack of cards: new cards are added to the top or taken from the top:
+Zásobník se obvykle ilustruje jako balíček karet: nové karty se přidávají na vrch a berou se z vrchu:
 
 ![](stack.svg)
 
-For stacks, the latest pushed item is received first, that's also called LIFO (Last-In-First-Out) principle. For queues, we have FIFO (First-In-First-Out).
+U zásobníků se naposledy vložený prvek odebírá jako první. Tento princip se také nazývá LIFO (Last-In-First-Out, česky „poslední dovnitř, první ven“). U fronty máme princip FIFO (First-In-First-Out, česky „první dovnitř, první ven“).
 
-Arrays in JavaScript can work both as a queue and as a stack. They allow you to add/remove elements both to/from the beginning or the end.
+Pole v JavaScriptu mohou fungovat jako fronta i jako zásobník. Umožňují nám přidávat/odebírat prvky do/ze začátku nebo konce.
 
-In computer science the data structure that allows this, is called [deque](https://en.wikipedia.org/wiki/Double-ended_queue).
+Datová struktura, která to umožňuje, se v informatice nazývá [deque](https://en.wikipedia.org/wiki/Double-ended_queue) *(z anglického „double-ended queue“ -- „fronta s dvojitým koncem“)*.
 
-**Methods that work with the end of the array:**
+**Metody, které pracují s koncem pole:**
 
 `pop`
-: Extracts the last element of the array and returns it:
+: Vyjme z pole poslední prvek a vrátí jej:
 
     ```js run
-    let fruits = ["Apple", "Orange", "Pear"];
+    let ovoce = ["Jablko", "Pomeranč", "Hruška"];
 
-    alert( fruits.pop() ); // remove "Pear" and alert it
+    alert( ovoce.pop() ); // odstraní prvek "Hruška" a zobrazí jej
 
-    alert( fruits ); // Apple, Orange
+    alert( ovoce ); // Jablko, Pomeranč
     ```
 
 `push`
-: Append the element to the end of the array:
+: Připojí prvek na konec pole:
 
     ```js run
-    let fruits = ["Apple", "Orange"];
+    let ovoce = ["Jablko", "Pomeranč"];
 
-    fruits.push("Pear");
+    ovoce.push("Hruška");
 
-    alert( fruits ); // Apple, Orange, Pear
+    alert( ovoce ); // Jablko, Pomeranč, Hruška
     ```
 
-    The call `fruits.push(...)` is equal to `fruits[fruits.length] = ...`.
+    Volání `ovoce.push(...)` se rovná volání `ovoce[ovoce.length] = ...`.
 
-**Methods that work with the beginning of the array:**
+**Metody, které pracují se začátkem pole:**
 
 `shift`
-: Extracts the first element of the array and returns it:
+: Vyjme první prvek z pole a vrátí jej:
 
     ```js run
-    let fruits = ["Apple", "Orange", "Pear"];
+    let ovoce = ["Jablko", "Pomeranč", "Hruška"];
 
-    alert( fruits.shift() ); // remove Apple and alert it
+    alert( ovoce.shift() ); // odstraní prvek Jablko a zobrazí jej
 
-    alert( fruits ); // Orange, Pear
+    alert( ovoce ); // Pomeranč, Hruška
     ```
 
 `unshift`
-: Add the element to the beginning of the array:
+: Přidá prvek na začátek pole:
 
     ```js run
-    let fruits = ["Orange", "Pear"];
+    let ovoce = ["Pomeranč", "Hruška"];
 
-    fruits.unshift('Apple');
+    ovoce.unshift('Jablko');
 
-    alert( fruits ); // Apple, Orange, Pear
+    alert( ovoce ); // Jablko, Pomeranč, Hruška
     ```
 
-Methods `push` and `unshift` can add multiple elements at once:
+Metody `push` a `unshift` mohou přidávat více prvků najednou:
 
 ```js run
-let fruits = ["Apple"];
+let ovoce = ["Jablko"];
 
-fruits.push("Orange", "Peach");
-fruits.unshift("Pineapple", "Lemon");
+ovoce.push("Pomeranč", "Broskev");
+ovoce.unshift("Ananas", "Citrón");
 
-// ["Pineapple", "Lemon", "Apple", "Orange", "Peach"]
-alert( fruits );
+// ["Ananas", "Citrón", "Jablko", "Pomeranč", "Broskev"]
+alert( ovoce );
 ```
 
-## Internals
+## Interní reprezentace
 
-An array is a special kind of object. The square brackets used to access a property `arr[0]` actually come from the object syntax. That's essentially the same as `obj[key]`, where `arr` is the object, while numbers are used as keys.
+Pole je speciální druh objektu. Hranaté závorky, kterými se přistupuje k vlastnosti `pole[0]`, ve skutečnosti pocházejí ze syntaxe objektu. Je to v zásadě totéž jako `objekt[klíč]`, kde objektem je `pole`, zatímco jako klíče se používají čísla.
 
-They extend objects providing special methods to work with ordered collections of data and also the `length` property. But at the core it's still an object.
+Pole rozšiřují objekty pomocí speciálních metod, které pracují se seřazenými kolekcemi dat, a vlastnosti `length`. V jádru jsou to však stále objekty.
 
-Remember, there are only eight basic data types in JavaScript (see the [Data types](info:types) chapter for more info). Array is an object and thus behaves like an object.
+Pamatujte, že v JavaScriptu je pouze osm základních datových typů (pro více informací viz kapitolu [Datové typy](info:types)). Pole je objekt, a proto se chová jako objekt.
 
-For instance, it is copied by reference:
+Například je kopírováno odkazem:
 
 ```js run
-let fruits = ["Banana"]
+let ovoce = ["Banán"]
 
-let arr = fruits; // copy by reference (two variables reference the same array)
+let pole = ovoce; // kopírování odkazem (dvě proměnné se odkazují na stejné pole)
 
-alert( arr === fruits ); // true
+alert( pole === ovoce ); // true
 
-arr.push("Pear"); // modify the array by reference
+pole.push("Hruška"); // modifikace pole odkazem
 
-alert( fruits ); // Banana, Pear - 2 items now
+alert( ovoce ); // Banán, Hruška - nyní 2 prvky
 ```
 
-...But what makes arrays really special is their internal representation. The engine tries to store its elements in the contiguous memory area, one after another, just as depicted on the illustrations in this chapter, and there are other optimizations as well, to make arrays work really fast.
+...Avšak to, co činí pole opravdu speciálními, je jejich interní reprezentace. Engine se snaží ukládat prvky pole do souvislé oblasti v paměti, jeden za druhým, jak je zobrazeno na obrázcích v této kapitole. Existují i jiné optimalizace, které způsobují, že pole fungují opravdu rychle.
 
-But they all break if we quit working with an array as with an "ordered collection" and start working with it as if it were a regular object.
+Ty se však všechny rozbijí, jestliže přestaneme pracovat s polem jako se „seřazenou kolekcí“ a začneme s ním pracovat tak, jako by to byl běžný objekt.
 
-For instance, technically we can do this:
+Například technicky můžeme udělat tohle:
 
 ```js
-let fruits = []; // make an array
+let ovoce = []; // vytvoříme pole
 
-fruits[99999] = 5; // assign a property with the index far greater than its length
+ovoce[99999] = 5; // přidáme vlastnost s indexem daleko větším, než jeho délka
 
-fruits.age = 25; // create a property with an arbitrary name
+ovoce.věk = 25; // vytvoříme vlastnost s libovolným názvem
 ```
 
-That's possible, because arrays are objects at their base. We can add any properties to them.
+To je možné, protože pole jsou v základu objekty. Můžeme do nich přidávat jakékoli vlastnosti.
 
-But the engine will see that we're working with the array as with a regular object. Array-specific optimizations are not suited for such cases and will be turned off, their benefits disappear.
+Avšak engine uvidí, že s polem pracujeme jako s běžným objektem. Optimalizace specifické pro pole nejsou pro takové případy uzpůsobeny, a tak budou vypnuty a jejich výhody zmizí.
 
-The ways to misuse an array:
+Způsoby nesprávného používání pole:
 
-- Add a non-numeric property like `arr.test = 5`.
-- Make holes, like: add `arr[0]` and then `arr[1000]` (and nothing between them).
-- Fill the array in the reverse order, like `arr[1000]`, `arr[999]` and so on.
+- Přidání nečíselné vlastnosti, např. `pole.test = 5`.
+- Vytváření děr, např. přidáme `pole[0]` a pak `pole[1000]` (a nic mezi nimi).
+- Zaplňování pole v obráceném pořadí, např. `pole[1000]`, `pole[999]` a tak dále.
 
-Please think of arrays as special structures to work with the *ordered data*. They provide special methods for that. Arrays are carefully tuned inside JavaScript engines to work with contiguous ordered data, please use them this way. And if you need arbitrary keys, chances are high that you actually require a regular object `{}`.
+Prosíme, považujte pole za speciální struktury, které pracují se *seřazenými daty*. Poskytují pro ně speciální metody. V JavaScriptových enginech jsou pole pečlivě vyladěna, aby pracovala se spojitými seřazenými daty, a tak je prosíme používejte tímto způsobem. Budete-li potřebovat libovolné klíče, je velmi pravděpodobné, že ve skutečnosti potřebujete běžný objekt `{}`.
 
-## Performance
+## Výkon
 
-Methods `push/pop` run fast, while `shift/unshift` are slow.
+Metody `push/pop` běží rychle, zatímco `shift/unshift` jsou pomalé.
 
 ![](array-speed.svg)
 
-Why is it faster to work with the end of an array than with its beginning? Let's see what happens during the execution:
+Proč je rychlejší pracovat s koncem pole než s jeho začátkem? Podívejme se, co se děje při provádění metod:
 
 ```js
-fruits.shift(); // take 1 element from the start
+ovoce.shift(); // odebere 1 prvek ze začátku
 ```
 
-It's not enough to take and remove the element with the number `0`. Other elements need to be renumbered as well.
+Nestačí vzít a odstranit prvek s číslem `0`. Musejí se přečíslovat ostatní prvky.
 
-The `shift` operation must do 3 things:
+Operace `shift` musí provést 3 věci:
 
-1. Remove the element with the index `0`.
-2. Move all elements to the left, renumber them from the index `1` to `0`, from `2` to `1` and so on.
-3. Update the `length` property.
+1. Odstranit prvek s indexem `0`.
+2. Posunout všechny prvky doleva a přečíslovat je z indexu `1` na `0`, z `2` na `1` a tak dále.
+3. Upravit vlastnost `length`.
 
 ![](array-shift.svg)
 
-**The more elements in the array, the more time to move them, more in-memory operations.**
+**Čím více prvků pole obsahuje, tím více času a paměťových operací zabere jejich přesun.**
 
-The similar thing happens with `unshift`: to add an element to the beginning of the array, we need first to move existing elements to the right, increasing their indexes.
+Podobná věc se děje při `unshift`: abychom přidali prvek na začátek pole, musíme napřed posunout existující prvky doprava a zvýšit jejich indexy.
 
-And what's with `push/pop`? They do not need to move anything. To extract an element from the end, the `pop` method cleans the index and shortens `length`.
+A jak je to s `push/pop`? Ty nemusejí nic posunovat. Metoda `pop` vyjme prvek z konce tak, že vyčistí index a zkrátí `length`.
 
-The actions for the `pop` operation:
+Akce pro operaci `pop`:
 
 ```js
-fruits.pop(); // take 1 element from the end
+ovoce.pop(); // odebere 1 prvek z konce
 ```
 
 ![](array-pop.svg)
 
-**The `pop` method does not need to move anything, because other elements keep their indexes. That's why it's blazingly fast.**
+**Metoda `pop` nemusí nic posunovat, jelikož indexy ostatních prvků se zachovají. Proto je bleskově rychlá.**
 
-The similar thing with the `push` method.
+Podobně je tomu u metody `push`.
 
-## Loops
+## Cykly
 
-One of the oldest ways to cycle array items is the `for` loop over indexes:
+Jeden z nejstarších způsobů, jak procházet prvky pole, je cyklus `for` nad jeho indexy:
 
 ```js run
-let arr = ["Apple", "Orange", "Pear"];
+let pole = ["Jablko", "Pomeranč", "Hruška"];
 
 *!*
-for (let i = 0; i < arr.length; i++) {
+for (let i = 0; i < pole.length; i++) {
 */!*
-  alert( arr[i] );
+  alert( pole[i] );
 }
 ```
 
-But for arrays there is another form of loop, `for..of`:
+Pro pole však existuje i jiná forma cyklu, `for..of`:
 
 ```js run
-let fruits = ["Apple", "Orange", "Plum"];
+let ovoce = ["Jablko", "Pomeranč", "Švestka"];
 
-// iterates over array elements
-for (let fruit of fruits) {
-  alert( fruit );
+// prochází prvky pole
+for (let jednoOvoce of ovoce) {
+  alert( jednoOvoce );
 }
 ```
 
-The `for..of` doesn't give access to the number of the current element, just its value, but in most cases that's enough. And it's shorter.
+Cyklus `for..of` neposkytuje přístup k indexu aktuálního prvku, jen jeho hodnotu, ale ve většině případů to stačí. A je to kratší.
 
-Technically, because arrays are objects, it is also possible to use `for..in`:
+Protože pole jsou objekty, je technicky možné použít i `for..in`:
 
 ```js run
-let arr = ["Apple", "Orange", "Pear"];
+let pole = ["Jablko", "Pomeranč", "Hruška"];
 
 *!*
-for (let key in arr) {
+for (let klíč in pole) {
 */!*
-  alert( arr[key] ); // Apple, Orange, Pear
+  alert( pole[klíč] ); // Jablko, Pomeranč, Hruška
 }
 ```
 
-But that's actually a bad idea. There are potential problems with it:
+Ve skutečnosti je to však špatný nápad. Mohou s ním nastat problémy:
 
-1. The loop `for..in` iterates over *all properties*, not only the numeric ones.
+1. Cyklus `for..in` prochází *všechny vlastnosti*, nejenom číselné.
 
-    There are so-called "array-like" objects in the browser and in other environments, that *look like arrays*. That is, they have `length` and indexes properties, but they may also have other non-numeric properties and methods, which we usually don't need. The `for..in` loop will list them though. So if we need to work with array-like objects, then these "extra" properties can become a problem.
+    V prohlížeči a v jiných prostředích jsou tzv. „polím podobné“ objekty, které *vypadají jako pole*. To znamená, že mají vlastnost `length` a indexové vlastnosti, ale mohou mít také jiné nečíselné vlastnosti a metody, které obvykle nepotřebujeme. Avšak cyklus `for..in` je prochází. Když tedy potřebujeme pracovat s objekty podobnými polím, tyto vlastnosti „navíc“ mohou představovat problém.
 
-2. The `for..in` loop is optimized for generic objects, not arrays, and thus is 10-100 times slower. Of course, it's still very fast. The speedup may only matter in bottlenecks. But still we should be aware of the difference.
+2. Cyklus `for..in` je optimalizován pro generické objekty, ne pro pole, a tak je 10-100krát pomalejší. Samozřejmě je stále velmi rychlý, zpomalení se může projevit jen v úzkých hrdlech. Měli bychom si však být tohoto rozdílu vědomi.
 
-Generally, we shouldn't use `for..in` for arrays.
+Obecně bychom neměli `for..in` používat pro pole.
 
 
-## A word about "length"
+## Něco o „length“
 
-The `length` property automatically updates when we modify the array. To be precise, it is actually not the count of values in the array, but the greatest numeric index plus one.
+Když modifikujeme pole, vlastnost `length` se automaticky aktualizuje. Abychom byli přesní, ve skutečnosti to není počet hodnot v poli, ale nejvyšší číselný index plus jedna.
 
-For instance, a single element with a large index gives a big length:
-
-```js run
-let fruits = [];
-fruits[123] = "Apple";
-
-alert( fruits.length ); // 124
-```
-
-Note that we usually don't use arrays like that.
-
-Another interesting thing about the `length` property is that it's writable.
-
-If we increase it manually, nothing interesting happens. But if we decrease it, the array is truncated. The process is irreversible, here's the example:
+Například jediný prvek s velkým indexem způsobí, že `length` bude vysoká:
 
 ```js run
-let arr = [1, 2, 3, 4, 5];
+let ovoce = [];
+ovoce[123] = "Jablko";
 
-arr.length = 2; // truncate to 2 elements
-alert( arr ); // [1, 2]
-
-arr.length = 5; // return length back
-alert( arr[3] ); // undefined: the values do not return
+alert( ovoce.length ); // 124
 ```
 
-So, the simplest way to clear the array is: `arr.length = 0;`.
+Všimněte si, že pole obvykle takto nepoužíváme.
+
+Další zajímavostí na vlastnosti `length` je, že do ní lze zapisovat.
+
+Když ji ručně zvýšíme, nestane se nic zajímavého. Ale když ji snížíme, pole bude zkráceno. Tento proces je nezvratný, viz příklad:
+
+```js run
+let pole = [1, 2, 3, 4, 5];
+
+pole.length = 2; // zkrácení na 2 prvky
+alert( pole ); // [1, 2]
+
+pole.length = 5; // vrátíme délku zpět
+alert( pole[3] ); // undefined: hodnoty se nevrátily
+```
+
+Nejjednodušší způsob, jak pole vyčistit, je tedy `pole.length = 0;`.
 
 
 ## new Array() [#new-array]
 
-There is one more syntax to create an array:
+Existuje ještě jedna syntaxe, jak vytvořit pole:
 
 ```js
-let arr = *!*new Array*/!*("Apple", "Pear", "etc");
+let pole = *!*new Array*/!*("Jablko", "Hruška", "atd.");
 ```
 
-It's rarely used, because square brackets `[]` are shorter. Also there's a tricky feature with it.
+Používá se jen zřídka, protože hranaté závorky `[]` jsou kratší. Navíc má jednu ošidnou vlastnost.
 
-If `new Array` is called with a single argument which is a number, then it creates an array *without items, but with the given length*.
+Je-li `new Array` voláno s jediným argumentem, kterým je číslo, pak vytvoří pole *bez prvků, ale se zadanou délkou*.
 
-Let's see how one can shoot themself in the foot:
+Podívejme se, jak se můžeme snadno střelit do nohy:
 
 ```js run
-let arr = new Array(2); // will it create an array of [2] ?
+let pole = new Array(2); // vznikne pole [2] ?
 
-alert( arr[0] ); // undefined! no elements.
+alert( pole[0] ); // undefined! bez prvků.
 
-alert( arr.length ); // length 2
+alert( pole.length ); // délka 2
 ```
 
-To avoid such surprises, we usually use square brackets, unless we really know what we're doing.
+Abychom předešli takovým překvapením, používáme zpravidla hranaté závorky, pokud opravdu dobře nevíme, co děláme.
 
-## Multidimensional arrays
+## Vícerozměrná pole
 
-Arrays can have items that are also arrays. We can use it for multidimensional arrays, for example to store matrices:
+Pole mohou obsahovat prvky, které jsou také pole. To můžeme využít pro vícerozměrná pole, například pro ukládání matic:
 
 ```js run
-let matrix = [
+let matice = [
   [1, 2, 3],
   [4, 5, 6],
   [7, 8, 9]
 ];
 
-alert( matrix[1][1] ); // 5, the central element
+alert( matice[1][1] ); // 5, prostřední prvek
 ```
 
 ## toString
 
-Arrays have their own implementation of `toString` method that returns a comma-separated list of elements.
+Pole mají svou vlastní implementaci metody `toString`, která vrátí seznam prvků oddělených čárkou.
 
-For instance:
+Příklad:
 
 
 ```js run
-let arr = [1, 2, 3];
+let pole = [1, 2, 3];
 
-alert( arr ); // 1,2,3
-alert( String(arr) === '1,2,3' ); // true
+alert( pole ); // 1,2,3
+alert( String(pole) === '1,2,3' ); // true
 ```
 
-Also, let's try this:
+Zkuste také tohle:
 
 ```js run
 alert( [] + 1 ); // "1"
@@ -417,9 +417,9 @@ alert( [1] + 1 ); // "11"
 alert( [1,2] + 1 ); // "1,21"
 ```
 
-Arrays do not have `Symbol.toPrimitive`, neither a viable `valueOf`, they implement only `toString` conversion, so here `[]` becomes an empty string, `[1]` becomes `"1"` and `[1,2]` becomes `"1,2"`.
+Pole nemají `Symbol.toPrimitive` ani životaschopné `valueOf`, implementují jedině konverzi `toString`, takže `[]` se převede na prázdný řetězec, `[1]` se převede na `"1"` a `[1,2]` se převede na `"1,2"`.
 
-When the binary plus `"+"` operator adds something to a string, it converts it to a string as well, so the next step looks like this:
+Když operátor binárního plus `"+"` přidává něco do řetězce, převede to také na řetězec, takže další krok vypadá následovně:
 
 ```js run
 alert( "" + 1 ); // "1"
@@ -427,31 +427,31 @@ alert( "1" + 1 ); // "11"
 alert( "1,2" + 1 ); // "1,21"
 ```
 
-## Don't compare arrays with ==
+## Neporovnávejte pole pomocí ==
 
-Arrays in JavaScript, unlike some other programming languages, shouldn't be compared with operator `==`.
+Pole v JavaScriptu, na rozdíl od jiných programovacích jazyků, by neměla být porovnávána operátorem `==`.
 
-This operator has no special treatment for arrays, it works with them as with any objects.
+Tento operátor nezná žádné zvláštní zacházení s poli, pracuje s nimi jako s kterýmikoli jinými objekty.
 
-Let's recall the rules:
+Připomeňme si pravidla:
 
-- Two objects are equal `==` only if they're references to the same object.
-- If one of the arguments of `==` is an object, and the other one is a primitive, then the object gets converted to primitive, as explained in the chapter <info:object-toprimitive>.
-- ...With an exception of `null` and `undefined` that equal `==` each other and nothing else.
+- Dva objekty jsou si rovny `==`, jedině když to jsou odkazy na tentýž objekt.
+- Je-li jeden z argumentů `==` objekt a druhý je primitiv, objekt bude převeden na primitiv, jak bylo vysvětleno v kapitole <info:object-toprimitive>.
+- ...Výjimkou jsou `null` a `undefined`, které se rovnají `==` sobě navzájem a ničemu jinému.
 
-The strict comparison `===` is even simpler, as it doesn't convert types. 
+Striktní porovnání `===` je ještě jednodušší, jelikož neprovádí typovou konverzi.
 
-So, if we compare arrays with `==`, they are never the same, unless we compare two variables that reference exactly the same array.
+Když tedy porovnáváme pole pomocí `==`, nejsou si nikdy rovna, pokud neporovnáváme dvě proměnné, které odkazují na jedno a totéž pole.
 
-For example:
+Příklad:
 ```js run
 alert( [] == [] ); // false
 alert( [0] == [0] ); // false
 ```
 
-These arrays are technically different objects. So they aren't equal. The `==` operator doesn't do item-by-item comparison.
+Tato pole jsou technicky různé objekty. Proto si nejsou rovna. Operátor `==` neprovádí porovnání prvek po prvku.
 
-Comparison with primitives may give seemingly strange results as well:
+Také porovnání s primitivy mohou vydat zdánlivě podivné výsledky:
 
 ```js run
 alert( 0 == [] ); // true
@@ -459,54 +459,54 @@ alert( 0 == [] ); // true
 alert('0' == [] ); // false
 ```
 
-Here, in both cases, we compare a primitive with an array object. So the array `[]` gets converted to primitive for the purpose of comparison and becomes an empty string `''`. 
+V obou případech zde porovnáváme primitiv s objektem pole. Pro účely porovnávání je tedy pole `[]` konvertováno na primitiv a stane se z něj prázdný řetězec `''`. 
 
-Then the comparison process goes on with the primitives, as described in the chapter <info:type-conversions>:
+Pak proces porovnávání pokračuje na primitivech, jak je popsáno v kapitole <info:type-conversions>:
 
 ```js run
-// after [] was converted to ''
-alert( 0 == '' ); // true, as '' becomes converted to number 0
+// poté, co [] bylo konvertováno na ''
+alert( 0 == '' ); // true, jelikož '' bude konvertováno na číslo 0
 
-alert('0' == '' ); // false, no type conversion, different strings
+alert('0' == '' ); // false, žádná typová konverze, různé řetězce
 ```
 
-So, how to compare arrays?
+Jak tedy porovnávat pole?
 
-That's simple: don't use the `==` operator. Instead, compare them item-by-item in a loop or using iteration methods explained in the next chapter.
+Je to jednoduché: nepoužívejte operátor `==`. Místo toho je porovnávejte prvek po prvku v cyklu nebo pomocí iteračních metod, které budou vysvětleny v další kapitole.
 
-## Summary
+## Shrnutí
 
-Array is a special kind of object, suited to storing and managing ordered data items.
+Pole je speciální druh objektu, uzpůsobený k ukládání a spravování seřazených datových prvků.
 
-- The declaration:
+- Deklarace:
 
     ```js
-    // square brackets (usual)
-    let arr = [item1, item2...];
+    // hranaté závorky (obvyklé)
+    let pole = [prvek1, prvek2...];
 
-    // new Array (exceptionally rare)
-    let arr = new Array(item1, item2...);
+    // new Array (výjimečně vzácné)
+    let pole = new Array(prvek1, prvek2...);
     ```
 
-    The call to `new Array(number)` creates an array with the given length, but without elements.
+    Volání `new Array(číslo)` vytvoří pole o zadané délce, ale bez prvků.
 
-- The `length` property is the array length or, to be precise, its last numeric index plus one. It is auto-adjusted by array methods.
-- If we shorten `length` manually, the array is truncated.
+- Vlastnost `length` je délka pole nebo, abychom byli přesní, jeho poslední číselný index plus jedna. Metody pole ji automaticky aktualizují.
+- Snížíme-li `length` ručně, pole bude zkráceno.
 
-We can use an array as a deque with the following operations:
+Pole můžeme používat jako deque (frontu s dvojitým koncem) s následujícími operacemi:
 
-- `push(...items)` adds `items` to the end.
-- `pop()` removes the element from the end and returns it.
-- `shift()` removes the element from the beginning and returns it.
-- `unshift(...items)` adds `items` to the beginning.
+- `push(...prvky)` přidá `prvky` na konec.
+- `pop()` odstraní prvek z konce a vrátí jej.
+- `shift()` odstraní prvek ze začátku a vrátí jej.
+- `unshift(...prvky)` přidá `prvky` na začátek.
 
-To loop over the elements of the array:
-  - `for (let i=0; i<arr.length; i++)` -- works fastest, old-browser-compatible.
-  - `for (let item of arr)` -- the modern syntax for items only,
-  - `for (let i in arr)` -- never use.
+Cyklus procházející prvky pole:
+  - `for (let i=0; i<pole.length; i++)` -- funguje nejrychleji, kompatibilní i se starými prohlížeči.
+  - `for (let prvek of pole)` -- moderní syntaxe výhradně pro prvky.
+  - `for (let i in pole)` -- nepoužívat.
 
-To compare arrays, don't use the `==` operator (as well as `>`, `<` and others), as they have no special treatment for arrays. They handle them as any objects, and it's not what we usually want.
+Pro porovnávání polí nepoužívejte operátor `==` (stejně jako `>`, `<` a jiné), jelikož tyto operátory neznají žádné zvláštní zacházení s poli. Zacházejí s nimi jako s objekty, což není obvykle to, co chceme.
 
-Instead you can use `for..of` loop to compare arrays item-by-item.
+Místo toho můžeme použít cyklus `for..of` a porovnávat pole prvek po prvku.
 
-We will continue with arrays and study more methods to add, remove, extract elements and sort arrays in the next chapter <info:array-methods>.
+V další kapitole <info:array-methods> budeme s poli pokračovat a prostudujeme další metody, jak přidávat, odstraňovat a vybírat prvky a jak pole řadit.

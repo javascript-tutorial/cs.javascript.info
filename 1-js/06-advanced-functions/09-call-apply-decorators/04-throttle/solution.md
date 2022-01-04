@@ -1,26 +1,26 @@
 ```js demo
-function throttle(func, ms) {
+function tlumič(funkce, ms) {
 
-  let isThrottled = false,
-    savedArgs,
-    savedThis;
+  let jeTlumena = false,
+    uloženéArgumenty,
+    uloženéThis;
 
   function wrapper() {
 
-    if (isThrottled) { // (2)
-      savedArgs = arguments;
-      savedThis = this;
+    if (jeTlumena) { // (2)
+      uloženéArgumenty = arguments;
+      uloženéThis = this;
       return;
     }
-    isThrottled = true;
+    jeTlumena = true;
 
-    func.apply(this, arguments); // (1)
+    funkce.apply(this, arguments); // (1)
 
     setTimeout(function() {
-      isThrottled = false; // (3)
-      if (savedArgs) {
-        wrapper.apply(savedThis, savedArgs);
-        savedArgs = savedThis = null;
+      jeTlumena = false; // (3)
+      if (uloženéArgumenty) {
+        wrapper.apply(uloženéThis, uloženéArgumenty);
+        uloženéArgumenty = uloženéThis = null;
       }
     }, ms);
   }
@@ -29,10 +29,10 @@ function throttle(func, ms) {
 }
 ```
 
-A call to `throttle(func, ms)` returns `wrapper`.
+Volání funkce `tlumič(funkce, ms)` vrátí `wrapper`.
 
-1. During the first call, the `wrapper` just runs `func` and sets the cooldown state (`isThrottled = true`).
-2. In this state all calls are memorized in `savedArgs/savedThis`. Please note that both the context and the arguments are equally important and should be memorized. We need them simultaneously to reproduce the call.
-3. After `ms` milliseconds pass, `setTimeout` triggers. The cooldown state is removed (`isThrottled = false`) and, if we had ignored calls, `wrapper` is executed with the last memorized arguments and context.
+1. Během prvního volání `wrapper` jen spustí funkci `funkce` a nastaví stav chladnutí (`jeTlumena = true`).
+2. V tomto stavu se všechna volání budou ukládat do `uloženéArgumenty/uloženéThis`. Prosíme všimněte si, že kontext i argumenty jsou stejně důležité a měly by se ukládat do paměti. K reprodukování volání potřebujeme obojí.
+3. Po uplynutí `ms` milisekund se spustí `setTimeout`. Stav chladnutí se odstraní (`jeTlumena = false`), a pokud jsme ignorovali nějaká volání, `wrapper` se spustí s posledními zapamatovanými argumenty a kontextem.
 
-The 3rd step runs not `func`, but `wrapper`, because we not only need to execute `func`, but once again enter the cooldown state and setup the timeout to reset it.
+Třetí krok nespouští funkci `funkce`, ale `wrapper`, protože potřebujeme nejenom spustit `funkce`, ale také znovu vstoupit do stavu chladnutí a nastavit timeout, abychom jej vyresetovali.

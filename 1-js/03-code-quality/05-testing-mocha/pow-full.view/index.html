@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- add mocha css, to show results -->
+  <!-- přidáme css mochy, aby se zobrazily výsledky -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
-  <!-- add mocha framework code -->
+  <!-- přidáme kód frameworku mocha -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
   <script>
-    // enable bdd-style testing
+    // umožňuje testování stylem bdd
     mocha.setup('bdd');
   </script>
-  <!-- add chai -->
+  <!-- přidáme chai -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
   <script>
-    // chai has a lot of stuff, let's make assert global
+    // chai má spoustu věcí, učiníme assert globálním
     let assert = chai.assert;
   </script>
 </head>
@@ -20,25 +20,25 @@
 <body>
 
   <script>
-    function pow(x, n) {
+    function mocnina(x, n) {
       if (n < 0) return NaN;
       if (Math.round(n) != n) return NaN;
 
-      let result = 1;
+      let výsledek = 1;
       for (let i = 0; i < n; i++) {
-        result *= x;
+        výsledek *= x;
       }
-      return result;
+      return výsledek;
     }
   </script>
 
-  <!-- the script with tests (describe, it...) -->
+  <!-- skript s testy (describe, it...) -->
   <script src="test.js"></script>
 
-  <!-- the element with id="mocha" will contain test results -->
+  <!-- prvek s id="mocha" bude obsahovat výsledky testů -->
   <div id="mocha"></div>
 
-  <!-- run tests! -->
+  <!-- spustíme testy! -->
   <script>
     mocha.run();
   </script>
