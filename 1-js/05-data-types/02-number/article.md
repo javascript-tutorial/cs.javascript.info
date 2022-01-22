@@ -50,11 +50,7 @@ let mсs = 0.000001;
 Stejně jako předtím nám může pomoci použití `"e"`. Jestliže se chceme vyhnout explicitnímu zápisu nul, můžeme zapsat totéž jako:
 
 ```js
-<<<<<<< HEAD
-let ms = 1e-6; // šest nul nalevo od 1
-=======
-let mcs = 1e-6; // six zeroes to the left from 1
->>>>>>> a6fdfda09570a8ce47bb0b83cd7a32a33869cfad
+let mcs = 1e-6; // šest nul nalevo od 1
 ```
 
 Spočítáme-li nuly v čísle `0.000001`, bude jich 6. Je to tedy přirozeně `1e-6`.
