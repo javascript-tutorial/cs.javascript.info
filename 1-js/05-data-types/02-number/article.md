@@ -44,13 +44,13 @@ Jinými slovy, `e` toto číslo násobí číslem `1` se zadaným počtem nul.
 Nyní zapišme něco velmi malého. Třeba 1 mikrosekundu (jednu milióntinu sekundy):
 
 ```js
-let ms = 0.000001;
+let mcs = 0.000001;
 ```
 
 Stejně jako předtím nám může pomoci použití `"e"`. Jestliže se chceme vyhnout explicitnímu zápisu nul, můžeme zapsat totéž jako:
 
 ```js
-let ms = 1e-6; // šest nul nalevo od 1
+let mcs = 1e-6; // šest nul nalevo od 1
 ```
 
 Spočítáme-li nuly v čísle `0.000001`, bude jich 6. Je to tedy přirozeně `1e-6`.

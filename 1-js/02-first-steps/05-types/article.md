@@ -86,7 +86,6 @@ Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v I
 Nahlédnutím do [*MDN* tabulky kompatibility BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
 
 ## Řetězec
-=======
 
 Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
 
@@ -100,7 +99,7 @@ JavaScript rozeznává tři druhy uvozovek.
 
 1. Dvojité uvozovky: `"Ahoj"`.
 2. Jednoduché uvozovky (apostrofy): `'Ahoj'`.
-3. Obrácené čárky (gravisy): <code>&#96;Hello&#96;</code>.
+3. Obrácené čárky (gravisy): <code>&#96;Ahoj&#96;</code>.
 
 Dvojité uvozovky a apostrofy jsou „obyčejné“ uvozovky. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
 
@@ -241,10 +240,10 @@ Poslední tři řádky možná vyžadují podrobnější vysvětlení:
 2. Výsledkem `typeof null` je `"object"`. Toto je oficiálně přiznaná chyba chování `typeof`, která pochází z pravěku JavaScriptu a byla v něm ponechána kvůli kompatibilitě. Ve skutečnosti `null` není objekt. Je to speciální hodnota, která má svůj vlastní typ.
 3. Výsledkem `typeof alert` je `"function"`, protože `alert` je funkce. Funkce prostudujeme v dalších kapitolách, kde také uvidíme, že v JavaScriptu není žádný speciální typ „funkce“. Funkce jsou typu objekt. Avšak `typeof` s nimi zachází jinak a vrátí `"function"`. To také pochází z pravěku JavaScriptu. Technicky není toto chování korektní, ale v praxi může být užitečné.
 
-```smart header="Syntaxe `typeof(x)` syntax"
+```smart header="Syntaxe `typeof(x)`"
 Můžete narazit i na jinou syntaxi: `typeof(x)`. To je totéž jako `typeof x`.
 
-Abychom to objasnili: `typeof` je operátor, ne funkce. Závorky zde uvedené nejsou součástí `typeof`. Je to druh závorek používaný pro seskupování v matematice.
+Abychom to objasnili: `typeof` je operátor, ne funkce. Závorky zde uvedené nejsou součástí `typeof`. Je to stejný druh závorek, který se v matematice používá pro seskupování.
 
 Zpravidla takové závorky obsahují matematický výraz, např. `(2 + 2)`, ale zde obsahují jen jediný argument `(x)`. Syntakticky umožňují vyhnout se mezeře mezi operátorem `typeof` a jeho argumentem. Některým lidem se to líbí.
 
