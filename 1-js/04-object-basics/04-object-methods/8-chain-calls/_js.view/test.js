@@ -32,6 +32,14 @@ describe('Žebřík', function() {
   it('dolů().nahoru().nahoru().nahoru() ', function() {
     assert.equal(žebřík.dolů().nahoru().nahoru().nahoru().stupeň, 2);
   });
+
+  it('showStep() should return this', function() {
+    assert.equal(ladder.showStep(), ladder);
+  });
+ 
+  it('up().up().down().showStep().down().showStep()', function () {
+    assert.equal(ladder.up().up().down().showStep().down().showStep().step, 0)
+  });
   
   after(function() {
     žebřík.stupeň = 0;
