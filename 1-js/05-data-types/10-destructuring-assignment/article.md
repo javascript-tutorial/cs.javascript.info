@@ -5,7 +5,11 @@ Dvě nejpoužívanější datové struktury v JavaScriptu jsou objekty a pole.
 - Objekty nám umožňují vytvořit jednoduchou entitu, v níž jsou datové prvky uloženy pod klíči.
 - Pole nám umožňují shromáždit datové prvky do seřazeného seznamu.
 
+<<<<<<< HEAD
 Když je však předáváme funkci, funkce nemusí potřebovat objekt nebo pole jako celek. Může potřebovat jen jednotlivé části.
+=======
+Although, when we pass those to a function, it may need not be an object/array as a whole. It may need individual pieces.
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 
 *Destrukturační přiřazení* (česky někdy také nazývané *destrukturalizační* -- pozn. překl.) je speciální syntaxe, která nám umožňuje „rozbalit“ pole nebo objekty do svazku proměnných, který bývá někdy vhodnější.
 

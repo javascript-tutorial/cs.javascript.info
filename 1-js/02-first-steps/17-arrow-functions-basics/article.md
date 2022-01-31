@@ -33,7 +33,11 @@ let součet = function(a, b) {
 alert( součet(1, 2) ); // 3
 ```
 
+<<<<<<< HEAD
 Jak vidíte, `(a, b) => a + b` znamená funkci, která přijímá dva argumenty pojmenované `a` a `b`. Když je vykonána, vyhodnotí výraz `a + b` a vrátí jeho výsledek.
+=======
+As you can see, `(a, b) => a + b` means a function that accepts two arguments named `a` and `b`. Upon the execution, it evaluates the expression `a + b` and returns the result.
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 
 - Máme-li pouze jeden argument, můžeme závorky kolem něj vynechat, čímž se zápis ještě zkrátí.
 
@@ -86,7 +90,11 @@ Například takto:
 let součet = (a, b) => {  // složená závorka uvozuje víceřádkovou funkci
   let výsledek = a + b;
 *!*
+<<<<<<< HEAD
   return výsledek; // když používáme složené závorky, musíme výslovně uvést „return“
+=======
+  return result; // if we use curly braces, then we need an explicit "return"
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 */!*
 };
 

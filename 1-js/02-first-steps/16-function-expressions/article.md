@@ -12,7 +12,11 @@ function řekniAhoj() {
 
 Existuje i jiná syntaxe pro vytváření funkce, která se nazývá *funkční výraz*.
 
+<<<<<<< HEAD
 Ten nám umožňuje vytvořit novou funkci uprostřed libovolného výrazu.
+=======
+It allows us to create a new function in the middle of any expression.
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 
 Například:
 

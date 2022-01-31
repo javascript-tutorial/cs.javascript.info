@@ -27,10 +27,17 @@ let interval = {
 
 Abychom učinili objekt `interval` iterovatelným (a tím zprovoznili `for..of`), musíme do tohoto objektu přidat metodu nazvanou `Symbol.iterator` (speciální vestavěný symbol právě pro tento účel).
 
+<<<<<<< HEAD
 1. Když `for..of` začne, jedenkrát tuto metodu zavolá (nebo ohlásí chybu, není-li nalezena). Metoda musí vracet *iterátor* -- objekt obsahující metodu `next`.
 2. Nadále `for..of` pracuje *pouze s tímto vráceným objektem*.
 3. Když `for..of` chce další hodnotu, volá na tomto objektu `next()`.
 4. Výsledek `next()` musí mít tvar `{done: Boolean, value: cokoli}`, kde `done=true` znamená, že iterace skončila, v opačném případě je další hodnotou `value`.
+=======
+1. When `for..of` starts, it calls that method once (or errors if not found). The method must return an *iterator* -- an object with the method `next`.
+2. Onward, `for..of` works *only with that returned object*.
+3. When `for..of` wants the next value, it calls `next()` on that object.
+4. The result of `next()` must have the form `{done: Boolean, value: any}`, where `done=true` means that the loop is finished, otherwise `value` is the next value.
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 
 Zde je úplná implementace objektu `interval` s komentáři:
 
@@ -43,11 +50,19 @@ let interval = {
 // 1. volání for..of nejprve zavolá tuto funkci
 interval[Symbol.iterator] = function() {
 
+<<<<<<< HEAD
   // ...tato funkce vrátí objekt iterátoru:
   // 2. Od této chvíle for..of pracuje jen s tímto iterátorem a ptá se ho na další hodnoty
   return {
     aktuální: this.začátek,
     poslední: this.konec,
+=======
+  // ...it returns the iterator object:
+  // 2. Onward, for..of works only with the iterator object below, asking it for next values
+  return {
+    current: this.from,
+    last: this.to,
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 
     // 3. next() je volána cyklem for..of při každé iteraci
     next() {
@@ -269,7 +284,11 @@ for (let znak of str) {
 alert(znaky);
 ```
 
+<<<<<<< HEAD
 ...Ale je to kratší.
+=======
+...But it is shorter.
+>>>>>>> 0f748275e20a81700c8514f22a7cc80c4422d09c
 
 Můžeme na ní dokonce postavit metodu `slice`, která bude rozpoznávat surrogate pairy:
 
