@@ -106,7 +106,11 @@ V praxi je nulová výška často platnou hodnotou, takže by neměla být nahra
 
 ## Priorita
 
+<<<<<<< HEAD
 Priorita operátoru `??` je přibližně stejná jako `||`, jen o něco nižší. Je rovna `5` v [tabulce MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table), zatímco `||` má prioritu `6`.
+=======
+The precedence of the `??` operator is the same as `||`. They both equal `4` in the [MDN table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table).
+>>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
 
 To znamená, že operátor koalescence `??` se stejně jako `||` vyhodnocuje před `=` a `?`, ale až po většině ostatních operací, například  `+`, `*`.
 
