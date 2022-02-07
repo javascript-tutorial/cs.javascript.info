@@ -117,12 +117,6 @@ Jsou i další. Samozřejmě i když používáme některý z transpilovaných j
 
 ## Shrnutí
 
-<<<<<<< HEAD
 - JavaScript byl původně vytvořen jako jazyk určený výhradně pro prohlížeč, ale dnes se používá i v mnoha jiných prostředích.
 - Dnes si JavaScript vydobyl unikátní postavení jako nejrozsáhleji přijímaný prohlížečový jazyk s plnou integrací s HTML/CSS.
 - Existuje mnoho jazyků, které jsou „transpilovány“ do JavaScriptu a poskytují určité vlastnosti. Až zvládnete JavaScript, doporučujeme vám, abyste se na ně alespoň krátce podívali.
-=======
-- JavaScript was initially created as a browser-only language, but it is now used in many other environments as well.
-- Today, JavaScript has a unique position as the most widely-adopted browser language, fully integrated with HTML/CSS.
-- There are many languages that get "transpiled" to JavaScript and provide certain features. It is recommended to take a look at them, at least briefly, after mastering JavaScript.
->>>>>>> 4541b7af7584014a676da731f6e8774da5e059f6

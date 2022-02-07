@@ -318,11 +318,7 @@ for (let klíč in uživatel) {
 
 ...To však nekopíruje přepínače. Chceme-li tedy „lepší“ klon, dáme přednost metodě `Object.defineProperties`.
 
-<<<<<<< HEAD
-Další rozdíl je v tom, že `for..in` ignoruje symbolické vlastnosti, ale `Object.getOwnPropertyDescriptors` vrací deskriptory *všech* vlastností včetně symbolických.
-=======
-Another difference is that `for..in` ignores symbolic and non-enumerable properties, but `Object.getOwnPropertyDescriptors` returns *all* property descriptors including symbolic and non-enumerable ones.
->>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
+Další rozdíl je v tom, že `for..in` ignoruje symbolické a neenumerovatelné vlastnosti, ale `Object.getOwnPropertyDescriptors` vrací deskriptory *všech* vlastností včetně symbolických a neenumerovatelných.
 
 ## Globální zapečetění objektu
 

@@ -40,31 +40,22 @@ Kromě běžných čísel obsahuje JavaScript i tzv. „speciální číselné h
     ```js run
     alert( Infinity ); // Infinity
     ```
+    
 - `NaN` (z anglického „not a number“ -- není číslo) představuje výpočetní chybu. Je to výsledek nekorektní nebo nedefinované matematické operace, například:
 
     ```js run
     alert( "to není číslo" / 2 ); // NaN, takové dělení je chybné
     ```
 
-<<<<<<< HEAD
     `NaN` je „lepkavé“. Jakákoli operace provedená s `NaN` vrátí opět `NaN`:
-
-    ```js run
-    alert( "to není číslo" / 2 + 5 ); // NaN
-    ```
-
-    Je-li tedy někde v matematickém výrazu `NaN`, přenese se až do jeho celkového výsledku.
-=======
-    `NaN` is sticky. Any further mathematical operation on `NaN` returns `NaN`:
 
     ```js run
     alert( NaN + 1 ); // NaN
     alert( 3 * NaN ); // NaN
-    alert( "not a number" / 2 - 1 ); // NaN
+    alert( "to není číslo" / 2 - 1 ); // NaN
     ```
 
-    So, if there's a `NaN` somewhere in a mathematical expression, it propagates to the whole result (there's only one exception to that: `NaN ** 0` is `1`).
->>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
+    Je-li tedy někde v matematickém výrazu `NaN`, přenese se až do jeho celkového výsledku (jediná výjimka: `NaN ** 0` je `1`).
 
 ```smart header="Matematické operace jsou bezpečné"
 Veškeré matematické výpočty v JavaScriptu jsou „bezpečné“. Můžeme provádět cokoli: dělit nulou, zacházet s řetězci neobsahujícími číslo jako s čísly a podobně.

@@ -25,11 +25,7 @@ To je očekávaný výsledek. JavaScript takto funguje. Když `uživatel.adresa`
 
 V mnoha praktických případech bychom však zde raději získali `undefined` místo chyby (což znamená „žádná ulice“).
 
-<<<<<<< HEAD
 ...A jiný příklad. Při vývoji webů můžeme pomocí speciálního volání metody, např. `document.querySelector('.elem')`, získat objekt, který odpovídá určitému prvku webové stránky. Když na stránce takový prvek není, metoda vrací `null`.
-=======
-...and another example. In Web development, we can get an object that corresponds to a web page element using a special method call, such as `document.querySelector('.elem')`, and it returns `null` when there's no such element.
->>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
 
 ```js run
 // document.querySelector('.elem') je null, pokud tam žádný prvek není

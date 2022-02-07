@@ -193,41 +193,22 @@ Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/doc
 | Priorita | Název | Znak |
 |----------|-------|------|
 | ... | ... | ... |
-<<<<<<< HEAD
-| 17 | unární plus | `+` |
-| 17 | unární negace | `-` |
-| 16 | umocňování | `**` |
-| 15 | násobení | `*` |
-| 15 | dělení | `/` |
-| 13 | sčítání | `+` |
-| 13 | odčítání | `-` |
+| 15 | unární plus | `+` |
+| 15 | unární negace | `-` |
+| 14 | umocňování | `**` |
+| 13 | násobení | `*` |
+| 13 | dělení | `/` |
+| 12 | sčítání | `+` |
+| 12 | odčítání | `-` |
 | ... | ... | ... |
-| 3 | přiřazení | `=` |
-| ... | ... | ... |
-
-Jak vidíme, „unární plus“ má prioritu `17`, která je vyšší než priorita `13` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
-=======
-| 15 | unary plus | `+` |
-| 15 | unary negation | `-` |
-| 14 | exponentiation | `**` |
-| 13 | multiplication | `*` |
-| 13 | division | `/` |
-| 12 | addition | `+` |
-| 12 | subtraction | `-` |
-| ... | ... | ... |
-| 2 | assignment | `=` |
+| 2 | přiřazení | `=` |
 | ... | ... | ... |
 
-As we can see, the "unary plus" has a priority of `15` which is higher than the `13` of "addition" (binary plus). That's why, in the expression `"+apples + +oranges"`, unary pluses work before the addition.
->>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
+Jak vidíme, „unární plus“ má prioritu `15`, která je vyšší než priorita `13` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
 
 ## Přiřazení
 
-<<<<<<< HEAD
-Všimněte si, že přiřazení `=` je také operátor. V tabulce priorit je uveden s velmi nízkou prioritou `3`.
-=======
-Let's note that an assignment `=` is also an operator. It is listed in the precedence table with the very low priority of `2`.
->>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
+Všimněte si, že přiřazení `=` je také operátor. V tabulce priorit je uveden s velmi nízkou prioritou `2`.
 
 To je důvod, proč při přiřazení proměnné, např. `x = 2 * 2 + 1`, se nejprve provedou výpočty a až potom se vyhodnotí `=`, které uloží výsledek do `x`.
 
