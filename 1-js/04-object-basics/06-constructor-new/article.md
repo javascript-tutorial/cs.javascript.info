@@ -1,6 +1,10 @@
 # Konstruktor, operátor „new“
 
+<<<<<<< HEAD
 Obvyklá syntaxe `{...}` nám umožňuje vytvořit jeden objekt. Často však potřebujeme vytvořit mnoho podobných objektů, např. více uživatelů, položek menu a podobně.
+=======
+The regular `{...}` syntax allows us to create one object. But often we need to create many similar objects, like multiple users or menu items and so on.
+>>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
 
 To můžeme učinit pomocí konstruktorů a operátoru `"new"`.
 
