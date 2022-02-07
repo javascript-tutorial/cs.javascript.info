@@ -73,13 +73,13 @@ try-catch-flow.svg:
     position: "center"
   "// code...": "// kód..."
   "Ignore catch block":
-    text: "Ignorovat blok catch"
+    text: "Ignoruj blok catch"
     position: "center"
   "Ignore the rest of try":
-    text: "Ignorovat zbytek try"
+    text: "Ignoruj zbytek try"
     position: "center"
   "Execute catch block":
-    text: "Vykonat blok catch"
+    text: "Vykonej blok catch"
     position: "center"
 
 recursion-pow.svg:

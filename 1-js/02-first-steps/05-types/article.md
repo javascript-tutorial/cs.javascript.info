@@ -40,31 +40,22 @@ Kromě běžných čísel obsahuje JavaScript i tzv. „speciální číselné h
     ```js run
     alert( Infinity ); // Infinity
     ```
+    
 - `NaN` (z anglického „not a number“ -- není číslo) představuje výpočetní chybu. Je to výsledek nekorektní nebo nedefinované matematické operace, například:
 
     ```js run
     alert( "to není číslo" / 2 ); // NaN, takové dělení je chybné
     ```
 
-<<<<<<< HEAD
     `NaN` je „lepkavé“. Jakákoli operace provedená s `NaN` vrátí opět `NaN`:
-
-    ```js run
-    alert( "to není číslo" / 2 + 5 ); // NaN
-    ```
-
-    Je-li tedy někde v matematickém výrazu `NaN`, přenese se až do jeho celkového výsledku.
-=======
-    `NaN` is sticky. Any further mathematical operation on `NaN` returns `NaN`:
 
     ```js run
     alert( NaN + 1 ); // NaN
     alert( 3 * NaN ); // NaN
-    alert( "not a number" / 2 - 1 ); // NaN
+    alert( "to není číslo" / 2 - 1 ); // NaN
     ```
 
-    So, if there's a `NaN` somewhere in a mathematical expression, it propagates to the whole result (there's only one exception to that: `NaN ** 0` is `1`).
->>>>>>> 71da17e5960f1c76aad0d04d21f10bc65318d3f6
+    Je-li tedy někde v matematickém výrazu `NaN`, přenese se až do jeho celkového výsledku (jediná výjimka: `NaN ** 0` je `1`).
 
 ```smart header="Matematické operace jsou bezpečné"
 Veškeré matematické výpočty v JavaScriptu jsou „bezpečné“. Můžeme provádět cokoli: dělit nulou, zacházet s řetězci neobsahujícími číslo jako s čísly a podobně.
@@ -98,7 +89,6 @@ Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v I
 Nahlédnutím do [*MDN* tabulky kompatibility BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
 
 ## Řetězec
-=======
 
 Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
 
@@ -112,7 +102,7 @@ JavaScript rozeznává tři druhy uvozovek.
 
 1. Dvojité uvozovky: `"Ahoj"`.
 2. Jednoduché uvozovky (apostrofy): `'Ahoj'`.
-3. Obrácené čárky (gravisy): <code>&#96;Hello&#96;</code>.
+3. Obrácené čárky (gravisy): <code>&#96;Ahoj&#96;</code>.
 
 Dvojité uvozovky a apostrofy jsou „obyčejné“ uvozovky. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
 
@@ -253,10 +243,10 @@ Poslední tři řádky možná vyžadují podrobnější vysvětlení:
 2. Výsledkem `typeof null` je `"object"`. Toto je oficiálně přiznaná chyba chování `typeof`, která pochází z pravěku JavaScriptu a byla v něm ponechána kvůli kompatibilitě. Ve skutečnosti `null` není objekt. Je to speciální hodnota, která má svůj vlastní typ.
 3. Výsledkem `typeof alert` je `"function"`, protože `alert` je funkce. Funkce prostudujeme v dalších kapitolách, kde také uvidíme, že v JavaScriptu není žádný speciální typ „funkce“. Funkce jsou typu objekt. Avšak `typeof` s nimi zachází jinak a vrátí `"function"`. To také pochází z pravěku JavaScriptu. Technicky není toto chování korektní, ale v praxi může být užitečné.
 
-```smart header="Syntaxe `typeof(x)` syntax"
+```smart header="Syntaxe `typeof(x)`"
 Můžete narazit i na jinou syntaxi: `typeof(x)`. To je totéž jako `typeof x`.
 
-Abychom to objasnili: `typeof` je operátor, ne funkce. Závorky zde uvedené nejsou součástí `typeof`. Je to druh závorek používaný pro seskupování v matematice.
+Abychom to objasnili: `typeof` je operátor, ne funkce. Závorky zde uvedené nejsou součástí `typeof`. Je to stejný druh závorek, který se v matematice používá pro seskupování.
 
 Zpravidla takové závorky obsahují matematický výraz, např. `(2 + 2)`, ale zde obsahují jen jediný argument `(x)`. Syntakticky umožňují vyhnout se mezeře mezi operátorem `typeof` a jeho argumentem. Některým lidem se to líbí.
 
