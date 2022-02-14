@@ -204,7 +204,11 @@ Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/doc
 | 2 | přiřazení | `=` |
 | ... | ... | ... |
 
+<<<<<<< HEAD
 Jak vidíme, „unární plus“ má prioritu `15`, která je vyšší než priorita `13` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
+=======
+As we can see, the "unary plus" has a priority of `15` which is higher than the `12` of "addition" (binary plus). That's why, in the expression `"+apples + +oranges"`, unary pluses work before the addition.
+>>>>>>> 29216730a877be28d0a75a459676db6e7f5c4834
 
 ## Přiřazení
 
