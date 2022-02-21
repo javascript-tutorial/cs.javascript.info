@@ -42,7 +42,11 @@ Vývojář si obvykle spustí transpiler na svém vlastním počítači a pak um
 
 Když hovoříme o názvech, jedním z nejvýznamnějších transpilerů je [Babel](https://babeljs.io).
 
+<<<<<<< HEAD
 Moderní systémy pro vytváření projektů, například [webpack](http://webpack.github.io/), poskytují způsoby, jak spouštět transpiler automaticky při každé změně kódu, takže je velmi jednoduché jej integrovat do procesu vývoje.
+=======
+Modern project build systems, such as [webpack](https://webpack.js.org/), provide means to run transpiler automatically on every code change, so it's very easy to integrate into development process.
+>>>>>>> e2f9e5840737e00846bfd492192d8a3828820c60
 
 ## Polyfilly
 
@@ -82,7 +86,11 @@ V této kapitole jsme vás chtěli motivovat k prostudování moderních vlastno
 
 Jen nezapomínejte používat transpiler (používáte-li moderní syntaxi nebo operátory) a polyfilly (abyste přidali funkce, které mohou chybět). Ty zajistí, že váš kód bude fungovat.
 
+<<<<<<< HEAD
 Například později, až budete JavaScript dobře znát, si můžete nastavit systém pro vytváření kódu založený na [webpacku](http://webpack.github.io/) s pluginem [babel-loader](https://github.com/babel/babel-loader).
+=======
+For example, later when you're familiar with JavaScript, you can setup a code build system based on [webpack](https://webpack.js.org/) with [babel-loader](https://github.com/babel/babel-loader) plugin.
+>>>>>>> e2f9e5840737e00846bfd492192d8a3828820c60
 
 Dobré zdroje, které ukazují aktuální stav podpory různých vlastností:
 - <https://kangax.github.io/compat-table/es6/> - pro čistý JavaScript.
