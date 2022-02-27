@@ -268,9 +268,11 @@ promise-handler-variants.svg:
   return promise: 'vrácením příslibu'
   throw error: 'chybou'
   'that promise settles with:': 'tento příslib se usadí s:'
+  'result: value': 'result: hodnota'
+  'result: error': 'result: chyba'
 
 promiseQueue.svg:
-  '"code finished"': '„kód ukončen“'
+  '"code finished"': '"konec kódu"'
   handler enqueued: 'handler ve frontě'
   queued handler runs: 'spouští se handler z fronty'
   script execution finished: 'výkon skriptu ukončen'
@@ -546,3 +548,19 @@ mixin-inheritance.svg:
   'name: ...': 'jméno: ...'
   'sayHiMixin': 'mixinŘekniAhoj'
   
+promise-resolve-reject.svg:
+  'resolve(value)': 'resolve(hodnota)'
+  'reject(error)': 'reject(chyba)'
+  'result: value': 'result: hodnota'
+  'result: error': 'result: chyba'
+  'new Promise(executor)': 'new Promise(exekutor)'
+  
+promise-resolve-1.svg:
+  'resolve("done")': 'resolve("hotovo")'
+  'result: "done"': 'result: "hotovo"'
+  'new Promise(executor)': 'new Promise(exekutor)'
+  
+promise-reject-1.svg:
+  'reject(error)': 'reject(chyba)'
+  'result: error': 'result: chyba'
+  'new Promise(executor)': 'new Promise(exekutor)'
