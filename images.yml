@@ -256,6 +256,7 @@ genYield2.svg:
     position: "center"
   Generator: 'Generátor'
   Calling code: 'Volající kód'
+  question = "2 + 2 = ?": 'otázka = "2 + 2 = ?"'
 
 promise-handler-variants.svg:
   _defaults:
@@ -564,3 +565,9 @@ promise-reject-1.svg:
   'reject(error)': 'reject(chyba)'
   'result: error': 'result: chyba'
   'new Promise(executor)': 'new Promise(exekutor)'
+
+generateSequence-1.svg:
+  'generateSequence': 'generujPosloupnost'
+  
+proxy.svg:
+  'target': 'cíl'

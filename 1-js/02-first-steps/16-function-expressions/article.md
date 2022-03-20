@@ -152,7 +152,7 @@ V praxi jsou takové funkce poměrně užitečné. Hlavním rozdílem mezi `zept
 
 *(Pozn. překladatele: V češtině pro callback žádný ustálený výraz není, většinou se nepřekládá, někdy se používá „zpětné volání“.)*
 
-Myšlenkou je, že předáme funkci a očekáváme, že bude „zpětně volána“ (call = volání, back = zpět) později, až to bude nutné. V našem případě `zobrazOK` se stala callbackem pro odpověd „ano“ a `zobrazStorno` pro odpověď „ne“.
+Myšlenkou je, že předáme funkci a očekáváme, že bude „zpětně volána“ (call = volání, back = zpět) později, až to bude nutné. V našem případě `zobrazOK` se stala callbackem pro odpověď „ano“ a `zobrazStorno` pro odpověď „ne“.
 
 Pomocí funkčních výrazů můžeme stejnou funkci napsat mnohem stručněji:
 
