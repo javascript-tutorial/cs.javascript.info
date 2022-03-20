@@ -167,6 +167,7 @@ object-user-empty.svg:
   empty:
     text: prázdný
     position: "center"
+  user: uživatel
 
 garbage-collection-5.svg:
   unreachables:
@@ -571,3 +572,30 @@ generateSequence-1.svg:
   
 proxy.svg:
   'target': 'cíl'
+  
+object.svg:
+  key1: klíč1
+  key2: klíč2
+  key3: klíč3
+
+object-user.svg:
+  user: uživatel
+  name: jméno
+  age: věk
+  
+object-user-isadmin.svg:
+  user: uživatel
+  name: jméno
+  age: věk
+  isAdmin: jeAdmin
+  
+object-user-delete.svg:
+  user: uživatel
+  name: jméno
+  isAdmin: jeAdmin
+
+object-user-props.svg:
+  user: uživatel
+  name: jméno
+  age: věk
+  likes birds: má rád ptáky
