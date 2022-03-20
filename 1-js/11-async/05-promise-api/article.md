@@ -243,12 +243,21 @@ Zde je příklad, v němž všechny přísliby selžou:
 
 ```js run
 Promise.any([
+<<<<<<< HEAD
   new Promise((resolve, reject) => setTimeout(() => reject(new Error("Au!")), 1000)),
   new Promise((resolve, reject) => setTimeout(() => reject(new Error("Chyba!")), 2000))
 ]).catch(chyba => {
   console.log(chyba.constructor.name); // AggregateError
   console.log(chyba.errors[0]); // Error: Au!
   console.log(chyba.errors[1]); // Error: Chyba
+=======
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ouch!")), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Error!")), 2000))
+]).catch(error => {
+  console.log(error.constructor.name); // AggregateError
+  console.log(error.errors[0]); // Error: Ouch!
+  console.log(error.errors[1]); // Error: Error!
+>>>>>>> 2cca9a9d09fdd45819832294225aa3721fa5a2d4
 });
 ```
 
