@@ -1,5 +1,5 @@
 
-# Volitelné zřetězení '?.'
+# Volitelné zřetězení „?.“
 
 [recent browser="new"]
 
