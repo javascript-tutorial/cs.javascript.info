@@ -1,4 +1,4 @@
-
+ 
 # Volitelné zřetězení „?.“
 
 [recent browser="new"]
@@ -108,22 +108,16 @@ Např. `?.` v `uživatel?.adresa.ulice.name` umožňuje, aby `uživatel` byl bez
 ```warn header="Nepoužívejte volitelné zřetězení přehnaně často"
 Měli bychom používat `?.` jen tehdy, když je v pořádku, že něco neexistuje.
 
-<<<<<<< HEAD
 Například pokud podle logiky našeho kódování musí objekt `uživatel` existovat, ale `adresa` je volitelná, pak bychom měli psát `uživatel.adresa?.ulice`, ale ne `uživatel?.adresa?.ulice`.
 
-Pak pokud se v důsledku chyby stane, že `uživatel` bude nedefinovaný, uvidíme programátorskou chybu a opravíme ji. Jinak by se chyby v kódu mohly neohlásit i tehdy, když to není vhodné, a jejich ladění by bylo obtížnější.
-=======
-For example, if according to our code logic `user` object must exist, but `address` is optional, then we should write `user.address?.street`, but not `user?.address?.street`.
-
-Then, if `user` happens to be undefined, we'll see a programming error about it and fix it. Otherwise, if we overuse `?.`, coding errors can be silenced where not appropriate, and become more difficult to debug.
->>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
+Pak pokud se stane, že `uživatel` bude nedefinovaný, ohlásí se programátorská chyba a my ji opravíme. Kdybychom však přehnaně používali `?.`, mohly by se chyby v kódu neohlásit i tehdy, když to není vhodné, a jejich ladění by bylo obtížnější.
 ```
 
 ````warn header="Proměnná před `?.` musí být deklarovaná"
 Pokud proměnná `uživatel` vůbec neexistuje, pak `uživatel?.cokoli` ohlásí chybu:
 
 ```js run
-// ReferenceError: uživatel is not defined
+// ReferenceError: uživatel není definován
 uživatel?.adresa;
 ```
 Proměnná musí být deklarovaná (tj. `let/const/var uživatel` nebo jako parametr funkce). Volitelné zřetězení funguje jen pro deklarované proměnné.
@@ -133,11 +127,7 @@ Proměnná musí být deklarovaná (tj. `let/const/var uživatel` nebo jako para
 
 Jak bylo řečeno, `?.` okamžitě pozastaví („vyzkratuje“) vyhodnocování, jestliže levá část neexistuje.
 
-<<<<<<< HEAD
-Jestliže tedy následují další volání funkcí nebo vedlejší efekty, neprovedou se.
-=======
-So, if there are any further function calls or operations to the right of `?.`, they won't be made.
->>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
+Jestliže tedy za pozastaveným `?.` vpravo následují další volání funkcí nebo operace, nevykonají se.
 
 Například:
 
@@ -145,11 +135,7 @@ Například:
 let uživatel = null;
 let x = 0;
 
-<<<<<<< HEAD
-uživatel?.řekniAhoj(x++); // „řekniAhoj“ se neprovede, takže výkon se nedostane ke x++
-=======
-user?.sayHi(x++); // no "user", so the execution doesn't reach sayHi call and x++
->>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
+uživatel?.řekniAhoj(x++); // „uživatel“ není, takže výkon se nedostane k volání řekniAhoj a x++
 
 alert(x); // 0, hodnota se nezvýšila
 ```
@@ -193,11 +179,7 @@ let uživatel1 = {
   křestníJméno: "Jan"
 };
 
-<<<<<<< HEAD
 let uživatel2 = null; 
-=======
-let user2 = null;
->>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 alert( uživatel1?.[klíč] ); // Jan
 alert( uživatel2?.[klíč] ); // undefined
