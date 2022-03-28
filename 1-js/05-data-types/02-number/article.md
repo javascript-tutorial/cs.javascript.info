@@ -47,7 +47,11 @@ Nyní zapišme něco velmi malého. Třeba 1 mikrosekundu (jednu milióntinu sek
 let mcs = 0.000001;
 ```
 
+<<<<<<< HEAD
 Stejně jako předtím nám může pomoci použití `"e"`. Jestliže se chceme vyhnout explicitnímu zápisu nul, můžeme zapsat totéž jako:
+=======
+Just like before, using `"e"` can help. If we'd like to avoid writing the zeroes explicitly, we could write the same as:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ```js
 let mcs = 1e-6; // šest nul nalevo od 1
@@ -156,7 +160,11 @@ Existují dva způsoby, jak to udělat:
 
 1. Násobit a dělit.
 
+<<<<<<< HEAD
     Abychom například zaokrouhlili číslo na 2. číslici za desetinnou čárkou, můžeme toto číslo vynásobit `100` (nebo vyšší mocninou 10), zavolat zaokrouhlovací funkci a pak je znovu vydělit.
+=======
+    For example, to round the number to the 2nd digit after the decimal, we can multiply the number by `100`, call the rounding function and then divide it back.
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
     ```js run
     let číslo = 1.23456;
 
@@ -184,13 +192,21 @@ Existují dva způsoby, jak to udělat:
     alert( číslo.toFixed(5) ); // "12.34000", přidají se nuly, aby číslic bylo přesně 5
     ```
 
+<<<<<<< HEAD
     Můžeme jej převést na číslo pomocí unárního plus nebo volání `Number()`: `+číslo.toFixed(5)`.
+=======
+    We can convert it to a number using the unary plus or a `Number()` call, e.g write `+num.toFixed(5)`.
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ## Nepřesné výpočty
 
 Číslo je vnitřně reprezentováno v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754-2008_revision), takže se ukládá přesně do 64 bitů: 52 z nich se používá k uložení číslic, v 11 z nich je uložena pozice desetinné čárky (u celých čísel jsou tyto bity nulové) a 1 bit je pro znaménko.
 
+<<<<<<< HEAD
 Je-li číslo příliš velké, překročí toto 64-bitové úložiště a stane se z něj nekonečno:
+=======
+If a number is really huge, it may overflow the 64-bit storage and become a special numeric value `Infinity`:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ```js run
 alert( 1e500 ); // Infinity (nekonečno)
@@ -198,7 +214,11 @@ alert( 1e500 ); // Infinity (nekonečno)
 
 Co může být trochu méně zřejmé, ale stává se poměrně často, je ztráta přesnosti.
 
+<<<<<<< HEAD
 Uvažujme tento (nepravdivý!) test:
+=======
+Consider this (falsy!) equality test:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ```js run
 alert( 0.1 + 0.2 == 0.3 ); // *!*false*/!*
@@ -212,13 +232,21 @@ Zvláštní! Co tedy je, když ne `0.3`?
 alert( 0.1 + 0.2 ); // 0.30000000000000004
 ```
 
+<<<<<<< HEAD
 Ouvej! Tohle má větší důsledky než jen zdejší nekorektní porovnání. Představme si, že vytváříme elektronický obchod a návštěvník si do košíku uloží zboží za `$0.10` a za `$0.20`. Celková cena pak bude `$0.30000000000000004`. To každého překvapí.
+=======
+Ouch! Imagine you're making an e-shopping site and the visitor puts `$0.10` and `$0.20` goods into their cart. The order total will be `$0.30000000000000004`. That would surprise anyone.
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 Ale proč se to děje?
 
 Číslo je v paměti uloženo ve své binární podobě, jako posloupnost bitů -- jedniček a nul. Ale desetinná čísla jako `0.1` nebo `0.2`, která v desítkové soustavě vypadají jednoduše, jsou ve své binární podobě ve skutečnosti nekonečná.
 
+<<<<<<< HEAD
 Jinými slovy, co je `0.1`? Je to jedna děleno deseti `1/10`, jedna desetina. V desítkové soustavě lze taková čísla snadno reprezentovat. Srovnejme si to s jednou třetinou: `1/3`. Z ní se stane nekonečné desetinné číslo `0.33333(3)`.
+=======
+What is `0.1`? It is one divided by ten `1/10`, one-tenth. In decimal numeral system such numbers are easily representable. Compare it to one-third: `1/3`. It becomes an endless fraction `0.33333(3)`.
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 Je tedy zaručeno, že dělení mocninami `10` bude v desítkové soustavě fungovat dobře, ale dělení třemi ne. Ze stejného důvodu je v binární soustavě zaručeno, že bude fungovat dělení mocninami `2`, ale z `1/10` se stane nekonečné binární číslo.
 
