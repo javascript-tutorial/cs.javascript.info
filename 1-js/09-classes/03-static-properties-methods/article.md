@@ -1,9 +1,15 @@
 
 # Statické vlastnosti a metody
 
+<<<<<<< HEAD
 Metodu můžeme přiřadit samotné funkci třídy namísto jejímu `„prototype"`. Takové metody se nazývají *statické*.
 
 Ve třídě jsou předznamenány klíčovým slovem `static`, například:
+=======
+We can also assign a method to the class as a whole. Such methods are called *static*.
+
+In a class declaration, they are prepended by `static` keyword, like this:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ```js run
 class Uživatel {
@@ -31,9 +37,17 @@ Uživatel.statickáMetoda(); // true
 
 Hodnota `this` ve volání `Uživatel.statickáMetoda()` je samotný třídní konstruktor `Uživatel` (podle pravidla „objekt před tečkou“).
 
+<<<<<<< HEAD
 Statické metody se obvykle používají k implementaci funkcí, které patří třídě, ale žádnému jejímu konkrétnímu objektu.
 
 Například máme objekty třídy `Článek` a potřebujeme funkci, která je bude porovnávat. Přirozené řešení by bylo přidat metodu `Článek.porovnej`, například:
+=======
+Usually, static methods are used to implement functions that belong to the class as a whole, but not to any particular object of it.
+
+For instance, we have `Article` objects and need a function to compare them.
+
+A natural solution would be to add `Article.compare` static method:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ```js run
 class Článek {
@@ -63,9 +77,17 @@ let články = [
 alert( články[0].titulek ); // CSS
 ```
 
+<<<<<<< HEAD
 Zde metoda `Článek.porovnej` stojí „nad“ články jako způsob jejich porovnávání. Není to metoda článku, ale metoda celé třídy.
 
 Jiným příkladem může být tzv. „tovární“ metoda. Představme si, že potřebujeme několik způsobů, jak vytvořit článek:
+=======
+Here `Article.compare` method stands "above" articles, as a means to compare them. It's not a method of an article, but rather of the whole class.
+
+Another example would be a so-called "factory" method.
+
+Let's say, we need multiple ways to create an article:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 1. Vytvořit jej ze zadaných parametrů (`titulek`, `datum` atd.).
 2. Vytvořit prázdný článek s dnešním datem.
@@ -73,7 +95,11 @@ Jiným příkladem může být tzv. „tovární“ metoda. Představme si, že 
 
 První způsob můžeme implementovat konstruktorem. A pro druhý můžeme vytvořit statickou metodu třídy.
 
+<<<<<<< HEAD
 Například `Článek.vytvořDnešní()` zde:
+=======
+Such as `Article.createTodays()` here:
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 
 ```js run
 class Článek {
@@ -100,9 +126,15 @@ Nyní pokaždé, když budeme potřebovat vytvořit dnešní přehled, můžeme 
 Statické metody se také používají ve třídách vztažených k databázím pro hledání/ukládání/odstraňování záznamů z databáze, například:
 
 ```js
+<<<<<<< HEAD
 // předpokládejme, že Článek je speciální třída pro práci s články
 // statická metoda pro odstranění článku:
 Článek.odstraň({id: 12345});
+=======
+// assuming Article is a special class for managing articles
+// static method to remove the article by id:
+Article.remove({id: 12345});
+>>>>>>> 741d90ce8a730d66e987bff5e9794d6e41cb2f05
 ```
 
 ## Statické vlastnosti
