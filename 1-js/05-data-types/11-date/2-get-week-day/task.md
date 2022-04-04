@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Show a weekday
+# Zobrazení dne v týdnu
 
-Write a function `getWeekDay(date)` to show the weekday in short format: 'MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'.
+Napište funkci `vraťDenVTýdnu(datum)`, která zobrazí den v týdnu ve zkráceném tvaru: „PO“, „ÚT“, „ST“, „ČT“, „PÁ“, „SO“, „NE“.
 
-For instance:
+Příklad:
 
 ```js no-beautify
-let date = new Date(2012, 0, 3);  // 3 Jan 2012
-alert( getWeekDay(date) );        // should output "TU"
+let datum = new Date(2012, 0, 3);  // 3. leden 2012
+alert( vraťDenVTýdnu(datum) );     // měla by vypsat „ÚT“
 ```

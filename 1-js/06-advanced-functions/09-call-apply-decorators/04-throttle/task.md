@@ -2,52 +2,53 @@ importance: 5
 
 ---
 
-# Throttle decorator
+# Tlumící dekorátor
 
-Create a "throttling" decorator `throttle(f, ms)` -- that returns a wrapper.
+Vytvořte „tlumící“ dekorátor `tlumič(f, ms)`, který bude vracet wrapper.
 
-When it's called multiple times, it passes the call to `f` at maximum once per `ms` milliseconds.
+Když je zavolán vícekrát, předá volání funkci `f` nejvýše jednou za `ms` milisekund.
 
-The difference with debounce is that it's completely different decorator:
-- `debounce` runs the function once after the "cooldown" period. Good for processing the final result.
-- `throttle` runs it not more often than given `ms` time. Good for regular updates that shouldn't be very often.
+Rozdíl oproti debounce je v tom, že je to zcela odlišný dekorátor:
+- `debounce` spustí funkci jednou po „době vychladnutí“. To je dobré pro zpracování konečného výsledku.
+- `tlumič` spustí funkci nejvýše jednou za čas `ms`. To je dobré pro pravidelné aktualizace, které by se neměly dít příliš často.
 
-In other words, `throttle` is like a secretary that accepts phone calls, but bothers the boss (calls the actual `f`) not more often than once per `ms` milliseconds.
+Jinými slovy, `tlumič` je jako sekretářka, která přijímá telefonní hovory, ale neobtěžuje šéfa (nevolá skutečnou funkci `f`) častěji než jednou za `ms` milisekund.
 
-Let's check the real-life application to better understand that requirement and to see where it comes from.
+Podívejme se na aplikaci z reálného života, abychom tomuto požadavku lépe porozuměli a viděli, odkud přichází.
 
-**For instance, we want to track mouse movements.**
+**Například chceme trasovat pohyby myši.**
 
-In a browser we can setup a function to run at every mouse movement and get the pointer location as it moves. During an active mouse usage, this function usually runs very frequently, can be something like 100 times per second (every 10 ms).
-**We'd like to update some information on the web-page when the pointer moves.**
+V prohlížeči můžeme nastavit funkci, která se spustí při každém pohybu myši a vrátí polohu kurzoru při jeho pohybu. Při aktivním používání myši se tato funkce spouští obvykle velmi často, může to být třeba 100krát za sekundu (každých 10 ms).
 
-...But updating function `update()` is too heavy to do it on every micro-movement. There is also no sense in updating more often than once per 100ms.
+**Když se kurzor pohybuje, chtěli bychom aktualizovat určitou informaci na webové stránce.**
 
-So we'll wrap it into the decorator: use `throttle(update, 100)` as the function to run on each mouse move instead of the original `update()`. The decorator will be called often, but forward the call to `update()` at maximum once per 100ms.
+...Ale aktualizační funkce `aktualizace()` je příliš náročná, než abychom ji prováděli při každém drobném pohybu. Navíc nemá smysl aktualizovat častěji než jednou za 100 ms.
 
-Visually, it will look like this:
+Zabalíme ji tedy do dekorátoru: použijeme na ni `tlumič(aktualizace, 100)`, aby se spustil při každém pohybu myši místo původní `aktualizace()`. Dekorátor bude volán často, ale předá volání funkci `aktualizace()` nanejvýše jednou za 100 ms.
 
-1. For the first mouse movement the decorated variant immediately passes the call to `update`. That's important, the user sees our reaction to their move immediately.
-2. Then as the mouse moves on, until `100ms` nothing happens. The decorated variant ignores calls.
-3. At the end of `100ms` -- one more `update` happens with the last coordinates.
-4. Then, finally, the mouse stops somewhere. The decorated variant waits until `100ms` expire and then runs `update` with last coordinates. So, quite important, the final mouse coordinates are processed.
+Vizuálně to bude vypadat následovně:
 
-A code example:
+1. Při prvním pohybu myši dekorovaná varianta okamžitě předá volání funkci `aktualizace`. To je důležité, jelikož uživatel okamžitě uvidí naši reakci na jeho pohyb.
+2. Když se pak myš bude pohybovat, před uplynutím `100 ms` se nic nestane. Dekorovaná varianta bude volání ignorovat.
+3. Po uplynutí `100 ms` se jedenkrát zavolá `aktualizace` s posledními souřadnicemi.
+4. Nakonec se pak myš někde zastaví. Dekorovaná varianta počká, než uplyne `100 ms`, a pak spustí funkci `aktualizace` s posledními souřadnicemi. Takže, což je poměrně důležité, budou zpracovány konečné souřadnice myši.
+
+Příklad kódu:
 
 ```js
 function f(a) {
   console.log(a);
 }
 
-// f1000 passes calls to f at maximum once per 1000 ms
-let f1000 = throttle(f, 1000);
+// f1000 předá volání funkci f nejvýše jednou za 1000 ms
+let f1000 = tlumič(f, 1000);
 
-f1000(1); // shows 1
-f1000(2); // (throttling, 1000ms not out yet)
-f1000(3); // (throttling, 1000ms not out yet)
+f1000(1); // zobrazí 1
+f1000(2); // (tlumeno, 1000 ms ještě neuplynulo)
+f1000(3); // (tlumeno, 1000 ms ještě neuplynulo)
 
-// when 1000 ms time out...
-// ...outputs 3, intermediate value 2 was ignored
+// až 1000 ms uběhne...
+// ...vypíše 3, mezilehlá hodnota 2 byla ignorována
 ```
 
-P.S. Arguments and the context `this` passed to `f1000` should be passed to the original `f`.
+P.S. Původní funkci `f` by měly být předány argumenty a kontext `this` předané do `f1000`.

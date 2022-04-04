@@ -1,32 +1,32 @@
-# Error on reading non-existent property
+# Chyba při načítání neexistující vlastnosti
 
-Usually, an attempt to read a non-existent property returns `undefined`.
+Pokus o načtení neexistující vlastnosti zpravidla vrátí `undefined`.
 
-Create a proxy that throws an error for an attempt to read of a non-existent property instead.
+Vytvořte proxy, která při pokusu o načtení neexistující vlastnosti místo toho vyvolá chybu.
 
-That can help to detect programming mistakes early.
+To nám může pomoci brzy detekovat programátorské chyby.
 
-Write a function `wrap(target)` that takes an object `target` and return a proxy that adds this functionality aspect.
+Napište funkci `wrap(cíl)`, která vezme objekt `cíl` a vrátí proxy, která přidá tento funkcionální aspekt.
 
-That's how it should work:
+Mělo by to fungovat takto:
 
 ```js
-let user = {
-  name: "John"
+let uživatel = {
+  jméno: "Jan"
 };
 
-function wrap(target) {
-  return new Proxy(target, {
+function wrap(cíl) {
+  return new Proxy(cíl, {
 *!*
-      /* your code */
+      /* váš kód */
 */!*
   });
 }
 
-user = wrap(user);
+uživatel = wrap(uživatel);
 
-alert(user.name); // John
+alert(uživatel.jméno); // Jan
 *!*
-alert(user.age); // ReferenceError: Property doesn't exist: "age"
+alert(uživatel.věk); // ReferenceError: Vlastnost neexistuje: "věk"
 */!*
 ```
