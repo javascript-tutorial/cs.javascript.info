@@ -1,4 +1,4 @@
-# Šipkové funkce - základy 
+# Šipkové funkce – základy 
 
 Existuje ještě jedna velice jednoduchá a výstižná syntaxe vytváření funkcí, která často bývá lepší než funkční výrazy.
 
@@ -48,7 +48,7 @@ Jak vidíte, `(a, b) => a + b` znamená funkci, která přijímá dva argumenty 
     alert( dvojnásobek(3) ); // 6
     ```
 
-- Nejsou-li žádné argumenty, závorky budou prázdné (ale musejí být uvedeny):
+- Nejsou-li žádné argumenty, závorky budou prázdné, ale musejí být uvedeny:
 
     ```js run
     let řekniAhoj = () => alert("Ahoj!");
@@ -76,9 +76,9 @@ Jsou velmi vhodné pro jednoduché jednořádkové akce, kdy se nám prostě nec
 
 ## Víceřádkové šipkové funkce
 
-Výše uvedené příklady přebíraly argumenty z levé strany `=>` a vyhodnocovaly s nimi pravou stranu.
+Šipkové funkce, které jsme doposud viděli, byly velmi jednoduché. Přebíraly argumenty z levé strany `=>`, vyhodnotily s nimi výraz na pravé straně a vrátily jeho hodnotu.
 
-Někdy potřebujeme něco složitějšího, například více výrazů nebo příkazů za sebou. I to je možné, ale pak je musíme uzavřít do složených závorek. Uvnitř nich potom použijeme běžný příkaz `return`.
+Někdy potřebujeme složitější funkci s více výrazy a příkazy. V takovém případě je můžeme uzavřít do složených závorek. Hlavní rozdíl je v tom, že složené závorky vyžadují uvnitř `return`, aby mohly vrátit hodnotu (stejně jako běžná funkce).
 
 Například takto:
 
@@ -105,7 +105,7 @@ Prozatím už můžeme používat šipkové funkce pro jednořádkové akce a ca
 
 ## Shrnutí
 
-Šipkové funkce se hodí pro jednořádkové funkce. Dají se napsat dvěma způsoby:
+Šipkové funkce se hodí pro jednoduché akce, zvláště pro jednořádkové funkce. Dají se napsat dvěma způsoby:
 
-1. Bez složených závorek: `(...args) => výraz` -- na pravé straně je výraz: funkce jej vyhodnotí a vrátí jeho výsledek.
+1. Bez složených závorek: `(...args) => výraz` -- na pravé straně je výraz: funkce jej vyhodnotí a vrátí jeho výsledek. Závorky můžeme vynechat, má-li funkce pouze jeden argument, např. `n => n*2`.
 2. Se složenými závorkami: `(...args) => { tělo }` -- složené závorky nám umožňují uvést ve funkci více příkazů, ale aby funkce něco vrátila, musíme výslovně uvést `return`.

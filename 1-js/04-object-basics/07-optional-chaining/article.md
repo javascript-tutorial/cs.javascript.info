@@ -1,4 +1,3 @@
- 
 # Volitelné zřetězení „?.“
 
 [recent browser="new"]
@@ -32,7 +31,7 @@ V mnoha praktických případech bychom však zde raději získali `undefined` m
 let html = document.querySelector('.elem').innerHTML; // chyba, pokud je to null
 ```
 
-Opět platí, že pokud tento prvek neexistuje, při přístupu k `.innerHTML` z `null` dostaneme chybu. Ale v některých případech, kdy je nepřítomnost prvku normální, bychom se této chybě rádi vyhnuli a prostě přijali za výsledek `html = null`.
+Opět platí, že pokud tento prvek neexistuje, při přístupu k vlastnosti `.innerHTML` z `null` dostaneme chybu. Ale v některých případech, kdy je nepřítomnost prvku normální, bychom se této chybě rádi vyhnuli a prostě přijali za výsledek `html = null`.
 
 Jak to můžeme udělat?
 
@@ -44,11 +43,19 @@ let uživatel = {};
 alert(uživatel.adresa ? uživatel.adresa.ulice : undefined);
 ```
 
-Funguje to, nenastala žádná chyba... Ale není to příliš elegantní. Jak vidíme, `"uživatel.adresa"` se v kódu objevuje dvakrát. U hlouběji vnořených vlastností to bude problém, protože bude vyžadováno více opakování.
+Funguje to, nenastala žádná chyba... Ale není to příliš elegantní. Jak vidíme, `„uživatel.adresa“` se v kódu objevuje dvakrát.
 
-Např. zkusme získat `uživatel.adresa.ulice.název`.
+Takto by vypadalo totéž pro `document.querySelector`:
 
-Musíme zkontrolovat jak `uživatel.adresa`, tak `uživatel.adresa.ulice`:
+```js run
+let html = document.querySelector('.elem') ? document.querySelector('.elem').innerHTML : null;
+```
+
+Vidíme, že hledání prvku `document.querySelector('.elem')` se zde ve skutečnosti volá dvakrát. To není dobré.
+
+Pro hlouběji vnořené vlastnosti to bude ještě ošklivější, protože bude vyžadováno více opakování.
+
+Například zkusme podobným způsobem získat `uživatel.adresa.ulice.název`.
 
 ```js
 let uživatel = {}; // uživatel nemá adresu
@@ -58,7 +65,7 @@ alert(uživatel.adresa ? uživatel.adresa.ulice ? uživatel.adresa.ulice.name : 
 
 Je to ošklivé a člověk může mít problémy takovému kódu porozumět.
 
-Ani na to nemyslete, jelikož existuje lepší způsob, jak to napsat, a to pomocí operátoru `&&`:
+Existuje trochu lepší způsob, jak to napsat, a to pomocí operátoru `&&`:
 
 ```js run
 let uživatel = {}; // uživatel nemá adresu
@@ -91,6 +98,13 @@ alert( uživatel?.adresa?.ulice ); // undefined (bez chyby)
 ```
 
 Kód je krátký a jasný, není v něm žádné zdvojení.
+
+Zde je příklad s `document.querySelector`:
+
+```js run
+let html = document.querySelector('.elem')?.innerHTML; // není-li žádný prvek, bude null
+```
+
 
 Načtení adresy pomocí `uživatel?.adresa` funguje i tehdy, když objekt `uživatel` neexistuje:
 
@@ -162,11 +176,11 @@ uživatelAdmin.admin?.(); // Jsem admin
 */!*
 
 *!*
-uživatelHost.admin?.(); // nic (taková metoda není)
+uživatelHost.admin?.(); // nic se nestane (taková metoda není)
 */!*
 ```
 
-Zde na obou řádcích nejprve použijeme tečku (`uživatelAdmin.admin`) k získání vlastnosti `admin`, protože předpokládáme, že objekt uživatele existuje, takže je bezpečné z něj číst.
+Zde na obou řádcích nejprve použijeme tečku (`uživatelAdmin.admin`) k získání vlastnosti `admin`, protože předpokládáme, že objekt `uživatel` existuje, takže je bezpečné z něj číst.
 
 Pak `?.()` prověří levou stranu: jestliže funkce `admin` existuje, pak se spustí (tak tomu je pro `uživatelAdmin`). Jinak (pro `uživatelHost`) se vyhodnocování zastaví bez chyb.
 
@@ -199,10 +213,8 @@ Například:
 let uživatel = null;
 
 uživatel?.jméno = "Jan"; // Chyba, nefunguje to
-// protože se to vyhodnotí jako undefined = "Jan"
+// protože se to vyhodnotí jako: undefined = "Jan"
 ```
-
-Tak elegantní to zase není.
 ````
 
 ## Shrnutí
@@ -217,4 +229,4 @@ Jak vidíme, všechny jsou srozumitelné a snadno se používají. `?.` ověří
 
 Řetězec více `?.` nám umožňuje bezpečný přístup k vnořeným vlastnostem.
 
-Přesto bychom měli používat `?.` opatrně a jen tehdy, když je přijatelné, aby levá strana skutečně neexistovala. Tak se před námi neukryjí programátorské chyby, jestliže k nim dojde.
+Přesto bychom měli používat `?.` opatrně a jen tehdy, když je podle logiky našeho kódu přijatelné, aby levá strana skutečně neexistovala. Tak se před námi neukryjí programátorské chyby, jestliže k nim dojde.

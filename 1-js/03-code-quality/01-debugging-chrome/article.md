@@ -38,7 +38,7 @@ Pokud stiskneme `key:Esc`, otevře se dole konzole. Můžeme tam psát příkazy
 
 Poté, co se příkaz vykoná, se dole zobrazí jeho výsledek.
 
-Například `1+2` zde vydá výsledek `3` a `ahoj("debugger")` nevrátí nic, takže výsledek bude `undefined`:
+Například `1+2` zde vydá výsledek `3`, zatímco volání funkce `ahoj("debugger")` nevrátí nic, takže výsledek bude `undefined`:
 
 ![](chrome-sources-console.svg)
 
@@ -63,12 +63,12 @@ V pravém panelu vždy najdeme seznam breakpointů. Ten je užitečný, když m�
 - ...A tak dále.
 
 ```smart header="Podmíněné breakpointy"
-*Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněný* breakpoint. Ten se aktivuje, jen když je splněna zadaná podmínka.
+*Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněný* breakpoint. Ten se aktivuje, jen když je zadaný výraz, který byste měli uvést při vytvoření breakpointu, pravdivý.
 
 To se hodí, když potřebujeme zastavit skript jen při určité hodnotě proměnné nebo pro určité parametry funkce.
 ```
 
-## Příkaz debugger
+## Příkaz „debugger“
 
 Pozastavit kód můžeme také tím, že v něm použijeme příkaz `debugger`, například:
 
@@ -84,8 +84,7 @@ function ahoj(jméno) {
 }
 ```
 
-To je velmi užitečné, když se nacházíme v editoru kódu a nechceme se přepínat do prohlížeče a hledat skript ve vývojářských nástrojích, abychom nastavili breakpoint.
-
+Tento příkaz funguje jen tehdy, když jsou otevřené vývojářské nástroje, jinak jej prohlížeč ignoruje.
 
 ## Pozastavení a rozhlédnutí
 
@@ -99,7 +98,7 @@ Prosíme otevřete si informační dropdowny vpravo (označené šipkami), kter�
 
 1. **`Watch` -- zobrazí aktuální hodnotu jakéhokoli výrazu.**
 
-    Můžete kliknout na plus `+` a zadat výraz. Debugger bude vždy zobrazovat jeho hodnotu, kterou při výkonu skriptu automaticky přepočítá.
+    Můžete kliknout na plus `+` a zadat výraz. Debugger bude zobrazovat jeho hodnotu, kterou při výkonu skriptu automaticky přepočítá.
 
 2. **`Call Stack` -- zobrazí řetězec vnořených volání funkcí.**
 
@@ -137,11 +136,11 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
     Dalším a dalším klikáním můžeme procházet všechny příkazy skriptu jeden po druhém.
 
 <span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": vykoná další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
-: Podobá se předchozímu příkazu „Step“, ale chová se jinak, jestliže dalším příkazem je volání funkce. Ne však vestavěné funkce jako `alert`, ale námi nadefinované funkce.
+: Podobá se předchozímu příkazu „Step“, ale chová se jinak, jestliže dalším příkazem je volání funkce (ne však vestavěné funkce jako `alert`, ale námi nadefinované funkce).
 
-    Příkaz „Step“ do ní vstoupí a pozastaví provádění na jejím prvním řádku, zatímco „Step over“ neviditelně zavolá funkci a přeskočí její vnitřek.
-
-    Provádění se pak ihned po této funkci pozastaví.
+    Když si je srovnáme, příkaz „Step“ do ní vstoupí a pozastaví provádění na jejím prvním řádku, zatímco „Step over“ provede vnořené volání funkce pro nás neviditelně a přeskočí její vnitřek.
+    
+    Provádění se pak ihned po volání této funkce pozastaví.
 
     To se hodí, když nás nezajímá, co se děje uvnitř volané funkce.
 
@@ -157,7 +156,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 : Toto tlačítko nemá vliv na provádění, jen hromadně zapne/vypne všechny breakpointy.
 
 <span class="devtools" style="background-position:-90px -146px"></span> -- povolí/zakáže automatické pozastavení v případě chyby.
-: Když je povoleno a vývojářské nástroje jsou otevřeny, chyba ve skriptu způsobí automatické pozastavení jeho výkonu. Pak můžeme analyzovat jeho proměnné, abychom viděli, co je špatně. Když tedy náš skript skončí s chybou, můžeme otevřít debugger, povolit tuto možnost a znovu načíst stránku, abychom viděli, kde spadl a jaký je v tom okamžiku jeho kontext.
+: Když je povoleno a vývojářské nástroje jsou otevřeny, chyba během výkonu skriptu jej automaticky pozastaví. Pak můžeme v debuggeru analyzovat proměnné, abychom viděli, co je špatně. Když tedy náš skript skončí s chybou, můžeme otevřít debugger, povolit tuto možnost a znovu načíst stránku, abychom viděli, kde spadl a jaký je v tom okamžiku jeho kontext.
 
 ```smart header="Pokračovat až sem"
 Po kliknutí pravým tlačítkem myši na řádek kódu se otevře kontextové menu s výtečnou možností „Pokračovat až sem“ („Continue to here“).
@@ -189,7 +188,7 @@ Jak vidíme, existují tři hlavní způsoby, jak pozastavit skript:
 2. Příkazy `debugger`.
 3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
 
-Když je kód pozastaven, můžeme jej ladit - prozkoumávat proměnné a trasovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
+Když je kód pozastaven, můžeme jej ladit: prozkoumávat proměnné a trasovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
 
 Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 
