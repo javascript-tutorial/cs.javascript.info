@@ -32,7 +32,11 @@ V mnoha praktických případech bychom však zde raději získali `undefined` m
 let html = document.querySelector('.elem').innerHTML; // chyba, pokud je to null
 ```
 
+<<<<<<< HEAD
 Opět platí, že pokud tento prvek neexistuje, při přístupu k `.innerHTML` z `null` dostaneme chybu. Ale v některých případech, kdy je nepřítomnost prvku normální, bychom se této chybě rádi vyhnuli a prostě přijali za výsledek `html = null`.
+=======
+Once again, if the element doesn't exist, we'll get an error accessing `.innerHTML` property of `null`. And in some cases, when the absence of the element is normal, we'd like to avoid the error and just accept `html = null` as the result.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 Jak to můžeme udělat?
 
@@ -44,11 +48,27 @@ let uživatel = {};
 alert(uživatel.adresa ? uživatel.adresa.ulice : undefined);
 ```
 
+<<<<<<< HEAD
 Funguje to, nenastala žádná chyba... Ale není to příliš elegantní. Jak vidíme, `"uživatel.adresa"` se v kódu objevuje dvakrát. U hlouběji vnořených vlastností to bude problém, protože bude vyžadováno více opakování.
 
 Např. zkusme získat `uživatel.adresa.ulice.název`.
 
 Musíme zkontrolovat jak `uživatel.adresa`, tak `uživatel.adresa.ulice`:
+=======
+It works, there's no error... But it's quite inelegant. As you can see, the `"user.address"` appears twice in the code.
+
+Here's how the same would look for `document.querySelector`:
+
+```js run
+let html = document.querySelector('.elem') ? document.querySelector('.elem').innerHTML : null;
+```
+
+We can see that the element search `document.querySelector('.elem')` is actually called twice here. Not good.
+
+For more deeply nested properties, it becomes even uglier, as more repetitions are required.
+
+E.g. let's get `user.address.street.name` in a similar fashion.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 ```js
 let uživatel = {}; // uživatel nemá adresu
@@ -58,7 +78,11 @@ alert(uživatel.adresa ? uživatel.adresa.ulice ? uživatel.adresa.ulice.name : 
 
 Je to ošklivé a člověk může mít problémy takovému kódu porozumět.
 
+<<<<<<< HEAD
 Ani na to nemyslete, jelikož existuje lepší způsob, jak to napsat, a to pomocí operátoru `&&`:
+=======
+There's a little better way to write it, using the `&&` operator:
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 ```js run
 let uživatel = {}; // uživatel nemá adresu
@@ -92,7 +116,17 @@ alert( uživatel?.adresa?.ulice ); // undefined (bez chyby)
 
 Kód je krátký a jasný, není v něm žádné zdvojení.
 
+<<<<<<< HEAD
 Načtení adresy pomocí `uživatel?.adresa` funguje i tehdy, když objekt `uživatel` neexistuje:
+=======
+Here's an example with `document.querySelector`:
+
+```js run
+let html = document.querySelector('.elem')?.innerHTML; // will be null, if there's no element
+```
+
+Reading the address with `user?.address` works even if `user` object doesn't exist:
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 ```js run
 let uživatel = null;
@@ -162,11 +196,19 @@ uživatelAdmin.admin?.(); // Jsem admin
 */!*
 
 *!*
+<<<<<<< HEAD
 uživatelHost.admin?.(); // nic (taková metoda není)
 */!*
 ```
 
 Zde na obou řádcích nejprve použijeme tečku (`uživatelAdmin.admin`) k získání vlastnosti `admin`, protože předpokládáme, že objekt uživatele existuje, takže je bezpečné z něj číst.
+=======
+userGuest.admin?.(); // nothing happens (no such method)
+*/!*
+```
+
+Here, in both lines we first use the dot (`userAdmin.admin`) to get `admin` property, because we assume that the `user` object exists, so it's safe read from it.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 Pak `?.()` prověří levou stranu: jestliže funkce `admin` existuje, pak se spustí (tak tomu je pro `uživatelAdmin`). Jinak (pro `uživatelHost`) se vyhodnocování zastaví bez chyb.
 
@@ -198,11 +240,18 @@ Například:
 ```js run
 let uživatel = null;
 
+<<<<<<< HEAD
 uživatel?.jméno = "Jan"; // Chyba, nefunguje to
 // protože se to vyhodnotí jako undefined = "Jan"
 ```
 
 Tak elegantní to zase není.
+=======
+user?.name = "John"; // Error, doesn't work
+// because it evaluates to: undefined = "John"
+```
+
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 ````
 
 ## Shrnutí
@@ -217,4 +266,8 @@ Jak vidíme, všechny jsou srozumitelné a snadno se používají. `?.` ověří
 
 Řetězec více `?.` nám umožňuje bezpečný přístup k vnořeným vlastnostem.
 
+<<<<<<< HEAD
 Přesto bychom měli používat `?.` opatrně a jen tehdy, když je přijatelné, aby levá strana skutečně neexistovala. Tak se před námi neukryjí programátorské chyby, jestliže k nim dojde.
+=======
+Still, we should apply `?.` carefully, only where it's acceptable, according to our code logic, that the left part doesn't exist. So that it won't hide programming errors from us, if they occur.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f

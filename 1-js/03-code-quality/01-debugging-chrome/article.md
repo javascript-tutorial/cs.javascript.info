@@ -38,7 +38,11 @@ Pokud stiskneme `key:Esc`, otevře se dole konzole. Můžeme tam psát příkazy
 
 Poté, co se příkaz vykoná, se dole zobrazí jeho výsledek.
 
+<<<<<<< HEAD
 Například `1+2` zde vydá výsledek `3` a `ahoj("debugger")` nevrátí nic, takže výsledek bude `undefined`:
+=======
+For example, here `1+2` results in `3`, while the function call `hello("debugger")` returns nothing, so the result is `undefined`:
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 ![](chrome-sources-console.svg)
 
@@ -62,13 +66,22 @@ V pravém panelu vždy najdeme seznam breakpointů. Ten je užitečný, když m�
 - Odstranit breakpoint tím, že na něj klikneme pravým tlačítkem myši a zvolíme Remove.
 - ...A tak dále.
 
+<<<<<<< HEAD
 ```smart header="Podmíněné breakpointy"
 *Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněný* breakpoint. Ten se aktivuje, jen když je splněna zadaná podmínka.
+=======
+```smart header="Conditional breakpoints"
+*Right click* on the line number allows to create a *conditional* breakpoint. It only triggers when the given expression, that you should provide when you create it, is truthy.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 To se hodí, když potřebujeme zastavit skript jen při určité hodnotě proměnné nebo pro určité parametry funkce.
 ```
 
+<<<<<<< HEAD
 ## Příkaz debugger
+=======
+## The command "debugger"
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 Pozastavit kód můžeme také tím, že v něm použijeme příkaz `debugger`, například:
 
@@ -84,8 +97,12 @@ function ahoj(jméno) {
 }
 ```
 
+<<<<<<< HEAD
 To je velmi užitečné, když se nacházíme v editoru kódu a nechceme se přepínat do prohlížeče a hledat skript ve vývojářských nástrojích, abychom nastavili breakpoint.
 
+=======
+Such command works only when the development tools are open, otherwise the browser ignores it.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 ## Pozastavení a rozhlédnutí
 
@@ -99,7 +116,11 @@ Prosíme otevřete si informační dropdowny vpravo (označené šipkami), kter�
 
 1. **`Watch` -- zobrazí aktuální hodnotu jakéhokoli výrazu.**
 
+<<<<<<< HEAD
     Můžete kliknout na plus `+` a zadat výraz. Debugger bude vždy zobrazovat jeho hodnotu, kterou při výkonu skriptu automaticky přepočítá.
+=======
+    You can click the plus `+` and input an expression. The debugger will show its value, automatically recalculating it in the process of execution.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 2. **`Call Stack` -- zobrazí řetězec vnořených volání funkcí.**
 
@@ -136,12 +157,21 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 
     Dalším a dalším klikáním můžeme procházet všechny příkazy skriptu jeden po druhém.
 
+<<<<<<< HEAD
 <span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": vykoná další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
 : Podobá se předchozímu příkazu „Step“, ale chová se jinak, jestliže dalším příkazem je volání funkce. Ne však vestavěné funkce jako `alert`, ale námi nadefinované funkce.
 
     Příkaz „Step“ do ní vstoupí a pozastaví provádění na jejím prvním řádku, zatímco „Step over“ neviditelně zavolá funkci a přeskočí její vnitřek.
 
     Provádění se pak ihned po této funkci pozastaví.
+=======
+<span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": run the next command, but *don't go into a function*, hotkey `key:F10`.
+: Similar to the previous "Step" command, but behaves differently if the next statement is a function call (not a built-in, like `alert`, but a function of our own).
+
+    If we compare them, the "Step" command goes into a nested function call and pauses the execution at its first line, while "Step over" executes the nested function call invisibly to us, skipping the function internals.
+
+    The execution is then paused immediately after that function call.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
     To se hodí, když nás nezajímá, co se děje uvnitř volané funkce.
 
@@ -156,8 +186,13 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <span class="devtools" style="background-position:-61px -74px"></span> -- povolí/zakáže všechny breakpointy.
 : Toto tlačítko nemá vliv na provádění, jen hromadně zapne/vypne všechny breakpointy.
 
+<<<<<<< HEAD
 <span class="devtools" style="background-position:-90px -146px"></span> -- povolí/zakáže automatické pozastavení v případě chyby.
 : Když je povoleno a vývojářské nástroje jsou otevřeny, chyba ve skriptu způsobí automatické pozastavení jeho výkonu. Pak můžeme analyzovat jeho proměnné, abychom viděli, co je špatně. Když tedy náš skript skončí s chybou, můžeme otevřít debugger, povolit tuto možnost a znovu načíst stránku, abychom viděli, kde spadl a jaký je v tom okamžiku jeho kontext.
+=======
+<span class="devtools" style="background-position:-90px -146px"></span> -- enable/disable automatic pause in case of an error.
+: When enabled, if the developer tools is open, an error during the script execution automatically pauses it. Then we can analyze variables in the debugger to see what went wrong. So if our script dies with an error, we can open debugger, enable this option and reload the page to see where it dies and what's the context at that moment.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 ```smart header="Pokračovat až sem"
 Po kliknutí pravým tlačítkem myši na řádek kódu se otevře kontextové menu s výtečnou možností „Pokračovat až sem“ („Continue to here“).
@@ -189,7 +224,11 @@ Jak vidíme, existují tři hlavní způsoby, jak pozastavit skript:
 2. Příkazy `debugger`.
 3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
 
+<<<<<<< HEAD
 Když je kód pozastaven, můžeme jej ladit - prozkoumávat proměnné a trasovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
+=======
+When paused, we can debug: examine variables and trace the code to see where the execution goes wrong.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 

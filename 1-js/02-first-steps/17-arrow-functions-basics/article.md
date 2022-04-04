@@ -48,7 +48,11 @@ Jak vidíte, `(a, b) => a + b` znamená funkci, která přijímá dva argumenty 
     alert( dvojnásobek(3) ); // 6
     ```
 
+<<<<<<< HEAD
 - Nejsou-li žádné argumenty, závorky budou prázdné (ale musejí být uvedeny):
+=======
+- If there are no arguments, parentheses are empty, but they must be present:
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
     ```js run
     let řekniAhoj = () => alert("Ahoj!");
@@ -76,9 +80,15 @@ Jsou velmi vhodné pro jednoduché jednořádkové akce, kdy se nám prostě nec
 
 ## Víceřádkové šipkové funkce
 
+<<<<<<< HEAD
 Výše uvedené příklady přebíraly argumenty z levé strany `=>` a vyhodnocovaly s nimi pravou stranu.
 
 Někdy potřebujeme něco složitějšího, například více výrazů nebo příkazů za sebou. I to je možné, ale pak je musíme uzavřít do složených závorek. Uvnitř nich potom použijeme běžný příkaz `return`.
+=======
+The arrow functions that we've seen so far were very simple. They took arguments from the left of `=>`, evaluated and returned the right-side expression with them.
+
+Sometimes we need a more complex function, with multiple expressions and statements. In that case, we can enclose them in curly braces. The major difference is that curly braces require a `return` within them to return a value (just like a regular function does).
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
 
 Například takto:
 
@@ -105,7 +115,14 @@ Prozatím už můžeme používat šipkové funkce pro jednořádkové akce a ca
 
 ## Shrnutí
 
+<<<<<<< HEAD
 Šipkové funkce se hodí pro jednořádkové funkce. Dají se napsat dvěma způsoby:
 
 1. Bez složených závorek: `(...args) => výraz` -- na pravé straně je výraz: funkce jej vyhodnotí a vrátí jeho výsledek.
 2. Se složenými závorkami: `(...args) => { tělo }` -- složené závorky nám umožňují uvést ve funkci více příkazů, ale aby funkce něco vrátila, musíme výslovně uvést `return`.
+=======
+Arrow functions are handy for simple actions, especially for one-liners. They come in two flavors:
+
+1. Without curly braces: `(...args) => expression` -- the right side is an expression: the function evaluates it and returns the result. Parentheses can be omitted, if there's only a single argument, e.g. `n => n*2`.
+2. With curly braces: `(...args) => { body }` -- brackets allow us to write multiple statements inside the function, but we need an explicit `return` to return something.
+>>>>>>> 45934debd9bb31376ea5da129e266df5b43e545f
