@@ -1,10 +1,10 @@
 # Async/await
 
-Existuje speciální syntaxe, která umožňuje pracovat s přísliby pohodlnějším způsobem. Nazývá se „async/await“. Je překvapivě snadné jí porozumět a používat ji.
+There's a special syntax to work with promises in a more comfortable fashion, called "async/await". It's surprisingly easy to understand and use.
 
-## Asynchronní funkce
+## Async functions
 
-Začněme klíčovým slovem `async`. To může být umístěno před funkci, například:
+Let's start with the `async` keyword. It can be placed before a function, like this:
 
 ```js
 async function f() {
@@ -12,9 +12,9 @@ async function f() {
 }
 ```
 
-Slovo „async“ před funkcí znamená jednoduchou věc: funkce vždy vrátí příslib. Jiné hodnoty budou automaticky zabaleny do vyhodnoceného příslibu.
+The word "async" before a function means one simple thing: a function always returns a promise. Other values are wrapped in a resolved promise automatically.
 
-Například tato funkce vrátí vyhodnocený příslib s výsledkem `1`; otestujme to:
+For instance, this function returns a resolved promise with the result of `1`; let's test it:
 
 ```js run
 async function f() {
@@ -24,7 +24,7 @@ async function f() {
 f().then(alert); // 1
 ```
 
-...Mohli bychom explicitně vrátit příslib, což by bylo totéž:
+...We could explicitly return a promise, which would be the same:
 
 ```js run
 async function f() {
@@ -34,204 +34,204 @@ async function f() {
 f().then(alert); // 1
 ```
 
-Klíčové slovo `async` tedy zaručuje, že funkce vrátí příslib, a jiné hodnoty než přísliby do něj zabalí. Jednoduché, že? Ale to není všechno. Existuje další klíčové slovo, `await`, které funguje výhradně uvnitř funkcí s `async` a je opravdu pěkné.
+So, `async` ensures that the function returns a promise, and wraps non-promises in it. Simple enough, right? But not only that. There's another keyword, `await`, that works only inside `async` functions, and it's pretty cool.
 
 ## Await
 
-Syntaxe:
+The syntax:
 
 ```js
-// funguje jen v asynchronních funkcích
-let hodnota = await příslib;
+// works only inside async functions
+let value = await promise;
 ```
 
-Klíčové slovo `await` přiměje JavaScript počkat, než se příslib usadí, a vrátí jeho výsledek.
+The keyword `await` makes JavaScript wait until that promise settles and returns its result.
 
-Následuje příklad s příslibem, který se vyhodnotí za 1 sekundu:
+Here's an example with a promise that resolves in 1 second:
 ```js run
 async function f() {
 
-  let příslib = new Promise((resolve, reject) => {
-    setTimeout(() => resolve("hotovo!"), 1000)
+  let promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("done!"), 1000)
   });
 
 *!*
-  let výsledek = await příslib; // čeká, než se příslib vyhodnotí (*)
+  let result = await promise; // wait until the promise resolves (*)
 */!*
 
-  alert(výsledek); // "hotovo!"
+  alert(result); // "done!"
 }
 
 f();
 ```
 
-Výkon funkce se na řádku `(*)` „přeruší“ a obnoví se až tehdy, když se příslib usadí. Do proměnné `výsledek` se uloží jeho výsledek. Proto uvedený kód zobrazí za jednu sekundu „hotovo!“.
+The function execution "pauses" at the line `(*)` and resumes when the promise settles, with `result` becoming its result. So the code above shows "done!" in one second.
 
-Zdůrazněme to: `await` doslova přeruší výkon funkce, dokud se příslib neusadí, a pak jej obnoví s výsledkem příslibu. To nestojí žádné zdroje CPU, protože JavaScriptový engine mezitím může vykonávat jinou práci: spouštět další skripty, ošetřovat události a podobně.
+Let's emphasize: `await` literally suspends the function execution until the promise settles, and then resumes it with the promise result. That doesn't cost any CPU resources, because the JavaScript engine can do other jobs in the meantime: execute other scripts, handle events, etc.
 
-Je to jen elegantnější syntaxe získání výsledku příslibu než `příslib.then`. A snadněji se čte a píše.
+It's just a more elegant syntax of getting the promise result than `promise.then`. And, it's easier to read and write.
 
-````warn header="V běžných funkcích nelze `await` používat"
-Pokud se pokusíme použít `await` v neasynchronní funkci, nastane syntaktická chyba:
+````warn header="Can't use `await` in regular functions"
+If we try to use `await` in a non-async function, there would be a syntax error:
 
 ```js run
 function f() {
-  let příslib = Promise.resolve(1);
+  let promise = Promise.resolve(1);
 *!*
-  let výsledek = await příslib; // Syntaktická chyba
+  let result = await promise; // Syntax error
 */!*
 }
 ```
 
-Tuto chybu můžeme získat, když zapomeneme uvést `async` před funkcí. Jak bylo uvedeno, `await` funguje jedině uvnitř funkce s `async`.
+We may get this error if we forget to put `async` before a function. As stated earlier, `await` only works inside an `async` function.
 ````
 
-Vezměme nyní příklad `zobrazAvatara()` z kapitoly <info:promise-chaining> a přepišme jej za použití `async/await`:
+Let's take the `showAvatar()` example from the chapter <info:promise-chaining> and rewrite it using `async/await`:
 
-1. Musíme nahradit volání `.then` za `await`.
-2. Aby to fungovalo, měli bychom také označit funkci jako `async`.
+1. We'll need to replace `.then` calls with `await`.
+2. Also we should make the function `async` for them to work.
 
 ```js run
-async function zobrazAvatara() {
+async function showAvatar() {
 
-  // načteme náš JSON
-  let odpověď = await fetch('/article/promise-chaining/user.json');
-  let uživatel = await odpověď.json();
+  // read our JSON
+  let response = await fetch('/article/promise-chaining/user.json');
+  let user = await response.json();
 
-  // načteme uživatele GitHubu
-  let odpověďGitHubu = await fetch(`https://api.github.com/users/${uživatel.name}`);
-  let uživatelGitHubu = await odpověďGitHubu.json();
+  // read github user
+  let githubResponse = await fetch(`https://api.github.com/users/${user.name}`);
+  let githubUser = await githubResponse.json();
 
-  // zobrazíme avatara
+  // show the avatar
   let img = document.createElement('img');
-  img.src = uživatelGitHubu.avatar_url;
+  img.src = githubUser.avatar_url;
   img.className = "promise-avatar-example";
   document.body.append(img);
 
-  // počkáme 3 sekundy
+  // wait 3 seconds
   await new Promise((resolve, reject) => setTimeout(resolve, 3000));
 
   img.remove();
 
-  return uživatelGitHubu;
+  return githubUser;
 }
 
-zobrazAvatara();
+showAvatar();
 ```
 
-Pěkně čisté a snadno čitelné, že? Mnohem lepší než předtím.
+Pretty clean and easy to read, right? Much better than before.
 
-````smart header="Moderní prohlížeče povolují `await` na nejvyšší úrovni v modulech"
-V moderních prohlížečích funguje `await` dobře i na nejvyšší úrovni, když jsme uvnitř modulu. Moduly probereme v článku <info:modules-intro>.
+````smart header="Modern browsers allow top-level `await` in modules"
+In modern browsers, `await` on top level works just fine, when we're inside a module. We'll cover modules in article <info:modules-intro>.
 
-Například:
+For instance:
 
 ```js run module
-// předpokládáme, že tento kód běží na nejvyšší úrovni uvnitř modulu
-let odpověď = await fetch('/article/promise-chaining/user.json');
-let uživatel = await odpověď.json();
+// we assume this code runs at top level, inside a module
+let response = await fetch('/article/promise-chaining/user.json');
+let user = await response.json();
 
-console.log(uživatel);
+console.log(user);
 ```
 
-Jestliže nepoužíváme moduly nebo musíme podporovat i [starší prohlížeče](https://caniuse.com/mdn-javascript_operators_await_top_level), pak existuje univerzální recept: zabalení do anonymní asynchronní funkce.
+If we're not using modules, or [older browsers](https://caniuse.com/mdn-javascript_operators_await_top_level) must be supported, there's a universal recipe: wrapping into an anonymous async function.
 
-Například:
+Like this:
 
 ```js
 (async () => {
-  let odpověď = await fetch('/article/promise-chaining/user.json');
-  let uživatel = await odpověď.json();
+  let response = await fetch('/article/promise-chaining/user.json');
+  let user = await response.json();
   ...
 })();
 ```
 
 ````
 
-````smart header="`await` přijímá „thenable“ objekty"
-Stejně jako `příslib.then`, i `await` nám umožňuje používat thenable objekty (ty, které obsahují volatelnou metodu `then`). Myšlenkou je, že objekt třetí strany nemusí být příslib, ale objekt kompatibilní s příslibem: podporuje-li `then`, stačí to k tomu, abychom jej použili s `await`.
+````smart header="`await` accepts \"thenables\""
+Like `promise.then`, `await` allows us to use thenable objects (those with a callable `then` method). The idea is that a third-party object may not be a promise, but promise-compatible: if it supports `.then`, that's enough to use it with `await`.
 
-Zde je příklad třídy `Thenable`; níže uvedený `await` přijímá její instance:
+Here's a demo `Thenable` class; the `await` below accepts its instances:
 
 ```js run
 class Thenable {
-  constructor(číslo) {
-    this.číslo = číslo;
+  constructor(num) {
+    this.num = num;
   }
   then(resolve, reject) {
     alert(resolve);
-    // splnění s hodnotou this.číslo*2 za 1000 ms
-    setTimeout(() => resolve(this.číslo * 2), 1000); // (*)
+    // resolve with this.num*2 after 1000ms
+    setTimeout(() => resolve(this.num * 2), 1000); // (*)
   }
 }
 
 async function f() {
-  // počká 1 sekundu, pak výsledek bude 2
-  let výsledek = await new Thenable(1);
-  alert(výsledek);
+  // waits for 1 second, then result becomes 2
+  let result = await new Thenable(1);
+  alert(result);
 }
 
 f();
 ```
 
-Jestliže `await` obdrží nepříslibový objekt obsahující `.then`, zavolá tuto metodu a jako argumenty jí poskytne zabudované funkce `resolve` a `reject` (tak, jako to učiní pro obvyklý exekutor `Promise`). Pak `await` počká, dokud nebude zavolána jedna z nich (v uvedeném příkladu se to stane na řádku `(*)`) a poté bude pokračovat s výsledkem.
+If `await` gets a non-promise object with `.then`, it calls that method providing the built-in functions `resolve` and `reject` as arguments (just as it does for a regular `Promise` executor). Then `await` waits until one of them is called (in the example above it happens in the line `(*)`) and then proceeds with the result.
 ````
 
-````smart header="Asynchronní třídní metody"
-Chceme-li deklarovat asynchronní třídní metodu, jednoduše před ni uvedeme `async`:
+````smart header="Async class methods"
+To declare an async class method, just prepend it with `async`:
 
 ```js run
-class Čekatel {
+class Waiter {
 *!*
-  async čekej() {
+  async wait() {
 */!*
     return await Promise.resolve(1);
   }
 }
 
-new Čekatel()
-  .čekej()
-  .then(alert); // 1 (to je totéž jako (výsledek => alert(výsledek)))
+new Waiter()
+  .wait()
+  .then(alert); // 1 (this is the same as (result => alert(result)))
 ```
-Význam je stejný: zajišťuje, že vrácená hodnota je příslib, a umožňuje `await`.
+The meaning is the same: it ensures that the returned value is a promise and enables `await`.
 
 ````
-## Ošetřování chyb
+## Error handling
 
-Jestliže je příslib normálně vyhodnocen, pak `await příslib` vrátí výsledek. V případě zamítnutí však vyvolá výjimku, tak, jako by na tomto řádku byl uveden příkaz `throw`.
+If a promise resolves normally, then `await promise` returns the result. But in the case of a rejection, it throws the error, just as if there were a `throw` statement at that line.
 
-Tento kód:
-
-```js
-async function f() {
-*!*
-  await Promise.reject(new Error("Ouha!"));
-*/!*
-}
-```
-
-...je stejný jako tento:
+This code:
 
 ```js
 async function f() {
 *!*
-  throw new Error("Ouha!");
+  await Promise.reject(new Error("Whoops!"));
 */!*
 }
 ```
 
-V reálných situacích může nějakou dobu trvat, než bude příslib zamítnut. V tom případě nastane prodleva předtím, než `await` vyvolá chybu.
+...is the same as this:
 
-Tuto chybu můžeme zachytit pomocí `try..catch`, stejným způsobem, jako obvyklé `throw`:
+```js
+async function f() {
+*!*
+  throw new Error("Whoops!");
+*/!*
+}
+```
+
+In real situations, the promise may take some time before it rejects. In that case there will be a delay before `await` throws an error.
+
+We can catch that error using `try..catch`, the same way as a regular `throw`:
 
 ```js run
 async function f() {
 
   try {
-    let odpověď = await fetch('http://takove-url-neni');
-  } catch(chyba) {
+    let response = await fetch('http://no-such-url');
+  } catch(err) {
 *!*
-    alert(chyba); // TypeError: failed to fetch
+    alert(err); // TypeError: failed to fetch
 */!*
   }
 }
@@ -239,73 +239,73 @@ async function f() {
 f();
 ```
 
-V případě chyby řízení skočí do bloku `catch`. Můžeme také zabalit více řádků:
+In the case of an error, the control jumps to the `catch` block. We can also wrap multiple lines:
 
 ```js run
 async function f() {
 
   try {
-    let odpověď = await fetch('/tady-neni-uzivatel');
-    let uživatel = await odpověď.json();
-  } catch(chyba) {
-    // zachytává chyby z funkce fetch i z funkce odpověď.json
-    alert(chyba);
+    let response = await fetch('/no-user-here');
+    let user = await response.json();
+  } catch(err) {
+    // catches errors both in fetch and response.json
+    alert(err);
   }
 }
 
 f();
 ```
 
-Pokud nemáme `try..catch`, stane se příslib generovaný voláním asynchronní funkce `f()` zamítnutým. Můžeme připojit `.catch`, abychom to ošetřili:
+If we don't have `try..catch`, then the promise generated by the call of the async function `f()` becomes rejected. We can append `.catch` to handle it:
 
 ```js run
 async function f() {
-  let odpověď = await fetch('http://takove-url-neni');
+  let response = await fetch('http://no-such-url');
 }
 
-// f() se stane zamítnutým příslibem
+// f() becomes a rejected promise
 *!*
 f().catch(alert); // TypeError: failed to fetch // (*)
 */!*
 ```
 
-Jestliže sem zapomeneme přidat `.catch`, získáme neošetřenou chybu příslibu (viditelnou v konzoli). Takové chyby můžeme zachytávat pomocí globálního handleru událostí `unhandledrejection`, popsaného v kapitole <info:promise-error-handling>.
+If we forget to add `.catch` there, then we get an unhandled promise error (viewable in the console). We can catch such errors using a global `unhandledrejection` event handler as described in the chapter <info:promise-error-handling>.
 
 
-```smart header="`async/await` a `promise.then/catch`"
-Když používáme `async/await`, potřebujeme `.then` jenom zřídka, neboť `await` nám čekání zpracuje. A místo `.catch` můžeme použít běžné `try..catch`. To je obvykle (ale ne vždy) vhodnější.
+```smart header="`async/await` and `promise.then/catch`"
+When we use `async/await`, we rarely need `.then`, because `await` handles the waiting for us. And we can use a regular `try..catch` instead of `.catch`. That's usually (but not always) more convenient.
 
-Avšak na nejvyšší úrovni kódu, když jsme mimo jakoukoli funkci s `async`, nemůžeme syntakticky použít `await`, takže je obvyklou praktikou přidat `.then/catch` pro ošetření konečného výsledku nebo vypadnuvší chyby, jako na řádku `(*)` v uvedeném příkladu.
+But at the top level of the code, when we're outside any `async` function, we're syntactically unable to use `await`, so it's a normal practice to add `.then/catch` to handle the final result or falling-through error, like in the line `(*)` of the example above.
 ```
 
-````smart header="`async/await` funguje správně s `Promise.all`"
-Když potřebujeme čekat na více příslibů, můžeme je zabalit do `Promise.all` a pak volat `await`:
+````smart header="`async/await` works well with `Promise.all`"
+When we need to wait for multiple promises, we can wrap them in `Promise.all` and then `await`:
 
 ```js
-// čekáme na pole výsledků
-let výsledky = await Promise.all([
+// wait for the array of results
+let results = await Promise.all([
   fetch(url1),
   fetch(url2),
   ...
 ]);
 ```
 
-V případě chyby se tato chyba vyvolá jako obvykle, z neúspěšného příslibu do `Promise.all`, a pak se stane výjimkou, kterou můžeme zachytit použitím `try..catch` okolo volání.
+In the case of an error, it propagates as usual, from the failed promise to `Promise.all`, and then becomes an exception that we can catch using `try..catch` around the call.
 
 ````
 
-## Shrnutí
+## Summary
 
-Klíčové slovo `async` před funkcí má dva efekty:
+The `async` keyword before a function has two effects:
 
-1. Způsobí, že funkce vždy vrátí příslib.
-2. Umožní v ní použít `await`.
+1. Makes it always return a promise.
+2. Allows `await` to be used in it.
 
-Klíčové slovo `await` před příslibem přiměje JavaScript čekat, než se příslib usadí, a pak:
+The `await` keyword before a promise makes JavaScript wait until that promise settles, and then:
 
-1. Pokud je to chyba, vygeneruje se výjimka -- totéž, jako by přesně na tomto místě bylo voláno `throw chyba`.
-2. V opačném případě vrátí výsledek.
+1. If it's an error, an exception is generated — same as if `throw error` were called at that very place.
+2. Otherwise, it returns the result.
 
-Společně poskytují vynikající rámec pro psaní asynchronního kódu, který je snadné číst i psát.
+Together they provide a great framework to write asynchronous code that is easy to both read and write.
 
-S `async/await` potřebujeme jen zřídka psát `příslib.then/catch`, ale stále bychom neměli zapomínat, že jsou založeny na příslibech, protože někdy (např. na nejvyšší úrovni kódu) tyto metody musíme použít. Rovněž `Promise.all` se hodí, když čekáme na mnoho úkolů současně.
+With `async/await` we rarely need to write `promise.then/catch`, but we still shouldn't forget that they are based on promises, because sometimes (e.g. in the outermost scope) we have to use these methods. Also `Promise.all` is nice when we are waiting for many tasks simultaneously.

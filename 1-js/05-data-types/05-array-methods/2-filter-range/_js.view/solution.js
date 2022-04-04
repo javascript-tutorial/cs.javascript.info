@@ -1,5 +1,5 @@
 
-function filtrujPodleRozsahu(pole, a, b) {
-  // závorky kolem výrazu jsou přidány pro lepší čitelnost
-  return pole.filter(prvek => (a <= prvek && prvek <= b));
+function filterRange(arr, a, b) {
+  // added brackets around the expression for better readability
+  return arr.filter(item => (a <= item && item <= b));
 }

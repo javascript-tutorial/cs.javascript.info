@@ -1,3 +1,3 @@
-function podleVlastnosti(názevVlastnosti){
-  return (a, b) => a[názevVlastnosti] > b[názevVlastnosti] ? 1 : -1;
+function byField(fieldName){
+  return (a, b) => a[fieldName] > b[fieldName] ? 1 : -1;
 }

@@ -2,19 +2,19 @@ importance: 4
 
 ---
 
-# Které hodnoty zobrazí cyklus while?
+# Which values does the while loop show?
 
-Pro oba cykly si zapište hodnoty, které budou vypsány, a pak je porovnejte s řešením.
+For every loop iteration, write down which value it outputs and then compare it with the solution.
 
-Vypíše `alert` v obou cyklech stejné hodnoty, nebo ne?
+Both loops `alert` the same values, or not?
 
-1. Prefixová forma `++i`:
+1. The prefix form `++i`:
 
     ```js
     let i = 0;
     while (++i < 5) alert( i );
     ```
-2. Postfixová forma `i++`
+2. The postfix form `i++`
 
     ```js
     let i = 0;

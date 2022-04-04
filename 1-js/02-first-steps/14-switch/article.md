@@ -1,20 +1,22 @@
-# Příkaz „switch“
+# The "switch" statement
 
-Příkaz `switch` dokáže nahradit několik podmíněných příkazů `if`. Poskytuje přehlednější způsob, jak porovnat hodnotu s několika variantami.
+A `switch` statement can replace multiple `if` checks.
 
-## Syntaxe
+It gives a more descriptive way to compare a value with multiple variants.
 
-Příkaz `switch` obsahuje jeden nebo více bloků `case` a nepovinný blok `default`.
+## The syntax
 
-Vypadá takto:
+The `switch` has one or more `case` blocks and an optional default.
+
+It looks like this:
 
 ```js no-beautify
 switch(x) {
-  case 'hodnota1':  // if (x === 'hodnota1')
+  case 'value1':  // if (x === 'value1')
     ...
     [break]
 
-  case 'hodnota2':  // if (x === 'hodnota2')
+  case 'value2':  // if (x === 'value2')
     ...
     [break]
 
@@ -24,71 +26,71 @@ switch(x) {
 }
 ```
 
-- Je ověřena striktní rovnost hodnoty `x` s hodnotou z prvního `case` (tj. `hodnota1`), pak s druhou `hodnota2`, a tak dále.
-- Pokud je rovnost nalezena, `switch` začne vykonávat kód od odpovídajícího `case` až do nejbližšího `break` (nebo do konce `switch`).
-- Není-li nalezena žádná rovnost, je vykonán kód `default` (pokud je uveden).
+- The value of `x` is checked for a strict equality to the value from the first `case` (that is, `value1`) then to the second (`value2`) and so on.
+- If the equality is found, `switch` starts to execute the code starting from the corresponding `case`, until the nearest `break` (or until the end of `switch`).
+- If no case is matched then the `default` code is executed (if it exists).
 
-## Příklad
+## An example
 
-Příklad příkazu `switch` (vykonaný kód je zvýrazněn):
+An example of `switch` (the executed code is highlighted):
 
 ```js run
 let a = 2 + 2;
 
 switch (a) {
   case 3:
-    alert( 'Příliš málo' );
+    alert( 'Too small' );
     break;
 *!*
   case 4:
-    alert( 'Přesně!' );
+    alert( 'Exactly!' );
     break;
 */!*
   case 5:
-    alert( 'Příliš mnoho' );
+    alert( 'Too big' );
     break;
   default:
-    alert( "Takové hodnoty neznám" );
+    alert( "I don't know such values" );
 }
 ```
 
-Zde `switch` začne porovnávat `a` od první varianty `case`, kterou je `3`. Porovnání neuspěje.
+Here the `switch` starts to compare `a` from the first `case` variant that is `3`. The match fails.
 
-Pak `4`. Tady je nalezena shoda, takže výkon začne od `case 4` a skončí na nejbližším `break`.
+Then `4`. That's a match, so the execution starts from `case 4` until the nearest `break`.
 
-**Není-li přítomen příkaz `break`, výkon pokračuje další větví `case` bez jakéhokoli porovnání.**
+**If there is no `break` then the execution continues with the next `case` without any checks.**
 
-Příklad bez `break`:
+An example without `break`:
 
 ```js run
 let a = 2 + 2;
 
 switch (a) {
   case 3:
-    alert( 'Příliš málo' );
+    alert( 'Too small' );
 *!*
   case 4:
-    alert( 'Přesně!' );
+    alert( 'Exactly!' );
   case 5:
-    alert( 'Příliš mnoho' );
+    alert( 'Too big' );
   default:
-    alert( "Takové hodnoty neznám" );
+    alert( "I don't know such values" );
 */!*
 }
 ```
 
-V uvedeném příkladu vidíme sekvenční vykonání tří `alert`ů:
+In the example above we'll see sequential execution of three `alert`s:
 
 ```js
-alert( 'Přesně!' );
-alert( 'Příliš mnoho' );
-alert( "Takové hodnoty neznám" );
+alert( 'Exactly!' );
+alert( 'Too big' );
+alert( "I don't know such values" );
 ```
 
-````smart header="Argumentem `switch/case` může být jakýkoli výraz"
-Jak `switch`, tak `case` dovolují libovolné výrazy.
+````smart header="Any expression can be a `switch/case` argument"
+Both `switch` and `case` allow arbitrary expressions.
 
-Příklad:
+For example:
 
 ```js run
 let a = "1";
@@ -97,74 +99,74 @@ let b = 0;
 switch (+a) {
 *!*
   case b + 1:
-    alert("toto se vykoná, protože +a je 1, což se přesně rovná b+1");
+    alert("this runs, because +a is 1, exactly equals b+1");
     break;
 */!*
 
   default:
-    alert("toto se nevykoná");
+    alert("this doesn't run");
 }
 ```
-Zde `+a` dává `1`, to se v `case` porovná s `b + 1` a spustí se příslušný kód.
+Here `+a` gives `1`, that's compared with `b + 1` in `case`, and the corresponding code is executed.
 ````
 
-## Seskupování „case“
+## Grouping of "case"
 
-Je možné seskupit několik variant větví `case`, které mají mít stejný kód.
+Several variants of `case` which share the same code can be grouped.
 
-Například když chceme, aby se stejný kód spustil pro `case 3` a `case 5`:
+For example, if we want the same code to run for `case 3` and `case 5`:
 
 ```js run no-beautify
 let a = 3;
 
 switch (a) {
   case 4:
-    alert('Správně!');
+    alert('Right!');
     break;
 
 *!*
-  case 3: // (*) dvě seskupené větve case
+  case 3: // (*) grouped two cases
   case 5:
-    alert('Špatně!');
-    alert("Proč nenavštěvujete kurz matematiky?");
+    alert('Wrong!');
+    alert("Why don't you take a math class?");
     break;
 */!*
 
   default:
-    alert('Tento výsledek je divný. Opravdu.');
+    alert('The result is strange. Really.');
 }
 ```
 
-Nyní `3` a `5` zobrazí stejnou zprávu.
+Now both `3` and `5` show the same message.
 
-Schopnost „seskupovat“ větve je vedlejší efekt toho, jak `switch/case` funguje bez `break`. Zde výkon `case 3` začne od řádku `(*)` a projde přes `case 5`, protože tam není žádný `break`.
+The ability to "group" cases is a side-effect of how `switch/case` works without `break`. Here the execution of `case 3` starts from the line `(*)` and goes through `case 5`, because there's no `break`.
 
-## Na typu záleží
+## Type matters
 
-Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musejí být stejného typu.
+Let's emphasize that the equality check is always strict. The values must be of the same type to match.
 
-Uvažujme například tento kód:
+For example, let's consider the code:
 
 ```js run
-let arg = prompt("Zadejte hodnotu");
+let arg = prompt("Enter a value?");
 switch (arg) {
   case '0':
   case '1':
-    alert( 'Jedna nebo nula' );
+    alert( 'One or zero' );
     break;
 
   case '2':
-    alert( 'Dvě' );
+    alert( 'Two' );
     break;
 
   case 3:
-    alert( 'Toto se nikdy nevykoná!' );
+    alert( 'Never executes!' );
     break;
   default:
-    alert( 'Neznámá hodnota' );
+    alert( 'An unknown value' );
 }
 ```
 
-1. Pro `0` a `1` se spustí první `alert`.
-2. Pro `2` se spustí druhý `alert`.
-3. Avšak pro `3` je výsledkem příkazu `prompt` řetězec `"3"`, který není striktně roven `===` číslu `3`. Proto jsme pro `case 3` získali mrtvý kód! Spustí se varianta `default`.
+1. For `0`, `1`, the first `alert` runs.
+2. For `2` the second `alert` runs.
+3. But for `3`, the result of the `prompt` is a string `"3"`, which is not strictly equal `===` to the number `3`. So we've got a dead code in `case 3`! The `default` variant will execute.

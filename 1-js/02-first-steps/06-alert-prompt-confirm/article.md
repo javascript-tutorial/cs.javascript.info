@@ -1,105 +1,105 @@
-# Interakce: alert, prompt, confirm
+# Interaction: alert, prompt, confirm
 
-Protože jako demonstrační prostředí budeme používat prohlížeč, podíváme se na několik funkcí sloužících k interakci s uživatelem: `alert`, `prompt` a `confirm`.
+As we'll be using the browser as our demo environment, let's see a couple of functions to interact with the user: `alert`, `prompt` and `confirm`.
 
 ## alert
 
-Tuto funkci jsme už viděli. Zobrazí zprávu a počká, až uživatel stiskne tlačítko „OK“.
+This one we've seen already. It shows a message and waits for the user to press "OK".
 
-Příklad:
+For example:
 
 ```js run
-alert("Ahoj");
+alert("Hello");
 ```
 
-Miniokno se zprávou se nazývá *modální okno*. Slovo „modální“ znamená, že uživatel nemůže komunikovat se zbytkem stránky, mačkat jiná tlačítka apod., dokud nevyhodnotí toto okno -- v tomto případě dokud nestiskne „OK“.
+The mini-window with the message is called a *modal window*. The word "modal" means that the visitor can't interact with the rest of the page, press other buttons, etc, until they have dealt with the window. In this case -- until they press "OK".
 
 ## prompt
 
-Funkce `prompt` přijímá dva argumenty:
+The function `prompt` accepts two arguments:
 
 ```js no-beautify
-výsledek = prompt(titulek, [default]);
+result = prompt(title, [default]);
 ```
 
-Zobrazí modální okno s textovou zprávou, vstupní pole pro návštěvníka a tlačítka OK a Storno.
+It shows a modal window with a text message, an input field for the visitor, and the buttons OK/Cancel.
 
-`titulek`
-: Text, který se má zobrazit návštěvníkovi.
+`title`
+: The text to show the visitor.
 
 `default`
-: Volitelný druhý parametr, úvodní hodnota ve vstupním poli.
+: An optional second parameter, the initial value for the input field.
 
-```smart header="Hranaté závorky v syntaxi `[...]`"
-Hranaté závorky okolo `default` ve výše uvedené syntaxi označují, že parametr je dobrovolný a není vyžadován.
+```smart header="The square brackets in syntax `[...]`"
+The square brackets around `default` in the syntax above denote that the parameter is optional, not required.
 ```
 
-Návštěvník může do vstupního pole něco napsat a stisknout OK. Pak získáme napsaný text jako `výsledek`. Nebo může zrušit vstup stisknutím tlačítka Storno nebo klávesy `key:Esc`. Pak jako `výsledek` obdržíme `null`.
+The visitor can type something in the prompt input field and press OK. Then we get that text in the `result`. Or they can cancel the input by pressing Cancel or hitting the `key:Esc` key, then we get `null` as the `result`.
 
-Volání `prompt` vrátí text ze vstupního pole nebo `null`, pokud byl vstup zrušen.
+The call to `prompt` returns the text from the input field or `null` if the input was canceled.
 
-Příklad:
+For instance:
 
 ```js run
-let věk = prompt('Kolik je ti let?', 100);
+let age = prompt('How old are you?', 100);
 
-alert(`Je ti ${věk} let!`); // Je ti 100 let!
+alert(`You are ${age} years old!`); // You are 100 years old!
 ```
 
-````warn header="Pro IE vždy uvádějte `default`"
-Druhý parametr je nepovinný, ale jestliže ho neuvedeme, Internet Explorer vloží do dotazu text `"undefined"`.
+````warn header="In IE: always supply a `default`"
+The second parameter is optional, but if we don't supply it, Internet Explorer will insert the text `"undefined"` into the prompt.
 
-Spusťte si v Internet Exploreru tento kód a uvidíte:
+Run this code in Internet Explorer to see:
 
 ```js run
 let test = prompt("Test");
 ```
 
-Aby dotazy vypadaly dobře i v IE, doporučujeme vždy uvádět i druhý argument:
+So, for prompts to look good in IE, we recommend always providing the second argument:
 
 ```js run
-let test = prompt("Test", ''); // <-- pro IE
+let test = prompt("Test", ''); // <-- for IE
 ```
 ````
 
 ## confirm
 
-Syntaxe:
+The syntax:
 
 ```js
-výsledek = confirm(otázka);
+result = confirm(question);
 ```
 
-Funkce `confirm` zobrazí modální okno s otázkou `otázka` a dvěma tlačítky: OK a Storno.
+The function `confirm` shows a modal window with a `question` and two buttons: OK and Cancel.
 
-Výsledek bude `true`, jestliže uživatel stiskne OK, jinak bude `false`.
+The result is `true` if OK is pressed and `false` otherwise.
 
-Příklad:
+For example:
 
 ```js run
-let jeŠéf = confirm("Jsi šéf?");
+let isBoss = confirm("Are you the boss?");
 
-alert( jeŠéf ); // pokud bylo stisknuto OK, tak true
+alert( isBoss ); // true if OK is pressed
 ```
 
-## Shrnutí
+## Summary
 
-Uvedli jsme tři funkce specifické pro prohlížeče, které umožňují interakci s uživatelem:
+We covered 3 browser-specific functions to interact with visitors:
 
 `alert`
-: Zobrazí zprávu.
+: shows a message.
 
 `prompt`
-: Zobrazí zprávu, která požádá uživatele o zadání textu. Vrátí zadaný text nebo `null`, pokud uživatel stiskl tlačítko Storno nebo klávesu `key:Esc`.
+: shows a message asking the user to input text. It returns the text or, if Cancel button or `key:Esc` is clicked, `null`.
 
 `confirm`
-: Zobrazí zprávu a počká, než uživatel stiskne „OK“ nebo „Storno“. Vrátí `true`, pokud stiskl OK, nebo `false`, pokud stiskl Storno nebo klávesu `key:Esc`.
+: shows a message and waits for the user to press "OK" or "Cancel". It returns `true` for OK and `false` for Cancel/`key:Esc`.
 
-Všechny tyto metody jsou modální: pozastaví vykonávání skriptu a neumožní návštěvníkovi komunikovat se zbytkem stránky, dokud okno nezmizí.
+All these methods are modal: they pause script execution and don't allow the visitor to interact with the rest of the page until the window has been dismissed.
 
-Všechny uvedené metody mají dvě omezení:
+There are two limitations shared by all the methods above:
 
-1. Přesná poloha modálního okna je stanovena prohlížečem. Obvykle to bývá uprostřed.
-2. Také přesný vzhled okna závisí na prohlížeči a my jej nemůžeme měnit.
+1. The exact location of the modal window is determined by the browser. Usually, it's in the center.
+2. The exact look of the window also depends on the browser. We can't modify it.
 
-To je cena za jednoduchost. Existují jiné způsoby, jak zobrazit hezčí okna a umožnit bohatší interakci s návštěvníkem, ale pokud nám na cerepetičkách příliš nezáleží, tyto metody fungují dobře.
+That is the price for simplicity. There are other ways to show nicer windows and richer interaction with the visitor, but if "bells and whistles" do not matter much, these methods work just fine.

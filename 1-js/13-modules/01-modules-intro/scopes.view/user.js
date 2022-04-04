@@ -1,1 +1,1 @@
-let uživatel = "Jan";
+let user = "John";

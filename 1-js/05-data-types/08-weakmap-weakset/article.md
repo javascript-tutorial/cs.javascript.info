@@ -1,213 +1,213 @@
-# Slabá mapa a slabá množina
+# WeakMap and WeakSet
 
-Jak víme z kapitoly <info:garbage-collection>, engine JavaScriptu si udržuje hodnotu v paměti, dokud je „dosažitelná“ a může být použita.
+As we know from the chapter <info:garbage-collection>, JavaScript engine keeps a value in memory while it is "reachable" and can potentially be used.
 
-Příklad:
+For instance:
 ```js
-let jan = { jméno: "Jan" };
+let john = { name: "John" };
 
-// k objektu může být přistupováno, jan je odkaz na něj
+// the object can be accessed, john is the reference to it
 
-// přepíšeme odkaz
-jan = null;
+// overwrite the reference
+john = null;
 
 *!*
-// objekt bude odstraněn z paměti
+// the object will be removed from memory
 */!*
 ```
 
-Obvykle jsou vlastnosti objektu nebo prvky pole či jiné datové struktury považovány za dosažitelné a udržovány v paměti, dokud je v paměti tato datová struktura.
+Usually, properties of an object or elements of an array or another data structure are considered reachable and kept in memory while that data structure is in memory.
 
-Například uložíme-li objekt do pole, pak dokud je toto pole živé, bude živý i tento objekt, i když na něj nebudou existovat žádné jiné odkazy.
+For instance, if we put an object into an array, then while the array is alive, the object will be alive as well, even if there are no other references to it.
 
-Třeba takto:
+Like this:
 
 ```js
-let jan = { jméno: "Jan" };
+let john = { name: "John" };
 
-let pole = [ jan ];
+let array = [ john ];
 
-jan = null; // přepíšeme odkaz
+john = null; // overwrite the reference
 
 *!*
-// objekt, na který se dříve odkazoval jan, je uložen uvnitř pole
-// proto nebude odklizen garbage collectorem
-// můžeme k němu přistoupit pomocí pole[0]
+// the object previously referenced by john is stored inside the array
+// therefore it won't be garbage-collected
+// we can get it as array[0]
 */!*
 ```
 
-Podobně když použijeme objekt jako klíč v běžné mapě `Map`, pak dokud tato mapa bude existovat, bude existovat i tento objekt. Bude zabírat místo v paměti a nebude moci být odstraněn garbage collectorem.
+Similar to that, if we use an object as the key in a regular `Map`, then while the `Map` exists, that object exists as well. It occupies memory and may not be garbage collected.
 
-Příklad:
+For instance:
 
 ```js
-let jan = { jméno: "Jan" };
+let john = { name: "John" };
 
-let mapa = new Map();
-mapa.set(jan, "...");
+let map = new Map();
+map.set(john, "...");
 
-jan = null; // přepíšeme odkaz
+john = null; // overwrite the reference
 
 *!*
-// jan je uložen uvnitř mapy,
-// můžeme k němu přistoupit pomocí mapa.keys()
+// john is stored inside the map,
+// we can get it by using map.keys()
 */!*
 ```
 
-`WeakMap` („slabá mapa“) se v tomto ohledu zásadně liší. Nebrání odstraňování svých klíčových objektů garbage collectorem.
+`WeakMap` is fundamentally different in this aspect. It doesn't prevent garbage-collection of key objects.
 
-Na příkladech se podívejme, co to znamená.
+Let's see what it means on examples.
 
 ## WeakMap
 
-Prvním rozdílem mezi `Map` a `WeakMap` je, že klíče musejí být objekty, ne primitivní hodnoty:
+The first difference between `Map` and `WeakMap` is that keys must be objects, not primitive values:
 
 ```js run
-let slabáMapa = new WeakMap();
+let weakMap = new WeakMap();
 
 let obj = {};
 
-slabáMapa.set(obj, "ok"); // funguje správně (klíč je objekt)
+weakMap.set(obj, "ok"); // works fine (object key)
 
 *!*
-// jako klíč nemůžeme použít řetězec
-slabáMapa.set("test", "Hop!"); // Chyba, protože "test" není objekt
+// can't use a string as the key
+weakMap.set("test", "Whoops"); // Error, because "test" is not an object
 */!*
 ```
 
-Jestliže nyní použijeme objekt jako klíč a nebudou na něj existovat žádné jiné odkazy -- bude automaticky odstraněn z paměti (a z mapy).
+Now, if we use an object as the key in it, and there are no other references to that object -- it will be removed from memory (and from the map) automatically.
 
 ```js
-let jan = { jméno: "Jan" };
+let john = { name: "John" };
 
-let slabáMapa = new WeakMap();
-slabáMapa.set(jan, "...");
+let weakMap = new WeakMap();
+weakMap.set(john, "...");
 
-jan = null; // přepíšeme odkaz
+john = null; // overwrite the reference
 
-// jan se odstraní z paměti!
+// john is removed from memory!
 ```
 
-Srovnejte si to s výše uvedeným příkladem běžné mapy `Map`. Když nyní `jan` existuje jen jako klíč `WeakMap` -- bude automaticky smazán z mapy (a z paměti).
+Compare it with the regular `Map` example above. Now if `john` only exists as the key of `WeakMap` -- it will be automatically deleted from the map (and memory).
 
-`WeakMap` nepodporuje iteraci a metody `keys()`, `values()`, `entries()`, neexistuje tedy žádný způsob, jak z ní získat všechny klíče nebo hodnoty.
+`WeakMap` does not support iteration and methods `keys()`, `values()`, `entries()`, so there's no way to get all keys or values from it.
 
-`WeakMap` má pouze následující metody:
+`WeakMap` has only the following methods:
 
-- `slabáMapa.get(klíč)`
-- `slabáMapa.set(klíč, hodnota)`
-- `slabáMapa.delete(klíč)`
-- `slabáMapa.has(klíč)`
+- `weakMap.get(key)`
+- `weakMap.set(key, value)`
+- `weakMap.delete(key)`
+- `weakMap.has(key)`
 
-Proč takové omezení? Je tomu tak z technických důvodů. Pokud objekt ztratil všechny ostatní odkazy (např. `jan` ve výše uvedeném kódu), má být automaticky odstraněn garbage collectorem. Technicky však není přesně specifikováno, *kdy k odstranění dojde*.
+Why such a limitation? That's for technical reasons. If an object has lost all other references (like `john` in the code above), then it is to be garbage-collected automatically. But technically it's not exactly specified *when the cleanup happens*.
 
-O tom rozhoduje JavaScriptový engine. Ten se může rozhodnout provést úklid paměti okamžitě anebo s ním počkat a provést jej až později, když dojde k dalšímu mazání. Technicky tedy není znám momentální počet prvků `WeakMap`. Engine je už mohl pročistit nebo ještě ne, nebo to mohl udělat zatím jen částečně. Z tohoto důvodu nejsou podporovány metody, které přistupují ke všem klíčům a hodnotám.
+The JavaScript engine decides that. It may choose to perform the memory cleanup immediately or to wait and do the cleaning later when more deletions happen. So, technically, the current element count of a `WeakMap` is not known. The engine may have cleaned it up or not, or did it partially. For that reason, methods that access all keys/values are not supported.
 
-K čemu nyní takovou datovou strukturu potřebujeme?
+Now, where do we need such a data structure?
 
-## Případ použití: dodatečná data
+## Use case: additional data
 
-Hlavní oblastí použití `WeakMap` je *úložiště dodatečných dat*.
+The main area of application for `WeakMap` is an *additional data storage*.
 
-Jestliže pracujeme s objektem, který „patří“ do jiného kódu, třeba i do knihovny třetí strany, a chtěli bychom si uložit nějaká data s ním spojená, která by měla existovat, jen dokud je tento objekt živý -- pak `WeakMap` je přesně to, co potřebujeme.
+If we're working with an object that "belongs" to another code, maybe even a third-party library, and would like to store some data associated with it, that should only exist while the object is alive - then `WeakMap` is exactly what's needed.
 
-Uložíme data do `WeakMap` a tento objekt použijeme jako klíč. Když bude objekt odklizen garbage collectorem, data automaticky zmizí s ním.
+We put the data to a `WeakMap`, using the object as the key, and when the object is garbage collected, that data will automatically disappear as well.
 
 ```js
-slabáMapa.set(jan, "tajné dokumenty");
-// jestliže jan zemře, tajné dokumenty budou automaticky zničeny
+weakMap.set(john, "secret documents");
+// if john dies, secret documents will be destroyed automatically
 ```
 
-Podívejme se na příklad.
+Let's look at an example.
 
-Máme například kód, který si udržuje počet návštěv jednotlivých uživatelů. Tato informace je uložena v mapě: objekt uživatele je klíč a počet návštěv je hodnota. Když uživatel odejde (jeho objekt bude odklizen garbage collectorem), nechceme již nadále mít počet jeho návštěv uložen.
+For instance, we have code that keeps a visit count for users. The information is stored in a map: a user object is the key and the visit count is the value. When a user leaves (its object gets garbage collected), we don't want to store their visit count anymore.
 
-Zde je příklad počítací funkce s `Map`.
+Here's an example of a counting function with `Map`:
 
 ```js
 // 📁 visitsCount.js
-let mapaPočetNávštěv = new Map(); // mapa: uživatel => počet návštěv
+let visitsCountMap = new Map(); // map: user => visits count
 
-// zvýší počet návštěv
-function započítejUživatele(uživatel) {
-  let počet = mapaPočetNávštěv.get(uživatel) || 0;
-  mapaPočetNávštěv.set(uživatel, počet + 1);
+// increase the visits count
+function countUser(user) {
+  let count = visitsCountMap.get(user) || 0;
+  visitsCountMap.set(user, count + 1);
 }
 ```
 
-A zde je další část kódu, třeba další soubor, který ji používá:
+And here's another part of the code, maybe another file using it:
 
 ```js
 // 📁 main.js
-let jan = { jméno: "Jan" };
+let john = { name: "John" };
 
-započítejUživatele(jan); // počet jeho návštěv
+countUser(john); // count his visits
 
-// později nás jan opustí
-jan = null;
+// later john leaves us
+john = null;
 ```
 
-Nyní by objekt `jan` měl být odklizen, ale zůstává v paměti, neboť je to klíč v mapě `mapaPočetNávštěv`.
+Now, `john` object should be garbage collected, but remains in memory, as it's a key in `visitsCountMap`.
 
-Když tedy odstraňujeme uživatele, musíme `mapaPočetNávštěv` pročistit, jinak bude neustále narůstat v paměti. Ve složitých architekturách se takové pročišťování může stát nepříjemným úkolem.
+We need to clean `visitsCountMap` when we remove users, otherwise it will grow in memory indefinitely. Such cleaning can become a tedious task in complex architectures.
 
-Můžeme se tomu vyhnout, když použijeme `WeakMap`:
+We can avoid it by switching to `WeakMap` instead:
 
 ```js
 // 📁 visitsCount.js
-let mapaPočetNávštěv = new WeakMap(); // slabá mapa: uživatel => počet návštěv
+let visitsCountMap = new WeakMap(); // weakmap: user => visits count
 
-// zvýší počet návštěv
-function započítejUživatele(uživatel) {
-  let počet = mapaPočetNávštěv.get(uživatel) || 0;
-  mapaPočetNávštěv.set(uživatel, počet + 1);
+// increase the visits count
+function countUser(user) {
+  let count = visitsCountMap.get(user) || 0;
+  visitsCountMap.set(user, count + 1);
 }
 ```
 
-Nyní nemusíme čistit `mapaPočetNávštěv`. Jakmile se objekt `jan` stane nedosažitelným všemi jinými způsoby než jako klíč `WeakMap`, bude odstraněn z paměti spolu s informací uloženou pod tímto klíčem ve `WeakMap`.
+Now we don't have to clean `visitsCountMap`. After `john` object becomes unreachable, by all means except as a key of `WeakMap`, it gets removed from memory, along with the information by that key from `WeakMap`.
 
-## Případ použití: cache
+## Use case: caching
 
-Dalším běžným příkladem je cache. Můžeme si ukládat do paměti (tato paměť se nazývá „cache“) výsledky funkce, abychom je mohli znovu použít při jejích dalších voláních na témže objektu.
+Another common example is caching. We can store ("cache") results from a function, so that future calls on the same object can reuse it.
 
-Abychom toho dosáhli, můžeme použít `Map` (neoptimální scénář):
+To achieve that, we can use `Map` (not optimal scenario):
 
 ```js run
 // 📁 cache.js
 let cache = new Map();
 
-// vypočítá a zapamatuje si výsledek
-function proces(obj) {
+// calculate and remember the result
+function process(obj) {
   if (!cache.has(obj)) {
-    let výsledek = /* výpočet výsledku pro */ obj;
+    let result = /* calculations of the result for */ obj;
 
-    cache.set(obj, výsledek);
+    cache.set(obj, result);
   }
 
   return cache.get(obj);
 }
 
 *!*
-// Nyní použijeme proces() v jiném souboru:
+// Now we use process() in another file:
 */!*
 
 // 📁 main.js
-let obj = {/* řekněme, že máme nějaký objekt */};
+let obj = {/* let's say we have an object */};
 
-let výsledek1 = proces(obj); // vypočteno
+let result1 = process(obj); // calculated
 
-// ...později z jiného místa kódu...
-let výsledek2 = proces(obj); // vezmeme z cache výsledek, který si pamatujeme
+// ...later, from another place of the code...
+let result2 = process(obj); // remembered result taken from cache
 
-// ...později, když už tento objekt nebudeme potřebovat:
+// ...later, when the object is not needed any more:
 obj = null;
 
-alert(cache.size); // 1 (Ouha! Objekt je stále v cache a zabírá paměť!)
+alert(cache.size); // 1 (Ouch! The object is still in cache, taking memory!)
 ```
 
-Při více voláních `proces(obj)` nad stejným objektem funkce vypočítá výsledek jen poprvé a pak ho bude jednoduše brát z `cache`. Nevýhodou je, že když už objekt nebudeme potřebovat, musíme `cache` vyčistit.
+For multiple calls of `process(obj)` with the same object, it only calculates the result the first time, and then just takes it from `cache`. The downside is that we need to clean `cache` when the object is not needed any more.
 
-Když nahradíme `Map` za `WeakMap`, tento problém zmizí. Výsledek v cache bude z paměti odstraněn automaticky poté, co bude objekt odklizen garbage collectorem.
+If we replace `Map` with `WeakMap`, then this problem disappears. The cached result will be removed from memory automatically after the object gets garbage collected.
 
 ```js run
 // 📁 cache.js
@@ -215,77 +215,77 @@ Když nahradíme `Map` za `WeakMap`, tento problém zmizí. Výsledek v cache bu
 let cache = new WeakMap();
 */!*
 
-// vypočítá a zapamatuje si výsledek
-function proces(obj) {
+// calculate and remember the result
+function process(obj) {
   if (!cache.has(obj)) {
-    let výsledek = /* výpočet výsledku pro */ obj;
+    let result = /* calculate the result for */ obj;
 
-    cache.set(obj, výsledek);
+    cache.set(obj, result);
   }
 
   return cache.get(obj);
 }
 
 // 📁 main.js
-let obj = {/* nějaký objekt */};
+let obj = {/* some object */};
 
-let výsledek1 = proces(obj);
-let výsledek2 = proces(obj);
+let result1 = process(obj);
+let result2 = process(obj);
 
-// ...později, když už tento objekt nebudeme potřebovat:
+// ...later, when the object is not needed any more:
 obj = null;
 
-// Nemůžeme získat cache.size, protože to je WeakMap,
-// ale je nebo zanedlouho bude 0
-// Když bude obj odklizen, budou odstraněna i data z cache
+// Can't get cache.size, as it's a WeakMap,
+// but it's 0 or soon be 0
+// When obj gets garbage collected, cached data will be removed as well
 ```
 
 ## WeakSet
 
-`WeakSet` („slabá množina“) se chová obdobně:
+`WeakSet` behaves similarly:
 
-- Je analogická k `Set`, ale do `WeakSet` můžeme přidávat jedině objekty (ne primitivy).
-- Objekt v této množině existuje, dokud je dosažitelný odjinud.
-- Stejně jako `Set` podporuje `add`, `has` a `delete`, ale ne `size`, `keys()` ani žádné iterace.
+- It is analogous to `Set`, but we may only add objects to `WeakSet` (not primitives).
+- An object exists in the set while it is reachable from somewhere else.
+- Like `Set`, it supports `add`, `has` and `delete`, but not `size`, `keys()` and no iterations.
 
-Přestože je „slabá“, může sloužit i jako dodatečné úložiště. Ne však pro libovolná data, ale jen pro skutečnost „ano/ne“. Členství ve `WeakSet` může o objektu něco znamenat.
+Being "weak", it also serves as additional storage. But not for arbitrary data, rather for "yes/no" facts. A membership in `WeakSet` may mean something about the object.
 
-Například můžeme do `WeakSet` přidávat uživatele, abychom si pamatovali ty, kteří navštívili naše stránky:
+For instance, we can add users to `WeakSet` to keep track of those who visited our site:
 
 ```js run
-let množinaNávštěvníků = new WeakSet();
+let visitedSet = new WeakSet();
 
-let jan = { jméno: "Jan" };
-let petr = { jméno: "Petr" };
-let marie = { jméno: "Marie" };
+let john = { name: "John" };
+let pete = { name: "Pete" };
+let mary = { name: "Mary" };
 
-množinaNávštěvníků.add(jan); // navštívil nás Jan
-množinaNávštěvníků.add(petr); // pak Petr
-množinaNávštěvníků.add(jan); // znovu Jan 
+visitedSet.add(john); // John visited us
+visitedSet.add(pete); // Then Pete
+visitedSet.add(john); // John again
 
-// množinaNávštěvníků má nyní 2 uživatele
+// visitedSet has 2 users now
 
-// ověříme, zda nás navštívil Jan
-alert(množinaNávštěvníků.has(jan)); // true
+// check if John visited?
+alert(visitedSet.has(john)); // true
 
-// ověříme, zda nás navštívila Marie
-alert(množinaNávštěvníků.has(marie)); // false
+// check if Mary visited?
+alert(visitedSet.has(mary)); // false
 
-jan = null;
+john = null;
 
-// množinaNávštěvníků bude automaticky pročištěna
+// visitedSet will be cleaned automatically
 ```
 
-Nejvýznamnějším omezením `WeakMap` a `WeakSet` je absence iterací a nemožnost získat celý jejich momentální obsah. To se může zdát nešikovné, ale nebrání to `WeakMap/WeakSet` v tom, aby odváděly svou hlavní práci -- být úložištěm „dodatečných“ dat pro objekty, které jsou uloženy nebo spravovány na jiném místě.
+The most notable limitation of `WeakMap` and `WeakSet` is the absence of iterations, and the inability to get all current content. That may appear inconvenient, but does not prevent `WeakMap/WeakSet` from doing their main job -- be an "additional" storage of data for objects which are stored/managed at another place.
 
-## Shrnutí
+## Summary
 
-`WeakMap` je kolekce podobná `Map`, která dovoluje používat jako klíče jen objekty a odstraňuje je i s připojenou hodnotou, jakmile se stanou nedosažitelnými jiným způsobem.
+`WeakMap` is `Map`-like collection that allows only objects as keys and removes them together with associated value once they become inaccessible by other means.
 
-`WeakSet` je kolekce podobná `Set`, která ukládá jen objekty a odstraňuje je, jakmile se stanou nedosažitelnými jiným způsobem.
+`WeakSet` is `Set`-like collection that stores only objects and removes them once they become inaccessible by other means.
 
-Jejich hlavní výhodou je, že obsahují slabé odkazy na objekty, takže ty mohou být snadno odklizeny garbage collectorem.
+Their main advantages are that they have weak reference to objects, so they can easily be removed by garbage collector.
 
-Cenou za to je, že nejsou podporovány `clear`, `size`, `keys`, `values`...
+That comes at the cost of not having support for `clear`, `size`, `keys`, `values`...
 
-`WeakMap` a `WeakSet` se používají jako „sekundární“ datové struktury navíc k „primárním“ úložištím objektů. Když je objekt odstraněn z primárního úložiště, pak pokud se dá najít jen jako klíč `WeakMap` nebo prvek `WeakSet`, bude automaticky odklizen.
+`WeakMap` and `WeakSet` are used as "secondary" data structures in addition to the "primary" object storage. Once the object is removed from the primary storage, if it is only found as the key of `WeakMap` or in a `WeakSet`, it will be cleaned up automatically.

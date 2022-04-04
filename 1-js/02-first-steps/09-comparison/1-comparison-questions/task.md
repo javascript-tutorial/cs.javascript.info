@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Porovnávání
+# Comparisons
 
-Jaký bude výsledek těchto výrazů?
+What will be the result for these expressions?
 
 ```js no-beautify
 5 > 4
-"jablko" > "rajské jablko"
+"apple" > "pineapple"
 "2" > "12"
 undefined == null
 undefined === null

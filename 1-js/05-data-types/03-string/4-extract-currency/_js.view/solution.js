@@ -1,3 +1,3 @@
-function vyjmiČástku(řetězec) {
-  return +řetězec.slice(1);
+function extractCurrencyValue(str) {
+  return +str.slice(1);
 }

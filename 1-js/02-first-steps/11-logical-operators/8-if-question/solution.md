@@ -1,20 +1,20 @@
-Odpověď zní: vykoná se první a třetí `alert`.
+The answer: the first and the third will execute.
 
-Podrobnosti:
+Details:
 
 ```js run
-// Vykoná se.
-// Výsledek -1 || 0 = -1, tedy pravda.
-if (-1 || 0) alert( 'první' );
+// Runs.
+// The result of -1 || 0 = -1, truthy
+if (-1 || 0) alert( 'first' );
 
-// Nevykoná se.
-// -1 && 0 = 0, nepravda.
-if (-1 && 0) alert( 'druhý' );
+// Doesn't run
+// -1 && 0 = 0, falsy
+if (-1 && 0) alert( 'second' );
 
-// Vykoná se.
-// Operátor && má vyšší prioritu než ||,
-// takže -1 && 1 se vykoná jako první, což dává tento řetězec:
+// Executes
+// Operator && has a higher precedence than ||
+// so -1 && 1 executes first, giving us the chain:
 // null || -1 && 1  ->  null || 1  ->  1
-if (null || -1 && 1) alert( 'třetí' );
+if (null || -1 && 1) alert( 'third' );
 ```
 

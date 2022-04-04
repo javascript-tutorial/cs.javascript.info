@@ -1,15 +1,15 @@
-describe("nejvyššíPlat", function() {
-  it("vrátí nejlépe placenou osobu", function() {
-    let platy = {
-      "Jan": 100,
-      "Petr": 300,
-      "Marie": 250
+describe("topSalary", function() {
+  it("returns top-paid person", function() {
+    let salaries = {
+      "John": 100,
+      "Pete": 300,
+      "Mary": 250
     };
 
-    assert.equal( nejvyššíPlat(platy), "Petr" );
+    assert.equal( topSalary(salaries), "Pete" );
   });
 
-  it("pro prázdný objekt vrátí null", function() {
-    assert.isNull( nejvyššíPlat({}) );
+  it("returns null for the empty object", function() {
+    assert.isNull( topSalary({}) );
   });
 });

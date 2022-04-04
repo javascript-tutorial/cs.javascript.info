@@ -1,7 +1,7 @@
-describe("mocnina", function() {
+describe("pow", function() {
 
-  it("umocňuje na n-tou", function() {
-    assert.equal(mocnina(2, 3), 8);
+  it("raises to n-th power", function() {
+    assert.equal(pow(2, 3), 8);
   });
 
 });

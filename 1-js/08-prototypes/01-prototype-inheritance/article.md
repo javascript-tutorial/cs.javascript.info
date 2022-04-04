@@ -1,338 +1,339 @@
-# Prototypová dědičnost
+# Prototypal inheritance
 
-V programování často chceme něco vzít a rozšířit.
+In programming, we often want to take something and extend it.
 
-Například máme objekt `uživatel` s jeho vlastnostmi a metodami a chceme vytvořit objekty `admin` a `host` jako jeho mírně pozměněné varianty. Rádi bychom použili to, co máme v objektu `uživatel`, nekopírovali ani znovu neimplementovali jeho metody, jen postavili nový objekt na jeho základu.
+For instance, we have a `user` object with its properties and methods, and want to make `admin` and `guest` as slightly modified variants of it. We'd like to reuse what we have in `user`, not copy/reimplement its methods, just build a new object on top of it.
 
-*Prototypová dědičnost* je prvek jazyka, který nám s tím pomůže.
+*Prototypal inheritance* is a language feature that helps in that.
 
 ## [[Prototype]]
 
-V JavaScriptu mají objekty speciální skrytou vlastnost `[[Prototype]]` (jak je nazvána ve specifikaci), která je buď `null`, nebo se odkazuje na jiný objekt. Tento objekt se nazývá „prototyp“:
+In JavaScript, objects have a special hidden property `[[Prototype]]` (as named in the specification), that is either `null` or references another object. That object is called "a prototype":
 
 ![prototype](object-prototype-empty.svg)
 
-Když načítáme vlastnost z objektu a ta tam není, JavaScript ji automaticky převezme z prototypu. V programování se to nazývá „prototypová dědičnost“. Brzy prostudujeme mnoho příkladů této dědičnosti i chytřejší jazykové prvky, které jsou na ní postaveny.
+When we read a property from `object`, and it's missing, JavaScript automatically takes it from the prototype. In programming, this is called "prototypal inheritance". And soon we'll study many examples of such inheritance, as well as cooler language features built upon it.
 
-Vlastnost `[[Prototype]]` je interní a skrytá, ale je mnoho způsobů, jak ji nastavit.
+The property `[[Prototype]]` is internal and hidden, but there are many ways to set it.
 
-Jeden z nich je použít speciální název `__proto__`, například takto:
+One of them is to use the special name `__proto__`, like this:
 
 ```js run
-let zvíře = {
-  žere: true
+let animal = {
+  eats: true
 };
-let králík = {
-  skáče: true
+let rabbit = {
+  jumps: true
 };
 
 *!*
-králík.__proto__ = zvíře; // nastaví králík.[[Prototype]] = zvíře
+rabbit.__proto__ = animal; // sets rabbit.[[Prototype]] = animal
 */!*
 ```
 
-Když nyní budeme načítat nějakou vlastnost z objektu `králík` a ta tam nebude, JavaScript ji automaticky převezme z objektu `zvíře`.
+Now if we read a property from `rabbit`, and it's missing, JavaScript will automatically take it from `animal`.
 
-Například:
+For instance:
 
-```js run
-let zvíře = {
-  žere: true
+```js
+let animal = {
+  eats: true
 };
-let králík = {
-  skáče: true
+let rabbit = {
+  jumps: true
 };
 
 *!*
-králík.__proto__ = zvíře; // (*)
+rabbit.__proto__ = animal; // (*)
 */!*
 
-// nyní můžeme v králíkovi najít obě vlastnosti:
+// we can find both properties in rabbit now:
 *!*
-alert( králík.žere ); // true (**)
+alert( rabbit.eats ); // true (**)
 */!*
-alert( králík.skáče ); // true
+alert( rabbit.jumps ); // true
 ```
 
-Zde se na řádku `(*)` nastaví, aby `zvíře` bylo prototypem objektu `králík`.
+Here the line `(*)` sets `animal` to be the prototype of `rabbit`.
 
-Když se pak `alert` pokusí načíst vlastnost `králík.žere` `(**)`, v objektu `králík` tato vlastnost není, takže JavaScript následuje odkaz `[[Prototype]]` a najde ji v objektu `zvíře` (dívá se zdola nahoru):
+Then, when `alert` tries to read property `rabbit.eats` `(**)`, it's not in `rabbit`, so JavaScript follows the `[[Prototype]]` reference and finds it in `animal` (look from the bottom up):
 
 ![](proto-animal-rabbit.svg)
 
-Zde můžeme říci, že „objekt `zvíře` je prototyp objektu `králík`“ nebo že „objekt `králík` je prototypově zděděn z objektu `zvíře`“.
+Here we can say that "`animal` is the prototype of `rabbit`" or "`rabbit` prototypically inherits from `animal`".
 
-Má-li tedy `zvíře` množství užitečných vlastností a metod, pak se stanou automaticky dostupnými i v objektu `králík`. Takové vlastnosti se nazývají „zděděné“.
+So if `animal` has a lot of useful properties and methods, then they become automatically available in `rabbit`. Such properties are called "inherited".
 
-Máme-li metodu v objektu `zvíře`, můžeme ji volat na objektu `králík`:
+If we have a method in `animal`, it can be called on `rabbit`:
 
 ```js run
-let zvíře = {
-  žere: true,
+let animal = {
+  eats: true,
 *!*
-  jdi() {
-    alert("Zvíře jde");
+  walk() {
+    alert("Animal walk");
   }
 */!*
 };
 
-let králík = {
-  skáče: true,
-  __proto__: zvíře
+let rabbit = {
+  jumps: true,
+  __proto__: animal
 };
 
-// jdi se převezme z prototypu
+// walk is taken from the prototype
 *!*
-králík.jdi(); // Zvíře jde
+rabbit.walk(); // Animal walk
 */!*
 ```
 
-Tato metoda se automaticky převezme z prototypu, například takto:
+The method is automatically taken from the prototype, like this:
 
 ![](proto-animal-rabbit-walk.svg)
 
-Řetězec prototypů může být delší:
+The prototype chain can be longer:
 
 ```js run
-let zvíře = {
-  žere: true,
-  jdi() {
-    alert("Zvíře jde");
+let animal = {
+  eats: true,
+  walk() {
+    alert("Animal walk");
   }
 };
 
-let králík = {
-  skáče: true,
+let rabbit = {
+  jumps: true,
 *!*
-  __proto__: zvíře
+  __proto__: animal
 */!*
 };
 
-let dlouhouchý = {
-  délkaUcha: 10,
+let longEar = {
+  earLength: 10,
 *!*
-  __proto__: králík
+  __proto__: rabbit
 */!*
 };
 
-// jdi se převezme z řetězce prototypů
-dlouhouchý.jdi(); // Zvíře jde
-alert(dlouhouchý.skáče); // true (z králíka)
+// walk is taken from the prototype chain
+longEar.walk(); // Animal walk
+alert(longEar.jumps); // true (from rabbit)
 ```
 
 ![](proto-animal-rabbit-chain.svg)
 
-Když nyní budeme něco načítat z objektu `dlouhouchý` a nebude to tam, JavaScript to bude hledat v objektu `králík` a pak v objektu `zvíře`.
+Now if we read something from `longEar`, and it's missing, JavaScript will look for it in `rabbit`, and then in `animal`.
 
-Existují jen dvě omezení:
+There are only two limitations:
 
-1. Odkazy nemohou být kruhové. Pokud se pokusíme nastavit `__proto__` kruhově, JavaScript ohlásí chybu.
-2. Hodnota `__proto__` může být buď objekt, nebo `null`. Jiné typy jsou ignorovány.
+1. The references can't go in circles. JavaScript will throw an error if we try to assign `__proto__` in a circle.
+2. The value of `__proto__` can be either an object or `null`. Other types are ignored.
 
-Možná je to zřejmé, ale přesto: `[[Prototype]]` může být pouze jeden. Objekt nemůže dědit ze dvou jiných objektů.
+Also it may be obvious, but still: there can be only one `[[Prototype]]`. An object may not inherit from two others.
 
-```smart header="`__proto__` je historický getter/setter pro `[[Prototype]]`"
-Je běžnou chybou začínajících vývojářů neznat mezi těmito dvěma rozdíl.
 
-Prosíme všimněte si, že `__proto__` *není totéž* jako interní vlastnost `[[Prototype]]`. Je to getter/setter vlastnosti `[[Prototype]]`. Později uvidíme situace, v nichž na tom záleží. Prozatím to jen mějme na paměti, když se snažíme porozumět jazyku JavaScript.
+```smart header="`__proto__` is a historical getter/setter for `[[Prototype]]`"
+It's a common mistake of novice developers not to know the difference between these two.
 
-Vlastnost `__proto__` je poněkud zastaralá. Existuje z historických důvodů, moderní JavaScript naznačuje, že bychom místo čtení/nastavování prototypu měli používat funkce `Object.getPrototypeOf/Object.setPrototypeOf`. Tyto funkce rovněž probereme později.
+Please note that `__proto__` is *not the same* as the internal `[[Prototype]]` property. It's a getter/setter for `[[Prototype]]`. Later we'll see situations where it matters, for now let's just keep it in mind, as we build our understanding of JavaScript language.
 
-Specifikace vyžaduje podporu `__proto__` jen od prohlížečů. Ve skutečnosti však podporují `__proto__` všechna prostředí včetně těch na straně serveru, takže jeho používání je poměrně bezpečné.
+The `__proto__` property is a bit outdated. It exists for historical reasons, modern JavaScript suggests that we should use `Object.getPrototypeOf/Object.setPrototypeOf` functions instead that get/set the prototype. We'll also cover these functions later.
 
-Protože zápis `__proto__` je intuitivně trochu jasnější, budeme jej používat v příkladech.
+By the specification, `__proto__` must only be supported by browsers. In fact though, all environments including server-side support `__proto__`, so we're quite safe using it.
+
+As the `__proto__` notation is a bit more intuitively obvious, we use it in the examples.
 ```
 
-## Při zápisu se prototyp nepoužívá
+## Writing doesn't use prototype
 
-Prototyp se používá jen při čtení vlastností.
+The prototype is only used for reading properties.
 
-Operace zápisu a mazání pracují přímo s objektem.
+Write/delete operations work directly with the object.
 
-V níže uvedeném příkladu přiřadíme objektu `králík` jeho vlastní metodu `jdi`:
+In the example below, we assign its own `walk` method to `rabbit`:
 
 ```js run
-let zvíře = {
-  žere: true,
-  jdi() {
-    /* tuto metodu králík nepoužije */  
+let animal = {
+  eats: true,
+  walk() {
+    /* this method won't be used by rabbit */  
   }
 };
 
-let králík = {
-  __proto__: zvíře
+let rabbit = {
+  __proto__: animal
 };
 
 *!*
-králík.jdi = function() {
-  alert("Králík! Hop hop hop!");
+rabbit.walk = function() {
+  alert("Rabbit! Bounce-bounce!");
 };
 */!*
 
-králík.jdi(); // Králík! Hop hop hop!
+rabbit.walk(); // Rabbit! Bounce-bounce!
 ```
 
-Od nynějška volání `králík.jdi()` najde metodu rovnou v objektu a spustí ji bez použití prototypu:
+From now on, `rabbit.walk()` call finds the method immediately in the object and executes it, without using the prototype:
 
 ![](proto-animal-rabbit-walk-2.svg)
 
-Výjimkou jsou přístupové vlastnosti, jelikož přiřazení je zpracováváno setterem. Zápis do takové vlastnosti je tedy ve skutečnosti totéž jako volání funkce.
+Accessor properties are an exception, as assignment is handled by a setter function. So writing to such a property is actually the same as calling a function.
 
-Z tohoto důvodu bude v níže uvedeném kódu korektně fungovat `admin.celéJméno`:
+For that reason `admin.fullName` works correctly in the code below:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  příjmení: "Novák",
+let user = {
+  name: "John",
+  surname: "Smith",
 
-  set celéJméno(hodnota) {
-    [this.jméno, this.příjmení] = hodnota.split(" ");
+  set fullName(value) {
+    [this.name, this.surname] = value.split(" ");
   },
 
-  get celéJméno() {
-    return `${this.jméno} ${this.příjmení}`;
+  get fullName() {
+    return `${this.name} ${this.surname}`;
   }
 };
 
 let admin = {
-  __proto__: uživatel,
-  jeAdmin: true
+  __proto__: user,
+  isAdmin: true
 };
 
-alert(admin.celéJméno); // Jan Novák (*)
+alert(admin.fullName); // John Smith (*)
 
-// spustí se setter!
-admin.celéJméno = "Alice Cooper"; // (**)
+// setter triggers!
+admin.fullName = "Alice Cooper"; // (**)
 
-alert(admin.celéJméno); // Alice Cooper, stav admina modifikován
-alert(uživatel.celéJméno); // Jan Novák, stav uživatele ochráněn
+alert(admin.fullName); // Alice Cooper, state of admin modified
+alert(user.fullName); // John Smith, state of user protected
 ```
 
-Zde na řádku `(*)` má vlastnost `admin.celéJméno` getter v prototypu `uživatel`, takže ten se zavolá. A na řádku `(**)` má tato vlastnost setter v prototypu, takže ten se zavolá.
+Here in the line `(*)` the property `admin.fullName` has a getter in the prototype `user`, so it is called. And in the line `(**)` the property has a setter in the prototype, so it is called.
 
-## Hodnota „this“
+## The value of "this"
 
-Ve výše uvedeném příkladu se může objevit zajímavá otázka: jaká je hodnota `this` uvnitř `set celéJméno(hodnota)`? Kam se zapíší vlastnosti `this.jméno` a `this.příjmení`: do objektu `uživatel` nebo `admin`?
+An interesting question may arise in the example above: what's the value of `this` inside `set fullName(value)`? Where are the properties `this.name` and `this.surname` written: into `user` or `admin`?
 
-Odpověď je jednoduchá: na `this` prototyp vůbec nepůsobí.
+The answer is simple: `this` is not affected by prototypes at all.
 
-**Nezáleží na tom, kde je metoda nalezena: zda v objektu nebo v prototypu. Při volání metody je `this` vždy objekt před tečkou.**
+**No matter where the method is found: in an object or its prototype. In a method call, `this` is always the object before the dot.**
 
-Volání setteru `admin.celéJméno=` tedy jako `this` použije objekt `admin`, ne `uživatel`.
+So, the setter call `admin.fullName=` uses `admin` as `this`, not `user`.
 
-To je ve skutečnosti nesmírně důležitá věc, neboť můžeme mít velký objekt s mnoha metodami a objekty, které z něj budou dědit. A když budou dědící objekty spouštět zděděné metody, budou modifikovat jen svůj vlastní stav a ne stav onoho velkého objektu.
+That is actually a super-important thing, because we may have a big object with many methods, and have objects that inherit from it. And when the inheriting objects run the inherited methods, they will modify only their own states, not the state of the big object.
 
-Například zde `zvíře` představuje „sklad metod“ a `králík` jej využívá.
+For instance, here `animal` represents a "method storage", and `rabbit` makes use of it.
 
-Volání `králík.spi()` nastaví `this.jeSpící` na objektu `králík`:
+The call `rabbit.sleep()` sets `this.isSleeping` on the `rabbit` object:
 
 ```js run
-// zvíře má metody
-let zvíře = {
-  jdi() {
-    if (!this.jeSpící) {
-      alert(`Já jdu`);
+// animal has methods
+let animal = {
+  walk() {
+    if (!this.isSleeping) {
+      alert(`I walk`);
     }
   },
-  spi() {
-    this.jeSpící = true;
+  sleep() {
+    this.isSleeping = true;
   }
 };
 
-let králík = {
-  jméno: "Bílý králík",
-  __proto__: zvíře
+let rabbit = {
+  name: "White Rabbit",
+  __proto__: animal
 };
 
-// modifikuje králík.jeSpící
-králík.spi();
+// modifies rabbit.isSleeping
+rabbit.sleep();
 
-alert(králík.jeSpící); // true
-alert(zvíře.jeSpící); // undefined (v prototypu žádná taková vlastnost není)
+alert(rabbit.isSleeping); // true
+alert(animal.isSleeping); // undefined (no such property in the prototype)
 ```
 
-Výsledný obrázek:
+The resulting picture:
 
 ![](proto-animal-rabbit-walk-3.svg)
 
-Kdybychom měli jiné objekty, které dědí ze `zvíře`, např. `pták`, `had` atd., tyto objekty by také měly přístup k metodám objektu `zvíře`. Avšak `this` by při každém volání metody byl odpovídající objekt, vyhodnocený v čase volání (před tečkou), ne `zvíře`. Když tedy zapíšeme data do `this`, uloží se do těchto objektů.
+If we had other objects, like `bird`, `snake`, etc., inheriting from `animal`, they would also gain access to methods of `animal`. But `this` in each method call would be the corresponding object, evaluated at the call-time (before dot), not `animal`. So when we write data into `this`, it is stored into these objects.
 
-Výsledkem je, že metody jsou sdílené, ale stav objektu ne.
+As a result, methods are shared, but the object state is not.
 
-## Cyklus for..in
+## for..in loop
 
-Cyklus `for..in` iteruje i nad zděděnými vlastnostmi.
+The `for..in` loop iterates over inherited properties too.
 
-Například:
+For instance:
 
 ```js run
-let zvíře = {
-  žere: true
+let animal = {
+  eats: true
 };
 
-let králík = {
-  skáče: true,
-  __proto__: zvíře
+let rabbit = {
+  jumps: true,
+  __proto__: animal
 };
 
 *!*
-// Object.keys vrátí jen jeho vlastní klíče
-alert(Object.keys(králík)); // skáče
+// Object.keys only returns own keys
+alert(Object.keys(rabbit)); // jumps
 */!*
 
 *!*
-// for..in cykluje nad vlastními i zděděnými klíči
-for(let vlastnost in králík) alert(vlastnost); // skáče, pak žere
+// for..in loops over both own and inherited keys
+for(let prop in rabbit) alert(prop); // jumps, then eats
 */!*
 ```
 
-Pokud to není to, co chceme, a rádi bychom zděděné vlastnosti vyloučili, existuje zabudovaná metoda [obj.hasOwnProperty(klíč)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty): vrátí `true`, jestliže `obj` má svou vlastní (ne zděděnou) vlastnost jménem `klíč`.
+If that's not what we want, and we'd like to exclude inherited properties, there's a built-in method [obj.hasOwnProperty(key)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty): it returns `true` if `obj` has its own (not inherited) property named `key`.
 
-Můžeme tedy zděděné vlastnosti odfiltrovat (nebo s nimi udělat něco jiného):
+So we can filter out inherited properties (or do something else with them):
 
 ```js run
-let zvíře = {
-  žere: true
+let animal = {
+  eats: true
 };
 
-let králík = {
-  skáče: true,
-  __proto__: zvíře
+let rabbit = {
+  jumps: true,
+  __proto__: animal
 };
 
-for(let vlastnost in králík) {
-  let jeVlastní = králík.hasOwnProperty(vlastnost);
+for(let prop in rabbit) {
+  let isOwn = rabbit.hasOwnProperty(prop);
 
-  if (jeVlastní) {
-    alert(`Naše: ${vlastnost}`); // Naše: skáče
+  if (isOwn) {
+    alert(`Our: ${prop}`); // Our: jumps
   } else {
-    alert(`Zděděná: ${vlastnost}`); // Zděděná: žere
+    alert(`Inherited: ${prop}`); // Inherited: eats
   }
 }
 ```
 
-Zde máme následující řetězec dědičnosti: `králík` dědí ze `zvíře`, to dědí z `Object.prototype` (protože `zvíře` je literální objekt `{...}`, takže to je defaultní) a pak z `null` nad ním:
+Here we have the following inheritance chain: `rabbit` inherits from `animal`, that inherits from `Object.prototype` (because `animal` is a literal object `{...}`, so it's by default), and then `null` above it:
 
 ![](rabbit-animal-object.svg)
 
-Všimněte si jedné legrační věci. Odkud pochází metoda `králík.hasOwnProperty`? Tu jsme přece nedefinovali. Když se podíváme na řetězec, uvidíme, že tuto metodu poskytuje `Object.prototype.hasOwnProperty`. Jinými slovy, je zděděná.
+Note, there's one funny thing. Where is the method `rabbit.hasOwnProperty` coming from? We did not define it. Looking at the chain we can see that the method is provided by `Object.prototype.hasOwnProperty`. In other words, it's inherited.
 
-...Proč se však `hasOwnProperty` neobjeví v cyklu `for..in` jako metody `žere` a `skáče`, když `for..in` vyjmenovává zděděné vlastnosti?
+...But why does `hasOwnProperty` not appear in the `for..in` loop like `eats` and `jumps` do, if `for..in` lists inherited properties?
 
-Odpověď je jednoduchá: není enumerovatelná. Stejně jako všechny ostatní vlastnosti z `Object.prototype` má přepínač `enumerable:false`. A `for..in` vyjmenovává jedině enumerovatelné vlastnosti. To je důvod, proč nevyjmenuje ji ani ostatní vlastnosti z `Object.prototype`.
+The answer is simple: it's not enumerable. Just like all other properties of `Object.prototype`, it has `enumerable:false` flag. And `for..in` only lists enumerable properties. That's why it and the rest of the `Object.prototype` properties are not listed.
 
-```smart header="Téměř všechny ostatní metody pro získávání klíčů/hodnot ignorují zděděné vlastnosti"
-Téměř všechny ostatní metody pro získávání klíčů/hodnot, například `Object.keys`, `Object.values` a tak dále, zděděné vlastnosti ignorují.
+```smart header="Almost all other key/value-getting methods ignore inherited properties"
+Almost all other key/value-getting methods, such as `Object.keys`, `Object.values` and so on ignore inherited properties.
 
-Pracují pouze nad samotným objektem. Vlastnosti z prototypu se *neberou* v úvahu.
+They only operate on the object itself. Properties from the prototype are *not* taken into account.
 ```
 
-## Shrnutí
+## Summary
 
-- V JavaScriptu mají všechny vlastnosti skrytou vlastnost `[[Prototype]]`, která je buď jiný objekt, nebo `null`.
-- K přístupu k ní můžeme použít `obj.__proto__` (je to historický getter/setter, existují i jiné způsoby, které brzy probereme).
-- Objekt, na který odkazuje `[[Prototype]]`, se nazývá „prototyp“.
-- Chceme-li načíst vlastnost `obj` nebo volat metodu a ta neexistuje, pak se JavaScript pokusí najít ji v prototypu.
-- Operace zápisu a mazání pracují přímo nad objektem a nepoužívají prototyp (za předpokladu, že je to datová vlastnost a ne setter).
-- Voláme-li `obj.metoda()` a `metoda` je převzata z prototypu, pak `this` stále odkazuje na `obj`. Metody tedy vždy pracují s aktuálním objektem, i když jsou zděděné.
-- Cyklus `for..in` iteruje jak nad vlastními, tak nad zděděnými vlastnostmi. Všechny ostatní metody pro získávání klíčů/hodnot pracují jen nad samotným objektem.
+- In JavaScript, all objects have a hidden `[[Prototype]]` property that's either another object or `null`.
+- We can use `obj.__proto__` to access it (a historical getter/setter, there are other ways, to be covered soon).
+- The object referenced by `[[Prototype]]` is called a "prototype".
+- If we want to read a property of `obj` or call a method, and it doesn't exist, then JavaScript tries to find it in the prototype.
+- Write/delete operations act directly on the object, they don't use the prototype (assuming it's a data property, not a setter).
+- If we call `obj.method()`, and the `method` is taken from the prototype, `this` still references `obj`. So methods always work with the current object even if they are inherited.
+- The `for..in` loop iterates over both its own and its inherited properties. All other key/value-getting methods only operate on the object itself.

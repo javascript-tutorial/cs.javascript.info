@@ -2,13 +2,13 @@ importance: 2
 
 ---
 
-# Náhodné číslo od min do max
+# A random number from min to max
 
-Vestavěná funkce `Math.random()` vytváří náhodnou hodnotu od `0` do `1` (kromě `1`).
+The built-in function `Math.random()` creates a random value from `0` to `1` (not including `1`).
 
-Napište funkci `random(min, max)`, která bude generovat náhodné číslo s pohyblivou řádovou čárkou od `min` do `max` (kromě `max`).
+Write the function `random(min, max)` to generate a random floating-point number from `min` to `max` (not including `max`).
 
-Příklady, jak má fungovat:
+Examples of its work:
 
 ```js
 alert( random(1, 5) ); // 1.2345623452

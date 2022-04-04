@@ -1,263 +1,263 @@
 
-# Objekty
+# Objects
 
-Jak víme z kapitoly <info:types>, JavaScript obsahuje osm datových typů. Sedm z nich se nazývá „primitivní typy“ nebo „primitivy“, protože jejich hodnoty obsahují pouze jednu věc (ať už je to řetězec, číslo nebo něco jiného).
+As we know from the chapter <info:types>, there are eight data types in JavaScript. Seven of them are called "primitive", because their values contain only a single thing (be it a string or a number or whatever).
 
-Naproti tomu objekty se používají k uložení klíčovaných kolekcí různých dat a složitějších entit. V JavaScriptu objekty pronikají do téměř všech aspektů jazyka. Musíme jim tedy porozumět předtím, než půjdeme do hloubky v něčem jiném.
+In contrast, objects are used to store keyed collections of various data and more complex entities. In JavaScript, objects penetrate almost every aspect of the language. So we must understand them first before going in-depth anywhere else.
 
-Objekt můžeme vytvořit pomocí složených závorek `{…}` obsahujících nepovinný seznam *vlastností*. Vlastnost je dvojice „klíč: hodnota“, v níž `klíč` je řetězec (nazývá se také „název vlastnosti“) a `hodnota` může být cokoli.
+An object can be created with figure brackets `{…}` with an optional list of *properties*. A property is a "key: value" pair, where `key` is a string (also called a "property name"), and `value` can be anything.
 
-Objekt si můžeme představit jako skříň s označenými spisy. Každý kousek dat je uložen podle klíče ve svém spisu. Je pak lehké najít spis podle jeho názvu nebo spis přidat či odstranit.
+We can imagine an object as a cabinet with signed files. Every piece of data is stored in its file by the key. It's easy to find a file by its name or add/remove a file.
 
 ![](object.svg)
 
-Prázdný objekt („prázdná skříň“) může být vytvořen pomocí jedné ze dvou syntaxí:
+An empty object ("empty cabinet") can be created using one of two syntaxes:
 
 ```js
-let uživatel = new Object(); // syntaxe „konstruktor objektu“
-let uživatel = {};  // syntaxe „objektový literál“
+let user = new Object(); // "object constructor" syntax
+let user = {};  // "object literal" syntax
 ```
 
 ![](object-user-empty.svg)
 
-Obvykle se používají složené závorky `{...}`. Tato deklarace se nazývá *objektový literál*.
+Usually, the figure brackets `{...}` are used. That declaration is called an *object literal*.
 
-## Literály a vlastnosti
+## Literals and properties
 
-Do `{...}` můžeme rovnou umístit vlastnosti jako dvojice „klíč: hodnota“:
+We can immediately put some properties into `{...}` as "key: value" pairs:
 
 ```js
-let uživatel = {     // objekt
-  jméno: "Jan",  // pod klíčem „jméno“ uložíme hodnotu „Jan“
-  věk: 30        // pod klíčem „věk“ uložíme hodnotu 30
+let user = {     // an object
+  name: "John",  // by key "name" store value "John"
+  age: 30        // by key "age" store value 30
 };
 ```
 
-Vlastnost má klíč (nazývaný také „jméno“, „název“ nebo „identifikátor“) před dvojtečkou `":"` a hodnotu napravo od ní.
+A property has a key (also known as "name" or "identifier") before the colon `":"` and a value to the right of it.
 
-V objektu `uživatel` se nacházejí dvě vlastnosti:
+In the `user` object, there are two properties:
 
-1. První vlastnost má název `"jméno"` a hodnotu `"Jan"`.
-2. Druhá vlastnost má název `"věk"` a hodnotu `30`.
+1. The first property has the name `"name"` and the value `"John"`.
+2. The second one has the name `"age"` and the value `30`.
 
-Výsledný objekt `uživatel` si můžeme představit jako skříň se dvěma spisy označenými „jméno“ a „věk“.
+The resulting `user` object can be imagined as a cabinet with two signed files labeled "name" and "age".
 
 ![user object](object-user.svg)
 
-Kdykoli do ní můžeme přidávat, odebírat a číst z ní spisy.
+We can add, remove and read files from it any time.
 
-Hodnoty vlastností jsou dostupné pomocí tečkové notace:
+Property values are accessible using the dot notation:
 
 ```js
-// vrátí hodnoty vlastností objektu:
-alert( uživatel.jméno ); // Jan
-alert( uživatel.věk );   // 30
+// get property values of the object:
+alert( user.name ); // John
+alert( user.age ); // 30
 ```
 
-Hodnota může být libovolného typu. Přidejme booleanovou:
+The value can be of any type. Let's add a boolean one:
 
 ```js
-uživatel.jeAdmin = true;
+user.isAdmin = true;
 ```
 
 ![user object 2](object-user-isadmin.svg)
 
-K odstranění vlastnosti můžeme použít operátor `delete`:
+To remove a property, we can use `delete` operator:
 
 ```js
-delete uživatel.věk;
+delete user.age;
 ```
 
 ![user object 3](object-user-delete.svg)
 
-Můžeme použít i víceslovné názvy vlastností, ale pak je musíme dát do uvozovek:
+We can also use multiword property names, but then they must be quoted:
 
 ```js
-let uživatel = {
-  jméno: "Jan",
-  věk: 30,
-  "má rád ptáky": true  // víceslovný název vlastnosti musí být v uvozovkách
+let user = {
+  name: "John",
+  age: 30,
+  "likes birds": true  // multiword property name must be quoted
 };
 ```
 
 ![](object-user-props.svg)
 
 
-Poslední vlastnost v seznamu může končit čárkou:
+The last property in the list may end with a comma:
 ```js
-let uživatel = {
-  jméno: "Jan",
-  věk: 30*!*,*/!*
+let user = {
+  name: "John",
+  age: 30*!*,*/!*
 }
 ```
-Tato čárka se nazývá „vlečná“ nebo „závěsná“ *(v angličtině „trailing“ nebo „hanging“, nevím o standardním českém názvu -- pozn. překl.)*. Díky ní je jednodušší přidávat, odebírat nebo přesunovat vlastnosti, protože všechny řádky budou vypadat podobně.
+That is called a "trailing" or "hanging" comma. Makes it easier to add/remove/move around properties, because all lines become alike.
 
-## Hranaté závorky
+## Square brackets
 
-U víceslovných vlastností tečkový přístup nefunguje:
-
-```js run
-// toto způsobí syntaktickou chybu
-uživatel.má rád ptáky = true
-```
-
-JavaScript tomu nerozumí. Myslí si, že adresujeme `uživatel.má`, a pak oznámí syntaktickou chybu, když narazí na nečekané `rád`.
-
-Tečka vyžaduje, aby klíč byl platný identifikátor proměnné. To znamená, že neobsahuje žádné mezery, nezačíná číslicí a neobsahuje speciální znaky (`$` a `_` jsou povoleny).
-
-Existuje alternativní „notace hranatých závorek“, která funguje s libovolným řetězcem:
+For multiword properties, the dot access doesn't work:
 
 ```js run
-let uživatel = {};
-
-// nastavit
-uživatel["má rád ptáky"] = true;
-
-// vrátit
-alert(uživatel["má rád ptáky"]); // true
-
-// smazat
-delete uživatel["má rád ptáky"];
+// this would give a syntax error
+user.likes birds = true
 ```
 
-Nyní je všechno v pořádku. Všimněte si, že řetězec uvnitř hranatých závorek je správně ohraničen uvozovkami (lze použít jakýkoli druh uvozovek).
+JavaScript doesn't understand that. It thinks that we address `user.likes`, and then gives a syntax error when comes across unexpected `birds`.
 
-Hranaté závorky také poskytují způsob, jak získat název vlastnosti jako výsledek jakéhokoli výrazu -- na rozdíl od literálního řetězce -- například z proměnné následovně:
+The dot requires the key to be a valid variable identifier. That implies: contains no spaces, doesn't start with a digit and doesn't include special characters (`$` and `_` are allowed).
+
+There's an alternative "square bracket notation" that works with any string:
+
+```js run
+let user = {};
+
+// set
+user["likes birds"] = true;
+
+// get
+alert(user["likes birds"]); // true
+
+// delete
+delete user["likes birds"];
+```
+
+Now everything is fine. Please note that the string inside the brackets is properly quoted (any type of quotes will do).
+
+Square brackets also provide a way to obtain the property name as the result of any expression -- as opposed to a literal string -- like from a variable as follows:
 
 ```js
-let klíč = "má rád ptáky";
+let key = "likes birds";
 
-// totéž jako uživatel["má rád ptáky"] = true;
-uživatel[klíč] = true;
+// same as user["likes birds"] = true;
+user[key] = true;
 ```
 
-Zde může být proměnná `klíč` vypočtena za běhu skriptu nebo záviset na uživatelském vstupu. A pak ji použijeme k přístupu k vlastnosti. To nám dává velké množství flexibility.
+Here, the variable `key` may be calculated at run-time or depend on the user input. And then we use it to access the property. That gives us a great deal of flexibility.
 
-Například:
+For instance:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  věk: 30
+let user = {
+  name: "John",
+  age: 30
 };
 
-let klíč = prompt("Co chcete vědět o uživateli?", "jméno");
+let key = prompt("What do you want to know about the user?", "name");
 
-// přístup pomocí proměnné
-alert( uživatel[klíč] ); // Jan (pokud bylo zadáno "jméno")
+// access by variable
+alert( user[key] ); // John (if enter "name")
 ```
 
-Tečkovou notaci nelze podobným způsobem použít:
+The dot notation cannot be used in a similar way:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  věk: 30
+let user = {
+  name: "John",
+  age: 30
 };
 
-let klíč = "jméno";
-alert( uživatel.klíč ) // undefined
+let key = "name";
+alert( user.key ) // undefined
 ```
 
-### Vypočítávané vlastnosti
+### Computed properties
 
-Když vytváříme objekt, můžeme použít hranaté závorky v objektovém literálu. To se nazývá *vypočítávané vlastnosti*.
+We can use square brackets in an object literal, when creating an object. That's called *computed properties*.
 
-Například:
+For instance:
 
 ```js run
-let ovoce = prompt("Jaké ovoce koupit?", "jablko");
+let fruit = prompt("Which fruit to buy?", "apple");
 
-let taška = {
+let bag = {
 *!*
-  [ovoce]: 5, // název vlastnosti se získá z proměnné ovoce
+  [fruit]: 5, // the name of the property is taken from the variable fruit
 */!*
 };
 
-alert( taška.jablko ); // 5, je-li ovoce=="jablko"
+alert( bag.apple ); // 5 if fruit="apple"
 ```
 
-Význam vypočítávané vlastnosti je jednoduchý: `[ovoce]` znamená, že název vlastnosti by měl být převzat z proměnné `ovoce`.
+The meaning of a computed property is simple: `[fruit]` means that the property name should be taken from `fruit`.
 
-Jestliže tedy návštěvník zadá `"jablko"`, `taška` bude `{jablko: 5}`.
+So, if a visitor enters `"apple"`, `bag` will become `{apple: 5}`.
 
-V zásadě to funguje stejně jako:
+Essentially, that works the same as:
 ```js run
-let ovoce = prompt("Jaké ovoce koupit?", "jablko");
-let taška = {};
+let fruit = prompt("Which fruit to buy?", "apple");
+let bag = {};
 
-// vezmeme název vlastnosti z proměnné ovoce
-taška[ovoce] = 5;
+// take property name from the fruit variable
+bag[fruit] = 5;
 ```
 
-...Ale vypadá to lépe.
+...But looks nicer.
 
-Uvnitř hranatých závorek můžeme používat i složitější výrazy:
+We can use more complex expressions inside square brackets:
 
 ```js
-let ovoce = 'apple'; // anglicky „jablko“ (pozn. překl.)
-let taška = {
-  [ovoce + 'Computers']: 5 // taška.appleComputers = 5
+let fruit = 'apple';
+let bag = {
+  [fruit + 'Computers']: 5 // bag.appleComputers = 5
 };
 ```
 
-Hranaté závorky jsou mnohem silnější než tečková notace. Umožňují libovolné názvy vlastností a proměnné. Je však také pracnější je napsat.
+Square brackets are much more powerful than the dot notation. They allow any property names and variables. But they are also more cumbersome to write.
 
-Většinou se tedy používá tečka, jsou-li názvy vlastností známé a jednoduché. Teprve když potřebujeme něco složitějšího, přejdeme k hranatým závorkám.
+So most of the time, when property names are known and simple, the dot is used. And if we need something more complex, then we switch to square brackets.
 
-## Zkratka hodnoty vlastnosti
+## Property value shorthand
 
-Ve skutečném kódu často používáme jako hodnoty vlastností již existující proměnné.
+In real code we often use existing variables as values for property names.
 
-Například:
+For instance:
 
 ```js run
-function vytvořUživatele(jméno, věk) {
+function makeUser(name, age) {
   return {
-    jméno: jméno,
-    věk: věk,
-    // ...další vlastnosti
+    name: name,
+    age: age,
+    // ...other properties
   };
 }
 
-let uživatel = vytvořUživatele("Jan", 30);
-alert(uživatel.jméno); // Jan
+let user = makeUser("John", 30);
+alert(user.name); // John
 ```
 
-Ve výše uvedeném příkladu mají vlastnosti stejné názvy jako proměnné. Vytvoření vlastnosti z proměnné se provádí natolik často, že pro něj existuje speciální *zkratka hodnoty vlastnosti*, která jej zkracuje.
+In the example above, properties have the same names as variables. The use-case of making a property from a variable is so common, that there's a special *property value shorthand* to make it shorter.
 
-Místo `jméno:jméno` můžeme napsat jen `jméno`, například takto:
+Instead of `name:name` we can just write `name`, like this:
 
 ```js
-function vytvořUživatele(jméno, věk) {
+function makeUser(name, age) {
 *!*
   return {
-    jméno, // totéž jako jméno: jméno
-    věk,   // totéž jako věk: věk
+    name, // same as name: name
+    age,  // same as age: age
     // ...
   };
 */!*
 }
 ```
 
-Ve stejném objektu můžeme použít běžné vlastnosti i zkratky:
+We can use both normal properties and shorthands in the same object:
 
 ```js
-let uživatel = {
-  jméno,  // totéž jako jméno: jméno
-  věk: 30
+let user = {
+  name,  // same as name:name
+  age: 30
 };
 ```
 
 
-## Omezení názvů vlastností
+## Property names limitations
 
-Jak už víme, proměnná nemůže mít stejný název jako některé z rezervovaných slov, např. „for“, „let“, „return“ atd.
+As we already know, a variable cannot have a name equal to one of language-reserved words like "for", "let", "return" etc.
 
-Pro vlastnost objektu však toto omezení neplatí:
+But for an object property, there's no such restriction:
 
 ```js run
-// všechny tyto vlastnosti jsou správně
+// these properties are all right
 let obj = {
   for: 1,
   let: 2,
@@ -267,236 +267,236 @@ let obj = {
 alert( obj.for + obj.let + obj.return );  // 6
 ```
 
-Krátce řečeno, názvy vlastností nejsou nijak omezeny. Mohou to být libovolné řetězce nebo symboly (speciální typ identifikátorů, který bude objasněn později).
+In short, there are no limitations on property names. They can be any strings or symbols (a special type for identifiers, to be covered later).
 
-Ostatní typy se automaticky konvertují na řetězce.
+Other types are automatically converted to strings.
 
-Například když je jako klíč vlastnosti použito číslo `0`, stane se řetězcem `0`:
+For instance, a number `0` becomes a string `"0"` when used as a property key:
 
 ```js run
 let obj = {
-  0: "test" // totéž jako "0": "test"
+  0: "test" // same as "0": "test"
 };
 
-// oba alerty přistupují ke stejné vlastnosti (číslo 0 se převede na řetězec "0")
+// both alerts access the same property (the number 0 is converted to string "0")
 alert( obj["0"] ); // test
-alert( obj[0] ); // test (stejná vlastnost)
+alert( obj[0] ); // test (same property)
 ```
 
-Je tady drobné úskalí se speciální vlastností jménem `__proto__`. Tu nemůžeme nastavit na neobjektovou hodnotu:
+There's a minor gotcha with a special property named `__proto__`. We can't set it to a non-object value:
 
 ```js run
 let obj = {};
-obj.__proto__ = 5; // přiřadíme číslo
-alert(obj.__proto__); // [object Object] - hodnota je objekt, nefungovalo to tak, jak jsme zamýšleli
+obj.__proto__ = 5; // assign a number
+alert(obj.__proto__); // [object Object] - the value is an object, didn't work as intended
 ```
 
-Jak vidíme z kódu, přiřazení primitivu `5` se ignoruje.
+As we see from the code, the assignment to a primitive `5` is ignored.
 
-V [dalších kapitolách](info:prototype-inheritance) vysvětlíme zvláštní povahu `__proto__` a naznačíme [způsoby](info:prototype-methods), jak takové chování opravit.
+We'll cover the special nature of `__proto__` in [subsequent chapters](info:prototype-inheritance), and suggest the [ways to fix](info:prototype-methods) such behavior.
 
-## Test existence vlastnosti, operátor „in“
+## Property existence test, "in" operator
 
-Pozoruhodnou vlastností objektů v JavaScriptu, na rozdíl od mnoha jiných jazyků, je možnost přistupovat k libovolné vlastnosti. Pokud vlastnost nebude existovat, nenastane chyba!
+A notable feature of objects in JavaScript, compared to many other languages, is that it's possible to access any property. There will be no error if the property doesn't exist!
 
-Načtení neexistující vlastnosti jednoduše vrátí `undefined`. Můžeme tedy snadno otestovat, zda vlastnost existuje:
+Reading a non-existing property just returns `undefined`. So we can easily test whether the property exists:
 
 ```js run
-let uživatel = {};
+let user = {};
 
-alert( uživatel.takováVlastnostNení === undefined ); // true znamená „taková vlastnost neexistuje“
+alert( user.noSuchProperty === undefined ); // true means "no such property"
 ```
 
-K tomuto účelu existuje i speciální operátor `"in"`.
+There's also a special operator `"in"` for that.
 
-Jeho syntaxe je:
+The syntax is:
 ```js
-"klíč" in objekt
+"key" in object
 ```
 
-Například:
+For instance:
 
 ```js run
-let uživatel = { jméno: "Jan", věk: 30 };
+let user = { name: "John", age: 30 };
 
-alert( "věk" in uživatel );    // true, uživatel.věk existuje
-alert( "blabla" in uživatel ); // false, uživatel.blabla neexistuje
+alert( "age" in user ); // true, user.age exists
+alert( "blabla" in user ); // false, user.blabla doesn't exist
 ```
 
-Prosíme všimněte si, že na levé straně `in` musí být *název vlastnosti*, což bývá obvykle řetězec v uvozovkách.
+Please note that on the left side of `in` there must be a *property name*. That's usually a quoted string.
 
-Vypustíme-li uvozovky, znamená to proměnnou, která by měla obsahovat skutečný název, který bude prověřen. Například:
+If we omit quotes, that means a variable, it should contain the actual name to be tested. For instance:
 
 ```js run
-let uživatel = { věk: 30 };
+let user = { age: 30 };
 
-let klíč = "věk";
-alert( *!*klíč*/!* in uživatel ); // true, vlastnost „věk“ existuje
+let key = "age";
+alert( *!*key*/!* in user ); // true, property "age" exists
 ```
 
-Proč vůbec existuje operátor `in`? Nestačilo by porovnávat s `undefined`?
+Why does the `in` operator exist? Isn't it enough to compare against `undefined`?
 
-Ve většině případů porovnání s `undefined` funguje správně. Existuje však speciální případ, kdy selže, ale operátor `"in"` funguje korektně.
+Well, most of the time the comparison with `undefined` works fine. But there's a special case when it fails, but `"in"` works correctly.
 
-Je to tehdy, když vlastnost objektu existuje, ale je v ní uloženo `undefined`:
+It's when an object property exists, but stores `undefined`:
 
 ```js run
 let obj = {
   test: undefined
 };
 
-alert( obj.test ); // je undefined, takže - taková vlastnost neexistuje?
+alert( obj.test ); // it's undefined, so - no such property?
 
-alert( "test" in obj ); // true, vlastnost existuje!
+alert( "test" in obj ); // true, the property does exist!
 ```
 
-Ve výše uvedeném kódu vlastnost `obj.test` technicky existuje, takže operátor `in` funguje správně.
+In the code above, the property `obj.test` technically exists. So the `in` operator works right.
 
-Takové situace nastávají velmi zřídka, jelikož `undefined` by nemělo být výslovně přiřazováno. Pro „neznámé“ nebo „prázdné“ hodnoty většinou používáme `null`. Proto je operátor `in` v kódu exotickým hostem.
+Situations like this happen very rarely, because `undefined` should not be explicitly assigned. We mostly use `null` for "unknown" or "empty" values. So the `in` operator is an exotic guest in the code.
 
 
-## Cyklus „for..in“
+## The "for..in" loop
 
-Pro procházení všemi klíči objektu existuje speciální forma cyklu: `for..in`. Je to úplně něco jiného než konstrukce `for(;;)`, kterou jsme již prostudovali.
+To walk over all keys of an object, there exists a special form of the loop: `for..in`. This is a completely different thing from the `for(;;)` construct that we studied before.
 
-Syntaxe:
+The syntax:
 
 ```js
-for (klíč in objekt) {
-  // tělo se spustí pro každý klíč mezi vlastnostmi objektu
+for (key in object) {
+  // executes the body for each key among object properties
 }
 ```
 
-Například vydáme všechny vlastnosti objektu `uživatel`:
+For instance, let's output all properties of `user`:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  věk: 30,
-  jeAdmin: true
+let user = {
+  name: "John",
+  age: 30,
+  isAdmin: true
 };
 
-for (let klíč in uživatel) {
-  // klíče
-  alert( klíč );  // jméno, věk, jeAdmin
-  // hodnoty klíčů
-  alert( uživatel[klíč] ); // Jan, 30, true
+for (let key in user) {
+  // keys
+  alert( key );  // name, age, isAdmin
+  // values for the keys
+  alert( user[key] ); // John, 30, true
 }
 ```
 
-Všimněte si, že všechny konstrukce „for“ nám umožňují deklarovat uvnitř cyklu smyčkovou proměnnou, jako zde `let klíč`.
+Note that all "for" constructs allow us to declare the looping variable inside the loop, like `let key` here.
 
-Můžeme zde použít i jiný název proměnné namísto `klíč`. Například hojně se používá `"for (let vlastnost in obj)"` *(v angličtině `"for (let prop in obj)"` -- pozn. překl.)*.
+Also, we could use another variable name here instead of `key`. For instance, `"for (let prop in obj)"` is also widely used.
 
-### Seřazené jako objekt
+### Ordered like an object
 
-Jsou objekty seřazené? Jinými slovy: když procházíme objekt v cyklu, obdržíme všechny vlastnosti ve stejném pořadí, v jakém byly přidány? Můžeme se na to spolehnout?
+Are objects ordered? In other words, if we loop over an object, do we get all properties in the same order they were added? Can we rely on this?
 
-Krátká odpověď je: „seřazeny speciálním způsobem“: celočíselné vlastnosti jsou seřazeny, ostatní se objeví v pořadí vytvoření. Následují podrobnosti.
+The short answer is: "ordered in a special fashion": integer properties are sorted, others appear in creation order. The details follow.
 
-Uvažujme například objekt s telefonními předvolbami států:
+As an example, let's consider an object with the phone codes:
 
 ```js run
-let předvolby = {
-  "49": "Německo",
-  "41": "Švýcarsko",
-  "44": "Velká Británie",
+let codes = {
+  "49": "Germany",
+  "41": "Switzerland",
+  "44": "Great Britain",
   // ..,
   "1": "USA"
 };
 
 *!*
-for (let předvolba in předvolby) {
-  alert(předvolba); // 1, 41, 44, 49
+for (let code in codes) {
+  alert(code); // 1, 41, 44, 49
 }
 */!*
 ```
 
-Objekt můžeme použít k navržení seznamu možností pro uživatele. Například vytváříme-li stránku zejména pro návštěvníky z Německa, budeme pravděpodobně chtít, aby jako první bylo `49`.
+The object may be used to suggest a list of options to the user. If we're making a site mainly for German audience then we probably want `49` to be the first.
 
-Jenže když kód spustíme, uvidíme úplně jiný obrázek:
+But if we run the code, we see a totally different picture:
 
-- jako první bude USA (1)
-- pak Švýcarsko (41) a tak dále.
+- USA (1) goes first
+- then Switzerland (41) and so on.
 
-Telefonní předvolby jsou seřazeny vzestupně, protože jsou to celá čísla. Uvidíme tedy `1, 41, 44, 49`.
+The phone codes go in the ascending sorted order, because they are integers. So we see `1, 41, 44, 49`.
 
-````smart header="Celočíselné vlastnosti? K čemu to je?"
-Pojem „celočíselná vlastnost“ zde znamená řetězec, který může být konvertován na celé číslo a zpět beze změny.
+````smart header="Integer properties? What's that?"
+The "integer property" term here means a string that can be converted to-and-from an integer without a change.
 
-Takže "49" je název celočíselné vlastnosti, protože když se konvertuje na celé číslo a zpět, zůstane stejný. Ale "+49" a "1.2" nejsou:
+So, "49" is an integer property name, because when it's transformed to an integer number and back, it's still the same. But "+49" and "1.2" are not:
 
 ```js run
-// Math.trunc je vestavěná funkce, která odstraní desetinnou část
-alert( String(Math.trunc(Number("49"))) ); // "49", totéž, celočíselná vlastnost
-alert( String(Math.trunc(Number("+49"))) ); // "49", není totéž jako "+49" ⇒ není to celočíselná vlastnost
-alert( String(Math.trunc(Number("1.2"))) ); // "1", není totéž jako "1.2" ⇒ není to celočíselná vlastnost
+// Math.trunc is a built-in function that removes the decimal part
+alert( String(Math.trunc(Number("49"))) ); // "49", same, integer property
+alert( String(Math.trunc(Number("+49"))) ); // "49", not same "+49" ⇒ not integer property
+alert( String(Math.trunc(Number("1.2"))) ); // "1", not same "1.2" ⇒ not integer property
 ```
 ````
 
-...Na druhou stranu nejsou-li klíče celá čísla, budou seřazeny v tomtéž pořadí, v jakém byly vytvořeny, například:
+...On the other hand, if the keys are non-integer, then they are listed in the creation order, for instance:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  příjmení: "Novák"
+let user = {
+  name: "John",
+  surname: "Smith"
 };
-uživatel.věk = 25; // přidáme další
+user.age = 25; // add one more
 
 *!*
-// jiné než celočíselné vlastnosti jsou seřazeny v pořadí, v němž byly vytvořeny
+// non-integer properties are listed in the creation order
 */!*
-for (let vlastnost in uživatel) {
-  alert( vlastnost ); // jméno, příjmení, věk
+for (let prop in user) {
+  alert( prop ); // name, surname, age
 }
 ```
 
-Abychom tedy vyřešili problém s telefonními předvolbami, můžeme „podvádět“ tak, že předvolby učiníme neceločíselnými. Postačí přidat znaménko plus `"+"` před každou předvolbu.
+So, to fix the issue with the phone codes, we can "cheat" by making the codes non-integer. Adding a plus `"+"` sign before each code is enough.
 
-Například:
+Like this:
 
 ```js run
-let předvolby = {
-  "+49": "Německo",
-  "+41": "Švýcarsko",
-  "+44": "Velká Británie",
+let codes = {
+  "+49": "Germany",
+  "+41": "Switzerland",
+  "+44": "Great Britain",
   // ..,
   "+1": "USA"
 };
 
-for (let předvolba in předvolby) {
-  alert( +předvolba ); // 49, 41, 44, 1
+for (let code in codes) {
+  alert( +code ); // 49, 41, 44, 1
 }
 ```
 
-Nyní to funguje tak, jak jsme zamýšleli.
+Now it works as intended.
 
-## Shrnutí
+## Summary
 
-Objekty jsou asociativní pole s několika speciálními vlastnostmi.
+Objects are associative arrays with several special features.
 
-Ukládají se do nich vlastnosti (dvojice klíč-hodnota), v nichž:
-- Klíče vlastností musejí být řetězce nebo symboly (obvykle to jsou řetězce).
-- Hodnoty mohou být jakéhokoli typu.
+They store properties (key-value pairs), where:
+- Property keys must be strings or symbols (usually strings).
+- Values can be of any type.
 
-Pro přístup k vlastnosti můžeme použít:
-- Tečkovou notaci: `obj.vlastnost`.
-- Notaci hranatých závorek `obj["vlastnost"]`. Hranaté závorky nám umožňují převzít klíč z proměnné, např. `obj[proměnnáSKlíčem]`.
+To access a property, we can use:
+- The dot notation: `obj.property`.
+- Square brackets notation `obj["property"]`. Square brackets allow to take the key from a variable, like `obj[varWithKey]`.
 
-Další operátory:
-- K vymazání vlastnosti: `delete obj.vlastnost`.
-- K ověření, zda vlastnost se zadaným klíčem existuje: `"klíč" in obj`.
-- K iteraci nad objektem: cyklus `for (let klíč in obj)`.
+Additional operators:
+- To delete a property: `delete obj.prop`.
+- To check if a property with the given key exists: `"key" in obj`.
+- To iterate over an object: `for (let key in obj)` loop.
 
-To, co jsme prostudovali v této kapitole, se nazývá „planý objekt“ nebo jen `Object`.
+What we've studied in this chapter is called a "plain object", or just `Object`.
 
-V JavaScriptu však existuje i mnoho dalších druhů objektů:
+There are many other kinds of objects in JavaScript:
 
-- `Array` (pole) k ukládání seřazených kolekcí dat,
-- `Date` (datum) k ukládání informací o datu a času,
-- `Error` (chyba) k ukládání informací o chybě,
-- ...a tak dále.
+- `Array` to store ordered data collections,
+- `Date` to store the information about the date and time,
+- `Error` to store the information about an error.
+- ...And so on.
 
-Mají své speciální vlastnosti, které prostudujeme později. Někdy lidé říkají něco jako „typ Array“ nebo „typ Date“, ale formálně to nejsou samostatné typy, nýbrž patří do jednoduchého datového typu „objekt“ a různými způsoby jej rozšiřují.
+They have their special features that we'll study later. Sometimes people say something like "Array type" or "Date type", but formally they are not types of their own, but belong to a single "object" data type. And they extend it in various ways.
 
-Objekty v JavaScriptu jsou velmi silné. Tady jsme jen lehce nakousli téma, které je opravdu obrovské. V dalších částech tohoto tutoriálu budeme s objekty pracovat blíže a dozvíme se o nich víc.
+Objects in JavaScript are very powerful. Here we've just scratched the surface of a topic that is really huge. We'll be closely working with objects and learning more about them in further parts of the tutorial.

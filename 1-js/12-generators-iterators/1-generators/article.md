@@ -1,131 +1,131 @@
-# Generátory
+# Generators
 
-Běžné funkce vracejí jen jednu jedinou hodnotu (nebo žádnou).
+Regular functions return only one, single value (or nothing).
 
-Generátory mohou na požádání vrátit (vydat, anglicky *„yield“*) více hodnot, jednu po druhé. Výborně spolupracují s [iterovatelnými objekty](info:iterable) a umožňují nám snadno vytvářet datové proudy.
+Generators can return ("yield") multiple values, one after another, on-demand. They work great with [iterables](info:iterable), allowing to create data streams with ease.
 
-## Generátorové funkce
+## Generator functions
 
-K vytvoření generátoru potřebujeme speciální syntaktickou konstrukci: `function*`, tzv. „generátorovou funkci“.
+To create a generator, we need a special syntax construct: `function*`, so-called "generator function".
 
-Vypadá takto:
+It looks like this:
 
 ```js
-function* generujPosloupnost() {
+function* generateSequence() {
   yield 1;
   yield 2;
   return 3;
 }
 ```
 
-Generátorové funkce se chovají jinak než obyčejné. Když je taková funkce volána, nespustí se její kód. Místo toho vrátí speciální objekt, zvaný „generátorový objekt“, aby její výkon řídil.
+Generator functions behave differently from regular ones. When such function is called, it doesn't run its code. Instead it returns a special object, called "generator object", to manage the execution.
 
-Podívejme se:
+Here, take a look:
 
 ```js run
-function* generujPosloupnost() {
+function* generateSequence() {
   yield 1;
   yield 2;
   return 3;
 }
 
-// „generátorová funkce“ vytvoří „generátorový objekt“
-let generátor = generujPosloupnost();
+// "generator function" creates "generator object"
+let generator = generateSequence();
 *!*
-alert(generátor); // [object Generator]
+alert(generator); // [object Generator]
 */!*
 ```
 
-Výkon kódu funkce ještě nezačal:
+The function code execution hasn't started yet:
 
 ![](generateSequence-1.svg)
 
-Hlavní metoda generátoru je `next()`. Když je volána, spustí výkon funkce až do nejbližšího příkazu `yield <hodnota>` (`hodnota` nemusí být uvedena, pak je `undefined`). Pak se výkon funkce přeruší a vydaná `hodnota` je vrácena vnějšímu kódu.
+The main method of a generator is `next()`. When called, it runs the execution until the nearest `yield <value>` statement (`value` can be omitted, then it's `undefined`). Then the function execution pauses, and the yielded `value` is returned to the outer code.
 
-Výsledkem funkce `next()` je vždy objekt se dvěma vlastnostmi:
-- `value`: vydaná hodnota.
-- `done`: `true`, jestliže kód funkce skončil, jinak `false`.
+The result of `next()` is always an object with two properties:
+- `value`: the yielded value.
+- `done`: `true` if the function code has finished, otherwise `false`.
 
-Například zde vytvoříme generátor a získáme jeho první vydanou hodnotu:
+For instance, here we create the generator and get its first yielded value:
 
 ```js run
-function* generujPosloupnost() {
+function* generateSequence() {
   yield 1;
   yield 2;
   return 3;
 }
 
-let generátor = generujPosloupnost();
+let generator = generateSequence();
 
 *!*
-let jedna = generátor.next();
+let one = generator.next();
 */!*
 
-alert(JSON.stringify(jedna)); // {value: 1, done: false}
+alert(JSON.stringify(one)); // {value: 1, done: false}
 ```
 
-Prozatím jsme získali jenom první hodnotu a výkon funkce je na druhém řádku:
+As of now, we got the first value only, and the function execution is on the second line:
 
 ![](generateSequence-2.svg)
 
-Volejme znovu `generátor.next()`. Metoda obnoví výkon kódu a vrátí další `yield`:
+Let's call `generator.next()` again. It resumes the code execution and returns the next `yield`:
 
 ```js
-let dvě = generátor.next();
+let two = generator.next();
 
-alert(JSON.stringify(dvě)); // {value: 2, done: false}
+alert(JSON.stringify(two)); // {value: 2, done: false}
 ```
 
 ![](generateSequence-3.svg)
 
-A když ji zavoláme potřetí, výkon dosáhne příkazu `return`, který funkci ukončí:
+And, if we call it a third time, the execution reaches the `return` statement that finishes the function:
 
 ```js
-let tři = generátor.next();
+let three = generator.next();
 
-alert(JSON.stringify(tři)); // {value: 3, *!*done: true*/!*}
+alert(JSON.stringify(three)); // {value: 3, *!*done: true*/!*}
 ```
 
 ![](generateSequence-4.svg)
 
-Nyní generátor skončil. Měli bychom to poznat z `done:true` a zpracovat `value:3` jako poslední výsledek.
+Now the generator is done. We should see it from `done:true` and process `value:3` as the final result.
 
-Další volání `generátor.next()` už nebudou dávat smysl. Pokud je učiníme, vrátí stejný objekt: `{done: true}`.
+New calls to `generator.next()` don't make sense any more. If we do them, they return the same object: `{done: true}`.
 
-```smart header="`function* f(…)` nebo `function *f(…)`?"
-Obě syntaxe jsou správné.
+```smart header="`function* f(…)` or `function *f(…)`?"
+Both syntaxes are correct.
 
-Obvykle se však dává přednost první syntaxi, jelikož hvězdička `*` označuje, že jde o generátorovou funkci. Popisuje druh funkce, ne její název, takže by měla být připojena ke klíčovému slovu `function`.
+But usually the first syntax is preferred, as the star `*` denotes that it's a generator function, it describes the kind, not the name, so it should stick with the `function` keyword.
 ```
 
-## Generátory jsou iterovatelné
+## Generators are iterable
 
-Jak jste již pravděpodobně usoudili z pohledu na metodu `next()`, generátory jsou [iterovatelné](info:iterable).
+As you probably already guessed looking at the `next()` method, generators are [iterable](info:iterable).
 
-Můžeme cyklovat nad jejich hodnotami pomocí `for..of`:
+We can loop over their values using `for..of`:
 
 ```js run
-function* generujPosloupnost() {
+function* generateSequence() {
   yield 1;
   yield 2;
   return 3;
 }
 
-let generátor = generujPosloupnost();
+let generator = generateSequence();
 
-for(let hodnota of generátor) {
-  alert(hodnota); // 1, pak 2
+for(let value of generator) {
+  alert(value); // 1, then 2
 }
 ```
 
-Vypadá to mnohem lépe než volání `.next().value`, že?
+Looks a lot nicer than calling `.next().value`, right?
 
-...Ale prosíme všimněte si: uvedený příklad zobrazí `1`, pak `2` a to je vše. Nezobrazí `3`!
+...But please note: the example above shows `1`, then `2`, and that's all. It doesn't show `3`!
 
-Je to proto, že iterace `for..of` ignoruje poslední hodnotu `value`, když je `done: true`. Jestliže tedy chceme, aby `for..of` zobrazilo všechny výsledky, musíme je vrátit pomocí `yield`:
+It's because `for..of` iteration ignores the last `value`, when `done: true`. So, if we want all results to be shown by `for..of`, we must return them with `yield`:
 
 ```js run
-function* generujPosloupnost() {
+function* generateSequence() {
   yield 1;
   yield 2;
 *!*
@@ -133,53 +133,53 @@ function* generujPosloupnost() {
 */!*
 }
 
-let generátor = generujPosloupnost();
+let generator = generateSequence();
 
-for(let hodnota of generátor) {
-  alert(hodnota); // 1, pak 2, pak 3
+for(let value of generator) {
+  alert(value); // 1, then 2, then 3
 }
 ```
 
-Protože generátory jsou iterovatelné, můžeme používat veškerou funkcionalitu vztahující se k iterovatelným objektům, např. roztaženou syntaxi `...`:
+As generators are iterable, we can call all related functionality, e.g. the spread syntax `...`:
 
 ```js run
-function* generujPosloupnost() {
+function* generateSequence() {
   yield 1;
   yield 2;
   yield 3;
 }
 
-let posloupnost = [0, ...generujPosloupnost()];
+let sequence = [0, ...generateSequence()];
 
-alert(posloupnost); // 0, 1, 2, 3
+alert(sequence); // 0, 1, 2, 3
 ```
 
-V uvedeném kódu `...generujPosloupnost()` přetvoří iterovatelný generátorový objekt na pole prvků (více o roztažené syntaxi si přečtěte v kapitole [](info:rest-parameters-spread#spread-syntax)).
+In the code above, `...generateSequence()` turns the iterable generator object into an array of items (read more about the spread syntax in the chapter [](info:rest-parameters-spread#spread-syntax))
 
-## Používání generátorů pro iterovatelné objekty
+## Using generators for iterables
 
-Před nějakou dobou, v kapitole [](info:iterable), jsme vytvořili objekt `rozsah`, který vracel hodnoty `začátek..konec`.
+Some time ago, in the chapter [](info:iterable) we created an iterable `range` object that returns values `from..to`.
 
-Zde si tento kód připomeňme:
+Here, let's remember the code:
 
 ```js run
-let rozsah = {
-  začátek: 1,
-  konec: 5,
+let range = {
+  from: 1,
+  to: 5,
 
-  // for..of na objektu rozsah volá tuto metodu jednou na samém začátku
+  // for..of range calls this method once in the very beginning
   [Symbol.iterator]() {
-    // ...vrací objekt iterátoru:
-    // od této chvíle for..of pracuje jen s tímto objektem a ptá se ho na další hodnoty
+    // ...it returns the iterator object:
+    // onward, for..of works only with that object, asking it for next values
     return {
-      aktuální: this.začátek,
-      poslední: this.konec,
+      current: this.from,
+      last: this.to,
 
-      // next() je volána cyklem for..of při každé iteraci
+      // next() is called on each iteration by the for..of loop
       next() {
-        // měla by vrátit hodnotu jako objekt {done:.., value :...}
-        if (this.aktuální <= this.poslední) {
-          return { done: false, value: this.aktuální++ };
+        // it should return the value as an object {done:.., value :...}
+        if (this.current <= this.last) {
+          return { done: false, value: this.current++ };
         } else {
           return { done: true };
         }
@@ -188,269 +188,269 @@ let rozsah = {
   }
 };
 
-// iterace nad rozsahem vrací čísla od rozsah.začátek do rozsah.konec
-alert([...rozsah]); // 1,2,3,4,5
+// iteration over range returns numbers from range.from to range.to
+alert([...range]); // 1,2,3,4,5
 ```
 
-Pro iteraci můžeme použít generátorovou funkci, když ji poskytneme jako `Symbol.iterator`.
+We can use a generator function for iteration by providing it as `Symbol.iterator`.
 
-Zde je stejný `rozsah`, ale mnohem kompaktnější:
+Here's the same `range`, but much more compact:
 
 ```js run
-let rozsah = {
-  začátek: 1,
-  konec: 5,
+let range = {
+  from: 1,
+  to: 5,
 
-  *[Symbol.iterator]() { // zkratka pro [Symbol.iterator]: function*()
-    for(let hodnota = this.začátek; hodnota <= this.konec; hodnota++) {
-      yield hodnota;
+  *[Symbol.iterator]() { // a shorthand for [Symbol.iterator]: function*()
+    for(let value = this.from; value <= this.to; value++) {
+      yield value;
     }
   }
 };
 
-alert( [...rozsah] ); // 1,2,3,4,5
+alert( [...range] ); // 1,2,3,4,5
 ```
 
-Funguje to, protože `rozsah[Symbol.iterator]()` nyní vrací generátor a metody generátoru jsou přesně to, co `for..of` očekává:
-- obsahuje metodu `.next()`
-- která vrací hodnoty ve tvaru `{value: ..., done: true/false}`
+That works, because `range[Symbol.iterator]()` now returns a generator, and generator methods are exactly what `for..of` expects:
+- it has a `.next()` method
+- that returns values in the form `{value: ..., done: true/false}`
 
-To samozřejmě není náhoda. Generátory byly do jazyka JavaScript přidány s ohledem na iterátory, aby je bylo možné lehce implementovat.
+That's not a coincidence, of course. Generators were added to JavaScript language with iterators in mind, to implement them easily.
 
-Varianta s generátorem je mnohem stručnější než původní iterovatelný kód objektu `rozsah` a udržuje si stejnou funkcionalitu.
+The variant with a generator is much more concise than the original iterable code of `range`, and keeps the same functionality.
 
-```smart header="Generátory mohou generovat hodnoty donekonečna"
-V uvedených příkladech jsme generovali konečné posloupnosti, ale můžeme vytvořit i generátor, který vydává hodnoty neustále. Například nekonečnou posloupnost pseudonáhodných čísel.
+```smart header="Generators may generate values forever"
+In the examples above we generated finite sequences, but we can also make a generator that yields values forever. For instance, an unending sequence of pseudo-random numbers.
 
-To by samozřejmě vyžadovalo `break` (nebo `return`) v cyklu `for..of` nad takovým generátorem. Jinak by se cyklus opakoval donekonečna a skript by zůstal viset.
+That surely would require a `break` (or `return`) in `for..of` over such generator. Otherwise, the loop would repeat forever and hang.
 ```
 
-## Skládání generátorů
+## Generator composition
 
-Skládání generátorů je speciální vlastnost generátorů, která je umožňuje průhledně „zanořit“ do sebe navzájem.
+Generator composition is a special feature of generators that allows to transparently "embed" generators in each other.
 
-Například máme funkci, která generuje posloupnost čísel:
+For instance, we have a function that generates a sequence of numbers:
 
 ```js
-function* generujPosloupnost(začátek, konec) {
-  for (let i = začátek; i <= konec; i++) yield i;
+function* generateSequence(start, end) {
+  for (let i = start; i <= end; i++) yield i;
 }
 ```
 
-Nyní bychom ji rádi znovu použili, aby generovala složitější posloupnost:
-- nejprve číslice `0..9` (s kódy znaků 48..57),
-- po nich písmena velké abecedy `A..Z` (s kódy znaků 65..90),
-- po nich písmena malé abecedy `a..z` (s kódy znaků 97..122).
+Now we'd like to reuse it to generate a more complex sequence:
+- first, digits `0..9` (with character codes 48..57),
+- followed by uppercase alphabet letters `A..Z` (character codes 65..90)
+- followed by lowercase alphabet letters `a..z` (character codes 97..122)
 
-Tuto posloupnost můžeme použít např. k vytváření hesel tím, že z ní budeme vybírat znaky (můžeme přidat i syntaktické znaky), ale napřed ji vygenerujme.
+We can use this sequence e.g. to create passwords by selecting characters from it (could add syntax characters as well), but let's generate it first.
 
-Když chceme v obyčejné funkci zkombinovat výsledky z několika jiných funkcí, zavoláme je, uložíme si jejich výsledky a nakonec je spojíme.
+In a regular function, to combine results from multiple other functions, we call them, store the results, and then join at the end.
 
-Pro generátory existuje speciální syntaxe `yield*` k „vnoření“ (složení) jednoho generátoru do jiného.
+For generators, there's a special `yield*` syntax to "embed" (compose) one generator into another.
 
-Složený generátor:
+The composed generator:
 
 ```js run
-function* generujPosloupnost(začátek, konec) {
-  for (let i = začátek; i <= konec; i++) yield i;
+function* generateSequence(start, end) {
+  for (let i = start; i <= end; i++) yield i;
 }
 
-function* generujKódyHesel() {
+function* generatePasswordCodes() {
 
 *!*
   // 0..9
-  yield* generujPosloupnost(48, 57);
+  yield* generateSequence(48, 57);
 
   // A..Z
-  yield* generujPosloupnost(65, 90);
+  yield* generateSequence(65, 90);
 
   // a..z
-  yield* generujPosloupnost(97, 122);
+  yield* generateSequence(97, 122);
 */!*
 
 }
 
-let řetězec = '';
+let str = '';
 
-for(let kód of generujKódyHesel()) {
-  řetězec += String.fromCharCode(kód);
+for(let code of generatePasswordCodes()) {
+  str += String.fromCharCode(code);
 }
 
-alert(řetězec); // 0..9A..Za..z
+alert(str); // 0..9A..Za..z
 ```
 
-Direktiva `yield*` *deleguje* výkon na jiný generátor. Tento pojem znamená, že `yield* gen` iteruje nad generátorem `gen` a průhledně předává jeho výstupy ven, jako by tyto hodnoty byly vydány vnějším generátorem.
+The `yield*` directive *delegates* the execution to another generator. This term means that `yield* gen` iterates over the generator `gen` and transparently forwards its yields outside. As if the values were yielded by the outer generator.
 
-Výsledek je stejný, jako kdybychom vložili kód z vnořených generátorů:
+The result is the same as if we inlined the code from nested generators:
 
 ```js run
-function* generujPosloupnost(začátek, konec) {
-  for (let i = začátek; i <= konec; i++) yield i;
+function* generateSequence(start, end) {
+  for (let i = start; i <= end; i++) yield i;
 }
 
-function* generujAlfanumerickou() {
+function* generateAlphaNum() {
 
 *!*
-  // yield* generujPosloupnost(48, 57);
+  // yield* generateSequence(48, 57);
   for (let i = 48; i <= 57; i++) yield i;
 
-  // yield* generujPosloupnost(65, 90);
+  // yield* generateSequence(65, 90);
   for (let i = 65; i <= 90; i++) yield i;
 
-  // yield* generujPosloupnost(97, 122);
+  // yield* generateSequence(97, 122);
   for (let i = 97; i <= 122; i++) yield i;
 */!*
 
 }
 
-let řetězec = '';
+let str = '';
 
-for(let kód of generujAlfanumerickou()) {
-  řetězec += String.fromCharCode(kód);
+for(let code of generateAlphaNum()) {
+  str += String.fromCharCode(code);
 }
 
-alert(řetězec); // 0..9A..Za..z
+alert(str); // 0..9A..Za..z
 ```
 
-Skládání generátorů je přirozený způsob, jak vložit tok jednoho generátoru do druhého. Nepoužívá další paměť, do níž by se ukládaly průběžné výsledky.
+A generator composition is a natural way to insert a flow of one generator into another. It doesn't use extra memory to store intermediate results.
 
-## „yield“ je obousměrná ulička
+## "yield" is a two-way street
 
-Až dosud se generátory podobaly iterovatelným objektům se speciální syntaxí pro generování hodnot. Ve skutečnosti však jsou mnohem silnější a flexibilnější.
+Until this moment, generators were similar to iterable objects, with a special syntax to generate values. But in fact they are much more powerful and flexible.
 
-Je to proto, že `yield` je obousměrná ulička: nejenom že vrací výsledek ven, ale také umí předat hodnotu dovnitř generátoru.
+That's because `yield` is a two-way street: it not only returns the result to the outside, but also can pass the value inside the generator.
 
-Abychom tak učinili, měli bychom volat `generátor.next(arg)` s argumentem. Tento argument se stane výsledkem `yield`.
+To do so, we should call `generator.next(arg)`, with an argument. That argument becomes the result of `yield`.
 
-Podívejme se na příklad:
+Let's see an example:
 
 ```js run
 function* gen() {
 *!*
-  // Předá otázku vnějšímu kódu a počká na odpověď
-  let výsledek = yield "2 + 2 = ?"; // (*)
+  // Pass a question to the outer code and wait for an answer
+  let result = yield "2 + 2 = ?"; // (*)
 */!*
 
-  alert(výsledek);
+  alert(result);
 }
 
-let generátor = gen();
+let generator = gen();
 
-let otázka = generátor.next().value; // <-- yield vrátí hodnotu
+let question = generator.next().value; // <-- yield returns the value
 
-generátor.next(4); // --> předá výsledek do generátoru
+generator.next(4); // --> pass the result into the generator  
 ```
 
 ![](genYield2.svg)
 
-1. První volání `generátor.next()` by mělo být vždy učiněno bez argumentu (je-li argument předán, je ignorován). Zahájí výkon a vrátí výsledek prvního `yield "2+2=?"`. V tuto chvíli generátor pozastaví svůj výkon a zůstane na řádku `(*)`.
-2. Pak, jak je znázorněno na obrázku výše, se výsledek `yield` stane hodnotou proměnné `otázka` ve volajícím kódu.
-3. Na `generátor.next(4)` se generátor obnoví a jako výsledek získá `4`: `let výsledek = 4`.
+1. The first call `generator.next()` should be always made without an argument (the argument is ignored if passed). It starts the execution and returns the result of the first `yield "2+2=?"`. At this point the generator pauses the execution, while staying on the line `(*)`.
+2. Then, as shown at the picture above, the result of `yield` gets into the `question` variable in the calling code.
+3. On `generator.next(4)`, the generator resumes, and `4` gets in as the result: `let result = 4`.
 
-Prosíme všimněte si, že vnější kód nemusí volat `next(4)` okamžitě. Může to nějakou dobu trvat. To není problém: generátor počká.
+Please note, the outer code does not have to immediately call `next(4)`. It may take time. That's not a problem: the generator will wait.
 
-Například:
+For instance:
 
 ```js
-// obnoví generátor za nějakou dobu
-setTimeout(() => generátor.next(4), 1000);
+// resume the generator after some time
+setTimeout(() => generator.next(4), 1000);
 ```
 
-Jak vidíme, na rozdíl od běžných funkcí si generátor a volající kód mohou vyměňovat výsledky předáváním hodnot v příkazech `next/yield`.
+As we can see, unlike regular functions, a generator and the calling code can exchange results by passing values in `next/yield`.
 
-Aby to bylo jasnější, následuje další příklad s více voláními:
+To make things more obvious, here's another example, with more calls:
 
 ```js run
 function* gen() {
-  let dotaz1 = yield "2 + 2 = ?";
+  let ask1 = yield "2 + 2 = ?";
 
-  alert(dotaz1); // 4
+  alert(ask1); // 4
 
-  let dotaz2 = yield "3 * 3 = ?"
+  let ask2 = yield "3 * 3 = ?"
 
-  alert(dotaz2); // 9
+  alert(ask2); // 9
 }
 
-let generátor = gen();
+let generator = gen();
 
-alert( generátor.next().value ); // "2 + 2 = ?"
+alert( generator.next().value ); // "2 + 2 = ?"
 
-alert( generátor.next(4).value ); // "3 * 3 = ?"
+alert( generator.next(4).value ); // "3 * 3 = ?"
 
-alert( generátor.next(9).done ); // true
+alert( generator.next(9).done ); // true
 ```
 
-Obrázek výkonu:
+The execution picture:
 
 ![](genYield2-2.svg)
 
-1. První `.next()` zahájí výkon... Dosáhne prvního `yield`.
-2. Výsledek je vrácen vnějšímu kódu.
-3. Druhé `.next(4)` předá `4` zpět generátoru jako výsledek prvního `yield` a obnoví výkon.
-4. ...Dosáhne druhého `yield`, které se stane výsledkem volání generátoru.
-5. Třetí `.next(9)` předá do generátoru `9` jako výsledek druhého `yield` a obnoví výkon, který dosáhne konce funkce, takže `done: true`.
+1. The first `.next()` starts the execution... It reaches the first `yield`.
+2. The result is returned to the outer code.
+3. The second `.next(4)` passes `4` back to the generator as the result of the first `yield`, and resumes the execution.
+4. ...It reaches the second `yield`, that becomes the result of the generator call.
+5. The third `next(9)` passes `9` into the generator as the result of the second `yield` and resumes the execution that reaches the end of the function, so `done: true`.
 
-Je to jako ping-pong. Každé `next(value)` (s výjimkou prvního) předá do generátoru hodnotu, která se stane výsledkem aktuálního `yield`, a pak získá zpět výsledek dalšího `yield`.
+It's like a "ping-pong" game. Each `next(value)` (excluding the first one) passes a value into the generator, that becomes the result of the current `yield`, and then gets back the result of the next `yield`.
 
-## generátor.throw
+## generator.throw
 
-Jak jsme viděli ve výše uvedených příkladech, vnější kód může předat generátoru hodnotu jako výsledek `yield`.
+As we observed in the examples above, the outer code may pass a value into the generator, as the result of `yield`.
 
-...Může v něm však také vyvolat chybu. To je přirozené, neboť chyba je druh výsledku.
+...But it can also initiate (throw) an error there. That's natural, as an error is a kind of result.
 
-Abychom předali chybu do `yield`, měli bychom volat `generátor.throw(chyba)`. V takovém případě je `chyba` vyvolána na řádku s tímto `yield`.
+To pass an error into a `yield`, we should call `generator.throw(err)`. In that case, the `err` is thrown in the line with that `yield`.
 
-Například zde vydání `"2 + 2 = ?"` vede k chybě:
+For instance, here the yield of `"2 + 2 = ?"` leads to an error:
 
 ```js run
 function* gen() {
   try {
-    let výsledek = yield "2 + 2 = ?"; // (1)
+    let result = yield "2 + 2 = ?"; // (1)
 
-    alert("Výkon se sem nedostane, protože výše bude vyvolána výjimka");
+    alert("The execution does not reach here, because the exception is thrown above");
   } catch(e) {
-    alert(e); // zobrazí chybu
+    alert(e); // shows the error
   }
 }
 
-let generátor = gen();
+let generator = gen();
 
-let otázka = generátor.next().value;
+let question = generator.next().value;
 
 *!*
-generátor.throw(new Error("Odpověď nenalezena v mé databázi")); // (2)
+generator.throw(new Error("The answer is not found in my database")); // (2)
 */!*
 ```
 
-Chyba, vhozená do generátoru na řádku `(2)`, povede k výjimce na řádku `(1)` s `yield`. V uvedeném příkladu ji `try..catch` zachytí a zobrazí.
+The error, thrown into the generator at line `(2)` leads to an exception in line `(1)` with `yield`. In the example above, `try..catch` catches it and shows it.
 
-Pokud ji nezachytíme, pak stejně jako každá výjimka „vypadne“ z generátoru do volajícího kódu.
+If we don't catch it, then just like any exception, it "falls out" the generator into the calling code.
 
-Aktuální řádek volajícího kódu je řádek s `generátor.throw`, označený `(2)`. Můžeme ji tedy zachytit tam, například takto:
+The current line of the calling code is the line with `generator.throw`, labelled as `(2)`. So we can catch it here, like this:
 
 ```js run
-function* generuj() {
-  let výsledek = yield "2 + 2 = ?"; // Chyba na tomto řádku
+function* generate() {
+  let result = yield "2 + 2 = ?"; // Error in this line
 }
 
-let generátor = generuj();
+let generator = generate();
 
-let otázka = generátor.next().value;
+let question = generator.next().value;
 
 *!*
 try {
-  generátor.throw(new Error("Odpověď nenalezena v mé databázi"));
+  generator.throw(new Error("The answer is not found in my database"));
 } catch(e) {
-  alert(e); // zobrazí chybu
+  alert(e); // shows the error
 }
 */!*
 ```
 
-Pokud tuto chybu nezachytíme zde, pak jako obvykle propadne do vnějšího volajícího kódu (je-li nějaký), a není-li zachycena, shodí skript.
+If we don't catch the error there, then, as usual, it falls through to the outer calling code (if any) and, if uncaught, kills the script.
 
-## generátor.return
+## generator.return
 
-`generátor.return(hodnota)` ukončí výkon generátoru a vrátí zadanou hodnotu `hodnota`.
+`generator.return(value)` finishes the generator execution and return the given `value`.
 
 ```js
 function* gen() {
@@ -466,18 +466,18 @@ g.return('foo'); // { value: "foo", done: true }
 g.next();        // { value: undefined, done: true }
 ```
 
-Jestliže na dokončeném generátoru znovu použijeme `generátor.return()`, vrátí tuto hodnotu znovu ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator/return)).
+If we again use `generator.return()` in a completed generator, it will return that value again ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator/return)).
 
-Tuto metodu nepoužíváme často, protože většinou chceme získat všechny vracené hodnoty, ale může být užitečná, když chceme za specifických podmínek generátor zastavit.
+Often we don't use it, as most of time we want to get all returning values, but it can be useful when we want to stop generator in a specific condition.
 
-## Shrnutí
+## Summary
 
-- Generátory se vytvářejí generátorovými funkcemi `function* f(…) {…}`.
-- Uvnitř generátorů (pouze tam) existuje operátor `yield`.
-- Vnější kód a generátor si mohou vyměňovat výsledky pomocí volání `next/yield`.
+- Generators are created by generator functions `function* f(…) {…}`.
+- Inside generators (only) there exists a `yield` operator.
+- The outer code and the generator may exchange results via `next/yield` calls.
 
-V moderním JavaScriptu se generátory používají jen zřídka, ale někdy se mohou hodit, protože schopnost funkce vyměňovat si data s volajícím kódem během jejího výkonu je poměrně unikátní. A samozřejmě jsou vynikající pro vytváření iterovatelných objektů.
+In modern JavaScript, generators are rarely used. But sometimes they come in handy, because the ability of a function to exchange data with the calling code during the execution is quite unique. And, surely, they are great for making iterable objects.
 
-V další kapitole se navíc dozvíme o asynchronních generátorech, které se používají k načítání proudů asynchronně generovaných dat (např. stránkovaných při stahování ze sítě) v cyklech `for await ... of`.
+Also, in the next chapter we'll learn async generators, which are used to read streams of asynchronously generated data (e.g paginated fetches over a network) in `for await ... of` loops.
 
-Při programování webů pracujeme s datovými proudy často, takže to je další velmi důležitý případ použití.
+In web-programming we often work with streamed data, so that's another very important use case.

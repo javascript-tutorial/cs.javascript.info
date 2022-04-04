@@ -1,33 +1,33 @@
-# Nativní prototypy
+# Native prototypes
 
-Vlastnost `„prototype“` je zeširoka využívána samotným jádrem JavaScriptu. Používají ji všechny zabudované konstruktory.
+The `"prototype"` property is widely used by the core of JavaScript itself. All built-in constructor functions use it.
 
-Nejprve se podíváme na detaily a pak na to, jak ji využít k přidání nových schopností vestavěným objektům.
+First we'll see at the details, and then how to use it for adding new capabilities to built-in objects.
 
 ## Object.prototype
 
-Řekněme, že vypíšeme prázdný objekt:
+Let's say we output an empty object:
 
 ```js run
 let obj = {};
 alert( obj ); // "[object Object]" ?
 ```
 
-Kde je kód, který vygeneruje řetězec `"[object Object]"`? Je to vestavěná metoda `toString`, ale kde je? Objekt `obj` je prázdný!
+Where's the code that generates the string `"[object Object]"`? That's a built-in `toString` method, but where is it? The `obj` is empty!
 
-...Krátká notace `obj = {}` je však totéž jako `obj = new Object()`, kde `Object` je vestavěný konstruktor objektu se svou vlastní vlastností `prototype`, která odkazuje na obrovský objekt s metodou `toString` a jinými.
+...But the short notation `obj = {}` is the same as `obj = new Object()`, where `Object` is a built-in object constructor function, with its own `prototype` referencing a huge object with `toString` and other methods.
 
-Děje se následující:
+Here's what's going on:
 
 ![](object-prototype.svg)
 
-Když je zavolán `new Object()` (nebo je vytvořen literální objekt `{...}`), jeho `[[Prototype]]` se nastaví na `Object.prototype` podle pravidla, které jsme probrali v předchozí kapitole:
+When `new Object()` is called (or a literal object `{...}` is created), the `[[Prototype]]` of it is set to `Object.prototype` according to the rule that we discussed in the previous chapter:
 
 ![](object-prototype-1.svg)
 
-Když je tedy volána `obj.toString()`, je tato metoda převzata z `Object.prototype`.
+So then when `obj.toString()` is called the method is taken from `Object.prototype`.
 
-Můžeme si to ověřit následovně:
+We can check it like this:
 
 ```js run
 let obj = {};
@@ -38,115 +38,115 @@ alert(obj.toString === obj.__proto__.toString); //true
 alert(obj.toString === Object.prototype.toString); //true
 ```
 
-Prosíme všimněte si, že ve výše uvedeném řetězci není nad `Object.prototype` žádný další `[[Prototype]]`:
+Please note that there is no more `[[Prototype]]` in the chain above `Object.prototype`:
 
 ```js run
 alert(Object.prototype.__proto__); // null
 ```
 
-## Jiné zabudované prototypy
+## Other built-in prototypes
 
-Metody v prototypech si uchovávají i jiné vestavěné objekty, např. `Array`, `Date`, `Function` a jiné.
+Other built-in objects such as `Array`, `Date`, `Function` and others also keep methods in prototypes.
 
-Například když vytvoříme pole `[1, 2, 3]`, interně se použije defaultní konstruktor `new Array()`. Takže `Array.prototype` se stane jeho prototypem a poskytne mu metody. To ušetří spoustu paměti.
+For instance, when we create an array `[1, 2, 3]`, the default `new Array()` constructor is used internally. So `Array.prototype` becomes its prototype and provides methods. That's very memory-efficient.
 
-Podle specifikace mají všechny vestavěné prototypy na svém vrcholu `Object.prototype`. Proto také někteří lidé říkají, že „všechno je zděděno z objektů“.
+By specification, all of the built-in prototypes have `Object.prototype` on the top. That's why some people say that "everything inherits from objects".
 
-Zde je obrázek s celkovým přehledem (pro 3 zabudované objekty, které se tam vejdou):
+Here's the overall picture (for 3 built-ins to fit):
 
 ![](native-prototypes-classes.svg)
 
-Ověřme prototypy ručně:
+Let's check the prototypes manually:
 
 ```js run
-let pole = [1, 2, 3];
+let arr = [1, 2, 3];
 
-// dědí z Array.prototype?
-alert( pole.__proto__ === Array.prototype ); // true
+// it inherits from Array.prototype?
+alert( arr.__proto__ === Array.prototype ); // true
 
-// pak z Object.prototype?
-alert( pole.__proto__.__proto__ === Object.prototype ); // true
+// then from Object.prototype?
+alert( arr.__proto__.__proto__ === Object.prototype ); // true
 
-// a na vrcholu je null.
-alert( pole.__proto__.__proto__.__proto__ ); // null
+// and null on the top.
+alert( arr.__proto__.__proto__.__proto__ ); // null
 ```
 
-Některé metody v prototypech se mohou překrývat, například `Array.prototype` má svou vlastní metodu `toString`, která vypíše prvky oddělené čárkou:
+Some methods in prototypes may overlap, for instance, `Array.prototype` has its own `toString` that lists comma-delimited elements:
 
 ```js run
-let pole = [1, 2, 3]
-alert(pole); // 1,2,3 <-- výsledek metody Array.prototype.toString
+let arr = [1, 2, 3]
+alert(arr); // 1,2,3 <-- the result of Array.prototype.toString
 ```
 
-Jak jsme už viděli, `Object.prototype` má rovněž `toString`, ale `Array.prototype` je v řetězci blíž, takže se použije varianta pro pole.
+As we've seen before, `Object.prototype` has `toString` as well, but `Array.prototype` is closer in the chain, so the array variant is used.
 
 
 ![](native-prototypes-array-tostring.svg)
 
 
-Dědičnost zobrazují i prohlížečové nástroje, například vývojářská konzole v Chrome (pro vestavěné objekty bude možná zapotřebí `console.dir`):
+In-browser tools like Chrome developer console also show inheritance (`console.dir` may need to be used for built-in objects):
 
 ![](console_dir_array.png)
 
-Takto fungují i jiné zabudované objekty. Dokonce i funkce -- to jsou objekty z vestavěného konstruktoru `Function` a jejich metody (`call`/`apply` a jiné) se berou z `Function.prototype`. Také funkce mají svůj vlastní `toString`.
+Other built-in objects also work the same way. Even functions -- they are objects of a built-in `Function` constructor, and their methods (`call`/`apply` and others) are taken from `Function.prototype`. Functions have their own `toString` too.
 
 ```js run
 function f() {}
 
 alert(f.__proto__ == Function.prototype); // true
-alert(f.__proto__.__proto__ == Object.prototype); // true, zděděna z objektů
+alert(f.__proto__.__proto__ == Object.prototype); // true, inherit from objects
 ```
 
-## Primitivy
+## Primitives
 
-Nejzrádnější věc se děje s řetězci, čísly a booleany.
+The most intricate thing happens with strings, numbers and booleans.
 
-Jak si pamatujeme, nejsou to objekty. Pokud se však pokusíme přistoupit k jejich vlastnostem, vytvoří se dočasné wrappery pomocí vestavěných konstruktorů `String`, `Number` a `Boolean`. Ty poskytnou své metody a zmizí.
+As we remember, they are not objects. But if we try to access their properties, temporary wrapper objects are created using built-in constructors `String`, `Number` and `Boolean`. They provide the methods and disappear.
 
-Tyto objekty se vytvoří pro nás neviditelně a většina enginů je vyoptimalizuje, ale přesně tímto způsobem to popisuje specifikace. Metody těchto objektů rovněž přebývají v prototypech, které jsou dostupné jako `String.prototype`, `Number.prototype` a `Boolean.prototype`.
+These objects are created invisibly to us and most engines optimize them out, but the specification describes it exactly this way. Methods of these objects also reside in prototypes, available as `String.prototype`, `Number.prototype` and `Boolean.prototype`.
 
-```warn header="Hodnoty `null` a `undefined` nemají objektové wrappery"
-Speciální hodnoty `null` a `undefined` stojí stranou. Ty nemají objektové wrappery, takže metody a vlastnosti pro ně nejsou dostupné. A neexistují ani odpovídající prototypy.
+```warn header="Values `null` and `undefined` have no object wrappers"
+Special values `null` and `undefined` stand apart. They have no object wrappers, so methods and properties are not available for them. And there are no corresponding prototypes either.
 ```
 
-## Měnění nativních prototypů [#native-prototype-change]
+## Changing native prototypes [#native-prototype-change]
 
-Nativní prototypy lze modifikovat. Například přidáme-li metodu do `String.prototype`, stane se dostupnou ve všech řetězcích:
+Native prototypes can be modified. For instance, if we add a method to `String.prototype`,  it becomes available to all strings:
 
 ```js run
-String.prototype.zobraz = function() {
+String.prototype.show = function() {
   alert(this);
 };
 
-"BUM!".zobraz(); // BUM!
+"BOOM!".show(); // BOOM!
 ```
 
-Během procesu vývoje nás mohou napadnout nové zabudované metody, které bychom rádi měli, a můžeme mít sklon přidat je do nativních prototypů. To je však obecně špatný nápad.
+During the process of development, we may have ideas for new built-in methods we'd like to have, and we may be tempted to add them to native prototypes. But that is generally a bad idea.
 
 ```warn
-Prototypy jsou globální, takže je snadné získat konflikt. Jestliže dvě knihovny přidají metodu `String.prototype.zobraz`, jedna z nich přepíše metodu druhé.
+Prototypes are global, so it's easy to get a conflict. If two libraries add a method `String.prototype.show`, then one of them will be overwriting the method of the other.
 
-Modifikace nativního prototypu je tedy obecně považována za špatný nápad.
+So, generally, modifying a native prototype is considered a bad idea.
 ```
 
-**V moderním programování existuje jen jeden případ, kdy je modifikace nativních prototypů vhodná. Tím je polyfilling.**
+**In modern programming, there is only one case where modifying native prototypes is approved. That's polyfilling.**
 
-Polyfilling je pojem pro nahrazení metody, která existuje ve specifikaci JavaScriptu, ale určitý JavaScriptový engine ji ještě nepodporuje.
+Polyfilling is a term for making a substitute for a method that exists in the JavaScript specification, but is not yet supported by a particular JavaScript engine.
 
-Pak ji můžeme implementovat ručně a vsadit ji do zabudovaného prototypu.
+We may then implement it manually and populate the built-in prototype with it.
 
-Například:
+For instance:
 
 ```js run
-if (!String.prototype.repeat) { // pokud žádná taková metoda není,
-  // přidáme ji do prototypu
+if (!String.prototype.repeat) { // if there's no such method
+  // add it to the prototype
 
   String.prototype.repeat = function(n) {
-    // opakuje řetězec n-krát
+    // repeat the string n times
 
-    // ve skutečnosti by kód měl být trochu složitější
-    // (úplný algoritmus je ve specifikaci),
-    // ale i nedokonalý polyfill se často považuje za dost dobrý
+    // actually, the code should be a little bit more complex than that
+    // (the full algorithm is in the specification)
+    // but even an imperfect polyfill is often considered good enough
     return new Array(n + 1).join(this);
   };
 }
@@ -155,22 +155,22 @@ alert( "La".repeat(3) ); // LaLaLa
 ```
 
 
-## Vypůjčení z prototypů
+## Borrowing from prototypes
 
-V kapitole <info:call-apply-decorators#method-borrowing> jsme hovořili o vypůjčování metod.
+In the chapter <info:call-apply-decorators#method-borrowing> we talked about method borrowing.
 
-To se děje tak, že vezmeme metodu z jednoho objektu a zkopírujeme ji do druhého.
+That's when we take a method from one object and copy it into another.
 
-Některé metody z nativních prototypů se vypůjčují často.
+Some methods of native prototypes are often borrowed.
 
-Například jestliže vytváříme objekt podobný poli, můžeme do něj chtít zkopírovat některé metody z `Array`.
+For instance, if we're making an array-like object, we may want to copy some `Array` methods to it.
 
-Například:
+E.g.
 
 ```js run
 let obj = {
-  0: "Ahoj",
-  1: "světe!",
+  0: "Hello",
+  1: "world!",
   length: 2,
 };
 
@@ -178,21 +178,21 @@ let obj = {
 obj.join = Array.prototype.join;
 */!*
 
-alert( obj.join(',') ); // Ahoj,světe!
+alert( obj.join(',') ); // Hello,world!
 ```
 
-Funguje to, protože interní algoritmus vestavěné metody `join` se zajímá jen o správné indexy a vlastnost `length`. Nekontroluje, zda objekt je skutečně pole. Takto se chová mnoho zabudovaných metod.
+It works because the internal algorithm of the built-in `join` method only cares about the correct indexes and the `length` property. It doesn't check if the object is indeed an array. Many built-in methods are like that.
 
-Další možností je dědit nastavením `obj.__proto__` na `Array.prototype`, takže v `obj` budou automaticky dostupné všechny metody `Array`.
+Another possibility is to inherit by setting `obj.__proto__` to `Array.prototype`, so all `Array` methods are automatically available in `obj`.
 
-To je však nemožné, pokud již `obj` dědí z jiného objektu. Pamatujte, že můžeme dědit jen z jednoho objektu najednou.
+But that's impossible if `obj` already inherits from another object. Remember, we only can inherit from one object at a time.
 
-Vypůjčování metod je flexibilní a umožňuje nám smíchat funkcionality z různých objektů, jestliže je potřebujeme.
+Borrowing methods is flexible, it allows to mix functionalities from different objects if needed.
 
-## Shrnutí
+## Summary
 
-- Všechny vestavěné objekty se chovají podle stejného vzorce:
-    - Metody jsou uloženy v prototypu (`Array.prototype`, `Object.prototype`, `Date.prototype`, atd.)
-    - Samotný objekt si ukládá pouze data (prvky pole, vlastnosti objektu, datum)
-- Rovněž primitivy mají metody uložené v prototypech wrapperů: `Number.prototype`, `String.prototype` a `Boolean.prototype`. Wrappery nemají pouze `undefined` a `null`.
-- Vestavěné prototypy lze modifikovat nebo do nich vkládat nové metody. Měnit je se však nedoporučuje. Pravděpodobně jediný přijatelný případ je, když přidáváme nový standard, ale JavaScriptový engine ho ještě nepodporuje.
+- All built-in objects follow the same pattern:
+    - The methods are stored in the prototype (`Array.prototype`, `Object.prototype`, `Date.prototype`, etc.)
+    - The object itself stores only the data (array items, object properties, the date)
+- Primitives also store methods in prototypes of wrapper objects: `Number.prototype`, `String.prototype` and `Boolean.prototype`. Only `undefined` and `null` do not have wrapper objects
+- Built-in prototypes can be modified or populated with new methods. But it's not recommended to change them. The only allowable case is probably when we add-in a new standard, but it's not yet supported by the JavaScript engine

@@ -3,326 +3,326 @@ libs:
 
 ---
 
-# Vazby funkcí
+# Function binding
 
-Když předáváme objektové metody jako callbacky, například do `setTimeout`, nastává známý problém: „ztráta `this`“.
+When passing object methods as callbacks, for instance to `setTimeout`, there's a known problem: "losing `this`".
 
-V této kapitole uvidíme způsoby, jak to opravit.
+In this chapter we'll see the ways to fix it.
 
-## Ztráta „this“
+## Losing "this"
 
-Už jsme viděli příklady ztráty `this`. Jakmile je metoda předána někde odděleně od objektu, `this` je ztraceno.
+We've already seen examples of losing `this`. Once a method is passed somewhere separately from the object -- `this` is lost.
 
-Tímto způsobem se to může stát se `setTimeout`:
+Here's how it may happen with `setTimeout`:
 
 ```js run
-let uživatel = {
-  křestníJméno: "Jan",
-  řekniAhoj() {
-    alert(`Ahoj, ${this.křestníJméno}!`);
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
   }
 };
 
 *!*
-setTimeout(uživatel.řekniAhoj, 1000); // Ahoj, undefined!
+setTimeout(user.sayHi, 1000); // Hello, undefined!
 */!*
 ```
 
-Jak vidíme, výstup nezobrazí jako `this.křestníJméno` „Jan“, ale `undefined`!
+As we can see, the output shows not "John" as `this.firstName`, but `undefined`!
 
-Je to proto, že `setTimeout` obdrží funkci `uživatel.řekniAhoj` odděleně od objektu. Poslední řádek lze přepsat na:
+That's because `setTimeout` got the function `user.sayHi`, separately from the object. The last line can be rewritten as:
 
 ```js
-let f = uživatel.řekniAhoj;
-setTimeout(f, 1000); // ztráta kontextu uživatel
+let f = user.sayHi;
+setTimeout(f, 1000); // lost user context
 ```
 
-Metoda `setTimeout` v prohlížeči je trochu zvláštní: při volání funkce nastaví `this=window` (v Node.js se `this` nastaví na objekt časovače, ale na tom zde opravdu nezáleží). Takže pro `this.křestníJméno` se funkce pokusí načíst `window.křestníJméno`, které neexistuje. V jiných podobných případech se `this` obvykle prostě nastaví na `undefined`.
+The method `setTimeout` in-browser is a little special: it sets `this=window` for the function call (for Node.js, `this` becomes the timer object, but doesn't really matter here). So for `this.firstName` it tries to get `window.firstName`, which does not exist. In other similar cases, usually `this` just becomes `undefined`.
 
-Tato úloha je vcelku typická -- chceme předat objektovou metodu někam jinam (zde do plánovače), kde bude volána. Jak zajistit, aby byla volána ve správném kontextu?
+The task is quite typical -- we want to pass an object method somewhere else (here -- to the scheduler) where it will be called. How to make sure that it will be called in the right context?
 
-## Řešení 1: wrapper
+## Solution 1: a wrapper
 
-Nejjednodušší řešení je použít wrapperovou funkci:
+The simplest solution is to use a wrapping function:
 
 ```js run
-let uživatel = {
-  křestníJméno: "Jan",
-  řekniAhoj() {
-    alert(`Ahoj, ${this.křestníJméno}!`);
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
   }
 };
 
 *!*
 setTimeout(function() {
-  uživatel.řekniAhoj(); // Ahoj, Jan!
+  user.sayHi(); // Hello, John!
 }, 1000);
 */!*
 ```
 
-Nyní to funguje, protože funkce si načte `uživatel` z vnějšího lexikálního prostředí a pak tuto metodu normálně zavolá.
+Now it works, because it receives `user` from the outer lexical environment, and then calls the method normally.
 
-Totéž, ale kratší:
+The same, but shorter:
 
 ```js
-setTimeout(() => uživatel.řekniAhoj(), 1000); // Ahoj, Jan!
+setTimeout(() => user.sayHi(), 1000); // Hello, John!
 ```
 
-Vypadá to dobře, ale v naší struktuře kódu se objevuje drobná zranitelnost.
+Looks fine, but a slight vulnerability appears in our code structure.
 
-Co když se před spuštěním `setTimeout` (je tam jednosekundová prodleva!) změní hodnota proměnné `uživatel`? Pak bude náhle zavolán nesprávný objekt!
+What if before `setTimeout` triggers (there's one second delay!) `user` changes value? Then, suddenly, it will call the wrong object!
 
 
 ```js run
-let uživatel = {
-  křestníJméno: "Jan",
-  řekniAhoj() {
-    alert(`Ahoj, ${this.křestníJméno}!`);
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
   }
 };
 
-setTimeout(() => uživatel.řekniAhoj(), 1000);
+setTimeout(() => user.sayHi(), 1000);
 
-// ...hodnota proměnné uživatel se za 1 sekundu změní
-uživatel = {
-  řekniAhoj() { alert("Jiný uživatel v setTimeout!"); }
+// ...the value of user changes within 1 second
+user = {
+  sayHi() { alert("Another user in setTimeout!"); }
 };
 
-// Jiný uživatel v setTimeout!
+// Another user in setTimeout!
 ```
 
-Další řešení nám zaručuje, že se nic takového nestane.
+The next solution guarantees that such thing won't happen.
 
-## Řešení 2: metoda bind
+## Solution 2: bind
 
-Funkce poskytují vestavěnou metodu [bind](mdn:js/Function/bind), která nám umožňuje `this` pevně nastavit.
+Functions provide a built-in method [bind](mdn:js/Function/bind) that allows to fix `this`.
 
-Základní syntaxe je:
+The basic syntax is:
 
 ```js
-// složitější syntaxe přijde o něco později
-let vázanáFunkce = funkce.bind(kontext);
+// more complex syntax will come a little later
+let boundFunc = func.bind(context);
 ```
 
-Výsledkem `funkce.bind(kontext)` je speciální „exotický objekt“ podobný funkci, který lze volat jako funkci a který transparentně předá volání funkci `funkce` s nastavením `this=kontext`.
+The result of `func.bind(context)` is a special function-like "exotic object", that is callable as function and transparently passes the call to `func` setting `this=context`.
 
-Jinými slovy, volání funkce `vázanáFunkce` je jako volání `funkce` s pevným `this`.
+In other words, calling `boundFunc` is like `func` with fixed `this`.
 
-Například zde`funkceUživatel` předá volání funkci `funkce` s `this=uživatel`:
+For instance, here `funcUser` passes a call to `func` with `this=user`:
 
 ```js run  
-let uživatel = {
-  křestníJméno: "Jan"
+let user = {
+  firstName: "John"
 };
 
-function funkce() {
-  alert(this.křestníJméno);
+function func() {
+  alert(this.firstName);
 }
 
 *!*
-let funkceUživatel = funkce.bind(uživatel);
-funkceUživatel(); // Jan  
+let funcUser = func.bind(user);
+funcUser(); // John  
 */!*
 ```
 
-Zde je `funkce.bind(uživatel)` jako „vázaná varianta“ `funkce` s napevno nastaveným `this=uživatel`.
+Here `func.bind(user)` as a "bound variant" of `func`, with fixed `this=user`.
 
-Všechny argumenty se předávají do původní `funkce` „tak, jak jsou“, například:
+All arguments are passed to the original `func` "as is", for instance:
 
 ```js run  
-let uživatel = {
-  křestníJméno: "Jan"
+let user = {
+  firstName: "John"
 };
 
-function funkce(věta) {
-  alert(věta + ', ' + this.křestníJméno);
+function func(phrase) {
+  alert(phrase + ', ' + this.firstName);
 }
 
-// navážeme this na uživatele
-let funkceUživatel = funkce.bind(uživatel);
+// bind this to user
+let funcUser = func.bind(user);
 
 *!*
-funkceUživatel("Ahoj"); // Ahoj, Jan (argument "Ahoj" je předán a this=uživatel)
+funcUser("Hello"); // Hello, John (argument "Hello" is passed, and this=user)
 */!*
 ```
 
-Zkusme to nyní s objektovou metodou:
+Now let's try with an object method:
 
 
 ```js run
-let uživatel = {
-  křestníJméno: "Jan",
-  řekniAhoj() {
-    alert(`Ahoj, ${this.křestníJméno}!`);
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
   }
 };
 
 *!*
-let řekniAhoj = uživatel.řekniAhoj.bind(uživatel); // (*)
+let sayHi = user.sayHi.bind(user); // (*)
 */!*
 
-// můžeme ji spustit bez objektu
-řekniAhoj(); // Ahoj, Jan!
+// can run it without an object
+sayHi(); // Hello, John!
 
-setTimeout(řekniAhoj, 1000); // Ahoj, Jan!
+setTimeout(sayHi, 1000); // Hello, John!
 
-// i když se hodnota proměnné uživatel během 1 sekundy změní,
-// řekniAhoj použije předem navázanou hodnotu
-uživatel = {
-  řekniAhoj() { alert("Jiný uživatel v setTimeout!"); }
+// even if the value of user changes within 1 second
+// sayHi uses the pre-bound value which is reference to the old user object
+user = {
+  sayHi() { alert("Another user in setTimeout!"); }
 };
 ```
 
-Na řádku `(*)` vezmeme metodu `uživatel.řekniAhoj` a navážeme ji na `uživatel`. Funkce `řekniAhoj` je „vázaná“ funkce, která může být volána samostatně nebo předána do `setTimeout` -- na tom nezáleží, kontext bude správně.
+In the line `(*)` we take the method `user.sayHi` and bind it to `user`. The `sayHi` is a "bound" function, that can be called alone or passed to `setTimeout` -- doesn't matter, the context will be right.
 
-Zde vidíme, že argumenty se předají „tak, jak jsou“, jen `this` bude pevně nastaveno funkcí `bind`:
+Here we can see that arguments are passed "as is", only `this` is fixed by `bind`:
 
 ```js run
-let uživatel = {
-  křestníJméno: "Jan",
-  řekni(věta) {
-    alert(`${věta}, ${this.křestníJméno}!`);
+let user = {
+  firstName: "John",
+  say(phrase) {
+    alert(`${phrase}, ${this.firstName}!`);
   }
 };
 
-let řekni = uživatel.řekni.bind(uživatel);
+let say = user.say.bind(user);
 
-řekni("Ahoj"); // Ahoj, Jan! (argument "Ahoj" je předán do řekni)
-řekni("Nashle"); // Nashle, Jan! ("Nashle" je předán do řekni)
+say("Hello"); // Hello, John! ("Hello" argument is passed to say)
+say("Bye"); // Bye, John! ("Bye" is passed to say)
 ```
 
-````smart header="Pohodlná metoda: `bindAll`"
-Jestliže objekt obsahuje mnoho metod a my je plánujeme aktivně předávat, můžeme je navázat všechny ve smyčce:
+````smart header="Convenience method: `bindAll`"
+If an object has many methods and we plan to actively pass it around, then we could bind them all in a loop:
 
 ```js
-for (let klíč in uživatel) {
-  if (typeof uživatel[klíč] == 'function') {
-    uživatel[klíč] = uživatel[klíč].bind(uživatel);
+for (let key in user) {
+  if (typeof user[key] == 'function') {
+    user[key] = user[key].bind(user);
   }
 }
 ```
 
-Knihovny JavaScriptu poskytují funkce i pro praktické hromadné navazování, např. [_.bindAll(obj)](http://lodash.com/docs#bindAll) v knihovně Lodash.
+JavaScript libraries also provide functions for convenient mass binding , e.g. [_.bindAll(object, methodNames)](http://lodash.com/docs#bindAll) in lodash.
 ````
 
-## Parciální funkce
+## Partial functions
 
-Doposud jsme hovořili pouze o vázání `this`. Učiňme další krok.
+Until now we have only been talking about binding `this`. Let's take it a step further.
 
-Můžeme vázat nejen `this`, ale i argumenty. To se dělá zřídkakdy, ale občas se to může hodit.
+We can bind not only `this`, but also arguments. That's rarely done, but sometimes can be handy.
 
-Úplná syntaxe funkce `bind`:
-
-```js
-let vázanáFunkce = funkce.bind(kontext, [arg1], [arg2], ...);
-```
-
-Umožní nám navázat kontext jako `this` a počáteční argumenty funkce.
-
-Mějme například funkci násobení `krát(a, b)`:
+The full syntax of `bind`:
 
 ```js
-function krát(a, b) {
+let bound = func.bind(context, [arg1], [arg2], ...);
+```
+
+It allows to bind context as `this` and starting arguments of the function.
+
+For instance, we have a multiplication function `mul(a, b)`:
+
+```js
+function mul(a, b) {
   return a * b;
 }
 ```
 
-Použitím `bind` vytvořme funkci `dvakrát`, která na ní bude založena:
+Let's use `bind` to create a function `double` on its base:
 
 ```js run
-function krát(a, b) {
+function mul(a, b) {
   return a * b;
 }
 
 *!*
-let dvakrát = krát.bind(null, 2);
+let double = mul.bind(null, 2);
 */!*
 
-alert( dvakrát(3) ); // = krát(2, 3) = 6
-alert( dvakrát(4) ); // = krát(2, 4) = 8
-alert( dvakrát(5) ); // = krát(2, 5) = 10
+alert( double(3) ); // = mul(2, 3) = 6
+alert( double(4) ); // = mul(2, 4) = 8
+alert( double(5) ); // = mul(2, 5) = 10
 ```
 
-Volání `krát.bind(null, 2)` vytvoří novou funkci `dvakrát`, která předává volání funkci `krát`, přičemž napevno nastaví `null` jako kontext a `2` jako první argument. Další argumenty se předají „tak, jak jsou“.
+The call to `mul.bind(null, 2)` creates a new function `double` that passes calls to `mul`, fixing `null` as the context and `2` as the first argument. Further arguments are passed "as is".
 
-To se nazývá [parciální (částečná) aplikace funkce](https://en.wikipedia.org/wiki/Partial_application) -- vytvoříme novou funkci tak, že napevno nastavíme některé parametry existující funkce.
+That's called [partial function application](https://en.wikipedia.org/wiki/Partial_application) -- we create a new function by fixing some parameters of the existing one.
 
-Prosíme všimněte si, že zde ve skutečnosti nepoužíváme `this`. Funkce `bind` jej však vyžaduje, takže musíme předat něco jako `null`.
+Please note that we actually don't use `this` here. But `bind` requires it, so we must put in something like `null`.
 
-V níže uvedeném kódu funkce `třikrát` hodnotu ztrojnásobí:
+The function `triple` in the code below triples the value:
 
 ```js run
-function krát(a, b) {
+function mul(a, b) {
   return a * b;
 }
 
 *!*
-let třikrát = krát.bind(null, 3);
+let triple = mul.bind(null, 3);
 */!*
 
-alert( třikrát(3) ); // = krát(3, 3) = 9
-alert( třikrát(4) ); // = krát(3, 4) = 12
-alert( třikrát(5) ); // = krát(3, 5) = 15
+alert( triple(3) ); // = mul(3, 3) = 9
+alert( triple(4) ); // = mul(3, 4) = 12
+alert( triple(5) ); // = mul(3, 5) = 15
 ```
 
-Proč obvykle vytváříme parciální funkci?
+Why do we usually make a partial function?
 
-Výhodou je, že můžeme vytvořit nezávislou funkci s čitelným názvem (`dvakrát`, `třikrát`). Můžeme ji používat, aniž bychom pokaždé museli uvádět první argument, jelikož ten je pevně nastaven pomocí `bind`.
+The benefit is that we can create an independent function with a readable name (`double`, `triple`). We can use it and not provide the first argument every time as it's fixed with `bind`.
 
-V jiných případech je parciální aplikace užitečná, když máme velmi generickou funkci a pro své pohodlí chceme její méně univerzální variantu.
+In other cases, partial application is useful when we have a very generic function and want a less universal variant of it for convenience.
 
-Například máme funkci `pošli(odKoho, komu, text)`. Uvnitř objektu `uživatel` pak můžeme chtít používat její parciální variantu: `pošliNěkomu(komu, text)`, která bude posílat od aktuálního uživatele.
+For instance, we have a function `send(from, to, text)`. Then, inside a `user` object we may want to use a partial variant of it: `sendTo(to, text)` that sends from the current user.
 
-## Parciální funkce bez kontextu
+## Going partial without context
 
-Co kdybychom chtěli napevno nastavit některé argumenty, ale ne kontext `this`? Například v objektové metodě.
+What if we'd like to fix some arguments, but not the context `this`? For example, for an object method.
 
-Nativní `bind` nám to neumožňuje. Nemůžeme jednoduše vypustit kontext a přeskočit na argumenty.
+The native `bind` does not allow that. We can't just omit the context and jump to arguments.
 
-Naštěstí můžeme snadno implementovat funkci `parciální`, která bude vázat pouze argumenty.
+Fortunately, a function `partial` for binding only arguments can be easily implemented.
 
-Například takto:
+Like this:
 
 ```js run
 *!*
-function parciální(funkce, ...vázanéArgumenty) {
-  return function(...argumenty) { // (*)
-    return funkce.call(this, ...vázanéArgumenty, ...argumenty);
+function partial(func, ...argsBound) {
+  return function(...args) { // (*)
+    return func.call(this, ...argsBound, ...args);
   }
 }
 */!*
 
-// Použití:
-let uživatel = {
-  křestníJméno: "Jan",
-  řekni(čas, věta) {
-    alert(`[${čas}] ${this.křestníJméno}: ${věta}!`);
+// Usage:
+let user = {
+  firstName: "John",
+  say(time, phrase) {
+    alert(`[${time}] ${this.firstName}: ${phrase}!`);
   }
 };
 
-// přidáme parciální metodu s pevným časem
-uživatel.řekniNyní = parciální(uživatel.řekni, new Date().getHours() + ':' + new Date().getMinutes());
+// add a partial method with fixed time
+user.sayNow = partial(user.say, new Date().getHours() + ':' + new Date().getMinutes());
 
-uživatel.řekniNyní("Ahoj");
-// Něco jako:
-// [10:00] Jan: Ahoj!
+user.sayNow("Hello");
+// Something like:
+// [10:00] John: Hello!
 ```
 
-Výsledkem volání `parciální(funkce[, arg1, arg2...])` je wrapper `(*)`, který volá funkci `funkce`:
-- Se stejným `this`, které obdrží (pro volání `uživatel.řekniNyní` to je `uživatel`).
-- Pak jí předá `...vázanéArgumenty` -- argumenty z volání funkce `parciální` (`"10:00"`).
-- Pak jí předá `...argumenty` -- argumenty předané wrapperu (`"Ahoj"`).
+The result of `partial(func[, arg1, arg2...])` call is a wrapper `(*)` that calls `func` with:
+- Same `this` as it gets (for `user.sayNow` call it's `user`)
+- Then gives it `...argsBound` -- arguments from the `partial` call (`"10:00"`)
+- Then gives it `...args` -- arguments given to the wrapper (`"Hello"`)
 
-S roztaženou syntaxí je tak lehké to udělat, že?
+So easy to do it with the spread syntax, right?
 
-Navíc je tady již připravená implementace funkce [_.partial](https://lodash.com/docs#partial) z knihovny Lodash.
+Also there's a ready [_.partial](https://lodash.com/docs#partial) implementation from lodash library.
 
-## Shrnutí
+## Summary
 
-Metoda `funkce.bind(kontext, ...argumenty)` vrací „vázanou variantu“ funkce `funkce`, která pevně nastaví kontext `this` a první argumenty, jsou-li předány.
+Method `func.bind(context, ...args)` returns a "bound variant" of function `func` that fixes the context `this` and first arguments if given.
 
-Obvykle používáme `bind` k pevnému nastavení `this` pro objektovou metodu, abychom ji mohli někam předat, například do funkce `setTimeout`.
+Usually we apply `bind` to fix `this` for an object method, so that we can pass it somewhere. For example, to `setTimeout`.
 
-Když pevně nastavíme některé argumenty existující funkce, výsledná (méně univerzální) funkce se nazývá *parciálně (částečně) aplikovaná* nebo *parciální (částečná)*.
+When we fix some arguments of an existing function, the resulting (less universal) function is called *partially applied* or *partial*.
 
-Parciální funkce se hodí, když nechceme stále znovu a znovu opakovat tentýž argument. Například máme-li funkci `pošli(odKoho, komu)` a argument `odKoho` by měl být v naší úloze vždy stejný, můžeme vytvořit parciální funkci a pokračovat s ní.
+Partials are convenient when we don't want to repeat the same argument over and over again. Like if we have a `send(from, to)` function, and `from` should always be the same for our task, we can get a partial and go on with it.

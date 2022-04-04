@@ -1,40 +1,40 @@
-Řešení pomocí cyklu:
+The solution using a loop:
 
 ```js run
-function sečtiDo(n) {
-  let součet = 0;
+function sumTo(n) {
+  let sum = 0;
   for (let i = 1; i <= n; i++) {
-    součet += i;
+    sum += i;
   }
-  return součet;
+  return sum;
 }
 
-alert( sečtiDo(100) );
+alert( sumTo(100) );
 ```
 
-Řešení pomocí rekurze:
+The solution using recursion:
 
 ```js run
-function sečtiDo(n) {
+function sumTo(n) {
   if (n == 1) return 1;
-  return n + sečtiDo(n - 1);
+  return n + sumTo(n - 1);
 }
 
-alert( sečtiDo(100) );
+alert( sumTo(100) );
 ```
 
-Řešení pomocí vzorce: `sečtiDo(n) = n*(n+1)/2`:
+The solution using the formula: `sumTo(n) = n*(n+1)/2`:
 
 ```js run
-function sečtiDo(n) {
+function sumTo(n) {
   return n * (n + 1) / 2;
 }
 
-alert( sečtiDo(100) );
+alert( sumTo(100) );
 ```
 
-P.S. Nejrychlejší řešení je pochopitelně pomocí vzorce. Pro jakékoli číslo `n` vykonává pouze 3 operace. Matematika pomáhá!
+P.S. Naturally, the formula is the fastest solution. It uses only 3 operations for any number `n`. The math helps!
 
-Druhá nejlepší co do rychlosti je varianta s cyklem. V rekurzívní i v cyklové variantě sčítáme stejná čísla, ale rekurze vyžaduje vnořená volání a správu prováděcího zásobníku. To také vyžaduje zdroje, takže je to pomalejší.
+The loop variant is the second in terms of speed. In both the recursive and the loop variant we sum the same numbers. But the recursion involves nested calls and execution stack management. That also takes resources, so it's slower.
 
-P.P.S. Některé enginy podporují optimalizaci „koncového volání“: je-li rekurzívní volání ve funkci úplně poslední (jako ve výše uvedené `sečtiDo`), pak se nemusí obnovovat provádění vnější funkce, takže si engine nemusí pamatovat její prováděcí kontext. To odstraní paměťovou zátěž, takže bude možné provést výpočet `sečtiDo(100000)`. Pokud však engine JavaScriptu nepodporuje optimalizaci koncového volání (a většina enginů ji nepodporuje), nastane chyba: bude překročena maximální velikost zásobníku, protože celková velikost zásobníku je obvykle omezena.
+P.P.S. Some engines support the "tail call" optimization: if a recursive call is the very last one in the function (like in `sumTo` above), then the outer function will not need to resume the execution, so the engine doesn't need to remember its execution context. That removes the burden on memory, so counting `sumTo(100000)` becomes possible. But if the JavaScript engine does not support tail call optimization (most of them don't), there will be an error: maximum stack size exceeded, because there's usually a limitation on the total stack size.

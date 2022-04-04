@@ -2,20 +2,20 @@ importance: 4
 
 ---
 
-# Je proměnná viditelná?
+# Is variable visible?
 
-Jaký bude výsledek tohoto kódu?
+What will be the result of this code?
 
 ```js
 let x = 1;
 
-function funkce() {
+function func() {
   console.log(x); // ?
 
   let x = 2;
 }
 
-funkce();
+func();
 ```
 
-P.S. V tomto úkolu je chyták. Řešení není očividné.
+P.S. There's a pitfall in this task. The solution is not obvious.

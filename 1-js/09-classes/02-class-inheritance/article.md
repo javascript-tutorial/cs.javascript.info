@@ -1,221 +1,221 @@
 
-# Třídní dědičnost
+# Class inheritance
 
-Třídní dědičnost je způsob, jak může jedna třída rozšířit jinou.
+Class inheritance is a way for one class to extend another class.
 
-Můžeme tedy vytvořit novou funkcionalitu nad existující.
+So we can create new functionality on top of the existing.
 
-## Klíčové slovo „extends“
+## The "extends" keyword
 
-Řekněme, že máme třídu `Zvíře`:
+Let's say we have class `Animal`:
 
 ```js
-class Zvíře {
-  constructor(jméno) {
-    this.rychlost = 0;
-    this.jméno = jméno;
+class Animal {
+  constructor(name) {
+    this.speed = 0;
+    this.name = name;
   }
-  běž(rychlost) {
-    this.rychlost = rychlost;
-    alert(`${this.jméno} běží rychlostí ${this.rychlost}.`);
+  run(speed) {
+    this.speed = speed;
+    alert(`${this.name} runs with speed ${this.speed}.`);
   }
-  stůj() {
-    this.rychlost = 0;
-    alert(`${this.jméno} klidně stojí.`);
+  stop() {
+    this.speed = 0;
+    alert(`${this.name} stands still.`);
   }
 }
 
-let zvíře = new Zvíře("Moje zvíře");
+let animal = new Animal("My animal");
 ```
 
-Takto můžeme reprezentovat objekt `zvíře` a třídu `Zvíře` graficky:
+Here's how we can represent `animal` object and `Animal` class graphically:
 
 ![](rabbit-animal-independent-animal.svg)
 
-...A rádi bychom vytvořili další třídu `Králík`.
+...And we would like to create another `class Rabbit`.
 
-Protože králíci jsou zvířata, třída `Králík` by měla být založena na třídě `Zvíře` a mít přístup k metodám zvířete, aby králíci mohli dělat to, co dělají „všeobecná“ zvířata.
+As rabbits are animals, `Rabbit` class should be based on `Animal`, have access to animal methods, so that rabbits can do what "generic" animals can do.
 
-Syntaxe pro rozšíření jiné třídy je: `class Potomek extends Rodič`.
+The syntax to extend another class is: `class Child extends Parent`.
 
-Vytvořme třídu `Králík`, která bude zděděna z třídy `Zvíře`:
+Let's create `class Rabbit` that inherits from `Animal`:
 
 ```js
 *!*
-class Králík extends Zvíře {
+class Rabbit extends Animal {
 */!*
-  schovejSe() {
-    alert(`${this.jméno} se schovává!`);
+  hide() {
+    alert(`${this.name} hides!`);
   }
 }
 
-let králík = new Králík("Bílý králík");
+let rabbit = new Rabbit("White Rabbit");
 
-králík.běž(5); // Bílý králík běží rychlostí 5.
-králík.schovejSe(); // Bílý králík se schovává!
+rabbit.run(5); // White Rabbit runs with speed 5.
+rabbit.hide(); // White Rabbit hides!
 ```
 
-Objekt třídy `Králík` má přístup jak k metodám třídy `Králík`, např. `králík.schovejSe()`, tak k metodám třídy `Zvíře`, např. `králík.běž()`.
+Object of `Rabbit` class have access both to `Rabbit` methods, such as `rabbit.hide()`, and also to `Animal` methods, such as `rabbit.run()`.
 
-Interně klíčové slovo `extends` funguje na principu staré dobré mechaniky prototypů. Nastaví `Králík.prototype.[[Prototype]]` na `Zvíře.prototype`. Jestliže tedy metoda není nalezena v `Králík.prototype`, JavaScript ji vezme ze `Zvíře.prototype`.
+Internally, `extends` keyword works using the good old prototype mechanics. It sets `Rabbit.prototype.[[Prototype]]` to `Animal.prototype`. So, if a method is not found in `Rabbit.prototype`, JavaScript takes it from `Animal.prototype`.
 
 ![](animal-rabbit-extends.svg)
 
-Například aby engine nalezl metodu `králík.běž`, prověří (na obrázku zdola nahoru):
-1. Objekt `králík` (nemá žádné `běž`).
-2. Jeho prototyp, tedy `Králík.prototype` (má `schovejSe`, ale ne `běž`).
-3. Jeho prototyp, což je (díky `extends`) `Zvíře.prototype`, který konečně má metodu `běž`.
+For instance, to find `rabbit.run` method, the engine checks (bottom-up on the picture):
+1. The `rabbit` object (has no `run`).
+2. Its prototype, that is `Rabbit.prototype` (has `hide`, but not `run`).
+3. Its prototype, that is (due to `extends`) `Animal.prototype`, that finally has the `run` method.
 
-Jak si můžeme pamatovat z kapitoly <info:native-prototypes>, samotný JavaScript používá prototypovou dědičnost pro vestavěné objekty. Například `Date.prototype.[[Prototype]]` je `Object.prototype`. To je důvod, proč mají data přístup k obecným objektovým metodám.
+As we can recall from the chapter <info:native-prototypes>, JavaScript itself uses prototypal inheritance for built-in objects. E.g. `Date.prototype.[[Prototype]]` is `Object.prototype`. That's why dates have access to generic object methods.
 
-````smart header="Za `extends` smí být jakýkoli výraz"
-Syntaxe třídy umožňuje za `extends` specifikovat nejenom třídu, ale jakýkoli výraz.
+````smart header="Any expression is allowed after `extends`"
+Class syntax allows to specify not just a class, but any expression after `extends`.
 
-Například volání funkce, které generuje rodičovskou třídu:
+For instance, a function call that generates the parent class:
 
 ```js run
-function f(věta) {
+function f(phrase) {
   return class {
-    řekniAhoj() { alert(věta); }
+    sayHi() { alert(phrase); }
   };
 }
 
 *!*
-class Uživatel extends f("Ahoj") {}
+class User extends f("Hello") {}
 */!*
 
-new Uživatel().řekniAhoj(); // Ahoj
+new User().sayHi(); // Hello
 ```
-Zde je třída `Uživatel` zděděna z výsledku volání `f("Ahoj")`.
+Here `class User` inherits from the result of `f("Hello")`.
 
-To může být užitečné pro pokročilé programovací vzory, když používáme funkce ke generování tříd závisejících na mnoha podmínkách a můžeme z nich dědit.
+That may be useful for advanced programming patterns when we use functions to generate classes depending on many conditions and can inherit from them.
 ````
 
-## Přepisování metod
+## Overriding a method
 
-Nyní se posuňme dál a přepišme metodu. Standardně se všechny metody, které nejsou uvedeny v `class Králík`, berou z `class Zvíře` rovnou tak, „jak jsou“.
+Now let's move forward and override a method. By default, all methods that are not specified in `class Rabbit` are taken directly "as is" from `class Animal`.
 
-Jestliže však specifikujeme ve třídě `Králík` svou vlastní metodu, např. `stůj()`, bude místo toho použita ona:
+But if we specify our own method in `Rabbit`, such as `stop()` then it will be used instead:
 
 ```js
-class Králík extends Zvíře {
-  stůj() {
-    // ...nyní bude při volání králík.stůj() použita tato metoda
-    // namísto stůj() ze třídy Zvíře
+class Rabbit extends Animal {
+  stop() {
+    // ...now this will be used for rabbit.stop()
+    // instead of stop() from class Animal
   }
 }
 ```
 
-Obvykle nechceme rodičovskou metodu úplně nahradit, ale spíše na ní stavět, abychom její funkcionalitu vylepšili nebo rozšířili. Uděláme něco v naší metodě, ale při tomto procesu, před ním nebo po něm voláme rodičovskou metodu.
+Usually we don't want to totally replace a parent method, but rather to build on top of it to tweak or extend its functionality. We do something in our method, but call the parent method before/after it or in the process.
 
-Třídy pro tento účel poskytují klíčové slovo `„super“`.
+Classes provide `"super"` keyword for that.
 
-- `super.metoda(...)` volá rodičovskou metodu.
-- `super(...)` volá rodičovský konstruktor (pouze uvnitř našeho konstruktoru).
+- `super.method(...)` to call a parent method.
+- `super(...)` to call a parent constructor (inside our constructor only).
 
-Například nechme našeho králíka, aby se po zastavení automaticky schoval:
+For instance, let our rabbit autohide when stopped:
 
 ```js run
-class Zvíře {
+class Animal {
 
-  constructor(jméno) {
-    this.rychlost = 0;
-    this.jméno = jméno;
+  constructor(name) {
+    this.speed = 0;
+    this.name = name;
   }
 
-  běž(rychlost) {
-    this.rychlost = rychlost;
-    alert(`${this.jméno} běží rychlostí ${this.rychlost}.`);
+  run(speed) {
+    this.speed = speed;
+    alert(`${this.name} runs with speed ${this.speed}.`);
   }
 
-  stůj() {
-    this.rychlost = 0;
-    alert(`${this.jméno} klidně stojí.`);
+  stop() {
+    this.speed = 0;
+    alert(`${this.name} stands still.`);
   }
 
 }
 
-class Králík extends Zvíře {
-  schovejSe() {
-    alert(`${this.jméno} se schovává!`);
+class Rabbit extends Animal {
+  hide() {
+    alert(`${this.name} hides!`);
   }
 
 *!*
-  stůj() {
-    super.stůj(); // volá rodičovskou metodu stůj
-    this.schovejSe(); // a poté schovejSe
+  stop() {
+    super.stop(); // call parent stop
+    this.hide(); // and then hide
   }
 */!*
 }
 
-let králík = new Králík("Bílý králík");
+let rabbit = new Rabbit("White Rabbit");
 
-králík.běž(5); // Bílý králík běží rychlostí 5.
-králík.stůj(); // Bílý králík klidně stojí. Bílý králík se schovává!
+rabbit.run(5); // White Rabbit runs with speed 5.
+rabbit.stop(); // White Rabbit stands still. White Rabbit hides!
 ```
 
-Nyní má `Králík` metodu `stůj`, která při provedení volá rodičovskou metodu `super.stůj()`.
+Now `Rabbit` has the `stop` method that calls the parent `super.stop()` in the process.
 
-````smart header="Šipkové funkce nemají `super`"
-Jak jsme zmínili v kapitole <info:arrow-functions>, šipkové funkce nemají `super`.
+````smart header="Arrow functions have no `super`"
+As was mentioned in the chapter <info:arrow-functions>, arrow functions do not have `super`.
 
-Pokud k němu přistoupíme, převezme se z vnější funkce. Například:
+If accessed, it's taken from the outer function. For instance:
 ```js
-class Králík extends Zvíře {
-  stůj() {
-    setTimeout(() => super.stůj(), 1000); // za 1 sekundu volá rodičovskou metodu stůj
+class Rabbit extends Animal {
+  stop() {
+    setTimeout(() => super.stop(), 1000); // call parent stop after 1sec
   }
 }
 ```
 
-`super` v šipkové funkci je stejné jako ve `stůj()`, funguje tedy tak, jak je zamýšleno. Kdybychom zde uvedli „obyčejnou“ funkci, nastala by chyba:
+The `super` in the arrow function is the same as in `stop()`, so it works as intended. If we specified a "regular" function here, there would be an error:
 
 ```js
-// Neočekávaný super
-setTimeout(function() { super.stůj() }, 1000);
+// Unexpected super
+setTimeout(function() { super.stop() }, 1000);
 ```
 ````
 
 
-## Přepisování konstruktorů
+## Overriding constructor
 
-S konstruktory se to začíná trochu zamotávat.
+With constructors it gets a little bit tricky.
 
-Až dosud `Králík` neměl svůj vlastní `constructor`.
+Until now, `Rabbit` did not have its own `constructor`.
 
-Podle [specifikace](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation), jestliže třída rozšiřuje jinou třídu a nemá `constructor`, vygeneruje se následující „prázdný“ `constructor`:
+According to the [specification](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation), if a class extends another class and has no `constructor`, then the following "empty" `constructor` is generated:
 
 ```js
-class Králík extends Zvíře {
-  // generován pro rozšiřující třídy bez vlastního konstruktoru
+class Rabbit extends Animal {
+  // generated for extending classes without own constructors
 *!*
-  constructor(...argumenty) {
-    super(...argumenty);
+  constructor(...args) {
+    super(...args);
   }
 */!*
 }
 ```
 
-Jak vidíme, v zásadě volá rodičovský `constructor` a předá mu všechny argumenty. To se stane, když si nenapíšeme svůj vlastní konstruktor.
+As we can see, it basically calls the parent `constructor` passing it all the arguments. That happens if we don't write a constructor of our own.
 
-Nyní přidejme do třídy `Králík` vlastní konstruktor, který bude navíc k vlastnosti `jméno` specifikovat vlastnost `délkaUcha`:
+Now let's add a custom constructor to `Rabbit`. It will specify the `earLength` in addition to `name`:
 
 ```js run
-class Zvíře {
-  constructor(jméno) {
-    this.rychlost = 0;
-    this.jméno = jméno;
+class Animal {
+  constructor(name) {
+    this.speed = 0;
+    this.name = name;
   }
   // ...
 }
 
-class Králík extends Zvíře {
+class Rabbit extends Animal {
 
 *!*
-  constructor(jméno, délkaUcha) {
-    this.rychlost = 0;
-    this.jméno = jméno;
-    this.délkaUcha = délkaUcha;
+  constructor(name, earLength) {
+    this.speed = 0;
+    this.name = name;
+    this.earLength = earLength;
   }
 */!*
 
@@ -223,408 +223,408 @@ class Králík extends Zvíře {
 }
 
 *!*
-// Nefunguje!
-let králík = new Králík("Bílý králík", 10); // Chyba: this není definováno.
+// Doesn't work!
+let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
 */!*
 ```
 
-Ouha! Obdrželi jsme chybu. Nyní nemůžeme vytvářet králíky. Co bylo špatně?
+Whoops! We've got an error. Now we can't create rabbits. What went wrong?
 
-Stručná odpověď zní:
+The short answer is:
 
-- **Konstruktory ve zděděných třídách musejí volat `super(...)` a (!) musejí to udělat před použitím `this`.**
+- **Constructors in inheriting classes must call `super(...)`, and (!) do it before using `this`.**
 
-...Ale proč? Co se tady děje? Tento požadavek zajisté vypadá podivně.
+...But why? What's going on here? Indeed, the requirement seems strange.
 
-Samozřejmě vysvětlení existuje. Pojďme do detailů, abychom doopravdy pochopili, co se tady odehrává.
+Of course, there's an explanation. Let's get into details, so you'll really understand what's going on.
 
-V JavaScriptu je rozdíl mezi konstruktorem zděděné třídy (tzv. „odvozeným konstruktorem“) a jinými funkcemi. Odvozený konstruktor má speciální interní vlastnost `[[ConstructorKind]]:"derived"`. To je speciální interní štítek.
+In JavaScript, there's a distinction between a constructor function of an inheriting class (so-called "derived constructor") and other functions. A derived constructor has a special internal property `[[ConstructorKind]]:"derived"`. That's a special internal label.
 
-Tato vlastnost ovlivňuje jeho chování s `new`.
+That label affects its behavior with `new`.
 
-- Když je pomocí `new` volána obvyklá funkce, vytvoří prázdný objekt a přiřadí jej do `this`.
-- Ale když se spustí odvozený konstruktor, neudělá to. Očekává, že tuto práci odvede rodičovský konstruktor.
+- When a regular function is executed with `new`, it creates an empty object and assigns it to `this`.
+- But when a derived constructor runs, it doesn't do this. It expects the parent constructor to do this job.
 
-Odvozený konstruktor tedy musí volat `super`, aby spustil svůj rodičovský (základní) konstruktor, jinak objekt pro `this` nebude vytvořen. A my dostaneme chybu.
+So a derived constructor must call `super` in order to execute its parent (base) constructor, otherwise the object for `this` won't be created. And we'll get an error.
 
-Aby konstruktor `Králík` fungoval, musí volat `super()` ještě před použitím `this`, například:
+For the `Rabbit` constructor to work, it needs to call `super()` before using `this`, like here:
 
 ```js run
-class Zvíře {
+class Animal {
 
-  constructor(jméno) {
-    this.rychlost = 0;
-    this.jméno = jméno;
+  constructor(name) {
+    this.speed = 0;
+    this.name = name;
   }
 
   // ...
 }
 
-class Králík extends Zvíře {
+class Rabbit extends Animal {
 
-  constructor(jméno, délkaUcha) {
+  constructor(name, earLength) {
 *!*
-    super(jméno);
+    super(name);
 */!*
-    this.délkaUcha = délkaUcha;
+    this.earLength = earLength;
   }
 
   // ...
 }
 
 *!*
-// nyní je to v pořádku
-let králík = new Králík("Bílý králík", 10);
-alert(králík.jméno); // Bílý králík
-alert(králík.délkaUcha); // 10
+// now fine
+let rabbit = new Rabbit("White Rabbit", 10);
+alert(rabbit.name); // White Rabbit
+alert(rabbit.earLength); // 10
 */!*
 ```
 
 
 
-### Přepisování třídních polí: záludnost
+### Overriding class fields: a tricky note
 
-```warn header="Pokročilá poznámka"
-Tato poznámka předpokládá, že již máte s třídami určité zkušenosti, možná i z jiných programovacích jazyků.
+```warn header="Advanced note"
+This note assumes you have a certain experience with classes, maybe in other programming languages.
 
-Poskytuje lepší náhled do jazyka a rovněž vysvětluje chování, které může být zdrojem chyb (ale ne příliš často).
+It provides better insight into the language and also explains the behavior that might be a source of bugs (but not very often).
 
-Pokud shledáte obtížným jí porozumět, prostě ji přeskočte a pokračujte ve čtení. Pak se k ní vraťte někdy později.
+If you find it difficult to understand, just go on, continue reading, then return to it some time later.
 ```
 
-Přepisovat můžeme nejen metody, ale i třídní pole.
+We can override not only methods, but also class fields.
 
-Nicméně když přistoupíme k přepsanému poli v rodičovském konstruktoru, je tady ošidné chování, poněkud odlišné od většiny ostatních programovacích jazyků.
+Although, there's a tricky behavior when we access an overridden field in parent constructor, quite different from most other programming languages.
 
-Uvažujme tento příklad:
+Consider this example:
 
 ```js run
-class Zvíře {
-  jméno = 'zvíře';
+class Animal {
+  name = 'animal';
 
   constructor() {
-    alert(this.jméno); // (*)
+    alert(this.name); // (*)
   }
 }
 
-class Králík extends Zvíře {
-  jméno = 'králík';
+class Rabbit extends Animal {
+  name = 'rabbit';
 }
 
-new Zvíře(); // zvíře
+new Animal(); // animal
 *!*
-new Králík(); // zvíře
+new Rabbit(); // animal
 */!*
 ```
 
-Zde třída `Králík` rozšiřuje třídu `Zvíře` a přepisuje pole `jméno` svou vlastní hodnotou.
+Here, class `Rabbit` extends `Animal` and overrides the `name` field with its own value.
 
-Ve třídě `Králík` není vlastní konstruktor, takže se zavolá konstruktor třídy `Zvíře`.
+There's no own constructor in `Rabbit`, so `Animal` constructor is called.
 
-Zajímavé je, že v obou případech `new Zvíře()` i `new Králík()` volání `alert` na řádku `(*)` zobrazí `zvíře`.
+What's interesting is that in both cases: `new Animal()` and `new Rabbit()`, the `alert` in the line `(*)` shows `animal`.
 
-**Jinými slovy, rodičovský konstruktor vždy používá svou vlastní hodnotu pole, ne přepsanou.**
+**In other words, the parent constructor always uses its own field value, not the overridden one.**
 
-Co je na tom zvláštního?
+What's odd about it?
 
-Pokud to ještě není jasné, prosíme porovnejte si to s metodami.
+If it's not clear yet, please compare with methods.
 
-Zde je stejný kód, ale místo pole `this.jméno` voláme metodu `this.zobrazJméno()`:
+Here's the same code, but instead of `this.name` field we call `this.showName()` method:
 
 ```js run
-class Zvíře {
-  zobrazJméno() {  // namísto this.jméno = 'zvíře'
-    alert('zvíře');
+class Animal {
+  showName() {  // instead of this.name = 'animal'
+    alert('animal');
   }
 
   constructor() {
-    this.zobrazJméno(); // namísto alert(this.jméno);
+    this.showName(); // instead of alert(this.name);
   }
 }
 
-class Králík extends Zvíře {
-  zobrazJméno() {
-    alert('králík');
+class Rabbit extends Animal {
+  showName() {
+    alert('rabbit');
   }
 }
 
-new Zvíře(); // zvíře
+new Animal(); // animal
 *!*
-new Králík(); // králík
+new Rabbit(); // rabbit
 */!*
 ```
 
-Prosíme všimněte si: nyní je výstup odlišný.
+Please note: now the output is different.
 
-A to je to, co přirozeně očekáváme. Když je v odvozené třídě volán rodičovský konstruktor, použije přepsanou metodu.
+And that's what we naturally expect. When the parent constructor is called in the derived class, it uses the overridden method.
 
-...Ale pro třídní pole tomu tak není. Jak bylo uvedeno, rodičovský konstruktor vždy používá rodičovské pole.
+...But for class fields it's not so. As said, the parent constructor always uses the parent field.
 
-Proč je zde tento rozdíl?
+Why is there a difference?
 
-Důvod spočívá v pořadí inicializace polí. Třídní pole je inicializováno:
-- Před konstruktorem rodičovské třídy (který nic nerozšiřuje),
-- ihned po `super()` pro odvozenou třídu.
+Well, the reason is the field initialization order. The class field is initialized:
+- Before constructor for the base class (that doesn't extend anything),
+- Immediately after `super()` for the derived class.
 
-V našem případě je `Králík` odvozená třída. Není v ní žádný `constructor()`. Jak bylo dříve uvedeno, je to totéž, jako by tam byl prázdný konstruktor obsahující pouze `super(...argumenty)`.
+In our case, `Rabbit` is the derived class. There's no `constructor()` in it. As said previously, that's the same as if there was an empty constructor with only `super(...args)`.
 
-Takže `new Králík()` volá `super()`, tím spustí rodičovský konstruktor, a (podle pravidla pro odvozené třídy) jsou až poté inicializována jeho třídní pole. Ve chvíli spuštění rodičovského konstruktoru ještě neexistují žádná pole třídy `Králík`, takže se použijí pole třídy `Zvíře`.
+So, `new Rabbit()` calls `super()`, thus executing the parent constructor, and (per the rule for derived classes) only after that its class fields are initialized. At the time of the parent constructor execution, there are no `Rabbit` class fields yet, that's why `Animal` fields are used.
 
-Tento jemný rozdíl mezi poli a metodami je specifický pro JavaScript.
+This subtle difference between fields and methods is specific to JavaScript
 
-Naštěstí se toto chování projevuje jen tehdy, když je přepsané pole použito v rodičovském konstruktoru. Pak může být obtížné pochopit, co se děje, proto to tady vysvětlujeme.
+Luckily, this behavior only reveals itself if an overridden field is used in the parent constructor. Then it may be difficult to understand what's going on, so we're explaining it here.
 
-Kdyby to byl problém, můžeme ho opravit použitím metod nebo getterů/setterů namísto polí.
+If it becomes a problem, one can fix it by using methods or getters/setters instead of fields.
 
 
-## Super: interní mechanismy, [[HomeObject]]
+## Super: internals, [[HomeObject]]
 
-```warn header="Pokročilá informace"
-Jestliže tento tutoriál čtete poprvé, můžete tuto část přeskočit.
+```warn header="Advanced information"
+If you're reading the tutorial for the first time - this section may be skipped.
 
-Hovoří o interních mechanismech v pozadí dědičnosti a `super`.
+It's about the internal mechanisms behind inheritance and `super`.
 ```
 
-Pronikněme trochu hlouběji pod kapuci `super`. Uvidíme tam zajímavé věci.
+Let's get a little deeper under the hood of `super`. We'll see some interesting things along the way.
 
-Nejprve je třeba říci, že podle všeho, čemu jsme se dosud naučili, je nemožné, aby `super` vůbec fungovalo!
+First to say, from all that we've learned till now, it's impossible for `super` to work at all!
 
-Ano, zajisté, zeptejme se sami sebe, jak by to mělo technicky fungovat? Když se spustí objektová metoda, dostane jako `this` aktuální objekt. Pokud pak zavoláme `super.metoda()`, engine musí získat metodu `metoda` z prototypu aktuálního objektu. Ale jak?
+Yeah, indeed, let's ask ourselves, how it should technically work? When an object method runs, it gets the current object as `this`. If we call `super.method()` then, the engine needs to get the `method` from the prototype of the current object. But how?
 
-Tento úkol se může zdát jednoduchý, ale není. Engine zná aktuální objekt `this`, takže může získat rodičovskou metodu `metoda` jako `this.__proto__.metoda`. Naneštěstí takové „naivní“ řešení nebude fungovat.
+The task may seem simple, but it isn't. The engine knows the current object `this`, so it could get the parent `method` as `this.__proto__.method`. Unfortunately, such a "naive" solution won't work.
 
-Demonstrujme si problém. Pro zjednodušení bez tříd, jen s použitím planých objektů.
+Let's demonstrate the problem. Without classes, using plain objects for the sake of simplicity.
 
-Pokud nechcete znát detaily, můžete tuto část přeskočit a pokračovat k podkapitole `[[HomeObject]]`. Neuškodí vám to. Nebo si ji přečtěte, pokud chcete porozumět věcem do hloubky.
+You may skip this part and go below to the `[[HomeObject]]` subsection if you don't want to know the details. That won't harm. Or read on if you're interested in understanding things in-depth.
 
-V níže uvedeném příkladu `králík.__proto__ = zvíře`. Nyní to zkusme: v `králík.žer()` zavolejme `zvíře.žer()` pomocí `this.__proto__`:
+In the example below, `rabbit.__proto__ = animal`. Now let's try: in `rabbit.eat()` we'll call `animal.eat()`, using `this.__proto__`:
 
 ```js run
-let zvíře = {
-  jméno: "Zvíře",
-  žer() {
-    alert(`${this.jméno} žere.`);
+let animal = {
+  name: "Animal",
+  eat() {
+    alert(`${this.name} eats.`);
   }
 };
 
-let králík = {
-  __proto__: zvíře,
-  jméno: "Králík",
-  žer() {
+let rabbit = {
+  __proto__: animal,
+  name: "Rabbit",
+  eat() {
 *!*
-    // předpokládáme, že takto funguje super.žer()
-    this.__proto__.žer.call(this); // (*)
+    // that's how super.eat() could presumably work
+    this.__proto__.eat.call(this); // (*)
 */!*
   }
 };
 
-králík.žer(); // Králík žere.
+rabbit.eat(); // Rabbit eats.
 ```
 
-Na řádku `(*)` převezmeme metodu `žer` z prototypu (`zvíře`) a zavoláme ji v kontextu aktuálního objektu. Prosíme všimněte si, že zde je důležité `.call(this)`, protože pouhé `this.__proto__.žer()` by volalo rodičovskou metodu `žer` v kontextu prototypu, ne aktuálního objektu.
+At the line `(*)` we take `eat` from the prototype (`animal`) and call it in the context of the current object. Please note that `.call(this)` is important here, because a simple `this.__proto__.eat()` would execute parent `eat` in the context of the prototype, not the current object.
 
-A ve výše uvedeném kódu to skutečně funguje tak, jak zamýšlíme: máme správné `alert`.
+And in the code above it actually works as intended: we have the correct `alert`.
 
-Nyní přidáme do řetězce jeden další objekt. Uvidíme, jak se to rozbije:
+Now let's add one more object to the chain. We'll see how things break:
 
 ```js run
-let zvíře = {
-  jméno: "Zvíře",
-  žer() {
-    alert(`${this.jméno} žere.`);
+let animal = {
+  name: "Animal",
+  eat() {
+    alert(`${this.name} eats.`);
   }
 };
 
-let králík = {
-  __proto__: zvíře,
-  žer() {
-    // ...poskakujeme po okolí králičím stylem a zavoláme metodu rodiče (zvíře)
-    this.__proto__.žer.call(this); // (*)
+let rabbit = {
+  __proto__: animal,
+  eat() {
+    // ...bounce around rabbit-style and call parent (animal) method
+    this.__proto__.eat.call(this); // (*)
   }
 };
 
-let dlouhouchý = {
-  __proto__: králík,
-  žer() {
-    // ...uděláme něco s dlouhýma ušima a zavoláme metodu rodiče (králík)
-    this.__proto__.žer.call(this); // (**)
+let longEar = {
+  __proto__: rabbit,
+  eat() {
+    // ...do something with long ears and call parent (rabbit) method
+    this.__proto__.eat.call(this); // (**)
   }
 };
 
 *!*
-dlouhouchý.žer(); // Chyba: Překročena maximální velikost zásobníku
+longEar.eat(); // Error: Maximum call stack size exceeded
 */!*
 ```
 
-Kód už nefunguje! Když se pokusíme zavolat `dlouhouchý.žer()`, uvidíme chybu.
+The code doesn't work anymore! We can see the error trying to call `longEar.eat()`.
 
-Nemusí to být tak zřejmé, ale když si projdeme volání `dlouhouchý.žer()`, uvidíme proč. Na obou řádcích `(*)` i `(**)` je hodnota `this` aktuální objekt (`dlouhouchý`). To je podstatné: všechny objektové metody dostanou jako `this` aktuální objekt, ne prototyp nebo něco jiného.
+It may be not that obvious, but if we trace `longEar.eat()` call, then we can see why. In both lines `(*)` and `(**)` the value of `this` is the current object (`longEar`). That's essential: all object methods get the current object as `this`, not a prototype or something.
 
-Na obou řádcích `(*)` a `(**)` je tedy hodnota `this.__proto__` naprosto stejná: `králík`. Oba volají `králík.žer` v nekonečné smyčce, aniž by v řetězci postoupily výš.
+So, in both lines `(*)` and `(**)` the value of `this.__proto__` is exactly the same: `rabbit`. They both call `rabbit.eat` without going up the chain in the endless loop.
 
-Zde je obrázek toho, co se stane:
+Here's the picture of what happens:
 
 ![](this-super-loop.svg)
 
-1. Uvnitř `dlouhouchý.žer()` řádek `(**)` volá `králík.žer` a poskytne mu `this=dlouhouchý`.
+1. Inside `longEar.eat()`, the line `(**)` calls `rabbit.eat` providing it with `this=longEar`.
     ```js
-    // uvnitř dlouhouchý.žer() máme this = dlouhouchý
-    this.__proto__.žer.call(this) // (**)
-    // se promění na
-    dlouhouchý.__proto__.žer.call(this)
-    // to je
-    králík.žer.call(this);
+    // inside longEar.eat() we have this = longEar
+    this.__proto__.eat.call(this) // (**)
+    // becomes
+    longEar.__proto__.eat.call(this)
+    // that is
+    rabbit.eat.call(this);
     ```
-2. Pak na řádku `(*)` metody `králík.žer` bychom rádi předali volání v řetězci ještě výš, ale `this=dlouhouchý`, takže `this.__proto__.žer` je opět `králík.žer`!
+2. Then in the line `(*)` of `rabbit.eat`, we'd like to pass the call even higher in the chain, but `this=longEar`, so `this.__proto__.eat` is again `rabbit.eat`!
 
     ```js
-    // uvnitř králík.žer() máme rovněž this = dlouhouchý
-    this.__proto__.žer.call(this) // (*)
-    // se promění na
-    dlouhouchý.__proto__.žer.call(this)
-    // neboli (opět)
-    králík.žer.call(this);
+    // inside rabbit.eat() we also have this = longEar
+    this.__proto__.eat.call(this) // (*)
+    // becomes
+    longEar.__proto__.eat.call(this)
+    // or (again)
+    rabbit.eat.call(this);
     ```
 
-3. ...Takže `králík.žer` volá sama sebe v nekonečné smyčce, protože nemůže postoupit nikam výš.
+3. ...So `rabbit.eat` calls itself in the endless loop, because it can't ascend any further.
 
-Tento problém nelze vyřešit pouze pomocí `this`.
+The problem can't be solved by using `this` alone.
 
 ### `[[HomeObject]]`
 
-Aby JavaScript poskytl řešení, přidává navíc jednu speciální vlastnost pro funkce: `[[HomeObject]]`.
+To provide the solution, JavaScript adds one more special internal property for functions: `[[HomeObject]]`.
 
-Když je funkce specifikována jako metoda třídy nebo objektu, tento objekt se stane hodnotou její vlastnosti `[[HomeObject]]`.
+When a function is specified as a class or object method, its `[[HomeObject]]` property becomes that object.
 
-Pak jej `super` používá k tomu, aby vyhodnotil rodičovský prototyp a jeho metody.
+Then `super` uses it to resolve the parent prototype and its methods.
 
-Podívejme se, jak to funguje, nejprve s planými objekty:
+Let's see how it works, first with plain objects:
 
 ```js run
-let zvíře = {
-  jméno: "Zvíře",
-  žer() {         // zvíře.žer.[[HomeObject]] == zvíře
-    alert(`${this.jméno} žere.`);
+let animal = {
+  name: "Animal",
+  eat() {         // animal.eat.[[HomeObject]] == animal
+    alert(`${this.name} eats.`);
   }
 };
 
-let králík = {
-  __proto__: zvíře,
-  jméno: "Králík",
-  žer() {         // králík.žer.[[HomeObject]] == králík
-    super.žer();
+let rabbit = {
+  __proto__: animal,
+  name: "Rabbit",
+  eat() {         // rabbit.eat.[[HomeObject]] == rabbit
+    super.eat();
   }
 };
 
-let dlouhouchý = {
-  __proto__: králík,
-  jméno: "Dlouhé ucho",
-  žer() {         // dlouhouchý.žer.[[HomeObject]] == dlouhouchý
-    super.žer();
+let longEar = {
+  __proto__: rabbit,
+  name: "Long Ear",
+  eat() {         // longEar.eat.[[HomeObject]] == longEar
+    super.eat();
   }
 };
 
 *!*
-// funguje správně
-dlouhouchý.žer();  // Dlouhé ucho žere.
+// works correctly
+longEar.eat();  // Long Ear eats.
 */!*
 ```
 
-Díky mechanice `[[HomeObject]]` to funguje tak, jak jsme zamýšleli. Metoda, např. `dlouhouchý.žer`, zná svůj `[[HomeObject]]` a převezme rodičovskou metodu z jeho prototypu. Bez jakéhokoli použití `this`.
+It works as intended, due to `[[HomeObject]]` mechanics. A method, such as `longEar.eat`, knows its `[[HomeObject]]` and takes the parent method from its prototype. Without any use of `this`.
 
-### Metody nejsou „volné“
+### Methods are not "free"
 
-Jak již víme, funkce jsou v JavaScriptu obecně „volné“, nevázané k objektům. Mohou tedy být kopírovány mezi objekty a volány s jiným `this`.
+As we've known before, generally functions are "free", not bound to objects in JavaScript. So they can be copied between objects and called with another `this`.
 
-Pouhá existence `[[HomeObject]]` však tento princip porušuje, jelikož metody si pamatují své objekty. `[[HomeObject]]` nemůže být změněn, takže tato vazba je trvalá.
+The very existence of `[[HomeObject]]` violates that principle, because methods remember their objects. `[[HomeObject]]` can't be changed, so this bond is forever.
 
-Jediné místo v jazyce, kde je `[[HomeObject]]` používán, je `super`. Jestliže tedy metoda nepoužívá `super`, můžeme ji stále považovat za volnou a kopírovat ji mezi objekty. Avšak se `super` se věci mohou pokazit.
+The only place in the language where `[[HomeObject]]` is used -- is `super`. So, if a method does not use `super`, then we can still consider it free and copy between objects. But with `super` things may go wrong.
 
-Zde je příklad špatného výsledku `super` po kopírování:
+Here's the demo of a wrong `super` result after copying:
 
 ```js run
-let zvíře = {
-  řekniAhoj() {
-    alert(`Jsem zvíře`);
+let animal = {
+  sayHi() {
+    alert(`I'm an animal`);
   }
 };
 
-// králík je zděděn ze zvířete
-let králík = {
-  __proto__: zvíře,
-  řekniAhoj() {
-    super.řekniAhoj();
+// rabbit inherits from animal
+let rabbit = {
+  __proto__: animal,
+  sayHi() {
+    super.sayHi();
   }
 };
 
-let rostlina = {
-  řekniAhoj() {
-    alert("Jsem rostlina");
+let plant = {
+  sayHi() {
+    alert("I'm a plant");
   }
 };
 
-// strom je zděděn z rostliny
-let strom = {
-  __proto__: rostlina,
+// tree inherits from plant
+let tree = {
+  __proto__: plant,
 *!*
-  řekniAhoj: králík.řekniAhoj // (*)
+  sayHi: rabbit.sayHi // (*)
 */!*
 };
 
 *!*
-strom.řekniAhoj();  // Jsem zvíře (?!?)
+tree.sayHi();  // I'm an animal (?!?)
 */!*
 ```
 
-Volání `strom.řekniAhoj()` zobrazí „Jsem zvíře“. Rozhodně špatně.
+A call to `tree.sayHi()` shows "I'm an animal". Definitely wrong.
 
-Důvod je prostý:
-- Na řádku `(*)` je metoda `strom.řekniAhoj` zkopírována z objektu `králík`. Možná jsme se chtěli zdržet zdvojení kódu?
-- Její `[[HomeObject]]` je `králík`, protože byla vytvořena v objektu `králík`. Není žádný způsob, jak `[[HomeObject]]` změnit.
-- Kód metody `strom.řekniAhoj()` má uvnitř `super.řekniAhoj()`. Ten jde nahoru od objektu `králík` a přebírá tuto metodu z objektu `zvíře`.
+The reason is simple:
+- In the line `(*)`, the method `tree.sayHi` was copied from `rabbit`. Maybe we just wanted to avoid code duplication?
+- Its `[[HomeObject]]` is `rabbit`, as it was created in `rabbit`. There's no way to change `[[HomeObject]]`.
+- The code of `tree.sayHi()` has `super.sayHi()` inside. It goes up from `rabbit` and takes the method from `animal`.
 
-Zde je diagram toho, co se stane:
+Here's the diagram of what happens:
 
 ![](super-homeobject-wrong.svg)
 
-### Metody, ne funkční vlastnosti
+### Methods, not function properties
 
-`[[HomeObject]]` je definován pro metody ve třídách i v planých objektech. Pro objekty však metody musejí být specifikovány přímo jako `metoda()`, ne jako `„metoda: function()“`.
+`[[HomeObject]]` is defined for methods both in classes and in plain objects. But for objects, methods must be specified exactly as `method()`, not as `"method: function()"`.
 
-Rozdíl pro nás nemusí být důležitý, ale pro JavaScript je podstatný.
+The difference may be non-essential for us, but it's important for JavaScript.
 
-V níže uvedeném příkladu se pro porovnání používá syntaxe bez metod. Vlastnost `[[HomeObject]]` se nenastaví a dědičnost nefunguje:
+In the example below a non-method syntax is used for comparison. `[[HomeObject]]` property is not set and the inheritance doesn't work:
 
 ```js run
-let zvíře = {
-  žer: function() { // úmyslně píšeme toto namísto žer() {...
+let animal = {
+  eat: function() { // intentionally writing like this instead of eat() {...
     // ...
   }
 };
 
-let králík = {
-  __proto__: zvíře,
-  žer: function() {
-    super.žer();
+let rabbit = {
+  __proto__: animal,
+  eat: function() {
+    super.eat();
   }
 };
 
 *!*
-králík.žer();  // Chyba při volání super (protože není žádný [[HomeObject]])
+rabbit.eat();  // Error calling super (because there's no [[HomeObject]])
 */!*
 ```
 
-## Shrnutí
+## Summary
 
-1. Pro rozšíření třídy: `class Potomek extends Rodič`:
-    - To znamená, že `Potomek.prototype.__proto__` bude `Rodič.prototype`, takže metody budou zděděny.
-2. Když přepisujeme konstruktor:
-    - V konstruktoru třídy `Potomek` musíme před použitím `this` zavolat rodičovský konstruktor pomocí `super()`.
-3. Když přepisujeme jinou metodu:
-    - V metodě třídy `Potomek` můžeme pomocí `super.metoda()` volat metodu třídy `Rodič`.
-4. Interní záležitosti:
-    - Metody si pamatují svou třídu/objekt v interní vlastnosti `[[HomeObject]]`. Tímto způsobem `super` vyhodnocuje rodičovské metody.
-    - Není tedy bezpečné kopírovat metodu obsahující `super` z jednoho objektu do jiného.
+1. To extend a class: `class Child extends Parent`:
+    - That means `Child.prototype.__proto__` will be `Parent.prototype`, so methods are inherited.
+2. When overriding a constructor:
+    - We must call parent constructor as `super()` in `Child` constructor before using `this`.
+3. When overriding another method:
+    - We can use `super.method()` in a `Child` method to call `Parent` method.
+4. Internals:
+    - Methods remember their class/object in the internal `[[HomeObject]]` property. That's how `super` resolves parent methods.
+    - So it's not safe to copy a method with `super` from one object to another.
 
-Navíc:
-- Šipkové funkce nemají vlastní `this` ani `super`, takže průhledně zapadají do okolního kontextu.
+Also:
+- Arrow functions don't have their own `this` or `super`, so they transparently fit into the surrounding context.

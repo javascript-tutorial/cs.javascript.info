@@ -1,55 +1,55 @@
 
-1. Aby to celé *jakkoli* fungovalo, výsledek funkce `součet` musí být funkce.
-2. Tato funkce si musí udržovat v paměti aktuální hodnotu mezi voláními.
-3. Podle zadání se funkce musí stát číslem, když je použita v `==`. Funkce jsou objekty, takže konverze se odehrává tak, jak je popsáno v kapitole <info:object-toprimitive>, a my můžeme poskytnout svou vlastní metodu, která toto číslo vrátí.
+1. For the whole thing to work *anyhow*, the result of `sum` must be function.
+2. That function must keep in memory the current value between calls.
+3. According to the task, the function must become the number when used in `==`. Functions are objects, so the conversion happens as described in the chapter <info:object-toprimitive>, and we can provide our own method that returns the number.
 
-Nyní kód:
+Now the code:
 
 ```js demo run
-function součet(a) {
+function sum(a) {
 
-  let aktuálníSoučet = a;
+  let currentSum = a;
 
   function f(b) {
-    aktuálníSoučet += b;
+    currentSum += b;
     return f;
   }
 
   f.toString = function() {
-    return aktuálníSoučet;
+    return currentSum;
   };
 
   return f;
 }
 
-alert( součet(1)(2) ); // 3
-alert( součet(5)(-1)(2) ); // 6
-alert( součet(6)(-1)(-2)(-3) ); // 0
-alert( součet(0)(1)(2)(3)(4)(5) ); // 15
+alert( sum(1)(2) ); // 3
+alert( sum(5)(-1)(2) ); // 6
+alert( sum(6)(-1)(-2)(-3) ); // 0
+alert( sum(0)(1)(2)(3)(4)(5) ); // 15
 ```
 
-Prosíme všimněte si, že funkce `součet` se ve skutečnosti spustí jenom jednou. Vrátí funkci `f`.
+Please note that the `sum` function actually works only once. It returns function `f`.
 
-Pak při každém následném volání `f` přičte svůj parametr k součtu `aktuálníSoučet` a vrátí sebe sama.
+Then, on each subsequent call, `f` adds its parameter to the sum `currentSum`, and returns itself.
 
-**Na posledním řádku `f` není rekurze.**
+**There is no recursion in the last line of `f`.**
 
-Rekurze by vypadala takto:
+Here is what recursion looks like:
 
 ```js
 function f(b) {
-  aktuálníSoučet += b;
-  return f(); // <-- rekurzívní volání
+  currentSum += b;
+  return f(); // <-- recursive call
 }
 ```
 
-V našem případě vracíme jen funkci, aniž bychom ji volali:
+And in our case, we just return the function, without calling it:
 
 ```js
 function f(b) {
-  aktuálníSoučet += b;
-  return f; // <-- nevolá sama sebe, vrací sama sebe
+  currentSum += b;
+  return f; // <-- does not call itself, returns itself
 }
 ```
 
-Tato `f` bude použita při dalším volání a opět vrátí sebe sama, tolikrát, kolikrát je zapotřebí. Když ji pak použijeme jako číslo nebo řetězec -- `toString` vrátí `aktuálníSoučet`. Zde bychom pro konverzi mohli také použít `Symbol.toPrimitive` nebo `valueOf`.
+This `f` will be used in the next call, again return itself, as many times as needed. Then, when used as a number or a string -- the `toString` returns the `currentSum`. We could also use `Symbol.toPrimitive` or `valueOf` here for the conversion.

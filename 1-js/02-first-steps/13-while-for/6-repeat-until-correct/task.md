@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Opakujte, dokud vstup nebude správně
+# Repeat until the input is correct
 
-Napište cyklus, který se bude ptát na číslo větší než `100`. Pokud návštěvník zadá jiné číslo, zeptejte se ho znovu.
+Write a loop which prompts for a number greater than `100`. If the visitor enters another number -- ask them to input again.
 
-Cyklus se musí ptát na číslo tak dlouho, až návštěvník zadá číslo větší než `100` nebo zruší vstup či zadá prázdný řádek.
+The loop must ask for a number until either the visitor enters a number greater than `100` or cancels the input/enters an empty line.
 
-Zde můžeme předpokládat, že uživatel zadává pouze čísla. V této úloze nemusíte implementovat zvláštní zacházení s nečíselnými vstupy.
+Here we can assume that the visitor only inputs numbers. There's no need to implement a special handling for a non-numeric input in this task.
 
 [demo]

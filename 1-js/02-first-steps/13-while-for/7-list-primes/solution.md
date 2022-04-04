@@ -1,29 +1,29 @@
-Pro tuto úlohu existuje mnoho algoritmů.
+There are many algorithms for this task.
 
-Použijeme vnořený cyklus:
+Let's use a nested loop:
 
 ```js
-pro každé i v intervalu {
-  ověř, zda i má dělitele mezi 1..i
-  pokud ano => i není prvočíslo
-  pokud ne => i je prvočíslo, zobraz ho
+For each i in the interval {
+  check if i has a divisor from 1..i
+  if yes => the value is not a prime
+  if no => the value is a prime, show it
 }
 ```
 
-Kód s použitím návěští:
+The code using a label:
 
 ```js run
 let n = 10;
 
-dalšíPrvočíslo:
-for (let i = 2; i <= n; i++) { // pro každé i...
+nextPrime:
+for (let i = 2; i <= n; i++) { // for each i...
 
-  for (let j = 2; j < i; j++) { // hledáme dělitele...
-    if (i % j == 0) continue dalšíPrvočíslo; // není to prvočíslo, přejdeme k dalšímu i
+  for (let j = 2; j < i; j++) { // look for a divisor..
+    if (i % j == 0) continue nextPrime; // not a prime, go next i
   }
 
-  alert( i ); // je to prvočíslo
+  alert( i ); // a prime
 }
 ```
 
-Je zde mnoho prostoru k optimalizaci. Můžeme se například dívat jen na dělitele od `2` do odmocniny `i`. Kdybychom však chtěli být opravdu efektivní i pro velké intervaly, museli bychom změnit přístup a zaměřit se na vysokou matematiku a složité algoritmy, např. [kvadratické síto](https://en.wikipedia.org/wiki/Quadratic_sieve), [Obecné číselné teoretické síto (GNFS)](https://en.wikipedia.org/wiki/General_number_field_sieve) atd.
+There's a lot of space to optimize it. For instance, we could look for the divisors from `2` to square root of `i`. But anyway, if we want to be really efficient for large intervals, we need to change the approach and rely on advanced maths and complex algorithms like [Quadratic sieve](https://en.wikipedia.org/wiki/Quadratic_sieve), [General number field sieve](https://en.wikipedia.org/wiki/General_number_field_sieve) etc.

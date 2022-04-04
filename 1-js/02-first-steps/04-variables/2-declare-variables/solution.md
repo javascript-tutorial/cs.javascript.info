@@ -1,21 +1,21 @@
-## Proměnná pro naši planetu
+## The variable for our planet
 
-To je jednoduché:
-
-```js
-let jménoNašíPlanety = "Země";
-```
-
-Všimněte si, že bychom mohli použít kratší název `planeta`, ale pak by nemuselo být zřejmé, na kterou planetu se odkazuje. Je vhodné být výřečnější, aspoň dokud název proměnné neníPřílišDlouhý.
-
-## Jméno aktuálního návštěvníka
+That's simple:
 
 ```js
-let jménoAktuálníhoUživatele = "Jan";
+let ourPlanetName = "Earth";
 ```
 
-Opět bychom to mohli zkrátit na `jménoUživatele`, pokud máme jistotu, že jde o aktuálního uživatele.
+Note, we could use a shorter name `planet`, but it might not be obvious what planet it refers to. It's nice to be more verbose. At least until the variable isNotTooLong.
 
-V moderních editorech se dlouhé názvy proměnných snadno píší díky funkci automatického doplňování. Nešetřete na nich. Tříslovný název je zcela v pořádku.
+## The name of the current visitor
 
-A pokud váš editor neumí automatické doplňování, pořiďte si [nový](/code-editors).
+```js
+let currentUserName = "John";
+```
+
+Again, we could shorten that to `userName` if we know for sure that the user is current.
+
+Modern editors and autocomplete make long variable names easy to write. Don't save on them. A name with 3 words in it is fine.
+
+And if your editor does not have proper autocompletion, get [a new one](/code-editors).

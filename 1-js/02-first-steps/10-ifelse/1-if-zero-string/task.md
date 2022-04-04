@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# if (řetězec s nulou)
+# if (a string with zero)
 
-Zobrazí se `alert`?
+Will `alert` be shown?
 
 ```js
 if ("0") {
-  alert( 'Ahoj' );
+  alert( 'Hello' );
 }
 ```
 

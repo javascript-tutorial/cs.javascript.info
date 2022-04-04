@@ -1,20 +1,20 @@
 
-# Funkce v if
+# Function in if
 
-Podívejte se na kód. Jaký bude výsledek volání na posledním řádku?
+Look at the code. What will be the result of the call at the last line?
 
 ```js run
-let věta = "Ahoj";
+let phrase = "Hello";
 
 if (true) {
-  let uživatel = "Jan";
+  let user = "John";
 
-  function řekniAhoj() {
-    alert(`${věta}, ${uživatel}`);
+  function sayHi() {
+    alert(`${phrase}, ${user}`);
   }
 }
 
 *!*
-řekniAhoj();
+sayHi();
 */!*
 ```

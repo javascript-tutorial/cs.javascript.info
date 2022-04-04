@@ -1,11 +1,11 @@
 
 
 ```js run
-let hodnota = prompt('Zadejte číslo', 0);
+let value = prompt('Type a number', 0);
 
-if (hodnota > 0) {
+if (value > 0) {
   alert( 1 );
-} else if (hodnota < 0) {
+} else if (value < 0) {
   alert( -1 );
 } else {
   alert( 0 );

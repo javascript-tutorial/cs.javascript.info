@@ -1,39 +1,39 @@
 describe('debounce', function () {
   before(function () {
-    this.hodiny = sinon.useFakeTimers();
+    this.clock = sinon.useFakeTimers();
   });
 
   after(function () {
-    this.hodiny.restore();
+    this.clock.restore();
   });
 
-  it('pro jedno volání - spustí je po zadané době v ms', function () {
+  it('for one call - runs it after given ms', function () {
     const f = sinon.spy();
     const debounced = debounce(f, 1000);
 
     debounced('test');
-    assert(f.notCalled, 'nevolá se okamžitě');
-    this.hodiny.tick(1000);
-    assert(f.calledOnceWith('test'), 'voláno po 1000 ms');
+    assert(f.notCalled, 'not called immediately');
+    this.clock.tick(1000);
+    assert(f.calledOnceWith('test'), 'called after 1000ms');
   });
 
-  it('pro 3 volání - spustí poslední po zadané době v ms', function () {
+  it('for 3 calls - runs the last one after given ms', function () {
     const f = sinon.spy();
     const debounced = debounce(f, 1000);
 
     debounced('a');
-    setTimeout(() => debounced('b'), 200); // ignorováno (příliš brzy)
-    setTimeout(() => debounced('c'), 500); // spustí se (1000 ms uplynulo)
-    this.hodiny.tick(1000);
+    setTimeout(() => debounced('b'), 200); // ignored (too early)
+    setTimeout(() => debounced('c'), 500); // runs (1000 ms passed)
+    this.clock.tick(1000);
 
-    assert(f.notCalled, 'nevoláno po 1000 ms');
+    assert(f.notCalled, 'not called after 1000ms');
 
-    this.hodiny.tick(500);
+    this.clock.tick(500);
 
-    assert(f.calledOnceWith('c'), 'voláno po 1500 ms');
+    assert(f.calledOnceWith('c'), 'called after 1500ms');
   });
 
-  it('udržuje si kontext volání', function () {
+  it('keeps the context of the call', function () {
     let obj = {
       f() {
         assert.equal(this, obj);
@@ -42,7 +42,7 @@ describe('debounce', function () {
 
     obj.f = debounce(obj.f, 1000);
     obj.f('test');
-    this.hodiny.tick(5000);
+    this.clock.tick(5000);
   });
   
 });

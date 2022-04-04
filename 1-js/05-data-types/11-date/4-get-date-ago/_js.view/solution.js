@@ -1,6 +1,6 @@
-function vraťDenPřed(datum, dny) {
-  let kopieData = new Date(datum);
+function getDateAgo(date, days) {
+  let dateCopy = new Date(date);
 
-  kopieData.setDate(datum.getDate() - dny);
-  return kopieData.getDate();
+  dateCopy.setDate(date.getDate() - days);
+  return dateCopy.getDate();
 }
