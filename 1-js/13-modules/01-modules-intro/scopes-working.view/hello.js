@@ -1,3 +1,3 @@
-import {uživatel} from './user.js';
+import {user} from './user.js';
 
-document.body.innerHTML = uživatel; // Jan
+document.body.innerHTML = user; // John

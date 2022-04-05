@@ -1,148 +1,148 @@
 
-# Gettery a settery vlastností
+# Property getters and setters
 
-Existují dva druhy vlastností objektů.
+There are two kinds of object properties.
 
-První druh jsou *datové vlastnosti*. S nimi už pracovat umíme. Všechny vlastnosti, které jsme až doposud používali, byly datové vlastnosti.
+The first kind is *data properties*. We already know how to work with them. All properties that we've been using until now were data properties.
 
-Druhý druh vlastností je něco nového. Jsou to *přístupové (accessorové) vlastnosti*. Jsou to v zásadě funkce, které se spustí při načítání a nastavování hodnoty, ale v externím kódu vypadají jako běžné vlastnosti.
+The second type of properties is something new. It's *accessor properties*. They are essentially functions that execute on getting and setting a value, but look like regular properties to an external code.
 
-## Gettery a settery
+## Getters and setters
 
-Přístupové vlastnosti jsou představovány metodami nazývanými „getter“ a „setter“. V objektovém literálu jsou označeny `get` a `set`:
+Accessor properties are represented by "getter" and "setter" methods. In an object literal they are denoted by `get` and `set`:
 
 ```js
 let obj = {
-  *!*get názevVlastnosti()*/!* {
-    // getter, kód spuštěný při načítání obj.názevVlastnosti
+  *!*get propName()*/!* {
+    // getter, the code executed on getting obj.propName
   },
 
-  *!*set názevVlastnosti(hodnota)*/!* {
-    // setter, kód spuštěný při nastavování obj.názevVlastnosti = hodnota
+  *!*set propName(value)*/!* {
+    // setter, the code executed on setting obj.propName = value
   }
 };
 ```
 
-Getter se spustí, když je vlastnost `obj.názevVlastnosti` načítána, setter -- když je měněna.
+The getter works when `obj.propName` is read, the setter -- when it is assigned.
 
-Například máme objekt `uživatel` s vlastnostmi `jméno` a `příjmení`:
+For instance, we have a `user` object with `name` and `surname`:
 
 ```js
-let uživatel = {
-  jméno: "Jan",
-  příjmení: "Novák"
+let user = {
+  name: "John",
+  surname: "Smith"
 };
 ```
 
-Nyní chceme přidat vlastnost `celéJméno`, která by měla být `"Jan Novák"`. Samozřejmě nechceme kopírovat a vkládat existující informaci, a tak ji můžeme implementovat jako přístupovou:
+Now we want to add a `fullName` property, that should be `"John Smith"`. Of course, we don't want to copy-paste existing information, so we can implement it as an accessor:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  příjmení: "Novák",
+let user = {
+  name: "John",
+  surname: "Smith",
 
 *!*
-  get celéJméno() {
-    return `${this.jméno} ${this.příjmení}`;
+  get fullName() {
+    return `${this.name} ${this.surname}`;
   }
 */!*
 };
 
 *!*
-alert(uživatel.celéJméno); // Jan Novák
+alert(user.fullName); // John Smith
 */!*
 ```
 
-Zvenčí se přístupová vlastnost jeví jako obyčejná. To je myšlenka přístupových vlastností. *Nevoláme* `uživatel.celéJméno` jako funkci, ale normálně ji *přečteme*: getter se spustí za scénou.
+From the outside, an accessor property looks like a regular one. That's the idea of accessor properties. We don't *call* `user.fullName` as a function, we *read* it normally: the getter runs behind the scenes.
 
-Dosud má `celéJméno` jen getter. Jestliže se pokusíme přiřadit `uživatel.celéJméno=`, nastane chyba:
+As of now, `fullName` has only a getter. If we attempt to assign `user.fullName=`, there will be an error:
 
 ```js run
-let uživatel = {
-  get celéJméno() {
+let user = {
+  get fullName() {
     return `...`;
   }
 };
 
 *!*
-uživatel.celéJméno = "Test"; // Chyba (vlastnost má jen getter)
+user.fullName = "Test"; // Error (property has only a getter)
 */!*
 ```
 
-Opravme ji přidáním setteru pro `uživatel.celéJméno`:
+Let's fix it by adding a setter for `user.fullName`:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  příjmení: "Novák",
+let user = {
+  name: "John",
+  surname: "Smith",
 
-  get celéJméno() {
-    return `${this.jméno} ${this.příjmení}`;
+  get fullName() {
+    return `${this.name} ${this.surname}`;
   },
 
 *!*
-  set celéJméno(hodnota) {
-    [this.jméno, this.příjmení] = hodnota.split(" ");
+  set fullName(value) {
+    [this.name, this.surname] = value.split(" ");
   }
 */!*
 };
 
-// nastavení vlastnosti celéJméno se spustí se zadanou hodnotou.
-uživatel.celéJméno = "Alice Cooper";
+// set fullName is executed with the given value.
+user.fullName = "Alice Cooper";
 
-alert(uživatel.jméno); // Alice
-alert(uživatel.příjmení); // Cooper
+alert(user.name); // Alice
+alert(user.surname); // Cooper
 ```
 
-Výsledkem je, že máme „virtuální“ vlastnost `celéJméno`. Lze ji číst i do ní zapisovat.
+As the result, we have a "virtual" property `fullName`. It is readable and writable.
 
-## Přístupové deskriptory
+## Accessor descriptors
 
-Deskriptory přístupových vlastností se liší od deskriptorů datových vlastností.
+Descriptors for accessor properties are different from those for data properties.
 
-U přístupových vlastností není `value` nebo `writable`, ale místo nich tam jsou funkce `get` a `set`.
+For accessor properties, there is no `value` or `writable`, but instead there are `get` and `set` functions.
 
-To znamená, že přístupový deskriptor může mít:
+That is, an accessor descriptor may have:
 
-- **`get`** -- funkci bez argumentů, která se spustí při čtení vlastnosti,
-- **`set`** -- funkci s jedním argumentem, která je volána, když se vlastnost nastavuje,
-- **`enumerable`** -- totéž jako u datových vlastností,
-- **`configurable`** -- totéž jako u datových vlastností.
+- **`get`** -- a function without arguments, that works when a property is read,
+- **`set`** -- a function with one argument, that is called when the property is set,
+- **`enumerable`** -- same as for data properties,
+- **`configurable`** -- same as for data properties.
 
-Například chceme-li vytvořit přístupovou vlastnost `celéJméno` pomocí metody `defineProperty`, můžeme předat deskriptor s `get` a `set`:
+For instance, to create an accessor `fullName` with `defineProperty`, we can pass a descriptor with `get` and `set`:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  příjmení: "Novák"
+let user = {
+  name: "John",
+  surname: "Smith"
 };
 
 *!*
-Object.defineProperty(uživatel, 'celéJméno', {
+Object.defineProperty(user, 'fullName', {
   get() {
-    return `${this.jméno} ${this.příjmení}`;
+    return `${this.name} ${this.surname}`;
   },
 
-  set(hodnota) {
-    [this.jméno, this.příjmení] = hodnota.split(" ");
+  set(value) {
+    [this.name, this.surname] = value.split(" ");
   }
 */!*
 });
 
-alert(uživatel.celéJméno); // Jan Novák
+alert(user.fullName); // John Smith
 
-for(let klíč in uživatel) alert(klíč); // jméno, příjmení
+for(let key in user) alert(key); // name, surname
 ```
 
-Prosíme všimněte si, že vlastnost může být buď přístupová (má metody `get/set`), nebo datová (má `value`), ale ne obojí.
+Please note that a property can be either an accessor (has `get/set` methods) or a data property (has a `value`), not both.
 
-Pokusíme-li se poskytnout ve stejném deskriptoru `get` i `value`, nastane chyba:
+If we try to supply both `get` and `value` in the same descriptor, there will be an error:
 
 ```js run
 *!*
-// Chyba: Neplatný deskriptor vlastnosti.
+// Error: Invalid property descriptor.
 */!*
-Object.defineProperty({}, 'vlastnost', {
+Object.defineProperty({}, 'prop', {
   get() {
     return 1
   },
@@ -151,93 +151,94 @@ Object.defineProperty({}, 'vlastnost', {
 });
 ```
 
-## Chytřejší gettery/settery
+## Smarter getters/setters
 
-Gettery/settery můžeme používat jako wrappery nad „skutečnými“ hodnotami vlastností, abychom získali více kontroly nad operacemi s nimi.
+Getters/setters can be used as wrappers over "real" property values to gain more control over operations with them.
 
-Například jestliže chceme zakázat příliš krátká jména v objektu `uživatel`, můžeme mít setter `jméno` a udržovat hodnotu v oddělené vlastnosti `_jméno`:
+For instance, if we want to forbid too short names for `user`, we can have a setter `name` and keep the value in a separate property `_name`:
 
 ```js run
-let uživatel = {
-  get jméno() {
-    return this._jméno;
+let user = {
+  get name() {
+    return this._name;
   },
 
-  set jméno(hodnota) {
-    if (hodnota.length < 4) {
-      alert("Jméno je příliš krátké, musí mít alespoň 4 znaky");
+  set name(value) {
+    if (value.length < 4) {
+      alert("Name is too short, need at least 4 characters");
       return;
     }
-    this._jméno = hodnota;
+    this._name = value;
   }
 };
 
-uživatel.jméno = "Petr";
-alert(uživatel.jméno); // Petr
+user.name = "Pete";
+alert(user.name); // Pete
 
-uživatel.jméno = ""; // Jméno je příliš krátké...
+user.name = ""; // Name is too short...
 ```
 
-Jméno je tedy uloženo ve vlastnosti `_jméno` a přístup k němu se děje přes getter a setter.
+So, the name is stored in `_name` property, and the access is done via getter and setter.
 
-Technicky může externí kód přistupovat přímo ke jménu pomocí `uživatel._jméno`. Je však široce známá konvence, že vlastnosti začínající podtržítkem `"_"` jsou interní a nemělo by se na ně sahat zvnějšku objektu.
+Technically, external code is able to access the name directly by using `user._name`. But there is a widely known convention that properties starting with an underscore `"_"` are internal and should not be touched from outside the object.
 
-## Používání pro kompatibilitu
 
-Jedno z vynikajících využití přístupových vlastností je, že umožňují kdykoli převzít kontrolu nad „obyčejnou“ datovou vlastností tím, že ji nahradíme getterem a setterem a vylepšíme její chování.
+## Using for compatibility
 
-Představme si, že jsme začali implementovat objekty uživatelů s použitím datových vlastností `jméno` a `věk`:
+One of the great uses of accessors is that they allow to take control over a "regular" data property at any moment by replacing it with a getter and a setter and tweak its behavior.
+
+Imagine we started implementing user objects using data properties `name` and `age`:
 
 ```js
-function Uživatel(jméno, věk) {
-  this.jméno = jméno;
-  this.věk = věk;
+function User(name, age) {
+  this.name = name;
+  this.age = age;
 }
 
-let jan = new Uživatel("Jan", 25);
+let john = new User("John", 25);
 
-alert( jan.věk ); // 25
+alert( john.age ); // 25
 ```
 
-...Dříve nebo později se to však může změnit. Místo vlastnosti `věk` se můžeme rozhodnout ukládat `datumNarození`, protože je to přesnější a vhodnější:
+...But sooner or later, things may change. Instead of `age` we may decide to store `birthday`, because it's more precise and convenient:
 
 ```js
-function Uživatel(jméno, datumNarození) {
-  this.jméno = jméno;
-  this.datumNarození = datumNarození;
+function User(name, birthday) {
+  this.name = name;
+  this.birthday = birthday;
 }
 
-let jan = new Uživatel("Jan", new Date(1992, 6, 1));
+let john = new User("John", new Date(1992, 6, 1));
 ```
 
-Co teď uděláme se starým kódem, který stále používá vlastnost `věk`?
+Now what to do with the old code that still uses `age` property?
 
-Můžeme se pokusit všechna taková místa najít a opravit, ale to nám zabere čas a může to být těžko proveditelné, jestliže tento kód používá mnoho dalších lidí. A kromě toho je hezké mít `věk` v objektu `uživatel`, ne?
+We can try to find all such places and fix them, but that takes time and can be hard to do if that code is used by many other people. And besides, `age` is a nice thing to have in `user`, right?
 
-Necháme si ho.
+Let's keep it.
 
-Problém vyřeší přidání getteru pro `věk`:
+Adding a getter for `age` solves the problem:
 
 ```js run no-beautify
-function Uživatel(jméno, datumNarození) {
-  this.jméno = jméno;
-  this.datumNarození = datumNarození;
+function User(name, birthday) {
+  this.name = name;
+  this.birthday = birthday;
 
 *!*
-  // věk se vypočítá z dnešního data a z data narození
-  Object.defineProperty(this, "věk", {
+  // age is calculated from the current date and birthday
+  Object.defineProperty(this, "age", {
     get() {
-      let dnešníRok = new Date().getFullYear();
-      return dnešníRok - this.datumNarození.getFullYear();
+      let todayYear = new Date().getFullYear();
+      return todayYear - this.birthday.getFullYear();
     }
   });
 */!*
 }
 
-let jan = new Uživatel("Jan", new Date(1992, 6, 1));
+let john = new User("John", new Date(1992, 6, 1));
 
-alert( jan.datumNarození ); // datumNarození je k dispozici
-alert( jan.věk );      // ...stejně jako věk
+alert( john.birthday ); // birthday is available
+alert( john.age );      // ...as well as the age
 ```
 
-Nyní bude fungovat i starý kód a navíc jsme získali další pěknou vlastnost.
+Now the old code works too and we've got a nice additional property.

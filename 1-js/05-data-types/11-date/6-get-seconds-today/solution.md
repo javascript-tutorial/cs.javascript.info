@@ -1,28 +1,28 @@
-Abychom získali počet sekund, můžeme vygenerovat datum z dnešního dne a času 00:00:00 a pak je odečíst od „nynějška“.
+To get the number of seconds, we can generate a date using the current day and time 00:00:00, then substract it from "now".
 
-Rozdílem bude počet milisekund od začátku dne, který bychom měli vydělit 1000, abychom získali sekundy:
+The difference is the number of milliseconds from the beginning of the day, that we should divide by 1000 to get seconds:
 
 ```js run
-function vraťDnešníSekundy() {
-  let nyní = new Date();
+function getSecondsToday() {
+  let now = new Date();
 
-  // vytvoříme objekt z dnešního dne/měsíce/roku
-  let dnešek = new Date(nyní.getFullYear(), nyní.getMonth(), nyní.getDate());
+  // create an object using the current day/month/year
+  let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  let rozdíl = nyní - dnešek; // rozdíl v milisekundách
-  return Math.round(rozdíl / 1000); // vytvoříme sekundy
+  let diff = now - today; // ms difference
+  return Math.round(diff / 1000); // make seconds
 }
 
-alert( vraťDnešníSekundy() );
+alert( getSecondsToday() );
 ```
 
-Alternativním řešením by bylo získat hodiny, minuty, sekundy a převést je na sekundy:
+An alternative solution would be to get hours/minutes/seconds and convert them to seconds:
 
 ```js run
-function vraťDnešníSekundy() {
+function getSecondsToday() {
   let d = new Date();
   return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
 }
 
-alert( vraťDnešníSekundy() );
+alert( getSecondsToday() );
 ```

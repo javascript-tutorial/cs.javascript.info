@@ -1,148 +1,148 @@
 
 
-# Úvod: callbacky
+# Introduction: callbacks
 
-```warn header="Ve zdejších příkladech používáme metody prohlížeče"
-Abychom demonstrovali použití callbacků, příslibů a jiných abstraktních konceptů, budeme používat některé metody prohlížeče: jmenovitě načítání skriptů a provádění jednoduchých manipulací s dokumentem.
+```warn header="We use browser methods in examples here"
+To demonstrate the use of callbacks, promises and other abstract concepts, we'll be using some browser methods: specifically, loading scripts and performing simple document manipulations.
 
-Jestliže tyto metody neznáte a jejich používání v příkladech vás mate, možná si budete chtít přečíst několik kapitol z [další části](/document) tutoriálu.
+If you're not familiar with these methods, and their usage in the examples is confusing, you may want to read a few chapters from the [next part](/document) of the tutorial.
 
-Snažíme se však, aby všechno bylo jasné. Z prohlížeče tady nebude nic opravdu složitého.
+Although, we'll try to make things clear anyway. There won't be anything really complex browser-wise.
 ```
 
-Hostitelská prostředí JavaScriptu poskytují mnoho funkcí, které vám umožňují naplánovat *asynchronní* akce. Jinými slovy akce, které spustíte nyní, ale dokončí se až později.
+Many functions are provided by JavaScript host environments that allow you to schedule *asynchronous* actions. In other words, actions that we initiate now, but they finish later.
 
-Například jedna taková funkce je `setTimeout`.
+For instance, one such function is the `setTimeout` function.
 
-Ze skutečného světa existují i jiné příklady asynchronních akcí, např. načítání skriptů a modulů (vysvětlíme je v dalších kapitolách).
+There are other real-world examples of asynchronous actions, e.g. loading scripts and modules (we'll cover them in later chapters).
 
-Podívejme se na funkci `načtiSkript(src)`, která načte skript ze zadaného zdroje `src`:
+Take a look at the function `loadScript(src)`, that loads a script with the given `src`:
 
 ```js
-function načtiSkript(src) {
-  // vytvoří značku <script> a připojí ji na stránku
-  // to způsobí, že se skript začne načítat ze zadaného zdroje src, a až bude kompletní, spustí se
-  let skript = document.createElement('script');
-  skript.src = src;
-  document.head.append(skript);
+function loadScript(src) {
+  // creates a <script> tag and append it to the page
+  // this causes the script with given src to start loading and run when complete
+  let script = document.createElement('script');
+  script.src = src;
+  document.head.append(script);
 }
 ```
 
-Funkce vloží do dokumentu novou, dynamicky vytvořenou značku `<script src="…">` se zadaným zdrojem `src`. Prohlížeč jej začne automaticky načítat, a až bude kompletní, spustí jej.
+It inserts into the document a new, dynamically created, tag `<script src="…">` with the given `src`. The browser automatically starts loading it and executes when complete.
 
-Tuto funkci můžeme používat následovně:
+We can use this function like this:
 
 ```js
-// načte skript ze zadané cesty a spustí ho
-načtiSkript('/my/script.js');
+// load and execute the script at the given path
+loadScript('/my/script.js');
 ```
 
-Skript se spustí „asynchronně“, začne se tedy načítat okamžitě, ale spustí se až později, když už funkce skončila.
+The script is executed "asynchronously", as it starts loading now, but runs later, when the function has already finished.
 
-Pokud je za `načtiSkript(…)` nějaký kód, nebude čekat, než načítání skriptu skončí.
+If there's any code below `loadScript(…)`, it doesn't wait until the script loading finishes.
 
 ```js
-načtiSkript('/my/script.js');
-// kód za funkcí načtiSkript
-// nepočká, než načítání skriptu skončí
+loadScript('/my/script.js');
+// the code below loadScript
+// doesn't wait for the script loading to finish
 // ...
 ```
 
-Řekněme, že skript potřebujeme použít hned, jakmile se načte. Skript deklaruje nové funkce a my je chceme spustit.
+Let's say we need to use the new script as soon as it loads. It declares new functions, and we want to run them.
 
-Pokud to však uděláme ihned po volání `načtiSkript(…)`, nebude to fungovat:
+But if we do that immediately after the `loadScript(…)` call, that wouldn't work:
 
 ```js
-načtiSkript('/my/script.js'); // skript obsahuje "function nováFunkce() {…}"
+loadScript('/my/script.js'); // the script has "function newFunction() {…}"
 
 *!*
-nováFunkce(); // taková funkce neexistuje!
+newFunction(); // no such function!
 */!*
 ```
 
-Pochopitelně, prohlížeč pravděpodobně neměl dost času na načtení skriptu. Funkce `načtiSkript` nám tedy zatím neposkytuje způsob, jak vystopovat dokončení načítání. Skript se načte a nakonec se spustí, to je vše. My bychom však rádi věděli, kdy se to stane, abychom mohli používat nové funkce a proměnné ze skriptu.
+Naturally, the browser probably didn't have time to load the script. As of now, the `loadScript` function doesn't provide a way to track the load completion. The script loads and eventually runs, that's all. But we'd like to know when it happens, to use new functions and variables from that script.
 
-Přidejme jako druhý argument funkce `načtiSkript` funkci `callback`, která by se měla spustit, až se skript načte:
+Let's add a `callback` function as a second argument to `loadScript` that should execute when the script loads:
 
 ```js
-function načtiSkript(src, *!*callback*/!*) {
-  let skript = document.createElement('script');
-  skript.src = src;
+function loadScript(src, *!*callback*/!*) {
+  let script = document.createElement('script');
+  script.src = src;
 
 *!*
-  skript.onload = () => callback(skript);
+  script.onload = () => callback(script);
 */!*
 
-  document.head.append(skript);
+  document.head.append(script);
 }
 ```
 
-Když nyní chceme volat nové funkce ze skriptu, měli bychom to uvést v callbacku:
+Now if we want to call new functions from the script, we should write that in the callback:
 
 ```js
-načtiSkript('/my/skript.js', function() {
-  // callback se spustí po načtení skriptu
-  nováFunkce(); // takže nyní to funguje
+loadScript('/my/script.js', function() {
+  // the callback runs after the script is loaded
+  newFunction(); // so now it works
   ...
 });
 ```
 
-Myšlenka je taková: druhý argument je funkce (zpravidla anonymní), která se spustí, až bude akce dokončena.
+That's the idea: the second argument is a function (usually anonymous) that runs when the action is completed.
 
-Zde je spustitelný příklad se skutečným skriptem:
+Here's a runnable example with a real script:
 
 ```js run
-function načtiSkript(src, callback) {
-  let skript = document.createElement('script');
-  skript.src = src;
-  skript.onload = () => callback(skript);
-  document.head.append(skript);
+function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
+  script.onload = () => callback(script);
+  document.head.append(script);
 }
 
 *!*
-načtiSkript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js', skript => {
-  alert(`Hurá, skript ${skript.src} se načetl`);
-  alert( _ ); // funkce deklarovaná v načteném skriptu
+loadScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js', script => {
+  alert(`Cool, the script ${script.src} is loaded`);
+  alert( _ ); // function declared in the loaded script
 });
 */!*
 ```
 
-To se nazývá styl „založený na callbacku“ („callback-based“) asynchronního programování. Funkce, která něco provádí asynchronně, by měla poskytovat argument `callback`, do něhož předáme funkci, která se má spustit, až bude původní funkce hotová.
+That's called a "callback-based" style of asynchronous programming. A function that does something asynchronously should provide a `callback` argument where we put the function to run after it's complete.
 
-Zde jsme to udělali ve funkci `načtiSkript`, ale samozřejmě je to obecný přístup.
+Here we did it in `loadScript`, but of course it's a general approach.
 
-## Callback v callbacku
+## Callback in callback
 
-Jak můžeme načíst dva skripty za sebou: napřed první a po něm druhý?
+How can we load two scripts sequentially: the first one, and then the second one after it?
 
-Přirozené řešení by bylo umístit druhé volání funkce `načtiSkript` do callbacku, například:
+The natural solution would be to put the second `loadScript` call inside the callback, like this:
 
 ```js
-načtiSkript('/my/script.js', function(skript) {
+loadScript('/my/script.js', function(script) {
 
-  alert(`Hurá, ${skript.src} se načetl, teď načteme další`);
+  alert(`Cool, the ${script.src} is loaded, let's load one more`);
 
 *!*
-  načtiSkript('/my/script2.js', function(skript) {
-    alert(`Hurá, druhý skript se načetl`);
+  loadScript('/my/script2.js', function(script) {
+    alert(`Cool, the second script is loaded`);
   });
 */!*
 
 });
 ```
 
-Poté, co skončí vnější funkce `načtiSkript`, callback vyvolá vnitřní.
+After the outer `loadScript` is complete, the callback initiates the inner one.
 
-Co kdybychom chtěli ještě další skript?
+What if we want one more script...?
 
 ```js
-načtiSkript('/my/script.js', function(skript) {
+loadScript('/my/script.js', function(script) {
 
-  načtiSkript('/my/script2.js', function(skript) {
+  loadScript('/my/script2.js', function(script) {
 
 *!*
-    načtiSkript('/my/script3.js', function(skript) {
-      // ...pokračujeme, dokud se nenačtou všechny skripty
+    loadScript('/my/script3.js', function(script) {
+      // ...continue after all scripts are loaded
     });
 */!*
 
@@ -151,73 +151,73 @@ načtiSkript('/my/script.js', function(skript) {
 });
 ```
 
-Každá nová akce je tedy uvnitř callbacku. To je dobré pro málo akcí, ale ne pro mnoho. Brzy tedy uvidíme další varianty.
+So, every new action is inside a callback. That's fine for few actions, but not good for many, so we'll see other variants soon.
 
-## Ošetřování chyb
+## Handling errors
 
-Ve výše uvedených příkladech jsme nebrali v úvahu chyby. Co když načítání skriptu selže? Náš callback by měl být schopen na to reagovat.
+In the above examples we didn't consider errors. What if the script loading fails? Our callback should be able to react on that.
 
-Zde je vylepšená verze funkce `načtiSkript`, která stopuje chyby při načítání:
+Here's an improved version of `loadScript` that tracks loading errors:
 
 ```js
-function načtiSkript(src, callback) {
-  let skript = document.createElement('script');
-  skript.src = src;
+function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
 
 *!*
-  skript.onload = () => callback(null, skript);
-  skript.onerror = () => callback(new Error(`Chyba načítání skriptu pro ${src}`));
+  script.onload = () => callback(null, script);
+  script.onerror = () => callback(new Error(`Script load error for ${src}`));
 */!*
 
-  document.head.append(skript);
+  document.head.append(script);
 }
 ```
 
-Funkce volá `callback(null, skript)` při úspěšném načtení a `callback(chyba)` jinak.
+It calls `callback(null, script)` for successful load and `callback(error)` otherwise.
 
-Použití:
+The usage:
 ```js
-načtiSkript('/my/script.js', function(chyba, skript) {
-  if (chyba) {
-    // ošetření chyby
+loadScript('/my/script.js', function(error, script) {
+  if (error) {
+    // handle error
   } else {
-    // skript úspěšně načten
+    // script loaded successfully
   }
 });
 ```
 
-Opět jsme pro funkci `načtiSkript` použili recept, jaký je opravdu poměrně běžný. Nazývá se styl „callbacku s chybou na prvním místě“ („error-first callback“).
+Once again, the recipe that we used for `loadScript` is actually quite common. It's called the "error-first callback" style.
 
-Konvence je:
-1. První argument funkce `callback` je rezervován pro chybu, pokud nějaká nastane. Pak se volá `callback(chyba)`.
-2. Druhý argument (a případně další, jsou-li zapotřebí) je pro úspěšný výsledek. Pak se volá `callback(null, výsledek1, výsledek2…)`.
+The convention is:
+1. The first argument of the `callback` is reserved for an error if it occurs. Then `callback(err)` is called.
+2. The second argument (and the next ones if needed) are for the successful result. Then `callback(null, result1, result2…)` is called.
 
-Jediná funkce `callback` se tedy používá jak pro hlášení chyb, tak pro další předání výsledků.
+So the single `callback` function is used both for reporting errors and passing back results.
 
-## Pyramida zkázy
+## Pyramid of Doom
 
-Na první pohled to vypadá jako životaschopný přístup k asynchronnímu kódování. A nepochybně jím také je. Pro jedno nebo možná dvě vnořená volání to vypadá dobře.
+At first glance, it looks like a viable approach to asynchronous coding. And indeed it is. For one or maybe two nested calls it looks fine.
 
-Avšak pro vícenásobné asynchronní akce, které následují jedna po druhé, budeme mít kód podobný tomuto:
+But for multiple asynchronous actions that follow one after another, we'll have code like this:
 
 ```js
-načtiSkript('1.js', function(chyba, skript) {
+loadScript('1.js', function(error, script) {
 
-  if (chyba) {
-    ošetřiChybu(chyba);
+  if (error) {
+    handleError(error);
   } else {
     // ...
-    načtiSkript('2.js', function(chyba, skript) {
-      if (chyba) {
-        ošetřiChybu(chyba);
+    loadScript('2.js', function(error, script) {
+      if (error) {
+        handleError(error);
       } else {
         // ...
-        načtiSkript('3.js', function(chyba, skript) {
-          if (chyba) {
-            ošetřiChybu(chyba);
+        loadScript('3.js', function(error, script) {
+          if (error) {
+            handleError(error);
           } else {
   *!*
-            // ...pokračujeme, dokud se nenačtou všechny skripty (*)
+            // ...continue after all scripts are loaded (*)
   */!*
           }
         });
@@ -228,29 +228,29 @@ načtiSkript('1.js', function(chyba, skript) {
 });
 ```
 
-Ve výše uvedeném kódu:
-1. Načteme `1.js`, pak pokud nenastala chyba...
-2. Načteme `2.js`, pak pokud nenastala chyba...
-3. Načteme `3.js`, pak pokud nenastala chyba -- uděláme něco jiného `(*)`.
+In the code above:
+1. We load `1.js`, then if there's no error...
+2. We load `2.js`, then if there's no error...
+3. We load `3.js`, then if there's no error -- do something else `(*)`.
 
-Když se volání budou stále vnořovat, kód bude stále hlubší a jeho údržba čím dál obtížnější, zvláště pokud místo `...` máme skutečný kód, který může obsahovat další cykly, podmíněné příkazy a podobně.
+As calls become more nested, the code becomes deeper and increasingly more difficult to manage, especially if we have real code instead of `...` that may include more loops, conditional statements and so on.
 
-Tomu se někdy říká „callbackové peklo“ nebo „pyramida zkázy“.
+That's sometimes called "callback hell" or "pyramid of doom."
 
 <!--
-načtiSkript('1.js', function(chyba, skript) {
-  if (chyba) {
-    ošetřiChybu(chyba);
+loadScript('1.js', function(error, script) {
+  if (error) {
+    handleError(error);
   } else {
     // ...
-    načtiSkript('2.js', function(chyba, skript) {
-      if (chyba) {
-        ošetřiChybu(chyba);
+    loadScript('2.js', function(error, script) {
+      if (error) {
+        handleError(error);
       } else {
         // ...
-        načtiSkript('3.js', function(chyba, skript) {
-          if (chyba) {
-            ošetřiChybu(chyba);
+        loadScript('3.js', function(error, script) {
+          if (error) {
+            handleError(error);
           } else {
             // ...
           }
@@ -263,48 +263,48 @@ načtiSkript('1.js', function(chyba, skript) {
 
 ![](callback-hell.svg)
 
-Tato „pyramida“ vnořených volání se bude protahovat doprava s každou další asynchronní akcí. Brzy se vymkne kontrole.
+The "pyramid" of nested calls grows to the right with every asynchronous action. Soon it spirals out of control.
 
-Tento způsob kódování se tedy zdá být poněkud nešťastným.
+So this way of coding isn't very good.
 
-Můžeme se tento problém pokusit utlumit tím, že vložíme každou akci do samostatné funkce, například:
+We can try to alleviate the problem by making every action a standalone function, like this:
 
 ```js
-načtiSkript('1.js', krok1);
+loadScript('1.js', step1);
 
-function krok1(chyba, skript) {
-  if (chyba) {
-    ošetřiChybu(chyba);
+function step1(error, script) {
+  if (error) {
+    handleError(error);
   } else {
     // ...
-    načtiSkript('2.js', krok2);
+    loadScript('2.js', step2);
   }
 }
 
-function krok2(chyba, skript) {
-  if (chyba) {
-    ošetřiChybu(chyba);
+function step2(error, script) {
+  if (error) {
+    handleError(error);
   } else {
     // ...
-    načtiSkript('3.js', krok3);
+    loadScript('3.js', step3);
   }
 }
 
-function krok3(chyba, skript) {
-  if (chyba) {
-    ošetřiChybu(chyba);
+function step3(error, script) {
+  if (error) {
+    handleError(error);
   } else {
-    // ...pokračujeme, dokud se nenačtou všechny skripty (*)
+    // ...continue after all scripts are loaded (*)
   }
 }
 ```
 
-Vidíte? Dělá totéž a neobsahuje žádné hluboké vnořování, protože jsme každou akci umístili do oddělené funkce na nejvyšší úrovni.
+See? It does the same thing, and there's no deep nesting now because we made every action a separate top-level function.
 
-Funguje to, ale kód nyní vypadá jako roztrhané prostěradlo. Špatně se čte a pravděpodobně jste si všimli, že člověk musí při jeho čtení přeskakovat očima mezi jednotlivými částmi. To je nepohodlné, zvláště pokud čtenář tento kód nezná a neví, kam má očima skočit.
+It works, but the code looks like a torn apart spreadsheet. It's difficult to read, and you probably noticed that one needs to eye-jump between pieces while reading it. That's inconvenient, especially if the reader is not familiar with the code and doesn't know where to eye-jump.
 
-Navíc všechny funkce jménem `krok*` jsou na jedno použití, byly vytvořeny jen proto, abychom se vyhnuli „pyramidě zkázy“. Mimo řetězec akcí je nikdo používat nebude. Zavádíme tedy trochu zbytečné názvy.
+Also, the functions named `step*` are all of single use, they are created only to avoid the "pyramid of doom." No one is going to reuse them outside of the action chain. So there's a bit of namespace cluttering here.
 
-Chtěli bychom mít něco lepšího.
+We'd like to have something better.
 
-Naštěstí existují i jiné způsoby, jak se takovým pyramidám vyhnout. Jedním z nejlepších je používání „příslibů“, které popíšeme v následující kapitole.
+Luckily, there are other ways to avoid such pyramids. One of the best ways is to use "promises", described in the next chapter.

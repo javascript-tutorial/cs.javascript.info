@@ -1,14 +1,16 @@
-1.  Buď použijeme wrapperovou funkci, pro stručnost šipkovou:
+
+
+1. Either use a wrapper function, an arrow to be concise:
 
     ```js 
-    zeptejSeNaHeslo(() => uživatel.přihlaš(true), () => uživatel.přihlaš(false)); 
+    askPassword(() => user.login(true), () => user.login(false)); 
     ```
 
-    Nyní načte proměnnou `uživatel` z vnějších proměnných a funguje běžným způsobem.
+    Now it gets `user` from outer variables and runs it the normal way.
 
-2.  Nebo vytvoříme částečnou funkci z `uživatel.přihlaš`, která používá `uživatel` jako kontext a má příslušný první argument:
+2. Or create a partial function from `user.login` that uses `user` as the context and has the correct first argument:
 
 
     ```js 
-    zeptejSeNaHeslo(uživatel.přihlaš.bind(uživatel, true), uživatel.přihlaš.bind(uživatel, false)); 
+    askPassword(user.login.bind(user, true), user.login.bind(user, false)); 
     ```

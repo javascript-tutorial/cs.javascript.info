@@ -2,21 +2,21 @@ importance: 4
 
 ---
 
-# Proč 6.35.toFixed(1) == 6.3?
+# Why 6.35.toFixed(1) == 6.3?
 
-Podle dokumentace `Math.round` a `toFixed` zaokrouhlují obě na nejbližší číslo: `0..4` se zaokrouhluje dolů, zatímco `5..9` nahoru.
+According to the documentation `Math.round` and `toFixed` both round to the nearest number: `0..4` lead down while `5..9` lead up.
 
-Například:
+For instance:
 
 ```js run
 alert( 1.35.toFixed(1) ); // 1.4
 ```
 
-Proč se v podobném níže uvedeném příkladu `6.35` zaokrouhlí na `6.3` a ne na `6.4`?
+In the similar example below, why is `6.35` rounded to `6.3`, not `6.4`?
 
 ```js run
 alert( 6.35.toFixed(1) ); // 6.3
 ```
 
-Jak zaokrouhlit `6.35` správně?
+How to round `6.35` the right way?
 

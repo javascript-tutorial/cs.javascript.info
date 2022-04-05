@@ -2,35 +2,37 @@ importance: 4
 
 ---
 
-# Je nutné „else“?
+# Is "else" required?
 
-Následující funkce vrátí `true`, jestliže parametr `věk` je větší než `18`. Jinak se zeptá na povolení a vrátí výsledek dotazu:
+The following function returns `true` if the parameter `age` is greater than `18`.
+
+Otherwise it asks for a confirmation and returns its result:
 
 ```js
-function ověřVěk(věk) {
-  if (věk > 18) {
+function checkAge(age) {
+  if (age > 18) {
     return true;
 *!*
   } else {
     // ...
-    return confirm('Dovolili ti to rodiče?');
+    return confirm('Did parents allow you?');
   }
 */!*
 }
 ```
 
-Bude tato funkce fungovat jinak, bude-li odstraněno `else`?
+Will the function work differently if `else` is removed?
 
 ```js
-function ověřVěk(věk) {
-  if (věk > 18) {
+function checkAge(age) {
+  if (age > 18) {
     return true;
   }
 *!*
   // ...
-  return confirm('Dovolili ti to rodiče?');
+  return confirm('Did parents allow you?');
 */!*
 }
 ```
 
-Je nějaký rozdíl mezi chováním těchto dvou variant?
+Is there any difference in the behavior of these two variants?

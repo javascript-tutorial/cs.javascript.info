@@ -1,10 +1,10 @@
-function vraťMístníDenVTýdnu(datum) {
+function getLocalDay(date) {
 
-  let den = datum.getDay();
+  let day = date.getDay();
 
-  if (den == 0) { // 0. den v týdnu (neděle) je v Evropě 7.
-    den = 7;
+  if (day == 0) { // weekday 0 (sunday) is 7 in european
+    day = 7;
   }
 
-  return den;
+  return day;
 }

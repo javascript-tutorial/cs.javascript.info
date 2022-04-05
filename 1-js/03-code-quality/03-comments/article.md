@@ -1,40 +1,40 @@
-# Komentáře
+# Comments
 
-Jak víme z kapitoly <info:structure>, komentáře mohou být jednořádkové, které začínají `//`, a víceřádkové `/* ... */`.
+As we know from the chapter <info:structure>, comments can be single-line: starting with `//` and multiline: `/* ... */`.
 
-Obvykle je používáme k popisu, jak a proč kód funguje.
+We normally use them to describe how and why the code works.
 
-Na první pohled může být komentování samozřejmé, ale začínající programátoři je často používají nesprávně.
+At first sight, commenting might be obvious, but novices in programming often use them wrongly.
 
-## Špatné komentáře
+## Bad comments
 
-Začátečníci tíhnou k používání komentářů, které vysvětlují, „co se v kódu děje“. Například:
+Novices tend to use comments to explain "what is going on in the code". Like this:
 
 ```js
-// Tento kód dělá toto (...) a toto (...)
-// ...a kdo ví, co jiného...
-velmi;
-složitý;
-kód;
+// This code will do this thing (...) and that thing (...)
+// ...and who knows what else...
+very;
+complex;
+code;
 ```
 
-V dobrém kódu by však množství takových „vysvětlujících“ komentářů mělo být minimální. Opravdu by kód měl být srozumitelný i bez nich.
+But in good code, the amount of such "explanatory" comments should be minimal. Seriously, the code should be easy to understand without them.
 
-Platí jedno zlaté pravidlo: „Je-li kód natolik nejasný, že vyžaduje komentář, možná by místo toho měl být přepsán.“
+There's a great rule about that: "if the code is so unclear that it requires a comment, then maybe it should be rewritten instead".
 
-### Recept: extrahujte funkce
+### Recipe: factor out functions
 
-Někdy se vyplatí nahradit kus kódu funkcí, například:
+Sometimes it's beneficial to replace a code piece with a function, like here:
 
 ```js
-function zobrazPrvočísla(n) {
-  dalšíPrvočíslo:
+function showPrimes(n) {
+  nextPrime:
   for (let i = 2; i < n; i++) {
 
 *!*
-    // ověří, zda i je prvočíslo
+    // check if i is a prime number
     for (let j = 2; j < i; j++) {
-      if (i % j == 0) continue dalšíPrvočíslo;
+      if (i % j == 0) continue nextPrime;
     }
 */!*
 
@@ -43,20 +43,20 @@ function zobrazPrvočísla(n) {
 }
 ```
 
-Lepší varianta s vyjmutou funkcí `jePrvočíslo`:
+The better variant, with a factored out function `isPrime`:
 
 
 ```js
-function zobrazPrvočísla(n) {
+function showPrimes(n) {
 
   for (let i = 2; i < n; i++) {
-    *!*if (!jePrvočíslo(i)) continue;*/!*
+    *!*if (!isPrime(i)) continue;*/!*
 
     alert(i);  
   }
 }
 
-function jePrvočíslo(n) {
+function isPrime(n) {
   for (let i = 2; i < n; i++) {
     if (n % i == 0) return false;
   }
@@ -65,116 +65,116 @@ function jePrvočíslo(n) {
 }
 ```
 
-Nyní kódu snadno porozumíme. Funkce sama o sobě se stává komentářem. Takový kód se nazývá *sebepopisující*.
+Now we can understand the code easily. The function itself becomes the comment. Such code is called *self-descriptive*.
 
-### Recept: vytvářejte funkce
+### Recipe: create functions
 
-A máme-li dlouhý „kus kódu“, jako třeba:
+And if we have a long "code sheet" like this:
 
 ```js
-// zde přidáme whisky
+// here we add whiskey
 for(let i = 0; i < 10; i++) {
-  let kapka = vezmiWhisky();
-  přičichni(kapka);
-  přidej(kapka, sklenice);
+  let drop = getWhiskey();
+  smell(drop);
+  add(drop, glass);
 }
 
-// zde přidáme džus
+// here we add juice
 for(let t = 0; t < 3; t++) {
-  let rajče = vezmiRajče();
-  prozkoumej(rajče);
-  let džus = rozmačkej(rajče);
-  přidej(džus, sklenice);
+  let tomato = getTomato();
+  examine(tomato);
+  let juice = press(tomato);
+  add(juice, glass);
 }
 
 // ...
 ```
 
-pak může být lepší varianta jej přepsat do funkcí takto:
+Then it might be a better variant to refactor it into functions like:
 
 ```js
-přidejWhisky(sklenice);
-přidejDžus(sklenice);
+addWhiskey(glass);
+addJuice(glass);
 
-function přidejWhisky(nádoba) {
+function addWhiskey(container) {
   for(let i = 0; i < 10; i++) {
-    let kapka = vezmiWhisky();
+    let drop = getWhiskey();
     //...
   }
 }
 
-function přidejDžus(nádoba) {
+function addJuice(container) {
   for(let t = 0; t < 3; t++) {
-    let rajče = vezmiRajče();
+    let tomato = getTomato();
     //...
   }
 }
 ```
 
-Opět funkce samy o sobě říkají, co se děje. Není tady co komentovat. I struktura kódu je lepší, když je kód rozdělený. Je jasné, co která funkce provádí, co přijímá a co vrací.
+Once again, functions themselves tell what's going on. There's nothing to comment. And also the code structure is better when split. It's clear what every function does, what it takes and what it returns.
 
-V realitě se nemůžeme „vysvětlujícím“ komentářům úplně vyhnout. Existují složité algoritmy a existují chytrá „vylepšení“ pro účely optimalizace. Obecně bychom se však měli snažit udržet kód jednoduchý a sebepopisující.
+In reality, we can't totally avoid "explanatory" comments. There are complex algorithms. And there are smart "tweaks" for purposes of optimization. But generally we should try to keep the code simple and self-descriptive.
 
-## Dobré komentáře
+## Good comments
 
-Vysvětlující komentáře jsou tedy obecně špatné. Jaké komentáře jsou dobré?
+So, explanatory comments are usually bad. Which comments are good?
 
-Popis architektury
-: Poskytují vysokoúrovňový pohled na komponenty, jak spolu interagují, jaký je řídicí tok v různých situacích... Stručně řečeno -- pohled na kód z ptačí perspektivy. Existuje i speciální jazyk [UML](http://wikipedia.org/wiki/Unified_Modeling_Language) určený k tvorbě diagramů na vysoké úrovni architektury, které popisují kód. Rozhodně má smysl si jej prostudovat.
+Describe the architecture
+: Provide a high-level overview of components, how they interact, what's the control flow in various situations... In short -- the bird's eye view of the code. There's a special language [UML](http://wikipedia.org/wiki/Unified_Modeling_Language) to build high-level architecture diagrams explaining the code. Definitely worth studying.
 
-Dokumentace parametrů a použití funkcí
-: Existuje speciální syntaxe [JSDoc](http://en.wikipedia.org/wiki/JSDoc) pro dokumentaci funkcí: použití, parametry, návratová hodnota.
+Document function parameters and usage
+: There's a special syntax [JSDoc](http://en.wikipedia.org/wiki/JSDoc) to document a function: usage, parameters, returned value.
 
-Například:
+For instance:
 ```js
 /**
- * Vrátí x umocněné na n-tou.
+ * Returns x raised to the n-th power.
  *
- * @param {number} x Číslo, které se má umocnit.
- * @param {number} n Exponent, musí být přirozené číslo.
- * @return {number} x umocněné na n-tou.
+ * @param {number} x The number to raise.
+ * @param {number} n The power, must be a natural number.
+ * @return {number} x raised to the n-th power.
  */
-function mocnina(x, n) {
+function pow(x, n) {
   ...
 }
 ```
 
-Takové komentáře nám umožňují porozumět účelu funkce a používat ji správně, aniž bychom se dívali na její kód.
+Such comments allow us to understand the purpose of the function and use it the right way without looking in its code.
 
-Mimochodem i mnoho editorů, například [WebStorm](https://www.jetbrains.com/webstorm/), jim dokáže porozumět a používá je k automatickému doplňování a určité automatické kontrole kódu.
+By the way, many editors like [WebStorm](https://www.jetbrains.com/webstorm/) can understand them as well and use them to provide autocomplete and some automatic code-checking.
 
-Existují i nástroje jako [JSDoc 3](https://github.com/jsdoc3/jsdoc), které umějí z těchto komentářů vygenerovat dokumentaci v HTML. Více informací o JSDoc si můžete přečíst na <http://usejsdoc.org/>.
+Also, there are tools like [JSDoc 3](https://github.com/jsdoc3/jsdoc) that can generate HTML-documentation from the comments. You can read more information about JSDoc at <http://usejsdoc.org/>.
 
-Proč se tato úloha řeší zrovna takhle?
-: To, co je psáno, je důležité. Ale to, co *není* psáno, může být ještě důležitější k pochopení toho, o co jde. Proč je tato úloha řešena právě tímto způsobem? Kód nám odpověď nedává.
+Why is the task solved this way?
+: What's written is important. But what's *not* written may be even more important to understand what's going on. Why is the task solved exactly this way? The code gives no answer.
 
-    Existuje-li mnoho způsobů, jak tuto úlohu řešit, proč zrovna tento? Zvláště pokud to není zrovna ten nejzřejmější.
+    If there are many ways to solve the task, why this one? Especially when it's not the most obvious one.
 
-    Bez takových komentářů může nastat následující situace:
-    1. Vy (nebo váš kolega) otevřete kód, napsaný před nějakou dobou, a vidíte, že je „suboptimální“.
-    2. Pomyslíte si: „To jsem byl tehdy ale hloupý, teď jsem o hodně chytřejší“, a přepíšete ho na „jasnější a korektnější“ variantu.
-    3. ...Potřeba přepsat kód byla dobrá. Ale v procesu uvidíte, že „jasnější“ řešení je ve skutečnosti horší. Matně si vzpomenete proč, jelikož jste je už před dlouhou dobou zkoušeli. Vrátíte kód na korektní variantu, ale byla to ztráta času.
+    Without such comments the following situation is possible:
+    1. You (or your colleague) open the code written some time ago, and see that it's "suboptimal".
+    2. You think: "How stupid I was then, and how much smarter I'm now", and rewrite using the "more obvious and correct" variant.
+    3. ...The urge to rewrite was good. But in the process you see that the "more obvious" solution is actually lacking. You even dimly remember why, because you already tried it long ago. You revert to the correct variant, but the time was wasted.
 
-    Komentáře, které vysvětlují řešení, jsou velmi důležité, protože nám pomáhají vyvíjet správnou cestou.
+    Comments that explain the solution are very important. They help to continue development the right way.
 
-Jsou v kódu nějaké finty? Proč jsou použity?
-: Obsahuje-li kód cokoli promyšleného a neintuitivního, má rozhodně smysl jej komentovat.
+Any subtle features of the code? Where they are used?
+: If the code has anything subtle and counter-intuitive, it's definitely worth commenting.
 
-## Shrnutí
+## Summary
 
-Komentáře jsou důležitým znakem dobrého vývojáře: jejich přítomnost, ale i jejich absence.
+An important sign of a good developer is comments: their presence and even their absence.
 
-Dobré komentáře nám umožňují kód dobře udržovat, později se k němu vracet a efektivněji jej využívat.
+Good comments allow us to maintain the code well, come back to it after a delay and use it more effectively.
 
-**Komentujte toto:**
+**Comment this:**
 
-- Celkovou architekturu, pohled z vysoké úrovně.
-- Používání funkcí.
-- Důležitá řešení, zvláště pokud nejsou jasná na první pohled.
+- Overall architecture, high-level view.
+- Function usage.
+- Important solutions, especially when not immediately obvious.
 
-**Zdržte se komentářů:**
+**Avoid comments:**
 
-- Které vysvětlují „jak kód funguje“ a „co dělá“.
-- Vkládejte je jen tehdy, když není možné udržet kód natolik jednoduchý a sebepopisující, že je nevyžaduje.
+- That tell "how code works" and "what it does".
+- Put them in only if it's impossible to make the code so simple and self-descriptive that it doesn't require them.
 
-Komentáře se také používají pro nástroje automatické dokumentace jako JSDoc3, které je načtou a vygenerují z nich dokumentaci v HTML (nebo v jakémkoli jiném formátu).
+Comments are also used for auto-documenting tools like JSDoc3: they read them and generate HTML-docs (or docs in another format).

@@ -1,9 +1,9 @@
 ```js run
-function čekej(ms) {
+function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-čekej(3000).then(() => alert('spustí se za 3 sekundy'));
+delay(3000).then(() => alert('runs after 3 seconds'));
 ```
 
-Prosíme všimněte si, že v této úloze je `resolve` voláno bez argumentů. Z funkce `čekej` nevracíme žádnou hodnotu, jen zajistíme čekání.
+Please note that in this task `resolve` is called without arguments. We don't return any value from `delay`, just ensure the delay.

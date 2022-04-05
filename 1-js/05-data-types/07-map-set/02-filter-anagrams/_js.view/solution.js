@@ -1,11 +1,11 @@
 
-function odstraňAnagramy(pole) {
-  let mapa = new Map();
+function aclean(arr) {
+  let map = new Map();
 
-  for(let slovo of pole) {
-    let seřazené = slovo.toLowerCase().split("").sort().join("");
-    mapa.set(seřazené, slovo);
+  for(let word of arr) {
+    let sorted = word.toLowerCase().split("").sort().join("");
+    map.set(sorted, word);
   }
 
-  return Array.from(mapa.values());
+  return Array.from(map.values());
 }

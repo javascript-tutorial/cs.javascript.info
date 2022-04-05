@@ -1,215 +1,221 @@
-# Datové typy
+# Data types
 
-Každá hodnota v JavaScriptu je určitého typu, například řetězec nebo číslo.
+A value in JavaScript is always of a certain type. For example, a string or a number.
 
-V JavaScriptu existuje osm základních datových typů. Zde je všeobecně popíšeme a v příštích kapitolách podrobně rozebereme každý z nich.
+There are eight basic data types in JavaScript. Here, we'll cover them in general and in the next chapters we'll talk about each of them in detail.
 
-Do proměnné můžeme uložit hodnotu libovolného typu. Například proměnná může být v jednu chvíli řetězec a pak do ní můžeme uložit číslo:
+We can put any type in a variable. For example, a variable can at one moment be a string and then store a number:
 
 ```js
-// to není chyba
-let zpráva = "ahoj";
-zpráva = 123456;
+// no error
+let message = "hello";
+message = 123456;
 ```
 
-Programovací jazyky jako JavaScript, které něco takového umožňují, se nazývají „dynamicky typované“. Znamená to, že v nich existují datové typy, ale proměnné na ně nejsou navázány.
+Programming languages that allow such things, such as JavaScript, are called "dynamically typed", meaning that there exist data types, but variables are not bound to any of them.
 
-## Číslo
+## Number
 
 ```js
 let n = 123;
 n = 12.345;
 ```
 
-Typ *číslo* (anglicky *number*) představuje čísla, a to celá čísla i čísla s plovoucí řádovou čárkou.
+The *number* type represents both integer and floating point numbers.
 
-Pro čísla existuje mnoho operací, např. násobení `*`, dělení `/`, sčítání `+`, odčítání `-` a jiné.
+There are many operations for numbers, e.g. multiplication `*`, division `/`, addition `+`, subtraction `-`, and so on.
 
-Kromě běžných čísel obsahuje JavaScript i tzv. „speciální číselné hodnoty“, které také patří do tohoto datového typu: `Infinity`, `-Infinity` a `NaN`.
+Besides regular numbers, there are so-called "special numeric values" which also belong to this data type: `Infinity`, `-Infinity` and `NaN`.
 
-- `Infinity` (anglicky nekonečno) představuje matematické [nekonečno](https://en.wikipedia.org/wiki/Infinity) ∞. Je to speciální hodnota, která je větší než kterékoli číslo.
+- `Infinity` represents the mathematical [Infinity](https://en.wikipedia.org/wiki/Infinity) ∞. It is a special value that's greater than any number.
 
-    Můžeme je získat jako výsledek dělení nulou:
+    We can get it as a result of division by zero:
 
     ```js run
     alert( 1 / 0 ); // Infinity
     ```
 
-    Nebo se na ně přímo odkázat:
+    Or just reference it directly:
 
     ```js run
     alert( Infinity ); // Infinity
     ```
-    
-- `NaN` (z anglického „not a number“ -- není číslo) představuje výpočetní chybu. Je to výsledek nekorektní nebo nedefinované matematické operace, například:
+- `NaN` represents a computational error. It is a result of an incorrect or an undefined mathematical operation, for instance:
 
     ```js run
-    alert( "to není číslo" / 2 ); // NaN, takové dělení je chybné
+    alert( "not a number" / 2 ); // NaN, such division is erroneous
     ```
 
-    `NaN` je „lepkavé“. Jakákoli operace provedená s `NaN` vrátí opět `NaN`:
+    `NaN` is sticky. Any further mathematical operation on `NaN` returns `NaN`:
 
     ```js run
     alert( NaN + 1 ); // NaN
     alert( 3 * NaN ); // NaN
-    alert( "to není číslo" / 2 - 1 ); // NaN
+    alert( "not a number" / 2 - 1 ); // NaN
     ```
 
-    Je-li tedy někde v matematickém výrazu `NaN`, přenese se až do jeho celkového výsledku (jediná výjimka: `NaN ** 0` je `1`).
+    So, if there's a `NaN` somewhere in a mathematical expression, it propagates to the whole result (there's only one exception to that: `NaN ** 0` is `1`).
 
-```smart header="Matematické operace jsou bezpečné"
-Veškeré matematické výpočty v JavaScriptu jsou „bezpečné“. Můžeme provádět cokoli: dělit nulou, zacházet s řetězci neobsahujícími číslo jako s čísly a podobně.
+```smart header="Mathematical operations are safe"
+Doing maths is "safe" in JavaScript. We can do anything: divide by zero, treat non-numeric strings as numbers, etc.
 
-Skript nikdy neskončí fatální chybou („nespadne“). Přinejhorším dostaneme jako výsledek `NaN`.
+The script will never stop with a fatal error ("die"). At worst, we'll get `NaN` as the result.
 ```
 
-Speciální číselné hodnoty formálně patří k typu „číslo“. Samozřejmě to nejsou čísla v běžném slova smyslu.
+Special numeric values formally belong to the "number" type. Of course they are not numbers in the common sense of this word.
 
-O práci s čísly si povíme víc v kapitole <info:number>.
+We'll see more about working with numbers in the chapter <info:number>.
 
 ## BigInt [#bigint-type]
 
-Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>. Toto technické omezení je dáno jeho vnitřní reprezentací.
+In JavaScript, the "number" type cannot represent integer values larger than <code>(2<sup>53</sup>-1)</code> (that's `9007199254740991`), or less than <code>-(2<sup>53</sup>-1)</code> for negatives. It's a technical limitation caused by their internal representation.
 
-Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy. Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
+For most purposes that's quite enough, but sometimes we need really big numbers, e.g. for cryptography or microsecond-precision timestamps.
 
-Hodnota typu `BigInt` vznikne přidáním písmene `n` na konec celého čísla:
+`BigInt` type was recently added to the language to represent integers of arbitrary length.
+
+A `BigInt` value is created by appending `n` to the end of an integer:
 
 ```js
-// "n" na konci znamená, že to je BigInt
+// the "n" at the end means it's a BigInt
 const bigInt = 1234567890123456789012345678901234567890n;
 ```
 
-Protože čísla typu `BigInt` potřebujeme jen málokdy, nebudeme je tady probírat, ale věnujeme jim zvláštní kapitolu <info:bigint>. Až budete tak velká čísla potřebovat, přečtěte si ji.
+As `BigInt` numbers are rarely needed, we don't cover them here, but devoted them a separate chapter <info:bigint>. Read it when you need such big numbers.
 
-```smart header="Otázka kompatibility"
-Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v IE.
+
+```smart header="Compatibility issues"
+Right now, `BigInt` is supported in Firefox/Chrome/Edge/Safari, but not in IE.
 ```
 
-Nahlédnutím do [*MDN* tabulky kompatibility BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
+You can check [*MDN* BigInt compatibility table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) to know which versions of a browser are supported.
 
-## Řetězec
+## String
 
-Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
+A string in JavaScript must be surrounded by quotes.
 
 ```js
-let str = "Ahoj";
-let str2 = 'Jednoduché uvozovky (apostrofy) lze také použít';
-let věta = `může zahrnovat jiný ${str}`;
+let str = "Hello";
+let str2 = 'Single quotes are ok too';
+let phrase = `can embed another ${str}`;
 ```
 
-JavaScript rozeznává tři druhy uvozovek.
+In JavaScript, there are 3 types of quotes.
 
-1. Dvojité uvozovky: `"Ahoj"`.
-2. Jednoduché uvozovky (apostrofy): `'Ahoj'`.
-3. Obrácené čárky (gravisy): <code>&#96;Ahoj&#96;</code>.
+1. Double quotes: `"Hello"`.
+2. Single quotes: `'Hello'`.
+3. Backticks: <code>&#96;Hello&#96;</code>.
 
-Dvojité uvozovky a apostrofy jsou „obyčejné“ uvozovky. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
+Double and single quotes are "simple" quotes. There's practically no difference between them in JavaScript.
 
-Obrácené čárky jsou uvozovky „s rozšířenou funkcionalitou“. Umožňují nám vložit do řetězce proměnné a výrazy, když je uzavřeme do `${…}`. Například:
+Backticks are "extended functionality" quotes. They allow us to embed variables and expressions into a string by wrapping them in `${…}`, for example:
 
 ```js run
-let jméno = "Jan";
+let name = "John";
 
-// vložíme proměnnou
-alert( `Ahoj, *!*${jméno}*/!*!` ); // Ahoj, Jan!
+// embed a variable
+alert( `Hello, *!*${name}*/!*!` ); // Hello, John!
 
-// vložíme výraz
-alert( `výsledek je *!*${1 + 2}*/!*` ); // výsledek je 3
+// embed an expression
+alert( `the result is *!*${1 + 2}*/!*` ); // the result is 3
 ```
 
-Výraz uvnitř `${…}` se vypočítá a jeho výsledek se stane součástí řetězce. Můžeme tam vložit cokoli: proměnnou jako `jméno`, aritmetický výraz jako `1 + 2`, nebo i něco složitějšího.
+The expression inside `${…}` is evaluated and the result becomes a part of the string. We can put anything in there: a variable like `name` or an arithmetical expression like `1 + 2` or something more complex.
 
-Všimněte si, že toto lze provést jen uvnitř obrácených čárek. Ostatní druhy uvozovek tuto funkcionalitu nemají!
+Please note that this can only be done in backticks. Other quotes don't have this embedding functionality!
 ```js run
-alert( "výsledek je ${1 + 2}" ); // výsledek je ${1 + 2} (dvojité uvozovky s tím nic neudělají)
+alert( "the result is ${1 + 2}" ); // the result is ${1 + 2} (double quotes do nothing)
 ```
 
-Řetězce probereme podrobněji v kapitole <info:string>.
+We'll cover strings more thoroughly in the chapter <info:string>.
 
-```smart header="V JavaScriptu není typ *znak*"
-V některých jazycích existuje speciální typ „znak“ pro jediný znak. Například v jazyce C nebo Java se nazývá „char“.
+```smart header="There is no *character* type."
+In some languages, there is a special "character" type for a single character. For example, in the C language and in Java it is called "char".
 
-V JavaScriptu žádný takový typ není. Je tady jen jeden typ: `string` (řetězec). Řetězec může být prázdný (neobsahovat žádný znak), může se skládat z jediného znaku nebo z více znaků.
+In JavaScript, there is no such type. There's only one type: `string`. A string may consist of zero characters (be empty), one character or many of them.
 ```
 
-## Boolean (logický typ)
+## Boolean (logical type)
 
-Typ boolean má jen dvě hodnoty: `true` a `false`.
+The boolean type has only two values: `true` and `false`.
 
-Tento typ se běžně používá k ukládání hodnot ano/ne: `true` znamená „ano, správně“, `false` znamená „ne, nesprávně“.
+This type is commonly used to store yes/no values: `true` means "yes, correct", and `false` means "no, incorrect".
 
-Příklad:
+For instance:
 
 ```js
-let poleJménaZkontrolováno = true; // ano, pole se jménem je zkontrolováno
-let poleVěkuZkontrolováno = false; // ne, pole s věkem není zkontrolováno
+let nameFieldChecked = true; // yes, name field is checked
+let ageFieldChecked = false; // no, age field is not checked
 ```
 
-Booleovské hodnoty také dostáváme jako výsledek porovnání:
+Boolean values also come as a result of comparisons:
 
 ```js run
-let jeVětší = 4 > 1;
+let isGreater = 4 > 1;
 
-alert( jeVětší ); // true (výsledek porovnání je „ano“)
+alert( isGreater ); // true (the comparison result is "yes")
 ```
 
-Booleovské hodnoty podrobně probereme v kapitole <info:logical-operators>.
+We'll cover booleans more deeply in the chapter <info:logical-operators>.
 
-## Hodnota „null“
+## The "null" value
 
-Speciální hodnota `null` nepatří k žádnému z výše uvedených typů. Tvoří samostatný typ, který obsahuje jedině hodnotu `null`:
+The special `null` value does not belong to any of the types described above.
+
+It forms a separate type of its own which contains only the `null` value:
 
 ```js
-let věk = null;
+let age = null;
 ```
 
-V JavaScriptu `null` není „odkaz na neexistující objekt“ nebo „nulový ukazatel“, jako v některých jiných jazycích. Je to speciální hodnota, která představuje „nic“, „prázdno“ nebo „neznámá hodnota“.
+In JavaScript, `null` is not a "reference to a non-existing object" or a "null pointer" like in some other languages.
 
-Výše uvedený kód říká, že `věk` je neznámý.
+It's just a special value which represents "nothing", "empty" or "value unknown".
 
-## Hodnota „undefined“
+The code above states that `age` is unknown.
 
-Rovněž speciální hodnota `undefined` stojí stranou a tvoří svůj vlastní typ, stejně jako `null`.
+## The "undefined" value
 
-Význam `undefined` je „hodnota není přiřazena“.
+The special value `undefined` also stands apart. It makes a type of its own, just like `null`.
 
-Je-li proměnná deklarována, ale není jí přiřazena hodnota, pak má hodnotu `undefined`:
+The meaning of `undefined` is "value is not assigned".
+
+If a variable is declared, but not assigned, then its value is `undefined`:
 
 ```js run
-let věk;
+let age;
 
-alert(věk); // zobrazí „undefined“
+alert(age); // shows "undefined"
 ```
 
-Technicky je možné výslovně přiřadit hodnotu `undefined` nějaké proměnné:
+Technically, it is possible to explicitly assign `undefined` to a variable:
 
 ```js run
-let věk = 100;
+let age = 100;
 
-// změníme hodnotu na undefined
-věk = undefined;
+// change the value to undefined
+age = undefined;
 
-alert(věk); // "undefined"
+alert(age); // "undefined"
 ```
 
-...Toto však nedoporučujeme. Běžně se k přiřazení „prázdné“ nebo „neznámé“ hodnoty do proměnné používá `null`, zatímco `undefined` je vyhrazeno jako defaultní úvodní hodnota nepřiřazených proměnných.
+...But we don't recommend doing that. Normally, one uses `null` to assign an "empty" or "unknown" value to a variable, while `undefined` is reserved as a default initial value for unassigned things.
 
-## Objekty a symboly
+## Objects and Symbols
 
-Typ `object` je speciální.
+The `object` type is special.
 
-Všechny ostatní typy se nazývají „primitivní“, protože jejich hodnoty mohou obsahovat pouze jednu věc (ať je to řetězec, číslo nebo cokoli). Naproti tomu objekty se používají k ukládání kolekcí dat a složitějších entit.
+All other types are called "primitive" because their values can contain only a single thing (be it a string or a number or whatever). In contrast, objects are used to store collections of data and more complex entities.
 
-Když jsou objekty tak důležité, vyžadují zvláštní zacházení. Budeme o nich hovořit později v kapitole <info:object>, až se dozvíme víc o primitivních typech.
+Being that important, objects deserve a special treatment. We'll deal with them later in the chapter <info:object>, after we learn more about primitives.
 
-Typ `symbol` se používá k vytváření unikátních identifikátorů pro objekty. Musíme jej zde zmínit, aby seznam byl úplný, ale podrobnosti necháme až na dobu, kdy budeme znát objekty.
+The `symbol` type is used to create unique identifiers for objects. We have to mention it here for the sake of completeness, but also postpone the details till we know objects.
 
-## Operátor typeof [#type-typeof]
+## The typeof operator [#type-typeof]
 
-Operátor `typeof` vrací typ argumentu. Je užitečný, když chceme hodnoty různých typů zpracovávat různě anebo si jen chceme typ rychle ověřit.
+The `typeof` operator returns the type of the argument. It's useful when we want to process values of different types differently or just want to do a quick check.
 
-Volání `typeof x` vrátí řetězec s názvem typu:
+A call to `typeof x` returns a string with the type name:
 
 ```js
 typeof undefined // "undefined"
@@ -237,39 +243,39 @@ typeof alert // "function"  (3)
 */!*
 ```
 
-Poslední tři řádky možná vyžadují podrobnější vysvětlení:
+The last three lines may need additional explanation:
 
-1. `Math` je vestavěný objekt, který poskytuje matematické operace. Dozvíme se o něm víc v kapitole <info:number>. Zde nám slouží jen jako příklad objektu.
-2. Výsledkem `typeof null` je `"object"`. Toto je oficiálně přiznaná chyba chování `typeof`, která pochází z pravěku JavaScriptu a byla v něm ponechána kvůli kompatibilitě. Ve skutečnosti `null` není objekt. Je to speciální hodnota, která má svůj vlastní typ.
-3. Výsledkem `typeof alert` je `"function"`, protože `alert` je funkce. Funkce prostudujeme v dalších kapitolách, kde také uvidíme, že v JavaScriptu není žádný speciální typ „funkce“. Funkce jsou typu objekt. Avšak `typeof` s nimi zachází jinak a vrátí `"function"`. To také pochází z pravěku JavaScriptu. Technicky není toto chování korektní, ale v praxi může být užitečné.
+1. `Math` is a built-in object that provides mathematical operations. We will learn it in the chapter <info:number>. Here, it serves just as an example of an object.
+2. The result of `typeof null` is `"object"`. That's an officially recognized error in `typeof`, coming from very early days of JavaScript and kept for compatibility. Definitely, `null` is not an object. It is a special value with a separate type of its own. The behavior of `typeof` is wrong here.
+3. The result of `typeof alert` is `"function"`, because `alert` is a function. We'll study functions in the next chapters where we'll also see that there's no special "function" type in JavaScript. Functions belong to the object type. But `typeof` treats them differently, returning `"function"`. That also comes from the early days of JavaScript. Technically, such behavior isn't correct, but can be convenient in practice.
 
-```smart header="Syntaxe `typeof(x)`"
-Můžete narazit i na jinou syntaxi: `typeof(x)`. To je totéž jako `typeof x`.
+```smart header="The `typeof(x)` syntax"
+You may also come across another syntax: `typeof(x)`. It's the same as `typeof x`.
 
-Abychom to objasnili: `typeof` je operátor, ne funkce. Závorky zde uvedené nejsou součástí `typeof`. Je to stejný druh závorek, který se v matematice používá pro seskupování.
+To put it clear: `typeof` is an operator, not a function. The parentheses here aren't a part of `typeof`. It's the kind of parentheses used for mathematical grouping.
 
-Zpravidla takové závorky obsahují matematický výraz, např. `(2 + 2)`, ale zde obsahují jen jediný argument `(x)`. Syntakticky umožňují vyhnout se mezeře mezi operátorem `typeof` a jeho argumentem. Některým lidem se to líbí.
+Usually, such parentheses contain a mathematical expression, such as `(2 + 2)`, but here they contain only one argument `(x)`. Syntactically, they allow to avoid a space between the `typeof` operator and its argument, and some people like it.
 
-Někteří lidé dávají přednost `typeof(x)`, ačkoli syntaxe `typeof x` je mnohem běžnější.
+Some people prefer `typeof(x)`, although the `typeof x` syntax is much more common.
 ```
 
-## Shrnutí
+## Summary
 
-V JavaScriptu existuje osm základních datových typů.
+There are 8 basic data types in JavaScript.
 
-- `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
-- `bigint` pro celá čísla libovolné délky.
-- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje zvláštní typ pro jediný znak.
-- `boolean` pro `true`/`false`.
-- `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
-- `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.
-- `object` pro složitější datové struktury.
-- `symbol` pro unikátní identifikátory.
+- `number` for numbers of any kind: integer or floating-point, integers are limited by <code>±(2<sup>53</sup>-1)</code>.
+- `bigint` is for integer numbers of arbitrary length.
+- `string` for strings. A string may have zero or more characters, there's no separate single-character type.
+- `boolean` for `true`/`false`.
+- `null` for unknown values -- a standalone type that has a single value `null`.
+- `undefined` for unassigned values -- a standalone type that has a single value `undefined`.
+- `object` for more complex data structures.
+- `symbol` for unique identifiers.
 
-Operátor `typeof` nám umožní zjistit, jaký typ byl uložen do proměnné.
+The `typeof` operator allows us to see which type is stored in a variable.
 
-- Obvykle se používá jako `typeof x`, ale je možné i `typeof(x)`.
-- Vrátí řetězec s názvem typu, např. `"string"`.
-- Pro `null` vrátí `"object"` -- to je chyba jazyka, ve skutečnosti to není objekt.
+- Usually used as `typeof x`, but `typeof(x)` is also possible.
+- Returns a string with the name of the type, like `"string"`.
+- For `null` returns `"object"` -- this is an error in the language, it's not actually an object.
 
-V dalších kapitolách se zaměříme na primitivní hodnoty. Až je budeme dobře znát, přejdeme k objektům.
+In the next chapters, we'll concentrate on primitive values and once we're familiar with them, we'll move on to objects.

@@ -1,6 +1,6 @@
 
 
 ```js
-let výsledek = (a + b < 4) ? 'Málo' : 'Hodně';
+let result = (a + b < 4) ? 'Below' : 'Over';
 ```
 

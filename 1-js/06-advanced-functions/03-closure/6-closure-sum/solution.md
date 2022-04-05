@@ -1,17 +1,17 @@
-Aby druhé závorky fungovaly, ty první musejí vrátit funkci.
+For the second parentheses to work, the first ones must return a function.
 
-Například:
+Like this:
 
 ```js run
-function sečti(a) {
+function sum(a) {
 
   return function(b) {
-    return a + b; // vezme "a" z vnějšího lexikálního prostředí
+    return a + b; // takes "a" from the outer lexical environment
   };
 
 }
 
-alert( sečti(1)(2) ); // 3
-alert( sečti(5)(-1) ); // 4
+alert( sum(1)(2) ); // 3
+alert( sum(5)(-1) ); // 4
 ```
 

@@ -2,8 +2,8 @@ importance: 5
 
 ---
 
-# Vypište sudá čísla v cyklu
+# Output even numbers in the loop
 
-Použitím cyklu `for` vypište sudá čísla od `2` do `10`.
+Use the `for` loop to output even numbers from `2` to `10`.
 
 [demo]

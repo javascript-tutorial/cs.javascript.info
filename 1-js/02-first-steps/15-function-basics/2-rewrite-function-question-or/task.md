@@ -2,24 +2,25 @@ importance: 4
 
 ---
 
-# Přepište funkci pomocí „?“ nebo „||“
+# Rewrite the function using '?' or '||'
 
-Následující funkce vrátí `true`, jestliže parametr `věk` je větší než `18`. Jinak se zeptá na povolení a vrátí výsledek dotazu:
+The following function returns `true` if the parameter `age` is greater than `18`.
 
+Otherwise it asks for a confirmation and returns its result.
 
 ```js
-function ověřVěk(věk) {
-  if (věk > 18) {
+function checkAge(age) {
+  if (age > 18) {
     return true;
   } else {
-    return confirm('Dovolili ti to rodiče?');
+    return confirm('Did parents allow you?');
   }
 }
 ```
 
-Přepište ji, aby dělala totéž, ale bez použití `if` a na jediný řádek.
+Rewrite it, to perform the same, but without `if`, in a single line.
 
-Vytvořte dvě varianty `ověřVěk`:
+Make two variants of `checkAge`:
 
-1. Pomocí operátoru otazníku `?`
-2. Pomocí OR `||`
+1. Using a question mark operator `?`
+2. Using OR `||`

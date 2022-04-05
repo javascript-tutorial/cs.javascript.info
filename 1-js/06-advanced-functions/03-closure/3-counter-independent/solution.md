@@ -1,5 +1,5 @@
-Odpověď: **0,1.**
+The answer: **0,1.**
 
-Funkce `čítač` a `čítač2` byly vytvořeny různými voláními funkce `vytvořČítač`.
+Functions `counter` and `counter2` are created by different invocations of `makeCounter`.
 
-Mají tedy nezávislá vnější lexikální prostředí, každé z nich má svůj vlastní `počet`.
+So they have independent outer Lexical Environments, each one has its own `count`.

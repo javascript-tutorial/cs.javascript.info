@@ -1,63 +1,63 @@
-# Vývojářská konzole
+# Developer console
 
-Kód je náchylný k chybám. Je pravděpodobné, že budete dělat chyby... Co to povídám? *Zaručeně* budete dělat chyby, jestliže jste člověk a ne [robot](https://cs.wikipedia.org/wiki/Bender_(Futurama)).
+Code is prone to errors. You will quite likely make errors... Oh, what am I talking about? You are *absolutely* going to make errors, at least if you're a human, not a [robot](https://en.wikipedia.org/wiki/Bender_(Futurama)).
 
-V prohlížeči však uživatelé chyby standardně nevidí. Jestliže je tedy ve skriptu něco špatně, nevidíme co a nemůžeme to opravit.
+But in the browser, users don't see errors by default. So, if something goes wrong in the script, we won't see what's broken and can't fix it.
 
-Abychom viděli chyby a získali spoustu dalších užitečných informací o skriptech, byly do prohlížečů zahrnuty „vývojářské nástroje“.
+To see errors and get a lot of other useful information about scripts, "developer tools" have been embedded in browsers.
 
-Většina vývojářů tíhne k vývoji v Chrome nebo Firefoxu, protože mají vyhlášené vývojářské nástroje. Jiné prohlížeče rovněž poskytují vývojářské nástroje, někdy se speciálními vlastnostmi, ale obvykle jen „dohánějí“ Chrome nebo Firefox. Většina vývojářů tedy má svůj „oblíbený“ prohlížeč a k jinému se uchýlí jen tehdy, řeší-li problém specifický pro určitý prohlížeč.
+Most developers lean towards Chrome or Firefox for development because those browsers have the best developer tools. Other browsers also provide developer tools, sometimes with special features, but are usually playing "catch-up" to Chrome or Firefox. So most developers have a "favorite" browser and switch to others if a problem is browser-specific.
 
-Vývojářské nástroje jsou silné a mají mnoho funkcí. Pro začátek se naučíme, jak je otevřít, podívat se na chyby a spustit v nich příkazy JavaScriptu.
+Developer tools are potent; they have many features. To start, we'll learn how to open them, look at errors, and run JavaScript commands.
 
 ## Google Chrome
 
-Otevřete si stránku [bug.html](bug.html).
+Open the page [bug.html](bug.html).
 
-V JavaScriptovém kódu na této stránce je chyba. Před očima běžného uživatele je skrytá, a tak otevřeme vývojářské nástroje, abychom ji viděli.
+There's an error in the JavaScript code on it. It's hidden from a regular visitor's eyes, so let's open developer tools to see it.
 
-Stiskněte `key:F12` nebo, máte-li Mac, stiskněte `key:Cmd+Opt+J`.
+Press `key:F12` or, if you're on Mac, then `key:Cmd+Opt+J`.
 
-Otevřou se vývojářské nástroje na záložce „Console“. 
+The developer tools will open on the Console tab by default.
 
-Budou vypadat zhruba takto:
+It looks somewhat like this:
 
 ![chrome](chrome.png)
 
-Vzhled vývojářských nástrojů závisí na vaší verzi Chrome. Čas od času se mění, ale měl by se podobat obrázku.
+The exact look of developer tools depends on your version of Chrome. It changes from time to time but should be similar.
 
-- Zde vidíte červenou chybovou zprávu. V tomto případě skript obsahuje neznámý příkaz „lalala“.
-- Napravo vidíte kliknutelný odkaz na zdrojový kód `bug.html:12` s číslem řádku, na němž se chyba vyskytla.
+- Here we can see the red-colored error message. In this case, the script contains an unknown "lalala" command.
+- On the right, there is a clickable link to the source `bug.html:12` with the line number where the error has occurred.
 
-Pod chybovou zprávou se nachází modrý symbol `>`, který označuje „příkazový řádek“, na němž můžeme psát příkazy JavaScriptu. Stisknutím `key:Enter` je spustíte.
+Below the error message, there is a blue `>` symbol. It marks a "command line" where we can type JavaScript commands. Press `key:Enter` to run them.
 
-Nyní vidíme chyby a to pro začátek stačí. K vývojářským nástrojům se později vrátíme a ladění se budeme hlouběji věnovat v kapitole <info:debugging-chrome>.
+Now we can see errors, and that's enough for a start. We'll come back to developer tools later and cover debugging more in-depth in the chapter <info:debugging-chrome>.
 
-```smart header="Víceřádkový vstup"
-Obvykle když napíšeme do konzole řádek kódu a stiskneme `key:Enter`, řádek se vykoná.
+```smart header="Multi-line input"
+Usually, when we put a line of code into the console, and then press `key:Enter`, it executes.
 
-Chcete-li vložit více řádků, stiskněte `key:Shift+Enter`. Tímto způsobem můžeme vkládat delší fragmenty JavaScriptového kódu.
+To insert multiple lines, press `key:Shift+Enter`. This way one can enter long fragments of JavaScript code.
 ```
 
-## Firefox, Edge a ostatní
+## Firefox, Edge, and others
 
-Většina ostatních prohlížečů rovněž využívá k otevření vývojářských nástrojů klávesu  `key:F12`.
+Most other browsers use `key:F12` to open developer tools.
 
-Jejich vzhled je vcelku podobný. Až budete vědět, jak používat nástroje v jednom prohlížeči (můžete začít s Chromem), budete moci snadno přejít na jiný.
+The look & feel of them is quite similar. Once you know how to use one of these tools (you can start with Chrome), you can easily switch to another.
 
 ## Safari
 
-Safari (prohlížeč pro Mac, není podporován ve Windows nebo Linuxu) je v tomto ohledu trochu zvláštní. Nejprve musíme povolit „menu Vývoj“.
+Safari (Mac browser, not supported by Windows/Linux) is a little bit special here. We need to enable the "Develop menu" first.
 
-Otevřete „Preferences“ a jděte na záložku „Advanced“. Dole uvidíte checkbox, který zaškrtněte:
+Open Preferences and go to the "Advanced" pane. There's a checkbox at the bottom:
 
 ![safari](safari.png)
 
-Nyní můžete zapínat konzoli pomocí `key:Cmd+Opt+C`. Všimněte si také, že v horním menu se objevila nová položka s názvem „Develop“ („Vývoj“), která obsahuje mnoho příkazů a nastavení.
+Now `key:Cmd+Opt+C` can toggle the console. Also, note that the new top menu item named "Develop" has appeared. It has many commands and options.
 
-## Shrnutí
+## Summary
 
-- Vývojářské nástroje nám umožňují vidět chyby, prozkoumávat proměnné a mnoho dalšího.
-- Ve většině prohlížečů ve Windows se otevírají klávesou `key:F12`. Chrome pro Mac vyžaduje `key:Cmd+Opt+J`, Safari `key:Cmd+Opt+C` (zde je třeba je napřed povolit).
+- Developer tools allow us to see errors, run commands, examine variables, and much more.
+- They can be opened with `key:F12` for most browsers on Windows. Chrome for Mac needs `key:Cmd+Opt+J`, Safari: `key:Cmd+Opt+C` (need to enable first).
 
-Nyní máme prostředí připraveno a v příští kapitole již přejdeme k samotnému JavaScriptu.
+Now we have the environment ready. In the next section, we'll get down to JavaScript.

@@ -1,14 +1,14 @@
 ```js run
-function vraťPrůměrnýVěk(uživatelé) {
-  return uživatelé.reduce((předchozí, uživatel) => předchozí + uživatel.věk, 0) / uživatelé.length;
+function getAverageAge(users) {
+  return users.reduce((prev, user) => prev + user.age, 0) / users.length;
 }
 
-let jan = { jméno: "Jan", věk: 25 };
-let petr = { jméno: "Petr", věk: 30 };
-let marie = { jméno: "Marie", věk: 29 };
+let john = { name: "John", age: 25 };
+let pete = { name: "Pete", age: 30 };
+let mary = { name: "Mary", age: 29 };
 
-let pole = [ jan, petr, marie ];
+let arr = [ john, pete, mary ];
 
-alert( vraťPrůměrnýVěk(pole) ); // 28
+alert( getAverageAge(arr) ); // 28
 ```
 

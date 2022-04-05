@@ -1,16 +1,16 @@
 
 ```js run
-let platy = {
-  Jan: 100,
-  Anna: 160,
-  Petr: 130
+let salaries = {
+  John: 100,
+  Ann: 160,
+  Pete: 130
 };
 
-let součet = 0;
-for (let klíč in platy) {
-  součet += platy[klíč];
+let sum = 0;
+for (let key in salaries) {
+  sum += salaries[key];
 }
 
-alert(součet); // 390
+alert(sum); // 390
 ```
 

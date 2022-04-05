@@ -1,20 +1,20 @@
 
-# Volání asynchronní funkce z neasynchronní
+# Call async from non-async
 
-Máme „obyčejnou“ funkci nazvanou `f`. Jak můžeme volat `async` funkci `čekej()` a použít její výsledek uvnitř `f`?
+We have a "regular" function called `f`. How can you call the `async` function `wait()` and use its result inside of `f`?
 
 ```js
-async function čekej() {
+async function wait() {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   return 10;
 }
 
 function f() {
-  // ...co byste sem měli napsat?
-  // musíme volat asynchronní čekej() a čekat, než obdržíme 10
-  // pamatujte, že nemůžeme použít „await“
+  // ...what should you write here?
+  // we need to call async wait() and wait to get 10
+  // remember, we can't use "await"
 }
 ```
 
-P.S. Tento úkol je technicky velmi jednoduchý, ale tato otázka je u vývojářů, kteří s async/await teprve začínají, vcelku běžná.
+P.S. The task is technically very simple, but the question is quite common for developers new to async/await.

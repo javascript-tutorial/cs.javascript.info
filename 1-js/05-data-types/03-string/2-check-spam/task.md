@@ -2,15 +2,15 @@ importance: 5
 
 ---
 
-# Kontrola spamu
+# Check for spam
 
-Napište funkci `ověřSpam(řetězec)`, která vrátí `true`, jestliže `řetězec` obsahuje  `'viagra'` nebo `'XXX'`, jinak vrátí `false`.
+Write a function `checkSpam(str)` that returns `true` if `str` contains 'viagra' or 'XXX', otherwise `false`.
 
-Funkce nesmí rozlišovat malá a velká písmena:
+The function must be case-insensitive:
 
 ```js
-ověřSpam('levná ViAgRA zde') == true
-ověřSpam('zdarma xxxxx') == true
-ověřSpam("nevinný králíček") == false
+checkSpam('buy ViAgRA now') == true
+checkSpam('free xxxxx') == true
+checkSpam("innocent rabbit") == false
 ```
 

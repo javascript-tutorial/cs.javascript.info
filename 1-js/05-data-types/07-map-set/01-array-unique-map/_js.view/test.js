@@ -1,15 +1,15 @@
-describe("unikát", function() {
-  it("odstraní neunikátní prvky", function() {
-    let řetězce = ["Haré", "Kršna", "Haré", "Kršna",
-      "Kršna", "Kršna", "Haré", "Haré", ":-O"
+describe("unique", function() {
+  it("removes non-unique elements", function() {
+    let strings = ["Hare", "Krishna", "Hare", "Krishna",
+      "Krishna", "Krishna", "Hare", "Hare", ":-O"
     ];
 
-    assert.deepEqual(unikát(řetězce), ["Haré", "Kršna", ":-O"]);
+    assert.deepEqual(unique(strings), ["Hare", "Krishna", ":-O"]);
   });
 
-  it("nemění zdrojové pole", function() {
-    let řetězce = ["Kršna", "Kršna", "Haré", "Haré"];
-    unikát(řetězce);
-    assert.deepEqual(řetězce, ["Kršna", "Kršna", "Haré", "Haré"]);
+  it("does not change the source array", function() {
+    let strings = ["Krishna", "Krishna", "Hare", "Hare"];
+    unique(strings);
+    assert.deepEqual(strings, ["Krishna", "Krishna", "Hare", "Hare"]);
   });
 });

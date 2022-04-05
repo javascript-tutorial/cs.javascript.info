@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Vlastnost funkce po bind
+# Function property after bind
 
-Ve vlastnosti funkce je nějaká hodnota. Změní se po `bind`? Proč, nebo proč ne?
+There's a value in the property of a function. Will it change after `bind`? Why, or why not?
 
 ```js run
-function řekniAhoj() {
-  alert( this.jméno );
+function sayHi() {
+  alert( this.name );
 }
-řekniAhoj.test = 5;
+sayHi.test = 5;
 
 *!*
-let vázaná = řekniAhoj.bind({
-  jméno: "Jan"
+let bound = sayHi.bind({
+  name: "John"
 });
 
-alert( vázaná.test ); // jaký bude výstup? A proč?
+alert( bound.test ); // what will be the output? why?
 */!*
 ```
 

@@ -1,1 +1,1 @@
-# Objekty: základy
+# Objects: the basics

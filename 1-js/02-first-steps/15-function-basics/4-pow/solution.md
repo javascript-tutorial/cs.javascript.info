@@ -1,21 +1,21 @@
 
 ```js run demo
-function mocnina(x, n) {
-  let výsledek = x;
+function pow(x, n) {
+  let result = x;
 
   for (let i = 1; i < n; i++) {
-    výsledek *= x;
+    result *= x;
   }
 
-  return výsledek;
+  return result;
 }
 
 let x = prompt("x?", '');
 let n = prompt("n?", '');
 
 if (n < 1) {
-  alert(`${n}-tá mocnina není podporována, zadejte kladné celé číslo`);
+  alert(`Power ${n} is not supported, use a positive integer`);
 } else {
-  alert( mocnina(x, n) );
+  alert( pow(x, n) );
 }
 ```

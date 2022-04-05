@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# Součet vlastností
+# Sum the properties
 
-Máme objekt `prodeje` s určitým počtem prodejů.
+There is a `salaries` object with arbitrary number of salaries. 
 
-Napište funkci `sečtiProdeje(prodeje)`, která vrátí součet všech prodejů, přičemž bude využívat `Object.values` a cyklus `for..of`.
+Write the function `sumSalaries(salaries)` that returns the sum of all salaries using `Object.values` and the `for..of` loop.
 
-Je-li objekt `prodeje` prázdný, výsledek musí být `0`.
+If `salaries` is empty, then the result must be `0`.
 
-Příklad:
+For instance:
 
 ```js
-let prodeje = {
-  "Jan": 100,
-  "Petr": 300,
-  "Marie": 250
+let salaries = {
+  "John": 100,
+  "Pete": 300,
+  "Mary": 250
 };
 
-alert( sečtiProdeje(prodeje) ); // 650
+alert( sumSalaries(salaries) ); // 650
 ```
 

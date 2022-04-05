@@ -1,232 +1,232 @@
-# Volitelné zřetězení „?.“
+# Optional chaining '?.'
 
 [recent browser="new"]
 
-Volitelné zřetězení `?.` je bezpečný způsob, jak přistupovat k vnořeným vlastnostem objektu, i když vlastnost mezi nimi neexistuje.
+The optional chaining `?.` is a safe way to access nested object properties, even if an intermediate property doesn't exist.
 
-## Problém „neexistující vlastnosti“
+## The "non-existing property" problem
 
-Pokud jste teprve začali číst tento tutoriál a učit se JavaScript, tento problém se vás možná ještě nedotkl, ale dochází k němu poměrně často.
+If you've just started to read the tutorial and learn JavaScript, maybe the problem hasn't touched you yet, but it's quite common.
 
-Jako příklad mějme objekt `uživatel`, který obsahuje informace o našich uživatelích.
+As an example, let's say we have `user` objects that hold the information about our users.
 
-Většina našich uživatelů má ve vlastnosti `uživatel.adresa` adresu s ulicí `uživatel.adresa.ulice`, ale někteří ji neuvedli.
+Most of our users have addresses in `user.address` property, with the street `user.address.street`, but some did not provide them.
 
-Když se v takovém případě pokusíme získat `uživatel.adresa.ulice` a uživatel je bez adresy, dostaneme chybu:
-
-```js run
-let uživatel = {}; // uživatel bez vlastnosti „adresa“
-
-alert(uživatel.adresa.ulice); // Chyba!
-```
-
-To je očekávaný výsledek. JavaScript takto funguje. Když `uživatel.adresa` je `undefined`, pokus o získání `uživatel.adresa.ulice` selže s chybou.
-
-V mnoha praktických případech bychom však zde raději získali `undefined` místo chyby (což znamená „žádná ulice“).
-
-...A jiný příklad. Při vývoji webů můžeme pomocí speciálního volání metody, např. `document.querySelector('.elem')`, získat objekt, který odpovídá určitému prvku webové stránky. Když na stránce takový prvek není, metoda vrací `null`.
+In such case, when we attempt to get `user.address.street`, and the user happens to be without an address, we get an error:
 
 ```js run
-// document.querySelector('.elem') je null, pokud tam žádný prvek není
-let html = document.querySelector('.elem').innerHTML; // chyba, pokud je to null
+let user = {}; // a user without "address" property
+
+alert(user.address.street); // Error!
 ```
 
-Opět platí, že pokud tento prvek neexistuje, při přístupu k vlastnosti `.innerHTML` z `null` dostaneme chybu. Ale v některých případech, kdy je nepřítomnost prvku normální, bychom se této chybě rádi vyhnuli a prostě přijali za výsledek `html = null`.
+That's the expected result. JavaScript works like this. As `user.address` is `undefined`, an attempt to get `user.address.street` fails with an error.
 
-Jak to můžeme udělat?
+In many practical cases we'd prefer to get `undefined` instead of an error here (meaning "no street").
 
-Očividným řešením by bylo zkontrolovat hodnotu pomocí `if` nebo podmíněného operátoru `?` před přístupem k její vlastnosti, například:
+...and another example. In Web development, we can get an object that corresponds to a web page element using a special method call, such as `document.querySelector('.elem')`, and it returns `null` when there's no such element.
+
+```js run
+// document.querySelector('.elem') is null if there's no element
+let html = document.querySelector('.elem').innerHTML; // error if it's null
+```
+
+Once again, if the element doesn't exist, we'll get an error accessing `.innerHTML` property of `null`. And in some cases, when the absence of the element is normal, we'd like to avoid the error and just accept `html = null` as the result.
+
+How can we do this?
+
+The obvious solution would be to check the value using `if` or the conditional operator `?`, before accessing its property, like this:
 
 ```js
-let uživatel = {};
+let user = {};
 
-alert(uživatel.adresa ? uživatel.adresa.ulice : undefined);
+alert(user.address ? user.address.street : undefined);
 ```
 
-Funguje to, nenastala žádná chyba... Ale není to příliš elegantní. Jak vidíme, `„uživatel.adresa“` se v kódu objevuje dvakrát.
+It works, there's no error... But it's quite inelegant. As you can see, the `"user.address"` appears twice in the code.
 
-Takto by vypadalo totéž pro `document.querySelector`:
+Here's how the same would look for `document.querySelector`:
 
 ```js run
 let html = document.querySelector('.elem') ? document.querySelector('.elem').innerHTML : null;
 ```
 
-Vidíme, že hledání prvku `document.querySelector('.elem')` se zde ve skutečnosti volá dvakrát. To není dobré.
+We can see that the element search `document.querySelector('.elem')` is actually called twice here. Not good.
 
-Pro hlouběji vnořené vlastnosti to bude ještě ošklivější, protože bude vyžadováno více opakování.
+For more deeply nested properties, it becomes even uglier, as more repetitions are required.
 
-Například zkusme podobným způsobem získat `uživatel.adresa.ulice.název`.
+E.g. let's get `user.address.street.name` in a similar fashion.
 
 ```js
-let uživatel = {}; // uživatel nemá adresu
+let user = {}; // user has no address
 
-alert(uživatel.adresa ? uživatel.adresa.ulice ? uživatel.adresa.ulice.name : null : null);
+alert(user.address ? user.address.street ? user.address.street.name : null : null);
 ```
 
-Je to ošklivé a člověk může mít problémy takovému kódu porozumět.
+That's just awful, one may even have problems understanding such code.
 
-Existuje trochu lepší způsob, jak to napsat, a to pomocí operátoru `&&`:
+There's a little better way to write it, using the `&&` operator:
 
 ```js run
-let uživatel = {}; // uživatel nemá adresu
+let user = {}; // user has no address
 
-alert( uživatel.adresa && uživatel.adresa.ulice && uživatel.adresa.ulice.name ); // undefined (žádná chyba)
+alert( user.address && user.address.street && user.address.street.name ); // undefined (no error)
 ```
 
-Spojení celé cesty k vlastnosti ANDem sice zajistí, že všechny komponenty existují (pokud ne, vyhodnocení se zastaví), ale ani to není ideální.
+AND'ing the whole path to the property ensures that all components exist (if not, the evaluation stops), but also isn't ideal.
 
-Jak vidíte, názvy vlastností jsou v kódu stále zdvojeny, tj. ve výše uvedeném kódu se `uživatel.adresa` objeví třikrát.
+As you can see, property names are still duplicated in the code. E.g. in the code above, `user.address` appears three times.
 
-Z tohoto důvodu bylo do jazyka přidáno volitelné zřetězení `?.`, aby tento problém vyřešilo jednou provždy!
+That's why the optional chaining `?.` was added to the language. To solve this problem once and for all!
 
-## Volitelné zřetězení
+## Optional chaining
 
-Volitelné zřetězení `?.` zastaví vyhodnocování, jestliže hodnota před `?.` je `undefined` nebo `null`, a vrátí `undefined`.
+The optional chaining `?.` stops the evaluation if the value before `?.` is `undefined` or `null` and returns `undefined`.
 
-**Dále v tomto článku budeme pro přehlednost říkat, že něco „existuje“, jestliže to není `null` ani `undefined`.**
+**Further in this article, for brevity, we'll be saying that something "exists" if it's not `null` and not `undefined`.**
 
-Jinými slovy, `hodnota?.vlastnost`:
-- funguje jako `hodnota.vlastnost`, jestliže `hodnota` existuje,
-- v opačném případě (když `hodnota` je `undefined/null`) vrátí `undefined`.
+In other words, `value?.prop`:
+- works as `value.prop`, if `value` exists,
+- otherwise (when `value` is `undefined/null`) it returns `undefined`.
 
-Toto je bezpečný způsob, jak přistoupit k `uživatel.adresa.ulice` pomocí `?.`:
+Here's the safe way to access `user.address.street` using `?.`:
 
 ```js run
-let uživatel = {}; // uživatel nemá adresu
+let user = {}; // user has no address
 
-alert( uživatel?.adresa?.ulice ); // undefined (bez chyby)
+alert( user?.address?.street ); // undefined (no error)
 ```
 
-Kód je krátký a jasný, není v něm žádné zdvojení.
+The code is short and clean, there's no duplication at all.
 
-Zde je příklad s `document.querySelector`:
+Here's an example with `document.querySelector`:
 
 ```js run
-let html = document.querySelector('.elem')?.innerHTML; // není-li žádný prvek, bude null
+let html = document.querySelector('.elem')?.innerHTML; // will be null, if there's no element
 ```
 
-
-Načtení adresy pomocí `uživatel?.adresa` funguje i tehdy, když objekt `uživatel` neexistuje:
+Reading the address with `user?.address` works even if `user` object doesn't exist:
 
 ```js run
-let uživatel = null;
+let user = null;
 
-alert( uživatel?.adresa ); // undefined
-alert( uživatel?.adresa.ulice ); // undefined
+alert( user?.address ); // undefined
+alert( user?.address.street ); // undefined
 ```
 
-Prosíme všimněte si: syntaxe `?.` umožňuje, aby volitelná byla hodnota před ní, ale žádná další.
+Please note: the `?.` syntax makes optional the value before it, but not any further.
 
-Např. `?.` v `uživatel?.adresa.ulice.name` umožňuje, aby `uživatel` byl bezpečně `null/undefined` (a v takovém případě vrátí `undefined`), ale to platí jen pro objekt `uživatel`. K dalším vlastnostem se přistupuje obvyklým způsobem. Chceme-li, aby některá z nich byla volitelná, musíme nahradit další `.` za `?.`.
+E.g. in `user?.address.street.name` the `?.` allows `user` to safely be `null/undefined` (and returns `undefined` in that case), but that's only for `user`. Further properties are accessed in a regular way. If we want some of them to be optional, then we'll need to replace more `.` with `?.`.
 
-```warn header="Nepoužívejte volitelné zřetězení přehnaně často"
-Měli bychom používat `?.` jen tehdy, když je v pořádku, že něco neexistuje.
+```warn header="Don't overuse the optional chaining"
+We should use `?.` only where it's ok that something doesn't exist.
 
-Například pokud podle logiky našeho kódování musí objekt `uživatel` existovat, ale `adresa` je volitelná, pak bychom měli psát `uživatel.adresa?.ulice`, ale ne `uživatel?.adresa?.ulice`.
+For example, if according to our code logic `user` object must exist, but `address` is optional, then we should write `user.address?.street`, but not `user?.address?.street`.
 
-Pak pokud se stane, že `uživatel` bude nedefinovaný, ohlásí se programátorská chyba a my ji opravíme. Kdybychom však přehnaně používali `?.`, mohly by se chyby v kódu neohlásit i tehdy, když to není vhodné, a jejich ladění by bylo obtížnější.
+Then, if `user` happens to be undefined, we'll see a programming error about it and fix it. Otherwise, if we overuse `?.`, coding errors can be silenced where not appropriate, and become more difficult to debug.
 ```
 
-````warn header="Proměnná před `?.` musí být deklarovaná"
-Pokud proměnná `uživatel` vůbec neexistuje, pak `uživatel?.cokoli` ohlásí chybu:
+````warn header="The variable before `?.` must be declared"
+If there's no variable `user` at all, then `user?.anything` triggers an error:
 
 ```js run
-// ReferenceError: uživatel není definován
-uživatel?.adresa;
+// ReferenceError: user is not defined
+user?.address;
 ```
-Proměnná musí být deklarovaná (tj. `let/const/var uživatel` nebo jako parametr funkce). Volitelné zřetězení funguje jen pro deklarované proměnné.
+The variable must be declared (e.g. `let/const/var user` or as a function parameter). The optional chaining works only for declared variables.
 ````
 
-## Zkratování
+## Short-circuiting
 
-Jak bylo řečeno, `?.` okamžitě pozastaví („vyzkratuje“) vyhodnocování, jestliže levá část neexistuje.
+As it was said before, the `?.` immediately stops ("short-circuits") the evaluation if the left part doesn't exist.
 
-Jestliže tedy za pozastaveným `?.` vpravo následují další volání funkcí nebo operace, nevykonají se.
+So, if there are any further function calls or operations to the right of `?.`, they won't be made.
 
-Například:
+For instance:
 
 ```js run
-let uživatel = null;
+let user = null;
 let x = 0;
 
-uživatel?.řekniAhoj(x++); // „uživatel“ není, takže výkon se nedostane k volání řekniAhoj a x++
+user?.sayHi(x++); // no "user", so the execution doesn't reach sayHi call and x++
 
-alert(x); // 0, hodnota se nezvýšila
+alert(x); // 0, value not incremented
 ```
 
-## Další varianty: ?.(), ?.[]
+## Other variants: ?.(), ?.[]
 
-Volitelné zřetězení `?.` není operátor, ale speciální syntaktická konstrukce, která funguje i s funkcemi a hranatými závorkami.
+The optional chaining `?.` is not an operator, but a special syntax construct, that also works with functions and square brackets.
 
-Například `?.()` se používá k volání funkce, která nemusí existovat.
+For example, `?.()` is used to call a function that may not exist.
 
-V níže uvedeném kódu někteří z našich uživatelů mají metodu `admin` a někteří ne:
+In the code below, some of our users have `admin` method, and some don't:
 
 ```js run
-let uživatelAdmin = {
+let userAdmin = {
   admin() {
-    alert("Jsem admin");
+    alert("I am admin");
   }
 };
 
-let uživatelHost = {};
+let userGuest = {};
 
 *!*
-uživatelAdmin.admin?.(); // Jsem admin
+userAdmin.admin?.(); // I am admin
 */!*
 
 *!*
-uživatelHost.admin?.(); // nic se nestane (taková metoda není)
+userGuest.admin?.(); // nothing happens (no such method)
 */!*
 ```
 
-Zde na obou řádcích nejprve použijeme tečku (`uživatelAdmin.admin`) k získání vlastnosti `admin`, protože předpokládáme, že objekt `uživatel` existuje, takže je bezpečné z něj číst.
+Here, in both lines we first use the dot (`userAdmin.admin`) to get `admin` property, because we assume that the `user` object exists, so it's safe read from it.
 
-Pak `?.()` prověří levou stranu: jestliže funkce `admin` existuje, pak se spustí (tak tomu je pro `uživatelAdmin`). Jinak (pro `uživatelHost`) se vyhodnocování zastaví bez chyb.
+Then `?.()` checks the left part: if the admin function exists, then it runs (that's so for `userAdmin`). Otherwise (for `userGuest`) the evaluation stops without errors.
 
-Funguje také syntaxe `?.[]`, jestliže pro přístup k vlastnostem raději používáme hranaté závorky `[]` namísto tečky `.`. Podobně jako v předchozích případech nám umožňuje bezpečně načíst vlastnost objektu, která nemusí existovat.
+The `?.[]` syntax also works, if we'd like to use brackets `[]` to access properties instead of dot `.`. Similar to previous cases, it allows to safely read a property from an object that may not exist.
 
 ```js run
-let klíč = "křestníJméno";
+let key = "firstName";
 
-let uživatel1 = {
-  křestníJméno: "Jan"
+let user1 = {
+  firstName: "John"
 };
 
-let uživatel2 = null; 
+let user2 = null;
 
-alert( uživatel1?.[klíč] ); // Jan
-alert( uživatel2?.[klíč] ); // undefined
+alert( user1?.[key] ); // John
+alert( user2?.[key] ); // undefined
 ```
 
-Můžeme použít `?.` i s `delete`:
+Also we can use `?.` with `delete`:
 
 ```js run
-delete uživatel?.jméno; // delete uživatel.jméno, pokud uživatel existuje
+delete user?.name; // delete user.name if user exists
 ```
 
-````warn header="Můžeme používat `?.` k bezpečnému čtení a mazání, ale ne k zápisu"
-Volitelné zřetězení `?.` nelze použít na levé straně přiřazení.
+````warn header="We can use `?.` for safe reading and deleting, but not writing"
+The optional chaining `?.` has no use at the left side of an assignment.
 
-Například:
+For example:
 ```js run
-let uživatel = null;
+let user = null;
 
-uživatel?.jméno = "Jan"; // Chyba, nefunguje to
-// protože se to vyhodnotí jako: undefined = "Jan"
+user?.name = "John"; // Error, doesn't work
+// because it evaluates to: undefined = "John"
 ```
+
 ````
 
-## Shrnutí
+## Summary
 
-Syntaxe volitelného zřetězení `?.` má tři podoby:
+The optional chaining `?.` syntax has three forms:
 
-1. `obj?.vlastnost` -- jestliže `obj` existuje, vrátí `obj.vlastnost`, jinak vrátí `undefined`.
-2. `obj?.[vlastnost]` -- jestliže `obj` existuje, vrátí `obj[vlastnost]`, jinak vrátí `undefined`.
-3. `obj.metoda?.()` -- jestliže `obj.metoda` existuje, zavolá `obj.metoda()`, jinak vrátí `undefined`.
+1. `obj?.prop` -- returns `obj.prop` if `obj` exists, otherwise `undefined`.
+2. `obj?.[prop]` -- returns `obj[prop]` if `obj` exists, otherwise `undefined`.
+3. `obj.method?.()` -- calls `obj.method()` if `obj.method` exists, otherwise returns `undefined`.
 
-Jak vidíme, všechny jsou srozumitelné a snadno se používají. `?.` ověří, zda levá strana je `null/undefined`, a pokud není, umožní pokračovat ve vyhodnocování.
+As we can see, all of them are straightforward and simple to use. The `?.` checks the left part for `null/undefined` and allows the evaluation to proceed if it's not so.
 
-Řetězec více `?.` nám umožňuje bezpečný přístup k vnořeným vlastnostem.
+A chain of `?.` allows to safely access nested properties.
 
-Přesto bychom měli používat `?.` opatrně a jen tehdy, když je podle logiky našeho kódu přijatelné, aby levá strana skutečně neexistovala. Tak se před námi neukryjí programátorské chyby, jestliže k nim dojde.
+Still, we should apply `?.` carefully, only where it's acceptable, according to our code logic, that the left part doesn't exist. So that it won't hide programming errors from us, if they occur.

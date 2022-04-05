@@ -1,4 +1,4 @@
-Řešení pomocí `if`:
+A solution using `if`:
 
 ```js
 function min(a, b) {
@@ -10,7 +10,7 @@ function min(a, b) {
 }
 ```
 
-Řešení pomocí operátoru otazníku `'?'`:
+A solution with a question mark operator `'?'`:
 
 ```js
 function min(a, b) {
@@ -18,4 +18,4 @@ function min(a, b) {
 }
 ```
 
-P.S. V případě rovnosti `a == b` nezáleží na tom, kterou proměnnou funkce vrátí.
+P.S. In the case of an equality `a == b` it does not matter what to return.

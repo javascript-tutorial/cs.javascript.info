@@ -1,112 +1,112 @@
 
-# Mikroúlohy
+# Microtasks
 
-Příslibové handlery `.then`/`.catch`/`.finally` jsou vždy asynchronní.
+Promise handlers `.then`/`.catch`/`.finally` are always asynchronous.
 
-I když je příslib okamžitě splněn, kód na řádcích *pod* `.then`/`.catch`/`.finally` se vykoná ještě před těmito handlery.
+Even when a Promise is immediately resolved, the code on the lines *below* `.then`/`.catch`/`.finally` will still execute before these handlers.
 
-Zde je ukázka:
+Here's a demo:
 
 ```js run
-let příslib = Promise.resolve();
+let promise = Promise.resolve();
 
-příslib.then(() => alert("příslib hotov!"));
+promise.then(() => alert("promise done!"));
 
-alert("konec kódu"); // tento alert se zobrazí jako první
+alert("code finished"); // this alert shows first
 ```
 
-Pokud si ji spustíte, uvidíte napřed `konec kódu` a až poté `příslib hotov!`.
+If you run it, you see `code finished` first, and then `promise done!`.
 
-To je zvláštní, protože příslib je očividně hotov již od začátku.
+That's strange, because the promise is definitely done from the beginning.
 
-Proč se `.then` spustí až pak? Co se děje?
+Why did the `.then` trigger afterwards? What's going on?
 
-## Fronta mikroúloh
+## Microtasks queue
 
-Asynchronní úlohy potřebují vhodný management. Proto standard ECMA specifikuje interní frontu `PromiseJobs`, častěji nazývanou „fronta mikroúloh“ (pojem z V8).
+Asynchronous tasks need proper management. For that, the ECMA standard specifies an internal queue `PromiseJobs`, more often referred to as the "microtask queue" (V8 term).
 
-Jak je uvedeno ve [specifikaci](https://tc39.github.io/ecma262/#sec-jobs-and-job-queues):
+As stated in the [specification](https://tc39.github.io/ecma262/#sec-jobs-and-job-queues):
 
-- Fronta funguje na principu „první dovnitř, první ven“: úlohy vložené jako první se spustí jako první.
-- Výkon úlohy se spustí jen tehdy, když neběží nic jiného.
+- The queue is first-in-first-out: tasks enqueued first are run first.
+- Execution of a task is initiated only when nothing else is running.
 
-Nebo, abychom to zjednodušili, když je příslib připraven, vloží se do fronty jeho handlery `.then/catch/finally`; zatím nebudou spuštěny. Až se engine JavaScriptu oprostí od právě prováděného kódu, vybere úlohu z fronty a spustí ji.
+Or, to put it more simply, when a promise is ready, its `.then/catch/finally` handlers are put into the queue; they are not executed yet. When the JavaScript engine becomes free from the current code, it takes a task from the queue and executes it.
 
-To je důvod, proč se „konec kódu“ ve výše uvedeném příkladu zobrazí jako první.
+That's why "code finished" in the example above shows first.
 
 ![](promiseQueue.svg)
 
-Příslibové handlery vždy procházejí touto interní frontou.
+Promise handlers always go through this internal queue.
 
-Jestliže zde je řetěz s více `.then/catch/finally`, je každý z nich spuštěn asynchronně. To znamená, že nejprve je vložen do fronty a spustí se až tehdy, když bude právě prováděný kód dokončen a handlery ve frontě před ním skončí.
+If there's a chain with multiple `.then/catch/finally`, then every one of them is executed asynchronously. That is, it first gets queued, then executed when the current code is complete and previously queued handlers are finished.
 
-**Co když nám záleží na pořadí? Jak můžeme zajistit, aby se `konec kódu` objevil až po `příslib hotov!`?**
+**What if the order matters for us? How can we make `code finished` appear after `promise done`?**
 
-Jednoduše, prostě jej vložíme do fronty pomocí `.then`:
+Easy, just put it into the queue with `.then`:
 
 ```js run
 Promise.resolve()
-  .then(() => alert("příslib hotov!"))
-  .then(() => alert("konec kódu"));
+  .then(() => alert("promise done!"))
+  .then(() => alert("code finished"));
 ```
 
-Nyní je pořadí takové, jaké jsme zamýšleli.
+Now the order is as intended.
 
-## Neošetřené odmítnutí
+## Unhandled rejection
 
-Pamatujete si na událost `unhandledrejection` z článku <info:promise-error-handling>?
+Remember the `unhandledrejection` event from the article <info:promise-error-handling>?
 
-Nyní přesně vidíme, jak JavaScript zjistí, že nastalo neošetřené odmítnutí.
+Now we can see exactly how JavaScript finds out that there was an unhandled rejection.
 
-**„Neošetřené odmítnutí“ nastane, když na konci fronty mikroúloh není ošetřena příslibová chyba.**
+**An "unhandled rejection" occurs when a promise error is not handled at the end of the microtask queue.**
 
-Normálně pokud očekáváme chybu, přidáme do řetězu příslibů `.catch`, aby ji ošetřil:
+Normally, if we expect an error, we add `.catch` to the promise chain to handle it:
 
 ```js run
-let příslib = Promise.reject(new Error("Příslib selhal!"));
+let promise = Promise.reject(new Error("Promise Failed!"));
 *!*
-příslib.catch(chyba => alert('odchyceno'));
+promise.catch(err => alert('caught'));
 */!*
 
-// nespustí se: chyba je ošetřena
-window.addEventListener('unhandledrejection', událost => alert(událost.reason));
+// doesn't run: error handled
+window.addEventListener('unhandledrejection', event => alert(event.reason));
 ```
 
-Jestliže však zapomeneme přidat `.catch`, pak engine po vyprázdnění fronty mikroúloh tuto událost spustí:
+But if we forget to add `.catch`, then, after the microtask queue is empty, the engine triggers the event:
 
 ```js run
-let příslib = Promise.reject(new Error("Příslib selhal!"));
+let promise = Promise.reject(new Error("Promise Failed!"));
 
-// Příslib selhal!
-window.addEventListener('unhandledrejection', událost => alert(událost.reason));
+// Promise Failed!
+window.addEventListener('unhandledrejection', event => alert(event.reason));
 ```
 
-Co když tuto chybu ošetříme později? Například:
+What if we handle the error later? Like this:
 
 ```js run
-let příslib = Promise.reject(new Error("Příslib selhal!"));
+let promise = Promise.reject(new Error("Promise Failed!"));
 *!*
-setTimeout(() => příslib.catch(chyba => alert('odchyceno')), 1000);
+setTimeout(() => promise.catch(err => alert('caught')), 1000);
 */!*
 
-// Příslib selhal!
-window.addEventListener('unhandledrejection', událost => alert(událost.reason));
+// Error: Promise Failed!
+window.addEventListener('unhandledrejection', event => alert(event.reason));
 ```
 
-Když to nyní spustíme, uvidíme nejprve `Příslib selhal!` a pak `odchyceno`.
+Now, if we run it, we'll see `Promise Failed!` first and then `caught`.
 
-Kdybychom nevěděli o frontě mikroúloh, mohli bychom se divit: „Proč se handler `unhandledrejection` spustil? Vždyť jsme tu chybu zachytili a ošetřili!“
+If we didn't know about the microtasks queue, we could wonder: "Why did `unhandledrejection` handler run? We did catch and handle the error!"
 
-Nyní však rozumíme, že `unhandledrejection` se generuje, když je fronta mikroúloh dokončena: engine prozkoumá přísliby, a pokud některý z nich je ve stavu „rejected“, událost se spustí.
+But now we understand that `unhandledrejection` is generated when the microtask queue is complete: the engine examines promises and, if any of them is in the "rejected" state, then the event triggers.
 
-Ve výše uvedeném příkladu se spustí i `.catch`, které přidala funkce `setTimeout`. Stane se to však později, až poté, co již nastala událost `unhandledrejection`, takže se tím nic nezmění.
+In the example above, `.catch` added by `setTimeout` also triggers. But it does so later, after `unhandledrejection` has already occurred, so it doesn't change anything.
 
-## Shrnutí
+## Summary
 
-Zpracování příslibů je vždy asynchronní, jelikož všechny příslibové akce procházejí interní frontou „příslibových úkolů“, nazývanou také „fronta mikroúloh“ (pojem z V8).
+Promise handling is always asynchronous, as all promise actions pass through the internal "promise jobs" queue, also called "microtask queue" (V8 term).
 
-Proto jsou handlery `.then/catch/finally` volány vždy až poté, co skončí aktuálně prováděný kód.
+So `.then/catch/finally` handlers are always called after the current code is finished.
 
-Jestliže potřebujeme zaručit, aby se část kódu spustila až po `.then/catch/finally`, můžeme ji přidat do zřetězeného volání `.then`.
+If we need to guarantee that a piece of code is executed after `.then/catch/finally`, we can add it into a chained `.then` call.
 
-Ve většině enginů JavaScriptu, včetně prohlížečů a Node.js, je koncept mikroúloh úzce spojen se „smyčkou událostí“ a „makroúlohami“. Protože tyto záležitosti přímo nesouvisejí s přísliby, probereme je v jiné části tutoriálu v článku <info:event-loop>.
+In most Javascript engines, including browsers and Node.js, the concept of microtasks is closely tied with the "event loop" and "macrotasks". As these have no direct relation to promises, they are covered in another part of the tutorial, in the article <info:event-loop>.

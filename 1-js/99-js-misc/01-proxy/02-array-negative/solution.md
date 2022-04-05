@@ -1,19 +1,19 @@
 
 ```js run
-let pole = [1, 2, 3];
+let array = [1, 2, 3];
 
-pole = new Proxy(pole, {
-  get(cíl, vlastnost, příjemce) {
-    if (vlastnost < 0) {
-      // i když k poli přistupujeme přes pole[1],
-      // vlastnost je řetězec, takže jej musíme konvertovat na číslo
-      vlastnost = +vlastnost + cíl.length;
+array = new Proxy(array, {
+  get(target, prop, receiver) {
+    if (prop < 0) {
+      // even if we access it like arr[1]
+      // prop is a string, so need to convert it to number
+      prop = +prop + target.length;
     }
-    return Reflect.get(cíl, vlastnost, příjemce);
+    return Reflect.get(target, prop, receiver);
   }
 });
 
 
-alert(pole[-1]); // 3
-alert(pole[-2]); // 2
+alert(array[-1]); // 3
+alert(array[-2]); // 2
 ```

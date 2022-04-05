@@ -2,9 +2,9 @@ importance: 4
 
 ---
 
-# Přepište „if“ na „switch“
+# Rewrite "if" into "switch"
 
-Přepište uvedený kód pomocí jediného příkazu `switch`:
+Rewrite the code below using a single `switch` statement:
 
 ```js run
 let a = +prompt('a?', '');

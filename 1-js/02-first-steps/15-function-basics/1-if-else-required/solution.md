@@ -1,1 +1,1 @@
-Žádný rozdíl není.
+No difference.

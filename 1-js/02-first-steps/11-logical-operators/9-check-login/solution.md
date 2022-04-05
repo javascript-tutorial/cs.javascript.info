@@ -1,25 +1,25 @@
 
 
 ```js run demo
-let uživatelskéJméno = prompt("Kdo je tam?", '');
+let userName = prompt("Who's there?", '');
 
-if (uživatelskéJméno === 'Správce') {
+if (userName === 'Admin') {
 
-  let pass = prompt('Heslo?', '');
+  let pass = prompt('Password?', '');
 
-  if (pass === 'Mistr') {
-    alert( 'Vítáme vás!' );
+  if (pass === 'TheMaster') {
+    alert( 'Welcome!' );
   } else if (pass === '' || pass === null) {
-    alert( 'Zrušeno' );
+    alert( 'Canceled' );
   } else {
-    alert( 'Špatné heslo' );
+    alert( 'Wrong password' );
   }
 
-} else if (uživatelskéJméno === '' || uživatelskéJméno === null) {
-  alert( 'Zrušeno' );
+} else if (userName === '' || userName === null) {
+  alert( 'Canceled' );
 } else {
-  alert( "Neznám vás" );
+  alert( "I don't know you" );
 }
 ```
 
-Všimněte si svislého odsazení uvnitř bloků `if`. Není technicky vyžadováno, ale činí kód čitelnějším.
+Note the vertical indents inside the `if` blocks. They are technically not required, but make the code more readable.

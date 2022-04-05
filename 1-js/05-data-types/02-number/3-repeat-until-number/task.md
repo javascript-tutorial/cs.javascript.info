@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Opakování, dokud na vstupu nebude číslo
+# Repeat until the input is a number
 
-Vytvořte funkci `načtiČíslo`, která se ptá na číslo tak dlouho, až návštěvník zadá platnou číselnou hodnotu.
+Create a function `readNumber` which prompts for a number until the visitor enters a valid numeric value.
 
-Výslednou hodnotu musí vrátit jako číslo.
+The resulting value must be returned as a number.
 
-Návštěvník může tento proces ukončit i zadáním prázdného řádku nebo stiskem „Storno“. V takovém případě by funkce měla vrátit `null`.
+The visitor can also stop the process by entering an empty line or pressing "CANCEL". In that case, the function should return `null`.
 
 [demo]
 

@@ -1,4 +1,4 @@
-function zkrať(řetězec, maxDélka) {
-  return (řetězec.length > maxDélka) ? 
-    řetězec.slice(0, maxDélka - 1) + '…' : řetězec;
+function truncate(str, maxlength) {
+  return (str.length > maxlength) ? 
+    str.slice(0, maxlength - 1) + '…' : str;
 }

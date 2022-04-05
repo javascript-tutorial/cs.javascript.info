@@ -1,12 +1,12 @@
-class RozšířenéHodiny extends Hodiny {
-  constructor(možnosti) {
-    super(možnosti);
-    let { přesnost = 1000 } = možnosti;
-    this.přesnost = přesnost;
+class ExtendedClock extends Clock {
+  constructor(options) {
+    super(options);
+    let { precision = 1000 } = options;
+    this.precision = precision;
   }
 
   start() {
-    this.vypiš();
-    this.časovač = setInterval(() => this.vypiš(), this.přesnost);
+    this.render();
+    this.timer = setInterval(() => this.render(), this.precision);
   }
 };
