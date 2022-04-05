@@ -2,16 +2,16 @@ importance: 5
 
 ---
 
-# Přepište „if“ na „?“
+# Rewrite 'if' into '?'
 
-Přepište tento příkaz `if` pomocí podmíněného operátoru `'?'`:
+Rewrite this `if` using the conditional operator `'?'`:
 
 ```js
-let výsledek;
+let result;
 
 if (a + b < 4) {
-  výsledek = 'Málo';
+  result = 'Below';
 } else {
-  výsledek = 'Hodně';
+  result = 'Over';
 }
 ```

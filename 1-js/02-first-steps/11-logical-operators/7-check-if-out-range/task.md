@@ -2,8 +2,8 @@ importance: 3
 
 ---
 
-# Ověřte, zda hodnota je mimo rozsah
+# Check the range outside
 
-Napište podmínku „if“, která ověří, zda proměnná `věk` NENÍ mezi `14` a `90` včetně.
+Write an `if` condition to check that `age` is NOT between `14` and `90` inclusively.
 
-Vytvořte dvě varianty: první bude používat NOT `!`, druhá se obejde bez něj.
+Create two variants: the first one using NOT `!`, the second one -- without it.

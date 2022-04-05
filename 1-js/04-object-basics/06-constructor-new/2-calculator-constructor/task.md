@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Vytvořte nový Kalkulátor
+# Create new Calculator
 
-Vytvořte konstruktor `Kalkulátor`, který bude vytvářet objekty se třemi metodami:
+Create a constructor function `Calculator` that creates objects with 3 methods:
 
-- `načti()` se funkcí `prompt` zeptá na dvě hodnoty a uloží je jako vlastnosti objektu.
-- `součet()` vrátí součet těchto hodnot.
-- `součin()` vrátí součin těchto hodnot.
+- `read()` asks for two values using `prompt` and remembers them in object properties.
+- `sum()` returns the sum of these properties.
+- `mul()` returns the multiplication product of these properties.
 
-Například:
+For instance:
 
 ```js
-let kalkulátor = new Kalkulátor();
-kalkulátor.načti();
+let calculator = new Calculator();
+calculator.read();
 
-alert( "Součet=" + kalkulátor.součet() );
-alert( "Součin=" + kalkulátor.součin() );
+alert( "Sum=" + calculator.sum() );
+alert( "Mul=" + calculator.mul() );
 ```
 
 [demo]

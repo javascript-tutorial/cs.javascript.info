@@ -1,7 +1,7 @@
-describe("vyjmiČástku", function() {
+describe("extractCurrencyValue", function() {
 
-  it("pro řetězec $120 vrátí číslo 120", function() {
-    assert.strictEqual(vyjmiČástku('$120'), 120);
+  it("for the string $120 returns the number 120", function() {
+    assert.strictEqual(extractCurrencyValue('$120'), 120);
   });
 
 

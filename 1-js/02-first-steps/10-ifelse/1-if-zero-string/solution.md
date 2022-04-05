@@ -1,12 +1,12 @@
-**Ano, zobrazí.**
+**Yes, it will.**
 
-Každý řetězec kromě prázdného (a `"0"` není prázdný řetězec) se v logickém kontextu převede na `true`.
+Any string except an empty one (and `"0"` is not empty) becomes `true` in the logical context.
 
-Můžeme si to spustit a uvidíme:
+We can run and check:
 
 ```js run
 if ("0") {
-  alert( 'Ahoj' );
+  alert( 'Hello' );
 }
 ```
 

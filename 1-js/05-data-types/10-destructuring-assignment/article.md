@@ -1,579 +1,579 @@
-# Destrukturační přiřazení
+# Destructuring assignment
 
-Dvě nejpoužívanější datové struktury v JavaScriptu jsou objekty a pole.
+The two most used data structures in JavaScript are `Object` and `Array`.
 
-- Objekty nám umožňují vytvořit jednoduchou entitu, v níž jsou datové prvky uloženy pod klíči.
-- Pole nám umožňují shromáždit datové prvky do seřazeného seznamu.
+- Objects allow us to create a single entity that stores data items by key. 
+- Arrays allow us to gather data items into an ordered list.
 
-Když je však předáváme funkci, funkce nemusí potřebovat objekt nebo pole jako celek. Může potřebovat jen jednotlivé části.
+Although, when we pass those to a function, it may need not be an object/array as a whole. It may need individual pieces.
 
-*Destrukturační přiřazení* (česky někdy také nazývané *destrukturalizační* -- pozn. překl.) je speciální syntaxe, která nám umožňuje „rozbalit“ pole nebo objekty do svazku proměnných, který bývá někdy vhodnější.
+*Destructuring assignment* is a special syntax that allows us to "unpack" arrays or objects into a bunch of variables, as sometimes that's more convenient. 
 
-Destrukturace také skvěle funguje se složitými funkcemi, které mají spoustu parametrů, defaultní hodnoty a tak dále. Brzy to uvidíme.
+Destructuring also works great with complex functions that have a lot of parameters, default values, and so on. Soon we'll see that.
 
-## Destrukturace polí
+## Array destructuring
 
-Zde je příklad, jak je pole destrukturováno do proměnných:
+Here's an example of how an array is destructured into variables:
 
 ```js
-// máme pole obsahující jméno a příjmení
-let pole = ["Jan", "Novák"]
+// we have an array with the name and surname
+let arr = ["John", "Smith"]
 
 *!*
-// destrukturační přiřazení
-// nastaví křestníJméno = pole[0]
-// a příjmení = pole[1]
-let [křestníJméno, příjmení] = pole;
+// destructuring assignment
+// sets firstName = arr[0]
+// and surname = arr[1]
+let [firstName, surname] = arr;
 */!*
 
-alert(křestníJméno); // Jan
-alert(příjmení);  // Novák
+alert(firstName); // John
+alert(surname);  // Smith
 ```
 
-Nyní můžeme místo s prvky pole pracovat s proměnnými.
+Now we can work with variables instead of array members.
 
-Vypadá to výborně, když to zkombinujeme se `split` nebo jinými metodami vracejícími pole:
+It looks great when combined with `split` or other array-returning methods:
 
 ```js run
-let [křestníJméno, příjmení] = "Jan Novák".split(' ');
-alert(křestníJméno); // Jan
-alert(příjmení);  // Novák
+let [firstName, surname] = "John Smith".split(' ');
+alert(firstName); // John
+alert(surname);  // Smith
 ```
 
-Jak vidíte, syntaxe je jednoduchá. Je tady však několik zvláštních detailů. Podíváme se na další příklady, abychom tomu lépe porozuměli.
+As you can see, the syntax is simple. There are several peculiar details though. Let's see more examples, to better understand it.
 
-````smart header="„Destrukturace“ neznamená „destrukce“"
-Nazývá se to „destrukturační přiřazení“, protože provádí „destrukturaci“ kopírováním prvků do proměnných. Samotné pole se však nemění.
+````smart header="\"Destructuring\" does not mean \"destructive\"."
+It's called "destructuring assignment," because it "destructurizes" by copying items into variables. But the array itself is not modified.
 
-Je to jen kratší způsob, jak napsat:
+It's just a shorter way to write:
 ```js
-// let [křestníJméno, příjmení] = pole;
-let křestníJméno = pole[0];
-let příjmení = pole[1];
+// let [firstName, surname] = arr;
+let firstName = arr[0];
+let surname = arr[1];
 ```
 ````
 
-````smart header="Ignorování prvků pomocí čárek"
-Nechtěné prvky pole můžeme zahodit pomocí čárky navíc:
+````smart header="Ignore elements using commas"
+Unwanted elements of the array can also be thrown away via an extra comma:
 
 ```js run
 *!*
-// druhý prvek nepotřebujeme
-let [křestníJméno, , titul] = ["Julius", "Caesar", "Konzul", "Římské republiky"];
+// second element is not needed
+let [firstName, , title] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
 */!*
 
-alert( titul ); // Konzul
+alert( title ); // Consul
 ```
 
-Ve výše uvedeném kódu byl druhý prvek pole přeskočen, třetí přiřazen do proměnné `titul` a ostatní prvky pole byly také přeskočeny (protože pro ně nejsou uvedeny žádné proměnné).
+In the code above, the second element of the array is skipped, the third one is assigned to `title`, and the rest of the array items is also skipped (as there are no variables for them).
 ````
 
-````smart header="Funguje s libovolným iterovatelným objektem na pravé straně"
+````smart header="Works with any iterable on the right-side"
 
-...Ve skutečnosti můžeme destrukturační přiřazení použít na libovolný iterovatelný objekt, nejenom na pole:
+...Actually, we can use it with any iterable, not only arrays:
 
 ```js
 let [a, b, c] = "abc"; // ["a", "b", "c"]
-let [jedna, dvě, tři] = new Set([1, 2, 3]);
+let [one, two, three] = new Set([1, 2, 3]);
 ```
-To funguje, protože interně se destrukturační přiřazení vykonává iterací nad hodnotou vpravo. Je to určitý druh syntaktického cukru pro volání `for..of` nad hodnotou vpravo od `=` a přiřazení hodnot.
+That works, because internally a destructuring assignment works by iterating over the right value. It's kind of syntax sugar for calling `for..of` over the value to the right of `=` and assigning the values.
 ````
 
 
-````smart header="Na levé straně můžeme přiřazovat do čehokoli"
-Na levé straně můžeme používat cokoli, do čeho lze přiřazovat.
+````smart header="Assign to anything at the left-side"
+We can use any "assignables" at the left side.
 
-Například vlastnost objektu:
+For instance, an object property:
 ```js run
-let uživatel = {};
-[uživatel.křestníJméno, uživatel.příjmení] = "Jan Novák".split(' ');
+let user = {};
+[user.name, user.surname] = "John Smith".split(' ');
 
-alert(uživatel.křestníJméno); // Jan
-alert(uživatel.příjmení); // Novák
+alert(user.name); // John
+alert(user.surname); // Smith
 ```
 
 ````
 
-````smart header="Cyklus pomocí .entries()"
-V předchozí kapitole jsme viděli metodu [Object.entries(obj)](mdn:js/Object/entries).
+````smart header="Looping with .entries()"
+In the previous chapter we saw the [Object.entries(obj)](mdn:js/Object/entries) method.
 
-Můžeme ji používat společně s destrukturací k procházení dvojic klíčů a hodnot objektu:
+We can use it with destructuring to loop over keys-and-values of an object:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  věk: 30
+let user = {
+  name: "John",
+  age: 30
 };
 
-// cyklus nad dvojicemi klíč-hodnota
+// loop over keys-and-values
 *!*
-for (let [klíč, hodnota] of Object.entries(uživatel)) {
+for (let [key, value] of Object.entries(user)) {
 */!*
-  alert(`${klíč}:${hodnota}`); // jméno:Jan, poté věk:30
+  alert(`${key}:${value}`); // name:John, then age:30
 }
 ```
 
-Podobný kód pro `Map` je jednodušší, protože mapa je iterovatelná:
+The similar code for a `Map` is simpler, as it's iterable:
 
 ```js run
-let uživatel = new Map();
-uživatel.set("jméno", "Jan");
-uživatel.set("věk", "30");
+let user = new Map();
+user.set("name", "John");
+user.set("age", "30");
 
 *!*
-// Map iteruje nad dvojicemi [klíč, hodnota], což je velmi vhodné pro destrukturaci
-for (let [klíč, hodnota] of uživatel) {
+// Map iterates as [key, value] pairs, very convenient for destructuring
+for (let [key, value] of user) {
 */!*
-  alert(`${klíč}:${hodnota}`); // jméno:Jan, poté věk:30
+  alert(`${key}:${value}`); // name:John, then age:30
 }
 ```
 ````
 
-````smart header="Trik s výměnou proměnných"
-Existuje dobře známý trik pro výměnu hodnot dvou proměnných použitím destrukturačního přiřazení:
+````smart header="Swap variables trick"
+There's a well-known trick for swapping values of two variables using a destructuring assignment:
 
 ```js run
-let host = "Jana";
-let admin = "Petr";
+let guest = "Jane";
+let admin = "Pete";
 
-// Vyměníme hodnoty: učiníme host=Petr, admin=Jana
+// Let's swap the values: make guest=Pete, admin=Jane
 *!*
-[host, admin] = [admin, host];
+[guest, admin] = [admin, guest];
 */!*
 
-alert(`${host} ${admin}`); // Petr Jana (úspěšně vyměněno!)
+alert(`${guest} ${admin}`); // Pete Jane (successfully swapped!)
 ```
 
-Zde jsme vytvořili dočasné pole dvou proměnných a okamžitě je destrukturovali v obráceném pořadí.
+Here we create a temporary array of two variables and immediately destructure it in swapped order.
 
-Tímto způsobem můžeme vyměnit i více než dvě proměnné.
+We can swap more than two variables this way.
 ````
 
-### Zbytek '...'
+### The rest '...'
 
-Jestliže je pole delší než seznam nalevo, „přebývající“ prvky jsou obvykle vypuštěny.
+Usually, if the array is longer than the list at the left, the "extra" items are omitted.
 
-Například zde se vezmou jen první dva prvky a ostatní se prostě ignorují:
+For example, here only two items are taken, and the rest is just ignored:
 
 ```js run
-let [jméno1, jméno2] = ["Julius", "Caesar", "Konzul", "Římské republiky"];
+let [name1, name2] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
 
-alert(jméno1); // Julius
-alert(jméno2); // Caesar
-// Další prvky již nejsou nikam přiřazeny
+alert(name1); // Julius
+alert(name2); // Caesar
+// Further items aren't assigned anywhere
 ```
 
-Kdybychom chtěli shromáždit i to, co následuje, můžeme přidat jeden další parametr, do něhož se uloží „zbytek“, pomocí tří teček `"..."`:
+If we'd like also to gather all that follows -- we can add one more parameter that gets "the rest" using three dots `"..."`:
 
 ```js run
-let [jméno1, jméno2, *!*...zbytek*/!*] = ["Julius", "Caesar", *!*"Konzul", "Římské republiky"*/!*];
+let [name1, name2, *!*...rest*/!*] = ["Julius", "Caesar", *!*"Consul", "of the Roman Republic"*/!*];
 
 *!*
-// zbytek je pole prvků počínaje třetím
-alert(zbytek[0]); // Konzul
-alert(zbytek[1]); // Římské republiky
-alert(zbytek.length); // 2
+// rest is array of items, starting from the 3rd one
+alert(rest[0]); // Consul
+alert(rest[1]); // of the Roman Republic
+alert(rest.length); // 2
 */!*
 ```
 
-Hodnota proměnné `zbytek` je pole zbývajících prvků pole.
+The value of `rest` is the array of the remaining array elements. 
 
-Místo `zbytek` můžeme použít jakékoli jméno proměnné, jen musíme zajistit, aby před ním byly tři tečky a aby bylo v destrukturačním přiřazení uvedeno jako poslední.
-
-```js run
-let [jméno1, jméno2, *!*...tituly*/!*] = ["Julius", "Caesar", "Konzul", "Římské republiky"];
-// nyní tituly = ["Konzul", "Římské republiky"]
-```
-
-### Defaultní hodnoty
-
-Pokud je pole kratší než seznam proměnných nalevo, nedojde k chybě. Neuvedené hodnoty se považují za nedefinované:
+We can use any other variable name in place of `rest`, just make sure it has three dots before it and goes last in the destructuring assignment.
 
 ```js run
-*!*
-let [křestníJméno, příjmení] = [];
-*/!*
-
-alert(křestníJméno); // undefined
-alert(příjmení); // undefined
+let [name1, name2, *!*...titles*/!*] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
+// now titles = ["Consul", "of the Roman Republic"]
 ```
 
-Chceme-li, aby chybějící hodnoty nahradila nějaká „defaultní“ hodnota, můžeme ji uvést pomocí `=`:
+### Default values
+
+If the array is shorter than the list of variables at the left, there'll be no errors. Absent values are considered undefined:
 
 ```js run
 *!*
-// defaultní hodnoty
-let [jméno = "Host", příjmení = "Anonym"] = ["Julius"];
+let [firstName, surname] = [];
 */!*
 
-alert(jméno);    // Julius (z pole)
-alert(příjmení); // Anonym (použita defaultní hodnota)
+alert(firstName); // undefined
+alert(surname); // undefined
 ```
 
-Defaultními hodnotami mohou být další složité výrazy nebo dokonce volání funkcí. Vyhodnocují se jen tehdy, není-li hodnota poskytnuta.
-
-Například zde použijeme pro dvě defaultní hodnoty funkci `prompt`:
+If we want a "default" value to replace the missing one, we can provide it using `=`:
 
 ```js run
-// spustí prompt jen pro příjmení
-let [jméno = prompt('jméno?'), příjmení = prompt('příjmení?')] = ["Julius"];
+*!*
+// default values
+let [name = "Guest", surname = "Anonymous"] = ["Julius"];
+*/!*
 
-alert(jméno);    // Julius (z pole)
-alert(příjmení); // to, co vrátil prompt
+alert(name);    // Julius (from array)
+alert(surname); // Anonymous (default used)
 ```
 
-Prosíme všimněte si: `prompt` se spustí jen pro chybějící hodnotu (`příjmení`).
+Default values can be more complex expressions or even function calls. They are evaluated only if the value is not provided.
 
-## Destrukturace objektů
+For instance, here we use the `prompt` function for two defaults:
 
-Destrukturační přiřazení funguje i pro objekty.
+```js run
+// runs only prompt for surname
+let [name = prompt('name?'), surname = prompt('surname?')] = ["Julius"];
 
-Základní syntaxe je:
+alert(name);    // Julius (from array)
+alert(surname); // whatever prompt gets
+```
+
+Please note: the `prompt` will run only for the missing value (`surname`).
+
+## Object destructuring
+
+The destructuring assignment also works with objects.
+
+The basic syntax is:
 
 ```js
-let {proměnná1, proměnná2} = {proměnná1:…, proměnná2:…}
+let {var1, var2} = {var1:…, var2:…}
 ```
 
-Na pravé straně bychom měli mít existující objekt, který chceme rozdělit do proměnných. Levá strana obsahuje objektu podobný „vzor“ pro odpovídající vlastnosti. V nejjednodušším případě je to seznam názvů proměnných v `{...}`.
+We should have an existing object at the right side, that we want to split into variables. The left side contains an object-like "pattern" for corresponding properties. In the simplest case, that's a list of variable names in `{...}`.
 
-Příklad:
+For instance:
 
 ```js run
-let možnosti = {
-  titulek: "Menu",
-  šířka: 100,
-  výška: 200
+let options = {
+  title: "Menu",
+  width: 100,
+  height: 200
 };
 
 *!*
-let {titulek, šířka, výška} = možnosti;
+let {title, width, height} = options;
 */!*
 
-alert(titulek); // Menu
-alert(šířka);   // 100
-alert(výška);   // 200
+alert(title);  // Menu
+alert(width);  // 100
+alert(height); // 200
 ```
 
-Vlastnosti `možnosti.title`, `možnosti.šířka` a `možnosti.výška` byly přiřazeny do příslušných proměnných.
+Properties `options.title`, `options.width` and `options.height` are assigned to the corresponding variables. 
 
-Na pořadí nezáleží. Tohle bude fungovat také:
+The order does not matter. This works too:
 
 ```js
-// změníme pořadí v let {...}
-let {výška, šířka, titulek} = { titulek: "Menu", výška: 200, šířka: 100 }
+// changed the order in let {...}
+let {height, width, title} = { title: "Menu", height: 200, width: 100 }
 ```
 
-Vzor na levé straně může být složitější a může specifikovat mapování mezi vlastnostmi a proměnnými.
+The pattern on the left side may be more complex and specify the mapping between properties and variables.
 
-Chceme-li přiřadit vlastnost do proměnné s jiným názvem, např. přiřadit `možnosti.šířka` do proměnné jménem `š`, pak můžeme nastavit jméno proměnné za dvojtečkou:
+If we want to assign a property to a variable with another name, for instance, make `options.width` go into the variable named `w`, then we can set the variable name using a colon:
 
 ```js run
-let možnosti = {
-  titulek: "Menu",
-  šířka: 100,
-  výška: 200
+let options = {
+  title: "Menu",
+  width: 100,
+  height: 200
 };
 
 *!*
-// { zdrojováVlastnost: cílováProměnná }
-let {šířka: š, výška: v, titulek} = možnosti;
+// { sourceProperty: targetVariable }
+let {width: w, height: h, title} = options;
 */!*
 
-// šířka -> š
-// výška -> v
-// titulek -> titulek
+// width -> w
+// height -> h
+// title -> title
 
-alert(titulek); // Menu
-alert(š);       // 100
-alert(v);       // 200
+alert(title);  // Menu
+alert(w);      // 100
+alert(h);      // 200
 ```
 
-Dvojtečka ukazuje, „co : jde kam“. V uvedeném příkladu vlastnost `šířka` jde do `š`, vlastnost `výška` jde do `v` a `titulek` se přiřadí do proměnné stejného názvu.
+The colon shows "what : goes where". In the example above the property `width` goes to `w`, property `height` goes to `h`, and `title` is assigned to the same name.
 
-Pro vlastnosti, které mohou chybět, můžeme nastavit defaultní hodnoty pomocí `"="` takto:
+For potentially missing properties we can set default values using `"="`, like this:
 
 ```js run
-let možnosti = {
-  titulek: "Menu"
+let options = {
+  title: "Menu"
 };
 
 *!*
-let {šířka = 100, výška = 200, titulek} = možnosti;
+let {width = 100, height = 200, title} = options;
 */!*
 
-alert(titulek);  // Menu
-alert(šířka);    // 100
-alert(výška);    // 200
+alert(title);  // Menu
+alert(width);  // 100
+alert(height); // 200
 ```
 
-Stejně jako u polí nebo parametrů funkcí mohou defaultní hodnoty být libovolné výrazy nebo dokonce volání funkcí. Budou vyhodnoceny, jestliže hodnota nebude poskytnuta.
+Just like with arrays or function parameters, default values can be any expressions or even function calls. They will be evaluated if the value is not provided.
 
-V níže uvedeném kódu se `prompt` zeptá na proměnnou `šířka`, ale ne na `titulek`:
+In the code below `prompt` asks for `width`, but not for `title`:
 
 ```js run
-let možnosti = {
-  titulek: "Menu"
+let options = {
+  title: "Menu"
 };
 
 *!*
-let {šířka = prompt("šířka?"), titulek = prompt("titulek?")} = možnosti;
+let {width = prompt("width?"), title = prompt("title?")} = options;
 */!*
 
-alert(titulek); // Menu
-alert(šířka);   // (to, co vydal prompt)
+alert(title);  // Menu
+alert(width);  // (whatever the result of prompt is)
 ```
 
-Můžeme také zkombinovat dvojtečku a rovnítko:
+We also can combine both the colon and equality:
 
 ```js run
-let možnosti = {
-  titulek: "Menu"
+let options = {
+  title: "Menu"
 };
 
 *!*
-let {šířka: š = 100, výška: v = 200, titulek} = možnosti;
+let {width: w = 100, height: h = 200, title} = options;
 */!*
 
-alert(titulek);  // Menu
-alert(š);        // 100
-alert(v);        // 200
+alert(title);  // Menu
+alert(w);      // 100
+alert(h);      // 200
 ```
 
-Máme-li složitý objekt s mnoha vlastnostmi, můžeme vytáhnout jen ty, které potřebujeme:
+If we have a complex object with many properties, we can extract only what we need:
 
 ```js run
-let možnosti = {
-  titulek: "Menu",
-  šířka: 100,
-  výška: 200
+let options = {
+  title: "Menu",
+  width: 100,
+  height: 200
 };
 
-// do proměnné vyjmeme jen titulek
-let { titulek } = možnosti;
+// only extract title as a variable
+let { title } = options;
 
-alert(titulek); // Menu
+alert(title); // Menu
 ```
 
-### Zbytkový vzor „...“
+### The rest pattern "..."
 
-Co když má objekt více vlastností, než my máme proměnných? Můžeme některé z nich vzít a „zbytek“ někam přiřadit?
+What if the object has more properties than we have variables? Can we take some and then assign the "rest" somewhere?
 
-Můžeme použít zbytkový vzor, stejně jako jsme to dělali u polí. Některé starší prohlížeče to nepodporují (IE, jako polyfill použijte Babel), ale v moderních to funguje.
+We can use the rest pattern, just like we did with arrays. It's not supported by some older browsers (IE, use Babel to polyfill it), but works in modern ones.
 
-Vypadá to takto:
+It looks like this:
 
 ```js run
-let možnosti = {
-  titulek: "Menu",
-  výška: 200,
-  šířka: 100
+let options = {
+  title: "Menu",
+  height: 200,
+  width: 100
 };
 
 *!*
-// titulek = vlastnost nazvaná titulek
-// zbytek = objekt s ostatními vlastnostmi
-let {titulek, ...zbytek} = možnosti;
+// title = property named title
+// rest = object with the rest of properties
+let {title, ...rest} = options;
 */!*
 
-// nyní titulek="Menu", zbytek={výška: 200, šířka: 100}
-alert(zbytek.výška); // 200
-alert(zbytek.šířka); // 100
+// now title="Menu", rest={height: 200, width: 100}
+alert(rest.height);  // 200
+alert(rest.width);   // 100
 ```
 
-````smart header="Chyták při neuvedení `let`"
-Ve výše uvedených příkladech jsme proměnné deklarovali přímo při přiřazení: `let {…} = {…}`. Můžeme samozřejmě použít i existující proměnné bez uvedení `let`. Je tady však chyták.
+````smart header="Gotcha if there's no `let`"
+In the examples above variables were declared right in the assignment: `let {…} = {…}`. Of course, we could use existing variables too, without `let`. But there's a catch.
 
-Tohle nebude fungovat:
+This won't work:
 ```js run
-let titulek, šířka, výška;
+let title, width, height;
 
-// na tomto řádku je chyba
-{titulek, šířka, výška} = {titulek: "Menu", šířka: 200, výška: 100};
+// error in this line
+{title, width, height} = {title: "Menu", width: 200, height: 100};
 ```
 
-Problém je v tom, že JavaScript zachází s `{...}` v toku hlavního kódu (ne uvnitř jiného výrazu) jako s kódovým blokem. Takové kódové bloky můžeme používat k seskupení příkazů, například:
+The problem is that JavaScript treats `{...}` in the main code flow (not inside another expression) as a code block. Such code blocks can be used to group statements, like this:
 
 ```js run
 {
-  // kódový blok
-  let zpráva = "Ahoj";
+  // a code block
+  let message = "Hello";
   // ...
-  alert( zpráva );
+  alert( message );
 }
 ```
 
-Zde tedy JavaScript předpokládá, že máme kódový blok, což je důvod, proč nastane chyba. My místo toho chceme destrukturaci.
+So here JavaScript assumes that we have a code block, that's why there's an error. We want destructuring instead.
 
-Abychom sdělili JavaScriptu, že tohle není kódový blok, můžeme uzavřít výraz do závorek `(...)`:
+To show JavaScript that it's not a code block, we can wrap the expression in parentheses `(...)`:
 
 ```js run
-let titulek, šířka, výška;
+let title, width, height;
 
-// nyní je to v pořádku
-*!*(*/!*{titulek, šířka, výška} = {titulek: "Menu", šířka: 200, výška: 100}*!*)*/!*;
+// okay now
+*!*(*/!*{title, width, height} = {title: "Menu", width: 200, height: 100}*!*)*/!*;
 
-alert( titulek ); // Menu
+alert( title ); // Menu
 ```
 ````
 
-## Vnořená destrukturace
+## Nested destructuring
 
-Jestliže objekt nebo pole obsahuje jiné vnořené objekty a pole, můžeme vyjmout zahloubené části pomocí složitějších vzorů na levé straně.
+If an object or an array contain other nested objects and arrays, we can use more complex left-side patterns to extract deeper portions.
 
-V níže uvedeném kódu objekt `možnosti` obsahuje jiný objekt ve vlastnosti `velikost` a pole ve vlastnosti `prvky`. Vzor na levé straně přiřazení má stejnou strukturu jako objekt, z něhož vybíráme hodnoty:
+In the code below `options` has another object in the property `size` and an array in the property `items`. The pattern at the left side of the assignment has the same structure to extract values from them:
 
 ```js run
-let možnosti = {
-  velikost: {
-    šířka: 100,
-    výška: 200
+let options = {
+  size: {
+    width: 100,
+    height: 200
   },
-  prvky: ["Koláč", "Vdolek"],
+  items: ["Cake", "Donut"],
   extra: true   
 };
 
-// destrukturační přiřazení, pro čitelnost rozdělené do více řádků
+// destructuring assignment split in multiple lines for clarity
 let {
-  velikost: { // zde uvedeme velikost
-    šířka,
-    výška
+  size: { // put size here
+    width,
+    height
   },
-  prvky: [prvek1, prvek2], // zde přiřadíme prvky
-  titulek = "Menu" // v objektu není přítomen (použije se defaultní hodnota)
-} = možnosti;
+  items: [item1, item2], // assign items here
+  title = "Menu" // not present in the object (default value is used)
+} = options;
 
-alert(titulek); // Menu
-alert(šířka);   // 100
-alert(výška);   // 200
-alert(prvek1);  // Koláč
-alert(prvek2);  // Vdolek
+alert(title);  // Menu
+alert(width);  // 100
+alert(height); // 200
+alert(item1);  // Cake
+alert(item2);  // Donut
 ```
 
-Do příslušných proměnných se přiřadí všechny vlastnosti objektu `možnosti` s výjimkou `extra`, která v levé části chybí:
+All properties of `options` object except `extra` that is absent in the left part, are assigned to corresponding variables:
 
 ![](destructuring-complex.svg)
 
-Nakonec tedy máme `šířka`, `výška`, `prvek1`, `prvek2` a `titulek` z defaultní hodnoty.
+Finally, we have `width`, `height`, `item1`, `item2` and `title` from the default value.
 
-Všimněte si, že zde nejsou žádné proměnné pro `velikost` a `prvky`, jelikož jsme místo nich vzali jejich obsah.
+Note that there are no variables for `size` and `items`, as we take their content instead.
 
-## Chytré funkční parametry
+## Smart function parameters
 
-Stává se, že funkce má mnoho parametrů a většina z nich je nepovinná. To platí zejména pro uživatelská rozhraní. Představte si funkci, která vytváří menu. Může obsahovat šířku, výšku, titulek, seznam prvků a podobně.
+There are times when a function has many parameters, most of which are optional. That's especially true for user interfaces. Imagine a function that creates a menu. It may have a width, a height, a title, items list and so on.
 
-Zde je špatný způsob, jak takovou funkci napsat:
+Here's a bad way to write such function:
 
 ```js
-function zobrazMenu(titulek = "Bez názvu", šířka = 200, výška = 100, prvky = []) {
+function showMenu(title = "Untitled", width = 200, height = 100, items = []) {
   // ...
 }
 ```
 
-Problém v reálném životě spočívá v tom, jak si pamatovat pořadí argumentů. IDE se nám s tím obvykle snaží pomoci, zvláště je-li kód dobře dokumentován, ale i tak... Další problém je v tom, jak volat funkci, když většina parametrů má být defaultních.
+In real-life, the problem is how to remember the order of arguments. Usually IDEs try to help us, especially if the code is well-documented, but still... Another problem is how to call a function when most parameters are ok by default.
 
-Takhle?
+Like this?
 
 ```js
-// undefined tam, kde se má použít defaultní hodnota
-zobrazMenu("Moje menu", undefined, undefined, ["Prvek1", "Prvek2"])
+// undefined where default values are fine
+showMenu("My Menu", undefined, undefined, ["Item1", "Item2"])
 ```
 
-To je ošklivé. A když budeme pracovat s více parametry, bude to nečitelné.
+That's ugly. And becomes unreadable when we deal with more parameters.
 
-Destrukturace nás přichází zachránit!
+Destructuring comes to the rescue!
 
-Můžeme předávat parametry jako objekt a funkce je okamžitě destrukturuje do proměnných:
+We can pass parameters as an object, and the function immediately destructurizes them into variables:
 
 ```js run
-// předáme objekt do funkce
-let možnosti = {
-  titulek: "Moje menu",
-  prvky: ["Prvek1", "Prvek2"]
+// we pass object to function
+let options = {
+  title: "My menu",
+  items: ["Item1", "Item2"]
 };
 
-// ...a ta jej okamžitě rozdělí do proměnných
-function zobrazMenu(*!*{titulek = "Bez názvu", šířka = 200, výška = 100, prvky = []}*/!*) {
-  // titulek, prvky – převzaty z objektu možnosti,
-  // šířka, výška – použity defaultní hodnoty
-  alert( `${titulek} ${šířka} ${výška}` ); // Moje menu 200 100
-  alert( prvky ); // Prvek1,Prvek2
+// ...and it immediately expands it to variables
+function showMenu(*!*{title = "Untitled", width = 200, height = 100, items = []}*/!*) {
+  // title, items – taken from options,
+  // width, height – defaults used
+  alert( `${title} ${width} ${height}` ); // My Menu 200 100
+  alert( items ); // Item1, Item2
 }
 
-zobrazMenu(možnosti);
+showMenu(options);
 ```
 
-S vnořenými objekty a dvojtečkovým mapováním můžeme použít i složitější destrukturaci:
+We can also use more complex destructuring with nested objects and colon mappings:
 
 ```js run
-let možnosti = {
-  titulek: "Moje menu",
-  prvky: ["Prvek1", "Prvek2"]
+let options = {
+  title: "My menu",
+  items: ["Item1", "Item2"]
 };
 
 *!*
-function zobrazMenu({
-  titulek = "Bez názvu",
-  šířka: š = 100, // šířka jde do š
-  výška: v = 200, // výška jde do v
-  prvky: [prvek1, prvek2] // první prvek pole prvky jde do prvek1, druhý do prvek2
+function showMenu({
+  title = "Untitled",
+  width: w = 100,  // width goes to w
+  height: h = 200, // height goes to h
+  items: [item1, item2] // items first element goes to item1, second to item2
 }) {
 */!*
-  alert( `${titulek} ${š} ${v}` ); // Moje menu 100 200
-  alert( prvek1 ); // Prvek1
-  alert( prvek2 ); // Prvek2
+  alert( `${title} ${w} ${h}` ); // My Menu 100 200
+  alert( item1 ); // Item1
+  alert( item2 ); // Item2
 }
 
-zobrazMenu(možnosti);
+showMenu(options);
 ```
 
-Úplná syntaxe je stejná jako u destrukturačního přiřazení:
+The full syntax is the same as for a destructuring assignment:
 ```js
 function({
-  vstupujícíVlastnost: názevProměnné = defaultníHodnota
+  incomingProperty: varName = defaultValue
   ...
 })
 ```
 
-Pak budeme mít vlastnost `vstupujícíVlastnost` objektu parametrů uloženou v proměnné `názevProměnné`, jejíž defaultní hodnota bude `defaultníHodnota`.
+Then, for an object of parameters, there will be a variable `varName` for property `incomingProperty`, with `defaultValue` by default.
 
-Prosíme všimněte si, že taková destrukturace předpokládá, že `zobrazMenu()` má argument. Chceme-li všechny hodnoty defaultní, měli bychom uvést prázdný objekt:
+Please note that such destructuring assumes that `showMenu()` does have an argument. If we want all values by default, then we should specify an empty object:
 
 ```js
-zobrazMenu({}); // ok, všechny hodnoty jsou defaultní
+showMenu({}); // ok, all values are default
 
-zobrazMenu(); // tohle ohlásí chybu
+showMenu(); // this would give an error
 ```
 
-To můžeme opravit tak, že učiníme `{}` defaultní hodnotou celého objektu parametrů:
+We can fix this by making `{}` the default value for the whole object of parameters:
 
 ```js run
-function zobrazMenu({ titulek = "Menu", šířka = 100, výška = 200 }*!* = {}*/!*) {
-  alert( `${titulek} ${šířka} ${výška}` );
+function showMenu({ title = "Menu", width = 100, height = 200 }*!* = {}*/!*) {
+  alert( `${title} ${width} ${height}` );
 }
 
-zobrazMenu(); // Menu 100 200
+showMenu(); // Menu 100 200
 ```
 
-V uvedeném kódu je celý argumentový objekt defaultně `{}`, takže vždy bude co destrukturovat.
+In the code above, the whole arguments object is `{}` by default, so there's always something to destructurize.
 
-## Shrnutí
+## Summary
 
-- Destrukturační přiřazení umožňuje okamžité mapování objektu nebo pole do mnoha proměnných.
-- Úplná syntaxe pro objekt:
+- Destructuring assignment allows for instantly mapping an object or array onto many variables.
+- The full object syntax:
     ```js
-    let {vlastnost : názevProměnné = defaultníHodnota, ...zbytek} = objekt
+    let {prop : varName = default, ...rest} = object
     ```
 
-    To znamená, že vlastnost `vlastnost` má přijít do proměnné `názevProměnné`, a pokud taková vlastnost neexistuje, měla by se použít hodnota `defaultníHodnota`.
+    This means that property `prop` should go into the variable `varName` and, if no such property exists, then the `default` value should be used.
 
-    Objektové vlastnosti, které nejsou mapovány, se zkopírují do objektu `zbytek`.
+    Object properties that have no mapping are copied to the `rest` object.
 
-- Úplná syntaxe pro pole:
+- The full array syntax:
 
     ```js
-    let [prvek1 = defaultníHodnota, prvek2, ...zbytek] = pole
+    let [item1 = default, item2, ...rest] = array
     ```
 
-    První prvek přijde do proměnné `prvek1`, druhý do `prvek2`, všechny ostatní prvky se stanou polem `zbytek`.
+    The first item goes to `item1`; the second goes into `item2`, all the rest makes the array `rest`.
 
-- Je možné extrahovat data z vnořených polí nebo objektů. V tom případě musí mít levá strana stejnou strukturu jako pravá.
+- It's possible to extract data from nested arrays/objects, for that the left side must have the same structure as the right one.

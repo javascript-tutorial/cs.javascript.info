@@ -1,1 +1,1 @@
-Prostě proveďte cyklus nad objektem, a má-li aspoň jednu vlastnost, okamžitě proveďte `return false`.
+Just loop over the object and `return false` immediately if there's at least one property.

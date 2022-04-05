@@ -2,9 +2,9 @@ importance: 3
 
 ---
 
-# Výsledek přiřazení
+# Assignment result
 
-Jaké jsou hodnoty proměnných `a` a `x` po provedení uvedeného kódu?
+What are the values of `a` and `x` after the code below?
 
 ```js
 let a = 2;

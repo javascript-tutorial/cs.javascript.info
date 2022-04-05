@@ -1,16 +1,16 @@
 ```js run untrusted
-class ChybaFormátu extends SyntaxError {
-  constructor(zpráva) {
-    super(zpráva);
+class FormatError extends SyntaxError {
+  constructor(message) {
+    super(message);
     this.name = this.constructor.name;
   }
 }
 
-let chyba = new ChybaFormátu("chyba formátování");
+let err = new FormatError("formatting error");
 
-alert( chyba.message ); // chyba formátování
-alert( chyba.name ); // ChybaFormátu
-alert( chyba.stack ); // zásobník
+alert( err.message ); // formatting error
+alert( err.name ); // FormatError
+alert( err.stack ); // stack
 
-alert( chyba instanceof SyntaxError ); // true
+alert( err instanceof SyntaxError ); // true
 ```

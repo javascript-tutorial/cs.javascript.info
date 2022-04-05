@@ -1,251 +1,251 @@
 
-# Úvod do modulů
+# Modules, introduction
 
-Když se naše aplikace rozrůstá, chceme ji rozdělit do více souborů, tzv. „modulů“. Modul může obsahovat třídu nebo knihovnu funkcí sloužící specifickému účelu.
+As our application grows bigger, we want to split it into multiple files, so called "modules". A module may contain a class or a library of functions for a specific purpose.
 
-Dlouhou dobu JavaScript existoval bez modulové syntaxe na jazykové úrovni. To nebyl problém, protože skripty byly původně malé a jednoduché, takže to nebylo zapotřebí.
+For a long time, JavaScript existed without a language-level module syntax. That wasn't a problem, because initially scripts were small and simple, so there was no need.
 
-Časem se však skripty stávaly stále složitějšími a složitějšími, takže komunita vynalezla rozličné způsoby, jak zorganizovat kód do modulů, speciální knihovny, které načtou moduly na požádání.
+But eventually scripts became more and more complex, so the community invented a variety of ways to organize code into modules, special libraries to load modules on demand.
 
-Abychom vyjmenovali některé z nich (z historických důvodů):
+To name some (for historical reasons):
 
-- [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) -- jeden z nejstarších modulových systémů, původně implementován knihovnou [require.js](http://requirejs.org/).
-- [CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1) -- modulový systém vytvořený pro server Node.js.
-- [UMD](https://github.com/umdjs/umd) -- další modulový systém, navržený jako univerzální, kompatibilní s AMD a CommonJS.
+- [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) -- one of the most ancient module systems, initially implemented by the library [require.js](http://requirejs.org/).
+- [CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1) -- the module system created for Node.js server.
+- [UMD](https://github.com/umdjs/umd) -- one more module system, suggested as a universal one, compatible with AMD and CommonJS.
 
-Nyní se všechny pomalu odebírají do dějin, ale ve starých skriptech je pořád můžeme najít.
+Now all these slowly become a part of history, but we still can find them in old scripts.
 
-Modulový systém na jazykové úrovni se ve standardu objevil v roce 2015, od té doby se postupně vyvíjel a nyní je podporován všemi významnými prohlížeči a v Node.js. Od nynějška tedy budeme studovat moderní JavaScriptové moduly.
+The language-level module system appeared in the standard in 2015, gradually evolved since then, and is now supported by all major browsers and in Node.js. So we'll study the modern JavaScript modules from now on.
 
-## Co je modul?
+## What is a module?
 
-Modul je prostě soubor. Jeden skript je jeden modul. Tak jednoduché to je.
+A module is just a file. One script is one module. As simple as that.
 
-Moduly se mohou navzájem načítat a používat speciální direktivy `export` a `import`, aby si vzájemně vyměňovaly funkcionalitu a jeden modul mohl volat funkce druhého:
+Modules can load each other and use special directives `export` and `import` to interchange functionality, call functions of one module from another one:
 
-- Klíčové slovo `export` označuje proměnné a funkce, které by měly být dostupné zvnějšku aktuálního modulu.
-- Klíčové slovo `import` umožňuje import funkcionality z jiných modulů.
+- `export` keyword labels variables and functions that should be accessible from outside the current module.
+- `import` allows the import of functionality from other modules.
 
-Například máme-li soubor `řekniAhoj.js`, který exportuje funkci:
+For instance, if we have a file `sayHi.js` exporting a function:
 
 ```js
-// 📁 řekniAhoj.js
-export function řekniAhoj(uživatel) {
-  alert(`Ahoj, ${uživatel}!`);
+// 📁 sayHi.js
+export function sayHi(user) {
+  alert(`Hello, ${user}!`);
 }
 ```
 
-...Pak ji jiný soubor může importovat a používat:
+...Then another file may import and use it:
 
 ```js
 // 📁 main.js
-import {řekniAhoj} from './řekniAhoj.js';
+import {sayHi} from './sayHi.js';
 
-alert(řekniAhoj); // function...
-řekniAhoj('Jan'); // Ahoj, Jan!
+alert(sayHi); // function...
+sayHi('John'); // Hello, John!
 ```
 
-Direktiva `import` nahrává modul z cesty `./řekniAhoj.js` relativní vůči aktuálnímu souboru a přiřadí exportovanou funkci `řekniAhoj` do odpovídající proměnné.
+The `import` directive loads the module by path `./sayHi.js` relative to the current file, and assigns exported function `sayHi` to the corresponding variable.
 
-Spusťme si tento příklad v prohlížeči.
+Let's run the example in-browser.
 
-Protože moduly podporují speciální klíčová slova a jazykové prvky, musíme prohlížeči sdělit, že se skriptem má zacházet jako s modulem, použitím atributu `<script type="module">`.
+As modules support special keywords and features, we must tell the browser that a script should be treated as a module, by using the attribute `<script type="module">`.
 
-Například:
+Like this:
 
 [codetabs src="say" height="140" current="index.html"]
 
-Prohlížeč automaticky stáhne a vyhodnotí importovaný modul (a jeho importy, jsou-li zapotřebí) a pak spustí skript.
+The browser automatically fetches and evaluates the imported module (and its imports if needed), and then runs the script.
 
-```warn header="Moduly fungují jen přes HTTP(s), ne lokálně"
-Pokud se pokusíte otevřít webovou stránku lokálně protokolem `file://`, zjistíte, že direktivy `import/export` nefungují. K testování modulů používejte lokální webový server, např. [statický server](https://www.npmjs.com/package/static-server#getting-started), nebo využijte schopnost „živého serveru“ ve vašem editoru, např. VS Code [Live Server Extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
+```warn header="Modules work only via HTTP(s), not locally"
+If you try to open a web-page locally, via `file://` protocol, you'll find that `import/export` directives don't work. Use a local web-server, such as [static-server](https://www.npmjs.com/package/static-server#getting-started) or use the "live server" capability of your editor, such as VS Code [Live Server Extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to test modules.
 ```
 
-## Základní vlastnosti modulů
+## Core module features
 
-Čím se liší moduly od „obyčejných“ skriptů?
+What's different in modules, compared to "regular" scripts?
 
-Mají základní vlastnosti, které platí pro JavaScript na prohlížečové i serverové straně.
+There are core features, valid both for browser and server-side JavaScript.
 
-### Vždy používají „use strict“
+### Always "use strict"
 
-Moduly vždy fungují ve striktním režimu. Například přiřazení hodnoty nedeklarované proměnné ohlásí chybu.
+Modules always work in strict mode. E.g. assigning to an undeclared variable will give an error.
 
 ```html run
 <script type="module">
-  a = 5; // chyba
+  a = 5; // error
 </script>
 ```
 
-### Rozsah platnosti na úrovni modulu
+### Module-level scope
 
-Každý modul má na nejvyšší úrovni svůj vlastní rozsah platnosti. Jinými slovy, proměnné a funkce na nejvyšší úrovni modulu nejsou vidět v jiných skriptech.
+Each module has its own top-level scope. In other words, top-level variables and functions from a module are not seen in other scripts.
 
-V níže uvedeném příkladu jsou importovány dva skripty a `hello.js` se pokusí použít proměnnou `uživatel`, deklarovanou v `user.js`. Selže to, protože to je oddělený modul (chybu uvidíte v konzoli):
+In the example below, two scripts are imported, and `hello.js` tries to use `user` variable declared in `user.js`. It fails, because it's a separate module (you'll see the error in the console):
 
 [codetabs src="scopes" height="140" current="index.html"]
 
-Moduly by měly exportovat direktivou `export` to, co chtějí zpřístupnit zvnějšku, a importovat direktivou `import` to, co potřebují.
+Modules should `export` what they want to be accessible from outside and `import` what they need.
 
-- `user.js` by měl exportovat proměnnou `uživatel`.
-- `hello.js` by ji měl importovat z modulu `user.js`.
+- `user.js` should export the `user` variable.
+- `hello.js` should import it from `user.js` module.
 
-Jinými slovy, s moduly používáme import/export místo závislosti na globálních proměnných.
+In other words, with modules we use import/export instead of relying on global variables.
 
-Toto je správná varianta:
+This is the correct variant:
 
 [codetabs src="scopes-working" height="140" current="hello.js"]
 
-V prohlížeči, hovoříme-li o HTML stránkách, existuje nezávislý rozsah platnosti na nejvyšší úrovni také pro každý `<script type="module">` zvlášť.
+In the browser, if we talk about HTML pages, independent top-level scope also exists for each `<script type="module">`.
 
-Zde jsou dva skripty na stejné stránce, oba mají `type="module"`. Navzájem nevidí svoje proměnné na nejvyšší úrovni:
+Here are two scripts on the same page, both `type="module"`. They don't see each other's top-level variables:
 
 ```html run
 <script type="module">
-  // Proměnná je viditelná jen v tomto modulovém skriptu
-  let uživatel = "Jan";
+  // The variable is only visible in this module script
+  let user = "John";
 </script>
 
 <script type="module">
   *!*
-  alert(uživatel); // Chyba: uživatel není definován
+  alert(user); // Error: user is not defined
   */!*
 </script>
 ```
 
 ```smart
-V prohlížeči můžeme učinit proměnnou globální na úrovni okna tím, že ji výslovně přiřadíme do vlastnosti `window`, např. `window.uživatel = "Jan"`. 
+In the browser, we can make a variable window-level global by explicitly assigning it to a `window` property, e.g. `window.user = "John"`. 
 
-Pak ji uvidí všechny skripty, s `type="module"` i bez něj.
+Then all scripts will see it, both with `type="module"` and without it. 
 
-Při tom všem je však vytváření takových globálních proměnných nehezké. Prosíme, snažte se tomu vyhnout.
+That said, making such global variables is frowned upon. Please try to avoid them.
 ```
 
-### Modulový kód je vyhodnocen jen poprvé, když je importován
+### A module code is evaluated only the first time when imported
 
-Je-li tentýž modul importován do více jiných modulů, jeho kód se spustí pouze jednou, při prvním importu. Pak jsou jeho exporty předány všem budoucím importérům.
+If the same module is imported into multiple other modules, its code is executed only once, upon the first import. Then its exports are given to all further importers.
 
-Jednorázové vyhodnocení má důležité důsledky, kterých bychom si měli být vědomi.
+The one-time evaluation has important consequences, that we should be aware of. 
 
-Podívejme se na několik příkladů.
+Let's see a couple of examples.
 
-Především jestliže spuštění kódu modulu způsobí vedlejší efekty, např. zobrazení zprávy, pak se při vícenásobném importu spustí pouze jednou -- poprvé:
+First, if executing a module code brings side-effects, like showing a message, then importing it multiple times will trigger it only once -- the first time:
 
 ```js
 // 📁 alert.js
-alert("Modul je vyhodnocen!");
+alert("Module is evaluated!");
 ```
 
 ```js
-// Importujeme stejný modul z různých souborů
+// Import the same module from different files
 
 // 📁 1.js
-import `./alert.js`; // Modul je vyhodnocen!
+import `./alert.js`; // Module is evaluated!
 
 // 📁 2.js
-import `./alert.js`; // (nezobrazí nic)
+import `./alert.js`; // (shows nothing)
 ```
 
-Druhý import nic nezobrazí, protože modul již byl vyhodnocen.
+The second import shows nothing, because the module has already been evaluated.
 
-Existuje pravidlo: kód na nejvyšší úrovni modulu by měl být použit pro inicializaci, vytvoření vnitřních datových struktur specifických pro modul. Potřebujeme-li umožnit volat něco vícekrát, měli bychom to exportovat jako funkci, tak jak jsme to udělali s výše uvedeným `řekniAhoj`.
+There's a rule: top-level module code should be used for initialization, creation of module-specific internal data structures. If we need to make something callable multiple times - we should export it as a function, like we did with `sayHi` above.
 
-Nyní uvažujme hlubší příklad.
+Now, let's consider a deeper example.
 
-Řekněme, že modul exportuje objekt:
+Let's say, a module exports an object:
 
 ```js
 // 📁 admin.js
 export let admin = {
-  jméno: "Jan"
+  name: "John"
 };
 ```
 
-Je-li tento modul importován z více souborů, je vyhodnocen pouze poprvé, vytvoří se objekt `admin` a ten je pak předán všem dalším importérům.
+If this module is imported from multiple files, the module is only evaluated the first time, `admin` object is created, and then passed to all further importers.
 
-Všichni importéři dostanou přesně jeden a tentýž objekt `admin`:
+All importers get exactly the one and only `admin` object:
 
 ```js
 // 📁 1.js
 import {admin} from './admin.js';
-admin.jméno = "Petr";
+admin.name = "Pete";
 
 // 📁 2.js
 import {admin} from './admin.js';
-alert(admin.jméno); // Petr
+alert(admin.name); // Pete
 
 *!*
-// Jak 1.js, tak 2.js se odkazují na tentýž objekt admin
-// Změny učiněné v 1.js jsou viditelné ve 2.js
+// Both 1.js and 2.js reference the same admin object
+// Changes made in 1.js are visible in 2.js
 */!*
 ```
 
-Jak vidíte, když `1.js` v importovaném objektu `admin` změní vlastnost `jméno`, pak `2.js` uvidí nové `admin.jméno`.
+As you can see, when `1.js` changes the `name` property in the imported `admin`, then `2.js` can see the new `admin.name`.
 
-To je právě proto, že modul je spuštěn pouze jednou. Vygenerují se exporty a ty jsou pak sdíleny mezi importéry, takže jestliže něco změní objekt `admin`, ostatní importéři to uvidí.
+That's exactly because the module is executed only once. Exports are generated, and then they are shared between importers, so if something changes the `admin` object, other importers will see that.
 
-**Takové chování je ve skutečnosti velmi užitečné, protože nám umožňuje *konfigurovat* moduly.**
+**Such behavior is actually very convenient, because it allows us to *configure* modules.**
 
-Jinými slovy, modul může poskytovat generickou funkcionalitu, která potřebuje nastavení. Například autentifikace potřebuje osobní údaje. Pak může exportovat konfigurační objekt a očekávat, že do něj vnější kód něco přiřadí.
+In other words, a module can provide a generic functionality that needs a setup. E.g. authentication needs credentials. Then it can export a configuration object expecting the outer code to assign to it.
 
-Zde je klasický vzor:
-1. Modul exportuje nějaký druh konfigurace, např. konfigurační objekt.
-2. Při prvním importu jej inicializujeme, zapíšeme do jeho vlastností. To může udělat skript na nejvyšší úrovni aplikace.
-3. Další importy budou tento modul využívat.
+Here's the classical pattern:
+1. A module exports some means of configuration, e.g. a configuration object.
+2. On the first import we initialize it, write to its properties. The top-level application script may do that.
+3. Further imports use the module.
 
-Například modul `admin.js` může poskytovat určitou funkcionalitu (např. autentifikaci), ale očekává, že osobní údaje přijdou do objektu `konfigurace` zvnějšku:
+For instance, the `admin.js` module may provide certain functionality (e.g. authentication), but expect the credentials to come into the `config` object from outside:
 
 ```js
 // 📁 admin.js
-export let konfigurace = { };
+export let config = { };
 
-export function řekniAhoj() {
-  alert(`Jsem připraven posloužit, ${konfigurace.uživatel}!`);
+export function sayHi() {
+  alert(`Ready to serve, ${config.user}!`);
 }
 ```
 
-Zde modul `admin.js` exportuje objekt `konfigurace` (na začátku je prázdný, ale může mít i nějaké defaultní vlastnosti).
+Here, `admin.js` exports the `config` object (initially empty, but may have default properties too).
 
-Pak v `init.js`, prvním skriptu naší aplikace, z něj objekt `konfigurace` importujeme a nastavíme `konfigurace.uživatel`:
+Then in `init.js`, the first script of our app, we import `config` from it and set `config.user`:
 
 ```js
 // 📁 init.js
-import {konfigurace} from './admin.js';
-konfigurace.uživatel = "Petr";
+import {config} from './admin.js';
+config.user = "Pete";
 ```
 
-...Nyní je modul `admin.js` nakonfigurován.
+...Now the module `admin.js` is configured. 
 
-Další importéři jej mohou volat a modul správně zobrazí aktuálního uživatele:
+Further importers can call it, and it correctly shows the current user:
 
 ```js
-// 📁 jiný.js
-import {řekniAhoj} from './admin.js';
+// 📁 another.js
+import {sayHi} from './admin.js';
 
-řekniAhoj(); // Jsem připraven posloužit, *!*Petr*/!*!
+sayHi(); // Ready to serve, *!*Pete*/!*!
 ```
 
 
 ### import.meta
 
-Objekt `import.meta` obsahuje informaci o aktuálním modulu.
+The object `import.meta` contains the information about the current module.
 
-Jeho obsah závisí na prostředí. V prohlížeči obsahuje URL skriptu nebo URL aktuální webové stránky, je-li uvnitř HTML:
+Its content depends on the environment. In the browser, it contains the URL of the script, or a current webpage URL if inside HTML:
 
 ```html run height=0
 <script type="module">
-  alert(import.meta.url); // URL skriptu
-  // pro inline skript URL aktuální HTML stránky
+  alert(import.meta.url); // script URL
+  // for an inline script - the URL of the current HTML-page
 </script>
 ```
 
-### V modulu je „this“ nedefinováno
+### In a module, "this" is undefined
 
-Není to významná vlastnost, ale pro úplnost bychom ji měli uvést.
+That's kind of a minor feature, but for completeness we should mention it.
 
-V modulu je `this` na nejvyšší úrovni nedefinované.
+In a module, top-level `this` is undefined.
 
-Porovnejme si to s nemodulovými skripty, v nichž je `this` globální objekt:
+Compare it to non-module scripts, where `this` is a global object:
 
 ```html run height=0
 <script>
@@ -257,66 +257,66 @@ Porovnejme si to s nemodulovými skripty, v nichž je `this` globální objekt:
 </script>
 ```
 
-## Vlastnosti specifické pro prohlížeče
+## Browser-specific features
 
-Mezi skripty s `type="module"` a běžnými skripty existuje také několik rozdílů, které jsou specifické pro prohlížeče.
+There are also several browser-specific differences of scripts with `type="module"` compared to regular ones.
 
-Jestliže tento článek čtete poprvé nebo jestliže nepoužíváte JavaScript v prohlížeči, můžete tuto podkapitolu prozatím přeskočit.
+You may want to skip this section for now if you're reading for the first time, or if you don't use JavaScript in a browser.
 
-### Modulové skripty jsou deferované
+### Module scripts are deferred
 
-Modulové skripty jsou *vždy* deferované. Je to stejný efekt jako u atributu `defer` (popsaného v kapitole [](info:script-async-defer)), pro externí i inline skripty.
+Module scripts are *always* deferred, same effect as `defer` attribute (described in the chapter [](info:script-async-defer)), for both external and inline scripts.
 
-Jinými slovy:
-- stahování externích modulových skriptů `<script type="module" src="...">` neblokuje zpracování HTML, načtou se paralelně s ostatními zdroji.
-- modulové skripty čekají, dokud není HTML dokument zcela připraven (i pokud jsou malé a načtou se rychleji než HTML), a až pak se spustí.
-- zachovává se relativní pořadí skriptů: skripty, které jsou v dokumentu uvedeny jako první, se spustí jako první.
+In other words:
+- downloading external module scripts `<script type="module" src="...">` doesn't block HTML processing, they load in parallel with other resources.
+- module scripts wait until the HTML document is fully ready (even if they are tiny and load faster than HTML), and then run.
+- relative order of scripts is maintained: scripts that go first in the document, execute first.
 
-Vedlejším efektem je, že modulové skripty vždy „vidí“ celou načtenou HTML stránku včetně HTML prvků, které jsou až pod nimi.
+As a side-effect, module scripts always "see" the fully loaded HTML-page, including HTML elements below them.
 
-Například:
+For instance:
 
 ```html run
 <script type="module">
 *!*
-  alert(typeof tlačítko); // object: skript „vidí“ tlačítko níže
+  alert(typeof button); // object: the script can 'see' the button below
 */!*
-  // protože moduly jsou deferované, skript se spustí až poté, co se načte celá stránka
+  // as modules are deferred, the script runs after the whole page is loaded
 </script>
 
-Porovnejme si to s běžným skriptem:
+Compare to regular script below:
 
 <script>
 *!*
-  alert(typeof tlačítko); // tlačítko je undefined, protože skript nevidí prvky pod sebou
+  alert(typeof button); // button is undefined, the script can't see elements below
 */!*
-  // běžné skripty se spustí okamžitě, ještě před zpracováním zbytku stránky
+  // regular scripts run immediately, before the rest of the page is processed
 </script>
 
-<button id="tlačítko">Tlačítko</button>
+<button id="button">Button</button>
 ```
 
-Prosíme všimněte si: druhý skript se ve skutečnosti spustí před prvním! Nejprve tedy uvidíme `undefined`, až pak `object`.
+Please note: the second script actually runs before the first! So we'll see `undefined` first, and then `object`.
 
-Je to proto, že moduly jsou deferované, takže čekají, až se zpracuje celý dokument. Běžný skript se spustí okamžitě, proto jeho výstup uvidíme jako první.
+That's because modules are deferred, so we wait for the document to be processed. The regular script runs immediately, so we see its output first.
 
-Při používání modulů bychom si měli být vědomi toho, že HTML stránka se zobrazuje průběžně, když se načítá, ale JavaScriptové moduly se spustí až potom. Uživatel tedy může vidět stránku ještě předtím, než je JavaScriptová aplikace připravena. Některá funkcionalita tedy ještě nemusí fungovat. Měli bychom tam umístit „indikátory načítání“ nebo jinak zajistit, aby to návštěvníka nezmátlo.
+When using modules, we should be aware that the HTML page shows up as it loads, and JavaScript modules run after that, so the user may see the page before the JavaScript application is ready. Some functionality may not work yet. We should put "loading indicators", or otherwise ensure that the visitor won't be confused by that.
 
-### Na inline skriptech funguje async
+### Async works on inline scripts
 
-Pro nemodulové skripty funguje atribut `async` pouze na externích skriptech. Asynchronní skripty se spustí okamžitě, když jsou připraveny, nezávisle na ostatních skriptech nebo HTML dokumentu.
+For non-module scripts, the `async` attribute only works on external scripts. Async scripts run immediately when ready, independently of other scripts or the HTML document.
 
-Pro modulové skripty funguje i na inline skriptech.
+For module scripts, it works on inline scripts as well.
 
-Například níže uvedený inline skript má `async`, takže nebude na nic čekat.
+For example, the inline script below has `async`, so it doesn't wait for anything.
 
-Provede import (stáhne si `./analytics.js`) a spustí se, jakmile bude připraven, i když HTML dokument ještě nebude dokončen nebo jiné skripty budou stále čekat na vyřízení.
+It performs the import (fetches `./analytics.js`) and runs when ready, even if the HTML document is not finished yet, or if other scripts are still pending.
 
-To je dobré pro funkcionalitu, která na ničem nezávisí, např. čítače, reklamy, listenery událostí na dokumentové úrovni.
+That's good for functionality that doesn't depend on anything, like counters, ads, document-level event listeners.
 
 ```html
-<!-- jsou staženy všechny závislosti (analytics.js) a skript se spustí -->
-<!-- nečeká na dokument nebo jiné značky <script> -->
+<!-- all dependencies are fetched (analytics.js), and the script runs -->
+<!-- doesn't wait for the document or other <script> tags -->
 <script *!*async*/!* type="module">
   import {counter} from './analytics.js';
 
@@ -324,95 +324,95 @@ To je dobré pro funkcionalitu, která na ničem nezávisí, např. čítače, r
 </script>
 ```
 
-### Externí skripty
+### External scripts
 
-Externí skripty, které mají `type="module"`, se liší ve dvou aspektech:
+External scripts that have `type="module"` are different in two aspects:
 
-1. Externí skripty se stejným `src` se spustí pouze jednou:
+1. External scripts with the same `src` run only once:
     ```html
-    <!-- skript můj.js se načte a spustí pouze jednou -->
-    <script type="module" src="můj.js"></script>
-    <script type="module" src="můj.js"></script>
+    <!-- the script my.js is fetched and executed only once -->
+    <script type="module" src="my.js"></script>
+    <script type="module" src="my.js"></script>
     ```
 
-2. Externí skripty, které jsou staženy z jiného zdroje (např. z jiné stránky), vyžadují header [CORS](mdn:Web/HTTP/CORS), jak je popsáno v kapitole <info:fetch-crossorigin>. Jinými slovy, je-li modulový skript stažen z jiného zdroje, vzdálený server musí poskytnout header `Access-Control-Allow-Origin`, který stažení umožní.
+2. External scripts that are fetched from another origin (e.g. another site) require [CORS](mdn:Web/HTTP/CORS) headers, as described in the chapter <info:fetch-crossorigin>. In other words, if a module script is fetched from another origin, the remote server must supply a header `Access-Control-Allow-Origin` allowing the fetch.
     ```html
-    <!-- jina-stranka.com musí poskytovat Access-Control-Allow-Origin -->
-    <!-- jinak se skript nespustí -->
-    <script type="module" src="*!*http://jina-stranka.com/jejich-modul.js*/!*"></script>
+    <!-- another-site.com must supply Access-Control-Allow-Origin -->
+    <!-- otherwise, the script won't execute -->
+    <script type="module" src="*!*http://another-site.com/their.js*/!*"></script>
     ```
 
-    To zajišťuje větší bezpečnost.
+    That ensures better security by default.
 
-### „Holé“ moduly nejsou povoleny
+### No "bare" modules allowed
 
-V prohlížeči musí `import` obdržet relativní nebo absolutní URL. Moduly bez cesty se nazývají „holé“ moduly. Takové moduly nejsou v `import` povoleny.
+In the browser, `import` must get either a relative or absolute URL. Modules without any path are called "bare" modules. Such modules are not allowed in `import`.
 
-Například tento `import` je chybný:
+For instance, this `import` is invalid:
 ```js
-import {řekniAhoj} from 'řekniAhoj'; // Chyba, „holý“ modul
-// modul musí mít cestu, např. './řekniAhoj.js' nebo kde tento modul je
+import {sayHi} from 'sayHi'; // Error, "bare" module
+// the module must have a path, e.g. './sayHi.js' or wherever the module is
 ```
 
-Určitá prostředí, např. Node.js nebo spojovací nástroje, umožňují holé moduly bez jakékoli cesty, protože mají své vlastní způsoby nalezení modulů a páky, jak je vyladit. Prohlížeče však holé moduly zatím nepodporují.
+Certain environments, like Node.js or bundle tools allow bare modules, without any path, as they have their own ways for finding modules and hooks to fine-tune them. But browsers do not support bare modules yet.
 
-### Kompatibilita, „nomodule“
+### Compatibility, "nomodule"
 
-Staré prohlížeče nerozumějí `type="module"`. Skripty neznámého typu prostě ignorují. Je možné jim poskytnout nouzové řešení pomocí atributu `nomodule`:
+Old browsers do not understand `type="module"`. Scripts of an unknown type are just ignored. For them, it's possible to provide a fallback using the `nomodule` attribute:
 
 ```html run
 <script type="module">
-  alert("Běží v moderních prohlížečích");
+  alert("Runs in modern browsers");
 </script>
 
 <script nomodule>
-  alert("Moderní prohlížeče znají type=module i nomodule, takže toto přeskočí.")
-  alert("Staré prohlížeče ignorují skript s neznámým type=module, ale toto spustí.");
+  alert("Modern browsers know both type=module and nomodule, so skip this")
+  alert("Old browsers ignore script with unknown type=module, but execute this.");
 </script>
 ```
 
-## Sestavovací nástroje
+## Build tools
 
-V reálném životě se prohlížečové moduly jen zřídka používají ve své „surové“ podobě. Obvykle je spojujeme dohromady *(anglicky „bundle“)* pomocí speciálního nástroje zvaného *bundler*, např. [Webpack](https://webpack.js.org/), a nahráváme na produkční server.
+In real-life, browser modules are rarely used in their "raw" form. Usually, we bundle them together with a special tool such as [Webpack](https://webpack.js.org/) and deploy to the production server.
 
-Jednou z výhod používání bundlerů je, že nám poskytují více kontroly nad tím, jak jsou moduly vyhodnocovány, umožňují holé moduly a mnoho dalších, např. CSS/HTML moduly.
+One of the benefits of using bundlers -- they give more control over how modules are resolved, allowing bare modules and much more, like CSS/HTML modules.
 
-Sestavovací nástroje provádějí následující:
+Build tools do the following:
 
-1. Vezmou „hlavní“ modul, ten, který je určen k vložení do `<script type="module">` v HTML.
-2. Analyzují jeho závislosti: importy, pak importy importů atd.
-3. Sestaví jediný soubor se všemi moduly (nebo více souborů, to lze nastavit) a nahradí nativní volání `import` spojovacími funkcemi, takže to bude fungovat. Podporovány jsou i „speciální“ typy modulů, např. HTML/CSS.
-4. V tomto procesu mohou být aplikovány i jiné transformace a optimalizace:
-    - Odstranění nedosažitelného kódu.
-    - Odstranění nepoužitých exportů („třesení stromem“).
-    - Odstranění příkazů specifických pro vývoj, např. `console` a `debugger`.
-    - Moderní syntaxe JavaScriptu může být transformována na starší s podobnou funkcionalitou pomocí [Babelu](https://babeljs.io/).
-    - Výsledný soubor je minifikován (mezery odstraněny, názvy proměnných nahrazeny kratšími, atd.).
-    
-Používáme-li bundlery, pak když jsou skripty spojeny dohromady do jediného souboru (nebo několika málo souborů), příkazy `import/export` uvnitř těchto skriptů jsou nahrazeny speciálními spojovacími funkcemi. Výsledný „spojený“ skript tedy neobsahuje žádný `import/export`, nevyžaduje `type="module"` a můžeme jej vložit do obvyklého skriptu:
+1. Take a "main" module, the one intended to be put in `<script type="module">` in HTML.
+2. Analyze its dependencies: imports and then imports of imports etc.
+3. Build a single file with all modules (or multiple files, that's tunable), replacing native `import` calls with bundler functions, so that it works. "Special" module types like HTML/CSS modules are also supported.
+4. In the process, other transformations and optimizations may be applied:
+    - Unreachable code removed.
+    - Unused exports removed ("tree-shaking").
+    - Development-specific statements like `console` and `debugger` removed.
+    - Modern, bleeding-edge JavaScript syntax may be transformed to older one with similar functionality using [Babel](https://babeljs.io/).
+    - The resulting file is minified (spaces removed, variables replaced with shorter names, etc).
+
+If we use bundle tools, then as scripts are bundled together into a single file (or few files), `import/export` statements inside those scripts are replaced by special bundler functions. So the resulting "bundled" script does not contain any `import/export`, it doesn't require `type="module"`, and we can put it into a regular script:
 
 ```html
-<!-- Předpokládáme, že jsme z nástroje, např. Webpacku, získali bundle.js -->
+<!-- Assuming we got bundle.js from a tool like Webpack -->
 <script src="bundle.js"></script>
 ```
 
-Při tom všem jsou však použitelné i nativní moduly. Nebudeme tedy zde používat Webpack: můžete si jej nakonfigurovat později.
+That said, native modules are also usable. So we won't be using Webpack here: you can configure it later.
 
-## Shrnutí
+## Summary
 
-Abychom to shrnuli, základní koncepty jsou:
+To summarize, the core concepts are:
 
-1. Modul je soubor. Aby fungoval `import/export`, prohlížeče potřebují `<script type="module">`. Moduly mají několik odlišností:
-    - Standardně jsou deferované.
-    - V inline skriptech funguje async.
-    - K načtení externích skriptů z jiného zdroje (domény/protokolu/portu) jsou nezbytné headery CORS.
-    - Duplikátní externí skripty jsou ignorovány.
-2. Moduly mají svůj vlastní, lokální rozsah platnosti na nejvyšší úrovni a vyměňují si funkcionalitu pomocí `import/export`.
-3. Moduly vždy mají `use strict`.
-4. Kód modulu se spustí pouze jednou. Exporty se vytvoří jednou a jsou sdíleny mezi importéry.
+1. A module is a file. To make `import/export` work, browsers need `<script type="module">`. Modules have several differences:
+    - Deferred by default.
+    - Async works on inline scripts.
+    - To load external scripts from another origin (domain/protocol/port), CORS headers are needed.
+    - Duplicate external scripts are ignored.
+2. Modules have their own, local top-level scope and interchange functionality via `import/export`.
+3. Modules always `use strict`.
+4. Module code is executed only once. Exports are created once and shared between importers.
 
-Když používáme moduly, každý modul implementuje funkcionalitu a exportuje ji. Pak použijeme `import` k jejímu přímému importu tam, kde je zapotřebí. Prohlížeč tyto skripty automaticky načte a vyhodnotí.
+When we use modules, each module implements the functionality and exports it. Then we use `import` to directly import it where it's needed. The browser loads and evaluates the scripts automatically.
 
-Při produkci lidé často používají bundlery, např. [Webpack](https://webpack.js.org), ke spojení modulů dohromady kvůli zlepšení výkonnosti i z jiných důvodů.
+In production, people often use bundlers such as [Webpack](https://webpack.js.org) to bundle modules together for performance and other reasons.
 
-V příští kapitole uvidíme další příklady modulů a toho, jak lze věci exportovat nebo importovat.
+In the next chapter we'll see more examples of modules, and how things can be exported/imported.

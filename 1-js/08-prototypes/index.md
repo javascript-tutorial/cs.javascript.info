@@ -1,1 +1,1 @@
-# Prototypy, dědičnost
+# Prototypes, inheritance

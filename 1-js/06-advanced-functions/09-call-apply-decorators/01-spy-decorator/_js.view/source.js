@@ -1,5 +1,5 @@
-function špión(funkce) {
-  // váš kód
+function spy(func) {
+  // your code
 }
 
 

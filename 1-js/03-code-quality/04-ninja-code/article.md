@@ -1,241 +1,240 @@
-# Ninjův kód
+# Ninja code
 
 
-```quote author="Konfucius (Hovory)"
-Učení bez myšlení je zbytečná práce; myšlení bez učení je nebezpečné.
+```quote author="Confucius (Analects)"
+Learning without thought is labor lost; thought without learning is perilous.
 ```
 
-Tyto triky používali programátorští ninjové v minulosti, aby zostřili mysl údržbářů kódu.
+Programmer ninjas of the past used these tricks to sharpen the mind of code maintainers.
 
-Zasvěcení recenzenti kódu je hledají v testovacích úlohách.
+Code review gurus look for them in test tasks.
 
-Začínající vývojáři je někdy používají ještě lépe než programátorští ninjové.
+Novice developers sometimes use them even better than programmer ninjas.
 
-Pozorně si je přečtěte a zjistěte, kdo jste -- ninja, začátečník, nebo snad recenzent kódu?
+Read them carefully and find out who you are -- a ninja, a novice, or maybe a code reviewer?
 
 
-```warn header="Detekována ironie"
-Mnozí lidé se snaží následovat cesty ninjů. Jen málokteří uspějí.
+```warn header="Irony detected"
+Many try to follow ninja paths. Few succeed.
 ```
 
 
-## Krátkost je matka duchaplnosti
+## Brevity is the soul of wit
 
-Snažte se napsat kód co nejkratší. Ukažte všem, jak jste chytří.
+Make the code as short as possible. Show how smart you are.
 
-Nechte se vést jemnými prvky jazyka.
+Let subtle language features guide you.
 
-Podívejte se například na tento ternární operátor `'?'`:
+For instance, take a look at this ternary operator `'?'`:
 
 ```js
-// převzato z dobře známé JavaScriptové knihovny
+// taken from a well-known javascript library
 i = i ? i < 0 ? Math.max(0, len + i) : i : 0;
 ```
 
-Hezké, ne? Budete-li takhle psát, zažije vývojář, který narazí na tento řádek a bude se snažit porozumět, jaká je hodnota `i`, veselé chvíle. Pak přijde za vámi a bude žádat odpověď.
+Cool, right? If you write like that, a developer who comes across this line and tries to understand what is the value of `i` is going to have a merry time. Then come to you, seeking for an answer.
 
-Řekněte mu, že co je kratší, to je vždy lepší. Zasvěťte ho do cest ninjů.
+Tell them that shorter is always better. Initiate them into the paths of ninja.
 
-## Jednopísmenné proměnné
+## One-letter variables
 
-```quote author="Laozi (Tao te ťing)"
-Dao spočívá v bezeslovnosti. Jedině Dao správně začíná a správně končí.
+```quote author="Laozi (Tao Te Ching)"
+The Dao hides in wordlessness. Only the Dao is well begun and well
+completed.
 ```
 
-Další způsob, jak zkrátit kód, je všude používat jednopísmenné názvy proměnných, např. `a`, `b` nebo `c`.
+Another way to code shorter is to use single-letter variable names everywhere. Like `a`, `b` or `c`.
 
-Krátká proměnná se v kódu ztratí jako opravdový ninja v lese. Nikdo ji nebude moci najít pomocí funkce hledání v editoru. A i kdyby ano, nedokáže „rozšifrovat“, co názvy `a` nebo `b` znamenají.
+A short variable disappears in the code like a real ninja in the forest. No one will be able to find it using "search" of the editor. And even if someone does, they won't be able to "decipher" what the name `a` or `b` means.
 
-...Je tady však jedna výjimka. Opravdový ninja nikdy nepoužije `i` jako čítač v cyklu `"for"`. Všude, jen ne tam. Jen se rozhlédněte kolem, existuje spousta exotičtějších písmen, např. `x` nebo `y`.
+...But there's an exception. A real ninja will never use `i` as the counter in a `"for"` loop. Anywhere, but not here. Look around, there are many more exotic letters. For instance, `x` or `y`.
 
-Exotická proměnná jako čítač v cyklu je obzvláště půvabná, jestliže tělo cyklu zabírá 1-2 stránky (můžete-li, napište je co nejdelší). Když se potom někdo podívá hlouběji do cyklu, nebude schopen rychle přijít na to, že proměnná `x` je čítač cyklu.
+An exotic variable as a loop counter is especially cool if the loop body takes 1-2 pages (make it longer if you can). Then if someone looks deep inside the loop, they won't be able to quickly figure out that the variable named `x` is the loop counter.
 
-## Používejte zkratky
+## Use abbreviations
 
-Jestliže týmová pravidla zakazují používat jednopísmenné a vágní názvy, zkracujte je. Vytvářejte zkratky.
+If the team rules forbid the use of one-letter and vague names -- shorten them, make abbreviations.
 
-Třeba takto:
+Like this:
 
-- `seznam` -> `szn`.
-- `uživatelskýAgent` -> `ua`.
-- `prohlížeč` -> `prhl`.
-- ...atd.
+- `list` -> `lst`.
+- `userAgent` -> `ua`.
+- `browser` -> `brsr`.
+- ...etc
 
-Jedině osoba s opravdu dobrou intuicí pak bude schopna takové názvy pochopit. Snažte se zkrátit všechno. Jen úctyhodný člověk pak bude moci podpořit vývoj vašeho kódu.
+Only the one with truly good intuition will be able to understand such names. Try to shorten everything. Only a worthy person should be able to uphold the development of your code.
 
-## Stoupejte vzhůru. Buďte abstraktní.
+## Soar high. Be abstract.
 
-```quote author="Laozi (Tao te ťing) (překlad Václav Cílek)"
-velký čtverec nemá rohy<br>
-velkou nádobu neuděláš hned<br>
-velký tón není slyšet<br>
-velká podoba je bez tvaru<br>
+```quote author="Laozi (Tao Te Ching)"
+The great square is cornerless<br>
+The great vessel is last complete,<br>
+The great note is rarified sound,<br>
+The great image has no form.
 ```
 
-Když vybíráte název, snažte se použít co nejabstraktnější slovo. Třeba `obj`, `data`, `hodnota`, `prvek`, `element` a podobně.
+While choosing a name try to use the most abstract word. Like `obj`, `data`, `value`, `item`, `elem` and so on.
 
-- **Ideální název proměnné je `data`.** Používejte jej všude, kde můžete. Každá proměnná přece obsahuje nějaká *data*, ne?
+- **The ideal name for a variable is `data`.** Use it everywhere you can. Indeed, every variable holds *data*, right?
 
-    ...Ale co když je název `data` už zabrán? Zkuste `hodnota`, to je také univerzální. Koneckonců každá proměnná nakonec bude mít nějakou *hodnotu*.
+    ...But what to do if `data` is already taken? Try `value`, it's also universal. After all, a variable eventually gets a *value*.
 
-- **Pojmenujte proměnnou podle jejího typu: `str`, `num`...**
+- **Name a variable by its type: `str`, `num`...**
 
-    Zkuste to. Mladý učedník se může divit -- jsou takové názvy pro ninju opravdu užitečné? Ale ano, jsou!
+    Give them a try. A young initiate may wonder -- are such names really useful for a ninja? Indeed, they are!
 
-    Jistě, takový název proměnné stále něco znamená. Říká, co proměnná obsahuje: řetězec (string), číslo (number) nebo něco jiného. Když se však outsider pokusí porozumět kódu, bude překvapen, že vidí, že název neobsahuje vlastně vůbec žádnou informaci! A nakonec se mu nepodaří váš dobře myšlený kód změnit.
+    Sure, the variable name still means something. It says what's inside the variable: a string, a number or something else. But when an outsider tries to understand the code, they'll be surprised to see that there's actually no information at all! And will ultimately fail to alter your well-thought code.
 
-    Typ proměnné lze snadno najít při ladění. Ale jaký je význam proměnné? Jaký řetězec nebo číslo je v ní uloženo?
+    The value type is easy to find out by debugging. But what's the meaning of the variable? Which string/number does it store?
 
-    Není způsob, jak to odhalit bez dobré meditace!
+    There's just no way to figure out without a good meditation!
 
-- **...Ale co když žádné další takové názvy už nejsou?** Stačí přidat číslo: `data1, prvek2, element5`...
+- **...But what if there are no more such names?** Just add a number: `data1, item2, elem5`...
 
-## Zkouška pozornosti
+## Attention test
 
-Vašemu kódu by měl porozumět jen skutečně pozorný programátor. Ale jak to zajistit?
+Only a truly attentive programmer should be able to understand your code. But how to check that?
 
-**Jeden způsob -- používejte podobné názvy proměnných, např. `datum` a `data`.**
+**One of the ways -- use similar variable names, like `date` and `data`.**
 
-Směšujte je všude, kde je to možné.
+Mix them where you can.
 
-Takový kód je pak nemožné rychle přečíst. A když je někde překlep... Ummm... Už jsme se zdrželi dost dlouho, je čas na čaj.
+A quick read of such code becomes impossible. And when there's a typo... Ummm... We're stuck for long, time to drink tea.
 
 
-## Chytrá synonyma
+## Smart synonyms
 
-```quote author="Laozi (Tao te ťing) (překlad Václav Cílek)"
-Tao, které se dá popsat slovy, není stálé Tao<br>
-jméno, které se dá jmenovat, není věčné jméno
+```quote author="Laozi (Tao Te Ching)"
+The Tao that can be told is not the eternal Tao. The name that can be named is not the eternal name.
 ```
 
-Používání *podobných* názvů pro *stejné* věci činí život zajímavějším a ukáže publiku vaši kreativitu.
+Using *similar* names for *same* things makes life more interesting and shows your creativity to the public.
 
-Zvažte například prefixy funkcí. Jestliže funkce zobrazuje zprávu na obrazovce, začněte její název `zobraz…`, např. `zobrazZprávu`. Pokud pak jiná funkce zobrazí na obrazovce něco jiného, třeba uživatelské jméno, začněte její název `vypiš…` (např. `vypišJméno`).
+For instance, consider function prefixes. If a function shows a message on the screen -- start it with `display…`, like `displayMessage`. And then if another function shows on the screen something else, like a user name, start it with `show…` (like `showName`).
 
-To naznačuje, že mezi těmito funkcemi je nějaký drobný rozdíl, přestože ve skutečnosti žádný není.
+Insinuate that there's a subtle difference between such functions, while there is none.
 
-Dohodněte se s kolegy ninji z týmu: bude-li Honza pojmenovávat „zobrazovací“ funkce ve svém kódu `zobraz...`, pak Petr by mohl používat `vypiš...` a Anna `vykresli...`. Všimněte si, nakolik se kód stane zajímavějším a rozmanitějším.
+Make a pact with fellow ninjas of the team: if John starts "showing" functions with `display...` in his code, then Peter could use `render..`, and Ann -- `paint...`. Note how much more interesting and diverse the code became.
 
-...A nyní přijde ten pravý trik!
+...And now the hat trick!
 
-Pro dvě funkce, mezi nimiž je důležitý rozdíl, použijte stejný prefix!
+For two functions with important differences -- use the same prefix!
 
-Například funkce `tiskniStránku(stránka)` bude tisknout na tiskárnu. Ale funkce `tiskniText(text)` vypíše text na obrazovku. Nechte neznalého čtenáře, aby se zamyslel nad podobně pojmenovanou funkcí `tiskniZprávu`: „Kam tu zprávu vlastně vytiskne? Na tiskárnu, nebo na obrazovku?“ Aby to bylo opravdu úchvatné, `tiskniZprávu(zpráva)` by měla zobrazit zprávu v novém okně!
+For instance, the function `printPage(page)` will use a printer. And the function `printText(text)` will put the text on-screen. Let an unfamiliar reader think well over similarly named function `printMessage`: "Where does it put the message? To a printer or on the screen?". To make it really shine, `printMessage(message)` should output it in the new window!
 
-## Používejte opakovaně stejné názvy
+## Reuse names
 
-```quote author="Laozi (Tao te ťing) (překlad Václav Cílek)"
-když rozdělujeme jednotu,<br>
-objevují se jména<br>
-pohromě se vyhneme,<br>
-jen když víme, kdy přestat<br>
+```quote author="Laozi (Tao Te Ching)"
+Once the whole is divided, the parts<br>
+need names.<br>
+There are already enough names.<br>
+One must know when to stop.
 ```
 
-Přidejte novou proměnnou jen tehdy, když je to absolutně nezbytné.
+Add a new variable only when absolutely necessary.
 
-Jinak místo toho opakovaně používejte již existující názvy. Jen do nich zapisujte nové hodnoty.
+Instead, reuse existing names. Just write new values into them.
 
-Ve funkci se snažte používat jedině proměnné, které byly předány jako parametry.
+In a function try to use only variables passed as parameters.
 
-Díky tomu je opravdu těžké rozpoznat, co je vlastně v proměnné *právě teď*. A také, odkud to přišlo. Cílem je procvičit intuici a paměť člověka, který čte kód. Osoba se slabou intuicí bude muset analyzovat kód řádek po řádku a stopovat změny v každé větvi.
+That would make it really hard to identify what's exactly in the variable *now*. And also where it comes from. The purpose is to develop the intuition and memory of a person reading the code. A person with weak intuition would have to analyze the code line-by-line and track the changes through every code branch.
 
-**Pokročilá varianta tohoto přístupu je utajeně (!) nahradit hodnotu něčím podobným uvnitř cyklu nebo funkce.**
+**An advanced variant of the approach is to covertly (!) replace the value with something alike in the middle of a loop or a function.**
 
-Například:
+For instance:
 
 ```js
-function ninjovaFunkce(elem) {
-  // 20 řádků kódu pracujícího s elem
+function ninjaFunction(elem) {
+  // 20 lines of code working with elem
 
   elem = clone(elem);
 
-  // 20 dalších řádků kódu, které nyní pracují s klonem proměnné elem!
+  // 20 more lines, now working with the clone of the elem!
 }
 ```
 
-Kolega, který bude chtít pracovat s proměnnou `elem` ve druhé polovině funkce, bude překvapen... Teprve při ladění po prozkoumání kódu přijde na to, že pracuje s klonem!
+A fellow programmer who wants to work with `elem` in the second half of the function will be surprised... Only during the debugging, after examining the code they will find out that they're working with a clone!
 
-Toto je v kódu často vidět. Je to efektivně smrtící i proti zkušenému ninjovi.
+Seen in code regularly. Deadly effective even against an experienced ninja.
 
+## Underscores for fun
 
-## Legrace s podtržítky
+Put underscores `_` and `__` before variable names. Like `_name` or `__value`. It would be great if only you knew their meaning. Or, better, add them just for fun, without particular meaning at all. Or different meanings in different places.
 
-Umisťujte před názvy proměnných podtržítka `_` a `__`. Například `_jméno` nebo `__hodnota`. Bude to legrace, když budete jejich význam znát jenom vy. Nebo ještě lépe: přidávejte je jen pro legraci, aniž by měla nějaký konkrétní význam. Nebo ať mají na různých místech různé významy.
+You kill two rabbits with one shot. First, the code becomes longer and less readable, and the second, a fellow developer may spend a long time trying to figure out what the underscores mean.
 
-Zabijete dvě mouchy jednou ranou. Za prvé, kód se prodlouží a stane se méně čitelným, a za druhé, kolega vývojář může strávit dlouhou dobu zjišťováním, co vlastně ta podtržítka znamenají.
+A smart ninja puts underscores at one spot of code and evades them at other places. That makes the code even more fragile and increases the probability of future errors.
 
-Elegantní ninja na jednom místě kódu podtržítka vkládá a na jiných se jim vyhýbá. Díky tomu je kód ještě zranitelnější a zvyšuje se pravděpodobnost budoucích chyb.
+## Show your love
 
+Let everyone see how magnificent your entities are! Names like `superElement`, `megaFrame` and `niceItem` will definitely enlighten a reader.
 
-## Ukažte svou lásku
-
-Dejte každému vědět, jak úžasné jsou vaše entity! Názvy jako `superElement`, `megaRámec` nebo `pěknýPrvek` čtenáře zaručeně osvítí.
-
-Jistě, na jednu stranu musíte něco napsat: `super..`, `mega..`, `pěkný..`. Ale na druhou stranu to neposkytuje žádné detaily. Čtenář se může rozhodnout hledat jejich skrytý význam a strávit meditací hodinu nebo dvě své placené pracovní doby.
+Indeed, from one hand, something is written: `super..`, `mega..`, `nice..` But from the other hand -- that brings no details. A reader may decide to look for a hidden meaning and meditate for an hour or two of their paid working time.
 
 
-## Překrývejte vnější proměnné
+## Overlap outer variables
 
 ```quote author="Guan Yin Zi"
-Kdo je na světle, nevidí nic, co je ve tmě.<br>
-Kdo je ve tmě, vidí všechno, co je na světle.
+When in the light, can't see anything in the darkness.<br>
+When in the darkness, can see everything in the light.
 ```
 
-Používejte stejné názvy pro proměnné vně a uvnitř funkce. Je to jednoduché. Není třeba úsilí k vymýšlení nových názvů.
+Use same names for variables inside and outside a function. As simple. No efforts to invent new names.
 
 ```js
-let *!*uživatel*/!* = autentikujUživatele();
+let *!*user*/!* = authenticateUser();
 
-function renderuj() {
-  let *!*uživatel*/!* = jináHodnota();
+function render() {
+  let *!*user*/!* = anotherValue();
   ...
-  ...mnoho řádků...
+  ...many lines...
   ...
-  ... // <-- programátor zde chce pracovat s uživatelem a...
+  ... // <-- a programmer wants to work with user here and...
   ...
 }
 ```
 
-Programátor, který skočí dovnitř funkce `renderuj`, si pravděpodobně nevšimne, že v ní je lokální proměnná `uživatel`, která zastiňuje tu vnější.
+A programmer who jumps inside the `render` will probably fail to notice that there's a local `user` shadowing the outer one.
 
-Pak se pokusí pracovat s proměnnou `uživatel` předpokládaje, že je to externí proměnná, která je výsledkem volání `autentikujUživatele()`... A past sklapne! Nazdar, debuggere...
-
-
-## Všude vedlejší efekty!
-
-Existují funkce, které vypadají, jako by nic neměnily. Například `jePřipraven()`, `zkontrolujPrávo()`, `najdiZnačky()`... Předpokládá se, že provedou výpočty a najdou a vrátí data, aniž by měnily cokoli mimo ně. Jinými slovy, bez „vedlejších efektů“.
-
-**Opravdu krásný trik je přidat do nich kromě hlavního úkolu ještě nějakou „užitečnou“ akci navíc.**
-
-Pohled na překvapenou tvář vašeho kolegy, který zjistí, že funkce pojmenovaná `je..`, `zkontroluj..` nebo `najdi..` něco mění, zaručeně posune hranice vašeho rozumu.
-
-**Další cestou, jak překvapit, je vrátit nestandardní výsledek.**
-
-Předveďte své originální myšlení! Nechte funkci `zkontrolujPrávo` vrátit nikoli `true/false`, ale složitý objekt s výsledky kontroly.
-
-Vývojáři, kteří se pokusí napsat `if (zkontrolujPrávo(..))`, se budou divit, proč to nefunguje. Řekněte jim: „Přečtěte si dokumentaci!“ A dejte jim odkaz na tento článek.
+Then they'll try to work with `user` assuming that it's the external variable, the result of `authenticateUser()`... The trap is sprung! Hello, debugger...
 
 
-## Silné funkce!
+## Side-effects everywhere!
 
-```quote author="Laozi (Tao te ťing) (překlad Václav Cílek)"
-Velké Tao se rozlévá, kam chce
+There are functions that look like they don't change anything. Like `isReady()`, `checkPermission()`, `findTags()`... They are assumed to carry out calculations, find and return the data, without changing anything outside of them. In other words, without "side-effects".
+
+**A really beautiful trick is to add a "useful" action to them, besides the main task.**
+
+An expression of dazed surprise on the face of your colleague when they see a function named `is..`, `check..` or `find...` changing something -- will definitely broaden your boundaries of reason.
+
+**Another way to surprise is to return a non-standard result.**
+
+Show your original thinking! Let the call of `checkPermission` return not `true/false`, but a complex object with the results of the check.
+
+Those developers who try to write `if (checkPermission(..))`, will wonder why it doesn't work. Tell them: "Read the docs!". And give this article.
+
+
+## Powerful functions!
+
+```quote author="Laozi (Tao Te Ching)"
+The great Tao flows everywhere,<br>
+both to the left and to the right.
 ```
 
-Neomezujte funkci na to, co je uvedeno v jejím názvu. Rozšiřte se.
+Don't limit the function by what's written in its name. Be broader.
 
-Například funkce `zkontrolujEmail(email)` by mohla (kromě kontroly, zda email je správně) zobrazit chybovou zprávu a požádat uživatele, aby email zadal znovu.
+For instance, a function `validateEmail(email)` could (besides checking the email for correctness) show an error message and ask to re-enter the email.
 
-Přidané akce by neměly být zřejmé z názvu funkce. Opravdový ninja je učiní nezřejmými dokonce i z kódu.
+Additional actions should not be obvious from the function name. A true ninja coder will make them not obvious from the code as well.
 
-**Spojení několika akcí do jedné ochrání váš kód před opakovaným použitím.**
+**Joining several actions into one protects your code from reuse.**
 
-Představte si, že jiný vývojář bude chtít jen zkontrolovat email a nevypisovat žádnou zprávu. Vaše funkce `zkontrolujEmail(email)`, která dělá obojí, mu pak nebude vyhovovat. Nepřekazí tedy vaši meditaci tím, že se na ni bude ptát.
+Imagine, another developer wants only to check the email, and not output any message. Your function  `validateEmail(email)` that does both will not suit them. So they won't break your meditation by asking anything about it.
 
-## Shrnutí
+## Summary
 
-Všechny výše uvedené „rady“ pocházejí ze skutečného kódu... Někdy byl dokonce napsán zkušenými vývojáři. Možná ještě zkušenějšími, než vy ;)
+All "pieces of advice" above are from the real code... Sometimes, written by experienced developers. Maybe even more experienced than you are ;)
 
-- Když budete dodržovat některé z nich, bude váš kód plný překvapení.
-- Když budete dodržovat mnohé z nich, bude váš kód opravdu jen váš a nikdo ho nebude chtít měnit.
-- Když budete dodržovat všechny, bude váš kód cennou lekcí pro mladé vývojáře toužící po osvícení.
+- Follow some of them, and your code will become full of surprises.
+- Follow many of them, and your code will become truly yours, no one would want to change it.
+- Follow all, and your code will become a valuable lesson for young developers looking for enlightenment.

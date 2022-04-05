@@ -1,123 +1,123 @@
 
-# Syntaxe „new Function“
+# The "new Function" syntax
 
-Existuje ještě jeden způsob, jak vytvořit funkci. Používá se jen zřídka, ale někdy nemáme jinou možnost.
+There's one more way to create a function. It's rarely used, but sometimes there's no alternative.
 
-## Syntaxe
+## Syntax
 
-Syntaxe vytvoření funkce:
-
-```js
-let funkce = new Function ([arg1, arg2, ...argN], těloFunkce);
-```
-
-Funkce je vytvořena s argumenty `arg1...argN` a zadaným tělem `těloFunkce`.
-
-Je snadnější tomu porozumět, když se podíváme na příklad. Toto je funkce se dvěma argumenty:
-
-```js run
-let sečti = new Function('a', 'b', 'return a + b');
-
-alert( sečti(1, 2) ); // 3
-```
-
-A zde je funkce bez argumentů, jenom s tělem:
-
-```js run
-let řekniAhoj = new Function('alert("Ahoj")');
-
-řekniAhoj(); // Ahoj
-```
-
-Hlavní rozdíl oproti ostatním způsobům, jaké jsme viděli, je, že funkce je vytvořena doslovně z řetězce, který je předán za běhu skriptu.
-
-Všechny předchozí deklarace po nás programátorech požadovaly, abychom zapsali kód funkce do skriptu.
-
-Avšak `new Function` umožňuje převést libovolný řetězec na funkci. Například můžeme získat novou funkci ze serveru a pak ji spustit:
+The syntax for creating a function:
 
 ```js
-let str = ... dynamické získání kódu ze serveru ...
-
-let funkce = new Function(str);
-funkce();
+let func = new Function ([arg1, arg2, ...argN], functionBody);
 ```
 
-Používá se jen ve velmi specifických případech, například když získáme kód ze serveru nebo k dynamickému kompilování funkce ze šablony ve složitých webových aplikacích.
+The function is created with the arguments `arg1...argN` and the given `functionBody`.
 
-## Uzávěr
-
-Funkce si zpravidla pamatuje, kde se zrodila, ve speciální vlastnosti `[[Environment]]`. Ta se odkazuje na lexikální prostředí, z něhož byla funkce vytvořena (probrali jsme to v kapitole <info:closure>).
-
-Když je však funkce vytvořena pomocí `new Function`, do její vlastnosti `[[Environment]]` se nenastaví odkaz na aktuální lexikální prostředí, ale na globální.
-
-Taková funkce tedy nemá přístup k vnějším proměnným, jedině ke globálním.
+It's easier to understand by looking at an example. Here's a function with two arguments:
 
 ```js run
-function vraťFunkci() {
-  let hodnota = "test";
+let sum = new Function('a', 'b', 'return a + b');
+
+alert( sum(1, 2) ); // 3
+```
+
+And here there's a function without arguments, with only the function body:
+
+```js run
+let sayHi = new Function('alert("Hello")');
+
+sayHi(); // Hello
+```
+
+The major difference from other ways we've seen is that the function is created literally from a string, that is passed at run time.
+
+All previous declarations required us, programmers, to write the function code in the script.
+
+But `new Function` allows to turn any string into a function. For example, we can receive a new function from a server and then execute it:
+
+```js
+let str = ... receive the code from a server dynamically ...
+
+let func = new Function(str);
+func();
+```
+
+It is used in very specific cases, like when we receive code from a server, or to dynamically compile a function from a template, in complex web-applications.
+
+## Closure
+
+Usually, a function remembers where it was born in the special property `[[Environment]]`. It references the Lexical Environment from where it's created  (we covered that in the chapter <info:closure>).
+
+But when a function is created using `new Function`, its `[[Environment]]` is set to reference not the current Lexical Environment, but the global one.
+
+So, such function doesn't have access to outer variables, only to the global ones.
+
+```js run
+function getFunc() {
+  let value = "test";
 
 *!*
-  let funkce = new Function('alert(hodnota)');
+  let func = new Function('alert(value)');
 */!*
 
-  return funkce;
+  return func;
 }
 
-vraťFunkci()(); // chyba: hodnota není definována
+getFunc()(); // error: value is not defined
 ```
 
-Porovnejte si to s běžným chováním:
+Compare it with the regular behavior:
 
 ```js run
-function vraťFunkci() {
-  let hodnota = "test";
+function getFunc() {
+  let value = "test";
 
 *!*
-  let funkce = function() { alert(hodnota); };
+  let func = function() { alert(value); };
 */!*
 
-  return funkce;
+  return func;
 }
 
-vraťFunkci()(); // *!*"test"*/!*, z lexikálního prostředí funkce vraťFunkci
+getFunc()(); // *!*"test"*/!*, from the Lexical Environment of getFunc
 ```
 
-Tato speciální vlastnost `new Function` vypadá zvláštně, ale v praxi se ukazuje být velmi užitečná.
+This special feature of `new Function` looks strange, but appears very useful in practice.
 
-Představme si, že musíme vytvořit funkci z řetězce. Kód této funkce není znám v době psaní skriptu (to je důvod, proč nepoužijeme obvyklou funkci), ale bude znám v průběhu spuštění. Můžeme jej získat ze serveru nebo z jiného zdroje.
+Imagine that we must create a function from a string. The code of that function is not known at the time of writing the script (that's why we don't use regular functions), but will be known in the process of execution. We may receive it from the server or from another source.
 
-Naše nová funkce musí interagovat s hlavním skriptem.
+Our new function needs to interact with the main script.
 
-Co kdyby mohla přistupovat k vnějším proměnným?
+What if it could access the outer variables?
 
-Problém je, že předtím, než je JavaScript zveřejněn k produkci, je zkomprimován použitím *minifikátoru* -- speciálního programu, který zkrátí kód tím, že odstraní komentáře, přebytečné mezery a -- co je důležité, přejmenuje lokální proměnné na kratší.
+The problem is that before JavaScript is published to production, it's compressed using a *minifier* -- a special program that shrinks code by removing extra comments, spaces and -- what's important, renames local variables into shorter ones.
 
-Například jestliže funkce obsahuje `let uživatelskéJméno`, minifikátor je nahradí za `let a` (nebo jiné písmeno, je-li toto již použito) a učiní tak všude. To je obvykle bezpečné, jelikož proměnná je lokální a nic mimo funkci k ní nemůže přistupovat. A uvnitř funkce minifikátor nahradí každou zmínku o ní. Minifikátory jsou chytré, analyzují strukturu kódu, takže nic nerozbíjejí. Není to jen tupé najdi a nahraď.
+For instance, if a function has `let userName`, minifier replaces it with `let a` (or another letter if this one is occupied), and does it everywhere. That's usually a safe thing to do, because the variable is local, nothing outside the function can access it. And inside the function, minifier replaces every mention of it. Minifiers are smart, they analyze the code structure, so they don't break anything. They're not just a dumb find-and-replace.
 
-Kdyby tedy `new Function` měla přístup k vnějším proměnným, nedokázala by najít přejmenované `uživatelskéJméno`.
+So if `new Function` had access to outer variables, it would be unable to find renamed  `userName`.
 
-**Kdyby `new Function` měla přístup k vnějším proměnným, měla by problémy s minifikátory.**
+**If `new Function` had access to outer variables, it would have problems with minifiers.**
 
-Navíc by takový kód byl architektonicky špatný a náchylný k chybám.
+Besides, such code would be architecturally bad and prone to errors.
 
-K tomu, abychom něco předali funkci vytvořené pomocí `new Function`, bychom měli používat její argumenty.
+To pass something to a function, created as `new Function`, we should use its arguments.
 
-## Shrnutí
+## Summary
 
-Syntaxe:
+The syntax:
 
 ```js
-let funkce = new Function ([arg1, arg2, ...argN], těloFunkce);
+let func = new Function ([arg1, arg2, ...argN], functionBody);
 ```
 
-Z historických důvodů můžeme argumenty uvést i jako seznam oddělený čárkou.
+For historical reasons, arguments can also be given as a comma-separated list.
 
-Tyto tři deklarace znamenají totéž:
+These three declarations mean the same:
 
 ```js
-new Function('a', 'b', 'return a + b'); // základní syntaxe
-new Function('a,b', 'return a + b'); // oddělené čárkou
-new Function('a , b', 'return a + b'); // oddělené čárkou s mezerami
+new Function('a', 'b', 'return a + b'); // basic syntax
+new Function('a,b', 'return a + b'); // comma-separated
+new Function('a , b', 'return a + b'); // comma-separated with spaces
 ```
 
-Vlastnost `[[Environment]]` funkcí vytvořených pomocí `new Function` se odkazuje na globální lexikální prostředí, ne na vnější. Proto tyto funkce nemohou používat vnější proměnné. To je však ve skutečnosti dobře, protože nás to ochraňuje před chybami. Explicitní předávání parametrů je architektonicky mnohem lepší metoda a nezpůsobuje problémy s minifikátory.
+Functions created with `new Function`, have `[[Environment]]` referencing the global Lexical Environment, not the outer one. Hence, they cannot use outer variables. But that's actually good, because it insures us from errors. Passing parameters explicitly is a much better method architecturally and causes no problems with minifiers.

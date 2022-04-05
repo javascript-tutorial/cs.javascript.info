@@ -1,4 +1,4 @@
-describe("Akumulátor", function() {
+describe("Accumulator", function() {
 
   beforeEach(function() {
     sinon.stub(window, "prompt")
@@ -8,23 +8,23 @@ describe("Akumulátor", function() {
     prompt.restore();
   });
 
-  it("úvodní hodnota je argument konstruktoru", function() {
-    let akumulátor = new Akumulátor(1);
+  it("initial value is the argument of the constructor", function() {
+    let accumulator = new Accumulator(1);
 
-    assert.equal(akumulátor.hodnota, 1);
+    assert.equal(accumulator.value, 1);
   });
 
-  it("po načtení 0 je hodnota 1", function() {
-    let akumulátor = new Akumulátor(1);
+  it("after reading 0, the value is 1", function() {
+    let accumulator = new Accumulator(1);
     prompt.returns("0");
-    akumulátor.načti();
-    assert.equal(akumulátor.hodnota, 1);
+    accumulator.read();
+    assert.equal(accumulator.value, 1);
   });
 
-  it("po načtení 1 je hodnota 2", function() {
-    let akumulátor = new Akumulátor(1);
+  it("after reading 1, the value is 2", function() {
+    let accumulator = new Accumulator(1);
     prompt.returns("1");
-    akumulátor.načti();
-    assert.equal(akumulátor.hodnota, 2);
+    accumulator.read();
+    assert.equal(accumulator.value, 2);
   });
 });

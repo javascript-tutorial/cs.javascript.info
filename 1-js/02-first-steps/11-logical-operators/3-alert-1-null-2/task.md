@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# Jaký je výsledek AND?
+# What is the result of AND?
 
-Co vypíše níže uvedený kód?
+What is this code going to show?
 
 ```js
 alert( 1 && null && 2 );

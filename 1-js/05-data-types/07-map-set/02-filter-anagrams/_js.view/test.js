@@ -1,24 +1,24 @@
-function průnik(arr1, arr2) {
-  return arr1.filter(prvek => arr2.includes(prvek));
+function intersection(arr1, arr2) {
+  return arr1.filter(item => arr2.includes(item));
 }
 
-describe("odstraňAnagramy", function() {
+describe("aclean", function() {
 
-  it("z každé sady anagramů vrátí právě 1 slovo", function() {
-    let pole = ["rak", "reklama", "makrela", "KRA", "kostel", "stolek", "karamel"];
+  it("returns exactly 1 word from each anagram set", function() {
+    let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
 
-    let výsledek = odstraňAnagramy(pole);
-    assert.equal(výsledek.length, 3);
+    let result = aclean(arr);
+    assert.equal(result.length, 3);
 
-    assert.equal(intersection(výsledek, ["rak", "KRA"]).length, 1);
-    assert.equal(intersection(výsledek, ["reklama", "makrela", "karamel"]).length, 1);
-    assert.equal(intersection(výsledek, ["kostel", "stolek"]).length, 1);
+    assert.equal(intersection(result, ["nap", "PAN"]).length, 1);
+    assert.equal(intersection(result, ["teachers", "cheaters", "hectares"]).length, 1);
+    assert.equal(intersection(result, ["ear", "era"]).length, 1);
 
   });
 
-  it("nerozlišuje malá a velká písmena", function() {
-    let pole = ["rak", "KRA"];
-    assert.equal(odstraňAnagramy(pole).length, 1);
+  it("is case-insensitive", function() {
+    let arr = ["era", "EAR"];
+    assert.equal(aclean(arr).length, 1);
   });
 
 });

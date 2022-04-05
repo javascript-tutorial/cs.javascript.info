@@ -1,89 +1,89 @@
 
-# Globální objekt
+# Global object
 
-Globální objekt poskytuje proměnné a funkce, které jsou dostupné všude. Standardně jsou to ty, které jsou vestavěny do jazyka nebo prostředí.
+The global object provides variables and functions that are available anywhere. By default, those that are built into the language or the environment.
 
-V prohlížeči se jmenuje `window`, v Node.js je to `global`, v jiných prostředích může mít jiný název.
+In a browser it is named `window`, for Node.js it is `global`, for other environments it may have another name.
 
-Nedávno bylo do jazyka přidáno `globalThis` jako standardizovaný název globálního objektu, který by měla podporovat všechna prostředí. Je podporováno ve všech významných prohlížečích.
+Recently, `globalThis` was added to the language, as a standardized name for a global object, that should be supported across all environments. It's supported in all major browsers.
 
-Zde budeme používat `window`, jelikož předpokládáme, že naše prostředí je prohlížeč. Pokud váš skript má běžet v jiných prostředích, je lepší místo toho používat `globalThis`.
+We'll use `window` here, assuming that our environment is a browser. If your script may run in other environments, it's better to use `globalThis` instead.
 
-Ke všem vlastnostem globálního objektu lze přistupovat přímo:
+All properties of the global object can be accessed directly:
 
 ```js run
-alert("Ahoj");
-// je totéž jako
-window.alert("Ahoj");
+alert("Hello");
+// is the same as
+window.alert("Hello");
 ```
 
-V prohlížeči se globální funkce a proměnné deklarované pomocí `var` (ne `let/const`!) stávají vlastnostmi globálního objektu:
+In a browser, global functions and variables declared with `var` (not `let/const`!) become the property of the global object:
 
 ```js run untrusted refresh
 var gVar = 5;
 
-alert(window.gVar); // 5 (stala se vlastností globálního objektu)
+alert(window.gVar); // 5 (became a property of the global object)
 ```
 
-Stejný efekt mají deklarace funkcí (příkazy s klíčovým slovem `function` v hlavním kódu, ne funkční výrazy).
+The same effect have function declarations (statements with `function` keyword in the main code flow, not function expressions).
 
-Prosíme, nespoléhejte se na to! Toto chování existuje z důvodů kompatibility. Moderní skripty používají [moduly JavaScriptu](info:modules), v nichž se takové věci nedějí.
+Please don't rely on that! This behavior exists for compatibility reasons. Modern scripts use [JavaScript modules](info:modules) where such a thing doesn't happen.
 
-Kdybychom místo toho použili `let`, toto by se nestalo:
+If we used `let` instead, such thing wouldn't happen:
 
 ```js run untrusted refresh
 let gLet = 5;
 
-alert(window.gLet); // undefined (nestala se vlastností globálního objektu)
+alert(window.gLet); // undefined (doesn't become a property of the global object)
 ```
 
-Je-li hodnota tak důležitá, že byste ji chtěli učinit globálně dostupnou, uveďte ji rovnou jako vlastnost:
+If a value is so important that you'd like to make it available globally, write it directly as a property:
 
 ```js run
 *!*
-// učiní informaci o aktuálním uživateli globální, aby k ní mohly přistupovat všechny skripty
-window.aktuálníUživatel = {
-  jméno: "Jan"
+// make current user information global, to let all scripts access it
+window.currentUser = {
+  name: "John"
 };
 */!*
 
-// někde jinde v kódu
-alert(aktuálníUživatel.jméno);  // Jan
+// somewhere else in code
+alert(currentUser.name);  // John
 
-// nebo, máme-li lokální proměnnou s názvem „aktuálníUživatel“,
-// načteme jej přímo z objektu window (bezpečně!)
-alert(window.aktuálníUživatel.jméno); // Jan
+// or, if we have a local variable with the name "currentUser"
+// get it from window explicitly (safe!)
+alert(window.currentUser.name); // John
 ```
 
-Tím chceme říci, že používání globálních proměnných se obecně nedoporučuje. Mělo by jich být co nejméně. Návrh kódu, kdy funkce přijímá „vstupní“ proměnné a produkuje určitý „výstup“, je čistší, méně náchylný k chybám a snadnější na otestování, než když funkce používá vnější či globální proměnné.
+That said, using global variables is generally discouraged. There should be as few global variables as possible. The code design where a function gets "input" variables and produces certain "outcome" is clearer, less prone to errors and easier to test than if it uses outer or global variables.
 
-## Využití pro polyfilly
+## Using for polyfills
 
-Globální objekt používáme k testování podpory moderních vlastností jazyka.
+We use the global object to test for support of modern language features.
 
-Například otestujeme, zda existuje vestavěný objekt `Promise` (neexistuje v opravdu starých prohlížečích):
+For instance, test if a built-in `Promise` object exists (it doesn't in really old browsers):
 ```js run
 if (!window.Promise) {
-  alert("Máte opravdu starý prohlížeč!");
+  alert("Your browser is really old!");
 }
 ```
 
-Pokud neexistuje (řekněme, že jsme ve starém prohlížeči), můžeme vytvořit „polyfilly“: přidáme funkce, které toto prostředí nepodporuje, ale v moderním standardu existují.
+If there's none (say, we're in an old browser), we can create "polyfills": add functions that are not supported by the environment, but exist in the modern standard.
 
 ```js run
 if (!window.Promise) {
-  window.Promise = ... // vlastní implementace moderní vlastnosti jazyka
+  window.Promise = ... // custom implementation of the modern language feature
 }
 ```
 
-## Shrnutí
+## Summary
 
-- Globální objekt obsahuje proměnné, které by měly být dostupné odkudkoli.
+- The global object holds variables that should be available everywhere.
 
-    Patří sem vestavěné prvky JavaScriptu, např. `Array`, a proměnné specifické pro prostředí, např. `window.innerHeight` -- výška okna v prohlížeči.
-- Globální objekt má univerzální název `globalThis`.
+    That includes JavaScript built-ins, such as `Array` and environment-specific values, such as `window.innerHeight` -- the window height in the browser.
+- The global object has a universal name `globalThis`.
 
-    ...Častěji se na něj však odkazují názvy „ze staré školy“ specifické pro prostředí, např. `window` (prohlížeč) nebo `global` (Node.js).
-- Do globálního objektu bychom měli ukládat hodnoty jen tehdy, pokud jsou v našem projektu doopravdy globální. A udržovat jejich počet na minimu.
-- V prohlížeči, pokud nepoužíváme [moduly](info:modules), se globální funkce a proměnné deklarované pomocí `var` stávají vlastnostmi globálního objektu.
-- Abychom učinili kód připravený na budoucnost a lépe srozumitelný, měli bychom přistupovat k vlastnostem globálního objektu přímo, např. `window.x`.
+    ...But more often is referred by "old-school" environment-specific names, such as `window` (browser) and `global` (Node.js).
+- We should store values in the global object only if they're truly global for our project. And keep their number at minimum.
+- In-browser, unless we're using [modules](info:modules), global functions and variables declared with `var` become a property of the global object.
+- To make our code future-proof and easier to understand, we should access properties of the global object directly, as `window.x`.

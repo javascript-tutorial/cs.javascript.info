@@ -2,8 +2,8 @@ importance: 4
 
 ---
 
-# Jednoduchá stránka
+# A simple page
 
-Vytvořte webovou stránku, která se zeptá na jméno a pak je zobrazí.
+Create a web-page that asks for a name and outputs it.
 
 [demo]

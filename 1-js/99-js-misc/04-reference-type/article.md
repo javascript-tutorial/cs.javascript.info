@@ -1,108 +1,108 @@
 
-# Referenční typ
+# Reference Type
 
-```warn header="Hloubková vlastnost jazyka"
-Tento článek se zabývá pokročilým tématem, abychom lépe porozuměli určitým okrajovým případům.
+```warn header="In-depth language feature"
+This article covers an advanced topic, to understand certain edge-cases better.
 
-Není důležité. Mnoho zkušených vývojářů žije šťastně i přesto, že je neznají. Přečtěte si ho, pokud chcete vědět, jak fungují věci „pod kapotou“.
+It's not important. Many experienced developers live fine without knowing it. Read on if you want to know how things work under the hood.
 ```
 
-Dynamicky vyhodnocované volání metody může ztratit `this`.
+A dynamically evaluated method call can lose `this`.
 
-Například:
+For instance:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  ahoj() { alert(this.jméno); },
-  nashle() { alert("Nashle"); }
+let user = {
+  name: "John",
+  hi() { alert(this.name); },
+  bye() { alert("Bye"); }
 };
 
-uživatel.ahoj(); // funguje
+user.hi(); // works
 
-// nyní zavolejme uživatel.ahoj nebo uživatel.nashle podle jména
+// now let's call user.hi or user.bye depending on the name
 *!*
-(uživatel.jméno == "Jan" ? uživatel.ahoj : uživatel.nashle)(); // Chyba!
+(user.name == "John" ? user.hi : user.bye)(); // Error!
 */!*
 ```
 
-Na posledním řádku je podmíněný operátor, který vybere buď `uživatel.ahoj`, nebo `uživatel.nashle`. V tomto případě je výsledek `uživatel.ahoj`.
+On the last line there is a conditional operator that chooses either `user.hi` or `user.bye`. In this case the result is `user.hi`.
 
-Pak je tato metoda okamžitě volána pomocí závorek `()`. Ale nefunguje to správně!
+Then the method is immediately called with parentheses `()`. But it doesn't work correctly!
 
-Jak vidíte, výsledkem volání je chyba, protože hodnota `"this"` uvnitř volání se stala `undefined`.
+As you can see, the call results in an error, because the value of `"this"` inside the call becomes `undefined`.
 
-Tohle funguje (objekt tečka metoda):
+This works (object dot method):
 ```js
-uživatel.ahoj();
+user.hi();
 ```
 
-Tohle ne (vyhodnocená metoda):
+This doesn't (evaluated method):
 ```js
-(uživatel.jméno == "Jan" ? uživatel.ahoj : uživatel.nashle)(); // Chyba!
+(user.name == "John" ? user.hi : user.bye)(); // Error!
 ```
 
-Proč? Chceme-li porozumět, proč se to děje, podívejme se na zoubek tomu, jak funguje volání `obj.metoda()`.
+Why? If we want to understand why it happens, let's get under the hood of how `obj.method()` call works.
 
-## Vysvětlení referenčního typu
+## Reference type explained
 
-Když se podíváme pozorněji, můžeme si v příkazu `obj.metoda()` všimnout dvou operací:
+Looking closely, we may notice two operations in `obj.method()` statement:
 
-1. Nejprve tečka `'.'` získá vlastnost `obj.metoda`.
-2. Pak ji závorky `()` spustí.
+1. First, the dot `'.'` retrieves the property `obj.method`.
+2. Then parentheses `()` execute it.
 
-Jak se tedy informace o `this` předá z první části do druhé?
+So, how does the information about `this` get passed from the first part to the second one?
 
-Umístíme-li tyto operace na samostatné řádky, pak bude `this` zcela jistě ztraceno:
+If we put these operations on separate lines, then `this` will be lost for sure:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  ahoj() { alert(this.jméno); }
+let user = {
+  name: "John",
+  hi() { alert(this.name); }
 }
 
 *!*
-// rozdělíme získání a volání metody na dva řádky
-let ahoj = uživatel.ahoj;
-ahoj(); // Chyba, protože this je undefined
+// split getting and calling the method in two lines
+let hi = user.hi;
+hi(); // Error, because this is undefined
 */!*
 ```
 
-Zde `ahoj = uživatel.ahoj` vloží funkci do proměnné a ta je pak na posledním řádku zcela samostatná, takže tam není žádné `this`.
+Here `hi = user.hi` puts the function into the variable, and then on the last line it is completely standalone, and so there's no `this`.
 
-**Aby volání `uživatel.ahoj()` fungovalo, JavaScript používá trik -- tečka `'.'` nevrací funkci, ale hodnotu speciálního [referenčního typu](https://tc39.github.io/ecma262/#sec-reference-specification-type).**
+**To make `user.hi()` calls work, JavaScript uses a trick -- the dot `'.'` returns not a function, but a value of the special [Reference Type](https://tc39.github.io/ecma262/#sec-reference-specification-type).**
 
-Referenční typ je „specifikační typ“. Nemůžeme jej explicitně používat, ale je používán interně jazykem.
+The Reference Type is a "specification type". We can't explicitly use it, but it is used internally by the language.
 
-Hodnotou referenčního typu je tříhodnotová kombinace `(base, name, strict)`, kde:
+The value of Reference Type is a three-value combination `(base, name, strict)`, where:
 
-- `base` (základ) je objekt.
-- `name` (název) je název vlastnosti.
-- `strict` je true, pokud je použito `use strict`.
+- `base` is the object.
+- `name` is the property name.
+- `strict` is true if `use strict` is in effect.
 
-Výsledkem přístupu k vlastnosti `uživatel.ahoj` není funkce, ale hodnota referenčního typu. Pro `uživatel.ahoj` ve striktním režimu to je:
+The result of a property access `user.hi` is not a function, but a value of Reference Type. For `user.hi` in strict mode it is:
 
 ```js
-// hodnota referenčního typu
-(uživatel, "ahoj", true)
+// Reference Type value
+(user, "hi", true)
 ```
 
-Když se na referenčním typu zavolají závorky `()`, obdrží úplnou informaci o objektu a jeho metodě a mohou tedy nastavit správné `this` (v tomto případě `=uživatel`).
+When parentheses `()` are called on the Reference Type, they receive the full information about the object and its method, and can set the right `this` (`=user` in this case).
 
-Referenční typ je speciální „prostřednický“ interní typ, jehož účelem je předat informaci z tečky `.` volajícím závorkám `()`.
+Reference type is a special "intermediary" internal type, with the purpose to pass information from dot `.` to calling parentheses `()`.
 
-Jakákoli jiná operace, např. přiřazení `ahoj = uživatel.ahoj`, celý referenční typ zahodí, vezme hodnotu `uživatel.ahoj` (funkci) a předá ji dál. Jakákoli další operace tedy „ztratí“ `this`.
+Any other operation like assignment `hi = user.hi` discards the reference type as a whole, takes the value of `user.hi` (a function) and passes it on. So any further operation "loses" `this`.
 
-Výsledkem tedy je, že hodnota `this` se předá správně jen tehdy, je-li funkce volána přímo syntaxí tečky `obj.metoda()` nebo hranatých závorek `obj['metoda']()` (obojí zde provádí totéž). Existují různé způsoby, jak tento problém vyřešit, např. [funkce.bind()](/bind#solution-2-bind).
+So, as the result, the value of `this` is only passed the right way if the function is called directly using a dot `obj.method()` or square brackets `obj['method']()` syntax (they do the same here). There are various ways to solve this problem such as [func.bind()](/bind#solution-2-bind).
 
-## Shrnutí
+## Summary
 
-Referenční typ je interní jazykový typ.
+Reference Type is an internal type of the language.
 
-Načtení vlastnosti, např. pomocí tečky `.` v `obj.metoda()`, nevrací přesně hodnotu vlastnosti, ale speciální hodnotu „referenčního typu“, v níž je uložena jak hodnota vlastnosti, tak objekt, z něhož byla vzata.
+Reading a property, such as with dot `.` in `obj.method()` returns not exactly the property value, but a special "reference type" value that stores both the property value and the object it was taken from.
 
-To je proto, aby následné volání metody `()` mohlo získat objekt a nastavit jej jako `this`.
+That's for the subsequent method call `()` to get the object and set `this` to it.
 
-Při všech ostatních operacích se z referenčního typu automaticky stává hodnota vlastnosti (v našem případě funkce).
+For all other operations, the reference type automatically becomes the property value (a function in our case).
 
-Celá tato mechanika je před našima očima ukryta. Záleží na ní jen v krajních případech, např. když je metoda dynamicky získána z objektu použitím výrazu.
+The whole mechanics is hidden from our eyes. It only matters in subtle cases, such as when a method is obtained dynamically from the object, using an expression.

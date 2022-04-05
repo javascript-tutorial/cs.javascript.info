@@ -2,9 +2,9 @@ importance: 2
 
 ---
 
-# Práce s proměnnými
+# Working with variables
 
-1. Deklarujte dvě proměnné: `správce` a `jméno`.
-2. Přiřaďte do proměnné `jméno` hodnotu `"Jan"`.
-3. Zkopírujte hodnotu z proměnné `jméno` do proměnné `správce`.
-4. Zobrazte hodnotu proměnné `správce` pomocí `alert` (musí vypsat „Jan“).
+1. Declare two variables: `admin` and `name`.
+2. Assign the value `"John"` to `name`.
+3. Copy the value from `name` to `admin`.
+4. Show the value of `admin` using `alert` (must output "John").

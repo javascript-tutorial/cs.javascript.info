@@ -2,18 +2,18 @@ importance: 5
 
 ---
 
-# Změňte border-left-width na borderLeftWidth
+# Translate border-left-width to borderLeftWidth
 
-Napište funkci `camelizace(str)`, která změní slova oddělená pomlčkou, např. „můj-krátký-řetězec“, na velbloudí notaci „můjKrátkýŘetězec“.
+Write the function `camelize(str)` that changes dash-separated words like "my-short-string" into camel-cased "myShortString".
 
-To znamená, že odstraní všechny pomlčky a u všech slov za pomlčkami změní první písmeno na velké.
+That is: removes all dashes, each word after dash becomes uppercased.
 
-Příklad:
+Examples:
 
 ```js
-camelizace("background-color") == 'backgroundColor';
-camelizace("list-style-image") == 'listStyleImage';
-camelizace("-webkit-transition") == 'WebkitTransition';
+camelize("background-color") == 'backgroundColor';
+camelize("list-style-image") == 'listStyleImage';
+camelize("-webkit-transition") == 'WebkitTransition';
 ```
 
-P.S. Rada: použijte `split` pro rozdělení řetězce na pole, přeměňte je a spojte zpět pomocí `join`.
+P.S. Hint: use `split` to split the string into an array, transform it and `join` back.

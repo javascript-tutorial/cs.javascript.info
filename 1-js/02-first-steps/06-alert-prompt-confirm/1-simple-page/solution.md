@@ -1,11 +1,11 @@
-Kód v JavaScriptu:
+JavaScript-code:
 
 ```js demo run
-let jméno = prompt("Jak se jmenuješ?", "");
-alert(jméno);
+let name = prompt("What is your name?", "");
+alert(name);
 ```
 
-Celá stránka:
+The full page:
 
 ```html
 <!DOCTYPE html>
@@ -15,8 +15,8 @@ Celá stránka:
   <script>
     'use strict';
 
-    let jméno = prompt("Jak se jmenuješ?", "");
-    alert(jméno);
+    let name = prompt("What is your name?", "");
+    alert(name);
   </script>
 
 </body>

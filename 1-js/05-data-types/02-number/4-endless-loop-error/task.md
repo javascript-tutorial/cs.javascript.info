@@ -2,9 +2,9 @@ importance: 4
 
 ---
 
-# Občasná nekonečná smyčka
+# An occasional infinite loop
 
-Tento cyklus je nekonečný. Nikdy neskončí. Proč?
+This loop is infinite. It never ends. Why?
 
 ```js
 let i = 0;

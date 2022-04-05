@@ -1,88 +1,88 @@
-# Řešení pomocí cyklu
+# Loop-based solution
 
-Varianta řešení pomocí cyklu:
+The loop-based variant of the solution:
 
 ```js run
-let seznam = {
-  hodnota: 1,
-  další: {
-    hodnota: 2,
-    další: {
-      hodnota: 3,
-      další: {
-        hodnota: 4,
-        další: null
+let list = {
+  value: 1,
+  next: {
+    value: 2,
+    next: {
+      value: 3,
+      next: {
+        value: 4,
+        next: null
       }
     }
   }
 };
 
-function vypišSeznam(seznam) {
-  let tmp = seznam;
+function printList(list) {
+  let tmp = list;
 
   while (tmp) {
-    alert(tmp.hodnota);
-    tmp = tmp.další;
+    alert(tmp.value);
+    tmp = tmp.next;
   }
 
 }
 
-vypišSeznam(seznam);
+printList(list);
 ```
 
-Prosíme všimněte si, že k procházení seznamem používáme dočasnou proměnnou `tmp`. Technicky bychom místo ní mohli použít parametr funkce `seznam`:
+Please note that we use a temporary variable `tmp` to walk over the list. Technically, we could use a function parameter `list` instead:
 
 ```js
-function vypišSeznam(seznam) {
+function printList(list) {
 
-  while(*!*seznam*/!*) {
-    alert(seznam.hodnota);
-    seznam = seznam.další;
+  while(*!*list*/!*) {
+    alert(list.value);
+    list = list.next;
   }
 
 }
 ```
 
-...To by však nebylo moudré. V budoucnosti možná budeme potřebovat funkci rozšířit a provádět se seznamem i něco jiného. Pokud změníme `seznam`, o tuto možnost přijdeme.
+...But that would be unwise. In the future we may need to extend a function, do something else with the list. If we change `list`, then we lose such ability.
 
-Když mluvíme o dobrých názvech proměnných, `seznam` zde je samotný seznam. Jeho první prvek. A tak by to mělo zůstat. Je to čisté a zodpovědné.
+Talking about good variable names, `list` here is the list itself. The first element of it. And it should remain like that. That's clear and reliable.
 
-Na druhou stranu role `tmp` je výhradně procházení seznamu, podobně jako `i` v cyklu `for`.
+From the other side, the role of `tmp` is exclusively a list traversal, like `i` in the `for` loop.
 
-# Rekurzívní řešení
+# Recursive solution
 
-Rekurzívní varianta `vypišSeznam(seznam)` sleduje jednoduchou logiku: pro vypsání seznamu bychom měli vypsat aktuální prvek `seznam`, pak učinit totéž pro `seznam.další`:
+The recursive variant of `printList(list)` follows a simple logic: to output a list we should output the current element `list`, then do the same for `list.next`:
 
 ```js run
-let seznam = {
-  hodnota: 1,
-  další: {
-    hodnota: 2,
-    další: {
-      hodnota: 3,
-      další: {
-        hodnota: 4,
-        další: null
+let list = {
+  value: 1,
+  next: {
+    value: 2,
+    next: {
+      value: 3,
+      next: {
+        value: 4,
+        next: null
       }
     }
   }
 };
 
-function vypišSeznam(seznam) {
+function printList(list) {
 
-  alert(seznam.hodnota); // vypíše aktuální řádek
+  alert(list.value); // output the current item
 
-  if (seznam.další) {
-    vypišSeznam(seznam.další); // učiní totéž pro zbytek seznamu
+  if (list.next) {
+    printList(list.next); // do the same for the rest of the list
   }
 
 }
 
-vypišSeznam(seznam);
+printList(list);
 ```
 
-Které řešení je nyní lepší?
+Now what's better?
 
-Technicky je cyklus efektivnější. Obě varianty dělají totéž, ale cyklus nespotřebovává zdroje pro vnořená volání funkce.
+Technically, the loop is more effective. These two variants do the same, but the loop does not spend resources for nested function calls.
 
-Na druhou stranu je rekurzívní varianta kratší a někdy je snadnější jí porozumět.
+From the other side, the recursive variant is shorter and sometimes easier to understand.
