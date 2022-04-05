@@ -2,30 +2,30 @@ importance: 5
 
 ---
 
-# Working with prototype
+# Práce s prototypem
 
-Here's the code that creates a pair of objects, then modifies them.
+Následuje kód, který vytvoří dva objekty a pak je změní.
 
-Which values are shown in the process?
+Jaké hodnoty se v tomto procesu zobrazí?
 
 ```js
-let animal = {
-  jumps: null
+let zvíře = {
+  skáče: null
 };
-let rabbit = {
-  __proto__: animal,
-  jumps: true
+let králík = {
+  __proto__: zvíře,
+  skáče: true
 };
 
-alert( rabbit.jumps ); // ? (1)
+alert( králík.skáče ); // ? (1)
 
-delete rabbit.jumps;
+delete králík.skáče;
 
-alert( rabbit.jumps ); // ? (2)
+alert( králík.skáče ); // ? (2)
 
-delete animal.jumps;
+delete zvíře.skáče;
 
-alert( rabbit.jumps ); // ? (3)
+alert( králík.skáče ); // ? (3)
 ```
 
-There should be 3 answers.
+Odpovědi by měly být tři.

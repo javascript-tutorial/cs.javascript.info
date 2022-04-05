@@ -1,15 +1,15 @@
-The call `arr[2]()` is syntactically the good old `obj[method]()`, in the role of `obj` we have `arr`, and in the role of `method` we have `2`.
+Volání `pole[2]()` je syntakticky stará dobrá `obj[metoda]()`, v roli `obj` máme `pole` a v roli `metoda` máme `2`.
 
-So we have a call of the function `arr[2]` as an object method. Naturally, it receives `this` referencing the object `arr` and outputs the array:
+Zavolali jsme tedy funkci `pole[2]` jako objektovou metodu. Ta přirozeně obdrží `this` odkazující se na objekt `pole` a vypíše toto pole:
 
 ```js run
-let arr = ["a", "b"];
+let pole = ["a", "b"];
 
-arr.push(function() {
+pole.push(function() {
   alert( this );
 })
 
-arr[2](); // a,b,function(){...}
+pole[2](); // a,b,function(){...}
 ```
 
-The array has 3 values: initially it had two, plus the function. 
+Toto pole má 3 hodnoty: na začátku mělo dvě, plus funkce.

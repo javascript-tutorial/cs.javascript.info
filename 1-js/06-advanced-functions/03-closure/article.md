@@ -1,388 +1,387 @@
+# Oblast platnosti proměnné, uzávěr
 
-# Variable scope, closure
+JavaScript je velmi funkcionálně orientovaný jazyk. Dává nám velké množství svobody. Funkci můžeme vytvořit kdykoli, předat ji jako argument jiné funkci a později ji volat ze zcela odlišného místa kódu.
 
-JavaScript is a very function-oriented language. It gives us a lot of freedom. A function can be created at any moment, passed as an argument to another function, and then called from a totally different place of code later.
+Víme již, že funkce může přistupovat k proměnným, které leží mimo ni (k „vnějším“ proměnným).
 
-We already know that a function can access variables outside of it ("outer" variables).
+Co se však stane, když se poté, co je funkce vytvořena, vnější proměnné změní? Dostanou se do funkce jejich nové hodnoty nebo staré?
 
-But what happens if outer variables change since a function is created? Will the function get newer values or the old ones?
+A co když je funkce předána jako parametr a pak je volána z jiného místa kódu? Bude mít na novém místě přístup k vnějším proměnným?
 
-And what if a function is passed along as a parameter and called from another place of code, will it get access to outer variables at the new place?
+Rozšiřme si znalosti, abychom porozuměli těmto i složitějším scénářům.
 
-Let's expand our knowledge to understand these scenarios and more complex ones.
+```smart header="Zde budeme hovořit o proměnných deklarovaných pomocí `let/const`"
+V JavaScriptu jsou 3 způsoby, jak deklarovat proměnnou: `let`, `const` (tyto dva jsou moderní) a `var` (pozůstatek minulosti).
 
-```smart header="We'll talk about `let/const` variables here"
-In JavaScript, there are 3 ways to declare a variable: `let`, `const` (the modern ones), and `var` (the remnant of the past).
-
-- In this article we'll use `let` variables in examples.
-- Variables, declared with `const`, behave the same, so this article is about `const` too.
-- The old `var` has some notable differences, they will be covered in the article <info:var>.
+- V tomto článku budeme v příkladech používat proměnné deklarované pomocí `let`.
+- Proměnné deklarované pomocí `const` se chovají stejně, takže tento článek je i o `const`.
+- Staré `var` má určité významné rozdíly, které probereme v článku <info:var>.
 ```
 
-## Code blocks
+## Kódové bloky
 
-If a variable is declared inside a code block `{...}`, it's only visible inside that block.
+Jestliže je proměnná deklarována uvnitř kódového bloku `{...}`, je viditelná jedině uvnitř tohoto bloku.
 
-For example:
+Příklad:
 
 ```js run
 {
-  // do some job with local variables that should not be seen outside
+  // provedeme nějakou práci s lokálními proměnnými, které nemají být vidět zvenčí
 
-  let message = "Hello"; // only visible in this block
+  let zpráva = "Ahoj"; // je viditelná jen v tomto bloku
 
-  alert(message); // Hello
+  alert(zpráva); // Ahoj
 }
 
-alert(message); // Error: message is not defined
+alert(zpráva); // Chyba: zpráva není definována
 ```
 
-We can use this to isolate a piece of code that does its own task, with variables that only belong to it:
+Díky tomu můžeme izolovat kus kódu, který odvede svou vlastní práci, s proměnnými, které budou patřit pouze jemu:
 
 ```js run
 {
-  // show message
-  let message = "Hello";
-  alert(message);
+  // zobrazí zprávu
+  let zpráva = "Ahoj";
+  alert(zpráva);
 }
 
 {
-  // show another message
-  let message = "Goodbye";
-  alert(message);
+  // zobrazí jinou zprávu
+  let zpráva = "Na shledanou";
+  alert(zpráva);
 }
 ```
 
-````smart header="There'd be an error without blocks"
-Please note, without separate blocks there would be an error, if we use `let` with the existing variable name:
+````smart header="Bez bloků by nastala chyba"
+Prosíme všimněte si, že bez oddělených bloků by nastala chyba, kdybychom použili `let` s již existujícím názvem proměnné:
 
 ```js run
-// show message
-let message = "Hello";
-alert(message);
+// zobrazí zprávu
+let zpráva = "Ahoj";
+alert(zpráva);
 
-// show another message
+// zobrazí jinou zprávu
 *!*
-let message = "Goodbye"; // Error: variable already declared
+let zpráva = "Na shledanou"; // Chyba: proměnná je již deklarována
 */!*
-alert(message);
+alert(zpráva);
 ```
 ````
 
-For `if`, `for`, `while` and so on, variables declared in `{...}` are also only visible inside:
+Také pro `if`, `for`, `while` a podobné jsou proměnné deklarované v `{...}` viditelné jedině uvnitř:
 
 ```js run
 if (true) {
-  let phrase = "Hello!";
+  let věta = "Ahoj!";
 
-  alert(phrase); // Hello!
+  alert(věta); // Ahoj!
 }
 
-alert(phrase); // Error, no such variable!
+alert(věta); // Chyba, taková proměnná neexistuje!
 ```
 
-Here, after `if` finishes, the `alert` below won't see the `phrase`, hence the error.
+Zde poté, co `if` skončí, `alert` pod ním neuvidí proměnnou `věta`, takže nastane chyba.
 
-That's great, as it allows us to create block-local variables, specific to an `if` branch.
+To je skvělé, protože nám to umožňuje vytvářet blokově lokální proměnné, specifické pro větev `if`.
 
-The similar thing holds true for `for` and `while` loops:
+Podobně to platí pro cykly `for` a `while`:
 
 ```js run
 for (let i = 0; i < 3; i++) {
-  // the variable i is only visible inside this for
-  alert(i); // 0, then 1, then 2
+  // proměnná i je viditelná jen uvnitř tohoto cyklu for
+  alert(i); // 0, pak 1, pak 2
 }
 
-alert(i); // Error, no such variable
+alert(i); // Chyba, taková proměnná neexistuje
 ```
 
-Visually, `let i` is outside of `{...}`. But the `for` construct is special here: the variable, declared inside it, is considered a part of the block.
+Vizuálně je `let i` mimo `{...}`. Avšak konstrukce `for` je v tomto speciální: proměnná, která je deklarována uvnitř ní, se považuje za součást bloku.
 
-## Nested functions
+## Vnořené funkce
 
-A function is called "nested" when it is created inside another function.
+Funkce se nazývá „vnořená“, když je vytvořena uvnitř jiné funkce.
 
-It is easily possible to do this with JavaScript.
+V JavaScriptu je to snadno možné.
 
-We can use it to organize our code, like this:
+Můžeme to využít k organizaci našeho kódu, například takto:
 
 ```js
-function sayHiBye(firstName, lastName) {
+function řekniAhojNashle(křestníJméno, příjmení) {
 
-  // helper nested function to use below
-  function getFullName() {
-    return firstName + " " + lastName;
+  // pomocná vnořená funkce, kterou použijeme níže
+  function vraťCeléJméno() {
+    return křestníJméno + " " + příjmení;
   }
 
-  alert( "Hello, " + getFullName() );
-  alert( "Bye, " + getFullName() );
+  alert( "Ahoj, " + vraťCeléJméno() );
+  alert( "Nashle, " + vraťCeléJméno() );
 
 }
 ```
 
-Here the *nested* function `getFullName()` is made for convenience. It can access the outer variables and so can return the full name. Nested functions are quite common in JavaScript.
+Zde je *vnořená* funkce `vraťCeléJméno()` vytvořena pro naše pohodlí. Může přistupovat k vnějším proměnným, a tak může vrátit celé jméno. Vnořené funkce jsou v JavaScriptu poměrně běžné.
 
-What's much more interesting, a nested function can be returned: either as a property of a new object or as a result by itself. It can then be used somewhere else. No matter where, it still has access to the same outer variables.
+Co je ještě zajímavější, vnořenou funkci můžeme vrátit: buď jako vlastnost nového objektu, nebo jako samotný výsledek. Pak ji můžeme použít někde jinde. Ať to bude kdekoli, stále bude mít přístup k vnějším proměnným.
 
-Below, `makeCounter` creates the "counter" function that returns the next number on each invocation:
+Níže `vytvořČítač` vytvoří funkci „čítače“, která při každém zavolání vrátí další číslo:
 
 ```js run
-function makeCounter() {
-  let count = 0;
+function vytvořČítač() {
+  let počet = 0;
 
   return function() {
-    return count++;
+    return počet++;
   };
 }
 
-let counter = makeCounter();
+let čítač = vytvořČítač();
 
-alert( counter() ); // 0
-alert( counter() ); // 1
-alert( counter() ); // 2
+alert( čítač() ); // 0
+alert( čítač() ); // 1
+alert( čítač() ); // 2
 ```
 
-Despite being simple, slightly modified variants of that code have practical uses, for instance, as a [random number generator](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) to generate random values for automated tests.
+Ačkoli jsou jednoduché, mírně upravené varianty tohoto kódu mají praktické využití, například jako [generátor pseudonáhodných čísel](https://cs.wikipedia.org/wiki/Generátor_pseudonáhodných_čísel), který generuje náhodné hodnoty pro automatické testy.
 
-How does this work? If we create multiple counters, will they be independent? What's going on with the variables here?
+Jak to funguje? Když vytvoříme více čítačů, budou nezávislé? Co se bude dít se zdejšími proměnnými?
 
-Understanding such things is great for the overall knowledge of JavaScript and beneficial for more complex scenarios. So let's go a bit in-depth.
+Porozumět takovým věcem je skvělé pro celkovou znalost JavaScriptu a vyplatí se při složitějších scénářích. Pojďme tedy trochu do hloubky.
 
-## Lexical Environment
+## Lexikální prostředí
 
-```warn header="Here be dragons!"
-The in-depth technical explanation lies ahead.
+```warn header="Zde jsou draci!"
+Před námi leží hlubší technické vysvětlení.
 
-As far as I'd like to avoid low-level language details, any understanding without them would be lacking and incomplete, so get ready.
+Jakkoli se snažím vyhnout se nízkoúrovňovým detailům jazyka, bez nich by porozumění bylo děravé a neúplné, takže se na ně připravte.
 ```
 
-For clarity, the explanation is split into multiple steps.
+Aby to bylo jasnější, rozdělíme vysvětlení na několik kroků.
 
-### Step 1. Variables
+### Krok 1. Proměnné
 
-In JavaScript, every running function, code block `{...}`, and the script as a whole have an internal (hidden) associated object known as the *Lexical Environment*.
+V JavaScriptu je ke každé spuštěné funkci, kódovému bloku `{...}` i celému skriptu připojen interní (skrytý) objekt, nazývaný *lexikální prostředí*.
 
-The Lexical Environment object consists of two parts:
+Objekt lexikálního prostředí se skládá ze dvou částí:
 
-1. *Environment Record* -- an object that stores all local variables as its properties (and some other information like the value of `this`).
-2. A reference to the *outer lexical environment*, the one associated with the outer code.
+1. *Záznam prostředí* -- objekt, v němž jsou uloženy všechny lokální proměnné jako jeho vlastnosti (a některé další informace, např. hodnota `this`).
+2. Odkaz na *vnější lexikální prostředí*, tedy to, které je spojeno s vnějším kódem.
 
-**A "variable" is just a property of the special internal object, `Environment Record`. "To get or change a variable" means "to get or change a property of that object".**
+**„Proměnná“ je jen vlastnost speciálního interního objektu, `záznamu prostředí`. „Načíst nebo změnit proměnnou“ znamená „načíst nebo změnit vlastnost tohoto objektu“.**
 
-In this simple code without functions, there is only one Lexical Environment:
+V tomto jednoduchém kódu bez funkcí existuje pouze jedno lexikální prostředí:
 
-![lexical environment](lexical-environment-global.svg)
+![lexikální prostředí](lexical-environment-global.svg)
 
-This is the so-called *global* Lexical Environment, associated with the whole script.
+To je tzv. *globální* lexikální prostředí, připojené k celému skriptu.
 
-On the picture above, the rectangle means Environment Record (variable store) and the arrow means the outer reference. The global Lexical Environment has no outer reference, that's why the arrow points to `null`.
+Obdélník ve výše uvedeném obrázku znamená záznam prostředí (skladiště proměnných) a šipka znamená odkaz vně. Globální lexikální prostředí nemá žádný odkaz vně, proto šipka ukazuje na `null`.
 
-As the code starts executing and goes on, the Lexical Environment changes.
+Když se kód začne vykonávat a pokračuje, lexikální prostředí se mění.
 
-Here's a little bit longer code:
+Zde je trochu delší kód:
 
-![lexical environment](closure-variable-phrase.svg)
+![lexikální prostředí](closure-variable-phrase.svg)
 
-Rectangles on the right-hand side demonstrate how the global Lexical Environment changes during the execution:
+Obdélníky napravo ukazují, jak se globální lexikální prostředí mění během výkonu kódu:
 
-1. When the script starts, the Lexical Environment is pre-populated with all declared variables.
-    - Initially, they are in the "Uninitialized" state. That's a special internal state, it means that the engine knows about the variable, but it cannot be referenced until it has been declared with `let`. It's almost the same as if the variable didn't exist.
-2. Then `let phrase` definition appears. There's no assignment yet, so its value is `undefined`. We can use the variable from this point forward.
-3. `phrase` is assigned a value.
-4. `phrase` changes the value.
+1. Když se skript spustí, lexikální prostředí se obsadí všemi deklarovanými proměnnými.
+    - Na začátku jsou ve stavu „neinicializováno“. To je speciální interní stav, který znamená, že engine ví o proměnné, ale ta nemůže být odkazována, dokud nebude deklarována pomocí `let`. Je to skoro totéž, jako by proměnná neexistovala.
+2. Pak se objeví definice `let věta`. Zatím zde není žádné přiřazení, takže její hodnota je `undefined`. Od této chvíle můžeme tuto proměnnou používat.
+3. Do proměnné `věta` je přiřazena hodnota.
+4. Hodnota proměnné `věta` se změní.
 
-Everything looks simple for now, right?
+Prozatím to všechno vypadá jednoduše, že?
 
-- A variable is a property of a special internal object, associated with the currently executing block/function/script.
-- Working with variables is actually working with the properties of that object.
+- Proměnná je vlastností speciálního interního objektu, připojeného k právě vykonávanému bloku/funkci/skriptu.
+- Práce s proměnnými je ve skutečnosti práce s vlastnostmi tohoto objektu.
 
-```smart header="Lexical Environment is a specification object"
-"Lexical Environment" is a specification object: it only exists "theoretically" in the [language specification](https://tc39.es/ecma262/#sec-lexical-environments) to describe how things work. We can't get this object in our code and manipulate it directly.
+```smart header="Lexikální prostředí je objekt ze specifikace"
+„Lexikální prostředí“ je objekt ze specifikace: existuje jen „teoreticky“ ve [specifikaci jazyka](https://tc39.es/ecma262/#sec-lexical-environments), aby popisoval, jak věci fungují. V našem kódu nemůžeme tento objekt získat a přímo s ním manipulovat.
 
-JavaScript engines also may optimize it, discard variables that are unused to save memory and perform other internal tricks, as long as the visible behavior remains as described.
+Enginy JavaScriptu jej také mohou optimalizovat, vyřazovat nepoužívané proměnné, aby ušetřily paměť, a provádět jiné interní triky, pokud jeho viditelné chování zůstává takové, jak je zde popsáno.
 ```
 
-### Step 2. Function Declarations
+### Krok 2. Deklarace funkcí
 
-A function is also a value, like a variable.
+Funkce je také hodnota, stejně jako proměnná.
 
-**The difference is that a Function Declaration is instantly fully initialized.**
+**Rozdíl je v tom, že deklarace funkce je okamžitě plně inicializována.**
 
-When a Lexical Environment is created, a Function Declaration immediately becomes a ready-to-use function (unlike `let`, that is unusable till the declaration).
+Když je vytvořeno lexikální prostředí, funkce z deklarace se okamžitě stane funkcí připravenou k použití (na rozdíl od proměnné v `let`, která je až do deklarace nepoužitelná).
 
-That's why we can use a function, declared as Function Declaration, even before the declaration itself.
+Z tohoto důvodu můžeme používat funkci, deklarovanou deklarací funkce, ještě před samotnou deklarací.
 
-For example, here's the initial state of the global Lexical Environment when we add a function:
+Například zde je úvodní stav globálního lexikálního prostředí, když přidáme funkci:
 
 ![](closure-function-declaration.svg)
 
-Naturally, this behavior only applies to Function Declarations, not Function Expressions where we assign a function to a variable, such as `let say = function(name)...`.
+Pochopitelně toto chování platí jen pro deklarace funkcí, ne pro funkční výrazy, v nichž přiřazujeme funkci do proměnné, například `let řekni = function(jméno)...`.
 
-### Step 3. Inner and outer Lexical Environment
+### Krok 3. Vnitřní a vnější lexikální prostředí
 
-When a function runs, at the beginning of the call, a new Lexical Environment is created automatically to store local variables and parameters of the call.
+Když se spustí funkce, na začátku jejího volání je automaticky vytvořeno nové lexikální prostředí, do něhož se ukládají lokální proměnné a parametry volání.
 
-For instance, for `say("John")`, it looks like this (the execution is at the line, labelled with an arrow):
+Například pro `řekni("Jan")` vypadá takto (výkon je na řádku označeném šipkou):
 
 <!--
     ```js
-    let phrase = "Hello";
+    let věta = "Ahoj";
 
     function say(name) {
-     alert( `${phrase}, ${name}` );
+     alert( `${věta}, ${name}` );
     }
 
-    say("John"); // Hello, John
+    say("John"); // Ahoj, John
     ```-->
 
 ![](lexical-environment-simple.svg)
 
-During the function call we have two Lexical Environments: the inner one (for the function call) and the outer one (global):
+Během volání funkce máme dvě lexikální prostředí: vnitřní (pro volání funkce) a vnější (globální):
 
-- The inner Lexical Environment corresponds to the current execution of `say`. It has a single property: `name`, the function argument. We called `say("John")`, so the value of the `name` is `"John"`.
-- The outer Lexical Environment is the global Lexical Environment. It has the `phrase` variable and the function itself.
+- Vnitřní lexikální prostředí odpovídá aktuálnímu výkonu funkce `řekni`. Má jedinou vlastnost: `jméno`, argument funkce. Voláme ji `řekni("Jan")`, takže hodnota vlastnosti `jméno` je `"Jan"`.
+- Vnější lexikální prostředí je globální lexikální prostředí. Má proměnnou `věta` a samotnou funkci.
 
-The inner Lexical Environment has a reference to the `outer` one.
+Vnitřní lexikální prostředí obsahuje odkaz na `vnější`.
 
-**When the code wants to access a variable -- the inner Lexical Environment is searched first, then the outer one, then the more outer one and so on until the global one.**
+**Když kód chce přistupovat k proměnné -- nejprve se prohledá vnitřní lexikální prostředí, pak vnější, pak ještě vnější a tak dále, až ke globálnímu.**
 
-If a variable is not found anywhere, that's an error in strict mode (without `use strict`, an assignment to a non-existing variable creates a new global variable, for compatibility with old code).
+Není-li proměnná nikde nalezena, ve striktním režimu nastane chyba (bez `use strict` přiřazení do neexistující proměnné vytvoří novou globální proměnnou, aby byla zachována kompatibilita se starým kódem).
 
-In this example the search proceeds as follows:
+V tomto příkladu hledání postupuje následovně:
 
-- For the `name` variable, the `alert` inside `say` finds it immediately in the inner Lexical Environment.
-- When it wants to access `phrase`, then there is no `phrase` locally, so it follows the reference to the outer Lexical Environment and finds it there.
+- Co se týče proměnné `jméno`, `alert` uvnitř `řekni` ji najde okamžitě ve vnitřním lexikálním prostředí.
+- Když chce přistupovat k proměnné `věta`, pak lokálně žádná proměnná `věta` není, takže postupuje odkazem na vnější lexikální prostředí a najde ji v něm.
 
-![lexical environment lookup](lexical-environment-simple-lookup.svg)
+![náhled na lexikální prostředí](lexical-environment-simple-lookup.svg)
 
 
-### Step 4. Returning a function
+### Krok 4. Vrácení funkce
 
-Let's return to the `makeCounter` example.
+Vraťme se k příkladu `vytvořČítač`.
 
 ```js
-function makeCounter() {
-  let count = 0;
+function vytvořČítač() {
+  let počet = 0;
 
   return function() {
-    return count++;
+    return počet++;
   };
 }
 
-let counter = makeCounter();
+let čítač = vytvořČítač();
 ```
 
-At the beginning of each `makeCounter()` call, a new Lexical Environment object is created, to store variables for this `makeCounter` run.
+Na začátku každého volání `vytvořČítač()` se vytvoří nový objekt lexikálního prostředí, do něhož se uloží proměnné pro toto spuštění funkce `vytvořČítač`.
 
-So we have two nested Lexical Environments, just like in the example above:
+Máme tedy dvě vnořená lexikální prostředí, podobně jako ve výše uvedeném příkladu:
 
 ![](closure-makecounter.svg)
 
-What's different is that, during the execution of `makeCounter()`, a tiny nested function is created of only one line: `return count++`. We don't run it yet, only create.
+Rozdíl spočívá v tom, že během provádění funkce `vytvořČítač()` se vytvoří drobná vnořená funkce tvořená jediným řádkem: `return počet++`. Tuto funkci zatím nevoláme, jenom ji vytvoříme.
 
-All functions remember the Lexical Environment in which they were made. Technically, there's no magic here: all functions have the hidden property named `[[Environment]]`, that keeps the reference to the Lexical Environment where the function was created:
+Všechny funkce si pamatují lexikální prostředí, v němž byly vytvořeny. Technicky v tom není žádná magie: všechny funkce mají skrytou vlastnost jménem `[[Environment]]`, která si udržuje odkaz na lexikální prostředí, v němž byla funkce vytvořena:
 
 ![](closure-makecounter-environment.svg)
 
-So, `counter.[[Environment]]` has the reference to `{count: 0}` Lexical Environment. That's how the function remembers where it was created, no matter where it's called. The `[[Environment]]` reference is set once and forever at function creation time.
+Takže `čítač.[[Environment]]` má odkaz na lexikální prostředí `{počet: 0}`. Tímto způsobem si funkce pamatuje, kde byla vytvořena, bez ohledu na to, kde je volána. Odkaz `[[Environment]]` se při vytvoření funkce nastaví jednou provždy.
 
-Later, when `counter()` is called, a new Lexical Environment is created for the call, and its outer Lexical Environment reference is taken from `counter.[[Environment]]`:
+Když je později volán `čítač()`, vytvoří se pro toto volání nové lexikální prostředí a jeho vnější lexikální prostředí se převezme z `čítač.[[Environment]]`:
 
 ![](closure-makecounter-nested-call.svg)
 
-Now when the code inside `counter()` looks for `count` variable, it first searches its own Lexical Environment (empty, as there are no local variables there), then the Lexical Environment of the outer `makeCounter()` call, where it finds and changes it.
+Když nyní kód uvnitř funkce `čítač()` hledá proměnnou `počet`, nejprve prohledá své vlastní lexikální prostředí (prázdné, jelikož tady nejsou žádné lokální proměnné), pak lexikální prostředí vnějšího volání `vytvořČítač()`, kde ji najde a změní.
 
-**A variable is updated in the Lexical Environment where it lives.**
+**Proměnná je změněna v lexikálním prostředí, v němž přebývá.**
 
-Here's the state after the execution:
+Zde je stav po provedení funkce:
 
 ![](closure-makecounter-nested-call-2.svg)
 
-If we call `counter()` multiple times, the `count` variable will be increased to `2`, `3` and so on, at the same place.
+Jestliže voláme `čítač()` vícekrát, proměnná `počet` se zvýší na `2`, `3` a tak dále, a to na stejném místě.
 
-```smart header="Closure"
-There is a general programming term "closure", that developers generally should know.
+```smart header="Uzávěr"
+Existuje obecný programovací pojem „uzávěr“, který by vývojáři obecně měli znát.
 
-A [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)) is a function that remembers its outer variables and can access them. In some languages, that's not possible, or a function should be written in a special way to make it happen. But as explained above, in JavaScript, all functions are naturally closures (there is only one exception, to be covered in <info:new-function>).
+[Uzávěr](https://en.wikipedia.org/wiki/Closure_(computer_programming)) je funkce, která si pamatuje své vnější proměnné a může k nim přistupovat. V některých jazycích to není možné nebo funkce musí být napsána speciálním způsobem, aby se to mohlo dít. Ale jak bylo vysvětleno výše, v JavaScriptu jsou všechny funkce přirozeně uzávěry (je tady jen jedna výjimka, kterou probereme v kapitole <info:new-function>).
 
-That is: they automatically remember where they were created using a hidden `[[Environment]]` property, and then their code can access outer variables.
+To znamená: automaticky si pamatují, kde byly vytvořeny, pomocí skryté vlastnosti `[[Environment]]`, a jejich kód pak může přistupovat k vnějším proměnným.
 
-When on an interview, a frontend developer gets a question about "what's a closure?", a valid answer would be a definition of the closure and an explanation that all functions in JavaScript are closures, and maybe a few more words about technical details: the `[[Environment]]` property and how Lexical Environments work.
+Kdyby front-end vývojář v rozhovoru dostal otázku „co je to uzávěr?“, správná odpověď by byla definice uzávěru a vysvětlení, že v JavaScriptu jsou všechny funkce uzávěry, a možná několik dalších slov o technických detailech: o vlastnosti `[[Environment]]` a o tom, jak fungují lexikální prostředí.
 ```
 
 ## Garbage collection
 
-Usually, a Lexical Environment is removed from memory with all the variables after the function call finishes. That's because there are no references to it. As any JavaScript object, it's only kept in memory while it's reachable.
+Lexikální prostředí je zpravidla odstraněno z paměti i se všemi proměnnými poté, co volání funkce skončí. Je to proto, že pak už na něj nejsou žádné odkazy. Stejně jako jiné objekty v JavaScriptu je udržováno v paměti, jen dokud je dosažitelné.
 
-However, if there's a nested function that is still reachable after the end of a function, then it has `[[Environment]]` property that references the lexical environment.
+Jestliže však existuje vnořená funkce, která je po skončení funkce stále dostupná, pak tato funkce má vlastnost `[[Environment]]`, která se odkazuje na lexikální prostředí.
 
-In that case the Lexical Environment is still reachable even after the completion of the function, so it stays alive.
+V takovém případě je lexikální prostředí stále dostupné i po dokončení funkce, takže zůstane naživu.
 
-For example:
+Například:
 
 ```js
 function f() {
-  let value = 123;
+  let hodnota = 123;
 
   return function() {
-    alert(value);
+    alert(hodnota);
   }
 }
 
-let g = f(); // g.[[Environment]] stores a reference to the Lexical Environment
-// of the corresponding f() call
+let g = f(); // g.[[Environment]] si uloží odkaz na lexikální prostředí
+             // příslušného volání f()
 ```
 
-Please note that if `f()` is called many times, and resulting functions are saved, then all corresponding Lexical Environment objects will also be retained in memory. In the code below, all 3 of them:
+Prosíme všimněte si, že je-li `f()` volána mnohokrát a výsledné funkce jsou někam uloženy, pak zůstanou v paměti i všechny příslušné objekty lexikálních prostředí. V níže uvedeném kódu všechny tři:
 
 ```js
 function f() {
-  let value = Math.random();
+  let hodnota = Math.random();
 
-  return function() { alert(value); };
+  return function() { alert(hodnota); };
 }
 
-// 3 functions in array, every one of them links to Lexical Environment
-// from the corresponding f() run
-let arr = [f(), f(), f()];
+// 3 funkce v poli, každá z nich se odkazuje na lexikální prostředí
+// z příslušného spuštění f()
+let pole = [f(), f(), f()];
 ```
 
-A Lexical Environment object dies when it becomes unreachable (just like any other object). In other words, it exists only while there's at least one nested function referencing it.
+Objekt lexikálního prostředí je zničen, když se stane nedosažitelným (stejně jako každý jiný objekt). Jinými slovy, existuje, jen dokud existuje nejméně jedna vnořená funkce, která se na něj odkazuje.
 
-In the code below, after the nested function is removed, its enclosing Lexical Environment (and hence the `value`) is cleaned from memory:
+V níže uvedeném kódu je poté, co je vnořená funkce odstraněna, její uzavírající lexikální prostředí (a tedy i `hodnota`) vyčištěno z paměti:
 
 ```js
 function f() {
-  let value = 123;
+  let hodnota = 123;
 
   return function() {
-    alert(value);
+    alert(hodnota);
   }
 }
 
-let g = f(); // while g function exists, the value stays in memory
+let g = f(); // dokud existuje funkce g, hodnota zůstane v paměti
 
-g = null; // ...and now the memory is cleaned up
+g = null; // ...a nyní bude paměť pročištěna
 ```
 
-### Real-life optimizations
+### Optimalizace v reálném životě
 
-As we've seen, in theory while a function is alive, all outer variables are also retained.
+Jak jsme viděli, teoreticky dokud je funkce naživu, jsou udržovány i všechny vnější proměnné.
 
-But in practice, JavaScript engines try to optimize that. They analyze variable usage and if it's obvious from the code that an outer variable is not used -- it is removed.
+V praxi se však JavaScriptové enginy snaží o optimalizaci. Analyzují používání proměnných, a je-li z kódu zřejmé, že vnější proměnná není nikde použita, bude odstraněna.
 
-**An important side effect in V8 (Chrome, Edge, Opera) is that such variable will become unavailable in debugging.**
+**Důležitý vedlejší efekt ve V8 (Chrome, Edge, Opera) je, že taková proměnná přestane být dostupná při ladění.**
 
-Try running the example below in Chrome with the Developer Tools open.
+Zkuste si spustit níže uvedený příklad v Chrome s otevřenými ladicími nástroji.
 
-When it pauses, in the console type `alert(value)`.
+Když se zastaví, v konzoli zadejte `alert(hodnota)`.
 
 ```js run
 function f() {
-  let value = Math.random();
+  let hodnota = Math.random();
 
   function g() {
-    debugger; // in console: type alert(value); No such variable!
+    debugger; // v konzoli zadejte: alert(hodnota); taková proměnná neexistuje!
   }
 
   return g;
@@ -392,18 +391,18 @@ let g = f();
 g();
 ```
 
-As you could see -- there is no such variable! In theory, it should be accessible, but the engine optimized it out.
+Jak vidíme -- taková proměnná neexistuje! Teoreticky by měla být dostupná, ale engine ji vyřadil při optimalizaci.
 
-That may lead to funny (if not such time-consuming) debugging issues. One of them -- we can see a same-named outer variable instead of the expected one:
+To může vést k zábavným (kdyby nezabíraly tolik času) problémům při ladění. Jeden z nich -- můžeme vidět vnější proměnnou se stejným názvem namísto očekávané:
 
 ```js run global
-let value = "Surprise!";
+let hodnota = "Překvapení!";
 
 function f() {
-  let value = "the closest value";
+  let hodnota = "nejbližší hodnota";
 
   function g() {
-    debugger; // in console: type alert(value); Surprise!
+    debugger; // v konzoli zadejte: alert(hodnota); Překvapení!
   }
 
   return g;
@@ -413,6 +412,6 @@ let g = f();
 g();
 ```
 
-This feature of V8 is good to know. If you are debugging with Chrome/Edge/Opera, sooner or later you will meet it.
+Tuto vlastnost V8 je dobré znát. Jestliže ladíte s Chrome/Edge/Operou, dříve nebo později se s ní setkáte.
 
-That is not a bug in the debugger, but rather a special feature of V8. Perhaps it will be changed sometime. You can always check for it by running the examples on this page.
+Není to chyba debuggeru, ale spíše speciální vlastnost V8. Možná bude časem změněna. Vždy si ji můžete ověřit spuštěním příkladů na této stránce.

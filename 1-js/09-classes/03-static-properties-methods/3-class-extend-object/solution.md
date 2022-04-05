@@ -1,81 +1,81 @@
-First, let's see why the latter code doesn't work.
+Nejprve se podívejme, proč poslední uvedený kód nefunguje.
 
-The reason becomes obvious if we try to run it. An inheriting class constructor must call `super()`. Otherwise `"this"` won't be "defined".
+Důvod bude zřejmý, když se ho pokusíme spustit. Konstruktor zděděné třídy musí volat `super()`, jinak `„this“` nebude „definováno“.
 
-So here's the fix:
+Zde je tedy oprava:
 
 ```js run
-class Rabbit extends Object {
-  constructor(name) {
+class Králík extends Object {
+  constructor(jméno) {
 *!*
-    super(); // need to call the parent constructor when inheriting
+    super(); // při dědění je nutné volat rodičovský konstruktor
 */!*
-    this.name = name;
+    this.jméno = jméno;
   }
 }
 
-let rabbit = new Rabbit("Rab");
+let králík = new Králík("Bobek");
 
-alert( rabbit.hasOwnProperty('name') ); // true
+alert( králík.hasOwnProperty('jméno') ); // true
 ```
 
-But that's not all yet.
+To však ještě není všechno.
 
-Even after the fix, there's still important difference in `"class Rabbit extends Object"` versus `class Rabbit`.
+I po této opravě bude stále existovat důležitý rozdíl mezi `„class Králík extends Object“` a `class Králík`.
 
-As we know, the "extends" syntax sets up two prototypes:
+Jak víme, syntaxe „extends“ nastavuje dva prototypy:
 
-1. Between `"prototype"` of the constructor functions (for methods).
-2. Between the constructor functions themselves (for static methods).
+1. Mezi `„prototype“` konstruktorů (pro metody).
+2. Mezi samotnými konstruktory (pro statické metody).
 
-In our case, for `class Rabbit extends Object` it means:
+V našem případě to pro `class Králík extends Object` znamená:
 
 ```js run
-class Rabbit extends Object {}
+class Králík extends Object {}
 
-alert( Rabbit.prototype.__proto__ === Object.prototype ); // (1) true
-alert( Rabbit.__proto__ === Object ); // (2) true
+alert( Králík.prototype.__proto__ === Object.prototype ); // (1) true
+alert( Králík.__proto__ === Object ); // (2) true
 ```
 
-So `Rabbit` now provides access to static methods of `Object` via `Rabbit`, like this:
+`Králík` tedy nyní poskytuje přístup ke statickým metodám třídy `Object` přes třídu `Králík`, například:
 
 ```js run
-class Rabbit extends Object {}
+class Králík extends Object {}
 
 *!*
-// normally we call Object.getOwnPropertyNames
-alert ( Rabbit.getOwnPropertyNames({a: 1, b: 2})); // a,b
+// běžně voláme Object.getOwnPropertyNames
+alert ( Králík.getOwnPropertyNames({a: 1, b: 2})); // a,b
 */!*
 ```
 
-But if we don't have `extends Object`, then `Rabbit.__proto__` is not set to `Object`.
+Jestliže však nemáme `extends Object`, pak se `Králík.__proto__` nenastaví na `Object`.
 
-Here's the demo:
+Zde je demo:
 
 ```js run
-class Rabbit {}
+class Králík {}
 
-alert( Rabbit.prototype.__proto__ === Object.prototype ); // (1) true
-alert( Rabbit.__proto__ === Object ); // (2) false (!)
-alert( Rabbit.__proto__ === Function.prototype ); // as any function by default
+alert( Králík.prototype.__proto__ === Object.prototype ); // (1) true
+alert( Králík.__proto__ === Object ); // (2) false (!)
+alert( Králík.__proto__ === Function.prototype ); // jako defaultně kterákoli funkce
 
 *!*
-// error, no such function in Rabbit
-alert ( Rabbit.getOwnPropertyNames({a: 1, b: 2})); // Error
+// chyba, ve třídě Králík taková funkce není
+alert ( Králík.getOwnPropertyNames({a: 1, b: 2})); // Chyba
 */!*
 ```
 
-So `Rabbit` doesn't provide access to static methods of `Object` in that case.
+`Králík` tedy v tomto případě neposkytuje přístup ke statickým metodám třídy `Object`.
 
-By the way, `Function.prototype` has "generic" function methods, like `call`, `bind` etc. They are ultimately available in both cases, because for the built-in `Object` constructor, `Object.__proto__ === Function.prototype`.
+Mimochodem, `Function.prototype` obsahuje „obecné“ funkční metody, např. `call`, `bind` atd. Ty jsou definitivně dostupné v obou případech, protože pro zabudovaný konstruktor třídy `Object` platí `Object.__proto__ === Function.prototype`.
 
-Here's the picture:
+Zde je obrázek:
 
 ![](rabbit-extends-object.svg)
 
-So, to put it short, there are two differences:
+Abychom to tedy zkrátili, existují dva rozdíly:
 
-| class Rabbit | class Rabbit extends Object  |
+| class Králík | class Králík extends Object  |
 |--------------|------------------------------|
-| --             | needs to call `super()` in constructor |
-| `Rabbit.__proto__ === Function.prototype` | `Rabbit.__proto__ === Object` |
+| --             | musí v konstruktoru volat `super()` |
+| `Králík.__proto__ === Function.prototype` | `Králík.__proto__ === Object` |

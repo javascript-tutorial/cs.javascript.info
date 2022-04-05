@@ -1,2 +1,2 @@
 
-# Promises, async/await
+# Přísliby, async/await

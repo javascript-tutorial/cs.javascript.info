@@ -1,343 +1,341 @@
-# Variables
+# Proměnné
 
-Most of the time, a JavaScript application needs to work with information. Here are two examples:
-1. An online shop -- the information might include goods being sold and a shopping cart.
-2. A chat application -- the information might include users, messages, and much more.
+JavaScriptová aplikace musí většinu času pracovat s informacemi. Uvedeme dva příklady:
+1. Online obchod -- informace se mohou týkat prodávaného zboží a nákupního vozíku.
+2. Chatovací aplikace -- informace mohou zahrnovat uživatele, zprávy a mnoho dalšího.
 
-Variables are used to store this information.
+K ukládání těchto informací se používají proměnné.
 
-## A variable
+## Proměnná
 
-A [variable](https://en.wikipedia.org/wiki/Variable_(computer_science)) is a "named storage" for data. We can use variables to store goodies, visitors, and other data.
+[Proměnná](https://cs.wikipedia.org/wiki/Proměnná_(programování)) je „pojmenovaný sklad“ dat. Proměnné můžeme používat k ukládání zboží, návštěvníků i jiných dat.
 
-To create a variable in JavaScript, use the `let` keyword.
+K vytvoření proměnné v JavaScriptu se používá klíčové slovo `let`.
 
-The statement below creates (in other words: *declares*) a variable with the name "message":
+Níže uvedený příkaz vytvoří (jiným slovem *deklaruje*) proměnnou s názvem „zpráva“:
 
 ```js
-let message;
+let zpráva;
 ```
 
-Now, we can put some data into it by using the assignment operator `=`:
+Nyní do ní můžeme uložit nějaká data pomocí operátoru `=`:
 
 ```js
-let message;
+let zpráva;
 
 *!*
-message = 'Hello'; // store the string 'Hello' in the variable named message
+zpráva = 'Ahoj'; // uložíme řetězec 'Ahoj' do proměnné jménem zpráva
 */!*
 ```
 
-The string is now saved into the memory area associated with the variable. We can access it using the variable name:
+Řetězec se nyní uloží do paměťové oblasti, která je vyhrazena pro tuto proměnnou. Můžeme k ní přistoupit pomocí názvu proměnné:
 
 ```js run
-let message;
-message = 'Hello!';
+let zpráva;
+zpráva = 'Ahoj!';
 
 *!*
-alert(message); // shows the variable content
+alert(zpráva); // zobrazí obsah proměnné
 */!*
 ```
 
-To be concise, we can combine the variable declaration and assignment into a single line:
+Abychom byli stručnější, můžeme zkombinovat deklaraci proměnné a přiřazení dat do jednoho řádku:
 
 ```js run
-let message = 'Hello!'; // define the variable and assign the value
+let zpráva = 'Ahoj!'; // definujeme proměnnou a přiřadíme jí hodnotu
 
-alert(message); // Hello!
+alert(zpráva); // Ahoj!
 ```
 
-We can also declare multiple variables in one line:
+Na jednom řádku můžeme deklarovat i více proměnných:
 
 ```js no-beautify
-let user = 'John', age = 25, message = 'Hello';
+let uživatel = 'Jan', věk = 25, zpráva = 'Ahoj';
 ```
 
-That might seem shorter, but we don't recommend it. For the sake of better readability, please use a single line per variable.
+Může se to zdát kratší, ale nedoporučujeme to. Pro účely lepší čitelnosti raději uvádějte každou proměnnou na novém řádku.
 
-The multiline variant is a bit longer, but easier to read:
+Víceřádková varianta je trochu delší, ale snadněji se čte:
 
 ```js
-let user = 'John';
-let age = 25;
-let message = 'Hello';
+let uživatel = 'Jan';
+let věk = 25;
+let zpráva = 'Ahoj';
 ```
 
-Some people also define multiple variables in this multiline style:
+Někteří lidé definují více proměnných i tímto víceřádkovým stylem:
 ```js no-beautify
-let user = 'John',
-  age = 25,
-  message = 'Hello';
+let uživatel = 'Jan',
+  věk = 25,
+  zpráva = 'Ahoj';
 ```
 
-...Or even in the "comma-first" style:
+...Nebo dokonce tímto stylem „čárka napřed“:
 
 ```js no-beautify
-let user = 'John'
-  , age = 25
-  , message = 'Hello';
+let uživatel = 'Jan'
+  , věk = 25
+  , zpráva = 'Ahoj';
 ```
 
-Technically, all these variants do the same thing. So, it's a matter of personal taste and aesthetics.
+Technicky všechny tyto varianty dělají totéž, takže je to jen otázkou osobního vkusu a estetiky.
 
-````smart header="`var` instead of `let`"
-In older scripts, you may also find another keyword: `var` instead of `let`:
+````smart header="`var` namísto `let`"
+Ve starších skriptech můžete najít i jiné klíčové slovo: `var` namísto `let`:
 
 ```js
-*!*var*/!* message = 'Hello';
+*!*var*/!* zpráva = 'Ahoj';
 ```
 
-The `var` keyword is *almost* the same as `let`. It also declares a variable, but in a slightly different, "old-school" way.
+Klíčové slovo `var` znamená *skoro* totéž jako `let`. Rovněž deklaruje proměnnou, ale trochu jiným, „staroškolským“ způsobem.
 
-There are subtle differences between `let` and `var`, but they do not matter for us yet. We'll cover them in detail in the chapter <info:var>.
+Mezi `let` a `var` existují drobné rozdíly, ale ty nás zatím nezajímají. Podrobně je probereme v kapitole <info:var>.
 ````
 
-## A real-life analogy
+## Analogie s reálným životem
 
-We can easily grasp the concept of a "variable" if we imagine it as a "box" for data, with a uniquely-named sticker on it.
+Koncept „proměnné“ můžeme snadno pochopit, když si ji představíme jako „krabičku“ na data, na níž je nalepen štítek s unikátním názvem.
 
-For instance, the variable `message` can be imagined as a box labeled `"message"` with the value `"Hello!"` in it:
+Například proměnnou `zpráva` si můžeme představit jako krabičku se štítkem `"zpráva"`, v níž je hodnota `"Ahoj!"`:
 
 ![](variable.svg)
 
-We can put any value in the box.
+Do krabičky můžeme uložit libovolnou hodnotu.
 
-We can also change it as many times as we want:
+Můžeme ji také změnit tolikrát, kolikrát chceme:
 ```js run
-let message;
+let zpráva;
 
-message = 'Hello!';
+zpráva = 'Ahoj!';
 
-message = 'World!'; // value changed
+zpráva = 'Světe!'; // hodnota se změní
 
-alert(message);
+alert(zpráva);
 ```
 
-When the value is changed, the old data is removed from the variable:
+Když se hodnota změní, stará data jsou z proměnné odstraněna:
 
 ![](variable-change.svg)
 
-We can also declare two variables and copy data from one into the other.
+Můžeme také deklarovat dvě proměnné a zkopírovat data z jedné do druhé.
 
 ```js run
-let hello = 'Hello world!';
+let ahoj = 'Ahoj světe!';
 
-let message;
+let zpráva;
 
 *!*
-// copy 'Hello world' from hello into message
-message = hello;
+// zkopírujeme 'Ahoj světe!' z proměnné ahoj do proměnné zpráva
+zpráva = ahoj;
 */!*
 
-// now two variables hold the same data
-alert(hello); // Hello world!
-alert(message); // Hello world!
+// nyní obě proměnné obsahují stejná data
+alert(ahoj); // Ahoj světe!
+alert(zpráva); // Ahoj světe!
 ```
 
-````warn header="Declaring twice triggers an error"
-A variable should be declared only once.
+````warn header="Dvojí deklarace způsobí chybu"
+Stejná proměnná může být deklarována pouze jednou.
 
-A repeated declaration of the same variable is an error:
+Opakovaná deklarace stejné proměnné ohlásí chybu:
 
 ```js run
-let message = "This";
+let zpráva = "Toto";
 
-// repeated 'let' leads to an error
-let message = "That"; // SyntaxError: 'message' has already been declared
+// opakované 'let' vede k chybě
+let zpráva = "Tamto"; // Syntaktická chyba: 'zpráva' již byla deklarována
 ```
-So, we should declare a variable once and then refer to it without `let`.
+Proměnnou bychom tedy měli deklarovat jen jednou a pak se na ni odkazovat bez použití `let`.
 ````
 
-```smart header="Functional languages"
-It's interesting to note that there exist [functional](https://en.wikipedia.org/wiki/Functional_programming) programming languages, like [Scala](http://www.scala-lang.org/) or [Erlang](http://www.erlang.org/) that forbid changing variable values.
+```smart header="Funkcionální jazyky"
+Stojí za zmínku, že existují [funkcionální](https://cs.wikipedia.org/wiki/Funkcionální_programování) programovací jazyky, například [Scala](http://www.scala-lang.org/) nebo [Erlang](http://www.erlang.org/), které nedovolují měnit hodnotu proměnných.
 
-In such languages, once the value is stored "in the box", it's there forever. If we need to store something else, the language forces us to create a new box (declare a new variable). We can't reuse the old one.
+Když je v takových jazycích hodnota jednou uložena „do krabičky“, zůstane tam navždy. Pokud chceme uložit něco jiného, jazyk nás přinutí vytvořit novou krabičku (deklarovat novou proměnnou). Nemůžeme znovu použít starou.
 
-Though it may seem a little odd at first sight, these languages are quite capable of serious development. More than that, there are areas like parallel computations where this limitation confers certain benefits. Studying such a language (even if you're not planning to use it soon) is recommended to broaden the mind.
+Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody. Prostudovat si takový jazyk (i když jej neplánujete v dohledné době používat) se doporučuje k procvičení mysli.
 ```
 
-## Variable naming [#variable-naming]
+## Názvy proměnných [#variable-naming]
 
-There are two limitations on variable names in JavaScript:
+V JavaScriptu platí pro názvy proměnných dvě omezení:
 
-1. The name must contain only letters, digits, or the symbols `$` and `_`.
-2. The first character must not be a digit.
+1. Název musí obsahovat pouze písmena, číslice nebo symboly `$` a `_`.
+2. První znak nesmí být číslice.
 
-Examples of valid names:
+Příklady platných názvů:
 
 ```js
-let userName;
+let uživatelskéJméno;
 let test123;
 ```
 
-When the name contains multiple words, [camelCase](https://en.wikipedia.org/wiki/CamelCase) is commonly used. That is: words go one after another, each word except first starting with a capital letter: `myVeryLongName`.
+Když název obsahuje více slov, obvykle se používá tzv. [velbloudí notace](https://cs.wikipedia.org/wiki/CamelCase). To znamená, že slova následují hned za sebou a každé kromě prvního začíná velkým písmenem: `můjVelmiDlouhýNázev`.
 
-What's interesting -- the dollar sign `'$'` and the underscore `'_'` can also be used in names. They are regular symbols, just like letters, without any special meaning.
+Zajímavé je, že v názvech je možné používat i znak dolaru `'$'` a podtržítko `'_'`. Jsou to regulérní symboly bez zvláštního významu, podobně jako písmena.
 
-These names are valid:
+Tyto názvy jsou správné:
 
 ```js run untrusted
-let $ = 1; // declared a variable with the name "$"
-let _ = 2; // and now a variable with the name "_"
+let $ = 1; // deklarujeme proměnnou s názvem "$"
+let _ = 2; // a nyní proměnnou s názvem "_"
 
 alert($ + _); // 3
 ```
 
-Examples of incorrect variable names:
+Příklady nesprávných názvů proměnných:
 
 ```js no-beautify
-let 1a; // cannot start with a digit
+let 1a; // nesmí začínat číslicí
 
-let my-name; // hyphens '-' aren't allowed in the name
+let my-name; // pomlčky '-' nejsou v názvu povoleny
 ```
 
-```smart header="Case matters"
-Variables named `apple` and `AppLE` are two different variables.
+```smart header="Na velikosti záleží"
+Proměnné s názvy `jablko` a `JabLKO` jsou dvě různé proměnné.
 ```
 
-````smart header="Non-Latin letters are allowed, but not recommended"
-It is possible to use any language, including cyrillic letters or even hieroglyphs, like this:
+````smart header="Nelatinská písmena jsou povolena, ale nedoporučují se"
+Je dovoleno použít písmena z jakéhokoli jazyka, včetně písmen z kyrilice nebo dokonce čínských znaků, třeba takto:
 
 ```js
 let имя = '...';
 let 我 = '...';
 ```
 
-Technically, there is no error here. Such names are allowed, but there is an international convention to use English in variable names. Even if we're writing a small script, it may have a long life ahead. People from other countries may need to read it some time.
+Technicky zde není žádná chyba. Takové názvy jsou povoleny, ale podle mezinárodní konvence se v názvech proměnných používá angličtina. I když píšeme malý skript, může mít před sebou dlouhý život a lidé z jiných zemí občas mohou potřebovat si ho přečíst.
 ````
 
-````warn header="Reserved names"
-There is a [list of reserved words](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords), which cannot be used as variable names because they are used by the language itself.
+````warn header="Rezervované názvy"
+Existuje [seznam rezervovaných slov](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords), které nemůžeme používat jako názvy proměnných, protože je již používá samotný jazyk.
 
-For example: `let`, `class`, `return`, and `function` are reserved.
+Například: `let`, `class`, `return`, `function` jsou rezervované.
 
-The code below gives a syntax error:
+Níže uvedený kód ohlásí syntaktickou chybu:
 
 ```js run no-beautify
-let let = 5; // can't name a variable "let", error!
-let return = 5; // also can't name it "return", error!
+let let = 5; // proměnnou nelze pojmenovat "let", chyba!
+let return = 5; // nelze ji ani pojmenovat "return", chyba!
 ```
 ````
 
-````warn header="An assignment without `use strict`"
+````warn header="Přiřazení bez `use strict`"
 
-Normally, we need to define a variable before using it. But in the old times, it was technically possible to create a variable by a mere assignment of the value without using `let`. This still works now if we don't put `use strict` in our scripts to maintain compatibility with old scripts.
+Obvykle musíme proměnnou před použitím definovat. Ve starých časech však bylo technicky možné vytvořit proměnnou pouze přiřazením hodnoty bez použití `let`. Aby byla zaručena kompatibilita se starými skripty, funguje to dodnes, pokud v našich skriptech neuvedeme `use strict`.
 
 ```js run no-strict
-// note: no "use strict" in this example
+// poznámka: v tomto příkladu není "use strict"
 
-num = 5; // the variable "num" is created if it didn't exist
+num = 5; // pokud proměnná "num" ještě neexistuje, je vytvořena
 
 alert(num); // 5
 ```
 
-This is a bad practice and would cause an error in strict mode:
+Je to špatný zvyk a ve striktním režimu vyvolá chybu:
 
 ```js
 "use strict";
 
 *!*
-num = 5; // error: num is not defined
+num = 5; // chyba: num není definováno
 */!*
 ```
 ````
 
-## Constants
+## Konstanty
 
-To declare a constant (unchanging) variable, use `const` instead of `let`:
+Chceme-li deklarovat konstantní (neměnící se) proměnnou, použijeme `const` místo `let`:
 
 ```js
-const myBirthday = '18.04.1982';
+const mojeDatumNarození = '18.04.1982';
 ```
 
-Variables declared using `const` are called "constants". They cannot be reassigned. An attempt to do so would cause an error:
+Proměnné deklarované pomocí `const` se nazývají „konstanty“ a není možné jim přiřadit jinou hodnotu. Pokus o to by ohlásil chybu:
 
 ```js run
-const myBirthday = '18.04.1982';
+const mojeDatumNarození = '18.04.1982';
 
-myBirthday = '01.01.2001'; // error, can't reassign the constant!
+mojeDatumNarození = '01.01.2001'; // chyba, nelze změnit konstantu!
 ```
 
-When a programmer is sure that a variable will never change, they can declare it with `const` to guarantee and clearly communicate that fact to everyone.
+Když má programátor jistotu, že hodnota proměnné se nikdy nezmění, může ji deklarovat pomocí `const`, aby tuto skutečnost pojistil a všem jasně sdělil.
 
 
-### Uppercase constants
+### Konstanty velkými písmeny
 
-There is a widespread practice to use constants as aliases for difficult-to-remember values that are known prior to execution.
+Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu. Názvy takových konstant se uvádějí velkými písmeny a s podtržítky.
 
-Such constants are named using capital letters and underscores.
-
-For instance, let's make constants for colors in so-called "web" (hexadecimal) format:
+Například vytvoříme konstanty pro barvy v tzv. „webovém“ (hexadecimálním) formátu:
 
 ```js run
-const COLOR_RED = "#F00";
-const COLOR_GREEN = "#0F0";
-const COLOR_BLUE = "#00F";
-const COLOR_ORANGE = "#FF7F00";
+const BARVA_ČERVENÁ = "#F00";
+const BARVA_ZELENÁ = "#0F0";
+const BARVA_MODRÁ = "#00F";
+const BARVA_ORANŽOVÁ = "#FF7F00";
 
-// ...when we need to pick a color
-let color = COLOR_ORANGE;
-alert(color); // #FF7F00
+// ...když si máme zvolit barvu
+let barva = BARVA_ORANŽOVÁ;
+alert(barva); // #FF7F00
 ```
 
-Benefits:
+Výhody:
 
-- `COLOR_ORANGE` is much easier to remember than `"#FF7F00"`.
-- It is much easier to mistype `"#FF7F00"` than `COLOR_ORANGE`.
-- When reading the code, `COLOR_ORANGE` is much more meaningful than `#FF7F00`.
+- `BARVA_ORANŽOVÁ` se pamatuje mnohem lépe než `"#FF7F00"`.
+- Je mnohem snadnější špatně napsat `"#FF7F00"` než `BARVA_ORANŽOVÁ`.
+- Při čtení kódu dává `BARVA_ORANŽOVÁ` mnohem větší smysl než `#FF7F00`.
 
-When should we use capitals for a constant and when should we name it normally? Let's make that clear.
+Kdy bychom měli používat pro konstantu velká písmena a kdy bychom ji měli pojmenovat obvyklým způsobem? Ujasníme si to.
 
-Being a "constant" just means that a variable's value never changes. But there are constants that are known prior to execution (like a hexadecimal value for red) and there are constants that are *calculated* in run-time, during the execution, but do not change after their initial assignment.
+Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Existují však konstanty, které jsou známy již před spuštěním programu (například hexadecimální hodnota červené barvy), a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
 
-For instance:
+Příklad:
 ```js
-const pageLoadTime = /* time taken by a webpage to load */;
+const dobaNačítáníStránky = /* doba, kterou trvá načíst webovou stránku */;
 ```
 
-The value of `pageLoadTime` is not known prior to the page load, so it's named normally. But it's still a constant because it doesn't change after assignment.
+Hodnota proměnné `dobaNačítáníStránky` není známa dříve, než se stránka načte, proto je pojmenována obvyklým způsobem. Je to však konstanta, protože se po přiřazení již nezmění.
 
-In other words, capital-named constants are only used as aliases for "hard-coded" values.  
+Jinými slovy, názvy konstant zapsané velkými písmeny se používají jen pro pojmenování „natvrdo uvedených“ hodnot.
 
-## Name things right
+## Pojmenovávejte věci správně
 
-Talking about variables, there's one more extremely important thing.
+Když už mluvíme o proměnných, je tady jedna velice důležitá věc.
 
-A variable name should have a clean, obvious meaning, describing the data that it stores.
+Název proměnné by měl mít jasný a jednoznačný význam a měl by popisovat data, která jsou v proměnné uložena.
 
-Variable naming is one of the most important and complex skills in programming. A quick glance at variable names can reveal which code was written by a beginner versus an experienced developer.
+Pojmenovávání proměnných je jednou z nejdůležitějších a nejsložitějších dovedností v programování. Rychlý pohled na názvy proměnných nám může prozradit, zda kód psal začátečník nebo zkušený vývojář.
 
-In a real project, most of the time is spent modifying and extending an existing code base rather than writing something completely separate from scratch. When we return to some code after doing something else for a while, it's much easier to find information that is well-labeled. Or, in other words, when the variables have good names.
+V reálných projektech většinu času nezabere psaní něčeho úplně nového od základů, ale úprava a rozšiřování již existujícího kódu. Když se vrátíme k nějakému kódu poté, co jsme nějakou dobu dělali něco jiného, je mnohem jednodušší najít potřebné informace, když jsou vhodně pojmenovány. Nebo, jinými slovy, když proměnné mají vhodné názvy.
 
-Please spend time thinking about the right name for a variable before declaring it. Doing so will repay you handsomely.
+Než deklarujete proměnnou, dobře si promyslete její správný název. Bohatě se vám to vyplatí.
 
-Some good-to-follow rules are:
+Některá pravidla, která je vhodné dodržovat, jsou:
 
-- Use human-readable names like `userName` or `shoppingCart`.
-- Stay away from abbreviations or short names like `a`, `b`, `c`, unless you really know what you're doing.
-- Make names maximally descriptive and concise. Examples of bad names are `data` and `value`. Such names say nothing. It's only okay to use them if the context of the code makes it exceptionally obvious which data or value the variable is referencing.
-- Agree on terms within your team and in your own mind. If a site visitor is called a "user" then we should name related variables `currentUser` or `newUser` instead of `currentVisitor` or `newManInTown`.
+- Používejte názvy čitelné člověkem, například `uživatelskéJméno` nebo `nákupníVozík`.
+- Zdržte se zkratek nebo krátkých názvů typu `a`, `b`, `c`, leda že byste opravdu dobře věděli, co děláte.
+- Volte názvy co nejpopisnější a nejstručnější. Příklady špatných názvů jsou `data` nebo `hodnota`. Takové názvy nic neříkají. Je vhodné je používat jen tehdy, když je z kontextu kódu naprosto zřejmé, jaká data nebo hodnota se v proměnné nachází.
+- Dohodněte se na pojmech se svým týmem a promyslete si je. Jestliže se návštěvník stránky nazývá „uživatel“, pak byste příslušné proměnné měli pojmenovat `aktuálníUživatel` nebo `novýUživatel`, a ne `aktuálníNávštěvník` nebo `novýPánVeMěstě`.
 
-Sounds simple? Indeed it is, but creating descriptive and concise variable names in practice is not. Go for it.
+Zní to jednoduše? Bezpochyby ano, ale vytvářet popisné a stručné názvy proměnných v praxi jednoduché není. Jděte do toho.
 
-```smart header="Reuse or create?"
-And the last note. There are some lazy programmers who, instead of declaring new variables, tend to reuse existing ones.
+```smart header="Vytvořit novou nebo použít starou?"
+A jedna poznámka na závěr. Existují líní programátoři, kteří místo deklarace nové proměnné mají sklon znovu použít starou.
 
-As a result, their variables are like boxes into which people throw different things without changing their stickers. What's inside the box now? Who knows? We need to come closer and check.
+Výsledkem je, že jejich proměnné připomínají krabičky, do nichž lidé dávají různé věci, aniž by se obtěžovali změnit štítek. Co je právě teď v krabičce? Kdo ví? Musíme přijít blíž a podívat se.
 
-Such programmers save a little bit on variable declaration but lose ten times more on debugging.
+Takoví programátoři ušetří trochu času deklarací proměnné, ale desetkrát víc času ztratí při ladění.
 
-An extra variable is good, not evil.
+Proměnná navíc je dobro, ne zlo.
 
-Modern JavaScript minifiers and browsers optimize code well enough, so it won't create performance issues. Using different variables for different values can even help the engine optimize your code.
+Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečně dobře optimalizovat, takže nenastane problém s výkonem. Používání různých proměnných pro různé hodnoty dokonce enginu pomůže optimalizovat váš kód.
 ```
 
-## Summary
+## Shrnutí
 
-We can declare variables to store data by using the `var`, `let`, or `const` keywords.
+Deklarovat proměnné pro ukládání dat můžeme pomocí klíčových slov `var`, `let` nebo `const`.
 
-- `let` -- is a modern variable declaration.
-- `var` -- is an old-school variable declaration. Normally we don't use it at all, but we'll cover subtle differences from `let` in the chapter <info:var>, just in case you need them.
-- `const` -- is like `let`, but the value of the variable can't be changed.
+- `let` -- je moderní deklarace proměnné.
+- `var` -- je deklarace proměnné ze staré školy. Obvykle ji vůbec nepoužíváme, ale v kapitole <info:var> probereme drobné rozdíly oproti `let` pro případ, že byste je potřebovali.
+- `const` -- je jako `let`, ale hodnota proměnné se nesmí měnit.
 
-Variables should be named in a way that allows us to easily understand what's inside them.
+Proměnné by měly být pojmenovány tak, abychom snadno pochopili, co obsahují.
