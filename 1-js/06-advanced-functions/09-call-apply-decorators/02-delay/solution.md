@@ -1,7 +1,7 @@
-The solution:
+Řešení:
 
 ```js run demo
-function delay(f, ms) {
+function čekej(f, ms) {
 
   return function() {
     setTimeout(() => f.apply(this, arguments), ms);
@@ -9,24 +9,24 @@ function delay(f, ms) {
 
 }
 
-let f1000 = delay(alert, 1000);
+let f1000 = čekej(alert, 1000);
 
-f1000("test"); // shows "test" after 1000ms
+f1000("test"); // zobrazí "test" za 1000 ms
 ```
 
-Please note how an arrow function is used here. As we know, arrow functions do not have own `this` and `arguments`, so `f.apply(this, arguments)` takes `this` and `arguments` from the wrapper.
+Prosíme všimněte si, jak je zde použita šipková funkce. Jak víme, šipkové funkce nemají vlastní `this` ani `arguments`, takže `f.apply(this, arguments)` převezme `this` a `arguments` z wrapperu.
 
-If we pass a regular function, `setTimeout` would call it without arguments and `this=window` (assuming we're in the browser).
+Předáme-li běžnou funkci, `setTimeout` ji bude volat bez argumentů a `this=window` (za předpokladu, že jsme v prohlížeči).
 
-We still can pass the right `this` by using an intermediate variable, but that's a little bit more cumbersome:
+Stále můžeme předávat pravé `this` pomocí dočasné proměnné, ale to je trochu pracnější:
 
 ```js
-function delay(f, ms) {
+function čekej(f, ms) {
 
-  return function(...args) {
-    let savedThis = this; // store this into an intermediate variable
+  return function(...argumenty) {
+    let uloženéThis = this; // uloží this do dočasné proměnné
     setTimeout(function() {
-      f.apply(savedThis, args); // use it here
+      f.apply(uloženéThis, argumenty); // zde ji použijeme
     }, ms);
   };
 

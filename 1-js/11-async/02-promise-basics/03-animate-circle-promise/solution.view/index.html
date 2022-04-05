@@ -22,18 +22,18 @@
 
 <body>
 
-  <button onclick="go()">Click me</button>
+  <button onclick="spusť()">Klikni na mne</button>
 
   <script>
 
-  function go() {
-    showCircle(150, 150, 100).then(div => {
+  function spusť() {
+    zobrazKruh(150, 150, 100).then(div => {
       div.classList.add('message-ball');
-      div.append("Hello, world!");
+      div.append("Ahoj, světe!");
     });
   }
 
-  function showCircle(cx, cy, radius) {
+  function zobrazKruh(cx, cy, poloměr) {
     let div = document.createElement('div');
     div.style.width = 0;
     div.style.height = 0;
@@ -44,8 +44,8 @@
 
     return new Promise(resolve => {
       setTimeout(() => {
-        div.style.width = radius * 2 + 'px';
-        div.style.height = radius * 2 + 'px';
+        div.style.width = poloměr * 2 + 'px';
+        div.style.height = poloměr * 2 + 'px';
 
         div.addEventListener('transitionend', function handler() {
           div.removeEventListener('transitionend', handler);

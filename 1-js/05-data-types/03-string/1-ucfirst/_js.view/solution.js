@@ -1,5 +1,5 @@
-function ucFirst(str) {
-  if (!str) return str;
+function velkéPrvníPísmeno(řetězec) {
+  if (!řetězec) return řetězec;
 
-  return str[0].toUpperCase() + str.slice(1);
+  return řetězec[0].toUpperCase() + řetězec.slice(1);
 }

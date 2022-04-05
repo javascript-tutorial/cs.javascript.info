@@ -1,44 +1,44 @@
-# Code structure
+# Struktura kódu
 
-The first thing we'll study is the building blocks of code.
+První, co si prostudujeme, jsou stavební bloky kódu.
 
-## Statements
+## Příkazy
 
-Statements are syntax constructs and commands that perform actions.
+Příkazy (anglicky statement) jsou syntaktické konstrukce a povely, které provádějí akce.
 
-We've already seen a statement, `alert('Hello, world!')`, which shows the message "Hello, world!".
+Už jsme viděli příkaz `alert('Ahoj, světe!')`, který zobrazuje zprávu „Ahoj, světe!“.
 
-We can have as many statements in our code as we want. Statements can be separated with a semicolon.
+V kódu můžeme mít tolik příkazů, kolik chceme. Příkazy mohou být odděleny středníkem.
 
-For example, here we split "Hello World" into two alerts:
-
-```js run no-beautify
-alert('Hello'); alert('World');
-```
-
-Usually, statements are written on separate lines to make the code more readable:
+Například zde rozdělíme „Ahoj světe“ na dvě zprávy:
 
 ```js run no-beautify
-alert('Hello');
-alert('World');
+alert('Ahoj'); alert('Světe');
 ```
 
-## Semicolons [#semicolon]
-
-A semicolon may be omitted in most cases when a line break exists.
-
-This would also work:
+Každý příkaz obvykle píšeme na nový řádek, aby kód byl čitelnější:
 
 ```js run no-beautify
-alert('Hello')
-alert('World')
+alert('Ahoj');
+alert('Světe');
 ```
 
-Here, JavaScript interprets the line break as an "implicit" semicolon. This is called an [automatic semicolon insertion](https://tc39.github.io/ecma262/#sec-automatic-semicolon-insertion).
+## Středníky [#semicolon]
 
-**In most cases, a newline implies a semicolon. But "in most cases" does not mean "always"!**
+Ve většině případů, kdy je uveden konec řádku, můžeme středník vynechat.
 
-There are cases when a newline does not mean a semicolon. For example:
+Toto by také fungovalo:
+
+```js run no-beautify
+alert('Ahoj')
+alert('Světe')
+```
+
+Zde JavaScript interpretuje konec řádku jako „implicitní“ středník. Takové chování se nazývá [automatické vkládání středníku](https://tc39.github.io/ecma262/#sec-automatic-semicolon-insertion).
+
+**Ve většině případů nový řádek znamená středník, ale „ve většině případů“ neznamená „vždy“!**
+
+Existují případy, v nichž nový řádek neznamená středník. Například:
 
 ```js run no-beautify
 alert(3 +
@@ -46,14 +46,14 @@ alert(3 +
 + 2);
 ```
 
-The code outputs `6` because JavaScript does not insert semicolons here. It is intuitively obvious that if the line ends with a plus `"+"`, then it is an "incomplete expression", so a semicolon there would be incorrect. And in this case, that works as intended.
+Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je intuitivně zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník by byl nesprávný. V tomto případě to bude fungovat tak, jak očekáváme.
 
-**But there are situations where JavaScript "fails" to assume a semicolon where it is really needed.**
+**Existují však situace, v nichž JavaScript „nedokáže“ vložit středník tam, kde je opravdu zapotřebí.**
 
-Errors which occur in such cases are quite hard to find and fix.
+V takových případech nastanou chyby, které je poměrně těžké najít a opravit.
 
-````smart header="An example of an error"
-If you're curious to see a concrete example of such an error, check this code out:
+````smart header="Příklad chyby"
+Pokud jste zvědaví na konkrétní příklad takové chyby, zkuste si tento kód:
 
 ```js run
 alert("Hello");
@@ -61,95 +61,91 @@ alert("Hello");
 [1, 2].forEach(alert);
 ```
 
-No need to think about the meaning of the brackets `[]` and `forEach` yet. We'll study them later. For now, just remember the result of running the code: it shows `Hello`, then `1`, then `2`.
+O významu hranatých závorek `[]` a klíčového slova `forEach` zatím nemusíte přemýšlet. To probereme později. Nyní si jen zapamatujte výsledek kódu: zobrazí `Ahoj`, pak `1`, pak `2`.
 
-Now let's remove the semicolon after the `alert`:
+Nyní odstraníme středník před `alert`:
 
 ```js run no-beautify
-alert("Hello")
+alert("Ahoj")
 
 [1, 2].forEach(alert);
 ```
 
-The difference compared to the code above is only one character: the semicolon at the end of the first line is gone.
+Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku zmizel.
 
-If we run this code, only the first `Hello` shows (and there's an error, you may need to open the console to see it). There are no numbers any more.
+Když tento kód nyní spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
 
-That's because JavaScript does not assume a semicolon before square brackets `[...]`. So, the code in the last example is treated as a single statement.
+Je to proto, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`. S kódem v prvním příkladu se tedy zachází jako s jediným příkazem.
 
-Here's how the engine sees it:
+Takto jej vidí engine:
 
 ```js run no-beautify
-alert("Hello")[1, 2].forEach(alert);
+alert("Ahoj")[1, 2].forEach(alert);
 ```
 
-Looks weird, right? Such merging in this case is just wrong. We need to put a semicolon after `alert` for the code to work correctly.
+Vypadá to divně, že? Sloučení řádků v tomto případě je prostě špatně. Za `alert` musíme vložit středník, aby kód správně fungoval.
 
-This can happen in other situations also.
+To se může stát i v jiných situacích.
 ````
 
-We recommend putting semicolons between statements even if they are separated by newlines. This rule is widely adopted by the community. Let's note once again -- *it is possible* to leave out semicolons most of the time. But it's safer -- especially for a beginner -- to use them.
+Doporučujeme vám psát středníky mezi příkazy i tehdy, když je odděluje konec řádku. Toto pravidlo je v komunitě všeobecně přijímáno. Zmíníme to ještě jednou -- ve většině případů *je možné* středník vypustit. Je však bezpečnější -- zejména pro začátečníky -- jej používat.
 
-## Comments [#code-comments]
+## Komentáře [#code-comments]
 
-As time goes on, programs become more and more complex. It becomes necessary to add *comments* which describe what the code does and why.
+S postupem času se programy stávají stále složitějšími a složitějšími, a proto je nutné do nich vkládat *komentáře*, které popisují, co kód dělá a proč.
 
-Comments can be put into any place of a script. They don't affect its execution because the engine simply ignores them.
+Komentáře můžeme vkládat na kterékoli místo ve skriptu. Nemají vliv na jeho výkon, protože je engine jednoduše ignoruje.
 
-**One-line comments start with two forward slash characters `//`.**
+**Jednořádkové komentáře jsou uvozeny dvěma lomítky `//`.**
 
-The rest of the line is a comment. It may occupy a full line of its own or follow a statement.
+Celý zbytek řádku je komentář. Může být umístěn na samostatném řádku nebo za příkazem.
 
-Like here:
+Například zde:
 ```js run
-// This comment occupies a line of its own
-alert('Hello');
+// Tento komentář je umístěn na samostatném řádku
+alert('Ahoj');
 
-alert('World'); // This comment follows the statement
+alert('světe'); // Tento komentář následuje za příkazem
 ```
 
-**Multiline comments start with a forward slash and an asterisk <code>/&#42;</code> and end with an asterisk and a forward slash <code>&#42;/</code>.**
+**Víceřádkové komentáře začínají lomítkem a hvězdičkou <code>/&#42;</code> a končí hvězdičkou a lomítkem <code>&#42;/</code>.**
 
-Like this:
+Například takto:
 
 ```js run
-/* An example with two messages.
-This is a multiline comment.
+/* Příklad se dvěma zprávami.
+Toto je víceřádkový komentář.
 */
-alert('Hello');
-alert('World');
+alert('Ahoj');
+alert('světe');
 ```
 
-The content of comments is ignored, so if we put code inside <code>/&#42; ... &#42;/</code>, it won't execute.
+Obsah komentáře se ignoruje, proto jestliže mezi <code>/&#42; ... &#42;/</code> vložíme kód, neprovede se.
 
-Sometimes it can be handy to temporarily disable a part of code:
+Někdy může přijít vhod dočasně zneplatnit část kódu:
 
 ```js run
-/* Commenting out the code
-alert('Hello');
+/* Zakomentovaný kód
+alert('Ahoj');
 */
-alert('World');
+alert('světe');
 ```
 
-```smart header="Use hotkeys!"
-In most editors, a line of code can be commented out by pressing the `key:Ctrl+/` hotkey for a single-line comment and something like `key:Ctrl+Shift+/` -- for multiline comments (select a piece of code and press the hotkey). For Mac, try `key:Cmd` instead of `key:Ctrl` and `key:Option` instead of `key:Shift`.
+```smart header="Používejte horké klávesy!"
+Ve většině editorů se dá řádek kódu zakomentovat stisknutím klávesy `key:Ctrl+/` pro jednořádkový komentář a `key:Ctrl+Shift+/` nebo podobné kombinace pro víceřádkový komentář (označte část kódu jako blok a stiskněte uvedené klávesy). Na Macu zkuste `key:Cmd` místo `key:Ctrl` a `key:Option` místo `key:Shift`.
 ```
 
-````warn header="Nested comments are not supported!"
-There may not be `/*...*/` inside another `/*...*/`.
-
-Such code will die with an error:
+````warn header="Vnořené komentáře nejsou povoleny!"
+Uvnitř `/*...*/` nesmí být další `/*...*/`. Takový kód skončí s chybou:
 
 ```js run no-beautify
 /*
-  /* nested comment ?!? */
+  /* vnořený komentář ?!? */
 */
-alert( 'World' );
+alert( 'světe' );
 ```
 ````
 
-Please, don't hesitate to comment your code.
+Neváhejte do svého kódu vkládat komentáře. Sice zvětšují velikost kódu, ale to není vůbec žádný problém. Existuje mnoho nástrojů, které kód před publikací na produkčním serveru minimalizují a odstraní z něj komentáře, takže ty se v prováděných skriptech neobjeví. Komentáře tedy nemají vůbec žádný negativní efekt na výkon.
 
-Comments increase the overall code footprint, but that's not a problem at all. There are many tools which minify code before publishing to a production server. They remove comments, so they don't appear in the working scripts. Therefore, comments do not have negative effects on production at all.
-
-Later in the tutorial there will be a chapter <info:code-quality> that also explains how to write better comments.
+Později v tomto tutoriálu budeme mít kapitolu <info:code-quality>, která nám vysvětlí, jak psát komentáře co nejlépe.

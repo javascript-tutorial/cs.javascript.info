@@ -1,340 +1,341 @@
-# Promise
+# Příslib
 
-Imagine that you're a top singer, and fans ask day and night for your upcoming song.
+Představte si, že jste špičkový zpěvák a vaši fanoušci se dnem i nocí dožadují vaší nejnovější písně.
 
-To get some relief, you promise to send it to them when it's published. You give your fans a list. They can fill in their email addresses, so that when the song becomes available, all subscribed parties instantly receive it. And even if something goes very wrong, say, a fire in the studio, so that you can't publish the song, they will still be notified.
+Abyste získali trochu klidu, slíbíte jim, že jim píseň pošlete, až bude vydána. Dáte svým fanouškům seznam. Mohou do něj vyplnit svou emailovou adresu, takže až bude píseň k dispozici, všichni podepsaní ji okamžitě dostanou. A i kdyby se něco ošklivě pokazilo, například kdyby vyhořelo nahrávací studio a vy byste nemohli svou píseň vydat, stále byste jim to mohli oznámit.
 
-Everyone is happy: you, because the people don't crowd you anymore, and fans, because they won't miss the song.
+Všichni jsou šťastní: vy, protože vás lidé už neobléhají, a fanoušci, protože o píseň nepřijdou.
 
-This is a real-life analogy for things we often have in programming:
+To je analogie ze skutečného života s tím, co často máme v programování:
 
-1. A "producing code" that does something and takes time. For instance, some code that loads the data over a network. That's a "singer".
-2. A "consuming code" that wants the result of the "producing code" once it's ready. Many functions  may need that result. These are the "fans".
-3. A *promise* is a special JavaScript object that links the "producing code" and the "consuming code" together. In terms of our analogy: this is the "subscription list". The "producing code" takes whatever time it needs to produce the promised result, and the "promise" makes that result available to all of the subscribed code when it's ready.
+1. „Produkující kód“, který něco provádí a nějakou dobu mu to trvá. Například kód, který načítá data ze sítě. To je „zpěvák“.
+2. „Konzumující kód“, který chce mít výsledek „produkujícího kódu“, až bude připraven. Tento výsledek může být potřeba v mnoha funkcích. To jsou „fanoušci“.
+3. *Příslib* (anglicky *promise*) je speciální JavaScriptový objekt, který spojuje „produkující kód“ a „konzumující kód“ dohromady. V pojmech naší analogie to je „podpisový seznam“. „Produkující kód“ dostane čas, který potřebuje k vyprodukování slibovaného výsledku, a „příslib“ zprostředkuje výsledek veškerému podepsanému kódu, až bude připraven.
 
-The analogy isn't terribly accurate, because JavaScript promises are more complex than a simple subscription list: they have additional features and limitations. But it's fine to begin with.
+Tato analogie není zcela přesná, protože JavaScriptové přísliby jsou složitější než pouhý podpisový seznam: mají další možnosti a omezení. Pro začátek však postačí.
 
-The constructor syntax for a promise object is:
+Syntaxe konstruktoru objektu příslibu je:
 
 ```js
-let promise = new Promise(function(resolve, reject) {
-  // executor (the producing code, "singer")
+let příslib = new Promise(function(resolve, reject) {
+  // exekutor (produkující kód, „zpěvák“)
 });
 ```
 
-The function passed to `new Promise` is called the *executor*. When `new Promise` is created, the executor runs automatically. It contains the producing code which should eventually produce the result. In terms of the analogy above: the executor is the "singer".
+Funkce předaná do konstruktoru `new Promise` se nazývá *exekutor*. Když je vytvořen `new Promise`, exekutor se automaticky spustí. Obsahuje produkující kód, který by měl nakonec vyprodukovat výsledek. V pojmech výše uvedené analogie: exekutor je „zpěvák“.
 
-Its arguments `resolve` and `reject` are callbacks provided by JavaScript itself. Our code is only inside the executor.
+Jeho argumenty `resolve` a `reject` jsou callbacky, které poskytuje samotný JavaScript. Náš kód je obsažen pouze v exekutoru.
 
-When the executor obtains the result, be it soon or late, doesn't matter, it should call one of these callbacks:
+Když exekutor získá výsledek, ať je to dříve či později, na tom nezáleží, měl by volat jeden z těchto callbacků:
 
-- `resolve(value)` — if the job is finished successfully, with result `value`.
-- `reject(error)` — if an error has occurred, `error` is the error object.
+- `resolve(hodnota)` — pokud práce skončila úspěšně, s výsledkem `hodnota`.
+- `reject(chyba)` — pokud došlo k chybě, `chyba` je chybový objekt.
 
-So to summarize: the executor runs automatically and attempts to perform a job. When it is finished with the attempt, it calls `resolve` if it was successful or `reject` if there was an error.
+Když to tedy shrneme: exekutor se automaticky spustí a pokusí se provést svou práci. Když je s tímto pokusem hotov, volá buď `resolve`, jestliže byl úspěšný, nebo `reject`, pokud nastala chyba.
 
-The `promise` object returned by the `new Promise` constructor has these internal properties:
+Objekt `příslib` vracený konstruktorem `new Promise` obsahuje tyto interní vlastnosti:
 
-- `state` — initially `"pending"`, then changes to either `"fulfilled"` when `resolve` is called or `"rejected"` when `reject` is called.
-- `result` — initially `undefined`, then changes to `value` when `resolve(value)` called or `error` when `reject(error)` is called.
+- `state` — na začátku `"pending"` *(„čekající na vyřízení“)*, pak se změní buď na `"fulfilled"` *(„splněný“)*, když je voláno `resolve`, nebo na `"rejected"` *(„zamítnutý“)*, když je voláno `reject`.
+- `result` — na začátku `undefined`, pak se změní buď na `hodnota`, když je voláno `resolve(hodnota)`, nebo na `chyba`, když je voláno `reject(chyba)`.
 
-So the executor eventually moves `promise` to one of these states:
+Exekutor tedy nakonec uvede objekt `příslib` do jednoho z těchto stavů:
 
 ![](promise-resolve-reject.svg)
 
-Later we'll see how "fans" can subscribe to these changes.
+Později uvidíme, jak se na tyto změny mohou zapsat „fanoušci“.
 
-Here's an example of a promise constructor and a simple executor function with  "producing code" that takes time (via `setTimeout`):
+Zde je příklad konstruktoru příslibu a jednoduchý exekutor s „produkujícím kódem“, který zabere nějaký čas (pomocí `setTimeout`):
 
 ```js run
-let promise = new Promise(function(resolve, reject) {
-  // the function is executed automatically when the promise is constructed
+let příslib = new Promise(function(resolve, reject) {
+  // tato funkce se spustí automaticky, když se vytvoří příslib
 
-  // after 1 second signal that the job is done with the result "done"
-  setTimeout(() => *!*resolve("done")*/!*, 1000);
+  // po 1 sekundě signalizuje, že práce je hotová s výsledkem „hotovo“
+  setTimeout(() => *!*resolve("hotovo")*/!*, 1000);
 });
 ```
 
-We can see two things by running the code above:
+Při spuštění uvedeného kódu uvidíme dvě věci:
 
-1. The executor is called automatically and immediately (by `new Promise`).
-2. The executor receives two arguments: `resolve` and `reject`. These functions are pre-defined by the JavaScript engine, so we don't need to create them. We should only call one of them when ready.
+1. Exekutor je volán automaticky a okamžitě (pomocí `new Promise`).
+2. Exekutor obdrží dva argumenty: `resolve` a `reject`. Tyto funkce jsou předdefinovány enginem JavaScriptu, takže je nemusíme vytvářet. Měli bychom jen volat jednu z nich, až budeme připraveni.
 
-    After one second of "processing" the executor calls `resolve("done")` to produce the result. This changes the state of the `promise` object:
+    Po jedné sekundě „zpracovávání“ exekutor zavolá `resolve("hotovo")`, aby vytvořil výsledek. Tím se změní stav objektu `příslib`:
 
-    ![](promise-resolve-1.svg)
+![](promise-resolve-1.svg)
 
-That was an example of a successful job completion, a "fulfilled promise".
+To byl příklad úspěšného dokončení práce, „splněný příslib“.
 
-And now an example of the executor rejecting the promise with an error:
+A nyní uvedeme příklad exekutoru, který zamítne příslib s chybou:
 
 ```js
-let promise = new Promise(function(resolve, reject) {
-  // after 1 second signal that the job is finished with an error
-  setTimeout(() => *!*reject(new Error("Whoops!"))*/!*, 1000);
+let příslib = new Promise(function(resolve, reject) {
+  // po 1 sekundě signalizuje, že práce je hotová s chybou
+  setTimeout(() => *!*reject(new Error("Ouha!"))*/!*, 1000);
 });
 ```
 
-The call to `reject(...)` moves the promise object to `"rejected"` state:
+Volání `reject(...)` uvede objekt příslibu do stavu `"rejected"`:
 
 ![](promise-reject-1.svg)
 
-To summarize, the executor should perform a job (usually something that takes time) and then call `resolve` or `reject` to change the state of the corresponding promise object.
+Když to tedy shrneme, exekutor by měl provést nějakou práci (zpravidla něco, co zabere nějaký čas) a pak volat buď `resolve`, nebo `reject`, aby změnil stav odpovídajícího objektu příslibu.
 
-A promise that is either resolved or rejected is called "settled", as opposed to an initially "pending" promise.
+Příslib, který je buď vyřešený, nebo zamítnutý, se nazývá „usazený“ *(„settled“)*, oproti původně „čekajícímu“ *(„pending“)* příslibu.
 
-````smart header="There can be only a single result or an error"
-The executor should call only one `resolve` or one `reject`. Any state change is final.
+````smart header="Výsledek nebo chyba může být pouze jeden"
+Exekutor by měl volat pouze jednou `resolve` nebo jednou `reject`. Jakákoli změna stavu je konečná.
 
-All further calls of `resolve` and `reject` are ignored:
+Veškerá další volání `resolve` a `reject` jsou ignorována:
 
 ```js
-let promise = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(resolve, reject) {
 *!*
-  resolve("done");
+  resolve("hotovo");
 */!*
 
-  reject(new Error("…")); // ignored
-  setTimeout(() => resolve("…")); // ignored
+  reject(new Error("…")); // ignorováno
+  setTimeout(() => resolve("…")); // ignorováno
 });
 ```
 
-The idea is that a job done by the executor may have only one result or an error.
+Myšlenkou je, že práce prováděná exekutorem může mít pouze jeden výsledek nebo chybu.
 
-Also, `resolve`/`reject` expect only one argument (or none) and will ignore additional arguments.
+Navíc `resolve`/`reject` očekává pouze jediný argument (nebo žádný) a všechny další argumenty bude ignorovat.
 ````
 
-```smart header="Reject with `Error` objects"
-In case something goes wrong, the executor should call `reject`. That can be done with any type of argument (just like `resolve`). But it is recommended to use `Error` objects (or objects that inherit from `Error`). The reasoning for that will soon become apparent.
+```smart header="Zamítnutí s objekty třídy `Error`"
+V případě, že se něco pokazí, by exekutor měl volat `reject`. To je možné volat s argumentem libovolného typu (stejně jako `resolve`). Doporučuje se však používat objekty třídy `Error` (nebo objekty zděděné z třídy `Error`). Důvod bude brzy zřejmý.
 ```
 
-````smart header="Immediately calling `resolve`/`reject`"
-In practice, an executor usually does something asynchronously and calls `resolve`/`reject` after some time, but it doesn't have to. We also can call `resolve` or `reject` immediately, like this:
+````smart header="Okamžité volání `resolve`/`reject`"
+V praxi exekutor obvykle provádí něco asynchronně a volá `resolve`/`reject` až za nějakou dobu, ale to nemusí. Můžeme volat `resolve` nebo `reject` i okamžitě, například:
 
 ```js
-let promise = new Promise(function(resolve, reject) {
-  // not taking our time to do the job
-  resolve(123); // immediately give the result: 123
+let příslib = new Promise(function(resolve, reject) {
+  // odvést tuto práci nám nezabere žádný čas
+  resolve(123); // okamžitě vydáme výsledek: 123
 });
 ```
 
-For instance, this might happen when we start to do a job but then see that everything has already been completed and cached.
+Může se to stát například tehdy, když začneme dělat nějakou práci, ale pak uvidíme, že všechno už bylo dokončeno a uloženo do cache.
 
-That's fine. We immediately have a resolved promise.
+To je pěkné. Hned máme příslib splněný.
 ````
 
-```smart header="The `state` and `result` are internal"
-The properties `state` and `result` of the Promise object are internal. We can't directly access them. We can use the methods `.then`/`.catch`/`.finally` for that. They are described below.
+```smart header="Vlastnosti `state` a `result` jsou interní"
+Vlastnosti `state` a `result` objektu Promise jsou interní. Nemůžeme k nim přistupovat přímo. Můžeme k tomu použít metody `.then`/`.catch`/`.finally`, které jsou popsány níže.
 ```
 
-## Consumers: then, catch, finally
+## Konzumenti: then, catch, finally
 
-A Promise object serves as a link between the executor (the "producing code" or "singer") and the consuming functions (the "fans"), which will receive the result or error. Consuming functions can be registered (subscribed) using methods `.then`, `.catch` and `.finally`.
+Objekt Promise slouží jako spojení mezi exekutorem („produkující kód“ nebo „zpěvák“) a konzumujícími funkcemi („fanoušci“), které obdrží výsledek nebo chybu. Konzumující funkce můžeme registrovat (zapsat) použitím metod `.then`, `.catch` a `.finally`.
 
 ### then
 
-The most important, fundamental one is `.then`.
+Základní a nejdůležitější z nich je `.then`.
 
-The syntax is:
+Její syntaxe je:
 
 ```js
-promise.then(
-  function(result) { *!*/* handle a successful result */*/!* },
-  function(error) { *!*/* handle an error */*/!* }
+příslib.then(
+  function(výsledek) { *!*/* zpracování úspěšného výsledku */*/!* },
+  function(chyba) { *!*/* zpracování chyby */*/!* }
 );
 ```
 
-The first argument of `.then` is a function that runs when the promise is resolved, and receives the result.
+Prvním argumentem `.then` je funkce, která se spustí, když je příslib splněn, a obdrží výsledek.
 
-The second argument of `.then` is a function that runs when the promise is rejected, and receives the error.
+Druhým argumentem `.then` je funkce, která se spustí, když je příslib zamítnut, a obdrží chybu.
 
-For instance, here's a reaction to a successfully resolved promise:
+Například zde je reakce na úspěšně provedený příslib:
 
 ```js run
-let promise = new Promise(function(resolve, reject) {
-  setTimeout(() => resolve("done!"), 1000);
+let příslib = new Promise(function(resolve, reject) {
+  setTimeout(() => resolve("hotovo!"), 1000);
 });
 
-// resolve runs the first function in .then
-promise.then(
+// resolve spustí první funkci v .then
+příslib.then(
 *!*
-  result => alert(result), // shows "done!" after 1 second
+  výsledek => alert(výsledek), // zobrazí „hotovo!“ za 1 sekundu
 */!*
-  error => alert(error) // doesn't run
+  chyba => alert(chyba) // nespustí se
 );
 ```
 
-The first function was executed.
+Byla spuštěna první funkce.
 
-And in the case of a rejection, the second one:
+A v případě zamítnutí se spustí druhá:
 
 ```js run
-let promise = new Promise(function(resolve, reject) {
-  setTimeout(() => reject(new Error("Whoops!")), 1000);
+let příslib = new Promise(function(resolve, reject) {
+  setTimeout(() => reject(new Error("Ouha!")), 1000);
 });
 
-// reject runs the second function in .then
-promise.then(
-  result => alert(result), // doesn't run
+// reject spustí druhou funkci v .then
+příslib.then(
+  result => alert(result), // nespustí se
 *!*
-  error => alert(error) // shows "Error: Whoops!" after 1 second
+  chyba => alert(chyba) // zobrazí „Error: Ouha!“ za 1 sekundu
 */!*
 );
 ```
 
-If we're interested only in successful completions, then we can provide only one function argument to `.then`:
+Jestliže nás zajímají pouze úspěšná dokončení, můžeme funkci `.then` poskytnout pouze jeden argument:
 
 ```js run
-let promise = new Promise(resolve => {
-  setTimeout(() => resolve("done!"), 1000);
+let příslib = new Promise(resolve => {
+  setTimeout(() => resolve("hotovo!"), 1000);
 });
 
 *!*
-promise.then(alert); // shows "done!" after 1 second
+příslib.then(alert); // zobrazí „hotovo!“ za 1 sekundu
 */!*
 ```
 
 ### catch
 
-If we're interested only in errors, then we can use `null` as the first argument: `.then(null, errorHandlingFunction)`. Or we can use `.catch(errorHandlingFunction)`, which is exactly the same:
+Pokud nás zajímají pouze chyby, můžeme jako první argument použít `null`: `.then(null, funkceOšetřujícíChybu)`. Nebo můžeme použít `.catch(funkceOšetřujícíChybu)`, což je přesně totéž:
 
 
 ```js run
-let promise = new Promise((resolve, reject) => {
-  setTimeout(() => reject(new Error("Whoops!")), 1000);
+let příslib = new Promise((resolve, reject) => {
+  setTimeout(() => reject(new Error("Ouha!")), 1000);
 });
 
 *!*
-// .catch(f) is the same as promise.then(null, f)
-promise.catch(alert); // shows "Error: Whoops!" after 1 second
+// .catch(f) je totéž jako příslib.then(null, f)
+příslib.catch(alert); // zobrazí „Error: Ouha!“ za 1 sekundu
 */!*
 ```
 
-The call `.catch(f)` is a complete analog of `.then(null, f)`, it's just a shorthand.
+Volání `.catch(f)` je zcela analogické `.then(null, f)`, je to jen zkratka.
 
 ### finally
 
-Just like there's a `finally` clause in a regular `try {...} catch {...}`, there's `finally` in promises.
+Stejně jako existuje klauzule `finally` v běžném bloku `try {...} catch {...}`, existuje i `finally` v příslibech.
 
-The call `.finally(f)` is similar to `.then(f, f)` in the sense that `f` always runs when the promise is settled: be it resolve or reject.
+Volání `.finally(f)` se podobá `.then(f, f)` v tom smyslu, že `f` se spustí vždy, když se příslib usadí: ať už je splněn nebo zamítnut.
 
-`finally` is a good handler for performing cleanup, e.g. stopping our loading indicators, as they are not needed anymore, no matter what the outcome is.
+`finally` je vhodný handler pro provádění úklidu, např. zastavení našich indikátorů nahrávání, protože již nejsou zapotřebí, ať bude výsledek jakýkoli.
 
-Like this:
+Například:
 
 ```js
 new Promise((resolve, reject) => {
-  /* do something that takes time, and then call resolve/reject */
+  /* udělá něco, co trvá nějaký čas, a pak volá resolve/reject */
 })
 *!*
-  // runs when the promise is settled, doesn't matter successfully or not
-  .finally(() => stop loading indicator)
-  // so the loading indicator is always stopped before we process the result/error
+  // spustí se vždy, když se příslib usadí, nezáleží na tom, zda úspěšně nebo ne
+  .finally(() => zastav indikátor nahrávání)
+  // indikátor nahrávání se tedy vždy zastaví dříve, než zpracujeme výsledek nebo chybu
 */!*
-  .then(result => show result, err => show error)
+  .then(výsledek => zobraz výsledek, chyba => zobraz chybu)
 ```
 
-That said, `finally(f)` isn't exactly an alias of `then(f,f)` though. There are few subtle differences:
+Při tom všem však `finally(f)` není přesně totéž jako `then(f, f)`. Je mezi nimi několik drobných rozdílů:
 
-1. A `finally` handler has no arguments. In `finally` we don't know whether the promise is successful or not. That's all right, as our task is usually to perform "general" finalizing procedures.
-2. A `finally` handler passes through results and errors to the next handler.
+1. Handler `finally` nemá žádné argumenty. Ve `finally` nevíme, zda byl příslib úspěšný nebo ne. To je v pořádku, jelikož naším úkolem obvykle bývá provést „obecné“ finalizační procedury.
+2. Handler `finally` předává výsledky a chyby dalšímu handleru.
 
-    For instance, here the result is passed through `finally` to `then`:
+    Například zde je výsledek předán skrz `finally` do `then`:
     ```js run
     new Promise((resolve, reject) => {
-      setTimeout(() => resolve("result"), 2000)
+      setTimeout(() => resolve("výsledek"), 2000)
     })
-      .finally(() => alert("Promise ready"))
-      .then(result => alert(result)); // <-- .then handles the result
+      .finally(() => alert("Příslib připraven"))
+      .then(výsledek => alert(výsledek)); // <-- .then zpracuje výsledek
     ```
 
-    And here there's an error in the promise, passed through `finally` to `catch`:
+    A zde je v příslibu chyba, která se předá skrz `finally` do `catch`:
 
     ```js run
     new Promise((resolve, reject) => {
-      throw new Error("error");
+      throw new Error("chyba");
     })
-      .finally(() => alert("Promise ready"))
-      .catch(err => alert(err));  // <-- .catch handles the error object
+      .finally(() => alert("Příslib připraven"))
+      .catch(chyba => alert(chyba));  // <-- .catch zpracuje chybový objekt
     ```
 
-That's very convenient, because `finally` is not meant to process a promise result. So it passes it through.
+To se velmi hodí, protože `finally` není určeno k tomu, aby zpracovalo výsledek příslibu. Předá ho tedy dál.
 
-We'll talk more about promise chaining and result-passing between handlers in the next chapter.
+O zřetězení příslibů a předávání výsledků mezi jednotlivými handlery si povíme více v následující kapitole.
 
-
-````smart header="We can attach handlers to settled promises"
-If a promise is pending, `.then/catch/finally` handlers wait for it. Otherwise, if a promise has already settled, they just run:
+````smart header="Můžeme připojit handlery k již usazeným příslibům"
+Pokud příslib čeká na vyřízení, handlery `.then/catch/finally` na něj počkají. Jinak, pokud se příslib již usadil, jednoduše se spustí:
 
 ```js run
-// the promise becomes resolved immediately upon creation
-let promise = new Promise(resolve => resolve("done!"));
+// příslib bude splněn ihned po vytvoření
+let příslib = new Promise(resolve => resolve("hotovo!"));
 
-promise.then(alert); // done! (shows up right now)
+příslib.then(alert); // hotovo! (zobrazí se hned teď)
 ```
 
-Note that this makes promises more powerful than the real life "subscription list" scenario. If the singer has already released their song and then a person signs up on the subscription list, they probably won't receive that song. Subscriptions in real life must be done prior to the event.
+Všimněte si, že to činí přísliby silnějšími než „podpisový seznam“ z reálného života. Jestliže už zpěvák svou píseň vydal a nějaká osoba se podepíše na podpisový seznam až pak, píseň už pravděpodobně nedostane. Podpisy v reálném životě musejí být učiněny ještě před událostí.
 
-Promises are more flexible. We can add handlers any time: if the result is already there, they just execute.
+Přísliby jsou flexibilnější. Můžeme přidávat handlery kdykoli: pokud je výsledek už hotov, handler se jednoduše spustí.
 ````
 
-Next, let's see more practical examples of how promises can help us write asynchronous code.
+Dále uvidíme praktičtější příklady, jak nám přísliby mohou pomoci psát asynchronní kód.
 
-## Example: loadScript [#loadscript]
+## Příklad: načtiSkript [#loadscript]
 
-We've got the `loadScript` function for loading a script from the previous chapter.
+Mějme funkci `načtiSkript` pro načtení skriptu z předchozí kapitoly.
 
-Here's the callback-based variant, just to remind us of it:
+Zde je varianta založená na callbacku, jen pro připomenutí:
 
 ```js
-function loadScript(src, callback) {
-  let script = document.createElement('script');
-  script.src = src;
+function načtiSkript(src, callback) {
+  let skript = document.createElement('script');
+  skript.src = src;
 
-  script.onload = () => callback(null, script);
-  script.onerror = () => callback(new Error(`Script load error for ${src}`));
+*!*
+  skript.onload = () => callback(null, skript);
+  skript.onerror = () => callback(new Error(`Chyba načítání skriptu pro ${src}`));
+*/!*
 
-  document.head.append(script);
+  document.head.append(skript);
 }
 ```
 
-Let's rewrite it using Promises.
+Přepišme ji s použitím příslibů.
 
-The new function `loadScript` will not require a callback. Instead, it will create and return a Promise object that resolves when the loading is complete. The outer code can add handlers (subscribing functions) to it using `.then`:
+Nová funkce `načtiSkript` nebude vyžadovat callback. Místo toho vytvoří a vrátí objekt Promise, který se splní, až bude načítání hotovo. Vnější kód do něj může přidávat handlery (podepisující funkce) prostřednictvím `.then`:
 
 ```js run
-function loadScript(src) {
+function načtiSkript(src) {
   return new Promise(function(resolve, reject) {
-    let script = document.createElement('script');
-    script.src = src;
+    let skript = document.createElement('script');
+    skript.src = src;
 
-    script.onload = () => resolve(script);
-    script.onerror = () => reject(new Error(`Script load error for ${src}`));
+    skript.onload = () => resolve(skript);
+    skript.onerror = () => reject(new Error(`Chyba načítání skriptu pro ${src}`));
 
-    document.head.append(script);
+    document.head.append(skript);
   });
 }
 ```
 
-Usage:
+Použití:
 
 ```js run
-let promise = loadScript("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js");
+let příslib = načtiSkript("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js");
 
-promise.then(
-  script => alert(`${script.src} is loaded!`),
-  error => alert(`Error: ${error.message}`)
+příslib.then(
+  skript => alert(`${skript.src} je načten!`),
+  chyba => alert(`Chyba: ${chyba.message}`)
 );
 
-promise.then(script => alert('Another handler...'));
+příslib.then(skript => alert('Další handler...'));
 ```
 
-We can immediately see a few benefits over the callback-based pattern:
+Hned vidíme několik výhod oproti vzoru založenému na callbacku:
 
 
-| Promises | Callbacks |
+| Přísliby | Callbacky |
 |----------|-----------|
-| Promises allow us to do things in the natural order. First, we run `loadScript(script)`, and `.then` we write what to do with the result. | We must have a `callback` function at our disposal when calling `loadScript(script, callback)`. In other words, we must know what to do with the result *before* `loadScript` is called. |
-| We can call `.then` on a Promise as many times as we want. Each time, we're adding a new "fan", a new subscribing function, to the "subscription list". More about this in the next chapter: [](info:promise-chaining). | There can be only one callback. |
+| Přísliby nám umožňují dělat věci v přirozeném pořadí. Nejprve spustíme `načtiSkript(skript)` a pak do `.then` napíšeme, co máme dělat s výsledkem. | Musíme mít funkci `callback` k dispozici, už když voláme `načtiSkript(script, callback)`. Jinými slovy, ještě *před* voláním `načtiSkript` musíme vědět, co dělat s výsledkem. |
+| Můžeme volat `.then` na příslibu tolikrát, kolikrát chceme. Pokaždé přidáme na „podpisový seznam“ nového „fanouška“, novou podepsanou funkci. Více o tom v další kapitole: [](info:promise-chaining). | Callback může být pouze jeden. |
 
-So promises give us better code flow and flexibility. But there's more. We'll see that in the next chapters.
+Přísliby nám tedy poskytují lepší tok kódu a flexibilitu. Je toho však ještě víc. Uvidíme to v dalších kapitolách.

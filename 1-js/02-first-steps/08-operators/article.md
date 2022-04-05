@@ -1,15 +1,15 @@
-# Basic operators, maths
+# Základní operátory, matematika
 
-We know many operators from school. They are things like addition `+`, multiplication `*`, subtraction `-`, and so on.
+Mnoho operátorů známe ze školy. Jsou mezi nimi sčítání `+`, násobení `*`, odčítání `-` a podobně.
 
-In this chapter, we’ll start with simple operators, then concentrate on JavaScript-specific aspects, not covered by school arithmetic.
+V této kapitole začneme jednoduchými operátory a pak se budeme soustředit na prvky specifické pro JavaScript, které školní aritmetika nepokrývá.
 
-## Terms: "unary", "binary", "operand"
+## Pojmy: „unární“, „binární“, „operand“
 
-Before we move on, let's grasp some common terminology.
+Než budeme pokračovat, ujasníme si určitou společnou terminologii.
 
-- *An operand* -- is what operators are applied to. For instance, in the multiplication of `5 * 2` there are two operands: the left operand is `5` and the right operand is `2`. Sometimes, people call these "arguments" instead of "operands".
-- An operator is *unary* if it has a single operand. For example, the unary negation `-` reverses the sign of a number:
+- *Operand* je to, na co se aplikují operátory. Například při násobení `5 * 2` máme dva operandy: levý operand je `5` a pravý operand je `2`. Někdy se jim místo „operandy“ říká „argumenty“.
+- Operátor je *unární*, jestliže má jediný operand. Například unární negace `-`, která obrací znaménko čísla:
 
     ```js run
     let x = 1;
@@ -17,50 +17,50 @@ Before we move on, let's grasp some common terminology.
     *!*
     x = -x;
     */!*
-    alert( x ); // -1, unary negation was applied
+    alert( x ); // -1, byla aplikována unární negace
     ```
-- An operator is *binary* if it has two operands. The same minus exists in binary form as well:
+- Operátor je *binární*, jestliže má dva operandy. Stejné minus existuje i v binární podobě:
 
     ```js run no-beautify
     let x = 1, y = 3;
-    alert( y - x ); // 2, binary minus subtracts values
+    alert( y - x ); // 2, binární minus odečítá hodnoty
     ```
 
-    Formally, in the examples above we have two different operators that share the same symbol: the negation operator, a unary operator that reverses the sign, and the subtraction operator, a binary operator that subtracts one number from another.
+Formálně mají výše uvedené příklady dva různé operátory, které mají stejný symbol: operátor negace, což je unární operátor měnící znaménko, a operátor odčítání, což je binární operátor odečítající jedno číslo od druhého.
 
-## Maths
+## Matematika
 
-The following math operations are supported:
+JavaScript podporuje následující matematické operace:
 
-- Addition `+`,
-- Subtraction `-`,
-- Multiplication `*`,
-- Division `/`,
-- Remainder `%`,
-- Exponentiation `**`.
+- sčítání `+`,
+- odčítání `-`,
+- násobení `*`,
+- dělení `/`,
+- zbytek po dělení `%`,
+- umocňování `**`.
 
-The first four are straightforward, while `%` and `**` need a few words about them.
+První čtyři jsou jasné, `%` a `**` potřebují trochu vysvětlení.
 
-### Remainder %
+### Zbytek po dělení %
 
-The remainder operator `%`, despite its appearance, is not related to percents.
+Operátor zbytku po dělení `%` nemá navzdory svému symbolu nic společného s procenty.
 
-The result of `a % b` is the [remainder](https://en.wikipedia.org/wiki/Remainder) of the integer division of `a` by `b`.
+Výsledkem `a % b` je [zbytek](https://cs.wikipedia.org/wiki/Zbytek_po_dělení) při celočíselném dělení čísla `a` číslem `b`.
 
-For instance:
+Příklad:
 
 ```js run
-alert( 5 % 2 ); // 1, a remainder of 5 divided by 2
-alert( 8 % 3 ); // 2, a remainder of 8 divided by 3
+alert( 5 % 2 ); // 1, zbytek po dělení 5 děleno 2
+alert( 8 % 3 ); // 2, zbytek po dělení 8 děleno 3
 ```
 
-### Exponentiation **
+### Umocňování **
 
-The exponentiation operator `a ** b` raises `a` to the power of `b`.
+Operátor umocňování `a ** b` umocní `a` na `b`-tou.
 
-In school maths, we write that as a<sup>b</sup>.
+Ve školní matematice to zapisujeme a<sup>b</sup>.
 
-For instance:
+Příklad:
 
 ```js run
 alert( 2 ** 2 ); // 2² = 4
@@ -68,72 +68,71 @@ alert( 2 ** 3 ); // 2³ = 8
 alert( 2 ** 4 ); // 2⁴ = 16
 ```
 
-Just like in maths, the exponentiation operator is defined for non-integer numbers as well. 
+Stejně jako v matematice je operátor umocňování definován i pro necelá čísla. 
 
-For example, a square root is an exponentiation by ½:
+Například odmocnina je umocnění na ½:
 
 ```js run
-alert( 4 ** (1/2) ); // 2 (power of 1/2 is the same as a square root)
-alert( 8 ** (1/3) ); // 2 (power of 1/3 is the same as a cubic root)
+alert( 4 ** (1/2) ); // 2 (umocnění na 1/2 je totéž jako druhá odmocnina)
+alert( 8 ** (1/3) ); // 2 (umocnění na 1/3 je totéž jako třetí odmocnina)
 ```
 
 
-## String concatenation with binary +
+## Spojení řetězců pomocí binárního +
 
-Let's meet features of JavaScript operators that are beyond school arithmetics.
+Přejděme nyní k vlastnostem JavaScriptu, které jsou za hranicemi školní aritmetiky.
 
-Usually, the plus operator `+` sums numbers.
-
-But, if the binary `+` is applied to strings, it merges (concatenates) them:
+Operátor plus `+` obvykle sčítá čísla. Pokud je však binární `+` použito na řetězce, spojí je (zřetězí):
 
 ```js
-let s = "my" + "string";
-alert(s); // mystring
+let s = "můj" + "řetězec";
+alert(s); // můjřetězec
 ```
 
-Note that if any of the operands is a string, then the other one is converted to a string too.
+Všimněte si, že jestliže je kterýkoli z operandů řetězec, bude na řetězec převeden i druhý operand.
 
-For example:
+Příklad:
 
 ```js run
 alert( '1' + 2 ); // "12"
 alert( 2 + '1' ); // "21"
 ```
 
-See, it doesn't matter whether the first operand is a string or the second one.
+Vidíme, že nezáleží na tom, zda je řetězec první nebo druhý operand.
 
-Here's a more complex example:
+Složitější příklad:
 
 ```js run
-alert(2 + 2 + '1' ); // "41" and not "221"
+alert(2 + 2 + '1' ); // "41", ne "221"
 ```
 
-Here, operators work one after another. The first `+` sums two numbers, so it returns `4`, then the next `+` adds the string `1` to it, so it's like `4 + '1' = '41'`.
+Tady operátory fungují jeden za druhým. První `+` sečte dvě čísla, takže vrátí `4`, pak druhé `+` k němu přidá řetězec `1`, takže je to jako `4 + '1' = 41`.
 
 ```js run
-alert('1' + 2 + 2); // "122" and not "14"
-```
-Here, the first operand is a string, the compiler treats the other two operands as strings too. The `2` gets concatenated to `'1'`, so it's like `'1' + 2 = "12"` and `"12" + 2 = "122"`.
-
-The binary `+` is the only operator that supports strings in such a way. Other arithmetic operators work only with numbers and always convert their operands to numbers.
-
-Here's the demo for subtraction and division:
-
-```js run
-alert( 6 - '2' ); // 4, converts '2' to a number
-alert( '6' / '2' ); // 3, converts both operands to numbers
+alert('1' + 2 + 2); // "122" a ne "14"
 ```
 
-## Numeric conversion, unary +
+První operand je zde řetězec, takže kompilátor zachází i s ostatními dvěma operandy jako s řetězci. `2` se zřetězí s `'1'`, takže to bude jako `'1' + 2 = "12"` a `"12" + 2 = "122"`.
 
-The plus `+` exists in two forms: the binary form that we used above and the unary form.
+Binární `+` je jediný operátor, který takovýmto způsobem podporuje řetězce. Ostatní aritmetické operátory fungují jen s čísly a své operandy převádějí vždy na čísla.
 
-The unary plus or, in other words, the plus operator `+` applied to a single value, doesn't do anything to numbers. But if the operand is not a number, the unary plus converts it into a number.
-
-For example:
+Ukázka odčítání a dělení:
 
 ```js run
-// No effect on numbers
+alert( 6 - '2' ); // 4, převede '2' na číslo
+alert( '6' / '2' ); // 3, převede oba operandy na čísla
+```
+
+## Konverze na číslo a unární +
+
+Plus `+` existuje ve dvou podobách: binární, kterou jsme používali výše, a unární.
+
+Unární plus, jinými slovy operátor `+` aplikovaný na jedinou hodnotu, neprovádí s čísly nic. Jestliže však operand není číslo, unární plus jej převede na číslo.
+
+Příklad:
+
+```js run
+// Žádný efekt na čísla
 let x = 1;
 alert( +x ); // 1
 
@@ -141,77 +140,77 @@ let y = -2;
 alert( +y ); // -2
 
 *!*
-// Converts non-numbers
+// Převádí hodnoty, které nejsou čísla
 alert( +true ); // 1
 alert( +"" );   // 0
 */!*
 ```
 
-It actually does the same thing as `Number(...)`, but is shorter.
+Dělá tedy ve skutečnosti totéž jako `Number(...)`, ale je kratší.
 
-The need to convert strings to numbers arises very often. For example, if we are getting values from HTML form fields, they are usually strings. What if we want to sum them?
+Potřeba převádět řetězce na čísla se objevuje velmi často. Například jestliže načítáme hodnoty z polí HTML formulářů, jsou to obvykle řetězce. Co když je chceme sečíst?
 
-The binary plus would add them as strings:
+Binární plus by je spojilo jako řetězce:
 
 ```js run
-let apples = "2";
-let oranges = "3";
+let jablka = "2";
+let pomeranče = "3";
 
-alert( apples + oranges ); // "23", the binary plus concatenates strings
+alert( jablka + pomeranče ); // "23", binární plus spojuje řetězce
 ```
 
-If we want to treat them as numbers, we need to convert and then sum them:
+Pokud s nimi chceme zacházet jako s čísly, musíme je napřed konvertovat a teprve pak sečíst:
 
 ```js run
-let apples = "2";
-let oranges = "3";
+let jablka = "2";
+let pomeranče = "3";
 
 *!*
-// both values converted to numbers before the binary plus
-alert( +apples + +oranges ); // 5
+// obě hodnoty převedeme na čísla před binárním plus
+alert( +jablka + +pomeranče ); // 5
 */!*
 
-// the longer variant
-// alert( Number(apples) + Number(oranges) ); // 5
+// delší varianta
+// alert( Number(jablka) + Number(pomeranče) ); // 5
 ```
 
-From a mathematician's standpoint, the abundance of pluses may seem strange. But from a programmer's standpoint, there's nothing special: unary pluses are applied first, they convert strings to numbers, and then the binary plus sums them up.
+Z pohledu matematika může přemíra plusů vypadat podivně, ale z pohledu programátora na tom nic zvláštního není: nejprve se aplikují unární plusy, které převedou řetězce na čísla, a pak je binární plus sečte.
 
-Why are unary pluses applied to values before the binary ones? As we're going to see, that's because of their *higher precedence*.
+Proč se unární plusy aplikují na hodnoty dříve než binární? Jak uvidíme, je to důsledkem jejich *vyšší priority*.
 
-## Operator precedence
+## Priorita operátorů
 
-If an expression has more than one operator, the execution order is defined by their *precedence*, or, in other words, the default priority order of operators.
+Obsahuje-li výraz více než jeden operátor, je pořadí jejich výkonu definováno jejich *prioritou*, nebo jinými slovy standardním pořadím operátorů.
 
-From school, we all know that the multiplication in the expression `1 + 2 * 2` should be calculated before the addition. That's exactly the precedence thing. The multiplication is said to have *a higher precedence* than the addition.
+Ze školy jistě všichni víme, že ve výrazu `1 + 2 * 2` by násobení mělo být vyhodnoceno před sčítáním. To je přesně otázkou priority. Říkáme, že násobení má *vyšší prioritu* než sčítání.
 
-Parentheses override any precedence, so if we're not satisfied with the default order, we can use them to change it. For example, write `(1 + 2) * 2`.
+Závorky mají přednost před veškerou prioritou, takže nejsme-li spokojeni se standardním pořadím, můžeme je s jejich pomocí změnit. Například zapíšeme `(1 + 2) * 2`.
 
-There are many operators in JavaScript. Every operator has a corresponding precedence number. The one with the larger number executes first. If the precedence is the same, the execution order is from left to right.
+JavaScript obsahuje mnoho operátorů. Každému z nich odpovídá hodnota jeho priority. Dříve se vykoná ten, jehož priorita je vyšší. Je-li priorita více operátorů stejná, vykonávají se v pořadí zleva doprava.
 
-Here's an extract from the [precedence table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence) (you don't need to remember this, but note that unary operators are higher than corresponding binary ones):
+Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence) (nemusíte si ji celou pamatovat, ale všimněte si, že unární operátory mají vyšší prioritu než odpovídající binární):
 
-| Precedence | Name | Sign |
-|------------|------|------|
+| Priorita | Název | Znak |
+|----------|-------|------|
 | ... | ... | ... |
-| 15 | unary plus | `+` |
-| 15 | unary negation | `-` |
-| 14 | exponentiation | `**` |
-| 13 | multiplication | `*` |
-| 13 | division | `/` |
-| 12 | addition | `+` |
-| 12 | subtraction | `-` |
+| 15 | unární plus | `+` |
+| 15 | unární negace | `-` |
+| 14 | umocňování | `**` |
+| 13 | násobení | `*` |
+| 13 | dělení | `/` |
+| 12 | sčítání | `+` |
+| 12 | odčítání | `-` |
 | ... | ... | ... |
-| 2 | assignment | `=` |
+| 2 | přiřazení | `=` |
 | ... | ... | ... |
 
-As we can see, the "unary plus" has a priority of `15` which is higher than the `12` of "addition" (binary plus). That's why, in the expression `"+apples + +oranges"`, unary pluses work before the addition.
+Jak vidíme, „unární plus“ má prioritu `15`, která je vyšší než priorita `12` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
 
-## Assignment
+## Přiřazení
 
-Let's note that an assignment `=` is also an operator. It is listed in the precedence table with the very low priority of `2`.
+Všimněte si, že přiřazení `=` je také operátor. V tabulce priorit je uveden s velmi nízkou prioritou `2`.
 
-That's why, when we assign a variable, like `x = 2 * 2 + 1`, the calculations are done first and then the `=` is evaluated, storing the result in `x`.
+To je důvod, proč při přiřazení proměnné, např. `x = 2 * 2 + 1`, se nejprve provedou výpočty a až potom se vyhodnotí `=`, které uloží výsledek do `x`.
 
 ```js
 let x = 2 * 2 + 1;
@@ -219,15 +218,15 @@ let x = 2 * 2 + 1;
 alert( x ); // 5
 ```
 
-### Assignment = returns a value
+### Přiřazení = vrátí hodnotu
 
-The fact of `=` being an operator, not a "magical" language construct has an interesting implication.
+Skutečnost, že `=` je operátor a ne nějaký „magický“ jazykový konstrukt, má zajímavý důsledek.
 
-All operators in JavaScript return a value. That's obvious for `+` and `-`, but also true for `=`.
+Všechny operátory v JavaScriptu vracejí nějakou hodnotu. Pro `+` a `-` je to samozřejmé, ale platí to i pro `=`.
 
-The call `x = value` writes the `value` into `x` *and then returns it*.
+Volání `x = hodnota` zapíše hodnotu `hodnota` do `x` *a pak ji vrátí*.
 
-Here's a demo that uses an assignment as part of a more complex expression:
+Následuje ukázka, v níž je přiřazení využito jako součást složitějšího výrazu:
 
 ```js run
 let a = 1;
@@ -241,15 +240,15 @@ alert( a ); // 3
 alert( c ); // 0
 ```
 
-In the example above, the result of expression `(a = b + 1)` is the value which was assigned to `a` (that is `3`). It is then used for further evaluations.
+V uvedeném příkladu je výsledkem výrazu `(a = b + 1)` hodnota, která je přiřazena do `a` (což je `3`). Ta se pak použije pro další výpočty.
 
-Funny code, isn't it? We should understand how it works, because sometimes we see it in JavaScript libraries.
+Legrační kód, že? Měli bychom porozumět, jak funguje, protože v knihovnách JavaScriptu bývá občas k vidění.
 
-Although, please don't write the code like that. Such tricks definitely don't make code clearer or readable.
+Přesto vás prosíme, abyste takový kód nepsali. Takové triky zcela jistě nepřispívají k jeho jasnosti a čitelnosti.
 
-### Chaining assignments
+### Zřetězení přiřazení
 
-Another interesting feature is the ability to chain assignments:
+Další zajímavá vlastnost je možnost zřetězit přiřazení za sebou:
 
 ```js run
 let a, b, c;
@@ -263,22 +262,22 @@ alert( b ); // 4
 alert( c ); // 4
 ```
 
-Chained assignments evaluate from right to left. First, the rightmost expression `2 + 2` is evaluated and then assigned to the variables on the left: `c`, `b` and `a`. At the end, all the variables share a single value.
+Zřetězená přiřazení se vyhodnocují zprava doleva. Nejprve se vyhodnotí výraz `2 + 2` nejvíce vpravo a jeho hodnota se pak přiřadí do proměnných vlevo: `c`, `b` a `a`. Nakonec tedy budou mít všechny proměnné stejnou hodnotu.
 
-Once again, for the purposes of readability it's better to split such code into few lines:
+Opět je pro účely čitelnosti lepší rozdělit takový kód do více řádků:
 
 ```js
 c = 2 + 2;
 b = c;
 a = c;
 ```
-That's easier to read, especially when eye-scanning the code fast.
+Snadněji se to čte, zejména když kód rychle projíždíte očima.
 
-## Modify-in-place
+## Modifikace na místě
 
-We often need to apply an operator to a variable and store the new result in that same variable.
+Často potřebujeme aplikovat operátor na nějakou proměnnou a uložit nový výsledek do této proměnné.
 
-For example:
+Příklad:
 
 ```js
 let n = 2;
@@ -286,194 +285,192 @@ n = n + 5;
 n = n * 2;
 ```
 
-This notation can be shortened using the operators `+=` and `*=`:
+Tento zápis lze zkrátit pomocí operátorů `+=` a `*=`:
 
 ```js run
 let n = 2;
-n += 5; // now n = 7 (same as n = n + 5)
-n *= 2; // now n = 14 (same as n = n * 2)
+n += 5; // nyní n = 7 (totéž jako n = n + 5)
+n *= 2; // nyní n = 14 (totéž jako n = n * 2)
 
 alert( n ); // 14
 ```
 
-Short "modify-and-assign" operators exist for all arithmetical and bitwise operators: `/=`, `-=`, etc.
+Takové „modifikační“ operátory existují pro všechny aritmetické a bitové operace: `/=`, `-=`, apod.
 
-Such operators have the same precedence as a normal assignment, so they run after most other calculations:
+Tyto operátory mají stejnou prioritu jako běžné přiřazení, takže se provedou až po většině ostatních výpočtů:
 
 ```js run
 let n = 2;
 
 n *= 3 + 5;
 
-alert( n ); // 16  (right part evaluated first, same as n *= 8)
+alert( n ); // 16  (napřed se provede část vpravo, totéž jako n *= 8)
 ```
 
-## Increment/decrement
+## Inkrementace a dekrementace
 
 <!-- Can't use -- in title, because the built-in parser turns it into a 'long dash' – -->
 
-Increasing or decreasing a number by one is among the most common numerical operations.
+Jednou z nejběžnějších číselných operací je zvýšení nebo snížení čísla o 1 (inkrementace, dekrementace). Proto pro ně existují speciální operátory:
 
-So, there are special operators for it:
-
-- **Increment** `++` increases a variable by 1:
+- **Inkrementace** `++` zvýší proměnnou o 1:
 
     ```js run no-beautify
-    let counter = 2;
-    counter++;        // works the same as counter = counter + 1, but is shorter
-    alert( counter ); // 3
+    let čítač = 2;
+    čítač++;        // funguje stejně jako čítač = čítač + 1, ale je to kratší
+    alert( čítač ); // 3
     ```
-- **Decrement** `--` decreases a variable by 1:
+- **Dekrementace** `--` sníží proměnnou o 1:
 
     ```js run no-beautify
-    let counter = 2;
-    counter--;        // works the same as counter = counter - 1, but is shorter
-    alert( counter ); // 1
+    let čítač = 2;
+    čítač--;        // funguje stejně jako čítač = čítač - 1, ale je to kratší
+    alert( čítač ); // 1
     ```
 
 ```warn
-Increment/decrement can only be applied to variables. Trying to use it on a value like `5++` will give an error.
+Inkrementaci a dekrementaci lze aplikovat pouze na proměnné. Pokus použít ji na hodnotu, např. `5++`, vyvolá chybu.
 ```
 
-The operators `++` and `--` can be placed either before or after a variable.
+Operátory `++` a `--` lze umístit před i za proměnnou.
 
-- When the operator goes after the variable, it is in "postfix form": `counter++`.
-- The "prefix form" is when the operator goes before the variable: `++counter`.
+- Je-li operátor umístěn za proměnnou, nazývá se to „postfixová forma“: `čítač++`.
+- „Prefixová forma“ je umístění operátoru před proměnnou: `++čítač`.
 
-Both of these statements do the same thing: increase `counter` by `1`.
+Oba tyto příkazy vykonají totéž: zvýší `čítač` o `1`.
 
-Is there any difference? Yes, but we can only see it if we use the returned value of `++/--`.
+Je v nich tedy nějaký rozdíl? Ano, ale uvidíme ho jen tehdy, když použijeme hodnotu, kterou operátor `++/--` vrátí.
 
-Let's clarify. As we know, all operators return a value. Increment/decrement is no exception. The prefix form returns the new value while the postfix form returns the old value (prior to increment/decrement).
+Ujasněme si to. Jak víme, všechny operátory vracejí nějakou hodnotu. Inkrementace a dekrementace nejsou výjimkou. Prefixová forma vrací novou hodnotu, zatímco postfixová forma vrací starou hodnotu (tu před zvýšením nebo snížením).
 
-To see the difference, here's an example:
+Abychom viděli rozdíl, uvedeme příklad:
 
 ```js run
-let counter = 1;
-let a = ++counter; // (*)
+let čítač = 1;
+let a = ++čítač; // (*)
 
 alert(a); // *!*2*/!*
 ```
 
-In the line `(*)`, the *prefix* form `++counter` increments `counter` and returns the new value, `2`. So, the `alert` shows `2`.
+Na řádku `(*)` *prefixová* forma `++čítač` zvýšila `čítač` a vrátila novou hodnotu, `2`. Proto `alert` zobrazila `2`.
 
-Now, let's use the postfix form:
+Nyní použijeme postfixovou formu:
 
 ```js run
-let counter = 1;
-let a = counter++; // (*) changed ++counter to counter++
+let čítač = 1;
+let a = čítač++; // (*) změnili jsme ++čítač na čítač++
 
 alert(a); // *!*1*/!*
 ```
 
-In the line `(*)`, the *postfix* form `counter++` also increments `counter` but returns the *old* value (prior to increment). So, the `alert` shows `1`.
+Na řádku `(*)` *postfixová* forma `čítač++` rovněž zvýšila `čítač`, ale vrátila *starou* hodnotu (tu před zvýšením). Proto `alert` zobrazila `1`.
 
-To summarize:
+Shrneme to:
 
-- If the result of increment/decrement is not used, there is no difference in which form to use:
-
-    ```js run
-    let counter = 0;
-    counter++;
-    ++counter;
-    alert( counter ); // 2, the lines above did the same
-    ```
-- If we'd like to increase a value *and* immediately use the result of the operator, we need the prefix form:
+- Pokud výsledek zvýšení nebo snížení nepoužijeme, není rozdíl v tom, kterou formu použijeme:
 
     ```js run
-    let counter = 0;
-    alert( ++counter ); // 1
+    let čítač = 0;
+    čítač++;
+    ++čítač;
+    alert( čítač ); // 2, oba výše uvedené řádky dělají totéž
     ```
-- If we'd like to increment a value but use its previous value, we need the postfix form:
+- Pokud chceme zvýšit hodnotu *a* výsledek operátoru ihned použít, potřebujeme prefixovou formu:
 
     ```js run
-    let counter = 0;
-    alert( counter++ ); // 0
+    let čítač = 0;
+    alert( ++čítač ); // 1
+    ```
+- Pokud chceme zvýšit hodnotu, ale použít předchozí hodnotu, potřebujeme postfixovou formu:
+
+    ```js run
+    let čítač = 0;
+    alert( čítač++ ); // 0
     ```
 
-````smart header="Increment/decrement among other operators"
-The operators `++/--` can be used inside expressions as well. Their precedence is higher than most other arithmetical operations.
+````smart header="Inkrementace a dekrementace mezi jinými operátory"
+Operátory `++/--` je možné použít i uvnitř výrazů. Jejich priorita je vyšší než priorita většiny ostatních aritmetických operací.
 
-For instance:
+Příklad:
 
 ```js run
-let counter = 1;
-alert( 2 * ++counter ); // 4
+let čítač = 1;
+alert( 2 * ++čítač ); // 4
 ```
 
-Compare with:
+Porovnejte si to s:
 
 ```js run
-let counter = 1;
-alert( 2 * counter++ ); // 2, because counter++ returns the "old" value
+let čítač = 1;
+alert( 2 * čítač++ ); // 2, protože čítač++ vrací „starou“ hodnotu
 ```
 
-Though technically okay, such notation usually makes code less readable. One line does multiple things -- not good.
+Ačkoli je to technicky v pořádku, takový zápis obvykle snižuje čitelnost kódu. Jeden řádek provádí více věcí, a to není dobré.
 
-While reading code, a fast "vertical" eye-scan can easily miss something like `counter++` and it won't be obvious that the variable increased.
+Když čteme kód, při rychlém „svislém“ projíždění očima můžeme snadno přehlédnout něco jako `čítač++` a nevšimneme si, že se proměnná zvýšila.
 
-We advise a style of "one line -- one action":
+Doporučujeme psát stylem „jeden řádek -- jedna akce“:
 
 ```js run
-let counter = 1;
-alert( 2 * counter );
-counter++;
+let čítač = 1;
+alert( 2 * čítač );
+čítač++;
 ```
 ````
 
-## Bitwise operators
+## Bitové operátory
 
-Bitwise operators treat arguments as 32-bit integer numbers and work on the level of their binary representation.
+Bitové operátory zacházejí s argumenty jako s 32-bitovými celými čísly a pracují na úrovni jejich binární reprezentace.
 
-These operators are not JavaScript-specific. They are supported in most programming languages.
+Tyto operátory nejsou specifické pro JavaScript. Podporuje je většina programovacích jazyků.
 
-The list of operators:
+Seznam operátorů:
 
 - AND ( `&` )
 - OR ( `|` )
 - XOR ( `^` )
 - NOT ( `~` )
-- LEFT SHIFT ( `<<` )
-- RIGHT SHIFT ( `>>` )
-- ZERO-FILL RIGHT SHIFT ( `>>>` )
+- LEFT SHIFT (posun doleva) ( `<<` )
+- RIGHT SHIFT (posun doprava) ( `>>` )
+- ZERO-FILL RIGHT SHIFT (posun doprava s doplněním nul) ( `>>>` )
 
-These operators are used very rarely, when we need to fiddle with numbers on the very lowest (bitwise) level. We won't need these operators any time soon, as web development has little use of them, but in some special areas, such as cryptography, they are useful. You can read the [Bitwise Operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Bitwise) chapter on MDN when a need arises.
+Tyto operátory se používají jen velmi zřídka, když potřebujeme pracovat s čísly na naprosto nejnižší (bitové) úrovni. Nebudeme je v dohledné době potřebovat, jelikož při vývoji webů se využívají jen málokdy, ale jsou užitečné v některých speciálních oblastech, například v kryptografii. Až je budete potřebovat, můžete si o nich přečíst [článek](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Bitwise) na MDN.
 
-## Comma
+## Čárka
 
-The comma operator `,` is one of the rarest and most unusual operators. Sometimes, it's used to write shorter code, so we need to know it in order to understand what's going on.
+Operátor čárky `,` je jeden z nejvzácnějších a nejneobvyklejších operátorů. Někdy se používá k psaní kratšího kódu, takže jej potřebujeme znát, abychom pochopili, o co tady jde.
 
-The comma operator allows us to evaluate several expressions, dividing them with a comma `,`. Each of them is evaluated but only the result of the last one is returned.
+Operátor čárky nám umožňuje vyhodnotit několik výrazů za sebou, oddělených čárkou `,`. Vyhodnotí se každý z nich, ale vrátí se jen výsledek posledního.
 
-For example:
+Příklad:
 
 ```js run
 *!*
 let a = (1 + 2, 3 + 4);
 */!*
 
-alert( a ); // 7 (the result of 3 + 4)
+alert( a ); // 7 (výsledek 3 + 4)
 ```
 
-Here, the first expression `1 + 2` is evaluated and its result is thrown away. Then, `3 + 4` is evaluated and returned as the result.
+Zde se napřed vyhodnotí první výraz `1 + 2` a jeho výsledek se zahodí. Pak se vyhodnotí `3 + 4` a jeho výsledek je vrácen.
 
-```smart header="Comma has a very low precedence"
-Please note that the comma operator has very low precedence, lower than `=`, so parentheses are important in the example above.
+```smart header="Čárka má velmi nízkou prioritu"
+Všimněte si, že operátor čárky má velmi nízkou prioritu, dokonce nižší než `=`, takže závorky jsou ve výše uvedeném příkladu nezbytné.
 
-Without them: `a = 1 + 2, 3 + 4` evaluates `+` first, summing the numbers into `a = 3, 7`, then the assignment operator `=` assigns `a = 3`, and the rest is ignored. It's like `(a = 1 + 2), 3 + 4`.
+Bez nich: `a = 1 + 2, 3 + 4`, jako první by se vyhodnotilo `+`, které by sečetlo čísla do `a = 3, 7`, pak by operátor přiřazení `=` přiřadil `a = 3` a zbytek by se ignoroval. Bylo by to jako `(a = 1 + 2), 3 + 4`.
 ```
 
-Why do we need an operator that throws away everything except the last expression?
+K čemu potřebujeme operátor, který zahodí všechno kromě posledního výrazu?
 
-Sometimes, people use it in more complex constructs to put several actions in one line.
+Někdy jej lidé používají ve složitějších konstrukcích, aby umístili několik akcí na jeden řádek.
 
-For example:
+Příklad:
 
 ```js
-// three operations in one line
+// tři operace na jednom řádku
 for (*!*a = 1, b = 3, c = a * b*/!*; a < 10; a++) {
  ...
 }
 ```
 
-Such tricks are used in many JavaScript frameworks. That's why we're mentioning them. But usually they don't improve code readability so we should think well before using them.
+Takové triky se používají v mnoha rámcích JavaScriptu, a proto se o nich zmiňujeme. Obvykle však zrovna nezlepšují čitelnost kódu, a proto byste si jejich používání měli dobře rozmyslet.

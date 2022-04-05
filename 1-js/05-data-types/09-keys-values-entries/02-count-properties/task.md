@@ -2,20 +2,20 @@ importance: 5
 
 ---
 
-# Count properties
+# Počet vlastností
 
-Write a function `count(obj)` that returns the number of properties in the object:
+Napište funkci `spočítej(obj)`, která vrátí počet vlastností v objektu:
 
 ```js
-let user = {
-  name: 'John',
-  age: 30
+let uživatel = {
+  jméno: 'Jan',
+  věk: 30
 };
 
-alert( count(user) ); // 2
+alert( spočítej(uživatel) ); // 2
 ```
 
-Try to make the code as short as possible.
+Snažte se napsat kód co nejkratší.
 
-P.S. Ignore symbolic properties, count only "regular" ones.
+P.S. Ignorujte symbolické vlastnosti, počítejte jen „obyčejné“.
 
