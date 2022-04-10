@@ -1,7 +1,8 @@
-HTML kód:
+The HTML code:
 
 [html src="index.html"]
 
-Soubor `alert.js` ve stejné složce:
+For the file `alert.js` in the same folder:
 
 [js src="alert.js"]
+
