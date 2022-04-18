@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# What's the result of OR?
+# Jaký je výsledek OR?
 
-What is the code below going to output?
+Co vypíše níže uvedený kód?
 
 ```js
 alert( null || 2 || undefined );
