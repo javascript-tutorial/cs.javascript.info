@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Replace "for" with "while"
+# Nahraďte cyklus „for“ cyklem „while“
 
-Rewrite the code changing the `for` loop to `while` without altering its behavior (the output should stay same).
+Přepište kód tak, že cyklus `for` zaměníte za cyklus `while`, aniž by se změnilo jeho chování (výstup má zůstat stejný).
 
 ```js run
 for (let i = 0; i < 3; i++) {
-  alert( `number ${i}!` );
+  alert( `číslo ${i}!` );
 }
 ```
 
