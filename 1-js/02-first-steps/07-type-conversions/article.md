@@ -1,150 +1,145 @@
-# Type Conversions
+# Typová konverze
 
-Most of the time, operators and functions automatically convert the values given to them to the right type.
+Operátory a funkce většinou automaticky převedou hodnoty, které jim byly zadány, na správný typ.
 
-For example, `alert` automatically converts any value to a string to show it. Mathematical operations convert values to numbers.
+Například `alert` automaticky převede libovolnou hodnotu na řetězec a ten zobrazí. Matematické operace převádějí hodnoty na čísla.
 
-There are also cases when we need to explicitly convert a value to the expected type.
+Existují však případy, v nichž musíme konverzi hodnoty na potřebný typ explicitně uvést.
 
-```smart header="Not talking about objects yet"
-In this chapter, we won't cover objects. For now, we'll just be talking about primitives.
+```smart header="Zatím nehovoříme o objektech"
+V této kapitole se ještě nebudeme zabývat objekty. Prozatím budeme hovořit jen o primitivních typech.
 
-Later, after we learn about objects, in the chapter <info:object-toprimitive> we'll see how objects fit in.
+Až se později dozvíme něco o objektech, v kapitole <info:object-toprimitive> uvidíme, jak do toho zapadají.
 ```
 
-## String Conversion
+## Konverze na řetězec
 
-String conversion happens when we need the string form of a value.
+Konverze na řetězec se odehraje tehdy, když potřebujeme hodnotu ve formě řetězce. Provádí ji například `alert(hodnota)`, aby mohla zobrazit hodnotu.
 
-For example, `alert(value)` does it to show the value.
-
-We can also call the `String(value)` function to convert a value to a string:
+Můžeme také volat funkci `String(hodnota)`, která převede zadanou hodnotu na řetězec:
 
 ```js run
-let value = true;
-alert(typeof value); // boolean
+let hodnota = true;
+alert(typeof hodnota); // boolean
 
 *!*
-value = String(value); // now value is a string "true"
-alert(typeof value); // string
+hodnota = String(hodnota); // hodnota je nyní řetězec "true"
+alert(typeof hodnota); // string
 */!*
 ```
 
-String conversion is mostly obvious. A `false` becomes `"false"`, `null` becomes `"null"`, etc.
+Konverze na řetězec je většinou zřejmá: `false` se převede na `"false"`, `null` se převede na `"null"`, atd.
 
-## Numeric Conversion
+## Konverze na číslo
 
-Numeric conversion happens in mathematical functions and expressions automatically.
+Konverze na číslo se automaticky odehrává v matematických funkcích a výrazech.
 
-For example, when division `/` is applied to non-numbers:
+Například když použijeme dělení `/` na něco jiného než čísla:
 
 ```js run
-alert( "6" / "2" ); // 3, strings are converted to numbers
+alert( "6" / "2" ); // 3, řetězce se konvertují na čísla
 ```
 
-We can use the `Number(value)` function to explicitly convert a `value` to a number:
+Pro explicitní konverzi hodnoty `hodnota` na číslo můžeme použít funkci `Number(hodnota)`:
 
 ```js run
 let str = "123";
 alert(typeof str); // string
 
-let num = Number(str); // becomes a number 123
+let num = Number(str); // stane se z něj číslo 123
 
 alert(typeof num); // number
 ```
 
-Explicit conversion is usually required when we read a value from a string-based source like a text form but expect a number to be entered.
+Explicitní konverze je obvykle potřebná, když načítáme hodnotu z řetězcového zdroje, například z textového formuláře, ale očekáváme zadání čísla.
 
-If the string is not a valid number, the result of such a conversion is `NaN`. For instance:
+Není-li v řetězci platné číslo, výsledkem konverze bude `NaN`. Například:
 
 ```js run
-let age = Number("an arbitrary string instead of a number");
+let věk = Number("nějaký řetězec místo čísla");
 
-alert(age); // NaN, conversion failed
+alert(věk); // NaN, konverze neuspěla
 ```
 
-Numeric conversion rules:
+Pravidla pro konverzi na číslo:
 
-| Value |  Becomes... |
-|-------|-------------|
+| Hodnota |  Převede se na... |
+|---------|-------------------|
 |`undefined`|`NaN`|
 |`null`|`0`|
-|<code>true&nbsp;and&nbsp;false</code> | `1` and `0` |
-| `string` | Whitespaces from the start and end are removed. If the remaining string is empty, the result is `0`. Otherwise, the number is "read" from the string. An error gives `NaN`. |
+|<code>true</code>&nbsp;a&nbsp;<code>false</code> | `1` a `0` |
+| `řetězec` | Odstraní se bílé znaky (mezery, tabulátory, konce řádku) ze začátku a konce. Je-li výsledný řetězec prázdný, výsledkem je `0`. Jinak se číslo „přečte“ z řetězce. Při chybě je vydáno `NaN`. |
 
-Examples:
+Příklady:
 
 ```js run
 alert( Number("   123   ") ); // 123
-alert( Number("123z") );      // NaN (error reading a number at "z")
+alert( Number("123z") );      // NaN (chyba při čtení čísla v písmenu "z")
 alert( Number(true) );        // 1
 alert( Number(false) );       // 0
 ```
 
-Please note that `null` and `undefined` behave differently here: `null` becomes zero while `undefined` becomes `NaN`.
+Všimněte si, že `null` a `undefined` se tady chovají rozdílně: `null` se převede na nulu, zatímco `undefined` se převede na `NaN`.
 
-Most mathematical operators also perform such conversion, we'll see that in the next chapter.
+Tuto konverzi provádí i většina matematických operátorů. Uvidíme to v následující kapitole.
 
-## Boolean Conversion
+## Konverze na boolean
 
-Boolean conversion is the simplest one.
+Konverze na boolean je nejjednodušší. Odehrává se v logických operátorech (později se setkáme s testy platnosti podmínky a podobnými věcmi), ale můžeme ji provést i explicitně voláním `Boolean(value)`.
 
-It happens in logical operations (later we'll meet condition tests and other similar things) but can also be performed explicitly with a call to `Boolean(value)`.
+Pravidla konverze:
 
-The conversion rule:
+- Hodnoty, které jsou intuitivně „prázdné“, tj. `0`, prázdný řetězec, `null`, `undefined` a `NaN`, se převedou na `false`.
+- Ostatní hodnoty se převedou na `true`.
 
-- Values that are intuitively "empty", like `0`, an empty string, `null`, `undefined`, and `NaN`, become `false`.
-- Other values become `true`.
-
-For instance:
+Příklad:
 
 ```js run
 alert( Boolean(1) ); // true
 alert( Boolean(0) ); // false
 
-alert( Boolean("hello") ); // true
+alert( Boolean("ahoj") ); // true
 alert( Boolean("") ); // false
 ```
 
-````warn header="Please note: the string with zero `\"0\"` is `true`"
-Some languages (namely PHP) treat `"0"` as `false`. But in JavaScript, a non-empty string is always `true`.
+````warn header="Všimněte si: řetězec s nulou `\"0\"` se převede na `true`"
+Některé jazyky (konkrétně PHP) zacházejí s řetězcem `"0"` jako s `false`, avšak v JavaScriptu je neprázdný řetězec vždy `true`.
 
 ```js run
 alert( Boolean("0") ); // true
-alert( Boolean(" ") ); // spaces, also true (any non-empty string is true)
+alert( Boolean(" ") ); // mezery, také true (každý neprázdný řetězec je true)
 ```
 ````
 
-## Summary
+## Shrnutí
 
-The three most widely used type conversions are to string, to number, and to boolean.
+Tři nejčastěji používané typové konverze jsou na řetězec, na číslo a na boolean.
 
-**`String Conversion`** -- Occurs when we output something. Can be performed with `String(value)`. The conversion to string is usually obvious for primitive values.
+**`Konverze na řetězec`** -- Nastává, když něco vypisujeme. Můžeme ji provést pomocí `String(value)`. Konverze na řetězec je u primitivních hodnot obvykle zřejmá.
 
-**`Numeric Conversion`** -- Occurs in math operations. Can be performed with `Number(value)`.
+**`Konverze na číslo`** -- Nastává při matematických operacích. Můžeme ji provést pomocí `Number(value)`.
 
-The conversion follows the rules:
+Konverze se řídí těmito pravidly:
 
-| Value |  Becomes... |
-|-------|-------------|
+| Hodnota |  Převede se na... |
+|---------|-------------------|
 |`undefined`|`NaN`|
 |`null`|`0`|
 |<code>true&nbsp;/&nbsp;false</code> | `1 / 0` |
-| `string` | The string is read "as is", whitespaces from both sides are ignored. An empty string becomes `0`. An error gives `NaN`. |
+| `řetězec` | Načte se „doslovně“, bílé znaky na obou stranách se ignorují. Z prázdného řetězce se stane `0`. Při chybě je vydáno `NaN`. |
 
-**`Boolean Conversion`** -- Occurs in logical operations. Can be performed with `Boolean(value)`.
+**`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(value)`.
 
-Follows the rules:
+Řídí se těmito pravidly:
 
-| Value |  Becomes... |
-|-------|-------------|
+| Hodnota |  Převede se na... |
+|---------|-------------------|
 |`0`, `null`, `undefined`, `NaN`, `""` |`false`|
-|any other value| `true` |
+|jakákoli jiná hodnota| `true` |
 
+Většinu těchto pravidel je snadné pochopit a zapamatovat si. Významné výjimky, v nichž lidé obvykle chybují, jsou:
 
-Most of these rules are easy to understand and memorize. The notable exceptions where people usually make mistakes are:
+- `undefined` převedené na číslo je `NaN`, ne `0`.
+- `"0"` a řetězce obsahující jen mezery, např. `"   "`, převedené na boolean jsou true.
 
-- `undefined` is `NaN` as a number, not `0`.
-- `"0"` and space-only strings like `"   "` are true as a boolean.
-
-Objects aren't covered here. We'll return to them later in the chapter <info:object-toprimitive> that is devoted exclusively to objects after we learn more basic things about JavaScript.
+O objektech se zde nezmiňujeme. Později, až se v JavaScriptu naučíme další základní věci, se k nim vrátíme v kapitole <info:object-toprimitive>, která je věnována výlučně objektům.
