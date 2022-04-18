@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# The postfix and prefix forms
+# Postfixová a prefixová forma
 
-What are the final values of all variables `a`, `b`, `c` and `d` after the code below?
+Jaké jsou konečné hodnoty všech proměnných `a`, `b`, `c` a `d` po provedení uvedeného kódu?
 
 ```js
 let a = 1, b = 1;
