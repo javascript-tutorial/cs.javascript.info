@@ -2,14 +2,14 @@ importance: 2
 
 ---
 
-# Show the sign
+# Zobrazte znaménko
 
-Using `if..else`, write the code which gets a number via `prompt` and then shows in `alert`:
+Pomocí `if..else` napište kód, který načte číslo pomocí `prompt` a pak pomocí `alert` zobrazí:
 
-- `1`, if the value is greater than zero,
-- `-1`, if less than zero,
-- `0`, if equals zero.
+- `1`, je-li toto číslo větší než nula,
+- `-1`, je-li menší než nula,
+- `0`, je-li rovno nule.
 
-In this task we assume that the input is always a number.
+V tomto cvičení předpokládáme, že vstupem je vždy číslo.
 
 [demo src="if_sign"]
