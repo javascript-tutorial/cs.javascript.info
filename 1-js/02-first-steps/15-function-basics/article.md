@@ -1,500 +1,465 @@
-# Functions
+# Funkce
 
-Quite often we need to perform a similar action in many places of the script.
+Poměrně často potřebujeme vykonat podobnou akci na mnoha místech skriptu. Například chceme zobrazit pěkně vypadající zprávu, když se návštěvník přihlásí, odhlásí a možná i někde jinde.
 
-For example, we need to show a nice-looking message when a visitor logs in, logs out and maybe somewhere else.
+Funkce jsou hlavní „stavební kameny“ programu. Umožňují volat kód mnohokrát, aniž by bylo nutné ho opakovat.
 
-Functions are the main "building blocks" of the program. They allow the code to be called many times without repetition.
+Už jsme viděli příklady vestavěných funkcí, např. `alert(zpráva)`, `prompt(zpráva, default)` a `confirm(otázka)`. Můžeme si však vytvořit i své vlastní funkce.
 
-We've already seen examples of built-in functions, like `alert(message)`, `prompt(message, default)` and `confirm(question)`. But we can create functions of our own as well.
+## Deklarace funkcí
 
-## Function Declaration
+Funkce vytváříme pomocí *deklarace funkce*.
 
-To create a function we can use a *function declaration*.
-
-It looks like this:
+Vypadá takto:
 
 ```js
-function showMessage() {
-  alert( 'Hello everyone!' );
+function zobrazZprávu() {
+  alert( 'Ahoj všichni!' );
 }
 ```
 
-The `function` keyword goes first, then goes the *name of the function*, then a list of *parameters* between the parentheses (comma-separated, empty in the example above, we'll see examples later) and finally the code of the function, also named "the function body", between curly braces.
+Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, pak v závorkách seznam *parametrů* (jsou odděleny čárkami, v uvedeném příkladu je seznam prázdný, jeho příklady uvidíme později) a nakonec ve složených závorkách kód funkce, nazývaný také „tělo funkce“.
 
 ```js
-function name(parameter1, parameter2, ... parameterN) {
-  ...body...
+function název(parametr1, parametr2, ... parametrN) {
+  ...tělo...
 }
 ```
 
-Our new function can be called by its name: `showMessage()`.
+Naši novou funkci pak můžeme volat pomocí jejího názvu: `zobrazZprávu()`.
 
-For instance:
+Například:
 
 ```js run
-function showMessage() {
-  alert( 'Hello everyone!' );
+function zobrazZprávu() {
+  alert( 'Ahoj všichni!' );
 }
 
 *!*
-showMessage();
-showMessage();
+zobrazZprávu();
+zobrazZprávu();
 */!*
 ```
 
-The call `showMessage()` executes the code of the function. Here we will see the message two times.
+Volání `zobrazZprávu()` vykoná kód funkce. Zde tedy uvidíme tuto zprávu dvakrát.
 
-This example clearly demonstrates one of the main purposes of functions: to avoid code duplication.
+Tento příklad jasně demonstruje jeden z hlavních účelů funkcí: zdržet se duplikace kódu.
 
-If we ever need to change the message or the way it is shown, it's enough to modify the code in one place: the function which outputs it.
+Jestliže někdy budeme potřebovat změnit text zprávy nebo způsob, jakým je zobrazována, bude nám stačit modifikovat kód na jediném místě: ve funkci, která zprávu vypisuje.
 
-## Local variables
+## Lokální proměnné
 
-A variable declared inside a function is only visible inside that function.
+Proměnná deklarovaná uvnitř funkce je viditelná pouze v této funkci.
 
-For example:
+Příklad:
 
 ```js run
-function showMessage() {
+function zobrazZprávu() {
 *!*
-  let message = "Hello, I'm JavaScript!"; // local variable
+  let zpráva = "Ahoj, já jsem JavaScript!"; // lokální proměnná
 */!*
 
-  alert( message );
+  alert( zpráva );
 }
 
-showMessage(); // Hello, I'm JavaScript!
+zobrazZprávu(); // Ahoj, já jsem JavaScript!
 
-alert( message ); // <-- Error! The variable is local to the function
+alert( zpráva ); // <-- Chyba! Proměnná je lokální uvnitř funkce
 ```
 
-## Outer variables
+## Vnější proměnné
 
-A function can access an outer variable as well, for example:
+Funkce může přistupovat i k vnějším proměnným, například:
 
 ```js run no-beautify
-let *!*userName*/!* = 'John';
+let *!*uživatelskéJméno*/!* = 'Jan';
 
-function showMessage() {
-  let message = 'Hello, ' + *!*userName*/!*;
-  alert(message);
+function zobrazZprávu() {
+  let zpráva = 'Ahoj, ' + *!*uživatelskéJméno*/!*;
+  alert(zpráva);
 }
 
-showMessage(); // Hello, John
+zobrazZprávu(); // Ahoj, Jan
 ```
 
-The function has full access to the outer variable. It can modify it as well.
+Funkce má plný přístup k vnější proměnné a může ji také modifikovat.
 
-For instance:
+Příklad:
 
 ```js run
-let *!*userName*/!* = 'John';
+let *!*uživatelskéJméno*/!* = 'Jan';
 
-function showMessage() {
-  *!*userName*/!* = "Bob"; // (1) changed the outer variable
+function zobrazZprávu() {
+  *!*uživatelskéJméno*/!* = "Bob"; // (1) změna vnější proměnné
 
-  let message = 'Hello, ' + *!*userName*/!*;
-  alert(message);
+  let zpráva = 'Ahoj, ' + *!*uživatelskéJméno*/!*;
+  alert(zpráva);
 }
 
-alert( userName ); // *!*John*/!* before the function call
+alert( uživatelskéJméno ); // *!*Jan*/!* před voláním funkce
 
-showMessage();
+zobrazZprávu();
 
-alert( userName ); // *!*Bob*/!*, the value was modified by the function
+alert( uživatelskéJméno ); // *!*Bob*/!*, funkce změnila hodnotu proměnné
 ```
 
-The outer variable is only used if there's no local one.
-
-If a same-named variable is declared inside the function then it *shadows* the outer one. For instance, in the code below the function uses the local `userName`. The outer one is ignored:
+Vnější proměnná se použije jen tehdy, neexistuje-li stejnojmenná lokální. Pokud je uvnitř funkce deklarována proměnná se stejným názvem, *zastíní* tu vnější. Například v níže uvedeném kódu funkce používá lokální `uživatelskéJméno` a vnější ignoruje:
 
 ```js run
-let userName = 'John';
+let uživatelskéJméno = 'Jan';
 
-function showMessage() {
+function zobrazZprávu() {
 *!*
-  let userName = "Bob"; // declare a local variable
+  let uživatelskéJméno = "Bob"; // deklarace lokální proměnné
 */!*
 
-  let message = 'Hello, ' + userName; // *!*Bob*/!*
-  alert(message);
+  let zpráva = 'Ahoj, ' + uživatelskéJméno; // *!*Bob*/!*
+  alert(zpráva);
 }
 
-// the function will create and use its own userName
-showMessage();
+// funkce vytvoří a použije své vlastní uživatelskéJméno
+zobrazZprávu();
 
-alert( userName ); // *!*John*/!*, unchanged, the function did not access the outer variable
+alert( uživatelskéJméno ); // *!*Jan*/!*, beze změny, funkce nepřistupovala k vnější proměnné
 ```
 
-```smart header="Global variables"
-Variables declared outside of any function, such as the outer `userName` in the code above, are called *global*.
+```smart header="Globální proměnné"
+Proměnné deklarované mimo jakoukoli funkci, například `uživatelskéJméno` ve výše uvedeném kódu, se nazývají *globální*.
 
-Global variables are visible from any function (unless shadowed by locals).
+Globální proměnné jsou viditelné z každé funkce (pokud nejsou zastíněny lokálními).
 
-It's a good practice to minimize the use of global variables. Modern code has few or no globals. Most variables reside in their functions. Sometimes though, they can be useful to store project-level data.
+Je dobrým zvykem minimalizovat používání globálních proměnných. Moderní kód obsahuje jen málo globálních proměnných nebo vůbec žádné. Většina proměnných spočívá ve svých funkcích. Někdy ovšem mohou být globální proměnné užitečné k ukládání dat na úrovni projektu.
 ```
 
-## Parameters
+## Parametry
 
-We can pass arbitrary data to functions using parameters.
+Do funkcí můžeme předávat jakákoli data pomocí parametrů.
 
-In the example below, the function has two parameters: `from` and `text`.
+V níže uvedeném příkladu má funkce dva parametry: `odKoho` a `text`.
 
 ```js run
-function showMessage(*!*from, text*/!*) { // parameters: from, text
-  alert(from + ': ' + text);
+function zobrazZprávu(*!*odKoho, text*/!*) { // parametry: odKoho, text
+  alert(odKoho + ': ' + text);
 }
-
-*!*showMessage('Ann', 'Hello!');*/!* // Ann: Hello! (*)
-*!*showMessage('Ann', "What's up?");*/!* // Ann: What's up? (**)
-```
-
-When the function is called in lines `(*)` and `(**)`, the given values are copied to local variables `from` and `text`. Then the function uses them.
-
-Here's one more example: we have a variable `from` and pass it to the function. Please note: the function changes `from`, but the change is not seen outside, because a function always gets a copy of the value:
-
-```js run
-function showMessage(from, text) {
 
 *!*
-  from = '*' + from + '*'; // make "from" look nicer
+zobrazZprávu('Anna', 'Ahoj!'); // Anna: Ahoj! (*)
+zobrazZprávu('Anna', "Co se děje?"); // Anna: Co se děje? (**)
 */!*
-
-  alert( from + ': ' + text );
-}
-
-let from = "Ann";
-
-showMessage(from, "Hello"); // *Ann*: Hello
-
-// the value of "from" is the same, the function modified a local copy
-alert( from ); // Ann
 ```
 
-When a value is passed as a function parameter, it's also called an *argument*.
+Když se na řádcích `(*)` a `(**)` volá funkce, zadané hodnoty se zkopírují do lokálních proměnných `odKoho` a `text`. Pak je funkce použije.
 
-In other words, to put these terms straight:
-
-- A parameter is the variable listed inside the parentheses in the function declaration (it's a declaration time term).
-- An argument is the value that is passed to the function when it is called (it's a call time term).
-
-We declare functions listing their parameters, then call them passing arguments.
-
-In the example above, one might say: "the function `showMessage` is declared with two parameters, then called with two arguments: `from` and `"Hello"`".
-
-
-## Default values
-
-If a function is called, but an argument is not provided, then the corresponding value becomes `undefined`.
-
-For instance, the aforementioned function `showMessage(from, text)` can be called with a single argument:
-
-```js
-showMessage("Ann");
-```
-
-That's not an error. Such a call would output `"*Ann*: undefined"`. As the value for `text` isn't passed, it becomes `undefined`.
-
-We can specify the so-called "default" (to use if omitted) value for a parameter in the function declaration, using `=`:
+Další příklad: máme proměnnou `odKoho` a předáme ji funkci. Všimněte si, že funkce změní hodnotu `odKoho`, ale tato změna není vidět zvnějšku, jelikož funkce obdrží vždy kopii hodnoty:
 
 ```js run
-function showMessage(from, *!*text = "no text given"*/!*) {
-  alert( from + ": " + text );
-}
+function zobrazZprávu(odKoho, text) {
 
-showMessage("Ann"); // Ann: no text given
-```
-
-Now if the `text` parameter is not passed, it will get the value `"no text given"`
-
-Here `"no text given"` is a string, but it can be a more complex expression, which is only evaluated and assigned if the parameter is missing. So, this is also possible:
-
-```js run
-function showMessage(from, text = anotherFunction()) {
-  // anotherFunction() only executed if no text given
-  // its result becomes the value of text
-}
-```
-
-```smart header="Evaluation of default parameters"
-In JavaScript, a default parameter is evaluated every time the function is called without the respective parameter.
-
-In the example above, `anotherFunction()` isn't called at all, if the `text` parameter is provided.
-
-On the other hand, it's independently called every time when `text` is missing.
-```
-
-````smart header="Default parameters in old JavaScript code"
-Several years ago, JavaScript didn't support the syntax for default parameters. So people used other ways to specify them.
-
-Nowadays, we can come across them in old scripts.
-
-For example, an explicit check for `undefined`:
-
-```js
-function showMessage(from, text) {
 *!*
-  if (text === undefined) {
-    text = 'no text given';
-  }
+  odKoho = '*' + odKoho + '*'; // aby „odKoho“ vypadalo lépe
 */!*
 
-  alert( from + ": " + text );
+  alert( odKoho + ': ' + text );
 }
+
+let odKoho = "Anna";
+
+zobrazZprávu(odKoho, "Ahoj"); // *Anna*: Ahoj
+
+// hodnota „odKoho“ je stejná, funkce změnila lokální kopii
+alert( odKoho ); // Anna
 ```
 
-...Or using the `||` operator:
+Když je nějaká hodnota předána jako parametr funkce, nazývá se také *argument*.
+
+Jinými slovy, abychom tyto pojmy upřesnili:
+
+- Parametr je hodnota uvedená v závorkách v deklaraci funkce (pojem používaný v okamžiku deklarace).
+- Argument je hodnota, která je předána funkci, když je volána (pojem používaný v okamžiku volání).
+
+Když funkce deklarujeme, vypisujeme jejich parametry, a pak je voláme předáním argumentů.
+
+Ve výše uvedeném příkladu bychom mohli říci: „funkce `zobrazZprávu` je deklarována se dvěma parametry a pak je volána se dvěma argumenty: `odKoho` a `"Ahoj"`.“
+
+## Defaultní hodnoty
+
+Jestliže je volána funkce, ale některý argument není poskytnut, pak odpovídající hodnota bude `undefined`.
+
+Například výše uvedenou funkci `zobrazZprávu(odKoho, text)` lze volat jen s jediným argumentem:
 
 ```js
-function showMessage(from, text) {
-  // If the value of text is falsy, assign the default value
-  // this assumes that text == "" is the same as no text at all
-  text = text || 'no text given';
-  ...
-}
+zobrazZprávu("Anna");
 ```
-````
 
+To není chyba. Takové volání vypíše `"*Anna*: undefined"`. Protože hodnota `text` nebyla předána, stane se `undefined`.
 
-### Alternative default parameters
-
-Sometimes it makes sense to assign default values for parameters not in the function declaration, but at a later stage.
-
-We can check if the parameter is passed during the function execution, by comparing it with `undefined`:
+V deklaraci funkce můžeme specifikovat tzv. „defaultní“ (používanou, není-li uvedena) hodnotu parametru pomocí `=`:
 
 ```js run
-function showMessage(text) {
+function zobrazZprávu(odKoho, *!*text = "text není zadán"*/!*) {
+  alert( odKoho + ": " + text );
+}
+
+zobrazZprávu("Anna"); // Anna: text není zadán
+```
+
+Jestliže nyní parametr `text` nebude předán, bude mít hodnotu `"text není zadán"`.
+
+Zde `"text není zadán"` je řetězec, ale může to být složitější výraz, který se vyhodnotí a přiřadí jen tehdy, jestliže parametr chybí. Je tedy možné i toto:
+
+```js run
+function zobrazZprávu(odKoho, text = jináFunkce()) {
+  // jináFunkce() se vykoná jen tehdy, když text není předán
+  // její výsledek pak bude hodnotou parametru text
+}
+```
+
+```smart header="Vyhodnocení defaultních parametrů"
+V JavaScriptu bude defaultní parametr vyhodnocen pokaždé, když bude funkce volána bez příslušného parametru.
+
+Ve výše uvedeném příkladu nebude `jináFunkce()` vůbec volána, jestliže bude parametr `text` poskytnut.
+
+Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude `text` chybět.
+```
+
+### Alternativní defaultní parametry
+
+Někdy má smysl nenastavovat defaultní hodnoty parametrů v deklaraci funkce, ale až později.
+
+Abychom během provádění funkce ověřili, zda parametr byl předán, můžeme jej porovnat s `undefined`:
+
+```js run
+function zobrazZprávu(text) {
   // ...
 
 *!*
-  if (text === undefined) { // if the parameter is missing
-    text = 'empty message';
+  if (text === undefined) { // jestliže parametr chybí
+    text = 'prázdná zpráva';
   }
 */!*
 
   alert(text);
 }
 
-showMessage(); // empty message
+zobrazZprávu(); // prázdná zpráva
 ```
 
-...Or we could use the `||` operator:
+...Nebo můžeme použít operátor `||`:
 
 ```js
-function showMessage(text) {
-  // if text is undefined or otherwise falsy, set it to 'empty'
-  text = text || 'empty';
+function zobrazZprávu(text) {
+  // je-li parametr text neuveden nebo je nepravdivý, nastaví se na 'prázdný'
+  text = text || 'prázdný';
   ...
 }
 ```
 
-Modern JavaScript engines support the [nullish coalescing operator](info:nullish-coalescing-operator) `??`, it's better when most falsy values, such as `0`, should be considered "normal":
+Moderní enginy JavaScriptu podporují [operátor koalescence](info:nullish-coalescing-operator) `??`, který je lepší použít, když by většina nepravdivých hodnot, například `0`, měla být zpracována „normálně“:
 
 ```js run
-function showCount(count) {
-  // if count is undefined or null, show "unknown"
-  alert(count ?? "unknown");
+function zobrazPočet(počet) {
+  // je-li počet undefined nebo null, zobrazí se "neznámý"
+  alert(počet ?? "neznámý");
 }
 
-showCount(0); // 0
-showCount(null); // unknown
-showCount(); // unknown
+zobrazPočet(0); // 0
+zobrazPočet(null); // neznámý
+zobrazPočet(); // neznámý
 ```
 
-## Returning a value
+## Návratová hodnota
 
-A function can return a value back into the calling code as the result.
+Funkce může vrátit volajícímu kódu jako výsledek nějakou hodnotu.
 
-The simplest example would be a function that sums two values:
+Nejjednodušším příkladem je funkce, která sečte dvě hodnoty:
 
 ```js run no-beautify
-function sum(a, b) {
+function součet(a, b) {
   *!*return*/!* a + b;
 }
 
-let result = sum(1, 2);
-alert( result ); // 3
+let výsledek = součet(1, 2);
+alert( výsledek ); // 3
 ```
 
-The directive `return` can be in any place of the function. When the execution reaches it, the function stops, and the value is returned to the calling code (assigned to `result` above).
+Direktiva `return` může být ve funkci umístěna kdekoli. Když na ni výkon funkce narazí, ukončí se a vrátí zadanou hodnotu volajícímu kódu (v uvedeném příkladu se přiřadí do proměnné `výsledek`).
 
-There may be many occurrences of `return` in a single function. For instance:
+V jedné funkci se může `return` vyskytovat mnohokrát. Příklad:
 
 ```js run
-function checkAge(age) {
-  if (age >= 18) {
+function ověřVěk(věk) {
+  if (věk >= 18) {
 *!*
     return true;
 */!*
   } else {
 *!*
-    return confirm('Do you have permission from your parents?');
+    return confirm('Máš povolení od rodičů?');
 */!*
   }
 }
 
-let age = prompt('How old are you?', 18);
+let věk = prompt('Kolik je ti let?', 18);
 
-if ( checkAge(age) ) {
-  alert( 'Access granted' );
+if ( ověřVěk(věk) ) {
+  alert( 'Přístup povolen' );
 } else {
-  alert( 'Access denied' );
+  alert( 'Přístup zakázán' );
 }
 ```
 
-It is possible to use `return` without a value. That causes the function to exit immediately.
+Je možné použít `return` bez hodnoty. To způsobí okamžité ukončení funkce.
 
-For example:
+Příklad:
 
 ```js
-function showMovie(age) {
-  if ( !checkAge(age) ) {
+function zobrazFilm(věk) {
+  if ( !ověřVěk(věk) ) {
 *!*
     return;
 */!*
   }
 
-  alert( "Showing you the movie" ); // (*)
+  alert( "Zobrazím vám film" ); // (*)
   // ...
 }
 ```
 
-In the code above, if `checkAge(age)` returns `false`, then `showMovie` won't proceed to the `alert`.
+Pokud v uvedeném kódu `ověřVěk(věk)` vrátí `false`, pak `zobrazFilm` nebude pokračovat k `alert`.
 
-````smart header="A function with an empty `return` or without it returns `undefined`"
-If a function does not return a value, it is the same as if it returns `undefined`:
+````smart header="Funkce s prázdným `return` nebo bez něj vrátí `undefined`"
+Jestliže funkce nevrátí žádnou hodnotu, je to stejné, jako by vrátila `undefined`:
 
 ```js run
-function doNothing() { /* empty */ }
+function nedělejNic() { /* prázdná funkce */ }
 
-alert( doNothing() === undefined ); // true
+alert( nedělejNic() === undefined ); // true
 ```
 
-An empty `return` is also the same as `return undefined`:
+Rovněž prázdný `return` je totéž jako `return undefined`:
 
 ```js run
-function doNothing() {
+function nedělejNic() {
   return;
 }
 
-alert( doNothing() === undefined ); // true
+alert( nedělejNic() === undefined ); // true
 ```
 ````
 
-````warn header="Never add a newline between `return` and the value"
-For a long expression in `return`, it might be tempting to put it on a separate line, like this:
+````warn header="Nevkládejte konec řádku mezi `return` a hodnotu"
+Je-li za `return` dlouhý výraz, může to svádět k jeho umístění na samostatný řádek, například:
 
 ```js
 return
- (some + long + expression + or + whatever * f(a) + f(b))
+ (nějaký + dlouhý + výraz + nebo + co * f(a) + f(b))
 ```
-That doesn't work, because JavaScript assumes a semicolon after `return`. That'll work the same as:
+To však nebude fungovat, neboť JavaScript za `return` vloží středník. Bude to tedy stejné jako:
 
 ```js
 return*!*;*/!*
- (some + long + expression + or + whatever * f(a) + f(b))
+ (nějaký + dlouhý + výraz + nebo + co * f(a) + f(b))
 ```
 
-So, it effectively becomes an empty return.
+Z příkazu se tedy stane prázdný `return`.
 
-If we want the returned expression to wrap across multiple lines, we should start it at the same line as `return`. Or at least put the opening parentheses there as follows:
+Jestliže chceme rozdělit vracený výraz na více řádků, měli bychom jej zahájit na stejném řádku jako `return`, nebo aspoň tam umístit levou závorku následovně:
 
 ```js
 return (
-  some + long + expression
-  + or +
-  whatever * f(a) + f(b)
+  nějaký + dlouhý + výraz
+  + nebo +
+  co * f(a) + f(b)
   )
 ```
-And it will work just as we expect it to.
+Teď to bude fungovat tak, jak očekáváme.
 ````
 
-## Naming a function [#function-naming]
+## Pojmenování funkcí [#function-naming]
 
-Functions are actions. So their name is usually a verb. It should be brief, as accurate as possible and describe what the function does, so that someone reading the code gets an indication of what the function does.
+Funkce jsou akce, takže jejich názvem bývá obvykle sloveso. Mělo by být krátké a mělo by co nejpřesněji popisovat, co funkce dělá, aby ten, kdo čte kód, nabyl tušení, co přesně funkce provádí.
 
-It is a widespread practice to start a function with a verbal prefix which vaguely describes the action. There must be an agreement within the team on the meaning of the prefixes.
+Je široce rozšířenou praktikou zahájit název funkce slovesným prefixem (předponou), který přibližně popisuje akci. Na významu prefixů se celý tým musí dohodnout.
 
-For instance, functions that start with `"show"` usually show something.
+Například funkce, jejichž název začíná `"zobraz"` (v angličtině `"show"`), obvykle něco zobrazují.
 
-Function starting with...
+Funkce, které začínají...
 
-- `"get…"` -- return a value,
-- `"calc…"` -- calculate something,
-- `"create…"` -- create something,
-- `"check…"` -- check something and return a boolean, etc.
+- `"vrať…"` (`"get…"`) -- vracejí nějakou hodnotu,
+- `"vypočítej…"` (`"calc…"`) -- něco vypočítávají,
+- `"vytvoř…"` (`"create…"`) -- něco vytvářejí,
+- `"ověř…"` (`"check…"`) -- něco ověřují a vracejí typ boolean, atd.
 
-Examples of such names:
+Příklady takových názvů:
 
 ```js no-beautify
-showMessage(..)     // shows a message
-getAge(..)          // returns the age (gets it somehow)
-calcSum(..)         // calculates a sum and returns the result
-createForm(..)      // creates a form (and usually returns it)
-checkPermission(..) // checks a permission, returns true/false
+zobrazZprávu(..)    // zobrazí zprávu
+vraťVěk(..)         // vrátí věk (nějak jej zjistí)
+vypočítejSoučet(..) // vypočítá součet a vrátí výsledek
+vytvořFormulář(..)  // vytvoří formulář (a obvykle jej vrátí)
+ověřPrávo(..)       // ověří právo, vrátí true nebo false
 ```
 
-With prefixes in place, a glance at a function name gives an understanding what kind of work it does and what kind of value it returns.
+Když jsou použity prefixy, pohled na název funkce nám umožňuje lépe porozumět, jaký druh činnosti funkce provádí a jaký druh hodnoty vrací.
 
-```smart header="One function -- one action"
-A function should do exactly what is suggested by its name, no more.
+```smart header="Jedna funkce -- jedna akce"
+Funkce by měla provádět přesně to, co naznačuje její název, a nic víc.
 
-Two independent actions usually deserve two functions, even if they are usually called together (in that case we can make a 3rd function that calls those two).
+Dvě nezávislé akce si zpravidla zasluhují dvě funkce, i když jsou obvykle volány společně (v takovém případě můžeme vytvořit třetí funkci, která bude volat ty dvě).
 
-A few examples of breaking this rule:
+Několik příkladů porušení tohoto pravidla:
 
-- `getAge` -- would be bad if it shows an `alert` with the age (should only get).
-- `createForm` -- would be bad if it modifies the document, adding a form to it (should only create it and return).
-- `checkPermission` -- would be bad if it displays the `access granted/denied` message (should only perform the check and return the result).
+- `vraťVěk` -- bylo by špatně, kdyby zobrazovala `alert` s věkem (měla by ho jen vrátit).
+- `vytvořFormulář` -- bylo by špatně, kdyby modifikovala dokument a formulář do něj přidávala (měla by ho jen vytvořit a vrátit).
+- `ověřPrávo` -- bylo by špatně, kdyby zobrazovala zprávu `přístup povolen/zamítnut` (měla by jen ověřit právo přístupu a vrátit výsledek).
 
-These examples assume common meanings of prefixes. You and your team are free to agree on other meanings, but usually they're not much different. In any case, you should have a firm understanding of what a prefix means, what a prefixed function can and cannot do. All same-prefixed functions should obey the rules. And the team should share the knowledge.
+Tyto příklady předpokládají běžný význam prefixů. Se svým týmem se můžete dohodnout na jiném významu, ale obvykle se příliš neliší. V každém případě byste měli jasně rozumět tomu, co prefix znamená a co funkce s tímto prefixem v názvu může a nemůže dělat. Tato pravidla by měly dodržovat všechny funkce se stejným prefixem a celý tým by je měl znát.
 ```
 
-```smart header="Ultrashort function names"
-Functions that are used *very often* sometimes have ultrashort names.
+```smart header="Ultrakrátké názvy funkcí"
+Funkce, které se používají *velmi často*, mají někdy ultrakrátké názvy.
 
-For example, the [jQuery](http://jquery.com) framework defines a function with `$`. The [Lodash](http://lodash.com/) library has its core function named `_`.
+Například rozhraní [jQuery](http://jquery.com) definuje funkci s názvem `$`. Knihovna [Lodash](http://lodash.com/) má svou ústřední funkci pojmenovanou `_`.
 
-These are exceptions. Generally function names should be concise and descriptive.
+To jsou však výjimky. Obecně by názvy funkcí měly být stručné a popisné.
 ```
 
-## Functions == Comments
+## Funkce == komentáře
 
-Functions should be short and do exactly one thing. If that thing is big, maybe it's worth it to split the function into a few smaller functions. Sometimes following this rule may not be that easy, but it's definitely a good thing.
+Funkce by měly být krátké a provádět právě jednu věc. Je-li ta věc velká, může se vyplatit rozdělit funkci na několik menších funkcí. Dodržovat toto pravidlo nemusí být vždy snadné, ale bezpochyby se to vyplatí.
 
-A separate function is not only easier to test and debug -- its very existence is a great comment!
+Oddělená funkce se nejenom snadněji testuje a ladí -- samotná její existence je skvělým komentářem!
 
-For instance, compare the two functions `showPrimes(n)` below. Each one outputs [prime numbers](https://en.wikipedia.org/wiki/Prime_number) up to `n`.
+Například srovnejte dvě níže uvedené funkce `zobrazPrvočísla(n)`. Každá z nich vypíše [prvočísla](https://cs.wikipedia.org/wiki/Prvočíslo) menší nebo rovná `n`.
 
-The first variant uses a label:
+První varianta používá návěští:
 
 ```js
-function showPrimes(n) {
-  nextPrime: for (let i = 2; i < n; i++) {
+function zobrazPrvočísla(n) {
+  dalšíPrvočíslo: for (let i = 2; i < n; i++) {
 
     for (let j = 2; j < i; j++) {
-      if (i % j == 0) continue nextPrime;
+      if (i % j == 0) continue dalšíPrvočíslo;
     }
 
-    alert( i ); // a prime
+    alert( i ); // prvočíslo
   }
 }
 ```
 
-The second variant uses an additional function `isPrime(n)` to test for primality:
+Druhá varianta používá další funkci `jePrvočíslo(n)`, která otestuje, zda zadané číslo je prvočíslo:
 
 ```js
-function showPrimes(n) {
+function zobrazPrvočísla(n) {
 
   for (let i = 2; i < n; i++) {
-    *!*if (!isPrime(i)) continue;*/!*
+    *!*if (!jePrvočíslo(i)) continue;*/!*
 
-    alert(i);  // a prime
+    alert(i);  // prvočíslo
   }
 }
 
-function isPrime(n) {
+function jePrvočíslo(n) {
   for (let i = 2; i < n; i++) {
     if ( n % i == 0) return false;
   }
@@ -502,32 +467,32 @@ function isPrime(n) {
 }
 ```
 
-The second variant is easier to understand, isn't it? Instead of the code piece we see a name of the action (`isPrime`). Sometimes people refer to such code as *self-describing*.
+Druhou variantu je snadnější pochopit, že? Namísto části kódu vidíme název akce (`jePrvočíslo`). Takovému kódu lidé někdy říkají *sebepopisující*.
 
-So, functions can be created even if we don't intend to reuse them. They structure the code and make it readable.
+Funkce tedy můžeme vytvořit, i když nemáme v úmyslu je používat opakovaně. Strukturují kód a činí jej čitelnějším.
 
-## Summary
+## Shrnutí
 
-A function declaration looks like this:
+Deklarace funkce vypadá takto:
 
 ```js
-function name(parameters, delimited, by, comma) {
-  /* code */
+function název(parametry, oddělené, čárkami) {
+  /* kód */
 }
 ```
 
-- Values passed to a function as parameters are copied to its local variables.
-- A function may access outer variables. But it works only from inside out. The code outside of the function doesn't see its local variables.
-- A function can return a value. If it doesn't, then its result is `undefined`.
+- Hodnoty předané funkci jako parametry se zkopírují do jejích lokálních proměnných.
+- Funkce může přistupovat k vnějším proměnným, ale opačně to nefunguje -- kód mimo funkci nevidí její lokální proměnné.
+- Funkce může vracet hodnotu. Pokud žádnou nevrátí, její výsledek je `undefined`.
 
-To make the code clean and easy to understand, it's recommended to use mainly local variables and parameters in the function, not outer variables.
+Aby kód byl čistší a srozumitelnější, doporučuje se ve funkcích používat zejména lokální proměnné a parametry, ne vnější proměnné.
 
-It is always easier to understand a function which gets parameters, works with them and returns a result than a function which gets no parameters, but modifies outer variables as a side-effect.
+Je vždy jednodušší pochopit funkci, která obdrží parametry, něco s nimi udělá a vrátí výsledek, než funkci, která neobdrží žádné parametry, ale jako vedlejší efekt modifikuje vnější proměnné.
 
-Function naming:
+Pojmenování funkcí:
 
-- A name should clearly describe what the function does. When we see a function call in the code, a good name instantly gives us an understanding what it does and returns.
-- A function is an action, so function names are usually verbal.
-- There exist many well-known function prefixes like `create…`, `show…`, `get…`, `check…` and so on. Use them to hint what a function does.
+- Název by měl jasně popisovat, co funkce dělá. Když v kódu vidíme volání funkce, dobrý název nám umožňuje okamžitě pochopit, co funkce dělá a co vrací.
+- Funkce je akce, takže názvy funkcí jsou obvykle slovesa.
+- Existuje mnoho dobře známých prefixů funkcí, např. `vytvoř…`, `zobraz…`, `vrať…`, `ověř…` atd. Používají se, aby bylo naznačeno, co funkce dělá.
 
-Functions are the main building blocks of scripts. Now we've covered the basics, so we actually can start creating and using them. But that's only the beginning of the path. We are going to return to them many times, going more deeply into their advanced features.
+Funkce jsou hlavními stavebními kameny skriptů. Když jsme nyní vysvětlili jejich základy, můžeme je začít vytvářet a používat. To je však teprve začátek. Ještě mnohokrát se k nim vrátíme a pronikneme hlouběji do jejich složitějších vlastností.
