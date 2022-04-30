@@ -35,7 +35,7 @@ Příklad:
 ```
 
 ```online
-Příklad si můžete přehrát kliknutím na tlačítko „přehrát“ v pravém horním rohu ve výše uvedeném okně.
+Příklad si můžete přehrát kliknutím na tlačítko „Přehrát“ v pravém horním rohu ve výše uvedeném okně.
 ```
 
 Značka `<script>` obsahuje kód v JavaScriptu, který se spustí automaticky, když prohlížeč začne tuto značku zpracovávat.
