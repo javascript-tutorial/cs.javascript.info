@@ -110,7 +110,7 @@ Tohle nebude fungovat:
 </script>
 ```
 
-Musíme si vybrat mezi externím `<script src="…">` a značkou `<script>` s kódem.
+Musíme si vybrat mezi externím `<script src="…">` a vloženým `<script>` skriptem.
 
 Výše uvedený příklad může fungovat, když jej rozdělíme do dvou skriptů:
 
