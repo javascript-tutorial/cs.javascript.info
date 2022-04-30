@@ -96,7 +96,7 @@ Výhodou odděleného souboru je, že prohlížeč si jej stáhne a uloží do s
 
 Jiné stránky, které se odkazují na stejný skript, si jej místo opětovného stažení nahrají z cache, takže se soubor ve skutečnosti stáhne pouze jednou.
 
-Tím se snižuje objem přenosu a načítání stránek se urychluje.
+Tím se snižuje přenos dat a načítání stránek je tak rychlejší.
 ```
 
 ````warn header="Je-li nastaveno `src`, obsah značky se ignoruje."
