@@ -67,7 +67,7 @@ Komentáře před a za skripty.
 
 Máme-li větší množství kódu v JavaScriptu, můžeme jej uložit do samostatného souboru.
 
-Soubory se skripty se přidávají do HTML pomocí atributu `src`:
+Tyto soubory se přidávají do HTML pomocí atributu `src`:
 
 ```html
 <script src="/cesta/ke/skriptu.js"></script>
