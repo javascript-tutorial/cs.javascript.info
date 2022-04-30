@@ -73,7 +73,7 @@ alert("Ahoj")
 
 Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku chybí.
 
-Když tento kód nyní spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
+Když tento kód spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
 
 Je to proto, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`. S kódem v prvním příkladu se tedy zachází jako s jediným příkazem.
 
