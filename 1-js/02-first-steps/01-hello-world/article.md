@@ -9,7 +9,7 @@ Nejprve se podíváme, jak vložit skript na webovou stránku. V prostředích n
 
 ## Značka „script“
 
-Programy v JavaScriptu můžeme vložit téměř kamkoli do HTML dokumentu pomocí značky `<script>`.
+Programy v JavaScriptu můžeme vložit téměř kamkoli v HTML dokumentu pomocí značky `<script>`.
 
 Příklad:
 
