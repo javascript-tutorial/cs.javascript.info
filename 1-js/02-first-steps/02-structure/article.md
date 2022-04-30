@@ -131,7 +131,7 @@ alert('Ahoj');
 alert('světe');
 ```
 
-```smart header="Používejte horké klávesy!"
+```smart header="Používejte zkratky!"
 Ve většině editorů se dá řádek kódu zakomentovat stisknutím klávesy `key:Ctrl+/` pro jednořádkový komentář a `key:Ctrl+Shift+/` nebo podobné kombinace pro víceřádkový komentář (označte část kódu jako blok a stiskněte uvedené klávesy). Na Macu zkuste `key:Cmd` místo `key:Ctrl` a `key:Option` místo `key:Shift`.
 ```
 
