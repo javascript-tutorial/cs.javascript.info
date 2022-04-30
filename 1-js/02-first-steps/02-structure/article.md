@@ -105,7 +105,7 @@ Například zde:
 // Tento komentář je umístěn na samostatném řádku
 alert('Ahoj');
 
-alert('světe'); // Tento komentář následuje za příkazem
+alert('světe'); // Tento komentář je za příkazem
 ```
 
 **Víceřádkové komentáře začínají lomítkem a hvězdičkou <code>/&#42;</code> a končí hvězdičkou a lomítkem <code>&#42;/</code>.**
