@@ -96,7 +96,7 @@ S postupem času se programy stávají čím dál složitější, a proto je nut
 
 Komentáře můžeme vkládat na kterékoli místo ve skriptu. Nemají vliv na jeho výkon, protože je motor jednoduše ignoruje.
 
-**Jednořádkové komentáře jsou uvozeny dvěma lomítky `//`.**
+**Jednořádkové komentáře začínají dvěma lomítky `//`.**
 
 Celý zbytek řádku je komentář. Může být umístěn na samostatném řádku nebo za příkazem.
 
