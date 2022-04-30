@@ -71,7 +71,7 @@ alert("Ahoj")
 [1, 2].forEach(alert);
 ```
 
-Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku zmizel.
+Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku chybí.
 
 Když tento kód nyní spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
 
