@@ -92,7 +92,7 @@ Doporučujeme vám psát středníky mezi příkazy i tehdy, když je odděluje 
 
 ## Komentáře [#code-comments]
 
-S postupem času se programy stávají stále složitějšími a složitějšími, a proto je nutné do nich vkládat *komentáře*, které popisují, co kód dělá a proč.
+S postupem času se programy stávají čím dál složitější, a proto je nutné do nich vkládat *komentáře*, které popisují, co kód dělá a proč.
 
 Komentáře můžeme vkládat na kterékoli místo ve skriptu. Nemají vliv na jeho výkon, protože je engine jednoduše ignoruje.
 
