@@ -92,7 +92,7 @@ Chceme-li připojit více skriptů, použijeme více značek:
 ```smart
 Bývá pravidlem, že do HTML se ukládají jen ty nejjednodušší skripty. Složitější se umisťují do oddělených souborů.
 
-Výhodou odděleného souboru je, že prohlížeč si jej stáhne a uloží do své [cache](https://en.wikipedia.org/wiki/Web_cache).
+Výhodou odděleného souboru je, že prohlížeč si jej stáhne a uloží do své [mezipaměti](https://en.wikipedia.org/wiki/Web_cache).
 
 Jiné stránky, které se odkazují na stejný skript, si jej místo opětovného stažení nahrají z cache, takže se soubor ve skutečnosti stáhne pouze jednou.
 
