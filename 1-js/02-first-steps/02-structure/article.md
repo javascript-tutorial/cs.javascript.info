@@ -4,7 +4,7 @@ První, co si prostudujeme, jsou stavební bloky kódu.
 
 ## Příkazy
 
-Příkazy (anglicky statement) jsou syntaktické konstrukce a povely, které provádějí akce.
+Příkazy (anglicky *statement*) jsou syntaktické konstrukce a povely, které provádějí akce.
 
 Už jsme viděli příkaz `alert('Ahoj, světe!')`, který zobrazuje zprávu „Ahoj, světe!“.
 
@@ -77,7 +77,7 @@ Když tento kód spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, 
 
 Je to proto, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`. S kódem v prvním příkladu se tedy zachází jako s jediným příkazem.
 
-Takto jej vidí motor (angl. engine):
+Takto jej vidí motor (anglicky *engine*):
 
 ```js run no-beautify
 alert("Ahoj")[1, 2].forEach(alert);
