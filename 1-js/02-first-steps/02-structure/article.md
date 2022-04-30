@@ -46,7 +46,7 @@ alert(3 +
 + 2);
 ```
 
-Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je intuitivně zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník by byl nesprávný. V tomto případě to bude fungovat tak, jak očekáváme.
+Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník by byl nesprávný. V tomto případě to bude fungovat tak, jak očekáváme.
 
 **Existují však situace, v nichž JavaScript „nedokáže“ vložit středník tam, kde je opravdu zapotřebí.**
 
