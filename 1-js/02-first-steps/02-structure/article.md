@@ -122,7 +122,7 @@ alert('světe');
 
 Obsah komentáře se ignoruje, proto jestliže mezi <code>/&#42; ... &#42;/</code> vložíme kód, neprovede se.
 
-Někdy může přijít vhod dočasně zneplatnit část kódu:
+Někdy může přijít vhod dočasně vykomentovat část kódu:
 
 ```js run
 /* Zakomentovaný kód
