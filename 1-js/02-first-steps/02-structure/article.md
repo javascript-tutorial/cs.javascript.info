@@ -77,7 +77,7 @@ Když tento kód spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, 
 
 Je to proto, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`. S kódem v prvním příkladu se tedy zachází jako s jediným příkazem.
 
-Takto jej vidí engine:
+Takto jej vidí motor (angl. engine):
 
 ```js run no-beautify
 alert("Ahoj")[1, 2].forEach(alert);
