@@ -146,6 +146,6 @@ alert( 'světe' );
 ```
 ````
 
-Neváhejte do svého kódu vkládat komentáře. Sice zvětšují velikost kódu, ale to není vůbec žádný problém. Existuje mnoho nástrojů, které kód před publikací na produkčním serveru minimalizují a odstraní z něj komentáře, takže ty se v prováděných skriptech neobjeví. Komentáře tedy nemají vůbec žádný negativní efekt na výkon.
+Neváhejte do svého kódu vkládat komentáře. Sice zvětšují velikost kódu, ale to není vůbec žádný problém. Existuje mnoho nástrojů, které kód před nasazením na produkční server minimalizují a odstraní z něj komentáře, nemají tedy žádný vliv na výkon.
 
 Později v tomto tutoriálu budeme mít kapitolu <info:code-quality>, která se mimo jiné zaobírá i tím, co by mělo a nemělo být v komentáři obsaženo.
