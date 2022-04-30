@@ -52,7 +52,7 @@ Atribut `language`: <code>&lt;script <u>language</u>=...&gt;</code>
 : Tento atribut měl oznamovat jazyk (language) skriptu. Protože výchozím jazykem je dnes JavaScript, nemá již tento atribut smysl a není třeba jej používat.
 
 Komentáře před a za skripty.
-: V prastarých knihách a průvodcích můžete uvnitř značky `<script>` najít takovéto komentáře:
+: V zastaralých knihách a průvodcích můžete uvnitř značky `<script>` najít takovéto komentáře:
 
     ```html no-beautify
     <script type="text/javascript"><!--
