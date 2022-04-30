@@ -49,7 +49,7 @@ Atribut `type`: <code>&lt;script <u>type</u>=...&gt;</code>
 : Starý standard HTML, HTML4, vyžadoval, aby skript byl určitého typu (`type`). Obvykle to byl `type="text/javascript"`. To už dnes není nutné. Kromě toho moderní standard HTML zcela změnil význam tohoto atributu, který se dnes může používat pro moduly JavaScriptu. To je však pokročilejší záležitost. Na moduly se zaměříme v další části tohoto tutoriálu.
 
 Atribut `language`: <code>&lt;script <u>language</u>=...&gt;</code>
-: Tento atribut měl oznamovat jazyk (language) skriptu. Protože defaultním jazykem je dnes JavaScript, nemá již tento atribut smysl a není třeba jej používat.
+: Tento atribut měl oznamovat jazyk (language) skriptu. Protože výchozím jazykem je dnes JavaScript, nemá již tento atribut smysl a není třeba jej používat.
 
 Komentáře před a za skripty.
 : V prastarých knihách a průvodcích můžete uvnitř značky `<script>` najít takovéto komentáře:
