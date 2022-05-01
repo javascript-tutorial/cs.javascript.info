@@ -146,4 +146,4 @@ Většinu těchto pravidel je snadné pochopit a zapamatovat si. Významné výj
 - `undefined` převedené na číslo je `NaN`, ne `0`.
 - `"0"` a řetězce obsahující jen mezery, např. `"   "`, jsou po převodu na boolean vyhodnoceny jako true.
 
-O objektech se zde nezmiňujeme. Později, až se v JavaScriptu naučíme další základní věci, se k nim vrátíme v kapitole <info:object-toprimitive>, která je věnována výlučně objektům.
+O objektech se zde nezmiňujeme. Později, až se v JavaScriptu naučíme všechny potřebné základy, se k nim vrátíme v kapitole <info:object-toprimitive>, která je věnována výlučně objektům.
