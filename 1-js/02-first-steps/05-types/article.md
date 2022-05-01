@@ -195,7 +195,7 @@ věk = undefined;
 alert(věk); // "undefined"
 ```
 
-...Toto však nedoporučujeme. Běžně se k přiřazení „prázdné“ nebo „neznámé“ hodnoty do proměnné používá `null`, zatímco `undefined` je vyhrazeno jako defaultní úvodní hodnota nepřiřazených proměnných.
+...Toto však nedoporučujeme. Běžně se k přiřazení „prázdné“ nebo „neznámé“ hodnoty do proměnné používá `null`, zatímco `undefined` je vyhrazeno jako výchozí úvodní hodnota u proměnných, kterým nebyla hodnota přiřazena.
 
 ## Objekty a symboly
 
