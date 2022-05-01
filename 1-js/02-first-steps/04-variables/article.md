@@ -307,7 +307,7 @@ Pojmenovávání proměnných je jednou z nejdůležitějších a nejsložitěj�
 
 V reálných projektech většinu času nezabere psaní něčeho úplně nového od základů, ale úprava a rozšiřování již existujícího kódu. Když se vrátíme k nějakému kódu poté, co jsme nějakou dobu dělali něco jiného, je mnohem jednodušší najít potřebné informace, když jsou vhodně pojmenovány. Nebo, jinými slovy, když proměnné mají vhodné názvy.
 
-Než deklarujete proměnnou, dobře si promyslete její správný název. Bohatě se vám to vyplatí.
+Než deklarujete proměnnou, dobře si promyslete její název. Bohatě se vám to vyplatí.
 
 Některá pravidla, která je vhodné dodržovat, jsou:
 
