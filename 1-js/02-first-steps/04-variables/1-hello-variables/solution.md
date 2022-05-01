@@ -1,4 +1,4 @@
-V níže uvedeném kódu každý řádek odpovídá jednomu bodu v zadání cvičení.
+V níže uvedeném kódu každý řádek odpovídá jednomu bodu v zadání.
 
 ```js run
 let správce, jméno; // můžeme deklarovat dvě proměnné najednou
