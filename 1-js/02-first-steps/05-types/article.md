@@ -104,7 +104,7 @@ JavaScript rozeznává tři druhy uvozovek.
 
 1. Dvojité uvozovky: `"Ahoj"`.
 2. Jednoduché uvozovky: `'Ahoj'`.
-3. Obrácené čárky (gravisy): <code>&#96;Ahoj&#96;</code>.
+3. Zpětné uvozovky: <code>&#96;Ahoj&#96;</code>.
 
 Dvojité uvozovky a apostrofy jsou „obyčejné“ uvozovky. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
 
