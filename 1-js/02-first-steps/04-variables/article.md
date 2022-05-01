@@ -335,7 +335,7 @@ Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečn�
 Deklarovat proměnné pro ukládání dat můžeme pomocí klíčových slov `var`, `let` nebo `const`.
 
 - `let` -- je moderní deklarace proměnné.
-- `var` -- je deklarace proměnné ze staré školy. Obvykle ji vůbec nepoužíváme, ale v kapitole <info:var> probereme drobné rozdíly oproti `let` pro případ, že byste je potřebovali.
+- `var` -- je deklarace proměnné ze staré školy. Obvykle ji vůbec nepoužíváme, ale v kapitole <info:var> probereme drobné rozdíly oproti `let` pro případ, že byste je potřebovali znát.
 - `const` -- je jako `let`, ale hodnota proměnné se nesmí měnit.
 
 Proměnné by měly být pojmenovány tak, abychom snadno pochopili, co obsahují.
