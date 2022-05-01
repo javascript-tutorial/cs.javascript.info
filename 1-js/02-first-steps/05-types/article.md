@@ -95,7 +95,7 @@ Nahlédnutím do [*MDN* tabulky kompatibility pro BigInt](https://developer.mozi
 Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
 
 ```js
-let str = "Ahoj";
+let řtzc = "Ahoj";
 let str2 = 'Jednoduché uvozovky (apostrofy) lze také použít';
 let věta = `může zahrnovat jiný ${str}`;
 ```
