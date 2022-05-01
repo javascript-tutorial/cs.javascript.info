@@ -96,7 +96,7 @@ Nahlédnutím do [*MDN* tabulky kompatibility pro BigInt](https://developer.mozi
 
 ```js
 let řtzc = "Ahoj";
-let str2 = 'Jednoduché uvozovky (apostrofy) lze také použít';
+let řtzc2 = 'Jednoduché uvozovky lze také použít';
 let věta = `může zahrnovat jiný ${str}`;
 ```
 
