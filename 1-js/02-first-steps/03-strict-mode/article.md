@@ -73,7 +73,7 @@ Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nep
 
 Odpověď na tuto otázku se může zdát samozřejmá, ale není tomu tak.
 
-Můžeme doporučit, abyste zahajovali skripty `"use strict"`... ale víte, co je fajn?
+Můžeme vám doporučit, abyste zahajovali skripty s `"use strict"`... ale víte, co je fajn?
 
 Moderní JavaScript podporuje „třídy“ a „moduly“ - pokročilé jazykové struktury (určitě se k nim dostaneme), které používají `use strict` automaticky. Pokud je tedy používáme, nemusíme direktivu `use strict` přidávat.
 
