@@ -205,7 +205,7 @@ Všechny ostatní typy se nazývají „primitivní“, protože jejich hodnoty 
 
 Když jsou objekty tak důležité, vyžadují zvláštní zacházení. Budeme o nich hovořit později v kapitole <info:object>, až se dozvíme více o primitivních typech.
 
-Typ `symbol` se používá k vytváření unikátních identifikátorů pro objekty. Musíme jej zde zmínit, aby seznam byl úplný, ale podrobnosti necháme až na dobu, kdy budeme znát objekty.
+Typ `symbol` se používá k vytváření unikátních identifikátorů pro objekty. Musíme jej zde zmínit, aby seznam byl úplný, ale podrobnosti si necháme až na dobu, kdy budeme vědět více o objektech.
 
 ## Operátor typeof [#type-typeof]
 
