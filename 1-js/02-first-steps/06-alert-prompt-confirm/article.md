@@ -102,4 +102,4 @@ Všechny uvedené metody mají dvě omezení:
 1. Poloha modálního okna je stanovena prohlížečem. Obvykle je uprostřed.
 2. Vzhled okna závisí na prohlížeči. Nelze jej upravit.
 
-To je cena za jednoduchost. Existují jiné způsoby, jak zobrazit hezčí okna a umožnit bohatší interakci s návštěvníkem, ale pokud nám na cerepetičkách příliš nezáleží, tyto metody fungují dobře.
+To je cena za jednoduchost. Existují jiné způsoby, kde můžete upravit vzhled oken a umožnit bohatší interakci s návštěvníkem, ale pokud nám na těchto věcech příliš nezáleží, tyto metody fungují dobře.
