@@ -203,7 +203,7 @@ Typ `object` je speciální.
 
 Všechny ostatní typy se nazývají „primitivní“, protože jejich hodnoty mohou obsahovat pouze jednu věc (ať je to řetězec, číslo nebo cokoli). Naproti tomu objekty se používají k ukládání kolekcí dat a složitějších entit.
 
-Když jsou objekty tak důležité, vyžadují zvláštní zacházení. Budeme o nich hovořit později v kapitole <info:object>, až se dozvíme víc o primitivních typech.
+Když jsou objekty tak důležité, vyžadují zvláštní zacházení. Budeme o nich hovořit později v kapitole <info:object>, až se dozvíme více o primitivních typech.
 
 Typ `symbol` se používá k vytváření unikátních identifikátorů pro objekty. Musíme jej zde zmínit, aby seznam byl úplný, ale podrobnosti necháme až na dobu, kdy budeme znát objekty.
 
