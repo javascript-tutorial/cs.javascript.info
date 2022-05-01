@@ -80,6 +80,6 @@ Moderní JavaScript podporuje „třídy“ a „moduly“ - pokročilé jazykov
 **Prozatím tedy `"use strict"` používejte; na začátku vašich skriptů bývá vítaným hostem. Později, až budete mít celý svůj kód v třídách a modulech, jej můžete vypustit.**
 
 Prozatím tedy víme, jak obecně `use strict` používat.
-Až se v dalších kapitolách naučíme další vlastnosti jazyka, poznáme rozdíly mezi striktním a starším režimem. Naštěstí jich není mnoho a ve skutečnosti nám spíše zlepšují život.
+Až se v dalších kapitolách naučíme další vlastnosti jazyka, poznáme rozdíly mezi striktním a starším režimem. Naštěstí jich není mnoho a ve skutečnosti nám spíše ulehčují práci.
 
 Všechny příklady v našem tutoriálu předpokládají striktní režim, pokud není (velmi zřídka) uvedeno jinak.
