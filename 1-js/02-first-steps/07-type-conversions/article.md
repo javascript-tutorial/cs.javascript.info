@@ -89,7 +89,7 @@ Tuto konverzi provádí i většina matematických operátorů. Uvidíme to v n�
 
 Konverze na boolean je nejjednodušší.
 
-Odehrává se v logických operátorech (později se setkáme s testy platnosti podmínky a podobnými věcmi), ale můžeme ji provést i explicitně voláním `Boolean(value)`.
+Odehrává se v logických operátorech (později se setkáme s testy platnosti podmínky a podobnými věcmi), ale můžeme ji provést i explicitně voláním `Boolean(hodnota)`.
 
 Pravidla konverze:
 
