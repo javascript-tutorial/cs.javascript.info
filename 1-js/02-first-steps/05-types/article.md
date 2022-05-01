@@ -108,7 +108,7 @@ JavaScript rozeznává tři druhy uvozovek.
 
 Dvojité a jednoduché uvozovky jsou „obyčejné“. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
 
-Obrácené čárky jsou uvozovky „s rozšířenou funkcionalitou“. Umožňují nám vložit do řetězce proměnné a výrazy, když je uzavřeme do `${…}`. Například:
+Zpětné uvozovky jsou uvozovky „s rozšířenou funkcionalitou“. Umožňují nám vložit do řetězce proměnné a výrazy, když je uzavřeme do `${…}`. Například:
 
 ```js run
 let jméno = "Jan";
