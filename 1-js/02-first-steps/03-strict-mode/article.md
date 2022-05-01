@@ -75,7 +75,7 @@ Odpověď na tuto otázku se může zdát samozřejmá, ale není tomu tak.
 
 Můžeme vám doporučit, abyste zahajovali skripty s `"use strict"`... ale víte, co je fajn?
 
-Moderní JavaScript podporuje „třídy“ a „moduly“ - pokročilé jazykové struktury (určitě se k nim dostaneme), které používají `use strict` automaticky. Pokud je tedy používáme, nemusíme direktivu `use strict` přidávat.
+Moderní JavaScript podporuje „třídy“ a „moduly“ – pokročilé jazykové struktury (určitě se k nim dostaneme), které používají `use strict` automaticky. Pokud je tedy používáme, nemusíme direktivu `use strict` přidávat.
 
 **Prozatím tedy `"use strict"` používejte; na začátku vašich skriptů bývá vítaným hostem. Později, až budete mít celý svůj kód v třídách a modulech, jej můžete vypustit.**
 
