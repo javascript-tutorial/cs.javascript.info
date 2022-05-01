@@ -28,7 +28,7 @@ Zde není striktní režim povolen:
 
 ```js no-strict
 alert("nějaký kód");
-// níže uvedený "use strict" se ignoruje - musí být na začátku
+// níže uvedený "use strict" se ignoruje -- musí být na začátku
 
 "use strict";
 
