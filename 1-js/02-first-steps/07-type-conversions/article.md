@@ -119,7 +119,7 @@ alert( Boolean(" ") ); // mezery, také true (každý neprázdný řetězec je t
 
 Tři nejčastěji používané typové konverze jsou na řetězec, na číslo a na boolean.
 
-**`Konverze na řetězec`** -- Nastává, když něco vypisujeme. Můžeme ji provést pomocí `String(value)`. Konverze na řetězec je u primitivních hodnot obvykle zřejmá.
+**`Konverze na řetězec`** -- Nastává, když něco vypisujeme. Můžeme ji provést pomocí `String(hodnota)`. Konverze na řetězec je u primitivních typů obvykle zřejmá.
 
 **`Konverze na číslo`** -- Nastává při matematických operacích. Můžeme ji provést pomocí `Number(hodnota)`.
 
