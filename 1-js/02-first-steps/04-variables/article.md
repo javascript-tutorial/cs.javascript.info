@@ -174,7 +174,7 @@ Když název obsahuje více slov, obvykle se používá tzv. [velbloudí notace]
 
 Zajímavé je, že v názvech je možné používat i znak dolaru `'$'` a podtržítko `'_'`. Jsou to obyčejné symboly bez zvláštního významu, podobně jako písmena.
 
-Tyto názvy jsou správné:
+Tyto názvy jsou platné:
 
 ```js run untrusted
 let $ = 1; // deklarujeme proměnnou s názvem "$"
