@@ -203,7 +203,7 @@ let имя = '...';
 let 我 = '...';
 ```
 
-Technicky zde není žádná chyba. Takové názvy jsou povoleny, ale podle mezinárodní konvence se v názvech proměnných používá angličtina. I když píšeme malý skript, může mít před sebou dlouhý život a lidé z jiných zemí občas mohou potřebovat si ho přečíst.
+Technicky zde není žádná chyba. Takové názvy jsou povoleny, ale podle mezinárodní konvence se v názvech proměnných používá angličtina. I když píšeme malý skript, může mít před sebou dlouhý život a lidé z jiných zemí si ho možná někdy budou potřebovat přečíst.
 ````
 
 ````warn header="Rezervované názvy"
