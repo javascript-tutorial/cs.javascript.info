@@ -228,7 +228,7 @@ Obvykle musíme proměnnou před použitím definovat. Ve starých časech však
 
 čslo = 5; // pokud proměnná "čslo" ještě neexistuje, je vytvořena
 
-alert(číslo); // 5
+alert(čslo); // 5
 ```
 
 Je to špatný zvyk a ve striktním režimu vyvolá chybu:
