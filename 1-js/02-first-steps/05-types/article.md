@@ -156,7 +156,7 @@ let jeVětší = 4 > 1;
 alert( jeVětší ); // true (výsledek porovnání je „ano“)
 ```
 
-Booleovské hodnoty podrobně probereme v kapitole <info:logical-operators>.
+Datový typ boolean probereme podrobněji v kapitole <info:logical-operators>.
 
 ## Hodnota „null“
 
