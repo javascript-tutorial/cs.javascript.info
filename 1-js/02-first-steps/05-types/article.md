@@ -139,7 +139,7 @@ V JavaScriptu žádný takový typ není. Je tady jen jeden typ: `string` (řet�
 
 Typ boolean má jen dvě hodnoty: `true` a `false`.
 
-Tento typ se běžně používá k ukládání hodnot ano/ne: `true` znamená „ano, správně“, `false` znamená „ne, nesprávně“.
+Tento typ se běžně používá k ukládání hodnot ano/ne: `true` znamená „ano, pravda“, `false` znamená „ne, nepravda“.
 
 Příklad:
 
