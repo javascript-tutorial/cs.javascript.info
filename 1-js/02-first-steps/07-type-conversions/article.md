@@ -50,7 +50,7 @@ alert(typeof str); // string
 
 let num = Number(str); // stane se z něj číslo 123
 
-alert(typeof num); // number
+alert(typeof čslo); // number (číslo)
 ```
 
 Explicitní konverze je obvykle potřebná, když načítáme hodnotu z řetězcového zdroje, například z textového formuláře, ale očekáváme zadání čísla.
