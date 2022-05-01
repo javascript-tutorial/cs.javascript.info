@@ -76,7 +76,7 @@ Příklady:
 
 ```js run
 alert( Number("   123   ") ); // 123
-alert( Number("123z") );      // NaN (chyba při čtení čísla v písmenu "z")
+alert( Number("123z") );      // NaN (chyba při čtení čísla u znaku "z")
 alert( Number(true) );        // 1
 alert( Number(false) );       // 0
 ```
