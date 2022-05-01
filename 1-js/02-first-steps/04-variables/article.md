@@ -153,7 +153,7 @@ Stojí za zmínku, že existují [funkcionální](https://cs.wikipedia.org/wiki/
 
 Když je v takových jazycích hodnota jednou uložena „do krabičky“, zůstane tam navždy. Pokud chceme uložit něco jiného, jazyk nás přinutí vytvořit novou krabičku (deklarovat novou proměnnou). Nemůžeme znovu použít starou.
 
-Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody. Prostudovat si takový jazyk (i když jej neplánujete v dohledné době používat) se doporučuje k procvičení mysli.
+Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody. Prostudovat si takový jazyk (i když jej neplánujete v dohledné době používat) se doporučuje k rozšíření obzorů.
 ```
 
 ## Názvy proměnných [#variable-naming]
