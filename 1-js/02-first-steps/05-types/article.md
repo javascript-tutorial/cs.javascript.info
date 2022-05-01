@@ -71,7 +71,9 @@ O práci s čísly si povíme víc v kapitole <info:number>.
 
 Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>. Toto technické omezení je dáno jeho vnitřní reprezentací.
 
-Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy. Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
+Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy.
+
+Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
 
 Hodnota typu `BigInt` vznikne přidáním písmene `n` na konec celého čísla:
 
