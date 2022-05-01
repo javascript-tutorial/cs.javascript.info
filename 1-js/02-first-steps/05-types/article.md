@@ -160,7 +160,9 @@ Datový typ boolean probereme podrobněji v kapitole <info:logical-operators>.
 
 ## Hodnota „null“
 
-Speciální hodnota `null` nepatří k žádnému z výše uvedených typů. Tvoří samostatný typ, který obsahuje jedině hodnotu `null`:
+Speciální hodnota `null` nepatří k žádnému z výše uvedených typů.
+
+Tvoří samostatný typ, který obsahuje jedině hodnotu `null`:
 
 ```js
 let věk = null;
