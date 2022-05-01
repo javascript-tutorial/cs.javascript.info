@@ -132,7 +132,7 @@ Konverze se řídí těmito pravidly:
 |<code>true&nbsp;/&nbsp;false</code> | `1 / 0` |
 | `řetězec` | Načte se „doslovně“, bílé znaky na obou stranách se ignorují. Z prázdného řetězce se stane `0`. Při chybě je vydáno `NaN`. |
 
-**`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(value)`.
+**`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(hodnota)`.
 
 Řídí se těmito pravidly:
 
