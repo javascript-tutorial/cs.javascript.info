@@ -122,7 +122,7 @@ alert( `výsledek je *!*${1 + 2}*/!*` ); // výsledek je 3
 
 Výraz uvnitř `${…}` se vypočítá a jeho výsledek se stane součástí řetězce. Můžeme tam vložit cokoli: proměnnou jako `jméno`, aritmetický výraz jako `1 + 2`, nebo i něco složitějšího.
 
-Všimněte si, že toto lze provést jen uvnitř obrácených čárek. Ostatní druhy uvozovek tuto funkcionalitu nemají!
+Všimněte si, že toto lze provést jen uvnitř zpětných uvozovek. Ostatní druhy uvozovek tuto funkcionalitu nemají!
 ```js run
 alert( "výsledek je ${1 + 2}" ); // výsledek je ${1 + 2} (dvojité uvozovky s tím nic neudělají)
 ```
