@@ -106,7 +106,7 @@ JavaScript rozeznává tři druhy uvozovek.
 2. Jednoduché uvozovky: `'Ahoj'`.
 3. Zpětné uvozovky: <code>&#96;Ahoj&#96;</code>.
 
-Dvojité uvozovky a apostrofy jsou „obyčejné“ uvozovky. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
+Dvojité a jednoduché uvozovky jsou „obyčejné“. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
 
 Obrácené čárky jsou uvozovky „s rozšířenou funkcionalitou“. Umožňují nám vložit do řetězce proměnné a výrazy, když je uzavřeme do `${…}`. Například:
 
