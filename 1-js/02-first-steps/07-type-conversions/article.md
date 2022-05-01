@@ -26,7 +26,7 @@ alert(typeof hodnota); // boolean
 
 *!*
 hodnota = String(hodnota); // hodnota je nyní řetězec "true"
-alert(typeof hodnota); // string
+alert(typeof hodnota); // string (řetězec)
 */!*
 ```
 
