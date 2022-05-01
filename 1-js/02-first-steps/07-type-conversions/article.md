@@ -48,7 +48,7 @@ Pro explicitní konverzi hodnoty `hodnota` na číslo můžeme použít funkci `
 let řtzc = "123";
 alert(typeof řtzc); // string (řetězec)
 
-let num = Number(str); // stane se z něj číslo 123
+let čslo = Number(řtzc); // stane se z něj číslo 123
 
 alert(typeof čslo); // number (číslo)
 ```
