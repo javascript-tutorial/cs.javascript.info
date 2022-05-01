@@ -88,7 +88,7 @@ Protože čísla typu `BigInt` potřebujeme jen málokdy, nebudeme je tady prob�
 Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v IE.
 ```
 
-Nahlédnutím do [*MDN* tabulky kompatibility BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
+Nahlédnutím do [*MDN* tabulky kompatibility pro BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
 
 ## Řetězec
 
