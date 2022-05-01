@@ -168,7 +168,9 @@ Tvoří samostatný typ, který obsahuje jedině hodnotu `null`:
 let věk = null;
 ```
 
-V JavaScriptu `null` není „odkaz na neexistující objekt“ nebo „nulový ukazatel“, jako v některých jiných jazycích. Je to speciální hodnota, která představuje „nic“, „prázdno“ nebo „neznámá hodnota“.
+V JavaScriptu `null` není „odkaz na neexistující objekt“ nebo „nulový ukazatel“, jako v některých jiných jazycích.
+
+Je to speciální hodnota, která představuje „nic“, „prázdno“ nebo „neznámá hodnota“.
 
 Výše uvedený kód říká, že `věk` je neznámý.
 
