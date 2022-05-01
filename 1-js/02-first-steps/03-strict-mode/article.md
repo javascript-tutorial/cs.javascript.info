@@ -45,7 +45,7 @@ Neexistuje žádná direktiva jako `"no use strict"`, která by vrátila motoru 
 ## Prohlížečová konzole
 
 Když spustíte kód ve [vývojářské konzoli](info:devtools), neběží automaticky ve striktním režimu.
-Někdy, když `use strict` znamená rozdíl, dostanete nesprávné výsledky.
+Někdy to může ovlivnit i samotný výsledek.
 
 Jak tedy vlastně používat `use strict` v konzoli?
 
