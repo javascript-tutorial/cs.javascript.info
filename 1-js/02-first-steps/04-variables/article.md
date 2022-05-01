@@ -188,7 +188,7 @@ Příklady nesprávných názvů proměnných:
 ```js no-beautify
 let 1a; // nesmí začínat číslicí
 
-let my-name; // pomlčky '-' nejsou v názvu povoleny
+let moje-jméno; // spojovník '-' není v názvu povolen
 ```
 
 ```smart header="Na velikosti záleží"
