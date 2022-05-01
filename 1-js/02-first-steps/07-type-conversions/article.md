@@ -45,7 +45,7 @@ alert( "6" / "2" ); // 3, řetězce se konvertují na čísla
 Pro explicitní konverzi hodnoty `hodnota` na číslo můžeme použít funkci `Number(hodnota)`:
 
 ```js run
-let str = "123";
+let řtzc = "123";
 alert(typeof řtzc); // string (řetězec)
 
 let num = Number(str); // stane se z něj číslo 123
