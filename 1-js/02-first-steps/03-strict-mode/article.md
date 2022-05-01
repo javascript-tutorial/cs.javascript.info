@@ -39,7 +39,7 @@ Nad `"use strict"` nesmí být nic jiného než komentáře.
 ````
 
 ```warn header="`use strict` nelze nijak zrušit"
-Neexistuje žádná direktiva jako `"no use strict"`, která by vrátila engine ke starému chování. Jakmile jednou vstoupíme do striktního režimu, už není cesty zpět.
+Neexistuje žádná direktiva jako `"no use strict"`, která by vrátila motoru výchozí chování. Jakmile jednou vstoupíme do striktního režimu, už není cesty zpět.
 ```
 
 ## Prohlížečová konzole
