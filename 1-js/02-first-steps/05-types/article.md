@@ -261,7 +261,7 @@ V JavaScriptu existuje osm základních datových typů.
 
 - `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
 - `bigint` pro celá čísla libovolné délky.
-- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje zvláštní typ pro jediný znak.
+- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje datový typ pro znak.
 - `boolean` pro `true`/`false`.
 - `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
 - `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.
