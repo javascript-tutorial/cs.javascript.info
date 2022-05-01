@@ -59,7 +59,7 @@ Můžete zkusit vložit více řádků pomocí zkratky `key:Shift+Enter` a umís
 
 Funguje to ve většině prohlížečů, konkrétně ve Firefoxu a Chrome.
 
-Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nepěkný, ale spolehlivý způsob, jak zajistit `use strict`. Umístěte jej do tohoto wrapperu:
+Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nepěkný, ale spolehlivý způsob, jak zajistit `use strict`. Umístěte jej do tohoto obalu:
 
 ```js
 (function() {
