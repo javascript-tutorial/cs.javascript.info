@@ -70,7 +70,7 @@ Syntaxe:
 výsledek = confirm(otázka);
 ```
 
-Funkce `confirm` zobrazí modální okno s otázkou `otázka` a dvěma tlačítky: OK a Storno.
+Funkce `confirm` zobrazí modální okno s otázkou -- v našem případě obsaženou v promenné `otázka` -- a dvěma tlačítky: OK a Storno.
 
 Výsledek bude `true`, jestliže uživatel stiskne OK, jinak bude `false`.
 
