@@ -14,7 +14,9 @@ Až se později dozvíme něco o objektech, v kapitole <info:object-toprimitive>
 
 ## Konverze na řetězec
 
-Konverze na řetězec se odehraje tehdy, když potřebujeme hodnotu ve formě řetězce. Provádí ji například `alert(hodnota)`, aby mohla zobrazit hodnotu.
+Konverze na řetězec se odehraje tehdy, když potřebujeme hodnotu ve formě řetězce.
+
+Provádí ji například `alert(hodnota)`, aby mohla zobrazit hodnotu.
 
 Můžeme také volat funkci `String(hodnota)`, která převede zadanou hodnotu na řetězec:
 
