@@ -97,7 +97,7 @@ Nahlédnutím do [*MDN* tabulky kompatibility pro BigInt](https://developer.mozi
 ```js
 let řtzc = "Ahoj";
 let řtzc2 = 'Jednoduché uvozovky lze také použít';
-let věta = `může zahrnovat jiný ${str}`;
+let věta = `může zahrnovat jiný ${řtzc}`;
 ```
 
 JavaScript rozeznává tři druhy uvozovek.
