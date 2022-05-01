@@ -226,7 +226,7 @@ Obvykle musíme proměnnou před použitím definovat. Ve starých časech však
 ```js run no-strict
 // poznámka: v tomto příkladu není "use strict"
 
-číslo = 5; // pokud proměnná "číslo" ještě neexistuje, je vytvořena
+čslo = 5; // pokud proměnná "čslo" ještě neexistuje, je vytvořena
 
 alert(číslo); // 5
 ```
