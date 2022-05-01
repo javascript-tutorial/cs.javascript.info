@@ -84,7 +84,7 @@ alert( jeŠéf ); // pokud bylo stisknuto OK, tak true
 
 ## Shrnutí
 
-Uvedli jsme tři funkce specifické pro prohlížeče, které umožňují interakci s uživatelem:
+Uvedli jsme tři funkce specifické pro prohlížeče, které umožňují interakci s návštěvníky:
 
 `alert`
 : Zobrazí zprávu.
