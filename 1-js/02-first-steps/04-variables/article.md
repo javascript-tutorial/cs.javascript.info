@@ -263,7 +263,9 @@ Když má programátor jistotu, že hodnota proměnné se nikdy nezmění, můž
 
 ### Konstanty velkými písmeny
 
-Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu. Názvy takových konstant se uvádějí velkými písmeny a s podtržítky.
+Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu.
+
+Názvy takových konstant se uvádějí velkými písmeny a s podtržítky.
 
 Například vytvoříme konstanty pro barvy v tzv. „webovém“ (hexadecimálním) formátu:
 
