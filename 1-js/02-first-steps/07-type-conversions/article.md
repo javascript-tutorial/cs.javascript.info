@@ -121,7 +121,7 @@ Tři nejčastěji používané typové konverze jsou na řetězec, na číslo a 
 
 **`Konverze na řetězec`** -- Nastává, když něco vypisujeme. Můžeme ji provést pomocí `String(value)`. Konverze na řetězec je u primitivních hodnot obvykle zřejmá.
 
-**`Konverze na číslo`** -- Nastává při matematických operacích. Můžeme ji provést pomocí `Number(value)`.
+**`Konverze na číslo`** -- Nastává při matematických operacích. Můžeme ji provést pomocí `Number(hodnota)`.
 
 Konverze se řídí těmito pravidly:
 
