@@ -100,6 +100,6 @@ Všechny tyto metody jsou modální: pozastaví vykonávání skriptu a neumožn
 Všechny uvedené metody mají dvě omezení:
 
 1. Přesná poloha modálního okna je stanovena prohlížečem. Obvykle to bývá uprostřed.
-2. Také přesný vzhled okna závisí na prohlížeči a my jej nemůžeme měnit.
+2. Vzhled okna závisí na prohlížeči. Nelze jej upravit.
 
 To je cena za jednoduchost. Existují jiné způsoby, jak zobrazit hezčí okna a umožnit bohatší interakci s návštěvníkem, ale pokud nám na cerepetičkách příliš nezáleží, tyto metody fungují dobře.
