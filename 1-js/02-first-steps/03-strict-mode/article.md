@@ -49,7 +49,7 @@ Někdy, když `use strict` znamená rozdíl, dostanete nesprávné výsledky.
 
 Jak tedy vlastně používat `use strict` v konzoli?
 
-Za prvé, můžete zkusit vložit více řádků pomocí `key:Shift+Enter` a umístit `use strict` na začátek, například takto:
+Můžete zkusit vložit více řádků pomocí zkratky `key:Shift+Enter` a umístit `use strict` na začátek, například takto:
 
 ```js
 'use strict'; <Shift+Enter pro nový řádek>
