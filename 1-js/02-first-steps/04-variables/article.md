@@ -327,7 +327,7 @@ Takoví programátoři ušetří trochu času deklarací proměnné, ale desetkr
 
 Proměnná navíc je dobro, ne zlo.
 
-Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečně dobře optimalizovat, takže nenastane problém s výkonem. Používání různých proměnných pro různé hodnoty dokonce enginu pomůže optimalizovat váš kód.
+Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečně dobře optimalizovat, takže nenastane problém s výkonem. Používání různých proměnných pro různé hodnoty motoru dokonce pomůže optimalizovat váš kód.
 ```
 
 ## Shrnutí
