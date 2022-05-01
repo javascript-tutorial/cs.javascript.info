@@ -237,7 +237,7 @@ Je to špatný zvyk a ve striktním režimu vyvolá chybu:
 "use strict";
 
 *!*
-číslo = 5; // chyba: proměnná číslo není definována
+čslo = 5; // chyba: proměnná čslo není definována
 */!*
 ```
 ````
