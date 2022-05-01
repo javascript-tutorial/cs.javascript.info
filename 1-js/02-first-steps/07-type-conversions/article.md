@@ -46,7 +46,7 @@ Pro explicitní konverzi hodnoty `hodnota` na číslo můžeme použít funkci `
 
 ```js run
 let str = "123";
-alert(typeof str); // string
+alert(typeof řtzc); // string (řetězec)
 
 let num = Number(str); // stane se z něj číslo 123
 
