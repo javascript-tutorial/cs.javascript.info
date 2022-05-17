@@ -377,7 +377,7 @@ Shrneme to:
     ++čítač;
     alert( čítač ); // 2, oba výše uvedené řádky dělají totéž
     ```
-- Pokud chceme zvýšit hodnotu *a* výsledek operátoru ihned použít, potřebujeme prefixovou formu:
+- Pokud chceme zvýšit hodnotu *a* výsledek operátoru ihned použít, potřebujeme prefixovou notaci:
 
     ```js run
     let čítač = 0;
