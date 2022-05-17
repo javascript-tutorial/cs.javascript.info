@@ -297,7 +297,7 @@ n *= 2; // nyní n = 14 (totéž jako n = n * 2)
 alert( n ); // 14
 ```
 
-Takové „modifikační“ operátory existují pro všechny aritmetické a bitové operace: `/=`, `-=`, apod.
+Takové „modifikační“ operátory existují pro všechny aritmetické a bitové operátory: `/=`, `-=`, apod.
 
 Tyto operátory mají stejnou prioritu jako běžné přiřazení, takže se provedou až po většině ostatních výpočtů:
 
