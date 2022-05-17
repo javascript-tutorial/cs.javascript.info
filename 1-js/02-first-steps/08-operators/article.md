@@ -356,7 +356,7 @@ alert(a); // *!*2*/!*
 
 Na řádku `(*)` *prefixová* forma `++čítač` zvýšila `čítač` a vrátila novou hodnotu, `2`. Proto `alert` zobrazila `2`.
 
-Nyní použijeme postfixovou formu:
+Nyní použijeme postfixovou notaci:
 
 ```js run
 let čítač = 1;
