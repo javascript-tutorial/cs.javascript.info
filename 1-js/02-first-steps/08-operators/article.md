@@ -383,7 +383,7 @@ Shrneme to:
     let čítač = 0;
     alert( ++čítač ); // 1
     ```
-- Pokud chceme zvýšit hodnotu, ale použít předchozí hodnotu, potřebujeme postfixovou formu:
+- Pokud chceme zvýšit hodnotu, ale použít předchozí hodnotu, potřebujeme postfixovou notaci:
 
     ```js run
     let čítač = 0;
