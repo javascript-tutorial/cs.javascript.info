@@ -2,7 +2,7 @@ importance: 5
 
 ---
 
-# Postfixová a prefixová forma
+# Postfixová a prefixová notace
 
 Jaké jsou konečné hodnoty všech proměnných `a`, `b`, `c` a `d` po provedení uvedeného kódu?
 
