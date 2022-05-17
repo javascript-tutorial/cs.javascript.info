@@ -6,7 +6,7 @@ V této kapitole začneme jednoduchými operátory a pak se budeme soustředit n
 
 ## Pojmy: „unární“, „binární“, „operand“
 
-Než budeme pokračovat, ujasníme si určitou společnou terminologii.
+Než budeme pokračovat, ujasníme si základní terminologii.
 
 - *Operand* je to, na co se aplikují operátory. Například při násobení `5 * 2` máme dva operandy: levý operand je `5` a pravý operand je `2`. Někdy se jim místo „operandy“ říká „argumenty“.
 - Operátor je *unární*, jestliže má jediný operand. Například unární negace `-`, která obrací znaménko čísla:
