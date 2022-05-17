@@ -345,7 +345,7 @@ Oba tyto příkazy vykonají totéž: zvýší `čítač` o `1`.
 
 Je v nich tedy nějaký rozdíl? Ano, ale uvidíme ho jen tehdy, když použijeme hodnotu, kterou operátor `++/--` vrátí.
 
-Ujasněme si to. Jak víme, všechny operátory vracejí nějakou hodnotu. Inkrementace a dekrementace nejsou výjimkou. Prefixová forma vrací novou hodnotu, zatímco postfixová forma vrací starou hodnotu (tu před zvýšením nebo snížením).
+Ujasněme si to. Jak víme, všechny operátory vracejí nějakou hodnotu. Inkrementace a dekrementace nejsou výjimkou. Prefixová notace vrací novou hodnotu, zatímco postfixová notace vrací starou hodnotu (tu před zvýšením nebo snížením).
 
 Abychom viděli rozdíl, uvedeme příklad:
 
