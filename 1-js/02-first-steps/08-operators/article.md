@@ -369,7 +369,7 @@ Na řádku `(*)` *postfixová* notace `čítač++` rovněž zvýšila `čítač`
 
 Shrneme to:
 
-- Pokud výsledek zvýšení nebo snížení nepoužijeme, není rozdíl v tom, kterou formu použijeme:
+- Pokud výsledek zvýšení nebo snížení nepoužijeme, není rozdíl v tom, kterou notaci použijeme:
 
     ```js run
     let čítač = 0;
