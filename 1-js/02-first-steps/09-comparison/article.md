@@ -1,6 +1,8 @@
 # Porovnávání
 
-Z matematiky známe mnoho porovnávacích operátorů. V JavaScriptu se píší následovně:
+Z matematiky známe mnoho porovnávacích operátorů.
+
+V JavaScriptu se píší následovně:
 
 - Větší/menší než: <code>a &gt; b</code>, <code>a &lt; b</code>.
 - Větší/menší nebo rovno: <code>a &gt;= b</code>, <code>a &lt;= b</code>.
