@@ -313,7 +313,9 @@ alert( n ); // 16  (napřed se provede část vpravo, totéž jako n *= 8)
 
 <!-- Can't use -- in title, because the built-in parser turns it into a 'long dash' – -->
 
-Jednou z nejběžnějších číselných operací je zvýšení nebo snížení čísla o 1 (inkrementace, dekrementace). Proto pro ně existují speciální operátory:
+Jednou z nejběžnějších číselných operací je zvýšení nebo snížení čísla o 1 (inkrementace, dekrementace).
+
+Proto pro ně existují speciální operátory:
 
 - **Inkrementace** `++` zvýší proměnnou o 1:
 
