@@ -4,7 +4,7 @@ První, co si prostudujeme, jsou stavební bloky kódu.
 
 ## Příkazy
 
-Příkazy (anglicky statement) jsou syntaktické konstrukce a povely, které provádějí akce.
+Příkazy (anglicky *statement*) jsou syntaktické konstrukce a povely, které provádějí akce.
 
 Už jsme viděli příkaz `alert('Ahoj, světe!')`, který zobrazuje zprávu „Ahoj, světe!“.
 
@@ -46,7 +46,7 @@ alert(3 +
 + 2);
 ```
 
-Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je intuitivně zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník by byl nesprávný. V tomto případě to bude fungovat tak, jak očekáváme.
+Tento kód vypíše `6`, protože JavaScript sem středník nevloží. Je zřejmé, že jestliže řádek končí znaménkem plus `"+"`, je to „neúplný výraz“, takže středník by byl nesprávný. V tomto případě to bude fungovat tak, jak očekáváme.
 
 **Existují však situace, v nichž JavaScript „nedokáže“ vložit středník tam, kde je opravdu zapotřebí.**
 
@@ -71,13 +71,13 @@ alert("Ahoj")
 [1, 2].forEach(alert);
 ```
 
-Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku zmizel.
+Rozdíl oproti výše uvedenému kódu je pouze v jednom znaku: středník na konci prvního řádku chybí.
 
-Když tento kód nyní spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
+Když tento kód spustíme, zobrazí se jen první `Ahoj` (a pak nastane chyba, možná si budete muset otevřít konzoli, abyste ji viděli). Žádná čísla se už nezobrazí.
 
 Je to proto, že JavaScript nepředpokládá středník před hranatými závorkami `[...]`. S kódem v prvním příkladu se tedy zachází jako s jediným příkazem.
 
-Takto jej vidí engine:
+Takto jej vidí motor (anglicky *engine*):
 
 ```js run no-beautify
 alert("Ahoj")[1, 2].forEach(alert);
@@ -92,11 +92,11 @@ Doporučujeme vám psát středníky mezi příkazy i tehdy, když je odděluje 
 
 ## Komentáře [#code-comments]
 
-S postupem času se programy stávají stále složitějšími a složitějšími, a proto je nutné do nich vkládat *komentáře*, které popisují, co kód dělá a proč.
+S postupem času se programy stávají čím dál složitějšími, a proto je nutné do nich vkládat *komentáře*, které popisují, co kód dělá a proč.
 
-Komentáře můžeme vkládat na kterékoli místo ve skriptu. Nemají vliv na jeho výkon, protože je engine jednoduše ignoruje.
+Komentáře můžeme vkládat na kterékoli místo ve skriptu. Nemají vliv na jeho výkon, protože je motor jednoduše ignoruje.
 
-**Jednořádkové komentáře jsou uvozeny dvěma lomítky `//`.**
+**Jednořádkové komentáře začínají dvěma lomítky `//`.**
 
 Celý zbytek řádku je komentář. Může být umístěn na samostatném řádku nebo za příkazem.
 
@@ -105,7 +105,7 @@ Například zde:
 // Tento komentář je umístěn na samostatném řádku
 alert('Ahoj');
 
-alert('světe'); // Tento komentář následuje za příkazem
+alert('světe'); // Tento komentář je za příkazem
 ```
 
 **Víceřádkové komentáře začínají lomítkem a hvězdičkou <code>/&#42;</code> a končí hvězdičkou a lomítkem <code>&#42;/</code>.**
@@ -122,7 +122,7 @@ alert('světe');
 
 Obsah komentáře se ignoruje, proto jestliže mezi <code>/&#42; ... &#42;/</code> vložíme kód, neprovede se.
 
-Někdy může přijít vhod dočasně zneplatnit část kódu:
+Někdy může přijít vhod dočasně vykomentovat část kódu:
 
 ```js run
 /* Zakomentovaný kód
@@ -131,8 +131,8 @@ alert('Ahoj');
 alert('světe');
 ```
 
-```smart header="Používejte horké klávesy!"
-Ve většině editorů se dá řádek kódu zakomentovat stisknutím klávesy `key:Ctrl+/` pro jednořádkový komentář a `key:Ctrl+Shift+/` nebo podobné kombinace pro víceřádkový komentář (označte část kódu jako blok a stiskněte uvedené klávesy). Na Macu zkuste `key:Cmd` místo `key:Ctrl` a `key:Option` místo `key:Shift`.
+```smart header="Používejte zkratky!"
+Ve většině editorů se dá řádek kódu vykomentovat pomocí zkratky `key:Ctrl+/` pro jednořádkový komentář a `key:Ctrl+Shift+/` pro víceřádkový komentář (označte část kódu a stiskněte uvedené klávesy). Na Macu zkuste `key:Cmd` místo `key:Ctrl` a `key:Option` místo `key:Shift`.
 ```
 
 ````warn header="Vnořené komentáře nejsou povoleny!"
@@ -146,6 +146,6 @@ alert( 'světe' );
 ```
 ````
 
-Neváhejte do svého kódu vkládat komentáře. Sice zvětšují velikost kódu, ale to není vůbec žádný problém. Existuje mnoho nástrojů, které kód před publikací na produkčním serveru minimalizují a odstraní z něj komentáře, takže ty se v prováděných skriptech neobjeví. Komentáře tedy nemají vůbec žádný negativní efekt na výkon.
+Neváhejte do svého kódu vkládat komentáře. Sice zvětšují velikost kódu, ale to není vůbec žádný problém. Existuje mnoho nástrojů, které kód před nasazením na produkční server minimalizují a odstraní z něj komentáře, nemají tedy žádný vliv na výkon.
 
-Později v tomto tutoriálu budeme mít kapitolu <info:code-quality>, která nám vysvětlí, jak psát komentáře co nejlépe.
+Později v tomto tutoriálu budeme mít kapitolu <info:code-quality>, která se mimo jiné zaobírá i tím, co by mělo a nemělo být v komentáři obsaženo.

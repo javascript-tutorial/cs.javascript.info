@@ -9,7 +9,7 @@ Nejprve se podíváme, jak vložit skript na webovou stránku. V prostředích n
 
 ## Značka „script“
 
-Programy v JavaScriptu můžeme vložit téměř kamkoli do HTML dokumentu pomocí značky `<script>`.
+Programy v JavaScriptu můžeme vložit téměř kamkoli v HTML dokumentu pomocí značky `<script>`.
 
 Příklad:
 
@@ -35,7 +35,7 @@ Příklad:
 ```
 
 ```online
-Příklad si můžete přehrát kliknutím na tlačítko „Play“ v pravém horním rohu ve výše uvedeném okně.
+Příklad si můžete přehrát kliknutím na tlačítko „Přehrát“ v pravém horním rohu ve výše uvedeném okně.
 ```
 
 Značka `<script>` obsahuje kód v JavaScriptu, který se spustí automaticky, když prohlížeč začne tuto značku zpracovávat.
@@ -49,10 +49,10 @@ Atribut `type`: <code>&lt;script <u>type</u>=...&gt;</code>
 : Starý standard HTML, HTML4, vyžadoval, aby skript byl určitého typu (`type`). Obvykle to byl `type="text/javascript"`. To už dnes není nutné. Kromě toho moderní standard HTML zcela změnil význam tohoto atributu, který se dnes může používat pro moduly JavaScriptu. To je však pokročilejší záležitost. Na moduly se zaměříme v další části tohoto tutoriálu.
 
 Atribut `language`: <code>&lt;script <u>language</u>=...&gt;</code>
-: Tento atribut měl oznamovat jazyk (language) skriptu. Protože defaultním jazykem je dnes JavaScript, nemá již tento atribut smysl a není třeba jej používat.
+: Tento atribut měl oznamovat jazyk (language) skriptu. Protože výchozím jazykem je dnes JavaScript, nemá již tento atribut smysl a není třeba jej používat.
 
 Komentáře před a za skripty.
-: V prastarých knihách a průvodcích můžete uvnitř značky `<script>` najít takovéto komentáře:
+: V zastaralých knihách a průvodcích můžete uvnitř značky `<script>` najít takovéto komentáře:
 
     ```html no-beautify
     <script type="text/javascript"><!--
@@ -67,7 +67,7 @@ Komentáře před a za skripty.
 
 Máme-li větší množství kódu v JavaScriptu, můžeme jej uložit do samostatného souboru.
 
-Soubory se skripty se přidávají do HTML pomocí atributu `src`:
+Tyto soubory se přidávají do HTML pomocí atributu `src`:
 
 ```html
 <script src="/cesta/ke/skriptu.js"></script>
@@ -92,11 +92,11 @@ Chceme-li připojit více skriptů, použijeme více značek:
 ```smart
 Bývá pravidlem, že do HTML se ukládají jen ty nejjednodušší skripty. Složitější se umisťují do oddělených souborů.
 
-Výhodou odděleného souboru je, že prohlížeč si jej stáhne a uloží do své [cache](https://en.wikipedia.org/wiki/Web_cache).
+Výhodou odděleného souboru je, že prohlížeč si jej stáhne a uloží do své [mezipaměti](https://en.wikipedia.org/wiki/Web_cache).
 
-Jiné stránky, které se odkazují na stejný skript, si jej místo opětovného stažení nahrají z cache, takže se soubor ve skutečnosti stáhne pouze jednou.
+Jiné stránky, které se odkazují na stejný skript, si jej místo opětovného stažení nahrají z mezipaměti, takže se soubor ve skutečnosti stáhne pouze jednou.
 
-Tím se snižuje objem přenosu a načítání stránek se urychluje.
+Tím se snižuje přenos dat a načítání stránek je tak rychlejší.
 ```
 
 ````warn header="Je-li nastaveno `src`, obsah značky se ignoruje."
@@ -110,7 +110,7 @@ Tohle nebude fungovat:
 </script>
 ```
 
-Musíme si vybrat mezi externím `<script src="…">` a značkou `<script>` s kódem.
+Musíme si vybrat mezi externím `<script src="…">` a vloženým `<script>` skriptem.
 
 Výše uvedený příklad může fungovat, když jej rozdělíme do dvou skriptů:
 

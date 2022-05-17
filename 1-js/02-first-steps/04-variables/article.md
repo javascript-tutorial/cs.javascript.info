@@ -153,7 +153,7 @@ Stojí za zmínku, že existují [funkcionální](https://cs.wikipedia.org/wiki/
 
 Když je v takových jazycích hodnota jednou uložena „do krabičky“, zůstane tam navždy. Pokud chceme uložit něco jiného, jazyk nás přinutí vytvořit novou krabičku (deklarovat novou proměnnou). Nemůžeme znovu použít starou.
 
-Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody. Prostudovat si takový jazyk (i když jej neplánujete v dohledné době používat) se doporučuje k procvičení mysli.
+Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody. Prostudovat si takový jazyk (i když jej neplánujete v dohledné době používat) se doporučuje k rozšíření obzorů.
 ```
 
 ## Názvy proměnných [#variable-naming]
@@ -172,9 +172,9 @@ let test123;
 
 Když název obsahuje více slov, obvykle se používá tzv. [velbloudí notace](https://cs.wikipedia.org/wiki/CamelCase). To znamená, že slova následují hned za sebou a každé kromě prvního začíná velkým písmenem: `můjVelmiDlouhýNázev`.
 
-Zajímavé je, že v názvech je možné používat i znak dolaru `'$'` a podtržítko `'_'`. Jsou to regulérní symboly bez zvláštního významu, podobně jako písmena.
+Zajímavé je, že v názvech je možné používat i znak dolaru `'$'` a podtržítko `'_'`. Jsou to obyčejné symboly bez zvláštního významu, podobně jako písmena.
 
-Tyto názvy jsou správné:
+Tyto názvy jsou platné:
 
 ```js run untrusted
 let $ = 1; // deklarujeme proměnnou s názvem "$"
@@ -188,11 +188,16 @@ Příklady nesprávných názvů proměnných:
 ```js no-beautify
 let 1a; // nesmí začínat číslicí
 
-let my-name; // pomlčky '-' nejsou v názvu povoleny
+let moje-jméno; // spojovník '-' není v názvu povolen
 ```
 
+<<<<<<< HEAD
 ```smart header="Na velikosti záleží"
 Proměnné s názvy `jablko` a `JabLKO` jsou dvě různé proměnné.
+=======
+```smart header="Case matters"
+Variables named `apple` and `APPLE` are two different variables.
+>>>>>>> 2901e0c64590a67d8a2bde1ea76a514d96f80469
 ```
 
 ````smart header="Nelatinská písmena jsou povolena, ale nedoporučují se"
@@ -203,7 +208,7 @@ let имя = '...';
 let 我 = '...';
 ```
 
-Technicky zde není žádná chyba. Takové názvy jsou povoleny, ale podle mezinárodní konvence se v názvech proměnných používá angličtina. I když píšeme malý skript, může mít před sebou dlouhý život a lidé z jiných zemí občas mohou potřebovat si ho přečíst.
+Technicky zde není žádná chyba. Takové názvy jsou povoleny, ale podle mezinárodní konvence se v názvech proměnných používá angličtina. I když píšeme malý skript, může mít před sebou dlouhý život a lidé z jiných zemí si ho možná někdy budou potřebovat přečíst.
 ````
 
 ````warn header="Rezervované názvy"
@@ -226,9 +231,9 @@ Obvykle musíme proměnnou před použitím definovat. Ve starých časech však
 ```js run no-strict
 // poznámka: v tomto příkladu není "use strict"
 
-num = 5; // pokud proměnná "num" ještě neexistuje, je vytvořena
+čslo = 5; // pokud proměnná "čslo" ještě neexistuje, je vytvořena
 
-alert(num); // 5
+alert(čslo); // 5
 ```
 
 Je to špatný zvyk a ve striktním režimu vyvolá chybu:
@@ -237,7 +242,7 @@ Je to špatný zvyk a ve striktním režimu vyvolá chybu:
 "use strict";
 
 *!*
-num = 5; // chyba: num není definováno
+čslo = 5; // chyba: proměnná čslo není definována
 */!*
 ```
 ````
@@ -263,7 +268,9 @@ Když má programátor jistotu, že hodnota proměnné se nikdy nezmění, můž
 
 ### Konstanty velkými písmeny
 
-Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu. Názvy takových konstant se uvádějí velkými písmeny a s podtržítky.
+Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu.
+
+Názvy takových konstant se uvádějí velkými písmeny a s podtržítky.
 
 Například vytvoříme konstanty pro barvy v tzv. „webovém“ (hexadecimálním) formátu:
 
@@ -295,7 +302,11 @@ const dobaNačítáníStránky = /* doba, kterou trvá načíst webovou stránku
 
 Hodnota proměnné `dobaNačítáníStránky` není známa dříve, než se stránka načte, proto je pojmenována obvyklým způsobem. Je to však konstanta, protože se po přiřazení již nezmění.
 
+<<<<<<< HEAD
 Jinými slovy, názvy konstant zapsané velkými písmeny se používají jen pro pojmenování „natvrdo uvedených“ hodnot.
+=======
+In other words, capital-named constants are only used as aliases for "hard-coded" values.
+>>>>>>> 2901e0c64590a67d8a2bde1ea76a514d96f80469
 
 ## Pojmenovávejte věci správně
 
@@ -307,7 +318,7 @@ Pojmenovávání proměnných je jednou z nejdůležitějších a nejsložitěj�
 
 V reálných projektech většinu času nezabere psaní něčeho úplně nového od základů, ale úprava a rozšiřování již existujícího kódu. Když se vrátíme k nějakému kódu poté, co jsme nějakou dobu dělali něco jiného, je mnohem jednodušší najít potřebné informace, když jsou vhodně pojmenovány. Nebo, jinými slovy, když proměnné mají vhodné názvy.
 
-Než deklarujete proměnnou, dobře si promyslete její správný název. Bohatě se vám to vyplatí.
+Než deklarujete proměnnou, dobře si promyslete její název. Bohatě se vám to vyplatí.
 
 Některá pravidla, která je vhodné dodržovat, jsou:
 
@@ -316,7 +327,7 @@ Některá pravidla, která je vhodné dodržovat, jsou:
 - Volte názvy co nejpopisnější a nejstručnější. Příklady špatných názvů jsou `data` nebo `hodnota`. Takové názvy nic neříkají. Je vhodné je používat jen tehdy, když je z kontextu kódu naprosto zřejmé, jaká data nebo hodnota se v proměnné nachází.
 - Dohodněte se na pojmech se svým týmem a promyslete si je. Jestliže se návštěvník stránky nazývá „uživatel“, pak byste příslušné proměnné měli pojmenovat `aktuálníUživatel` nebo `novýUživatel`, a ne `aktuálníNávštěvník` nebo `novýPánVeMěstě`.
 
-Zní to jednoduše? Bezpochyby ano, ale vytvářet popisné a stručné názvy proměnných v praxi jednoduché není. Jděte do toho.
+Zní to jednoduše? Bezpochyby ano, ale vytvářet popisné a stručné názvy proměnných v praxi jednoduché není.
 
 ```smart header="Vytvořit novou nebo použít starou?"
 A jedna poznámka na závěr. Existují líní programátoři, kteří místo deklarace nové proměnné mají sklon znovu použít starou.
@@ -327,7 +338,7 @@ Takoví programátoři ušetří trochu času deklarací proměnné, ale desetkr
 
 Proměnná navíc je dobro, ne zlo.
 
-Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečně dobře optimalizovat, takže nenastane problém s výkonem. Používání různých proměnných pro různé hodnoty dokonce enginu pomůže optimalizovat váš kód.
+Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečně dobře optimalizovat, takže nenastane problém s výkonem. Používání různých proměnných pro různé hodnoty motoru dokonce pomůže optimalizovat váš kód.
 ```
 
 ## Shrnutí
@@ -335,7 +346,7 @@ Moderní JavaScriptové minifikátory a prohlížeče dokáží kód dostatečn�
 Deklarovat proměnné pro ukládání dat můžeme pomocí klíčových slov `var`, `let` nebo `const`.
 
 - `let` -- je moderní deklarace proměnné.
-- `var` -- je deklarace proměnné ze staré školy. Obvykle ji vůbec nepoužíváme, ale v kapitole <info:var> probereme drobné rozdíly oproti `let` pro případ, že byste je potřebovali.
+- `var` -- je deklarace proměnné ze staré školy. Obvykle ji vůbec nepoužíváme, ale v kapitole <info:var> probereme drobné rozdíly oproti `let` pro případ, že byste je potřebovali znát.
 - `const` -- je jako `let`, ale hodnota proměnné se nesmí měnit.
 
 Proměnné by měly být pojmenovány tak, abychom snadno pochopili, co obsahují.

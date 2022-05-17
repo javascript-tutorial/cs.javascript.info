@@ -28,7 +28,7 @@ Zde není striktní režim povolen:
 
 ```js no-strict
 alert("nějaký kód");
-// níže uvedený "use strict" se ignoruje - musí být na začátku
+// níže uvedený "use strict" se ignoruje -- musí být na začátku
 
 "use strict";
 
@@ -39,17 +39,17 @@ Nad `"use strict"` nesmí být nic jiného než komentáře.
 ````
 
 ```warn header="`use strict` nelze nijak zrušit"
-Neexistuje žádná direktiva jako `"no use strict"`, která by vrátila engine ke starému chování. Jakmile jednou vstoupíme do striktního režimu, už není cesty zpět.
+Neexistuje žádná direktiva jako `"no use strict"`, která by vrátila motoru výchozí chování. Jakmile jednou vstoupíme do striktního režimu, už není cesty zpět.
 ```
 
 ## Prohlížečová konzole
 
-Všimněte si, že když spouštíte kód ve [vývojářské konzoli](info:devtools), nepoužívá `use strict` defaultně.
-Někdy, když `use strict` znamená rozdíl, dostanete nesprávné výsledky.
+Když spustíte kód ve [vývojářské konzoli](info:devtools), neběží automaticky ve striktním režimu.
+Někdy to může ovlivnit i samotný výsledek.
 
 Jak tedy vlastně používat `use strict` v konzoli?
 
-Za prvé, můžete zkusit vložit více řádků pomocí `key:Shift+Enter` a umístit `use strict` na začátek, například takto:
+Můžete zkusit vložit více řádků pomocí zkratky `key:Shift+Enter` a umístit `use strict` na začátek, například takto:
 
 ```js
 'use strict'; <Shift+Enter pro nový řádek>
@@ -59,7 +59,7 @@ Za prvé, můžete zkusit vložit více řádků pomocí `key:Shift+Enter` a um�
 
 Funguje to ve většině prohlížečů, konkrétně ve Firefoxu a Chrome.
 
-Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nepěkný, ale spolehlivý způsob, jak zajistit `use strict`. Umístěte jej do tohoto wrapperu:
+Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nepěkný, ale spolehlivý způsob, jak zajistit `use strict`. Umístěte jej do tohoto obalu:
 
 ```js
 (function() {
@@ -73,13 +73,13 @@ Pokud to nefunguje, např. v nějakém starém prohlížeči, existuje jeden nep
 
 Odpověď na tuto otázku se může zdát samozřejmá, ale není tomu tak.
 
-Můžeme doporučit, abyste zahajovali skripty `"use strict"`... ale víte, co je fajn?
+Můžeme vám doporučit, abyste zahajovali skripty s `"use strict"`... ale víte, co je fajn?
 
-Moderní JavaScript podporuje „třídy“ a „moduly“ - pokročilé jazykové struktury (určitě se k nim dostaneme), které používají `use strict` automaticky. Pokud je tedy používáme, nemusíme direktivu `use strict` přidávat.
+Moderní JavaScript podporuje „třídy“ a „moduly“ -- pokročilé jazykové struktury (určitě se k nim dostaneme), které používají `use strict` automaticky. Pokud je tedy používáme, nemusíme direktivu `use strict` přidávat.
 
 **Prozatím tedy `"use strict"` používejte; na začátku vašich skriptů bývá vítaným hostem. Později, až budete mít celý svůj kód v třídách a modulech, jej můžete vypustit.**
 
 Prozatím tedy víme, jak obecně `use strict` používat.
-Až se v dalších kapitolách naučíme další vlastnosti jazyka, poznáme rozdíly mezi striktním a starším režimem. Naštěstí jich není mnoho a ve skutečnosti nám spíše zlepšují život.
+Až se v dalších kapitolách naučíme další vlastnosti jazyka, poznáme rozdíly mezi striktním a starším režimem. Naštěstí jich není mnoho a ve skutečnosti nám spíše ulehčují práci.
 
 Všechny příklady v našem tutoriálu předpokládají striktní režim, pokud není (velmi zřídka) uvedeno jinak.

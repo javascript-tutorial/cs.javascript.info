@@ -71,7 +71,9 @@ O práci s čísly si povíme víc v kapitole <info:number>.
 
 Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>. Toto technické omezení je dáno jeho vnitřní reprezentací.
 
-Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy. Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
+Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy.
+
+Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
 
 Hodnota typu `BigInt` vznikne přidáním písmene `n` na konec celého čísla:
 
@@ -86,27 +88,27 @@ Protože čísla typu `BigInt` potřebujeme jen málokdy, nebudeme je tady prob�
 Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v IE.
 ```
 
-Nahlédnutím do [*MDN* tabulky kompatibility BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
+Nahlédnutím do [*MDN* tabulky kompatibility pro BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
 
 ## Řetězec
 
 Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
 
 ```js
-let str = "Ahoj";
-let str2 = 'Jednoduché uvozovky (apostrofy) lze také použít';
-let věta = `může zahrnovat jiný ${str}`;
+let řtzc = "Ahoj";
+let řtzc2 = 'Jednoduché uvozovky lze také použít';
+let věta = `může zahrnovat jiný ${řtzc}`;
 ```
 
 JavaScript rozeznává tři druhy uvozovek.
 
 1. Dvojité uvozovky: `"Ahoj"`.
-2. Jednoduché uvozovky (apostrofy): `'Ahoj'`.
-3. Obrácené čárky (gravisy): <code>&#96;Ahoj&#96;</code>.
+2. Jednoduché uvozovky: `'Ahoj'`.
+3. Zpětné uvozovky: <code>&#96;Ahoj&#96;</code>.
 
-Dvojité uvozovky a apostrofy jsou „obyčejné“ uvozovky. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
+Dvojité a jednoduché uvozovky jsou „obyčejné“. V JavaScriptu mezi nimi není prakticky žádný rozdíl.
 
-Obrácené čárky jsou uvozovky „s rozšířenou funkcionalitou“. Umožňují nám vložit do řetězce proměnné a výrazy, když je uzavřeme do `${…}`. Například:
+Zpětné uvozovky jsou uvozovky „s rozšířenou funkcionalitou“. Umožňují nám vložit do řetězce proměnné a výrazy, když je uzavřeme do `${…}`. Například:
 
 ```js run
 let jméno = "Jan";
@@ -120,7 +122,7 @@ alert( `výsledek je *!*${1 + 2}*/!*` ); // výsledek je 3
 
 Výraz uvnitř `${…}` se vypočítá a jeho výsledek se stane součástí řetězce. Můžeme tam vložit cokoli: proměnnou jako `jméno`, aritmetický výraz jako `1 + 2`, nebo i něco složitějšího.
 
-Všimněte si, že toto lze provést jen uvnitř obrácených čárek. Ostatní druhy uvozovek tuto funkcionalitu nemají!
+Všimněte si, že toto lze provést jen uvnitř zpětných uvozovek. Ostatní druhy uvozovek tuto funkcionalitu nemají!
 ```js run
 alert( "výsledek je ${1 + 2}" ); // výsledek je ${1 + 2} (dvojité uvozovky s tím nic neudělají)
 ```
@@ -137,7 +139,7 @@ V JavaScriptu žádný takový typ není. Je tady jen jeden typ: `string` (řet�
 
 Typ boolean má jen dvě hodnoty: `true` a `false`.
 
-Tento typ se běžně používá k ukládání hodnot ano/ne: `true` znamená „ano, správně“, `false` znamená „ne, nesprávně“.
+Tento typ se běžně používá k ukládání hodnot ano/ne: `true` znamená „ano, pravda“, `false` znamená „ne, nepravda“.
 
 Příklad:
 
@@ -154,17 +156,21 @@ let jeVětší = 4 > 1;
 alert( jeVětší ); // true (výsledek porovnání je „ano“)
 ```
 
-Booleovské hodnoty podrobně probereme v kapitole <info:logical-operators>.
+Datový typ boolean probereme podrobněji v kapitole <info:logical-operators>.
 
 ## Hodnota „null“
 
-Speciální hodnota `null` nepatří k žádnému z výše uvedených typů. Tvoří samostatný typ, který obsahuje jedině hodnotu `null`:
+Speciální hodnota `null` nepatří k žádnému z výše uvedených typů.
+
+Tvoří samostatný typ, který obsahuje jedině hodnotu `null`:
 
 ```js
 let věk = null;
 ```
 
-V JavaScriptu `null` není „odkaz na neexistující objekt“ nebo „nulový ukazatel“, jako v některých jiných jazycích. Je to speciální hodnota, která představuje „nic“, „prázdno“ nebo „neznámá hodnota“.
+V JavaScriptu `null` není „odkaz na neexistující objekt“ nebo „nulový ukazatel“, jako v některých jiných jazycích.
+
+Je to speciální hodnota, která představuje „nic“, „prázdno“ nebo „neznámá hodnota“.
 
 Výše uvedený kód říká, že `věk` je neznámý.
 
@@ -193,7 +199,7 @@ věk = undefined;
 alert(věk); // "undefined"
 ```
 
-...Toto však nedoporučujeme. Běžně se k přiřazení „prázdné“ nebo „neznámé“ hodnoty do proměnné používá `null`, zatímco `undefined` je vyhrazeno jako defaultní úvodní hodnota nepřiřazených proměnných.
+...Toto však nedoporučujeme. Běžně se k přiřazení „prázdné“ nebo „neznámé“ hodnoty do proměnné používá `null`, zatímco `undefined` je vyhrazeno jako výchozí úvodní hodnota u proměnných, kterým nebyla hodnota přiřazena.
 
 ## Objekty a symboly
 
@@ -201,9 +207,9 @@ Typ `object` je speciální.
 
 Všechny ostatní typy se nazývají „primitivní“, protože jejich hodnoty mohou obsahovat pouze jednu věc (ať je to řetězec, číslo nebo cokoli). Naproti tomu objekty se používají k ukládání kolekcí dat a složitějších entit.
 
-Když jsou objekty tak důležité, vyžadují zvláštní zacházení. Budeme o nich hovořit později v kapitole <info:object>, až se dozvíme víc o primitivních typech.
+Když jsou objekty tak důležité, vyžadují zvláštní zacházení. Budeme o nich hovořit později v kapitole <info:object>, až se dozvíme více o primitivních typech.
 
-Typ `symbol` se používá k vytváření unikátních identifikátorů pro objekty. Musíme jej zde zmínit, aby seznam byl úplný, ale podrobnosti necháme až na dobu, kdy budeme znát objekty.
+Typ `symbol` se používá k vytváření unikátních identifikátorů pro objekty. Musíme jej zde zmínit, aby seznam byl úplný, ale podrobnosti si necháme až na dobu, kdy budeme vědět více o objektech.
 
 ## Operátor typeof [#type-typeof]
 
@@ -259,7 +265,7 @@ V JavaScriptu existuje osm základních datových typů.
 
 - `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
 - `bigint` pro celá čísla libovolné délky.
-- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje zvláštní typ pro jediný znak.
+- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje datový typ pro znak.
 - `boolean` pro `true`/`false`.
 - `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
 - `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.

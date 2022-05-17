@@ -14,7 +14,9 @@ Až se později dozvíme něco o objektech, v kapitole <info:object-toprimitive>
 
 ## Konverze na řetězec
 
-Konverze na řetězec se odehraje tehdy, když potřebujeme hodnotu ve formě řetězce. Provádí ji například `alert(hodnota)`, aby mohla zobrazit hodnotu.
+Konverze na řetězec se odehraje tehdy, když potřebujeme hodnotu ve formě řetězce.
+
+Provádí ji například `alert(hodnota)`, aby mohla zobrazit hodnotu.
 
 Můžeme také volat funkci `String(hodnota)`, která převede zadanou hodnotu na řetězec:
 
@@ -24,7 +26,7 @@ alert(typeof hodnota); // boolean
 
 *!*
 hodnota = String(hodnota); // hodnota je nyní řetězec "true"
-alert(typeof hodnota); // string
+alert(typeof hodnota); // string (řetězec)
 */!*
 ```
 
@@ -43,12 +45,12 @@ alert( "6" / "2" ); // 3, řetězce se konvertují na čísla
 Pro explicitní konverzi hodnoty `hodnota` na číslo můžeme použít funkci `Number(hodnota)`:
 
 ```js run
-let str = "123";
-alert(typeof str); // string
+let řtzc = "123";
+alert(typeof řtzc); // string (řetězec)
 
-let num = Number(str); // stane se z něj číslo 123
+let čslo = Number(řtzc); // stane se z něj číslo 123
 
-alert(typeof num); // number
+alert(typeof čslo); // number (číslo)
 ```
 
 Explicitní konverze je obvykle potřebná, když načítáme hodnotu z řetězcového zdroje, například z textového formuláře, ale očekáváme zadání čísla.
@@ -74,7 +76,7 @@ Příklady:
 
 ```js run
 alert( Number("   123   ") ); // 123
-alert( Number("123z") );      // NaN (chyba při čtení čísla v písmenu "z")
+alert( Number("123z") );      // NaN (chyba při čtení čísla u znaku "z")
 alert( Number(true) );        // 1
 alert( Number(false) );       // 0
 ```
@@ -85,7 +87,9 @@ Tuto konverzi provádí i většina matematických operátorů. Uvidíme to v n�
 
 ## Konverze na boolean
 
-Konverze na boolean je nejjednodušší. Odehrává se v logických operátorech (později se setkáme s testy platnosti podmínky a podobnými věcmi), ale můžeme ji provést i explicitně voláním `Boolean(value)`.
+Konverze na boolean je nejjednodušší.
+
+Odehrává se v logických operátorech (později se setkáme s testy platnosti podmínky a podobnými věcmi), ale můžeme ji provést i explicitně voláním `Boolean(hodnota)`.
 
 Pravidla konverze:
 
@@ -115,9 +119,9 @@ alert( Boolean(" ") ); // mezery, také true (každý neprázdný řetězec je t
 
 Tři nejčastěji používané typové konverze jsou na řetězec, na číslo a na boolean.
 
-**`Konverze na řetězec`** -- Nastává, když něco vypisujeme. Můžeme ji provést pomocí `String(value)`. Konverze na řetězec je u primitivních hodnot obvykle zřejmá.
+**`Konverze na řetězec`** -- Nastává, když něco vypisujeme. Můžeme ji provést pomocí `String(hodnota)`. Konverze na řetězec je u primitivních typů obvykle zřejmá.
 
-**`Konverze na číslo`** -- Nastává při matematických operacích. Můžeme ji provést pomocí `Number(value)`.
+**`Konverze na číslo`** -- Nastává při matematických operacích. Můžeme ji provést pomocí `Number(hodnota)`.
 
 Konverze se řídí těmito pravidly:
 
@@ -128,7 +132,7 @@ Konverze se řídí těmito pravidly:
 |<code>true&nbsp;/&nbsp;false</code> | `1 / 0` |
 | `řetězec` | Načte se „doslovně“, bílé znaky na obou stranách se ignorují. Z prázdného řetězce se stane `0`. Při chybě je vydáno `NaN`. |
 
-**`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(value)`.
+**`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(hodnota)`.
 
 Řídí se těmito pravidly:
 
@@ -140,6 +144,6 @@ Konverze se řídí těmito pravidly:
 Většinu těchto pravidel je snadné pochopit a zapamatovat si. Významné výjimky, v nichž lidé obvykle chybují, jsou:
 
 - `undefined` převedené na číslo je `NaN`, ne `0`.
-- `"0"` a řetězce obsahující jen mezery, např. `"   "`, převedené na boolean jsou true.
+- `"0"` a řetězce obsahující jen mezery, např. `"   "`, jsou po převodu na boolean vyhodnoceny jako true.
 
-O objektech se zde nezmiňujeme. Později, až se v JavaScriptu naučíme další základní věci, se k nim vrátíme v kapitole <info:object-toprimitive>, která je věnována výlučně objektům.
+O objektech se zde nezmiňujeme. Později, až se v JavaScriptu naučíme všechny potřebné základy, se k nim vrátíme v kapitole <info:object-toprimitive>, která je věnována výlučně objektům.

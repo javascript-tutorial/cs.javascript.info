@@ -70,7 +70,7 @@ Syntaxe:
 výsledek = confirm(otázka);
 ```
 
-Funkce `confirm` zobrazí modální okno s otázkou `otázka` a dvěma tlačítky: OK a Storno.
+Funkce `confirm` zobrazí modální okno s otázkou -- v našem případě obsaženou v promenné `otázka` -- a dvěma tlačítky: OK a Storno.
 
 Výsledek bude `true`, jestliže uživatel stiskne OK, jinak bude `false`.
 
@@ -84,7 +84,7 @@ alert( jeŠéf ); // pokud bylo stisknuto OK, tak true
 
 ## Shrnutí
 
-Uvedli jsme tři funkce specifické pro prohlížeče, které umožňují interakci s uživatelem:
+Uvedli jsme tři funkce specifické pro prohlížeče, které umožňují interakci s návštěvníky:
 
 `alert`
 : Zobrazí zprávu.
@@ -99,7 +99,7 @@ Všechny tyto metody jsou modální: pozastaví vykonávání skriptu a neumožn
 
 Všechny uvedené metody mají dvě omezení:
 
-1. Přesná poloha modálního okna je stanovena prohlížečem. Obvykle to bývá uprostřed.
-2. Také přesný vzhled okna závisí na prohlížeči a my jej nemůžeme měnit.
+1. Poloha modálního okna je stanovena prohlížečem. Obvykle je uprostřed.
+2. Vzhled okna závisí na prohlížeči. Nelze jej upravit.
 
-To je cena za jednoduchost. Existují jiné způsoby, jak zobrazit hezčí okna a umožnit bohatší interakci s návštěvníkem, ale pokud nám na cerepetičkách příliš nezáleží, tyto metody fungují dobře.
+To je cena za jednoduchost. Existují jiné způsoby, kde můžete upravit vzhled oken a umožnit bohatší interakci s návštěvníkem, ale pokud nám na těchto věcech příliš nezáleží, tyto metody fungují dobře.

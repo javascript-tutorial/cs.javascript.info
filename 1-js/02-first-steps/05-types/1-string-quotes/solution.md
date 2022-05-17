@@ -10,6 +10,6 @@ alert( `ahoj ${1}` ); // ahoj 1
 // výrazem je řetězec "jméno"
 alert( `ahoj ${"jméno"}` ); // ahoj jméno
 
-// výrazem je proměnná, vložíme ji do řetězce
+// výrazem je proměnná, hodnota se vloží do řetězce
 alert( `ahoj ${jméno}` ); // ahoj Ilja
 ```
