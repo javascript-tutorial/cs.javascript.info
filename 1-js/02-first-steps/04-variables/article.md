@@ -191,13 +191,8 @@ let 1a; // nesmí začínat číslicí
 let moje-jméno; // spojovník '-' není v názvu povolen
 ```
 
-<<<<<<< HEAD
 ```smart header="Na velikosti záleží"
-Proměnné s názvy `jablko` a `JabLKO` jsou dvě různé proměnné.
-=======
-```smart header="Case matters"
-Variables named `apple` and `APPLE` are two different variables.
->>>>>>> 2901e0c64590a67d8a2bde1ea76a514d96f80469
+Proměnné s názvy `jablko` a `JABLKO` jsou dvě různé proměnné.
 ```
 
 ````smart header="Nelatinská písmena jsou povolena, ale nedoporučují se"
@@ -302,11 +297,7 @@ const dobaNačítáníStránky = /* doba, kterou trvá načíst webovou stránku
 
 Hodnota proměnné `dobaNačítáníStránky` není známa dříve, než se stránka načte, proto je pojmenována obvyklým způsobem. Je to však konstanta, protože se po přiřazení již nezmění.
 
-<<<<<<< HEAD
 Jinými slovy, názvy konstant zapsané velkými písmeny se používají jen pro pojmenování „natvrdo uvedených“ hodnot.
-=======
-In other words, capital-named constants are only used as aliases for "hard-coded" values.
->>>>>>> 2901e0c64590a67d8a2bde1ea76a514d96f80469
 
 ## Pojmenovávejte věci správně
 
