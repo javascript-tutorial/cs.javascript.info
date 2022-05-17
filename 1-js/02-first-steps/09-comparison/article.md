@@ -37,7 +37,9 @@ alert( výsledek ); // true
 
 ## Porovnávání řetězců
 
-Ke zjištění, zda je jeden řetězec větší než jiný, JavaScript používá tzv. „slovníkové“ neboli „lexikografické“ pořadí. Jinými slovy, řetězce se porovnávají znak po znaku.
+Ke zjištění, zda je jeden řetězec větší než jiný, JavaScript používá tzv. „slovníkové“ neboli „lexikografické“ pořadí.
+
+Jinými slovy, řetězce se porovnávají znak po znaku.
 
 Příklad:
 
