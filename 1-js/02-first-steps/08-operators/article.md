@@ -82,7 +82,9 @@ alert( 8 ** (1/3) ); // 2 (umocnění na 1/3 je totéž jako třetí odmocnina)
 
 Přejděme nyní k vlastnostem JavaScriptu, které jsou za hranicemi školní aritmetiky.
 
-Operátor plus `+` obvykle sčítá čísla. Pokud je však binární `+` použito na řetězce, spojí je (zřetězí):
+Operátor plus `+` obvykle sčítá čísla.
+
+Pokud je však binární `+` použito na řetězce, spojí je (zřetězí):
 
 ```js
 let s = "můj" + "řetězec";
