@@ -356,7 +356,7 @@ let a = ++čítač; // (*)
 alert(a); // *!*2*/!*
 ```
 
-Na řádku `(*)` *prefixová* forma `++čítač` zvýšila `čítač` a vrátila novou hodnotu, `2`. Proto `alert` zobrazila `2`.
+Na řádku `(*)` *prefixová* notace `++čítač` zvýšila `čítač` a vrátila novou hodnotu, `2`. Proto `alert` zobrazila `2`.
 
 Nyní použijeme postfixovou notaci:
 
