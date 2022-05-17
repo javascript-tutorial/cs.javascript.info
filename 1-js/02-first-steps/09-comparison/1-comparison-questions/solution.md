@@ -13,7 +13,7 @@ null === +"\n0\n" → false
 Některé z důvodů:
 
 1. Samozřejmě true.
-2. Slovníkové porovnání, proto false. `"j"` je menší než `"r"`.
+2. Slovníkové porovnání, proto false. `"j"` je menší než `"a"`.
 3. Opět slovníkové porovnání, první znak `"2"` je větší než první znak `"1"`.
 4. Hodnoty `null` a `undefined` se rovnají jedině sobě navzájem.
 5. Striktní rovnost je striktní. Různé typy na obou stranách vedou k výsledku false.
