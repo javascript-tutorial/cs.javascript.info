@@ -365,7 +365,7 @@ let a = čítač++; // (*) změnili jsme ++čítač na čítač++
 alert(a); // *!*1*/!*
 ```
 
-Na řádku `(*)` *postfixová* forma `čítač++` rovněž zvýšila `čítač`, ale vrátila *starou* hodnotu (tu před zvýšením). Proto `alert` zobrazila `1`.
+Na řádku `(*)` *postfixová* notace `čítač++` rovněž zvýšila `čítač`, ale vrátila *starou* hodnotu (tu před zvýšením). Proto `alert` zobrazil `1`.
 
 Shrneme to:
 
