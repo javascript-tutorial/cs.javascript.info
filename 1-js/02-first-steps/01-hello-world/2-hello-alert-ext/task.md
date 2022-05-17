@@ -4,6 +4,6 @@ importance: 5
 
 # Zobrazte zprávu pomocí externího skriptu
 
-Vezměte si řešení předchozí úlohy <info:task/hello-alert> a upravte je tak, že obsah skriptu umístíte do externího souboru `alert.js`, který bude umístěn ve stejné složce.
+Vezměte si řešení předchozí úlohy <info:task/hello-alert>, vytvořte ve stejné složce nový soubor `alert.js` a obsah skriptu přemístěte do něj.
 
-Otevřete stránku a ujistěte se, že zobrazování zprávy funguje.
+Otevřete stránku a ujistěte se, že se zpráva zobrazuje.
