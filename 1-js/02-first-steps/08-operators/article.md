@@ -338,7 +338,7 @@ Inkrementaci a dekrementaci lze aplikovat pouze na proměnné. Pokus použít ji
 
 Operátory `++` a `--` lze umístit před i za proměnnou.
 
-- Je-li operátor umístěn za proměnnou, nazývá se to „postfixová forma“: `čítač++`.
+- Je-li operátor umístěn za proměnnou, nazývá se to „postfixová notace“: `čítač++`.
 - „Prefixová forma“ je umístění operátoru před proměnnou: `++čítač`.
 
 Oba tyto příkazy vykonají totéž: zvýší `čítač` o `1`.
