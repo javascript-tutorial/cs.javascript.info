@@ -13,7 +13,7 @@ let zpráva;
 
 if (přihlášený == 'Zaměstnanec') {
   zpráva = 'Ahoj';
-} else if (login == 'Ředitel') {
+} else if (přihlášený == 'Ředitel') {
   zpráva = 'Dobrý den';
 } else if (přihlášený == '') {
   zpráva = 'Nikdo není přihlášený';
