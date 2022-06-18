@@ -11,7 +11,7 @@ Z důvodu čitelnosti doporučujeme rozdělit kód na více řádků.
 ```js
 let zpráva;
 
-if (login == 'Zaměstnanec') {
+if (přihlášený == 'Zaměstnanec') {
   zpráva = 'Ahoj';
 } else if (login == 'Ředitel') {
   zpráva = 'Dobrý den';
