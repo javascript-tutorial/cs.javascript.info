@@ -95,7 +95,7 @@ if (rok < 2015) {
 } else if (rok > 2015) {
   alert( 'Příliš pozdě...' );
 } else {
-  alert( 'Přesně!' );
+  alert( 'Správně!' );
 }
 ```
 
