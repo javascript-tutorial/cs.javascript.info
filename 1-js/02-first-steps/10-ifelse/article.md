@@ -1,6 +1,8 @@
 # Podmíněné větvení: if, „?“
 
-Někdy potřebujeme provést různé akce v závislosti na platnosti různých podmínek. K tomu můžeme použít příkaz `if` a podmíněný operátor `?`, který se také nazývá operátor „otazníku“.
+Někdy potřebujeme provést různé akce v závislosti na platnosti různých podmínek. 
+
+K tomu můžeme použít příkaz `if` a podmíněný operátor `?`, který se také nazývá operátor „otazníku“.
 
 ## Příkaz „if“
 
