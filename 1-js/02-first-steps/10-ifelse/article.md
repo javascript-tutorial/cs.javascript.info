@@ -99,7 +99,7 @@ if (rok < 2015) {
 }
 ```
 
-Ve výše uvedeném kódu JavaScript napřed ověří podmínku `rok < 2015`. Není-li splněna, pokračuje k další podmínce `rok > 2015`. Není-li splněna ani ta, zobrazí poslední `alert`.
+Ve výše uvedeném kódu JavaScript napřed ověří podmínku `rok < 2015`. Není-li splněna, pokračuje k další podmínce `rok > 2015`. Není-li splněna ani ta, zobrazí se poslední `alert`.
 
 Bloků `else if` může být více. Závěrečné `else` není povinné.
 
