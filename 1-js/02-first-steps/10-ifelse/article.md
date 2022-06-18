@@ -75,7 +75,7 @@ Příklad:
 let rok = prompt('Ve kterém roce byla publikována specifikace ECMAScript-2015?', '');
 
 if (rok == 2015) {
-  alert( 'Uhádl jste!' );
+  alert( 'Uhádli jste!' );
 } else {
   alert( 'Jak se můžete takhle zmýlit?' ); // jakákoli jiná hodnota než 2015
 }
