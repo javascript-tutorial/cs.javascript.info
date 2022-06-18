@@ -105,7 +105,7 @@ Bloků `else if` může být více. Závěrečné `else` není povinné.
 
 ## Podmíněný operátor „?“
 
-Někdy potřebujeme přiřadit do proměnné různou hodnotu v závislosti na splnění určité podmínky.
+Někdy potřebujeme přiřadit do proměnné hodnotu v závislosti na výsledku podmínky.
 
 Příklad:
 
