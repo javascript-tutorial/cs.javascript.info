@@ -15,7 +15,7 @@ if (login == 'Zaměstnanec') {
   zpráva = 'Ahoj';
 } else if (login == 'Ředitel') {
   zpráva = 'Dobrý den';
-} else if (login == '') {
+} else if (přihlášený == '') {
   zpráva = 'Není login';
 } else {
   zpráva = '';
