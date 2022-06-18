@@ -108,11 +108,14 @@ ifelse_task2.svg:
   "Right!":
     text: "Správně!"
     position: "center"
-  "What's the ":
+  "What's the":
     text: "Jaký je"
     position: "center"
   "“official” name of":
     text: "\"oficiální\" název"
+    position: "center"
+  "JavaScript?":
+    text: "JavaScriptu?"
     position: "center"
   "Иначе": ""
 
