@@ -4,7 +4,7 @@ importance: 2
 
 # Název JavaScriptu
 
-Pomocí konstrukce `if..else` napište kód, který se zeptá: „Jaký je „oficiální“ název JavaScriptu?“
+Pomocí konstruktu `if..else` napište kód, který se zeptá: „Jaký je „oficiální“ název JavaScriptu?“
 
 Pokud návštěvník zadá „ECMAScript“, vypište „Správně!“, jinak vypište „Vy to nevíte? ECMAScript!“
 
