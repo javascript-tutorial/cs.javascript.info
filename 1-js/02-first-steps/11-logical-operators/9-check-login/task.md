@@ -10,7 +10,7 @@ Jestliže návštěvník zadá `"Správce"`, zeptejte se ho pomocí `prompt` na 
 
 Heslo se ověří následovně:
 
-- Pokud se rovná „Mistr“, pak zobrazte „Vítáme vás!“.
+- Pokud se rovná „Vládce“, tak zobrazte „Vítáme vás!“.
 - Při jiném řetězci zobrazte „Špatné heslo“.
 - Bude-li zadán prázdný řetězec nebo bude vstup zrušen, zobrazte „Zrušeno“.
 
