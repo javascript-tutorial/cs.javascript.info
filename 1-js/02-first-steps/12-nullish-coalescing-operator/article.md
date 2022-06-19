@@ -121,7 +121,7 @@ let plocha = (výška ?? 100) * (šířka ?? 50);
 alert(plocha); // 5000
 ```
 
-Kdybychom závorky nepoužili, `*` by se spustilo jako první, neboť má vyšší prioritu než `??`. To by vedlo k nesprávným výsledkům.
+Kdybychom závorky nepoužili, `*` by se vykonalo dřív, neboť má vyšší prioritu než `??`. To by vedlo k nesprávným výsledkům.
 
 ```js
 // bez závorek
