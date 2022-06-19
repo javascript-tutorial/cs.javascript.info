@@ -143,7 +143,7 @@ let x = 1 && 2 ?? 3; // Syntaktická chyba
 
 Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, kdy lidé začnou z `||` přecházet na `??`.
 
-Dá se obejít pomocí závorek:
+Omezení se dá se obejít pomocí závorek:
 
 ```js run
 *!*
