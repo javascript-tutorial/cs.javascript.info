@@ -10,7 +10,7 @@ Výsledkem `a ?? b` je:
 - pokud `a` je definovaný, pak `a`;
 - pokud `a` není definovaný, pak `b`.
 
-Jinými slovy, `??` vrátí první argument, jestliže ten nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
+Jinými slovy, `??` vrátí první argument, jestliže nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
 
 Operátor koalescence není zcela nová věc. Je to jen pěkná syntaxe, jak vrátit první „definovanou“ hodnotu ze dvou.
 
