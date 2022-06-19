@@ -20,6 +20,6 @@ Schéma:
 
 Použijte vnořené bloky `if`. Dbejte na celkovou čitelnost kódu.
 
-Rada: po zadání prázdného vstupu `prompt` vrátí prázdný řetězec `''`. Po stisknutí klávesy `key:ESC` vrátí `null`.
+Nápověda: po zadání prázdného vstupu `prompt` vrátí prázdný řetězec `''`. Po stisknutí klávesy `key:ESC` vrátí `null`.
 
 [demo]
