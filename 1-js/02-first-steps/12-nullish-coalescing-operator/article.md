@@ -42,7 +42,7 @@ alert(uživatel ?? "anonym"); // Jan (uživatel je definován)
 
 Můžeme také použít sekvenci `??` k výběru první hodnoty ze seznamu, která není `null/undefined`.
 
-Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`, které obsahují jeho křestní jméno, příjmení a přezdívku. Všechny mohou být nedefinované, jestliže se uživatel rozhodl nezadat žádnou hodnotu.
+Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`. Všechny mohou být nedefinované, jestliže se uživatel rozhodl tyto informace nevyplnit.
 
 Rádi bychom zobrazili uživatelovo jméno: jednu z těchto tří proměnných, nebo „Anonym“, pokud žádná z nich není definována.
 
