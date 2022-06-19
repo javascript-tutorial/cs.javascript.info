@@ -127,7 +127,7 @@ Kdybychom závorky nepoužili, `*` by se vykonalo dřív, neboť má vyšší pr
 // bez závorek
 let plocha = výška ?? 100 * šířka ?? 50;
 
-// ...funguje stejně jako toto (což jsme pravděpodobně nechtěli):
+// ...funguje stejně jako toto (což jsme nechtěli):
 let plocha = výška ?? (100 * šířka) ?? 50;
 ```
 
