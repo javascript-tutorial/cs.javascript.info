@@ -32,7 +32,7 @@ let uživatel;
 alert(uživatel ?? "anonym"); // anonym (uživatel není definován)
 ```
 
-Zde je příklad pro případ, že je proměnné `uživatel` přiřazena hodnota:
+Zde je příklad, kde má proměnná `uživatel` přiřazenou hodnotu:
 
 ```js run
 let uživatel = "Jan";
