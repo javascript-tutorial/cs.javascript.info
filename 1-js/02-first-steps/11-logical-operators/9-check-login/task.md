@@ -2,7 +2,7 @@ importance: 3
 
 ---
 
-# Ověřte login
+# Ověřte přihlášení
 
 Napište kód, který se pomocí `prompt` zeptá na login.
 
