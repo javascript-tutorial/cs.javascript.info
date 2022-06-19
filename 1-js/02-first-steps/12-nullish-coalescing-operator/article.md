@@ -44,7 +44,7 @@ Můžeme také použít sekvenci `??` k výběru první hodnoty ze seznamu, kter
 
 Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`. Všechny mohou být nedefinované, jestliže se uživatel rozhodl tyto informace nevyplnit.
 
-Rádi bychom zobrazili uživatelovo jméno: jednu z těchto tří proměnných, nebo „Anonym“, pokud žádná z nich není definována.
+Rádi bychom zobrazili uživatelské jméno: jednu z těchto tří proměnných, nebo „anonym“, pokud žádná z nich není definována.
 
 Použijeme k tomu operátor `??`:
 
