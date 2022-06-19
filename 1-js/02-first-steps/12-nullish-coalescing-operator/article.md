@@ -157,7 +157,7 @@ alert(x); // 2
 
 - Operátor koalescence `??` poskytuje zkratku, jak vybrat první „definovanou“ hodnotu ze seznamu.
 
-    Používá se k přiřazení defaultních hodnot do proměnných:
+    Používá se k přiřazení výchozích hodnot do proměnných:
 
     ```js
     // nastavíme výška=100, je-li výška null nebo undefined
