@@ -55,7 +55,7 @@ let přezdívka = "Supercoder";
 
 // zobrazíme první definovanou hodnotu:
 *!*
-alert(jméno ?? příjmení ?? přezdívka ?? "Anonym"); // Supercoder
+alert(jméno ?? příjmení ?? přezdívka ?? "anonym"); // Supercoder
 */!*
 ```
 
