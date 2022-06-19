@@ -7,7 +7,7 @@ if (uživatelskéJméno === 'Správce') {
 
   let heslo = prompt('Heslo?', '');
 
-  if (pass === 'Mistr') {
+  if (heslo === 'Vládce') {
     alert( 'Vítáme vás!' );
   } else if (pass === '' || pass === null) {
     alert( 'Zrušeno' );
