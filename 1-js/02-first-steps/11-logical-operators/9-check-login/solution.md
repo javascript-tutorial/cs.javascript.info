@@ -5,7 +5,7 @@ let uživatelskéJméno = prompt("Kdo je tam?", '');
 
 if (uživatelskéJméno === 'Správce') {
 
-  let pass = prompt('Heslo?', '');
+  let heslo = prompt('Heslo?', '');
 
   if (pass === 'Mistr') {
     alert( 'Vítáme vás!' );
