@@ -141,7 +141,7 @@ Následující kód vydá syntaktickou chybu:
 let x = 1 && 2 ?? 3; // Syntaktická chyba
 ```
 
-Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, až lidé začnou z `||` přecházet na `??`.
+Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, kdy lidé začnou z `||` přecházet na `??`.
 
 Dá se obejít pomocí závorek:
 
