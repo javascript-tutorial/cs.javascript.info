@@ -22,7 +22,7 @@ result = (a !== null && a !== undefined) ? a : b;
 
 Nyní by mělo být naprosto zřejmé, co `??` umí. Podíváme se, kde nám pomůže.
 
-Operátor `??` se běžně používá k poskytnutí defaultní hodnoty proměnné, která může být nedefinovaná.
+Operátor `??` se běžně používá k udání výchozí hodnoty.
 
 Například zde zobrazíme `anonym`, jestliže proměnná `uživatel` není definována:
 
