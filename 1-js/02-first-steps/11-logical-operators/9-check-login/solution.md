@@ -9,7 +9,7 @@ if (uživatelskéJméno === 'Správce') {
 
   if (heslo === 'Vládce') {
     alert( 'Vítáme vás!' );
-  } else if (pass === '' || pass === null) {
+  } else if (heslo === '' || heslo === null) {
     alert( 'Zrušeno' );
   } else {
     alert( 'Špatné heslo' );
