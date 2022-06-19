@@ -4,7 +4,7 @@ importance: 3
 
 # Ověřte přihlášení
 
-Napište kód, který se pomocí `prompt` zeptá na login.
+Napište kód, který se pomocí `prompt` zeptá na přihlášení.
 
 Jestliže návštěvník zadá `"Správce"`, zeptejte se ho pomocí `prompt` na heslo. Bude-li vstupem prázdný řádek nebo uživatel stiskne `key:Esc`, zobrazte „Zrušeno“. Bude-li zadán jiný řetězec, zobrazte „Neznám vás“.
 
