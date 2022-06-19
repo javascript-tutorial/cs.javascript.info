@@ -88,8 +88,7 @@ Jinými slovy, `||` nerozlišuje mezi `false`, `0`, prázdným řetězcem `""` a
 
 V praxi však můžeme chtít použít defaultní hodnotu jen tehdy, je-li proměnná `null/undefined`, tedy když hodnota je opravdu neznámá nebo není nastavena.
 
-Například uvažujme tento kód:
-
+Jako příklad poslouží tento kód:
 ```js run
 let výška = 0;
 
