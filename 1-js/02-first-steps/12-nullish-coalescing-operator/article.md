@@ -160,7 +160,7 @@ alert(x); // 2
     Používá se k přiřazení výchozích hodnot do proměnných:
 
     ```js
-    // nastavíme výška=100, je-li výška null nebo undefined
+    // nastavíme proměnnou výška=100, je-li proměnná výška null nebo undefined
     výška = výška ?? 100;
     ```
 
