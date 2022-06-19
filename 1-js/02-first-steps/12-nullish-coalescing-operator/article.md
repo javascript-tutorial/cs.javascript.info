@@ -72,7 +72,7 @@ let přezdívka = "Supercoder";
 
 // zobrazí první pravdivou hodnotu:
 *!*
-alert(jméno || příjmení || přezdívka || "Anonym"); // Supercoder
+alert(jméno || příjmení || přezdívka || "anonym"); // Supercoder
 */!*
 ```
 
