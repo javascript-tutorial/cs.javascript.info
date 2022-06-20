@@ -31,7 +31,12 @@ Pokud vyvíjíte pro prohlížeč, existují i další specifikace uvedené ve [
 
 JavaScript je neustále vyvíjen a pravidelně se do něj přidávají nové vlastnosti.
 
+<<<<<<< HEAD
 Chcete-li vědět, v jakých enginech jsou tyto vlastnosti už podporovány, podívejte se na:
+=======
+- <https://caniuse.com> - per-feature tables of support, e.g. to see which engines support modern cryptography functions: <http://caniuse.com/#feat=cryptography>.
+- <https://kangax.github.io/compat-table> - a table with language features and engines that support those or don't support.
+>>>>>>> 7964b11b8fa2c314d9a09a82ea4b585cda618c80
 
 - <http://caniuse.com> - pro každou vlastnost obsahuje tabulku enginů, které ji podporují, např. chcete-li vidět, které enginy podporují moderní kryptografické funkce, jděte na <http://caniuse.com/#feat=cryptography>. 
 - <https://kangax.github.io/compat-table> - tabulka vlastností jazyka a enginů, které je podporují nebo nepodporují.
