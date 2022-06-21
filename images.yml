@@ -136,8 +136,8 @@ ifelse_task.svg:
     text: "Kdo je tam?"
   "Password?": "Heslo?"
   "Cancel": "Zrušeno"
-  "Admin": "Admin"
-  "TheMaster": "Mistr"
+  "Admin": "Správce"
+  "TheMaster": "Vládce"
   "Other": "Jiné"
 
 chrome-sources-breakpoint.svg:
