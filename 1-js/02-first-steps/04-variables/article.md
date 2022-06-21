@@ -63,12 +63,8 @@ let věk = 25;
 let zpráva = 'Ahoj';
 ```
 
-<<<<<<< HEAD
 Někteří lidé definují více proměnných i tímto víceřádkovým stylem:
-=======
-Some people also define multiple variables in this multiline style:
 
->>>>>>> 7964b11b8fa2c314d9a09a82ea4b585cda618c80
 ```js no-beautify
 let uživatel = 'Jan',
   věk = 25,
@@ -107,12 +103,8 @@ Například proměnnou `zpráva` si můžeme představit jako krabičku se ští
 
 Do krabičky můžeme uložit libovolnou hodnotu.
 
-<<<<<<< HEAD
 Můžeme ji také změnit tolikrát, kolikrát chceme:
-=======
-We can also change it as many times as we want:
 
->>>>>>> 7964b11b8fa2c314d9a09a82ea4b585cda618c80
 ```js run
 let zpráva;
 
@@ -270,12 +262,7 @@ mojeDatumNarození = '01.01.2001'; // chyba, nelze změnit konstantu!
 
 Když má programátor jistotu, že hodnota proměnné se nikdy nezmění, může ji deklarovat pomocí `const`, aby tuto skutečnost pojistil a všem jasně sdělil.
 
-<<<<<<< HEAD
-
 ### Konstanty velkými písmeny
-=======
-### Uppercase constants
->>>>>>> 7964b11b8fa2c314d9a09a82ea4b585cda618c80
 
 Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu.
 
@@ -304,12 +291,8 @@ Kdy bychom měli používat pro konstantu velká písmena a kdy bychom ji měli 
 
 Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Existují však konstanty, které jsou známy již před spuštěním programu (například hexadecimální hodnota červené barvy), a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
 
-<<<<<<< HEAD
 Příklad:
-=======
-For instance:
 
->>>>>>> 7964b11b8fa2c314d9a09a82ea4b585cda618c80
 ```js
 const dobaNačítáníStránky = /* doba, kterou trvá načíst webovou stránku */;
 ```
