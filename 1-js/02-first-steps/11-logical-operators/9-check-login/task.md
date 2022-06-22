@@ -2,24 +2,24 @@ importance: 3
 
 ---
 
-# Check the login
+# Ověřte přihlášení
 
-Write the code which asks for a login with `prompt`.
+Napište kód, který se pomocí `prompt` zeptá na přihlášení.
 
-If the visitor enters `"Admin"`, then `prompt` for a password, if the input is an empty line or `key:Esc` -- show "Canceled", if it's another string -- then show "I don't know you".
+Jestliže návštěvník zadá `"Správce"`, zeptejte se ho pomocí `prompt` na heslo. Bude-li vstupem prázdný řádek nebo uživatel stiskne `key:Esc`, zobrazte „Zrušeno“. Bude-li zadán jiný řetězec, zobrazte „Neznám vás“.
 
-The password is checked as follows:
+Heslo se ověří následovně:
 
-- If it equals "TheMaster", then show "Welcome!",
-- Another string -- show "Wrong password",
-- For an empty string or cancelled input, show "Canceled"
+- Pokud se rovná „Vládce“, tak zobrazte „Vítáme vás!“.
+- Při jiném řetězci zobrazte „Špatné heslo“.
+- Bude-li zadán prázdný řetězec nebo bude vstup zrušen, zobrazte „Zrušeno“.
 
-The schema:
+Schéma:
 
 ![](ifelse_task.svg)
 
-Please use nested `if` blocks. Mind the overall readability of the code.
+Použijte vnořené bloky `if`. Dbejte na celkovou čitelnost kódu.
 
-Hint:  passing an empty input to a prompt returns an empty string `''`. Pressing `key:ESC` during a prompt returns `null`.
+Nápověda: po zadání prázdného vstupu `prompt` vrátí prázdný řetězec `''`. Po stisknutí klávesy `key:ESC` vrátí `null`.
 
 [demo]
