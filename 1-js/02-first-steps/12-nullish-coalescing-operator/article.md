@@ -1,169 +1,168 @@
-# Nullish coalescing operator '??'
+# Operátor koalescence „??“
 
 [recent browser="new"]
 
-The nullish coalescing operator is written as two question marks `??`.
+Operátor koalescence se zapisuje dvěma otazníky za sebou `??`.
 
-As it treats `null` and `undefined` similarly, we'll use a special term here, in this article. For brevity, we'll say that a value is "defined" when it's neither `null` nor `undefined`.
+Protože tento operátor zachází s hodnotami `null` a `undefined` podobně, budeme v tomto článku používat speciální pojem. Řekněme, že výraz je „definován“, pokud nemá hodnotu `null` ani `undefined`.
 
-The result of `a ?? b` is:
-- if `a` is defined, then `a`,
-- if `a` isn't defined, then `b`.
+Výsledkem `a ?? b` je:
+- pokud `a` je definovaný, pak `a`;
+- pokud `a` není definovaný, pak `b`.
 
-In other words, `??` returns the first argument if it's not `null/undefined`. Otherwise, the second one.
+Jinými slovy, `??` vrátí první argument, jestliže nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
 
-The nullish coalescing operator isn't anything completely new. It's just a nice syntax to get the first "defined" value of the two.
+Operátor koalescence není zcela nová věc. Je to jen pěkná syntaxe, jak vrátit první „definovanou“ hodnotu ze dvou.
 
-We can rewrite `result = a ?? b` using the operators that we already know, like this:
+Můžeme přepsat `result = a ?? b` pomocí operátorů, které již známe, například:
 
 ```js
 result = (a !== null && a !== undefined) ? a : b;
 ```
 
-Now it should be absolutely clear what `??` does. Let's see where it helps.
+Nyní by mělo být naprosto zřejmé, co `??` umí. Podíváme se, kde nám pomůže.
 
-The common use case for `??` is to provide a default value.
+Operátor `??` se běžně používá k udání výchozí hodnoty.
 
-For example, here we show `user` if its value isn't `null/undefined`, otherwise `Anonymous`:
+Například zde zobrazíme `anonym`, jestliže proměnná `uživatel` není definována:
 
 ```js run
-let user;
+let uživatel;
 
-alert(user ?? "Anonymous"); // Anonymous (user not defined)
+alert(uživatel ?? "anonym"); // anonym (uživatel není definován)
 ```
 
-Here's the example with `user` assigned to a name:
+Zde je příklad, kde má proměnná `uživatel` přiřazenou hodnotu:
 
 ```js run
-let user = "John";
+let uživatel = "Jan";
 
-alert(user ?? "Anonymous"); // John (user defined)
+alert(uživatel ?? "anonym"); // Jan (uživatel je definován)
 ```
 
-We can also use a sequence of `??` to select the first value from a list that isn't `null/undefined`.
+Můžeme také použít sekvenci `??` k výběru první hodnoty ze seznamu, která není `null/undefined`.
 
-Let's say we have a user's data in variables `firstName`, `lastName` or `nickName`. All of them may be not defined, if the user decided not to fill in the corresponding values.
+Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`. Všechny mohou být nedefinované, jestliže se uživatel rozhodl tyto informace nevyplnit.
 
-We'd like to display the user name using one of these variables, or show "Anonymous" if all of them are `null/undefined`.
+Rádi bychom zobrazili uživatelské jméno: jednu z těchto tří proměnných, nebo „anonym“, pokud žádná z nich není definována.
 
-Let's use the `??` operator for that:
+Použijeme k tomu operátor `??`:
 
 ```js run
-let firstName = null;
-let lastName = null;
-let nickName = "Supercoder";
+let jméno = null;
+let příjmení = null;
+let přezdívka = "Supercoder";
 
-// shows the first defined value:
+// zobrazíme první definovanou hodnotu:
 *!*
-alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
+alert(jméno ?? příjmení ?? přezdívka ?? "anonym"); // Supercoder
 */!*
 ```
 
-## Comparison with ||
+## Srovnání s ||
 
-The OR `||` operator can be used in the same way as `??`, as it was described in the [previous chapter](info:logical-operators#or-finds-the-first-truthy-value).
+Operátor OR `||` můžeme používat stejným způsobem jako `??`, jak bylo popsáno v [předchozí kapitole](info:logical-operators#or-finds-the-first-truthy-value).
 
-For example, in the code above we could replace `??` with `||` and still get the same result:
+Například ve výše uvedeném kódu můžeme operátor `??` nahradit operátorem `||` a získat stejný výsledek:
 
 ```js run
-let firstName = null;
-let lastName = null;
-let nickName = "Supercoder";
+let jméno = null;
+let příjmení = null;
+let přezdívka = "Supercoder";
 
-// shows the first truthy value:
+// zobrazí první pravdivou hodnotu:
 *!*
-alert(firstName || lastName || nickName || "Anonymous"); // Supercoder
+alert(jméno || příjmení || přezdívka || "anonym"); // Supercoder
 */!*
 ```
 
-Historically, the OR `||` operator was there first. It exists since the beginning of JavaScript, so developers were using it for such purposes for a long time.
+Historicky tu operátor OR `||` byl dříve. Existuje již od začátků JavaScriptu, takže jej vývojáři pro tyto účely dlouhou dobu skutečně používali.
 
-On the other hand, the nullish coalescing operator `??` was added to JavaScript only recently, and the reason for that was that people weren't quite happy with `||`.
+Naproti tomu operátor koalescence `??` byl do JavaScriptu přidán teprve nedávno a důvodem bylo, že lidé nebyli s operátorem `||` zcela spokojeni.
 
-The important difference between them is that:
-- `||` returns the first *truthy* value.
-- `??` returns the first *defined* value.
+Důležitý rozdíl mezi nimi je, že:
+- `||` vrací první *pravdivou* hodnotu.
+- `??` vrací první *definovanou* hodnotu.
 
-In other words, `||` doesn't distinguish between `false`, `0`, an empty string `""` and `null/undefined`. They are all the same -- falsy values. If any of these is the first argument of `||`, then we'll get the second argument as the result.
+Jinými slovy, `||` nerozlišuje mezi `false`, `0`, prázdným řetězcem `""` a `null/undefined`. Pro něj jsou všechny stejné -- nepravdivé hodnoty. Je-li kterákoli z nich prvním argumentem `||`, dostaneme jako výsledek druhou hodnotu.
 
-In practice though, we may want to use default value only when the variable is `null/undefined`. That is, when the value is really unknown/not set.
+V praxi však můžeme chtít použít defaultní hodnotu jen tehdy, je-li proměnná `null/undefined`, tedy když hodnota je opravdu neznámá nebo není nastavena.
 
-For example, consider this:
-
+Jako příklad poslouží tento kód:
 ```js run
-let height = 0;
+let výška = 0;
 
-alert(height || 100); // 100
-alert(height ?? 100); // 0
+alert(výška || 100); // 100
+alert(výška ?? 100); // 0
 ```
 
-- The `height || 100` checks `height` for being a falsy value, and it's `0`, falsy indeed.
-    - so the result of `||` is the second argument, `100`.
-- The `height ?? 100` checks `height` for being `null/undefined`, and it's not,
-    - so the result is `height` "as is", that is `0`.
+- `výška || 100` prověří, zda `výška` je nepravdivá hodnota, a protože je `0`, je tomu tak.
+  - výsledkem `||` je tedy druhý argument `100`.
+- `výška ?? 100` prověří, zda `výška` je `null/undefined`, a to není.
+  - výsledkem je tedy `výška` tak, jak je, tedy `0`.
 
-In practice, the zero height is often a valid value, that shouldn't be replaced with the default. So `??` does just the right thing.
+V praxi je nulová výška často platnou hodnotou, takže by neměla být nahrazena defaultní hodnotou. Zde tedy bude správně fungovat `??`.
 
-## Precedence
+## Priorita
 
-The precedence of the `??` operator is the same as `||`. They both equal `4` in the [MDN table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table).
+Priorita operátoru `??` je stejná jako `||`. Oba operátory mají v [tabulce MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table) prioritu `4`.
 
-That means that, just like `||`, the nullish coalescing operator `??` is evaluated before `=` and `?`, but after most other operations, such as `+`, `*`.
+To znamená, že operátor koalescence `??` se stejně jako `||` vyhodnocuje před `=` a `?`, ale až po většině ostatních operací, například  `+`, `*`.
 
-So we may need to add parentheses in expressions like this:
+Jestliže tedy chcete vybrat hodnotu pomocí `??` ve výrazu obsahujícím i jiné operátory, zvažte použití závorek:
 
 ```js run
-let height = null;
-let width = null;
+let výška = null;
+let šířka = null;
 
-// important: use parentheses
-let area = (height ?? 100) * (width ?? 50);
+// důležité: použijte závorky
+let plocha = (výška ?? 100) * (šířka ?? 50);
 
-alert(area); // 5000
+alert(plocha); // 5000
 ```
 
-Otherwise, if we omit parentheses, then as `*` has the higher precedence than `??`, it would execute first, leading to incorrect results.
+Kdybychom závorky nepoužili, `*` by se vykonalo dřív, neboť má vyšší prioritu než `??`. To by vedlo k nesprávným výsledkům.
 
 ```js
-// without parentheses
-let area = height ?? 100 * width ?? 50;
+// bez závorek
+let plocha = výška ?? 100 * šířka ?? 50;
 
-// ...works this way (not what we want):
-let area = height ?? (100 * width) ?? 50;
+// ...funguje stejně jako toto (což jsme nechtěli):
+let plocha = výška ?? (100 * šířka) ?? 50;
 ```
 
-### Using ?? with && or ||
+### Používání ?? společně s && nebo ||
 
-Due to safety reasons, JavaScript forbids using `??` together with `&&` and `||` operators, unless the precedence is explicitly specified with parentheses.
+Z bezpečnostních důvodů JavaScript zakazuje používat `??` společně s operátory `&&` a `||`, pokud není priorita výslovně uvedena pomocí závorek.
 
-The code below triggers a syntax error:
+Následující kód vydá syntaktickou chybu:
 
 ```js run
-let x = 1 && 2 ?? 3; // Syntax error
+let x = 1 && 2 ?? 3; // Syntaktická chyba
 ```
 
-The limitation is surely debatable, it was added to the language specification with the purpose to avoid programming mistakes, when people start to switch from `||` to `??`.
+Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, kdy lidé začnou z `||` přecházet na `??`.
 
-Use explicit parentheses to work around it:
+Omezení se dá se obejít pomocí závorek:
 
 ```js run
 *!*
-let x = (1 && 2) ?? 3; // Works
+let x = (1 && 2) ?? 3; // funguje
 */!*
 
 alert(x); // 2
 ```
 
-## Summary
+## Shrnutí
 
-- The nullish coalescing operator `??` provides a short way to choose the first "defined" value from a list.
+- Operátor koalescence `??` poskytuje zkratku, jak vybrat první „definovanou“ hodnotu ze seznamu.
 
-    It's used to assign default values to variables:
+    Používá se k přiřazení výchozích hodnot do proměnných:
 
     ```js
-    // set height=100, if height is null or undefined
-    height = height ?? 100;
+    // nastavíme proměnnou výška=100, je-li proměnná výška null nebo undefined
+    výška = výška ?? 100;
     ```
 
-- The operator `??` has a very low precedence, only a bit higher than `?` and `=`, so consider adding parentheses when using it in an expression.
-- It's forbidden to use it with `||` or `&&` without explicit parentheses.
+- Operátor `??` má velmi nízkou prioritu, jen o něco vyšší než `?` a `=`, takže když jej používáte ve výrazu, zvažte použití závorek.
+- Je zakázáno používat jej spolu s operátory `||` nebo `&&` bez uvedení závorek.
