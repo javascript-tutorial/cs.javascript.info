@@ -121,7 +121,7 @@ Vykonej začátek
 → ...
 ```
 
-To znamená, že `začátek` se vykoná jednou a pak se iteruje: po každém testu `podmínky` se vykonají `tělo` a `krok`.
+To znamená, že `začátek` se vykoná jednou a pak se iteruje: po každém testu `podmínky` se vykoná `tělo` a `krok`.
 
 Jestliže s cykly teprve začínáte, pomůže vám vrátit se k příkladu a na papíře si krok po kroku projít, jak se vykoná.
 
