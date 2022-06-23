@@ -367,7 +367,7 @@ break návěští; // skok na návěští níže (nebude fungovat)
 návěští: for (...)
 ```
 
-Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být jakýkoli kódový blok s návěštím, např.:
+Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být jakýkoli blok kódu s návěštím, např.:
 ```js
 návěští: {
   // ...
