@@ -192,7 +192,7 @@ for (; i < 3;) {
 }
 ```
 
-Pak bude cyklus identický jako `while (i < 3)`.
+Pak bude cyklus stejný jako `while (i < 3)`.
 
 Ve skutečnosti můžeme vynechat všechno a vytvořit tím nekonečnou smyčku:
 
