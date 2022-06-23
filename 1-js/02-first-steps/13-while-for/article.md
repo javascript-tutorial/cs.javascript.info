@@ -213,7 +213,7 @@ Kdykoli si však můžeme ukončení vynutit použitím speciální direktivy `b
 Například níže uvedený cyklus se uživatele ptá na sérii čísel, a když uživatel žádné číslo nezadá, cyklus skončí:
 
 ```js run
-let sum = 0;
+let součet = 0;
 
 while (true) {
 
