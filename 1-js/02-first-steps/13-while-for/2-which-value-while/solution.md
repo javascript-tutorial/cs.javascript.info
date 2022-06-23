@@ -1,30 +1,31 @@
-The task demonstrates how postfix/prefix forms can lead to different results when used in comparisons.
+Tato úloha ukazuje, jak může prefixová a postfixová notace vést k rozdílným výsledkům, když je použijeme v porovnání.
 
-1. **From 1 to 4**
+1. **Od 1 do 4**
 
     ```js run
     let i = 0;
     while (++i < 5) alert( i );
     ```
 
-    The first value is `i = 1`, because `++i` first increments `i` and then returns the new value. So the first comparison is `1 < 5` and the `alert` shows `1`.
+    První hodnota je `i = 1`, jelikož `++i` nejprve zvýší `i` a pak vrátí novou hodnotu. První porovnání je tedy `1 < 5` a `alert` zobrazí `1`.
 
-    Then follow `2, 3, 4…` -- the values show up one after another. The comparison always uses the incremented value, because `++` is before the variable.
+    Následují `2, 3, 4…` -- hodnoty se zobrazí jedna po druhé. Porovnání se vždy dívá na zvýšenou hodnotu, protože `++` je před proměnnou.
 
-    Finally, `i = 4` is incremented to `5`, the comparison `while(5 < 5)` fails, and the loop stops. So `5` is not shown.
-2. **From 1 to 5**
+    Nakonec `i = 4` se zvýší na `5`, porovnání `while(5 < 5)` neuspěje a cyklus skončí. Takže `5` se nezobrazí.
+    
+2. **Od 1 do 5**
 
     ```js run
     let i = 0;
     while (i++ < 5) alert( i );
     ```
 
-    The first value is again `i = 1`. The postfix form of `i++` increments `i` and then returns the *old* value, so the comparison `i++ < 5` will use `i = 0` (contrary to `++i < 5`).
+    První hodnota je opět `i = 1`. Postfixová notace `i++` zvýší `i` a pak vrátí *starou* hodnotu, takže porovnání `i++ < 5` se dívá na `i = 0` (na rozdíl od `++i < 5`).
 
-    But the `alert` call is separate. It's another statement which executes after the increment and the comparison. So it gets the current `i = 1`.
+    Avšak `alert` se volá odděleně. Je to další příkaz, který se spustí až po zvýšení a porovnání. Proto obdrží aktuální `i = 1`.
 
-    Then follow `2, 3, 4…`
+    Následují `2, 3, 4…`
 
-    Let's stop on `i = 4`. The prefix form `++i` would increment it and use `5` in the comparison. But here we have the postfix form `i++`. So it increments `i` to `5`, but returns the old value. Hence the comparison is actually `while(4 < 5)` -- true, and the control goes on to `alert`.
+    Zastavme se u `i = 4`. Prefixová notace `++i` by je zvýšila a v porovnání by použila `5`. Tady však máme postfixovou notaci `i++`. Ta zvýší `i` na `5`, ale vrátí starou hodnotu. Proto se provede porovnání `while(4 < 5)` -- pravda, tudíž řízení přejde k `alert`.
 
-    The value `i = 5` is the last one, because on the next step `while(5 < 5)` is false.
+    Hodnota `i = 5` je poslední, jelikož další krok `while(5 < 5)` dává nepravdu.
