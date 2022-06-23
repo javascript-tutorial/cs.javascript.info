@@ -6,6 +6,19 @@ Například vypsat ze seznamu jedno zboží po druhém nebo jen vykonat stejný 
 
 Způsob, jak opakovat stejný kód několikrát, poskytují *cykly* neboli *smyčky*.
 
+```smart header="Cykly for..of a for..in"
+Malé oznámení pro pokročilé čtenáře.
+
+Tento článek probírá jen základní cykly: `while`, `do..while` a `for(..;..;..)`.
+
+Jestli jste sem přišli hledat informace o jiných cyklech, najdete je zde:
+
+- [for..in](info:object#forin) pro procházení vlastností objektu.
+- [for..of](info:array#loops) and [iterables](info:iterable) pro procházení polí a iterovatelných objektů.
+
+Jinak čtěte dále.
+```
+
 ## Cyklus „while“
 
 Cyklus `while` má následující syntaxi:
@@ -162,9 +175,7 @@ for (i = 0; i < 3; i++) { // použijeme existující proměnnou
 
 alert(i); // 3, je viditelná, protože byla deklarována mimo cyklus
 ```
-
 ````
-
 
 ### Vynechávání částí
 
@@ -269,6 +280,7 @@ for (let i = 0; i < 10; i++) {
 Z technického pohledu je to stejné jako výše uvedený příklad. Bezpochyby můžeme namísto použití `continue` vnořit kód do bloku `if`.
 
 Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (volání `alert` uvnitř složených závorek). Je-li kód uvnitř `if` delší než pár řádků, může to snížit jeho celkovou čitelnost.
+````
 
 ````warn header="`break/continue` nesmějí být na pravé straně „?“"
 Všimněte si, že syntaktické konstrukce, které nejsou výrazy, nelze použít s ternárním operátorem „?“. Konkrétně tam nejsou povoleny direktivy jako `break/continue`.
@@ -284,7 +296,6 @@ if (i > 5) {
 ```
 
 ...a přepišme jej pomocí otazníku:
-
 
 ```js no-beautify
 (i > 5) ? alert(i) : *!*continue*/!*; // continue tady nesmí být
@@ -320,6 +331,7 @@ Potřebujeme způsob, jak tento proces zastavit, jestliže uživatel zruší vst
 Pouhé `break` po `vstup` by ukončilo jen vnitřní cyklus. To nám však nestačí. Návěští, pojďte nám na pomoc!
 
 *Návěští* je identifikátor s dvojtečkou před cyklem:
+
 ```js
 názevNávěští: for (...) {
   ...
@@ -341,6 +353,7 @@ Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí z uveden
     // provedeme něco s hodnotou...
   }
 }
+
 alert('Hotovo!');
 ```
 
@@ -361,6 +374,7 @@ Návěští můžeme použít i v direktivě `continue`. V takovém případě s
 Návěští nám neumožňují skákat na libovolné místo v kódu.
 
 Například nejde udělat toto:
+
 ```js
 break návěští; // skok na návěští níže (nebude fungovat)
 
@@ -368,6 +382,7 @@ návěští: for (...)
 ```
 
 Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být jakýkoli blok kódu s návěštím, např.:
+
 ```js
 návěští: {
   // ...
