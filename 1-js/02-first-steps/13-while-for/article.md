@@ -220,7 +220,7 @@ while (true) {
   let hodnota = +prompt("Zadejte číslo", '');
 
 *!*
-  if (!value) break; // (*)
+  if (!hodnota) break; // (*)
 */!*
 
   sum += value;
