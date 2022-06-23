@@ -14,4 +14,4 @@ Lze to snadno odvodit z algoritmu pro `for`:
 
 Zvýšení `i++` je odděleno od testu podmínky (2). Je to jen další příkaz.
 
-Hodnota vrácená zvýšením se tady nepoužívá, takže mezi `i++` a `++i` zde není žádný rozdíl.
+Hodnota vrácená zvýšením se tady nepoužívá, takže mezi `i++` a `++i` není žádný rozdíl.
