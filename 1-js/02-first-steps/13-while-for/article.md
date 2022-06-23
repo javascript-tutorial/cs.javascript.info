@@ -371,7 +371,7 @@ Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být 
 ```js
 návěští: {
   // ...
-  break návěští; // funguje to
+  break návěští; // toto funguje
   // ...
 }
 ```
