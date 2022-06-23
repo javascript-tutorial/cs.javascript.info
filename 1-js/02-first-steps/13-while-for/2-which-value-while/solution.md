@@ -20,7 +20,7 @@ Tato úloha ukazuje, jak může prefixová a postfixová notace vést k rozdíln
     while (i++ < 5) alert( i );
     ```
 
-    První hodnota je opět `i = 1`. Postfixová forma `i++` zvýší `i` a pak vrátí *starou* hodnotu, takže porovnání `i++ < 5` se dívá na `i = 0` (na rozdíl od `++i < 5`).
+    První hodnota je opět `i = 1`. Postfixová notace `i++` zvýší `i` a pak vrátí *starou* hodnotu, takže porovnání `i++ < 5` se dívá na `i = 0` (na rozdíl od `++i < 5`).
 
     Avšak `alert` se volá odděleně. Je to další příkaz, který se spustí až po zvýšení a porovnání. Proto obdrží aktuální `i = 1`.
 
