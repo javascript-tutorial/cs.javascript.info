@@ -26,6 +26,6 @@ Tato úloha ukazuje, jak může prefixová a postfixová notace vést k rozdíln
 
     Následují `2, 3, 4…`
 
-    Zastavme se u `i = 4`. Prefixová forma `++i` by je zvýšila a v porovnání by použila `5`. Tady však máme postfixovou formu `i++`. Ta zvýší `i` na `5`, ale vrátí starou hodnotu. Proto se provede porovnání `while(4 < 5)` -- pravda, tudíž řízení přejde k `alert`.
+    Zastavme se u `i = 4`. Prefixová notace `++i` by je zvýšila a v porovnání by použila `5`. Tady však máme postfixovou notaci `i++`. Ta zvýší `i` na `5`, ale vrátí starou hodnotu. Proto se provede porovnání `while(4 < 5)` -- pravda, tudíž řízení přejde k `alert`.
 
     Hodnota `i = 5` je poslední, jelikož další krok `while(5 < 5)` dává nepravdu.
