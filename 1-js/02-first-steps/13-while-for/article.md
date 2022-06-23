@@ -268,8 +268,7 @@ for (let i = 0; i < 10; i++) {
 
 Z technického pohledu je to stejné jako výše uvedený příklad. Bezpochyby můžeme namísto použití `continue` vnořit kód do bloku `if`.
 
-Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (volání `alert` uvnitř složených závorek). Je-li kód uvnitř `if` delší než několik řádků, může to snížit jeho celkovou čitelnost.
-````
+Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (volání `alert` uvnitř složených závorek). Je-li kód uvnitř `if` delší než pár řádků, může to snížit jeho celkovou čitelnost.
 
 ````warn header="`break/continue` nesmějí být na pravé straně „?“"
 Všimněte si, že syntaktické konstrukce, které nejsou výrazy, nelze použít s ternárním operátorem „?“. Konkrétně tam nejsou povoleny direktivy jako `break/continue`.
