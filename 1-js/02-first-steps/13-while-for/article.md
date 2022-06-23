@@ -217,7 +217,7 @@ let součet = 0;
 
 while (true) {
 
-  let value = +prompt("Zadejte číslo", '');
+  let hodnota = +prompt("Zadejte číslo", '');
 
 *!*
   if (!value) break; // (*)
