@@ -326,7 +326,7 @@ názevNávěští: for (...) {
 }
 ```
 
-Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí až z návěští:
+Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí z uvedeného návěští:
 
 ```js run no-beautify
 *!*vnější:*/!* for (let i = 0; i < 3; i++) {
