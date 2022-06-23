@@ -355,7 +355,7 @@ vnější:
 for (let i = 0; i < 3; i++) { ... }
 ```
 
-Návěští můžeme použít i v direktivě `continue`. V takovém případě výkon kódu přeskočí k další iteraci cyklu s uvedeným návěštím.
+Návěští můžeme použít i v direktivě `continue`. V takovém případě se zbytek kódu přeskočí a další iterace bude v cyklu s uvedeným návěštím.
 
 ````warn header="Návěští nám neumožňují „skákat“ kamkoli!"
 Návěští nám neumožňují skákat na libovolné místo v kódu.
