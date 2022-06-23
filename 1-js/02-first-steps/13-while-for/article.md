@@ -1,6 +1,8 @@
 # Cykly: while a for
 
-Často potřebujeme opakovat některé akce. Například vypsat ze seznamu jedno zboží po druhém nebo jen vykonat stejný kód pro každé z čísel od 1 do 10.
+Často potřebujeme opakovat některé akce. 
+
+Například vypsat ze seznamu jedno zboží po druhém nebo jen vykonat stejný kód pro každé z čísel od 1 do 10.
 
 Způsob, jak opakovat stejný kód několikrát, poskytují *cykly* neboli *smyčky*.
 
