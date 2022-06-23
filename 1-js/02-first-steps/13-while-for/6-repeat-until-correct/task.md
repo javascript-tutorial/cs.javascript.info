@@ -6,7 +6,7 @@ importance: 5
 
 Napište cyklus, který se bude ptát na číslo větší než `100`. Pokud návštěvník zadá jiné číslo, zeptejte se ho znovu.
 
-Cyklus se musí ptát na číslo tak dlouho, až návštěvník zadá číslo větší než `100` nebo zruší vstup či zadá prázdný řádek.
+Cyklus se musí ptát na číslo tak dlouho, než návštěvník zadá číslo větší než `100` nebo zruší vstup či zadá prázdný řádek.
 
 Zde můžeme předpokládat, že uživatel zadává pouze čísla. V této úloze nemusíte implementovat zvláštní zacházení s nečíselnými vstupy.
 
