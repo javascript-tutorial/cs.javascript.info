@@ -29,7 +29,7 @@ while (i < 3) { // zobrazí 0, pak 1, pak 2
 }
 ```
 
-Jedno vykonání těla cyklu se nazývá *iterace*. Cyklus v uvedeném příkladu vykoná tři iterace.
+Jedno vykonání těla cyklu se nazývá *iterace*. Cyklus ve výše uvedeném příkladu vykoná tři iterace.
 
 Kdyby v tomto příkladu chyběl příkaz `i++`, cyklus by se vykonával (teoreticky) donekonečna. V praxi prohlížeče poskytují způsoby, jak takový cyklus zastavit, a v JavaScriptu na serverové straně můžeme proces zastavit („shodit“) sami.
 
