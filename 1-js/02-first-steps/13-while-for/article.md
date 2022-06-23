@@ -273,7 +273,7 @@ Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (vo
 ````warn header="`break/continue` nesmějí být na pravé straně „?“"
 Všimněte si, že syntaktické konstrukce, které nejsou výrazy, nelze použít s ternárním operátorem „?“. Konkrétně tam nejsou povoleny direktivy jako `break/continue`.
 
-Například vezměme si tento kód:
+Vezměme si například tento kód:
 
 ```js
 if (i > 5) {
