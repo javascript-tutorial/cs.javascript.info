@@ -226,7 +226,7 @@ while (true) {
   součet += hodnota;
 
 }
-alert( 'Součet: ' + sum );
+alert( 'Součet: ' + součet );
 ```
 
 Direktiva `break` na řádku `(*)` se aktivuje, jestliže uživatel zadá prázdný řádek nebo zruší vstup. Okamžitě ukončí cyklus a předá řízení na první řádek za cyklem, konkrétně `alert`.
