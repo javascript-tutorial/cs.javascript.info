@@ -13,7 +13,7 @@ Vypíše `alert` v obou cyklech stejné hodnoty, nebo ne?
     let i = 0;
     while (++i < 5) alert( i );
     ```
-2. Postfixová forma `i++`
+2. Postfixová notace `i++`
 
     ```js
     let i = 0;
