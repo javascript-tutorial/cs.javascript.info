@@ -223,7 +223,7 @@ while (true) {
   if (!hodnota) break; // (*)
 */!*
 
-  sum += value;
+  součet += hodnota;
 
 }
 alert( 'Součet: ' + sum );
