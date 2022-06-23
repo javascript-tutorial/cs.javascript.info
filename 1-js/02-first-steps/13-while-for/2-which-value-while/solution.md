@@ -1,4 +1,4 @@
-Tato úloha ukazuje, jak mohou prefixová a postfixová forma vést k rozdílným výsledkům, když je použijeme v porovnání.
+Tato úloha ukazuje, jak může prefixová a postfixová notace vést k rozdílným výsledkům, když je použijeme v porovnání.
 
 1. **Od 1 do 4**
 
