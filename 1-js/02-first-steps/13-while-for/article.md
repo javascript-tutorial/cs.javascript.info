@@ -328,7 +328,7 @@ alert('Hotovo!');
 
 Potřebujeme způsob, jak tento proces zastavit, jestliže uživatel zruší vstup.
 
-Pouhé `break` po `vstup` by ukončilo jen vnitřní cyklus. To nám však nestačí. Návěští, pojďte nám na pomoc!
+Pouhé `break` po `vstup` by ukončilo jen vnitřní cyklus. To nám však nestačí. V takovém případě použijeme návěští.
 
 *Návěští* je identifikátor s dvojtečkou před cyklem:
 
