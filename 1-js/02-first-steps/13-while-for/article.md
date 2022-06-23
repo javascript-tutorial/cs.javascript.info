@@ -106,7 +106,7 @@ Prozkoumáme příkaz `for` po částech:
 
 | část  |          |                                                                            |
 |-------|----------|----------------------------------------------------------------------------|
-| začátek | `i = 0`    | Vykoná se jednou po vstupu do cyklu.                                      |
+| začátek | `let i = 0`    | Vykoná se jednou po vstupu do cyklu.                                      |
 | podmínka | `i < 3`| Kontroluje se před každou iterací cyklu. Je-li nepravdivá, cyklus skončí.              |
 | tělo | `alert(i)`| Vykonává se stále znovu, dokud je podmínka pravdivá.                         |
 | krok | `i++`      | Vykoná se po těle cyklu při každé iteraci. |
