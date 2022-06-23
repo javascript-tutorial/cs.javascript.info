@@ -8,8 +8,7 @@ Pro oba cykly si zapište hodnoty, které budou vypsány, a pak je porovnejte s 
 
 Vypíše `alert` v obou cyklech stejné hodnoty, nebo ne?
 
-1. Prefixová forma `++i`:
-
+1. Prefixová notace `++i`:
     ```js
     let i = 0;
     while (++i < 5) alert( i );
