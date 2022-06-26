@@ -106,9 +106,9 @@ Moderní nástroje provádějí transpilaci velmi rychle a čistě. V podstatě 
 
 Příklady takových jazyků:
 
-- [CoffeeScript](http://coffeescript.org/) je „syntaktický cukr“ pro JavaScript, který zavádí kratší syntaxi a tím nám umožňuje psát čistší a přesnější kód. Obvykle jej mají v oblibě vývojáři, kteří používají jazyk Ruby.
-- [TypeScript](http://www.typescriptlang.org/) se soustředí na přidání „striktního, silně typovaného systému“, aby zjednodušil vývoj a podporu složitých systémů. Vyvinula jej firma Microsoft.
-- [Flow](http://flow.org/) rovněž přidává typovací systém, ale jiným způsobem. Vyvinul jej Facebook.
+- [CoffeeScript](https://coffeescript.org/) je „syntaktický cukr“ pro JavaScript, který zavádí kratší syntaxi a tím nám umožňuje psát čistší a přesnější kód. Obvykle jej mají v oblibě vývojáři, kteří používají jazyk Ruby.
+- [TypeScript](https://www.typescriptlang.org/) se soustředí na přidání „striktního, silně typovaného systému“, aby zjednodušil vývoj a podporu složitých systémů. Vyvinula jej firma Microsoft.
+- [Flow](https://flow.org/) rovněž přidává typovací systém, ale jiným způsobem. Vyvinul jej Facebook.
 - [Dart](https://www.dartlang.org/) je samostatný jazyk se svým vlastním enginem, který běží v prostředích mimo prohlížeč (např. v mobilních aplikacích), ale i ten může být transpilován do JavaScriptu. Vyvinut firmou Google.
 - [Brython](https://brython.info/) je transpiler Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
 - [Kotlin](https://kotlinlang.org/docs/reference/js-overview.html) je moderní, stručný a bezpečný programovací jazyk, jehož cílem může být prohlížeč nebo Node.

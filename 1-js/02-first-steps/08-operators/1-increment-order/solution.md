@@ -9,8 +9,8 @@ Odpověď zní:
 ```js run no-beautify
 let a = 1, b = 1;
 
-alert( ++a ); // 2, prefixová forma vrátí novou hodnotu
-alert( b++ ); // 1, postfixová forma vrátí starou hodnotu
+alert( ++a ); // 2, prefixová notace vrátí novou hodnotu
+alert( b++ ); // 1, postfixová notace vrátí starou hodnotu
 
 alert( a ); // 2, zvýšeno jedenkrát
 alert( b ); // 2, zvýšeno jedenkrát

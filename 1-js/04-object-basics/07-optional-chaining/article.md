@@ -102,7 +102,7 @@ Kód je krátký a jasný, není v něm žádné zdvojení.
 Zde je příklad s `document.querySelector`:
 
 ```js run
-let html = document.querySelector('.elem')?.innerHTML; // není-li žádný prvek, bude null
+let html = document.querySelector('.elem')?.innerHTML; // není-li žádný prvek, bude undefined
 ```
 
 

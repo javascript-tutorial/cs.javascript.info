@@ -48,9 +48,9 @@ let seznamHostů = "Hosté: // Error: Unexpected token ILLEGAL
   * Jan";
 ```
 
-Apostrofy a uvozovky pocházejí ze starodávných časů vytváření jazyka, kdy potřeba víceřádkových řetězců nebyla brána v úvahu. Gravisy se objevily mnohem později, a tak jsou univerzálnější.
+Jednoduché a dvojité uvozovky pocházejí ze starých časů vytváření jazyka, kdy potřeba víceřádkových řetězců nebyla brána v úvahu. Zpětné uvozovky se objevily mnohem později, a tak jsou univerzálnější.
 
-Obrácené čárky nám také umožňují specifikovat „šablonovou funkci“ před levou čárkou. Syntaxe je <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. To se nazývá „značkované vlastnosti“ *(anglicky „tagged templates“ -- pozn. překl.)*. Tato vlastnost nám umožňuje snadněji implementovat vlastní šablony, ale v praxi se používá jen málokdy. Více se o ní můžete dočíst v [manuálu](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
+Zpětné uvozovky nám také umožňují specifikovat „šablonovou funkci“ před levou čárkou. Syntaxe je <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. To se nazývá „značkované vlastnosti“ *(anglicky „tagged templates“ -- pozn. překl.)*. Tato vlastnost nám umožňuje snadněji implementovat vlastní šablony, ale v praxi se používá jen málokdy. Více se o ní můžete dočíst v [manuálu](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
 
 ## Speciální znaky
 
@@ -214,7 +214,7 @@ alert( 'Rozhraní'.toLowerCase() ); // rozhraní
 
 Nebo jestliže chceme jediný znak malým písmenem:
 
-```js
+```js run
 alert( 'Rozhraní'[0].toLowerCase() ); // 'r'
 ```
 
@@ -371,8 +371,8 @@ alert( "Prorokovo".includes("oko", 5) ); // false, od pozice 5 není žádné "o
 Metody [řetězec.startsWith](mdn:js/string/startsWith) a [řetězec.endsWith](mdn:js/string/endsWith) dělají přesně to, co je jejich názvem *(„startsWith“ = začíná na, „endsWith“ = končí na, takže `startsWith` vrátí `true`, jestliže řetězec začíná zadaným podřetězcem, a `endsWith` vrátí `true`, jestliže řetězec končí zadaným podřetězcem -- pozn. překl.)*:
 
 ```js run
-alert( "Prorok".startsWith("Pro") ); // true, "Prorok" začíná na "Pro"
-alert( "Prorok".endsWith("rok") ); // true, "Prorok" končí na "rok"
+alert( "*!*Pro*/!*rok".startsWith("Pro") ); // true, "Prorok" začíná na "Pro"
+alert( "Pro*!*rok*/!*".endsWith("rok") ); // true, "Prorok" končí na "rok"
 ```
 
 ## Získání podřetězce

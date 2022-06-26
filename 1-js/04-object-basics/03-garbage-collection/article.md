@@ -76,7 +76,7 @@ Když nyní uděláme totéž:
 uživatel = null;
 ```
 
-...Pak bude objekt stále dosažitelný z globální proměnné `admin`, a tedy zůstane v paměti. Jestliže přepíšeme i `admin`, bude možné jej odstranit.
+...Pak bude objekt stále dosažitelný z globální proměnné `admin`, a tedy musí zůstat v paměti. Jestliže přepíšeme i `admin`, bude možné jej odstranit.
 
 ## Propojené objekty
 
@@ -171,11 +171,11 @@ První krok označí kořeny:
 
 ![](garbage-collection-2.svg)
 
-Pak se označí jejich odkazy:
+Pak budeme následovat jejich odkazy a označíme odkazované objekty:
 
 ![](garbage-collection-3.svg)
 
-...A jejich odkazy, dokud je to možné:
+...A budeme dále následovat další odkazy, dokud to bude možné:
 
 ![](garbage-collection-4.svg)
 
@@ -185,13 +185,13 @@ Nyní se objekty, které nemohly být v tomto procesu navštíveny, budou považ
 
 Můžeme si tento proces představit i jako rozlévání velkého kbelíku s barvou, která teče od kořenů všemi odkazy a dostane se ke všem dosažitelným objektům. Neoznačené objekty jsou poté odstraněny.
 
-Toto je koncept fungování garbage collection. JavaScriptové enginy používají mnoho optimalizací, které způsobí, že se jeho běh urychlí a neovlivní výkon skriptu.   
+Toto je koncept fungování sbírání odpadků. JavaScriptové motory aplikují mnoho optimalizací, které způsobí, že se jeho běh urychlí a nebude při běhu kódu způsobovat prodlevy.
 
 Některé z nich:
 
-- **Generační sběr** -- objekty se rozdělí na dvě skupiny: „nové“ a „staré“. Mnohé objekty se objeví, odvedou svou práci a rychle zemřou. Ty můžeme čistit agresívněji. Objekty, které přežijí dostatečně dlouho, se stanou „starými“ a budou prozkoumávány méně často.
-- **Inkrementální sběr** -- jestliže máme mnoho objektů a snažíme se projít a označit celou jejich sadu najednou, může to zabrat nějakou dobu a způsobit znatelné prodlevy při výkonu skriptu. Engine se tedy snaží rozdělit garbage collection na části. Pak se tyto části provádějí odděleně, jedna po druhé. To vyžaduje určitou administraci mezi nimi navíc, aby se zaznamenaly změny, ale pak získáme mnoho menších prodlev místo jedné velké.
-- **Sběr v čase nečinnosti** -- garbage collector se snaží běžet jen tehdy, když je CPU nečinná, aby zmenšil svůj vliv na výkon.
+- **Generační sběr** -- objekty se rozdělí na dvě skupiny: „nové“ a „staré“. V typickém kódu má mnoho objektů jen krátký život: objeví se, odvedou svou práci a rychle zemřou, takže má smysl stopovat nové objekty a pokud nastane tento případ, vyčistit je z paměti. Ty, které přežijí dostatečně dlouho, se stanou „starými“ a budou prozkoumávány méně často.
+- **Inkrementální sběr** -- jestliže máme mnoho objektů a snažíme se projít a označit celou jejich sadu najednou, může to zabrat nějakou dobu a způsobit znatelné prodlevy při běhu skriptu. Motor se tedy snaží rozdělit celou sadu existujících objektů do více částí. A pak čistí tyto části jednu po druhé. Nastane tedy více malých sběrů odpadků místo jednoho celkového. To vyžaduje určitou další administraci mezi nimi, aby se zaznamenaly změny, ale pak získáme mnoho menších prodlev místo jedné velké.
+- **Sběr v čase nečinnosti** -- sběrač odpadků se snaží běžet jen tehdy, když je CPU nečinná, aby zmenšil svůj vliv na běh.
 
 Existují i jiné optimalizace a doplňky algoritmů garbage collection. Rád bych je zde popsal, ale musím se toho vzdát, jelikož různé enginy implementují různá vylepšení a techniky. Co je ještě důležitější, během vývoje enginů se vše neustále mění, takže studovat je hlouběji „napřed“, aniž bychom je opravdu potřebovali, pravděpodobně nemá smysl. Pokud to ovšem není věc čistého zájmu, v kterémžto případě najdete některé odkazy níže.
 
@@ -199,16 +199,16 @@ Existují i jiné optimalizace a doplňky algoritmů garbage collection. Rád by
 
 Hlavní věci, které máme vědět:
 
-- Garbage collection se provádí automaticky. Nemůžeme si ji vynutit nebo jí zabránit.
+- Sběr odpadků se provádí automaticky. Nemůžeme si jej vynutit nebo mu zabránit.
 - Objekty zůstávají v paměti, dokud jsou dosažitelné.
-- Být odkazován není totéž jako být dosažitelný (z kořene): sada vzájemně propojených objektů se může jako celek stát nedosažitelnou.
+- Být odkazován není totéž jako být dosažitelný (z kořene): sada vzájemně propojených objektů se může jako celek stát nedosažitelnou, jak jsme viděli ve výše uvedeném příkladu.
 
 Moderní enginy implementují pokročilé algoritmy garbage collection.
 
 Některé z nich jsou pokryty v obecné knize „The Garbage Collection Handbook: The Art of Automatic Memory Management“ (R. Jones a kolektiv).
 
-Pokud jste obeznámeni s programováním na nízké úrovni, podrobnější informace o garbage collectoru V8 najdete v článku [A tour of V8: Garbage Collection](http://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection).
+Pokud jste obeznámeni s programováním na nízké úrovni, podrobnější informace o sběrači odpadků V8 najdete v článku [A tour of V8: Garbage Collection](http://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection).
 
-Rovněž [blog V8](https://v8.dev/) občas publikuje články o změnách ve správě paměti. Přirozeně, abyste se přiučili o garbage collection, měli byste se připravit -- naučit se něco o interních záležitostech V8 obecně a přečíst si blog [Vjačeslava Jegorova](http://mrale.ph), který pracoval jako jeden z tvůrců V8. Říkám „V8“, protože ten je nejlépe pokryt články na internetu. V jiných enginech jsou mnohé přístupy podobné, ale garbage collection se v mnoha aspektech liší.
+Rovněž [blog V8](https://v8.dev/) občas publikuje články o změnách ve správě paměti. Přirozeně, abyste se naučili o sbírání odpadků víc, měli byste se připravit tak, že se naučíte něco o interních záležitostech V8 obecně a přečtete si blog [Vjačeslava Jegorova](http://mrale.ph), který pracoval jako jeden z tvůrců V8. Říkám „V8“, protože ten je nejlépe pokryt články na internetu. V jiných motorech jsou mnohé přístupy podobné, ale sběrače odpadků se v mnoha aspektech liší.
 
-Hloubková znalost enginů se hodí, když potřebujete optimalizaci na nízké úrovni. Bylo by moudré naplánovat si to jako další krok poté, co se seznámíte s jazykem.
+Hloubková znalost motorů se hodí, když potřebujete optimalizaci na nízké úrovni. Bylo by moudré naplánovat si to jako další krok poté, co se seznámíte s jazykem.

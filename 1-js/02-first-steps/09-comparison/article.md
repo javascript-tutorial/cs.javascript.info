@@ -1,6 +1,8 @@
 # Porovnávání
 
-Z matematiky známe mnoho porovnávacích operátorů. V JavaScriptu se píší následovně:
+Z matematiky známe mnoho porovnávacích operátorů.
+
+V JavaScriptu se píší následovně:
 
 - Větší/menší než: <code>a &gt; b</code>, <code>a &lt; b</code>.
 - Větší/menší nebo rovno: <code>a &gt;= b</code>, <code>a &lt;= b</code>.
@@ -35,7 +37,9 @@ alert( výsledek ); // true
 
 ## Porovnávání řetězců
 
-Ke zjištění, zda je jeden řetězec větší než jiný, JavaScript používá tzv. „slovníkové“ neboli „lexikografické“ pořadí. Jinými slovy, řetězce se porovnávají znak po znaku.
+Ke zjištění, zda je jeden řetězec větší než jiný, JavaScript používá tzv. „slovníkové“ neboli „lexikografické“ pořadí.
+
+Jinými slovy, řetězce se porovnávají znak po znaku.
 
 Příklad:
 
@@ -48,7 +52,7 @@ alert( 'Bee' > 'Be' ); // true
 Algoritmus pro porovnání dvou řetězců je jednoduchý:
 
 1. Porovnej první znak obou řetězců.
-2. Je-li první znak prvního řetězce větší (menší) než první znak druhého řetězce, je první řetězec větší (menší) než druhý. Tím jsme hotovi.
+2. Je-li první znak prvního řetězce větší (nebo menší) než první znak druhého řetězce, je první řetězec větší (nebo menší) než druhý. Tím jsme hotovi.
 3. V opačném případě, tedy jsou-li první znaky obou řetězců stejné, porovnej stejným způsobem druhé znaky.
 4. Tento proces opakuj, dokud nedojdeš na konec některého z řetězců.
 5. Mají-li oba řetězce stejnou délku, jsou si rovny. V opačném případě je delší řetězec větší.

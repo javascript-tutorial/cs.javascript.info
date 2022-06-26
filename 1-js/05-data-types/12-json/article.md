@@ -27,7 +27,7 @@ Naštěstí kód, který by tohle všechno zvládl, není třeba psát. Tento ú
 
 ## JSON.stringify
 
-[JSON](http://cs.wikipedia.org/wiki/JSON) (JavaScript Object Notation -- JavaScriptová objektová notace) je obecný formát sloužící k reprezentaci hodnot a objektů. Je popsán ve standardu [RFC 4627](https://tools.ietf.org/html/rfc4627). Původně byl vytvořen pro JavaScript, ale knihovny pro práci s ním obsahuje i mnoho jiných jazyků. Je tedy snadné používat JSON pro výměnu dat, když klient používá JavaScript a server je psán v Ruby, PHP, Javě nebo čemkoli jiném.
+[JSON](https://cs.wikipedia.org/wiki/JSON) (JavaScript Object Notation -- JavaScriptová objektová notace) je obecný formát sloužící k reprezentaci hodnot a objektů. Je popsán ve standardu [RFC 4627](https://tools.ietf.org/html/rfc4627). Původně byl vytvořen pro JavaScript, ale knihovny pro práci s ním poskytuje i mnoho jiných jazyků. Je tedy snadné používat JSON pro výměnu dat, když klient používá JavaScript a server je psán v Ruby, PHP, Javě nebo čemkoli jiném.
 
 JavaScript poskytuje metody:
 
@@ -41,7 +41,7 @@ let student = {
   věk: 30,
   jeAdmin: false,
   kurzy: ['html', 'css', 'js'],
-  manželka: null
+  choť: null
 };
 
 *!*
@@ -58,7 +58,7 @@ alert(json);
   "věk": 30,
   "jeAdmin": false,
   "kurzy": ["html", "css", "js"],
-  "manželka": null
+  "choť": null
 }
 */
 */!*

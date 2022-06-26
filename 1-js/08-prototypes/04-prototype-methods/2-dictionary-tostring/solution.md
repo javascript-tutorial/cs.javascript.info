@@ -26,6 +26,6 @@ for(let klíč in slovník) {
 alert(slovník); // "jablko,__proto__"
 ```
 
-Když vytvoříme vlastnost použitím deskriptoru, její přepínače jsou defaultně `false`. Ve výše uvedeném kódu je tedy `slovník.toString` neenumerovatelná.
+Když vytvoříme vlastnost použitím deskriptoru, její přepínače jsou standardně `false`. Ve výše uvedeném kódu je tedy `slovník.toString` neenumerovatelná.
 
 Pro přehled viz kapitolu [](info:property-descriptors).

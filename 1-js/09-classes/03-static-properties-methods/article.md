@@ -109,6 +109,17 @@ Statické metody se také používají ve třídách vztažených k databázím 
 Článek.odstraň({id: 12345});
 ```
 
+````warn header="Statické metody nejsou dostupné pro jednotlivé objekty"
+Statické metody lze volat na třídách, ale ne na jednotlivých objektech.
+
+Například tento kód nebude fungovat:
+
+```js
+// ...
+článek.vytvořDnešní(); /// Chyba: článek.vytvořDnešní není funkce
+```
+````
+
 ## Statické vlastnosti
 
 [recent browser=Chrome]

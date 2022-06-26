@@ -234,11 +234,12 @@ Uveďme nyní metody, které prohledávají pole.
 
 ### indexOf/lastIndexOf a includes
 
-Metody [pole.indexOf](mdn:js/Array/indexOf), [pole.lastIndexOf](mdn:js/Array/lastIndexOf) a [pole.includes](mdn:js/Array/includes) mají stejnou syntaxi a dělají v zásadě totéž, jako jejich řetězcové protějšky, ale místo znaků pracují nad prvky pole:
+Metody [pole.indexOf](mdn:js/Array/indexOf) a [pole.includes](mdn:js/Array/includes) mají podobnou syntaxi a dělají v zásadě totéž, jako jejich řetězcové protějšky, ale místo znaků pracují nad prvky pole:
 
 - `pole.indexOf(prvek, odkud)` -- hledá `prvek` počínajíc indexem `odkud` a vrátí index, na němž byl prvek nalezen, anebo `-1`, když nalezen nebyl.
-- `pole.lastIndexOf(prvek, odkud)` -- totéž, ale hledá zprava doleva.
 - `pole.includes(prvek, odkud)` -- hledá `prvek` počínajíc indexem `odkud` a vrátí `true`, pokud byl nalezen.
+
+Tyto metody se obvykle používají jen s jedním argumentem: `prvek`, který se má hledat. Standardně se hledá od začátku pole.
 
 Příklad:
 
@@ -252,19 +253,31 @@ alert( pole.indexOf(null) ); // -1
 alert( pole.includes(1) ); // true
 ```
 
-Všimněte si, že metody používají porovnávání `===`. Hledáme-li tedy `false`, najdou přesně `false` a ne nulu.
+Prosíme všimněte si, že metoda `indexOf` používá striktní porovnávání `===`. Hledáme-li tedy `false`, najde přesně `false` a ne nulu.
 
-Chceme-li si jen ověřit, zda prvek je v poli, a nechceme znát jeho přesný index, dává se přednost metodě `pole.includes`.
+Chceme-li si jen ověřit, zda `prvek` je obsažen v poli, a nepotřebujeme jeho přesný index, dává se přednost metodě `pole.includes`.
 
-Velmi nepatrný rozdíl metody `includes` je také v tom, že na rozdíl od `indexOf/lastIndexOf` správně zpracovává `NaN`:
+Metoda [arr.lastIndexOf](mdn:js/Array/lastIndexOf) je totéž jako `indexOf`, ale hledá zprava doleva.
+
+```js run
+let ovoce = ['Jablko', 'Pomeranč', 'Jablko']
+
+alert( ovoce.indexOf('Jablko') ); // 0 (první Jablko)
+alert( ovoce.lastIndexOf('Jablko') ); // 2 (poslední Jablko)
+```
+
+````smart header="Metoda `includes` zpracovává správně `NaN`"
+Drobný, ale zaznamenatelný rozdíl metody `includes` je také v tom, že na rozdíl od `indexOf` správně zpracovává `NaN`:
 
 ```js run
 const pole = [NaN];
 alert( pole.indexOf(NaN) ); // -1 (mělo by být 0, ale rovnost === pro NaN nefunguje)
 alert( pole.includes(NaN) );// true (správně)
 ```
+Je to proto, že `includes` byla do JavaScriptu přidána mnohem později a interně používá novější algoritmus porovnávání.
+````
 
-### find a findIndex
+### find a findIndex/findLastIndex
 
 Představme si, že máme pole objektů. Jak najdeme objekt, pro který platí specifická podmínka?
 
@@ -304,7 +317,26 @@ V reálném životě jsou pole objektů běžnou věcí, takže metoda `find` je
 
 Všimněte si, že v tomto příkladu poskytujeme metodě `find` funkci `prvek => prvek.id == 1` s jedním argumentem. To je typické, ostatní argumenty této funkce se používají málokdy.
 
-Metoda [pole.findIndex](mdn:js/Array/findIndex) je v zásadě stejná, ale namísto samotného prvku vrací index, na němž byl prvek nalezen, anebo `-1`, jestliže nebylo nalezeno nic.
+Metoda [pole.findIndex](mdn:js/Array/findIndex) má stejnou syntaxi, ale namísto samotného prvku vrací index, na němž byl prvek nalezen. Jestliže nebylo nalezeno nic, vrátí se hodnota `-1`.
+
+Metoda [pole.findLastIndex](mdn:js/Array/findLastIndex) je podobná metodě `findIndex`, ale hledá zprava doleva, podobně jako `lastIndexOf`.
+
+Příklad:
+
+```js run
+let uživatelé = [
+  {id: 1, jméno: "Jan"},
+  {id: 2, jméno: "Petr"},
+  {id: 3, jméno: "Marie"},
+  {id: 4, jméno: "Jan"}
+];
+
+// Najde index prvního Jana
+alert(uživatelé.findIndex(uživatel => uživatel.jméno == 'Jan')); // 0
+
+// Najde index posledního Jana
+alert(uživatelé.findLastIndex(uživatel => uživatel.jméno == 'Jan')); // 3
+```
 
 ### filter
 
@@ -389,6 +421,7 @@ Doslova všechny prvky se při porovnávání převádějí na řetězce. Pro ř
 Abychom použili naše vlastní řazení, musíme jako argument `pole.sort()` poskytnout funkci.
 
 Tato funkce by měla porovnávat dvě libovolné hodnoty a vracet:
+
 ```js
 function porovnej(a, b) {
   if (a > b) return 1; // je-li první hodnota větší než druhá
@@ -633,7 +666,6 @@ Doporučuje se tedy počáteční hodnotu vždy uvádět.
 
 Metoda [pole.reduceRight](mdn:js/Array/reduceRight) dělá totéž, ale postupuje zprava doleva.
 
-
 ## Array.isArray
 
 Pole netvoří samostatný jazykový typ, ale jsou založena na objektech.
@@ -746,6 +778,7 @@ Tyto metody jsou nejpoužívanější a v 99% případů dostačují. Existuje v
   Tyto metody se chovají trochu jako operátory `||` a `&&`: jestliže `fn` vrátí pravdivou hodnotu, `pole.some()` okamžitě vrátí `true` a zastaví procházení zbývajících prvků; jestliže `fn` vrátí nepravdivou hodnotu, `pole.every()` okamžitě vrátí `false` a rovněž zastaví procházení zbývajících prvků.
 
   Pomocí `every` můžeme porovnávat pole:
+  
   ```js run
   function poleSeRovnají(pole1, pole2) {
     return pole1.length === pole2.length && pole1.every((hodnota, index) => hodnota === pole2[index]);

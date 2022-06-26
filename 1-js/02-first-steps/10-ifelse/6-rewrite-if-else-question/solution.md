@@ -1,9 +1,9 @@
 
 
 ```js
-let zpráva = (login == 'Zaměstnanec') ? 'Ahoj' :
-  (login == 'Ředitel') ? 'Dobrý den' :
-  (login == '') ? 'Není login' :
+let zpráva = (přihlášený == 'Zaměstnanec') ? 'Ahoj' :
+  (přihlášený == 'Ředitel') ? 'Dobrý den' :
+  (přihlášený == '') ? 'Nikdo není přihlášený' :
   '';
 ```
 

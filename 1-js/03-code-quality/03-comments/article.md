@@ -143,7 +143,7 @@ Takové komentáře nám umožňují porozumět účelu funkce a používat ji s
 
 Mimochodem i mnoho editorů, například [WebStorm](https://www.jetbrains.com/webstorm/), jim dokáže porozumět a používá je k automatickému doplňování a určité automatické kontrole kódu.
 
-Existují i nástroje jako [JSDoc 3](https://github.com/jsdoc3/jsdoc), které umějí z těchto komentářů vygenerovat dokumentaci v HTML. Více informací o JSDoc si můžete přečíst na <http://usejsdoc.org/>.
+Existují i nástroje jako [JSDoc 3](https://github.com/jsdoc/jsdoc), které umějí z těchto komentářů vygenerovat dokumentaci v HTML. Více informací o JSDoc si můžete přečíst na <https://jsdoc.app>.
 
 Proč se tato úloha řeší zrovna takhle?
 : To, co je psáno, je důležité. Ale to, co *není* psáno, může být ještě důležitější k pochopení toho, o co jde. Proč je tato úloha řešena právě tímto způsobem? Kód nám odpověď nedává.

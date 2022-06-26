@@ -104,9 +104,10 @@ if (nula) { // nula je pravdivá, protože je to objekt
 }
 ```
 
-Na druhou stranu použití stejné funkce `String/Number/Boolean` bez `new` je naprosto rozumná a užitečná věc. Funkce převede hodnotu na odpovídající typ: na řetězec, na číslo nebo na boolean (na primitiv).
+Na druhou stranu použití stejné funkce `String/Number/Boolean` bez `new` je zcela správná a užitečná věc. Funkce převede hodnotu na odpovídající typ: na řetězec, na číslo nebo na boolean (na primitiv).
 
 Například tohle je zcela v pořádku:
+
 ```js
 let num = Number("123"); // převede řetězec na číslo
 ```

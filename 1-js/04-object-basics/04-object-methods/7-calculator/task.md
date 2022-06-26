@@ -6,9 +6,9 @@ importance: 5
 
 Vytvořte objekt `kalkulátor` se třemi metodami:
 
-- `načti()` se zeptá na dvě hodnoty a uloží je jako vlastnosti objektu.
+- `načti()` se zeptá na dvě hodnoty a uloží je jako vlastnosti objektu pod názvy po řadě `a` a `b`.
 - `součet()` vrátí součet uložených hodnot.
-- `součin()` vrátí součin uložených hodnot.
+- `součin()` vynásobí uložené hodnoty mezi sebou a vrátí výsledek.
 
 ```js
 let kalkulátor = {
@@ -21,4 +21,3 @@ alert( kalkulátor.součin() );
 ```
 
 [demo]
-

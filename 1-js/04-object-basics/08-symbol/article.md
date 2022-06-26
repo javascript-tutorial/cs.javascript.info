@@ -1,9 +1,16 @@
 
 # Typ symbol
 
-Podle specifikace mohou klíče vlastností objektů být buď typu řetězec, nebo typu symbol. Nesmějí to být ani čísla, ani booleany, jedině řetězce nebo symboly, tyto dva typy.
+Podle specifikace mohou jako klíče vlastností objektů sloužit pouze dva primitivní typy:
 
-Doposud jsme používali pouze řetězce. Nyní se podívejme na výhody, jaké nám mohou poskytnout symboly.
+- typ řetězec, nebo 
+- typ symbol. 
+
+Pokud použijeme jiný typ, například číslo, je automaticky převeden na řetězec. Takže `obj[1]` je totéž jako `obj["1"]` a `obj[true]` je totéž jako `obj["true"]`.
+
+Doposud jsme používali pouze řetězce.
+
+Nyní prozkoumejme symboly a podívejme se, co pro nás mohou udělat.
 
 ## Symboly
 
@@ -23,7 +30,7 @@ Po vytvoření můžeme symbolu dát nějaký popis (nazývaný také název sym
 let id = Symbol("id");
 ```
 
-Symboly jsou zaručeně unikátní. I když vytvoříme mnoho symbolů se stejným popisem, jejich hodnoty budou různé. Popis je jenom štítek, který nemá na nic vliv.
+Symboly jsou zaručeně unikátní. I když vytvoříme mnoho symbolů s naprosto stejným popisem, budou představovat různé hodnoty. Popis je jenom štítek, který nemá na nic vliv.
 
 Například zde jsou dva symboly se stejným popisem -- přesto si nejsou rovny:
 
@@ -38,6 +45,8 @@ alert(id1 == id2); // false
 
 Jestliže znáte Ruby nebo jiný jazyk, který také obsahuje nějaký druh „symbolů“ -- prosíme, nenechte se zmást. Symboly v JavaScriptu jsou jiné.
 
+Když to tedy shrneme, symbol je „primitivní unikátní hodnota“ s nepovinným popisem. Podívejme se, kde je můžeme použít.
+
 ````warn header="Symboly se automaticky nekonvertují na řetězce"
 Většina hodnot v JavaScriptu podporuje implicitní konverzi na řetězec. Například můžeme použít `alert` na téměř jakoukoli hodnotu a bude fungovat. Symboly jsou zvláštní. Ty se automaticky nekonvertují.
 
@@ -46,13 +55,14 @@ Například tento `alert` ohlásí chybu:
 ```js run
 let id = Symbol("id");
 *!*
-alert(id); // TypeError: Cannot convert a Symbol value to a string
+alert(id); // TypeError: Nelze převést hodnotu Symbol na řetězec
 */!*
 ```
 
 Je to „jazyková stráž“ proti nepořádku, jelikož řetězce a symboly jsou naprosto odlišné a neměly by se náhodně konvertovat jedny na druhé.
 
 Jestliže opravdu chceme zobrazit symbol, musíme na něm explicitně zavolat `.toString()`, např. zde:
+
 ```js run
 let id = Symbol("id");
 *!*
@@ -61,6 +71,7 @@ alert(id.toString()); // Symbol(id), nyní to funguje
 ```
 
 Nebo načíst vlastnost `symbol.description`, aby se zobrazil jen popis:
+
 ```js run
 let id = Symbol("id");
 *!*
@@ -92,9 +103,9 @@ alert( uživatel[id] ); // můžeme přistupovat k datům pomocí tohoto symbolu
 
 Jaká je výhoda používání `Symbol("id")` oproti řetězci `"id"`?
 
-Když objekt `uživatel` patří do jiného kódu a tento kód s ním také pracuje, neměli bychom do něj přidávat žádná pole. Není to bezpečné. Avšak k symbolu nelze neúmyslně přistoupit, kód třetí strany jej pravděpodobně ani neuvidí, takže je pravděpodobně v pořádku to udělat.
+Protože objekt `uživatel` patří do jiného kódu, není bezpečné do něj přidávat nějaká pole, protože bychom mohli ovlivnit předdefinované chování v onom jiném kódu. Avšak k symbolu nelze neúmyslně přistoupit. Kód třetí strany se o nově definovaných symbolech nedozví, takže přidávat do objektu `uživatel` symboly je bezpečné.
 
-Představte si také, že jiný skript bude chtít uvnitř objektu `uživatel` mít svůj vlastní identifikátor pro své účely. Může to být jiná JavaScriptová knihovna, takže skripty o sobě navzájem vůbec nevědí.
+Představte si také, že jiný skript bude chtít uvnitř objektu `uživatel` mít svůj vlastní identifikátor pro své účely.
 
 Pak tento skript může vytvořit svůj vlastní `Symbol("id")`, například takto:
 
@@ -211,7 +222,7 @@ V JavaScriptu, jak vidíme, to platí pro globální symboly.
 
 ### Symbol.keyFor
 
-Pro globální symboly není jen `Symbol.for(klíč)`, která vrátí symbol podle názvu, ale existuje i opačná metoda: `Symbol.keyFor(sym)`, která udělá opak: vrátí název globálního symbolu.
+Viděli jsme, že pro globální symboly metoda `Symbol.for(klíč)` vrátí symbol podle názvu. Chceme-li udělat opak -- vrátit název podle globálního symbolu -- můžeme použít `Symbol.keyFor(sym)`:
 
 Například:
 
@@ -268,10 +279,11 @@ Symboly jsou vždy různé hodnoty, i když mají stejný název. Jestliže chce
 Symboly mají dvě hlavní použití:
 
 1. „Skryté“ vlastnosti objektů.
-    Chceme-li do objektu přidat vlastnost, která „patří“ do jiného skriptu nebo knihovny, můžeme vytvořit symbol a použít jej jako klíč vlastnosti. Symbolická vlastnost se neobjeví ve `for..in`, takže nebude neúmyslně zpracována společně s ostatními vlastnostmi. Nikdo jiný k ní také nebude přímo přistupovat, jelikož jiný skript nebude mít náš symbol. Vlastnost tedy bude chráněna před náhodným použitím nebo přepsáním.
+
+    Chceme-li do objektu přidat vlastnost, která „patří“ do jiného skriptu nebo knihovny, můžeme vytvořit symbol a použít jej jako klíč vlastnosti. Symbolická vlastnost se neobjeví ve `for..in`, takže nebude neúmyslně zpracována společně s ostatními vlastnostmi. Nikdo jiný k ní také nebude přímo přistupovat, jelikož žádný jiný skript nebude mít náš symbol. Vlastnost tedy bude chráněna před náhodným použitím nebo přepsáním.
 
     Pomocí symbolických vlastností tedy můžeme „utajeně“ ukrýt do objektů něco, co potřebujeme, ale jiní by to neměli vidět.
 
 2. JavaScript používá mnoho systémových symbolů, které jsou dostupné pomocí `Symbol.*`. Někdy je můžeme použít, abychom změnili vestavěné chování. Například později v tomto tutoriálu budeme používat `Symbol.iterator` pro [iterovatelné objekty](info:iterable), `Symbol.toPrimitive` k nastavení [konverze objektů na primitivy](info:object-toprimitive) a tak dále.
 
-Z technického hlediska nejsou symboly na 100% skryté. Existuje vestavěná metoda [Object.getOwnPropertySymbols(obj)](mdn:js/Object/getOwnPropertySymbols), která nám umožňuje získat všechny symboly. Existuje i metoda [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys), která vrátí *všechny* klíče objektu včetně symbolických. Nejsou tedy doopravdy skryté. Většina knihoven, vestavěných funkcí a syntaktických konstrukcí však tyto metody nepoužívá.
+Z technického hlediska nejsou symboly na 100% skryté. Existuje vestavěná metoda [Object.getOwnPropertySymbols(obj)](mdn:js/Object/getOwnPropertySymbols), která nám umožňuje získat všechny symboly. Existuje i metoda [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys), která vrátí *všechny* klíče objektu včetně symbolických. Většina knihoven, vestavěných funkcí a syntaktických konstruktů však tyto metody nepoužívá.

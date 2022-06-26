@@ -13,7 +13,7 @@ IDE načítá projekt (který se může skládat z mnoha souborů), umožňuje n
 Pokud jste si IDE ještě nevybrali, zvažte následující možnosti:
 
 - [Visual Studio Code](https://code.visualstudio.com/) (různé platformy, zdarma).
-- [WebStorm](http://www.jetbrains.com/webstorm/) (různé platformy, placené).
+- [WebStorm](https://www.jetbrains.com/webstorm/) (různé platformy, placené).
 
 Pro Windows existuje také „Visual Studio“ (nezaměňovat s „Visual Studio Code“), což je placený, ale silný editor pouze pro Windows, velmi vhodný pro platformu .NET, který funguje dobře i pro JavaScript. Má i neplacenou verzi [Visual Studio Community](https://www.visualstudio.com/vs/community/).
 

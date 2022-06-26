@@ -535,7 +535,7 @@ Pojmy:
     seznam = { hodnota, další -> seznam }
     ```
 
-    Stromy jako strom HTML prvků nebo strom firemních oddělení z této kapitoly jsou rovněž přirozeně rekurzívní: větví se a každá větev může obsahovat další větve.
+    Stromy jako strom HTML prvků nebo strom firemních oddělení z této kapitoly jsou rovněž přirozeně rekurzívní: mají větve a každá větev může obsahovat další větve.
 
     K procházení skrz ně mohou být použity rekurzívní funkce, jak jsme viděli v příkladu `sečtiPlaty`.
 

@@ -187,7 +187,7 @@ Operátor AND `&&` provádí následující:
 - Každý operand převede na typ boolean. Je-li výsledek `false`, zastaví se a vrátí původní hodnotu tohoto operandu.
 - Pokud byly vyhodnoceny všechny operandy (tj. všechny byly pravdivé), vrátí poslední operand.
 
-Jinými slovy, řetězec ANDů `"||"` vrátí první nepravdivou hodnotu, a pokud není žádná nepravdivá hodnota nalezena, vrátí poslední hodnotu.
+Jinými slovy, řetězec ANDů `"&&"` vrátí první nepravdivou hodnotu, a pokud není žádná nepravdivá hodnota nalezena, vrátí poslední hodnotu.
 
 Výše uvedená pravidla se podobají operátoru OR. Rozdíl spočívá v tom, že AND najde první *nepravdivou* hodnotu, zatímco OR najde první *pravdivou*.
 

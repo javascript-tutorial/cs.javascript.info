@@ -231,7 +231,7 @@ setTimeout(function() {...}, 100);
 
 Pro `setInterval` funkce zůstane v paměti, dokud není zavolán `clearInterval`.
 
-Je tady vedlejší efekt. Funkce se odkazuje na vnější lexikální prostředí, takže dokud existuje, existují i vnější proměnné. Ty mohou zabrat mnohem více paměti než samotná funkce. Když tedy načasovanou funkci už nepotřebujeme, je lepší ji zrušit, i když je velmi malá.
+Je tady vedlejší efekt. Funkce se odkazuje na vnější lexikální prostředí, takže dokud existuje, existují i vnější proměnné. Ty mohou zabrat mnohem více paměti než samotná funkce. Když tedy načasovanou funkci už nepotřebujeme, je lepší ji zrušit, i kdyby byla velmi malá.
 ````
 
 ## setTimeout s nulovou prodlevou
@@ -297,6 +297,6 @@ Prosíme všimněte si, že žádná časovací metoda *nezaručuje* přesnou pr
 Například časovač v prohlížeči může zpomalit z mnoha důvodů:
 - CPU je přetížen.
 - Záložka prohlížeče běží na pozadí.
-- Laptop běží na baterii.
+- Laptop je v režimu úspory baterie.
 
 To všechno může zvýšit minimální rozlišení časovače (minimální prodlevu) na 300 ms nebo dokonce 1000 ms v závislosti na prohlížeči a nastavení výkonu na úrovni OS.

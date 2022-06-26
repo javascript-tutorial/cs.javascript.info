@@ -132,7 +132,7 @@ Existují jen dvě omezení:
 Možná je to zřejmé, ale přesto: `[[Prototype]]` může být pouze jeden. Objekt nemůže dědit ze dvou jiných objektů.
 
 ```smart header="`__proto__` je historický getter/setter pro `[[Prototype]]`"
-Je běžnou chybou začínajících vývojářů neznat mezi těmito dvěma rozdíl.
+Je běžnou chybou začínajících vývojářů neznat mezi nimi dvěma rozdíl.
 
 Prosíme všimněte si, že `__proto__` *není totéž* jako interní vlastnost `[[Prototype]]`. Je to getter/setter vlastnosti `[[Prototype]]`. Později uvidíme situace, v nichž na tom záleží. Prozatím to jen mějme na paměti, když se snažíme porozumět jazyku JavaScript.
 

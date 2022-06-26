@@ -1,4 +1,6 @@
+importance: 5
 
+---
 # Funkce v if
 
 Podívejte se na kód. Jaký bude výsledek volání na posledním řádku?

@@ -106,7 +106,7 @@ class Králík extends Zvíře {
 }
 ```
 
-Obvykle nechceme rodičovskou metodu úplně nahradit, ale spíše na ní stavět, abychom její funkcionalitu vylepšili nebo rozšířili. Uděláme něco v naší metodě, ale při tomto procesu, před ním nebo po něm voláme rodičovskou metodu.
+Obvykle však nechceme rodičovskou metodu úplně nahradit, ale spíše na ní stavět, abychom její funkcionalitu vylepšili nebo rozšířili. Uděláme něco v naší metodě, ale v tomto procesu, před ním nebo po něm voláme rodičovskou metodu.
 
 Třídy pro tento účel poskytují klíčové slovo `„super“`.
 
@@ -160,6 +160,7 @@ Nyní má `Králík` metodu `stůj`, která při provedení volá rodičovskou m
 Jak jsme zmínili v kapitole <info:arrow-functions>, šipkové funkce nemají `super`.
 
 Pokud k němu přistoupíme, převezme se z vnější funkce. Například:
+
 ```js
 class Králík extends Zvíře {
   stůj() {
@@ -175,7 +176,6 @@ class Králík extends Zvíře {
 setTimeout(function() { super.stůj() }, 1000);
 ```
 ````
-
 
 ## Přepisování konstruktorů
 
@@ -280,8 +280,6 @@ alert(králík.délkaUcha); // 10
 */!*
 ```
 
-
-
 ### Přepisování třídních polí: záludnost
 
 ```warn header="Pokročilá poznámka"
@@ -375,7 +373,6 @@ Tento jemný rozdíl mezi poli a metodami je specifický pro JavaScript.
 Naštěstí se toto chování projevuje jen tehdy, když je přepsané pole použito v rodičovském konstruktoru. Pak může být obtížné pochopit, co se děje, proto to tady vysvětlujeme.
 
 Kdyby to byl problém, můžeme ho opravit použitím metod nebo getterů/setterů namísto polí.
-
 
 ## Super: interní mechanismy, [[HomeObject]]
 

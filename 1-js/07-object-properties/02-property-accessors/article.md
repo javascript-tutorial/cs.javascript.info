@@ -5,7 +5,7 @@ Existují dva druhy vlastností objektů.
 
 První druh jsou *datové vlastnosti*. S nimi už pracovat umíme. Všechny vlastnosti, které jsme až doposud používali, byly datové vlastnosti.
 
-Druhý druh vlastností je něco nového. Jsou to *přístupové (accessorové) vlastnosti*. Jsou to v zásadě funkce, které se spustí při načítání a nastavování hodnoty, ale v externím kódu vypadají jako běžné vlastnosti.
+Druhý druh vlastností je něco nového. Jsou to *přístupové vlastnosti*. Jsou to v zásadě funkce, které se spustí při načítání a nastavování hodnoty, ale v externím kódu vypadají jako běžné vlastnosti.
 
 ## Gettery a settery
 

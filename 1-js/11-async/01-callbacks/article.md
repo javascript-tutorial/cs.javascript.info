@@ -77,6 +77,8 @@ function načtiSkript(src, *!*callback*/!*) {
 }
 ```
 
+Událost `onload` je popsána v článku <info:onload-onerror#loading-a-script>. V zásadě spustí funkci poté, co je skript načten a proveden.
+
 Když nyní chceme volat nové funkce ze skriptu, měli bychom to uvést v callbacku:
 
 ```js
@@ -102,7 +104,7 @@ function načtiSkript(src, callback) {
 *!*
 načtiSkript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js', skript => {
   alert(`Hurá, skript ${skript.src} se načetl`);
-  alert( _ ); // funkce deklarovaná v načteném skriptu
+  alert( _ ); // _ je funkce deklarovaná v načteném skriptu
 });
 */!*
 ```

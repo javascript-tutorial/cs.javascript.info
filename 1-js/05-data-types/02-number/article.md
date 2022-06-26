@@ -22,7 +22,7 @@ Můžeme jako oddělovač použít podtržítko `_`:
 let miliarda = 1_000_000_000;
 ```
 
-Podtržítko `_` zde hraje roli „syntaktického cukru“ a činí číslo čitelnějším. Engine JavaScriptu podtržítka `_` mezi číslicemi jednoduše ignoruje, takže je to přesně stejná miliarda jako výše uvedená.
+Podtržítko `_` zde hraje roli „[syntaktického cukru](https://cs.wikipedia.org/wiki/Syntaktický_cukr)“, který činí číslo čitelnějším. Motor JavaScriptu podtržítka `_` mezi číslicemi jednoduše ignoruje, takže je to přesně stejná miliarda jako výše uvedená.
 
 V reálném životě se však snažíme vyhnout zápisu dlouhých sekvencí nul. Jsme na to příliš líní. Snažíme se zapsat miliardu nějak jako `"1 mld."` nebo 7 miliard 300 miliónů jako `"7,3 mld."`. To platí pro většinu velkých čísel.
 
@@ -50,7 +50,7 @@ let mcs = 0.000001;
 Stejně jako předtím nám může pomoci použití `"e"`. Jestliže se chceme vyhnout explicitnímu zápisu nul, můžeme zapsat totéž jako:
 
 ```js
-let mcs = 1e-6; // šest nul nalevo od 1
+let mcs = 1e-6; // pět nul nalevo od 1
 ```
 
 Spočítáme-li nuly v čísle `0.000001`, bude jich 6. Je to tedy přirozeně `1e-6`.
@@ -63,6 +63,9 @@ Jinými slovy, záporné číslo za `"e"` znamená dělení číslem 1 se zadan�
 
 // -6 znamená dělení číslem 1 se 6 nulami
 1.23e-6 === 1.23 / 1000000; // 0.00000123
+
+// an example with a bigger number
+1234e-2 === 1234 / 100; // 12.34, decimal point moves 2 times
 ```
 
 ### Hexadecimální, binární a oktální čísla
@@ -246,7 +249,7 @@ Můžeme se tomuto problému vyhnout? Jistě. Nejspolehlivější metoda je zaok
 
 ```js run
 let součet = 0.1 + 0.2;
-alert( součet.toFixed(2) ); // 0.30
+alert( součet.toFixed(2) ); // "0.30"
 ```
 
 Prosíme všimněte si, že `toFixed` vrací vždy řetězec. Zajišťuje, že za desetinnou čárkou má vždy 2 číslice. To se obzvláště hodí, když máme elektronický obchod a potřebujeme zobrazit `$0.30`. V jiným případech můžeme použít unární plus, abychom jej převedli na číslo:
@@ -305,7 +308,7 @@ Patří k typu `number`, ale nejsou to „normální“ čísla, takže existuj�
     alert( isNaN("str") ); // true
     ```
 
-    Ale potřebujeme vůbec tuto funkci? Nemůžeme jednoduše použít porovnání `=== NaN`? Je mi líto, ale odpověď zní ne. Hodnota `NaN` je unikátem, který se nerovná ničemu jinému, dokonce ani sám sobě:
+    Ale potřebujeme vůbec tuto funkci? Nemůžeme jednoduše použít porovnání `=== NaN`? Bohužel ne. Hodnota `NaN` je unikátem, který se nerovná ničemu jinému, dokonce ani sám sobě:
 
     ```js run
     alert( NaN === NaN ); // false
@@ -332,8 +335,7 @@ alert( isFinite(číslo) );
 Prosíme všimněte si, že s prázdným řetězcem nebo s řetězcem složeným pouze z mezer se zachází jako s `0` ve všech číselných funkcích včetně `isFinite`.
 
 ```smart header="Srovnání s `Object.is`"
-
-Existuje speciální vestavěná metoda [`Object.is`](mdn:js/Object/is), která porovnává hodnoty stejně jako `===`, ale ve dvou krajních případech je spolehlivější:
+Existuje speciální vestavěná metoda `Object.is`, která porovnává hodnoty stejně jako `===`, ale ve dvou krajních případech je spolehlivější:
 
 1. Funguje s `NaN`: `Object.is(NaN, NaN) === true`, což je dobrá věc.
 2. Hodnoty `0` a `-0` jsou rozdílné: `Object.is(0, -0) === false`, technicky je to pravda, protože interně má číslo znaménkový bit, který se může lišit, i když jsou všechny ostatní bity nulové.
@@ -400,7 +402,7 @@ Několik příkladů:
     alert( Math.random() ); // ... (jakákoli náhodná čísla)
     ```
 
-`Math.max(a, b, c...)` / `Math.min(a, b, c...)`
+`Math.max(a, b, c...)` a `Math.min(a, b, c...)`
 : Vrátí největší/nejmenší z libovolného počtu argumentů.
 
     ```js run
@@ -429,6 +431,11 @@ Pro různé číselné soustavy:
 - Můžeme zapisovat čísla přímo v hexadecimální (`0x`), oktální (`0o`) a binární (`0b`) soustavě.
 - `parseInt(str, základ)` parsuje řetězec `str` na celé číslo v číselné soustavě o zadaném základu `základ`, `2 ≤ základ ≤ 36`.
 - `číslo.toString(základ)` převede číslo na řetězec v číselné soustavě o zadaném základu `základ`.
+
+Pro běžné testování čísel:
+
+- `isNaN(hodnota)` převede svůj argument na číslo a pak testuje, zda je `NaN`
+- `isFinite(hodnota)` převede svůj argument na číslo a vrátí `true`, pokud je to skutečné číslo a ne `NaN/Infinity/-Infinity`
 
 Pro převod hodnot jako `12pt` nebo `100px` na číslo:
 

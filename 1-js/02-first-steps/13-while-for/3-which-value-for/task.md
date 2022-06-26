@@ -8,12 +8,12 @@ Pro oba cykly zapište hodnoty, které budou zobrazeny, a pak je porovnejte s ř
 
 Vypíše `alert` v obou cyklech stejné hodnoty, nebo ne?
 
-1. Postfixová forma:
+1. Postfixová notace:
 
     ```js
     for (let i = 0; i < 5; i++) alert( i );
     ```
-2. Prefixová forma:
+2. Prefixová notace:
 
     ```js
     for (let i = 0; i < 5; ++i) alert( i );

@@ -1,4 +1,4 @@
-Tato úloha ukazuje, jak mohou prefixová a postfixová forma vést k rozdílným výsledkům, když je použijeme v porovnání.
+Tato úloha ukazuje, jak může prefixová a postfixová notace vést k rozdílným výsledkům, když je použijeme v porovnání.
 
 1. **Od 1 do 4**
 
@@ -20,12 +20,12 @@ Tato úloha ukazuje, jak mohou prefixová a postfixová forma vést k rozdílný
     while (i++ < 5) alert( i );
     ```
 
-    První hodnota je opět `i = 1`. Postfixová forma `i++` zvýší `i` a pak vrátí *starou* hodnotu, takže porovnání `i++ < 5` se dívá na `i = 0` (na rozdíl od `++i < 5`).
+    První hodnota je opět `i = 1`. Postfixová notace `i++` zvýší `i` a pak vrátí *starou* hodnotu, takže porovnání `i++ < 5` se dívá na `i = 0` (na rozdíl od `++i < 5`).
 
     Avšak `alert` se volá odděleně. Je to další příkaz, který se spustí až po zvýšení a porovnání. Proto obdrží aktuální `i = 1`.
 
     Následují `2, 3, 4…`
 
-    Zastavme se u `i = 4`. Prefixová forma `++i` by je zvýšila a v porovnání by použila `5`. Tady však máme postfixovou formu `i++`. Ta zvýší `i` na `5`, ale vrátí starou hodnotu. Proto se provede porovnání `while(4 < 5)` -- pravda, tudíž řízení přejde k `alert`.
+    Zastavme se u `i = 4`. Prefixová notace `++i` by je zvýšila a v porovnání by použila `5`. Tady však máme postfixovou notaci `i++`. Ta zvýší `i` na `5`, ale vrátí starou hodnotu. Proto se provede porovnání `while(4 < 5)` -- pravda, tudíž řízení přejde k `alert`.
 
     Hodnota `i = 5` je poslední, jelikož další krok `while(5 < 5)` dává nepravdu.

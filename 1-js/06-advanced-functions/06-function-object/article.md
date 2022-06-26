@@ -325,7 +325,7 @@ vítej(); // Ahoj, Host (vnořené volání funguje)
 
 Nyní to funguje, protože název `„funkce“` je funkčně lokální. Nepřebírá se zvnějšku (a není tam viditelný). Specifikace zaručuje, že se bude vždy odkazovat na aktuální funkci.
 
-Vnější kód stále má svou proměnnou `řekniAhoj` nebo `vítej`. A `funkce` je „interní funkční název“, jakým tato funkce může interně volat sama sebe.
+Vnější kód stále má svou proměnnou `řekniAhoj` nebo `vítej`. A `funkce` je „interní funkční název“, způsob, jakým tato funkce může spolehlivě volat sama sebe.
 
 ```smart header="Pro deklarace funkce nic takového neexistuje"
 Zde popsaná vlastnost „interní název“ je k dispozici jen pro funkční výrazy, ne pro deklarace funkcí. V deklaracích funkcí neexistuje žádná syntaxe, jak přidat „interní“ název.

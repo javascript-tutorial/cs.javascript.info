@@ -181,7 +181,7 @@ Když funkce deklarujeme, vypisujeme jejich parametry, a pak je voláme předán
 
 Ve výše uvedeném příkladu bychom mohli říci: „funkce `zobrazZprávu` je deklarována se dvěma parametry a pak je volána se dvěma argumenty: `odKoho` a `"Ahoj"`.“
 
-## Defaultní hodnoty
+## Výchozí hodnoty
 
 Jestliže je volána funkce, ale některý argument není poskytnut, pak odpovídající hodnota bude `undefined`.
 
@@ -193,7 +193,7 @@ zobrazZprávu("Anna");
 
 To není chyba. Takové volání vypíše `"*Anna*: undefined"`. Protože hodnota `text` nebyla předána, stane se `undefined`.
 
-V deklaraci funkce můžeme specifikovat tzv. „defaultní“ (používanou, není-li uvedena) hodnotu parametru pomocí `=`:
+V deklaraci funkce můžeme specifikovat tzv. „výchozí“ (používanou, není-li uvedena jiná) hodnotu parametru pomocí `=`:
 
 ```js run
 function zobrazZprávu(odKoho, *!*text = "text není zadán"*/!*) {
@@ -214,17 +214,48 @@ function zobrazZprávu(odKoho, text = jináFunkce()) {
 }
 ```
 
-```smart header="Vyhodnocení defaultních parametrů"
-V JavaScriptu bude defaultní parametr vyhodnocen pokaždé, když bude funkce volána bez příslušného parametru.
+```smart header="Vyhodnocení výchozích parametrů"
+V JavaScriptu bude výchozí parametr vyhodnocen pokaždé, když bude funkce volána bez příslušného parametru.
 
 Ve výše uvedeném příkladu nebude `jináFunkce()` vůbec volána, jestliže bude parametr `text` poskytnut.
 
 Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude `text` chybět.
 ```
 
-### Alternativní defaultní parametry
+````smart header="Výchozí parametry ve starém JavaScriptovém kódu"
+Před několika lety JavaScript nepodporoval syntaxi pro výchozí parametry. Lidé tedy používali jiné způsoby, jak je specifikovat.
 
-Někdy má smysl nenastavovat defaultní hodnoty parametrů v deklaraci funkce, ale až později.
+V současnosti na ně můžeme narazit ve starých skriptech.
+
+Například explicitní ověřování na `undefined`:
+
+```js
+function zobrazZprávu(odKoho, text) {
+*!*
+  if (text === undefined) {
+    text = 'text není zadán';
+  }
+*/!*
+
+  alert( odKoho + ": " + text );
+}
+```
+
+...Nebo pomocí operátoru `||`:
+
+```js
+function zobrazZprávu(odKoho, text) {
+  // Je-li hodnota proměnné text nepravdivá, přiřadíme výchozí hodnotu
+  // to předpokládá, že text == "" je totéž jako vůbec žádný text
+  text = text || 'text není zadán';
+  ...
+}
+```
+````
+
+### Alternativní výchozí parametry
+
+Někdy má smysl nenastavovat výchozí hodnoty parametrů v deklaraci funkce, ale až později.
 
 Abychom během provádění funkce ověřili, zda parametr byl předán, můžeme jej porovnat s `undefined`:
 
@@ -487,7 +518,7 @@ function název(parametry, oddělené, čárkami) {
 
 Aby kód byl čistší a srozumitelnější, doporučuje se ve funkcích používat zejména lokální proměnné a parametry, ne vnější proměnné.
 
-Je vždy jednodušší pochopit funkci, která obdrží parametry, něco s nimi udělá a vrátí výsledek, než funkci, která neobdrží žádné parametry, ale jako vedlejší efekt modifikuje vnější proměnné.
+Je vždy jednodušší pochopit funkci, která obdrží parametry, pracuje s nimi a vrátí výsledek, než funkci, která neobdrží žádné parametry, ale jako vedlejší efekt modifikuje vnější proměnné.
 
 Pojmenování funkcí:
 

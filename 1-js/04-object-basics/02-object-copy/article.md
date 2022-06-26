@@ -37,7 +37,7 @@ A takto je ve skutečnosti uložen v paměti:
 
 Objekt je uložen někde v paměti (na obrázku vpravo), zatímco proměnná `uživatel` (vlevo) obsahuje „odkaz“ na něj.
 
-Můžeme považovat objektovou proměnnou, např. `uživatel`, za kus papíru, na němž je napsána adresa objektu.
+Můžeme se dívat na objektovou proměnnou, např. `uživatel`, jako na kus papíru, na němž je napsána adresa objektu.
 
 Když provádíme akci nad objektem, např. zjišťujeme vlastnost `uživatel.jméno`, engine JavaScriptu se podívá, co je na této adrese, a provede operaci nad skutečným objektem.
 
@@ -104,11 +104,9 @@ Při porovnání typu `obj1 > obj2` nebo při porovnání s primitivním typem `
 
 Kopírování objektové proměnné tedy vytvoří další odkaz na tentýž objekt.
 
-Co když však potřebujeme duplikovat objekt? Vytvořit jeho nezávislou kopii, jeho klon?
+Co když však potřebujeme duplikovat objekt?
 
-I to je proveditelné, ale trochu obtížnější, neboť v JavaScriptu pro to neexistuje žádná vestavěná metoda. Je to však zapotřebí jen zřídka -- většinou stačí kopírování odkazu.
-
-Jestliže to však doopravdy chceme, musíme vytvořit nový objekt a replikovat strukturu existujícího objektu tím, že budeme iterovat nad jeho vlastnostmi a kopírovat je na úrovni primitivů.
+Můžeme vytvořit nový objekt a replikovat strukturu existujícího objektu tím, že budeme iterovat nad jeho vlastnostmi a kopírovat je na úrovni primitivů.
 
 Například:
 
@@ -133,7 +131,7 @@ klon.jméno = "Petr"; // změníme data uvnitř
 alert( uživatel.jméno ); // v původním objektu je stále Jan
 ```
 
-Můžeme k tomu také použít metodu [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
+Můžeme také použít metodu [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
 Její syntaxe je:
 
@@ -190,7 +188,7 @@ Existují i jiné metody klonování objektu, např. použitím [rozšířené s
 
 ## Vnořené klonování
 
-Až dosud jsme předpokládali, že všechny vlastnosti objektu `uživatel` jsou primitivní. Ale vlastnosti mohou být i odkazy na jiné objekty. Co s nimi?
+Až dosud jsme předpokládali, že všechny vlastnosti objektu `uživatel` jsou primitivní. Ale vlastnosti mohou být i odkazy na jiné objekty.
 
 Například:
 ```js run
@@ -205,9 +203,7 @@ let uživatel = {
 alert( uživatel.míry.výška ); // 182
 ```
 
-Teď nestačí kopírovat `klon.míry = uživatel.míry`, protože `uživatel.míry` je objekt, který bude zkopírován odkazem. Pak budou `klon` a `uživatel` sdílet stejné míry.
-
-Například:
+Teď nestačí kopírovat `klon.míry = uživatel.míry`, protože `uživatel.míry` je objekt a bude zkopírován odkazem, takže `klon` a `uživatel` budou sdílet stejné míry:
 
 ```js run
 let uživatel = {
@@ -224,10 +220,10 @@ alert( uživatel.míry === klon.míry ); // true, stejný objekt
 
 // uživatel a klon sdílejí tytéž míry
 uživatel.míry.šířka++;  // změníme vlastnost na jednom místě
-alert(klon.míry.šířka); // 51, vidíme výsledek z prvního objektu
+alert(klon.míry.šířka); // 51, vidíme výsledek z jiného místa
 ```
 
-Abychom to opravili, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ nebo „hluboké“.
+Abychom to opravili a učinily objekty `uživatel` a `klon` skutečně oddělenými, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ nebo „hluboké“.
 
 Můžeme to implementovat pomocí rekurze. Nebo, abychom znovu nevynalézali kolo, použít existující implementaci, např. [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) z JavaScriptové knihovny [lodash](https://lodash.com).
 

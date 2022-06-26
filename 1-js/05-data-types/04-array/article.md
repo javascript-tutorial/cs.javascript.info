@@ -92,6 +92,38 @@ let ovoce = [
 Styl „koncové *(trailing)* čárky“ zjednodušuje přidávání a odstraňování prvků, protože všechny řádky vypadají podobně.
 ````
 
+## Get last elements with "at"
+
+[recent browser="new"]
+
+Let's say we want the last element of the array.
+
+Some programming languages allow to use negative indexes for the same purpose, like `fruits[-1]`.
+
+Although, in JavaScript it won't work. The result will be `undefined`, because the index in square brackets is treated literally.
+
+We can explicitly calculate the last element index and then access it: `fruits[fruits.length - 1]`.
+
+```js run
+let fruits = ["Apple", "Orange", "Plum"];
+
+alert( fruits[fruits.length-1] ); // Plum
+```
+
+A bit cumbersome, isn't it? We need to write the variable name twice.
+
+Luckily, there's a shorter syntax: `fruits.at(-1)`:
+
+```js run
+let fruits = ["Apple", "Orange", "Plum"];
+
+// same as fruits[fruits.length-1]
+alert( fruits.at(-1) ); // Plum
+```
+
+In other words, `arr.at(i)`:
+- is exactly the same as `arr[i]`, if `i >= 0`.
+- for negative values of `i`, it steps back from the end of the array.
 
 ## Metody pop/push, shift/unshift
 
@@ -121,7 +153,7 @@ Zásobník se obvykle ilustruje jako balíček karet: nové karty se přidávaj�
 
 U zásobníků se naposledy vložený prvek odebírá jako první. Tento princip se také nazývá LIFO (Last-In-First-Out, česky „poslední dovnitř, první ven“). U fronty máme princip FIFO (First-In-First-Out, česky „první dovnitř, první ven“).
 
-Pole v JavaScriptu mohou fungovat jako fronta i jako zásobník. Umožňují nám přidávat/odebírat prvky do/ze začátku nebo konce.
+Pole v JavaScriptu mohou fungovat jako fronta i jako zásobník. Umožňují nám přidávat/odebírat prvky do/ze začátku i konce.
 
 Datová struktura, která to umožňuje, se v informatice nazývá [deque](https://en.wikipedia.org/wiki/Double-ended_queue) *(z anglického „double-ended queue“ -- „fronta s dvojitým koncem“)*.
 
@@ -137,6 +169,8 @@ Datová struktura, která to umožňuje, se v informatice nazývá [deque](https
 
     alert( ovoce ); // Jablko, Pomeranč
     ```
+
+    Both `fruits.pop()` and `fruits.at(-1)` return the last element of the array, but `fruits.pop()` also modifies the array by removing it.
 
 `push`
 : Připojí prvek na konec pole:
@@ -247,7 +281,7 @@ Proč je rychlejší pracovat s koncem pole než s jeho začátkem? Podívejme s
 ovoce.shift(); // odebere 1 prvek ze začátku
 ```
 
-Nestačí vzít a odstranit prvek s číslem `0`. Musejí se přečíslovat ostatní prvky.
+Nestačí vzít a odstranit prvek s indexem `0`. Je třeba také přečíslovat ostatní prvky.
 
 Operace `shift` musí provést 3 věci:
 
@@ -478,20 +512,25 @@ Je to jednoduché: nepoužívejte operátor `==`. Místo toho je porovnávejte p
 
 Pole je speciální druh objektu, uzpůsobený k ukládání a spravování seřazených datových prvků.
 
-- Deklarace:
+Deklarace:
 
-    ```js
-    // hranaté závorky (obvyklé)
-    let pole = [prvek1, prvek2...];
+```js
+// hranaté závorky (obvyklé)
+let pole = [prvek1, prvek2...];
 
-    // new Array (výjimečně vzácné)
-    let pole = new Array(prvek1, prvek2...);
-    ```
+// new Array (výjimečně vzácné)
+let pole = new Array(prvek1, prvek2...);
+```
 
-    Volání `new Array(číslo)` vytvoří pole o zadané délce, ale bez prvků.
+Volání `new Array(číslo)` vytvoří pole o zadané délce, ale bez prvků.
 
 - Vlastnost `length` je délka pole nebo, abychom byli přesní, jeho poslední číselný index plus jedna. Metody pole ji automaticky aktualizují.
 - Snížíme-li `length` ručně, pole bude zkráceno.
+
+Získávání prvků:
+
+- můžeme získat prvek podle jeho indexu, například `pole[0]`
+- můžeme také použít metodu `at(i)`, která umožňuje záporné indexy. Pro záporné hodnoty `i` postupuje zpětně od konce pole. Je-li `i >= 0`, funguje stejně jako `pole[i]`.
 
 Pole můžeme používat jako deque (frontu s dvojitým koncem) s následujícími operacemi:
 

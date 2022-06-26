@@ -355,7 +355,7 @@ Ve výše uvedeném kódu vlastnost `obj.test` technicky existuje, takže operá
 Takové situace nastávají velmi zřídka, jelikož `undefined` by nemělo být výslovně přiřazováno. Pro „neznámé“ nebo „prázdné“ hodnoty většinou používáme `null`. Proto je operátor `in` v kódu exotickým hostem.
 
 
-## Cyklus „for..in“
+## Cyklus „for..in“ [#forin]
 
 Pro procházení všemi klíči objektu existuje speciální forma cyklu: `for..in`. Je to úplně něco jiného než konstrukce `for(;;)`, kterou jsme již prostudovali.
 
@@ -424,9 +424,10 @@ Telefonní předvolby jsou seřazeny vzestupně, protože jsou to celá čísla.
 ````smart header="Celočíselné vlastnosti? K čemu to je?"
 Pojem „celočíselná vlastnost“ zde znamená řetězec, který může být konvertován na celé číslo a zpět beze změny.
 
-Takže "49" je název celočíselné vlastnosti, protože když se konvertuje na celé číslo a zpět, zůstane stejný. Ale "+49" a "1.2" nejsou:
+Takže `"49"` je název celočíselné vlastnosti, protože když se převede na celé číslo a zpět, zůstane stejný. Ale `"+49"` a `"1.2"` nejsou:
 
 ```js run
+// Number(...) explicitně konvertuje na číslo
 // Math.trunc je vestavěná funkce, která odstraní desetinnou část
 alert( String(Math.trunc(Number("49"))) ); // "49", totéž, celočíselná vlastnost
 alert( String(Math.trunc(Number("+49"))) ); // "49", není totéž jako "+49" ⇒ není to celočíselná vlastnost

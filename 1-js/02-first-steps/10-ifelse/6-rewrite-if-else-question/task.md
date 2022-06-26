@@ -11,12 +11,12 @@ Z důvodu čitelnosti doporučujeme rozdělit kód na více řádků.
 ```js
 let zpráva;
 
-if (login == 'Zaměstnanec') {
+if (přihlášený == 'Zaměstnanec') {
   zpráva = 'Ahoj';
-} else if (login == 'Ředitel') {
+} else if (přihlášený == 'Ředitel') {
   zpráva = 'Dobrý den';
-} else if (login == '') {
-  zpráva = 'Není login';
+} else if (přihlášený == '') {
+  zpráva = 'Nikdo není přihlášený';
 } else {
   zpráva = '';
 }

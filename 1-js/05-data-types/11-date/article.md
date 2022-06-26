@@ -59,8 +59,8 @@ Abychom vytvořili objekt `Date`, zavoláme `new Date()` s jedním z následují
 `new Date(rok, měsíc, den, hodiny, minuty, sekundy, ms)`
 : Vytvoří datum ze zadaných součástí v místním časovém pásmu. Povinné jsou jen první dva argumenty.
 
-    - Parametr `rok` musí mít 4 číslice: `2013` je správně, `98` ne.
-    - Parametr `měsíc` se počítá od `0` (leden) do `11` (prosinec).
+    - Parametr `rok` musí mít 4 číslice. Z důvodu kompatibility se přijímají i 2 číslice a považují se za `19xx`, např. `98` je zde totéž jako `1998`, ale silně se doporučuje používat vždy 4 číslice.
+    - Parametr `měsíc` může být od `0` (leden) do `11` (prosinec).
     - Parametr `den` znamená den v měsíci. Není-li uveden, předpokládá se `1`.
     - Nejsou-li uvedeny parametry `hodiny/minuty/sekundy/ms`, předpokládá se, že jsou `0`.
 

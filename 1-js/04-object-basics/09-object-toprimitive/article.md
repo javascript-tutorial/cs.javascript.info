@@ -3,15 +3,15 @@
 
 Co se stane, když se objekty sečtou `obj1 + obj2`, odečtou `obj1 - obj2` nebo zobrazí pomocí `alert(obj)`?
 
-JavaScript neumožňuje přesně nastavit způsob, jakým operátory pracují nad objekty. Na rozdíl od některých jiných programovacích jazyků, např. Ruby nebo C++, nemůžeme implementovat speciální objektovou metodu, která bude zpracovávat sčítání (nebo jiné operátory).
+JavaScript neumožňuje přesně nastavit způsob, jakým operátory fungují nad objekty. Na rozdíl od některých jiných programovacích jazyků, např. Ruby nebo C++, nemůžeme implementovat speciální objektovou metodu, která bude zpracovávat sčítání (nebo jiné operátory).
 
 Při takovýchto operacích se objekty automaticky konvertují na primitivy a pak se nad těmito primitivy vykoná operace, jejímž výsledkem je primitivní hodnota.
 
-To je důležité omezení, jelikož výsledkem `obj1 + obj2` nemůže být jiný objekt!
+To je důležité omezení: výsledkem `obj1 + obj2` (nebo jiné matematické operace) nemůže být jiný objekt!
 
 Například nemůžeme vytvořit objekty představující vektory nebo matice (nebo úspěchy či cokoli jiného), sečíst je a jako výsledek očekávat „sečtený“ objekt. Takové architektonické výkony jsou automaticky „mimo mísu“.
 
-Protože zde tedy nemůžeme mnoho udělat, v reálných projektech nebývá žádné počítání s objekty. Když se objeví, je to obvykle důsledkem chyby v kódu.
+Protože zde toho technicky nemůžeme mnoho udělat, v reálných projektech nebývá žádné počítání s objekty. Když se objeví, je to až na vzácné výjimky důsledkem chyby v kódu.
 
 V této kapitole probereme, jak převést objekt na primitiv a jak si to přizpůsobit.
 
@@ -24,15 +24,19 @@ Má to dva účely:
 
 V kapitole <info:type-conversions> jsme viděli pravidla číselných, řetězcových a booleanových konverzí primitivů. Objekty jsme však vynechali. Nyní, když známe metody a symboly, můžeme tuto mezeru zaplnit.
 
-1. V booleovském kontextu jsou všechny objekty `true`. Existují jen konverze na číslo a na řetězec.
+1. Neexistuje žádná konverze na boolean. V booleovském kontextu jsou všechny objekty prostě a jednoduše `true`. Existují jen konverze na číslo a na řetězec.
 2. Konverze na číslo se odehrává, když objekty odečítáme nebo s nimi provádíme matematické funkce. Například objekty `Date` (vysvětlíme je v kapitole <info:date>) můžeme od sebe odečíst a výsledkem `datum1 - datum2` je časový rozdíl mezi těmito dvěma daty.
 3. Co se týče konverze na řetězec -- ta se zpravidla odehrává, když pošleme objekt na výstup, např. `alert(obj)`, a v podobných kontextech.
 
-Konverze na řetězec a na číslo můžeme vyladit použitím speciálních objektových metod.
+Konverzi na řetězec a na číslo si můžeme implementovat sami použitím speciálních objektových metod.
 
-Existují tři varianty typové konverze, k nimž dochází v různých situacích.
+Podívejme se nyní na technické podrobnosti, protože to je jediný způsob, jak toto téma pokrýt do hloubky.
 
-Nazývají se „hinty“ *(česky „rady“ nebo „náznaky“ -- pozn. překl.)* a jsou popsány ve [specifikaci](https://tc39.github.io/ecma262/#sec-toprimitive):
+## Hinty
+
+Podle čeho se JavaScript rozhoduje, kterou konverzi použít?
+
+Existují tři varianty typové konverze, k nimž dochází v různých situacích. Nazývají se „hinty“ a jsou popsány ve [specifikaci](https://tc39.github.io/ecma262/#sec-toprimitive):
 
 `"string"`
 : Pro konverzi objektu na řetězec, když nad objektem provádíme operaci, která očekává řetězec, např. `alert`:
@@ -60,10 +64,12 @@ Nazývají se „hinty“ *(česky „rady“ nebo „náznaky“ -- pozn. přek
     let větší = uživatel1 > uživatel2;
     ```
 
+    Most built-in mathematical functions also include such conversion.
+
 `"default"`
 : Nastává ve vzácných případech, když si operátor „není jist“, jaký typ má očekávat.
 
-    Například binární plus `+` může pracovat jak s řetězci (spojuje je), tak s čísly (sčítá je), takže zde by fungovaly řetězce i čísla. Jestliže tedy binární plus obdrží objekt jako argument, použije k jeho konverzi hint `"default"`.
+    Například binární plus `+` může pracovat jak s řetězci (spojuje je), tak s čísly (sčítá je). Jestliže tedy binární plus obdrží objekt jako argument, použije k jeho konverzi hint `"default"`.
 
     Rovněž je-li objekt porovnáván s řetězcem, číslem nebo symbolem pomocí `==`, není jisté, která konverze by se měla provést, takže je použit hint `"default"`.
 
@@ -77,13 +83,11 @@ Nazývají se „hinty“ *(česky „rady“ nebo „náznaky“ -- pozn. přek
 
     Také operátory porovnání větší než a menší než, např. `<` `>`, mohou pracovat s řetězci i s čísly. Ty však používají hint `"number"`, ne `"default"`. Je tomu tak z historických důvodů.
 
-    V praxi si však tyto svérázné detaily pamatovat nemusíme, neboť všechny vestavěné objekty až na jedinou výjimku (objekt `Date`, dozvíme se o něm později) implementují konverzi `"default"` stejným způsobem jako `"number"`. A my můžeme dělat totéž.
+V praxi je to však o něco jednodušší.
 
-```smart header="Neexistuje hint `\"boolean\"`"
-Všimněte si, že hinty jsou pouze tři. Tak jednoduché to je.
+Všechny vestavěné objekty až na jedinou výjimku (objekt `Date`, dozvíme se o něm později) implementují konverzi `"default"` stejným způsobem jako `"number"`. A my bychom asi měli dělat totéž.
 
-Neexistuje hint „boolean“ (v booleovském kontextu jsou všechny objekty `true`) ani žádný jiný. A pokud zacházíme s `"default"` stejně jako s `"number"`, což provádí většina vestavěných objektů, pak existují pouhé dvě konverze.
-```
+Stále je však důležité znát všechny 3 hinty. Brzy uvidíme proč.
 
 **Když JavaScript provádí konverzi, snaží se najít a zavolat tři objektové metody:**
 
@@ -128,12 +132,11 @@ alert(uživatel + 500); // hint: default -> 1500
 
 Jak vidíme z kódu, `uživatel` se stane sebepopisujícím řetězcem nebo peněžní částkou v závislosti na druhu konverze. Všechny případy konverze obstarává jediná metoda `uživatel[Symbol.toPrimitive]`.
 
-
 ## toString/valueOf
 
 Neexistuje-li `Symbol.toPrimitive`, pak se JavaScript pokusí najít metody `toString` a `valueOf`:
 
-- Pro hint "string": `toString`, a jestliže neexistuje, pak `valueOf` (při konverzi na řetězec má tedy přednost `toString`).
+- Pro hint `"string"`: volá se metoda `toString`, a jestliže neexistuje, pak `valueOf` (při konverzi na řetězec má tedy přednost `toString`).
 - Pro jiné hinty: `valueOf`, a jestliže neexistuje, pak `toString` (při výpočtech má tedy přednost `valueOf`).
 
 Metody `toString` a `valueOf` pocházejí z dávných časů. Nejsou to symboly (symboly tak dávno ještě neexistovaly), ale „obvyklé“ metody pojmenované řetězcem. Poskytují alternativní způsob „ve starém stylu“, jak implementovat konverzi.
@@ -214,16 +217,16 @@ Jediné, co je povinné: tyto metody musejí vracet primitiv, ne objekt.
 ```smart header="Historické poznámky"
 Z historických důvodů platí, že jestliže `toString` nebo `valueOf` vrátí objekt, nenastane chyba, ale taková hodnota se ignoruje (jako by tato metoda neexistovala). Je to proto, že v dávných dobách nebyl v JavaScriptu žádný dobrý „chybový“ koncept.
 
-Naproti tomu `Symbol.toPrimitive` *musí* vrátit primitiv, jinak bude ohlášena chyba.
+Naproti tomu `Symbol.toPrimitive` je striktnější a *musí* vrátit primitiv, jinak bude ohlášena chyba.
 ```
 
 ## Další konverze
 
 Jak již víme, mnoho operátorů a funkcí provádí typovou konverzi, např. násobení `*` převádí operandy na čísla.
 
-Jestliže předáme objekt jako argument, provedou se dva kroky:
+Jestliže předáme objekt jako argument, provedou se dva kroky výpočtu:
 1. Objekt se konvertuje na primitiv (podle výše uvedených pravidel).
-2. Není-li výsledný primitiv správného typu, konvertuje se.
+2. Je-li to nezbytné pro další výpočty, výsledný primitiv se také konvertuje.
 
 Například:
 
@@ -260,9 +263,9 @@ Konverze objektu na primitiv je volána automaticky mnoha vestavěnými funkcemi
 Dělí se na 3 druhy (hinty):
 - `"string"` (pro `alert` a jiné operace, které vyžadují řetězec)
 - `"number"` (pro matematické výpočty)
-- `"default"` (jen málo operátorů)
+- `"default"` (pro operátory, obvykle ji objekty implementují stejným způsobem jako `"number"`)
 
-Specifikace výslovně popisuje, který operátor používá který hint. Existuje jen velmi málo operátorů, které „nevědí, co očekávat“, a tak používají hint `"default"`. Vestavěné objekty obvykle hint `"default"` zpracovávají stejně jako `"number"`, a tak se v praxi poslední dva uvedené hinty často spojují dohromady.
+Specifikace výslovně popisuje, který operátor používá který hint.
 
 Algoritmus konverze je:
 
@@ -271,7 +274,7 @@ Algoritmus konverze je:
     - pokusí se zavolat `obj.toString()` nebo `obj.valueOf()`, první z nich, která existuje.
 3. V opačném případě, je-li hint `"number"` nebo `"default"`:
     - pokusí se zavolat `obj.valueOf()` nebo `obj.toString()`, první z nich, která existuje.
+    
+Všechny tyto metody musejí vracet primitiv, aby fungovaly (jsou-li definovány).
 
-V praxi často postačí implementovat jen `obj.toString()` jako „zachytávací“ metodu pro všechny konverze, která by měla vracet „člověkem čitelnou“ reprezentaci objektu, pro účely logování nebo ladění.
-
-Stejně jako u matematických operátorů JavaScript neposkytuje způsob, jak je „přetížit“ pomocí metod, takže projekty z reálného života je používají na objekty jen zřídka.
+V praxi často postačí implementovat jen `obj.toString()` jako „zachytávací“ metodu pro konverzi na řetězec, která by měla vracet „člověkem čitelnou“ reprezentaci objektu, pro účely logování nebo ladění.

@@ -8,7 +8,7 @@ Vytvořte „tlumící“ dekorátor `tlumič(f, ms)`, který bude vracet wrappe
 
 Když je zavolán vícekrát, předá volání funkci `f` nejvýše jednou za `ms` milisekund.
 
-Rozdíl oproti debounce je v tom, že je to zcela odlišný dekorátor:
+Ve srovnání s dekorátorem debounce je jeho chování zcela odlišné:
 - `debounce` spustí funkci jednou po „době vychladnutí“. To je dobré pro zpracování konečného výsledku.
 - `tlumič` spustí funkci nejvýše jednou za čas `ms`. To je dobré pro pravidelné aktualizace, které by se neměly dít příliš často.
 

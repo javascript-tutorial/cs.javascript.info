@@ -11,7 +11,7 @@ let pole = ["a", "b"];
 
 pole.push(function() {
   alert( this );
-})
+});
 
 pole[2](); // ?
 ```

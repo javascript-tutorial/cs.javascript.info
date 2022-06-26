@@ -6,7 +6,7 @@ V této kapitole začneme jednoduchými operátory a pak se budeme soustředit n
 
 ## Pojmy: „unární“, „binární“, „operand“
 
-Než budeme pokračovat, ujasníme si určitou společnou terminologii.
+Než budeme pokračovat, ujasníme si základní terminologii.
 
 - *Operand* je to, na co se aplikují operátory. Například při násobení `5 * 2` máme dva operandy: levý operand je `5` a pravý operand je `2`. Někdy se jim místo „operandy“ říká „argumenty“.
 - Operátor je *unární*, jestliže má jediný operand. Například unární negace `-`, která obrací znaménko čísla:
@@ -82,7 +82,9 @@ alert( 8 ** (1/3) ); // 2 (umocnění na 1/3 je totéž jako třetí odmocnina)
 
 Přejděme nyní k vlastnostem JavaScriptu, které jsou za hranicemi školní aritmetiky.
 
-Operátor plus `+` obvykle sčítá čísla. Pokud je však binární `+` použito na řetězce, spojí je (zřetězí):
+Operátor plus `+` obvykle sčítá čísla.
+
+Pokud je však binární `+` použito na řetězce, spojí je (zřetězí):
 
 ```js
 let s = "můj" + "řetězec";
@@ -295,7 +297,7 @@ n *= 2; // nyní n = 14 (totéž jako n = n * 2)
 alert( n ); // 14
 ```
 
-Takové „modifikační“ operátory existují pro všechny aritmetické a bitové operace: `/=`, `-=`, apod.
+Takové „modifikační“ operátory existují pro všechny aritmetické a bitové operátory: `/=`, `-=`, apod.
 
 Tyto operátory mají stejnou prioritu jako běžné přiřazení, takže se provedou až po většině ostatních výpočtů:
 
@@ -311,7 +313,9 @@ alert( n ); // 16  (napřed se provede část vpravo, totéž jako n *= 8)
 
 <!-- Can't use -- in title, because the built-in parser turns it into a 'long dash' – -->
 
-Jednou z nejběžnějších číselných operací je zvýšení nebo snížení čísla o 1 (inkrementace, dekrementace). Proto pro ně existují speciální operátory:
+Jednou z nejběžnějších číselných operací je zvýšení nebo snížení čísla o 1 (inkrementace, dekrementace).
+
+Proto pro ně existují speciální operátory:
 
 - **Inkrementace** `++` zvýší proměnnou o 1:
 
@@ -334,14 +338,14 @@ Inkrementaci a dekrementaci lze aplikovat pouze na proměnné. Pokus použít ji
 
 Operátory `++` a `--` lze umístit před i za proměnnou.
 
-- Je-li operátor umístěn za proměnnou, nazývá se to „postfixová forma“: `čítač++`.
-- „Prefixová forma“ je umístění operátoru před proměnnou: `++čítač`.
+- Je-li operátor umístěn za proměnnou, nazývá se to „postfixová notace“: `čítač++`.
+- „Prefixová notace“ je umístění operátoru před proměnnou: `++čítač`.
 
 Oba tyto příkazy vykonají totéž: zvýší `čítač` o `1`.
 
 Je v nich tedy nějaký rozdíl? Ano, ale uvidíme ho jen tehdy, když použijeme hodnotu, kterou operátor `++/--` vrátí.
 
-Ujasněme si to. Jak víme, všechny operátory vracejí nějakou hodnotu. Inkrementace a dekrementace nejsou výjimkou. Prefixová forma vrací novou hodnotu, zatímco postfixová forma vrací starou hodnotu (tu před zvýšením nebo snížením).
+Ujasněme si to. Jak víme, všechny operátory vracejí nějakou hodnotu. Inkrementace a dekrementace nejsou výjimkou. Prefixová notace vrací novou hodnotu, zatímco postfixová notace vrací starou hodnotu (tu před zvýšením nebo snížením).
 
 Abychom viděli rozdíl, uvedeme příklad:
 
@@ -352,9 +356,9 @@ let a = ++čítač; // (*)
 alert(a); // *!*2*/!*
 ```
 
-Na řádku `(*)` *prefixová* forma `++čítač` zvýšila `čítač` a vrátila novou hodnotu, `2`. Proto `alert` zobrazila `2`.
+Na řádku `(*)` *prefixová* notace `++čítač` zvýšila `čítač` a vrátila novou hodnotu, `2`. Proto `alert` zobrazila `2`.
 
-Nyní použijeme postfixovou formu:
+Nyní použijeme postfixovou notaci:
 
 ```js run
 let čítač = 1;
@@ -363,11 +367,11 @@ let a = čítač++; // (*) změnili jsme ++čítač na čítač++
 alert(a); // *!*1*/!*
 ```
 
-Na řádku `(*)` *postfixová* forma `čítač++` rovněž zvýšila `čítač`, ale vrátila *starou* hodnotu (tu před zvýšením). Proto `alert` zobrazila `1`.
+Na řádku `(*)` *postfixová* notace `čítač++` rovněž zvýšila `čítač`, ale vrátila *starou* hodnotu (tu před zvýšením). Proto `alert` zobrazil `1`.
 
 Shrneme to:
 
-- Pokud výsledek zvýšení nebo snížení nepoužijeme, není rozdíl v tom, kterou formu použijeme:
+- Pokud výsledek zvýšení nebo snížení nepoužijeme, není rozdíl v tom, kterou notaci použijeme:
 
     ```js run
     let čítač = 0;
@@ -375,13 +379,13 @@ Shrneme to:
     ++čítač;
     alert( čítač ); // 2, oba výše uvedené řádky dělají totéž
     ```
-- Pokud chceme zvýšit hodnotu *a* výsledek operátoru ihned použít, potřebujeme prefixovou formu:
+- Pokud chceme zvýšit hodnotu *a* výsledek operátoru ihned použít, potřebujeme prefixovou notaci:
 
     ```js run
     let čítač = 0;
     alert( ++čítač ); // 1
     ```
-- Pokud chceme zvýšit hodnotu, ale použít předchozí hodnotu, potřebujeme postfixovou formu:
+- Pokud chceme zvýšit hodnotu, ale použít předchozí hodnotu, potřebujeme postfixovou notaci:
 
     ```js run
     let čítač = 0;

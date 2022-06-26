@@ -199,6 +199,7 @@ V neprohlížečových prostředích jako Node.js jsou jiné způsoby, jak vysto
 ## Shrnutí
 
 - `.catch` ošetřuje chyby všech druhů v příslibech: ať je to volání `reject()` nebo chyba vyvolaná v handleru.
-- Měli bychom `.catch` umisťovat přesně na místa, kde chceme ošetřovat chyby a víme, jak je ošetřit. Handler by měl analyzovat chyby (pomáhá mít vlastní chybové třídy) a opětovně vyvolat ty neznámé (možná jde o programátorské chyby).
+- `.then` také zachytává chyby stejným způsobem, je-li zadán druhý argument (kterým je chybový handler).
+- Měli bychom `.catch` umisťovat přesně na místa, kde chceme ošetřovat chyby a víme, jak je ošetřit. Handler by měl analyzovat chyby (v tom nám pomáhají vlastní chybové třídy) a opětovně vyvolat ty neznámé (možná jde o programátorské chyby).
 - Vůbec nepoužít `.catch` je v pořádku, jestliže neexistuje způsob, jak se z chyby zotavit.
-- V každém případě bychom měli mít handler události `unhandledrejection` (pro prohlížeče, v jiných prostředích bývá analogický), abychom vystopovali neošetřené chyby a informovali o nich uživatele (a pravděpodobně náš server), aby naše aplikace nikdy „jen tak nespadla“.
+- V každém případě bychom měli mít handler události `unhandledrejection` (pro prohlížeče, v jiných prostředích bývá analogický handler), abychom vystopovali neošetřené chyby a informovali o nich uživatele (a pravděpodobně náš server), aby naše aplikace nikdy „jen tak nespadla“.

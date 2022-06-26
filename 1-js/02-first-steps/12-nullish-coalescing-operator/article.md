@@ -10,7 +10,7 @@ Výsledkem `a ?? b` je:
 - pokud `a` je definovaný, pak `a`;
 - pokud `a` není definovaný, pak `b`.
 
-Jinými slovy, `??` vrátí první argument, jestliže ten nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
+Jinými slovy, `??` vrátí první argument, jestliže nemá hodnotu `null/undefined`. Jinak vrátí druhý argument.
 
 Operátor koalescence není zcela nová věc. Je to jen pěkná syntaxe, jak vrátit první „definovanou“ hodnotu ze dvou.
 
@@ -22,7 +22,7 @@ result = (a !== null && a !== undefined) ? a : b;
 
 Nyní by mělo být naprosto zřejmé, co `??` umí. Podíváme se, kde nám pomůže.
 
-Operátor `??` se běžně používá k poskytnutí defaultní hodnoty proměnné, která může být nedefinovaná.
+Operátor `??` se běžně používá k udání výchozí hodnoty.
 
 Například zde zobrazíme `anonym`, jestliže proměnná `uživatel` není definována:
 
@@ -32,7 +32,7 @@ let uživatel;
 alert(uživatel ?? "anonym"); // anonym (uživatel není definován)
 ```
 
-Zde je příklad pro případ, že je proměnné `uživatel` přiřazena hodnota:
+Zde je příklad, kde má proměnná `uživatel` přiřazenou hodnotu:
 
 ```js run
 let uživatel = "Jan";
@@ -42,9 +42,9 @@ alert(uživatel ?? "anonym"); // Jan (uživatel je definován)
 
 Můžeme také použít sekvenci `??` k výběru první hodnoty ze seznamu, která není `null/undefined`.
 
-Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`, které obsahují jeho křestní jméno, příjmení a přezdívku. Všechny mohou být nedefinované, jestliže se uživatel rozhodl nezadat žádnou hodnotu.
+Představme si, že máme data o uživateli v proměnných `jméno`, `příjmení` a `přezdívka`. Všechny mohou být nedefinované, jestliže se uživatel rozhodl tyto informace nevyplnit.
 
-Rádi bychom zobrazili uživatelovo jméno: jednu z těchto tří proměnných, nebo „Anonym“, pokud žádná z nich není definována.
+Rádi bychom zobrazili uživatelské jméno: jednu z těchto tří proměnných, nebo „anonym“, pokud žádná z nich není definována.
 
 Použijeme k tomu operátor `??`:
 
@@ -55,7 +55,7 @@ let přezdívka = "Supercoder";
 
 // zobrazíme první definovanou hodnotu:
 *!*
-alert(jméno ?? příjmení ?? přezdívka ?? "Anonym"); // Supercoder
+alert(jméno ?? příjmení ?? přezdívka ?? "anonym"); // Supercoder
 */!*
 ```
 
@@ -72,7 +72,7 @@ let přezdívka = "Supercoder";
 
 // zobrazí první pravdivou hodnotu:
 *!*
-alert(jméno || příjmení || přezdívka || "Anonym"); // Supercoder
+alert(jméno || příjmení || přezdívka || "anonym"); // Supercoder
 */!*
 ```
 
@@ -88,8 +88,7 @@ Jinými slovy, `||` nerozlišuje mezi `false`, `0`, prázdným řetězcem `""` a
 
 V praxi však můžeme chtít použít defaultní hodnotu jen tehdy, je-li proměnná `null/undefined`, tedy když hodnota je opravdu neznámá nebo není nastavena.
 
-Například uvažujme tento kód:
-
+Jako příklad poslouží tento kód:
 ```js run
 let výška = 0;
 
@@ -122,13 +121,13 @@ let plocha = (výška ?? 100) * (šířka ?? 50);
 alert(plocha); // 5000
 ```
 
-Kdybychom závorky nepoužili, `*` by se spustilo jako první, neboť má vyšší prioritu než `??`. To by vedlo k nesprávným výsledkům.
+Kdybychom závorky nepoužili, `*` by se vykonalo dřív, neboť má vyšší prioritu než `??`. To by vedlo k nesprávným výsledkům.
 
 ```js
 // bez závorek
 let plocha = výška ?? 100 * šířka ?? 50;
 
-// ...funguje stejně jako toto (což jsme pravděpodobně nechtěli):
+// ...funguje stejně jako toto (což jsme nechtěli):
 let plocha = výška ?? (100 * šířka) ?? 50;
 ```
 
@@ -142,9 +141,9 @@ Následující kód vydá syntaktickou chybu:
 let x = 1 && 2 ?? 3; // Syntaktická chyba
 ```
 
-Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, až lidé začnou z `||` přecházet na `??`.
+Toto omezení je bezpochyby diskutabilní. Do specifikace jazyka bylo přidáno za účelem zabránit programátorským chybám, kdy lidé začnou z `||` přecházet na `??`.
 
-Dá se obejít pomocí závorek:
+Omezení se dá se obejít pomocí závorek:
 
 ```js run
 *!*
@@ -158,10 +157,10 @@ alert(x); // 2
 
 - Operátor koalescence `??` poskytuje zkratku, jak vybrat první „definovanou“ hodnotu ze seznamu.
 
-    Používá se k přiřazení defaultních hodnot do proměnných:
+    Používá se k přiřazení výchozích hodnot do proměnných:
 
     ```js
-    // nastavíme výška=100, je-li výška null nebo undefined
+    // nastavíme proměnnou výška=100, je-li proměnná výška null nebo undefined
     výška = výška ?? 100;
     ```
 

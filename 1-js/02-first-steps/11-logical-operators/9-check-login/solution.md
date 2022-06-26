@@ -5,11 +5,11 @@ let uživatelskéJméno = prompt("Kdo je tam?", '');
 
 if (uživatelskéJméno === 'Správce') {
 
-  let pass = prompt('Heslo?', '');
+  let heslo = prompt('Heslo?', '');
 
-  if (pass === 'Mistr') {
+  if (heslo === 'Vládce') {
     alert( 'Vítáme vás!' );
-  } else if (pass === '' || pass === null) {
+  } else if (heslo === '' || heslo === null) {
     alert( 'Zrušeno' );
   } else {
     alert( 'Špatné heslo' );

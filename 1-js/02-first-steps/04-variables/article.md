@@ -64,6 +64,7 @@ let zpráva = 'Ahoj';
 ```
 
 Někteří lidé definují více proměnných i tímto víceřádkovým stylem:
+
 ```js no-beautify
 let uživatel = 'Jan',
   věk = 25,
@@ -103,6 +104,7 @@ Například proměnnou `zpráva` si můžeme představit jako krabičku se ští
 Do krabičky můžeme uložit libovolnou hodnotu.
 
 Můžeme ji také změnit tolikrát, kolikrát chceme:
+
 ```js run
 let zpráva;
 
@@ -260,7 +262,6 @@ mojeDatumNarození = '01.01.2001'; // chyba, nelze změnit konstantu!
 
 Když má programátor jistotu, že hodnota proměnné se nikdy nezmění, může ji deklarovat pomocí `const`, aby tuto skutečnost pojistil a všem jasně sdělil.
 
-
 ### Konstanty velkými písmeny
 
 Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu.
@@ -291,6 +292,7 @@ Kdy bychom měli používat pro konstantu velká písmena a kdy bychom ji měli 
 Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Existují však konstanty, které jsou známy již před spuštěním programu (například hexadecimální hodnota červené barvy), a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
 
 Příklad:
+
 ```js
 const dobaNačítáníStránky = /* doba, kterou trvá načíst webovou stránku */;
 ```

@@ -5,7 +5,7 @@ Jazyk JavaScript se neustále vyvíjí. Pravidelně se pro tento jazyk objevují
 
 Týmy vyvíjející JavaScriptové enginy mají své vlastní mínění o tom, co implementovat jako první. Mohou se rozhodnout implementovat návrhy, které jsou teprve načrtnuty, a odložit věci, které jsou už ve specifikaci, protože jsou méně zajímavé nebo je jen těžší je implementovat.
 
-Je tedy poměrně běžné, že engine implementuje jen část standardu.
+Je tedy poměrně běžné, že engine implementuje pouze část standardu.
 
 Dobrá stránka, na které uvidíte aktuální stav podpory vlastností jazyka, je <https://kangax.github.io/compat-table/es6/> (je to velká tabulka, máme ještě hodně co studovat).
 
@@ -42,7 +42,7 @@ Vývojář si obvykle spustí transpiler na svém vlastním počítači a pak um
 
 Když hovoříme o názvech, jedním z nejvýznamnějších transpilerů je [Babel](https://babeljs.io).
 
-Moderní systémy pro vytváření projektů, například [webpack](http://webpack.js.org/), poskytují způsoby, jak spouštět transpiler automaticky při každé změně kódu, takže je velmi jednoduché jej integrovat do procesu vývoje.
+Moderní systémy pro vytváření projektů, například [webpack](https://webpack.js.org/), poskytují způsoby, jak spouštět transpiler automaticky při každé změně kódu, takže je velmi jednoduché jej integrovat do procesu vývoje.
 
 ## Polyfilly
 
@@ -69,12 +69,11 @@ if (!Math.trunc) { // není-li taková funkce
 }
 ```
 
-JavaScript je vysoce dynamický jazyk a skripty mohou přidávat nebo modifikovat libovolné funkce, dokonce i vestavěné.
+JavaScript je vysoce dynamický jazyk. Skripty mohou přidávat nebo modifikovat libovolné funkce, dokonce i vestavěné.
 
 Dvě zajímavé knihovny polyfillů jsou:
 - [core js](https://github.com/zloirock/core-js), která toho podporuje mnoho a umožňuje přidávat jen potřebné vlastnosti.
 - [polyfill.io](http://polyfill.io) je služba, která poskytuje skript s polyfilly podle vlastností a uživatelova prohlížeče.
-
 
 ## Shrnutí
 
@@ -82,7 +81,7 @@ V této kapitole jsme vás chtěli motivovat k prostudování moderních vlastno
 
 Jen nezapomínejte používat transpiler (používáte-li moderní syntaxi nebo operátory) a polyfilly (abyste přidali funkce, které mohou chybět). Ty zajistí, že váš kód bude fungovat.
 
-Například později, až budete JavaScript dobře znát, si můžete nastavit systém pro vytváření kódu založený na [webpacku](http://webpack.js.org/) s pluginem [babel-loader](https://github.com/babel/babel-loader).
+Například později, až budete JavaScript dobře znát, si můžete nastavit systém pro vytváření kódu založený na [webpacku](https://webpack.js.org/) s pluginem [babel-loader](https://github.com/babel/babel-loader).
 
 Dobré zdroje, které ukazují aktuální stav podpory různých vlastností:
 - <https://kangax.github.io/compat-table/es6/> - pro čistý JavaScript.

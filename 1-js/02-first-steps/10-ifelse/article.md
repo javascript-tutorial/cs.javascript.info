@@ -1,6 +1,8 @@
 # Podmíněné větvení: if, „?“
 
-Někdy potřebujeme provést různé akce v závislosti na platnosti různých podmínek. K tomu můžeme použít příkaz `if` a podmíněný operátor `?`, který se také nazývá operátor „otazníku“.
+Někdy potřebujeme provést různé akce v závislosti na platnosti různých podmínek. 
+
+K tomu můžeme použít příkaz `if` a podmíněný operátor `?`, který se také nazývá operátor „otazníku“.
 
 ## Příkaz „if“
 
@@ -73,7 +75,7 @@ Příklad:
 let rok = prompt('Ve kterém roce byla publikována specifikace ECMAScript-2015?', '');
 
 if (rok == 2015) {
-  alert( 'Uhádl jste!' );
+  alert( 'Uhádli jste!' );
 } else {
   alert( 'Jak se můžete takhle zmýlit?' ); // jakákoli jiná hodnota než 2015
 }
@@ -93,17 +95,17 @@ if (rok < 2015) {
 } else if (rok > 2015) {
   alert( 'Příliš pozdě...' );
 } else {
-  alert( 'Přesně!' );
+  alert( 'Správně!' );
 }
 ```
 
-Ve výše uvedeném kódu JavaScript napřed ověří podmínku `rok < 2015`. Není-li splněna, pokračuje k další podmínce `rok > 2015`. Není-li splněna ani ta, zobrazí poslední `alert`.
+Ve výše uvedeném kódu JavaScript napřed ověří podmínku `rok < 2015`. Není-li splněna, pokračuje k další podmínce `rok > 2015`. Není-li splněna ani ta, zobrazí se poslední `alert`.
 
 Bloků `else if` může být více. Závěrečné `else` není povinné.
 
 ## Podmíněný operátor „?“
 
-Někdy potřebujeme přiřadit do proměnné různou hodnotu v závislosti na splnění určité podmínky.
+Někdy potřebujeme přiřadit do proměnné hodnotu v závislosti na výsledku podmínky.
 
 Příklad:
 

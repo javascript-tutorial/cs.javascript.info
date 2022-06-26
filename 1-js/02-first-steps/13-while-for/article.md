@@ -1,8 +1,23 @@
 # Cykly: while a for
 
-Často potřebujeme opakovat některé akce. Například vypsat ze seznamu jedno zboží po druhém nebo jen vykonat stejný kód pro každé z čísel od 1 do 10.
+Často potřebujeme opakovat některé akce. 
+
+Například vypsat ze seznamu jedno zboží po druhém nebo jen vykonat stejný kód pro každé z čísel od 1 do 10.
 
 Způsob, jak opakovat stejný kód několikrát, poskytují *cykly* neboli *smyčky*.
+
+```smart header="Cykly for..of a for..in"
+Malé oznámení pro pokročilé čtenáře.
+
+Tento článek probírá jen základní cykly: `while`, `do..while` a `for(..;..;..)`.
+
+Jestli jste sem přišli hledat informace o jiných cyklech, najdete je zde:
+
+- [for..in](info:object#forin) pro procházení vlastností objektu.
+- [for..of](info:array#loops) and [iterables](info:iterable) pro procházení polí a iterovatelných objektů.
+
+Jinak čtěte dále.
+```
 
 ## Cyklus „while“
 
@@ -27,7 +42,7 @@ while (i < 3) { // zobrazí 0, pak 1, pak 2
 }
 ```
 
-Jedno vykonání těla cyklu se nazývá *iterace*. Cyklus v uvedeném příkladu vykoná tři iterace.
+Jedno vykonání těla cyklu se nazývá *iterace*. Cyklus ve výše uvedeném příkladu vykoná tři iterace.
 
 Kdyby v tomto příkladu chyběl příkaz `i++`, cyklus by se vykonával (teoreticky) donekonečna. V praxi prohlížeče poskytují způsoby, jak takový cyklus zastavit, a v JavaScriptu na serverové straně můžeme proces zastavit („shodit“) sami.
 
@@ -104,7 +119,7 @@ Prozkoumáme příkaz `for` po částech:
 
 | část  |          |                                                                            |
 |-------|----------|----------------------------------------------------------------------------|
-| začátek | `i = 0`    | Vykoná se jednou po vstupu do cyklu.                                      |
+| začátek | `let i = 0`    | Vykoná se jednou po vstupu do cyklu.                                      |
 | podmínka | `i < 3`| Kontroluje se před každou iterací cyklu. Je-li nepravdivá, cyklus skončí.              |
 | tělo | `alert(i)`| Vykonává se stále znovu, dokud je podmínka pravdivá.                         |
 | krok | `i++`      | Vykoná se po těle cyklu při každé iteraci. |
@@ -119,7 +134,7 @@ Vykonej začátek
 → ...
 ```
 
-To znamená, že `začátek` se vykoná jednou a pak se iteruje: po každém testu `podmínky` se vykonají `tělo` a `krok`.
+To znamená, že `začátek` se vykoná jednou a pak se iteruje: po každém testu `podmínky` se vykoná `tělo` a `krok`.
 
 Jestliže s cykly teprve začínáte, pomůže vám vrátit se k příkladu a na papíře si krok po kroku projít, jak se vykoná.
 
@@ -160,9 +175,7 @@ for (i = 0; i < 3; i++) { // použijeme existující proměnnou
 
 alert(i); // 3, je viditelná, protože byla deklarována mimo cyklus
 ```
-
 ````
-
 
 ### Vynechávání částí
 
@@ -190,7 +203,7 @@ for (; i < 3;) {
 }
 ```
 
-Pak bude cyklus identický jako `while (i < 3)`.
+Pak bude cyklus stejný jako `while (i < 3)`.
 
 Ve skutečnosti můžeme vynechat všechno a vytvořit tím nekonečnou smyčku:
 
@@ -211,20 +224,20 @@ Kdykoli si však můžeme ukončení vynutit použitím speciální direktivy `b
 Například níže uvedený cyklus se uživatele ptá na sérii čísel, a když uživatel žádné číslo nezadá, cyklus skončí:
 
 ```js run
-let sum = 0;
+let součet = 0;
 
 while (true) {
 
-  let value = +prompt("Zadejte číslo", '');
+  let hodnota = +prompt("Zadejte číslo", '');
 
 *!*
-  if (!value) break; // (*)
+  if (!hodnota) break; // (*)
 */!*
 
-  sum += value;
+  součet += hodnota;
 
 }
-alert( 'Součet: ' + sum );
+alert( 'Součet: ' + součet );
 ```
 
 Direktiva `break` na řádku `(*)` se aktivuje, jestliže uživatel zadá prázdný řádek nebo zruší vstup. Okamžitě ukončí cyklus a předá řízení na první řádek za cyklem, konkrétně `alert`.
@@ -266,13 +279,13 @@ for (let i = 0; i < 10; i++) {
 
 Z technického pohledu je to stejné jako výše uvedený příklad. Bezpochyby můžeme namísto použití `continue` vnořit kód do bloku `if`.
 
-Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (volání `alert` uvnitř složených závorek). Je-li kód uvnitř `if` delší než několik řádků, může to snížit jeho celkovou čitelnost.
+Jako vedlejší efekt jsme však vytvořili jednu další úroveň vnoření (volání `alert` uvnitř složených závorek). Je-li kód uvnitř `if` delší než pár řádků, může to snížit jeho celkovou čitelnost.
 ````
 
 ````warn header="`break/continue` nesmějí být na pravé straně „?“"
 Všimněte si, že syntaktické konstrukce, které nejsou výrazy, nelze použít s ternárním operátorem „?“. Konkrétně tam nejsou povoleny direktivy jako `break/continue`.
 
-Například vezměme si tento kód:
+Vezměme si například tento kód:
 
 ```js
 if (i > 5) {
@@ -283,7 +296,6 @@ if (i > 5) {
 ```
 
 ...a přepišme jej pomocí otazníku:
-
 
 ```js no-beautify
 (i > 5) ? alert(i) : *!*continue*/!*; // continue tady nesmí být
@@ -316,16 +328,17 @@ alert('Hotovo!');
 
 Potřebujeme způsob, jak tento proces zastavit, jestliže uživatel zruší vstup.
 
-Pouhé `break` po `vstup` by ukončilo jen vnitřní cyklus. To nám však nestačí. Návěští, pojďte nám na pomoc!
+Pouhé `break` po `vstup` by ukončilo jen vnitřní cyklus. To nám však nestačí. V takovém případě použijeme návěští.
 
 *Návěští* je identifikátor s dvojtečkou před cyklem:
+
 ```js
 názevNávěští: for (...) {
   ...
 }
 ```
 
-Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí až z návěští:
+Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí z uvedeného návěští:
 
 ```js run no-beautify
 *!*vnější:*/!* for (let i = 0; i < 3; i++) {
@@ -340,6 +353,7 @@ Příkaz `break <názevNávěští>` v níže uvedeném cyklu vyskočí až z n�
     // provedeme něco s hodnotou...
   }
 }
+
 alert('Hotovo!');
 ```
 
@@ -354,23 +368,25 @@ vnější:
 for (let i = 0; i < 3; i++) { ... }
 ```
 
-Návěští můžeme použít i v direktivě `continue`. V takovém případě výkon kódu přeskočí k další iteraci cyklu s uvedeným návěštím.
+Návěští můžeme použít i v direktivě `continue`. V takovém případě se zbytek kódu přeskočí a další iterace bude v cyklu s uvedeným návěštím.
 
 ````warn header="Návěští nám neumožňují „skákat“ kamkoli!"
 Návěští nám neumožňují skákat na libovolné místo v kódu.
 
 Například nejde udělat toto:
+
 ```js
 break návěští; // skok na návěští níže (nebude fungovat)
 
 návěští: for (...)
 ```
 
-Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být jakýkoli kódový blok s návěštím, např.:
+Direktiva `break` musí být uvnitř kódového bloku. Technicky to může být jakýkoli blok kódu s návěštím, např.:
+
 ```js
 návěští: {
   // ...
-  break návěští; // funguje to
+  break návěští; // toto funguje
   // ...
 }
 ```

@@ -8,7 +8,7 @@ Jaký bude výsledek těchto výrazů?
 
 ```js no-beautify
 5 > 4
-"jablko" > "rajské jablko"
+"ananas" > "jablko"
 "2" > "12"
 undefined == null
 undefined === null

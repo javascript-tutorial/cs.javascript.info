@@ -127,9 +127,9 @@ To je pěkné. Hned máme příslib splněný.
 Vlastnosti `state` a `result` objektu Promise jsou interní. Nemůžeme k nim přistupovat přímo. Můžeme k tomu použít metody `.then`/`.catch`/`.finally`, které jsou popsány níže.
 ```
 
-## Konzumenti: then, catch, finally
+## Konzumenti: then, catch
 
-Objekt Promise slouží jako spojení mezi exekutorem („produkující kód“ nebo „zpěvák“) a konzumujícími funkcemi („fanoušci“), které obdrží výsledek nebo chybu. Konzumující funkce můžeme registrovat (zapsat) použitím metod `.then`, `.catch` a `.finally`.
+Objekt Promise slouží jako spojení mezi exekutorem („produkující kód“ nebo „zpěvák“) a konzumujícími funkcemi („fanoušci“), které obdrží výsledek nebo chybu. Konzumující funkce mohou být registrovány (zapsány) použitím metod `.then` a `.catch`.
 
 ### then
 
@@ -212,58 +212,82 @@ příslib.catch(alert); // zobrazí „Error: Ouha!“ za 1 sekundu
 
 Volání `.catch(f)` je zcela analogické `.then(null, f)`, je to jen zkratka.
 
-### finally
+## Úklid: finally
 
 Stejně jako existuje klauzule `finally` v běžném bloku `try {...} catch {...}`, existuje i `finally` v příslibech.
 
 Volání `.finally(f)` se podobá `.then(f, f)` v tom smyslu, že `f` se spustí vždy, když se příslib usadí: ať už je splněn nebo zamítnut.
 
-`finally` je vhodný handler pro provádění úklidu, např. zastavení našich indikátorů nahrávání, protože již nejsou zapotřebí, ať bude výsledek jakýkoli.
+Myšlenkou `finally` je nastavit handler pro provádění úklidu/finalizace po dokončení předchozí operace.
 
-Například:
+Například zastavení indikátorů nahrávání, uzavření již nepotřebných připojení a podobně.
+
+Uvažujte o něm jako o uklízeči po večírku. Ať se večírek povedl nebo ne, ať na něm byl jakýkoli počet přátel, pokaždé po něm musíme (nebo bychom aspoň měli) uklidit.
+
+Kód může vypadat třeba následovně:
 
 ```js
 new Promise((resolve, reject) => {
-  /* udělá něco, co trvá nějaký čas, a pak volá resolve/reject */
+  /* udělá něco, co trvá nějaký čas, a pak volá resolve nebo možná reject */
 })
 *!*
   // spustí se vždy, když se příslib usadí, nezáleží na tom, zda úspěšně nebo ne
   .finally(() => zastav indikátor nahrávání)
-  // indikátor nahrávání se tedy vždy zastaví dříve, než zpracujeme výsledek nebo chybu
+  // indikátor nahrávání se tedy vždy zastaví dříve, než budeme pokračovat
 */!*
   .then(výsledek => zobraz výsledek, chyba => zobraz chybu)
 ```
 
-Při tom všem však `finally(f)` není přesně totéž jako `then(f, f)`. Je mezi nimi několik drobných rozdílů:
+Všimněte si však, že `finally(f)` není přesně totéž jako `then(f, f)`.
+
+Je mezi nimi několik důležitých rozdílů:
 
 1. Handler `finally` nemá žádné argumenty. Ve `finally` nevíme, zda byl příslib úspěšný nebo ne. To je v pořádku, jelikož naším úkolem obvykle bývá provést „obecné“ finalizační procedury.
-2. Handler `finally` předává výsledky a chyby dalšímu handleru.
+    
+    Prosíme podívejte se na výše uvedený příklad: jak vidíte, handler `finally` nemá žádné argumenty a výsledek příslibu je zpracován v dalším handleru.
+2. Handler `finally` „předává“ výsledek nebo chybu dalšímu vhodnému handleru.
 
     Například zde je výsledek předán skrz `finally` do `then`:
     ```js run
     new Promise((resolve, reject) => {
-      setTimeout(() => resolve("výsledek"), 2000)
+      setTimeout(() => resolve("hodnota"), 2000)
     })
-      .finally(() => alert("Příslib připraven"))
-      .then(výsledek => alert(výsledek)); // <-- .then zpracuje výsledek
+      .finally(() => alert("Příslib připraven")) // spustí se jako první
+      .then(výsledek => alert(výsledek)); // <-- .then zobrazí "hodnota"
     ```
+    
+    Jak vidíte, `hodnota` vrácená prvním příslibem se předá skrz `finally` do dalšího `then`.
+    
+    To je velmi užitečné, protože `finally` není určeno k tomu, aby zpracovalo výsledek příslibu. Jak bylo řečeno, jeho účelem je provést obecný úklid, nezávisle na tom, jaký byl výstup.
 
-    A zde je v příslibu chyba, která se předá skrz `finally` do `catch`:
+    A zde je v příslibu chyba, abychom viděli, jak se předá skrz `finally` do `catch`:
 
     ```js run
     new Promise((resolve, reject) => {
       throw new Error("chyba");
     })
-      .finally(() => alert("Příslib připraven"))
-      .catch(chyba => alert(chyba));  // <-- .catch zpracuje chybový objekt
+      .finally(() => alert("Příslib připraven")) // spustí se jako první
+      .catch(chyba => alert(chyba));  // <-- .catch zobrazí chybu
     ```
+    
+3. Handler `finally` by také neměl nic vracet. Pokud tak učiní, vrácená hodnota se tiše ignoruje.
+    
+    Jedinou výjimkou z tohoto pravidla je situace, kdy handler `finally` vygeneruje chybu. Pak se tato chyba předá do dalšího handleru místo předchozího výstupu.
+    
+Shrňme to:
 
-To se velmi hodí, protože `finally` není určeno k tomu, aby zpracovalo výsledek příslibu. Předá ho tedy dál.
+- Handler `finally` neobdrží výstup předchozího handleru (nemá žádné argumenty). Výstup se místo toho předá dál následujícímu vhodnému handleru.
+- Pokud handler `finally` vrátí nějakou hodnotu, je ignorována.
+- Když `finally` vygeneruje chybu, běh pokračuje do nejbližšího chybového handleru.
 
-O zřetězení příslibů a předávání výsledků mezi jednotlivými handlery si povíme více v následující kapitole.
+Tyto vlastnosti jsou užitečné a zajistí, že vše bude fungovat správně, pokud použijeme `finally` tak, jak bylo zamýšleno: pro obecné úklidové procedury.
 
 ````smart header="Můžeme připojit handlery k již usazeným příslibům"
-Pokud příslib čeká na vyřízení, handlery `.then/catch/finally` na něj počkají. Jinak, pokud se příslib již usadil, jednoduše se spustí:
+Pokud příslib čeká na vyřízení, handlery `.then/catch/finally` počkají na jeho výstup.
+
+Někdy se může stát, že ve chvíli, kdy k příslibu přidáme handler, příslib je již usazen.
+
+V takovém případě se tyto handlery prostě okamžitě spustí:
 
 ```js run
 // příslib bude splněn ihned po vytvoření
@@ -277,11 +301,11 @@ Všimněte si, že to činí přísliby silnějšími než „podpisový seznam�
 Přísliby jsou flexibilnější. Můžeme přidávat handlery kdykoli: pokud je výsledek už hotov, handler se jednoduše spustí.
 ````
 
-Dále uvidíme praktičtější příklady, jak nám přísliby mohou pomoci psát asynchronní kód.
-
 ## Příklad: načtiSkript [#loadscript]
 
-Mějme funkci `načtiSkript` pro načtení skriptu z předchozí kapitoly.
+Dále uvidíme praktičtější příklady, jak nám přísliby mohou pomoci psát asynchronní kód.
+
+Uvažujme funkci `načtiSkript` pro načtení skriptu z předchozí kapitoly.
 
 Zde je varianta založená na callbacku, jen pro připomenutí:
 

@@ -12,6 +12,6 @@ let výsledek;
 if (a + b < 4) {
   výsledek = 'Málo';
 } else {
-  výsledek = 'Hodně';
+  výsledek = 'Moc';
 }
 ```

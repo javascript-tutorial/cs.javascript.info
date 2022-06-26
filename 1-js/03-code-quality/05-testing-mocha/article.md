@@ -51,7 +51,7 @@ describe("mocnina", function() {
 Specifikace má tři hlavní stavební bloky, které vidíte výše:
 
 `describe("název", function() { ... })`
-: Jakou funkcionalitu popisujeme. V našem případě popisujeme funkci `mocnina`. Používá se k seskupení „pracovníků“ -- bloků `it`.
+: Jakou funkcionalitu popisujeme? V našem případě popisujeme funkci `mocnina`. Používá se k seskupení „pracovníků“ -- bloků `it`.
 
 `it("popis případu použití", function() { ... })`
 : V titulku `it` popíšeme *lidsky čitelným způsobem* konkrétní případ použití. Druhým argumentem je funkce, která jej otestuje.

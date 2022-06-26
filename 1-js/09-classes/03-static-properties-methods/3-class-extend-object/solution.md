@@ -28,7 +28,7 @@ Jak víme, syntaxe „extends“ nastavuje dva prototypy:
 1. Mezi `„prototype“` konstruktorů (pro metody).
 2. Mezi samotnými konstruktory (pro statické metody).
 
-V našem případě to pro `class Králík extends Object` znamená:
+V případě `class Králík extends Object` to znamená:
 
 ```js run
 class Králík extends Object {}
