@@ -90,7 +90,6 @@ let funkce = řekniAhoj;
 
 Všechno bude fungovat stejně.
 
-
 ````smart header="Proč je na konci středník?"
 Možná se divíte, proč funkční výraz obsahuje na konci středník `;`, ale deklarace funkce ne:
 
@@ -150,11 +149,9 @@ V praxi jsou takové funkce poměrně užitečné. Hlavním rozdílem mezi `zept
 
 **Argumenty `zobrazOK` a `zobrazStorno` funkce `zeptejSe` se nazývají *callbackové funkce* nebo jednoduše *callbacky*.**
 
-*(Pozn. překladatele: V češtině pro callback žádný ustálený výraz není, většinou se nepřekládá, někdy se používá „zpětné volání“.)*
-
 Myšlenkou je, že předáme funkci a očekáváme, že bude „zpětně volána“ (call = volání, back = zpět) později, až to bude nutné. V našem případě `zobrazOK` se stala callbackem pro odpověď „ano“ a `zobrazStorno` pro odpověď „ne“.
 
-Pomocí funkčních výrazů můžeme stejnou funkci napsat mnohem stručněji:
+Pomocí funkčních výrazů můžeme napsat ekvivalentní, ale kratší funkci:
 
 ```js run no-beautify
 function zeptejSe(otázka, ano, ne) {
@@ -190,7 +187,7 @@ Zformulujme nyní základní rozdíly mezi deklaracemi funkcí a funkčními vý
 
 První rozdíl je syntaxe: jak je rozlišovat v kódu.
 
-- *Deklarace funkce:* funkce deklarovaná samostatným příkazem v hlavním kódu.
+- *Deklarace funkce:* funkce deklarovaná samostatným příkazem v hlavním toku kódu:
 
     ```js
     // deklarace funkce
@@ -198,7 +195,7 @@ První rozdíl je syntaxe: jak je rozlišovat v kódu.
       return a + b;
     }
     ```
-- *Funkční výraz:* funkce vytvořená uprostřed výrazu nebo uvnitř jiné syntaktické konstrukce. Zde je funkce vytvořena na pravé straně „operátoru přiřazení“ `=`:
+- *Funkční výraz:* funkce vytvořená uprostřed výrazu nebo uvnitř jiného syntaktického konstruktu. Zde je funkce vytvořena na pravé straně „operátoru přiřazení“ `=`:
 
     ```js
     // funkční výraz
@@ -306,7 +303,7 @@ if (věk < 18) {
 } else {
 
   function uvítání() {    
-    alert("Dobrý den!");
+    alert("Zdravíme vás!");
   }
 }
 
