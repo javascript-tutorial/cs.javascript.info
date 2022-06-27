@@ -263,27 +263,16 @@ Někteří lidé dávají přednost `typeof(x)`, ačkoli syntaxe `typeof x` je m
 
 V JavaScriptu existuje osm základních datových typů.
 
-<<<<<<< HEAD
-- `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
-- `bigint` pro celá čísla libovolné délky.
-- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje datový typ pro znak.
-- `boolean` pro `true`/`false`.
-- `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
-- `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.
-- `object` pro složitější datové struktury.
-- `symbol` pro unikátní identifikátory.
-=======
-- Seven primitive data types:
-    - `number` for numbers of any kind: integer or floating-point, integers are limited by <code>±(2<sup>53</sup>-1)</code>.
-    - `bigint` for integer numbers of arbitrary length.
-    - `string` for strings. A string may have zero or more characters, there's no separate single-character type.
-    - `boolean` for `true`/`false`.
-    - `null` for unknown values -- a standalone type that has a single value `null`.
-    - `undefined` for unassigned values -- a standalone type that has a single value `undefined`.
-    - `symbol` for unique identifiers.
-- And one non-primitive data type:
-    - `object` for more complex data structures.
->>>>>>> 30a5d5e2a7c3504c9afd5028f83f4a696e60aede
+- Sedm primitivních datových typů:
+    - `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
+    - `bigint` pro celá čísla libovolné délky.
+    - `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje datový typ pro znak.
+    - `boolean` pro `true`/`false`.
+    - `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
+    - `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.
+    - `symbol` pro unikátní identifikátory.
+- A jeden neprimitivní datový typ:
+    - `object` pro složitější datové struktury.
 
 Operátor `typeof` nám umožní zjistit, jaký typ byl uložen do proměnné.
 
