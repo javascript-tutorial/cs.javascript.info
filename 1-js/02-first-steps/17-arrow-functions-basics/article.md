@@ -65,7 +65,7 @@ let věk = prompt("Kolik je vám let?", 18);
 
 let uvítání = (věk < 18) ?
   () => alert('Ahoj!') :
-  () => alert("Dobrý den!");
+  () => alert("Zdravíme vás!");
 
 uvítání();
 ```
