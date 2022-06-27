@@ -674,7 +674,7 @@ Proto `typeof` nedokáže rozlišit planý objekt od pole:
 
 ```js run
 alert(typeof {}); // object
-alert(typeof []); // totéž
+alert(typeof []); // object (totéž)
 ```
 
 ...Pole se však používají natolik často, že pro ně existuje speciální metoda: [Array.isArray(hodnota)](mdn:js/Array/isArray). Vrátí `true`, jestliže `hodnota` je pole, a `false` jinak.
@@ -765,7 +765,7 @@ Přehled metod polí:
   - `reduce/reduceRight(funkce, počátečníHodnota)` -- vypočítá z pole jedinou hodnotu tak, že volá `funkce` pro každý prvek a předává mezivýsledek mezi voláními.
 
 - Ostatní:
-  - `Array.isArray(pole)` ověří, zda `pole` je pole.
+  - `Array.isArray(hodnota)` ověří, zda `hodnota` je pole. Pokud ano, vrátí `true`, jinak vrátí `false`.
 
 Prosíme všimněte si, že metody `sort`, `reverse` a `splice` modifikují samotné pole.
 

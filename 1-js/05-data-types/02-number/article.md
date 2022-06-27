@@ -403,7 +403,7 @@ Několik příkladů:
     ```
 
 `Math.max(a, b, c...)` a `Math.min(a, b, c...)`
-: Vrátí největší/nejmenší z libovolného počtu argumentů.
+: Vrátí největší a nejmenší z libovolného počtu argumentů.
 
     ```js run
     alert( Math.max(3, 5, -10, 0, 1) ); // 5
