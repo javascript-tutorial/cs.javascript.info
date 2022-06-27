@@ -263,14 +263,16 @@ Někteří lidé dávají přednost `typeof(x)`, ačkoli syntaxe `typeof x` je m
 
 V JavaScriptu existuje osm základních datových typů.
 
-- `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
-- `bigint` pro celá čísla libovolné délky.
-- `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje datový typ pro znak.
-- `boolean` pro `true`/`false`.
-- `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
-- `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.
-- `object` pro složitější datové struktury.
-- `symbol` pro unikátní identifikátory.
+- Sedm primitivních datových typů:
+    - `number` pro čísla libovolného druhu: celá čísla nebo čísla s plovoucí řádovou čárkou. Celá čísla jsou omezena hodnotou <code>±(2<sup>53</sup>-1)</code>.
+    - `bigint` pro celá čísla libovolné délky.
+    - `string` pro řetězce. Řetězec může mít nula nebo více znaků. Neexistuje datový typ pro znak.
+    - `boolean` pro `true`/`false`.
+    - `null` pro neznámé hodnoty -- samostatný typ, který má jedinou hodnotu `null`.
+    - `undefined` pro nepřiřazené hodnoty -- samostatný typ, který má jedinou hodnotu `undefined`.
+    - `symbol` pro unikátní identifikátory.
+- A jeden neprimitivní datový typ:
+    - `object` pro složitější datové struktury.
 
 Operátor `typeof` nám umožní zjistit, jaký typ byl uložen do proměnné.
 
