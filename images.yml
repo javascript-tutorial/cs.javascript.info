@@ -145,14 +145,14 @@ chrome-sources-breakpoint.svg:
     text: "zde je seznam"
     position: "right"
   "breakpoints":
-    text: "breakpointy"
+    text: "zarážky"
 
 chrome-sources-debugger-pause.svg:
   "see the outer call details":
     text: "viz detaily vnějšího volání"
     position: "right"
   "watch expressions":
-    text: "sledovat výrazy"
+    text: "sledování výrazů"
     position: "right"
   "current variables":
     text: "aktuální proměnné"
