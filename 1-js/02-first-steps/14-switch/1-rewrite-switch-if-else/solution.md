@@ -9,7 +9,7 @@ if(prohlížeč == 'Edge') {
  || prohlížeč == 'Firefox'
  || prohlížeč == 'Safari'
  || prohlížeč == 'Opera') {
-  alert( 'Dobrá, tyto prohlížeče také podporujeme' );
+  alert( 'V pořádku, tyto prohlížeče také podporujeme' );
 } else {
   alert( 'Doufáme, že tato stránka vypadá dobře!' );
 }
