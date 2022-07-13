@@ -12,7 +12,7 @@ Už jsme viděli příklady vestavěných funkcí, např. `alert(zpráva)`, `pro
 
 Funkce vytváříme pomocí *deklarace funkce*.
 
-Vypadá takto:
+Deklarujeme ji takto:
 
 ```js
 function zobrazZprávu() {
