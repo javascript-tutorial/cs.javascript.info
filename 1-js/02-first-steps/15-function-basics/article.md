@@ -260,7 +260,7 @@ function zobrazZprávu(odKoho, text) {
 ### Alternativní výchozí argumenty
 Někdy má smysl nenastavovat výchozí hodnoty argumentů v deklaraci funkce, ale až později.
 
-Abychom během provádění funkce ověřili, zda parametr byl předán, můžeme jej porovnat s `undefined`:
+Abychom během provádění funkce ověřili, zda argument byl předán, můžeme jej porovnat s `undefined`:
 
 ```js run
 function zobrazZprávu(text) {
