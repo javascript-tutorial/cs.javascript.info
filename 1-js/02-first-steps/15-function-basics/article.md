@@ -223,7 +223,7 @@ V JavaScriptu bude výchozí argument vyhodnocen pokaždé, když bude funkce vo
 
 Ve výše uvedeném příkladu nebude `jináFunkce()` vůbec volána, jestliže bude argument u parametru `text` poskytnut.
 
-Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude `text` chybět.
+Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude argument parametru `text` chybět.
 ```
 
 ````smart header="Výchozí parametry ve starém JavaScriptovém kódu"
