@@ -515,7 +515,7 @@ function název(parametry, oddělené, čárkami) {
 }
 ```
 
-- Hodnoty předané funkci jako parametry se zkopírují do jejích lokálních proměnných.
+- Hodnoty předané funkci jako argumenty se zkopírují do lokálních proměnných.
 - Funkce může přistupovat k vnějším proměnným, ale opačně to nefunguje -- kód mimo funkci nevidí její lokální proměnné.
 - Funkce může vracet hodnotu. Pokud žádnou nevrátí, její výsledek je `undefined`.
 
