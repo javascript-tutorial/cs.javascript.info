@@ -139,7 +139,7 @@ switch (a) {
 
 Nyní `3` a `5` zobrazí stejnou zprávu.
 
-Schopnost „seskupovat“ větve je vedlejší efekt toho, jak `switch/case` funguje bez `break`. Zde provádění `case 3` začne od řádku `(*)` a projde přes `case 5`, protože tam není žádný `break`.
+Schopnost „seskupovat“ varianty je vedlejší efekt toho, jak `switch/case` funguje bez `break`. Zde provádění `case 3` začne od řádku `(*)` a projde přes `case 5`, protože tam není žádný `break`.
 
 ## Na typu záleží
 
