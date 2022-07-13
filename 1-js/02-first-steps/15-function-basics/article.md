@@ -218,7 +218,7 @@ function zobrazZprávu(odKoho, text = jináFunkce()) {
 }
 ```
 
-```smart header="Vyhodnocení výchozích parametrů"
+```smart header="Vyhodnocení výchozích argumentů"
 V JavaScriptu bude výchozí parametr vyhodnocen pokaždé, když bude funkce volána bez příslušného parametru.
 
 Ve výše uvedeném příkladu nebude `jináFunkce()` vůbec volána, jestliže bude parametr `text` poskytnut.
