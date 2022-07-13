@@ -117,7 +117,7 @@ function zobrazZprávu() {
   let uživatelskéJméno = "Pavel"; // deklarace lokální proměnné
 */!*
 
-  let zpráva = 'Ahoj, ' + uživatelskéJméno; // *!*Bob*/!*
+  let zpráva = 'Ahoj, ' + uživatelskéJméno; // *!*Pavel*/!*
   alert(zpráva);
 }
 
