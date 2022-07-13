@@ -178,7 +178,7 @@ Když je nějaká hodnota předána funkci jako parametr, můžeme ji označovat
 
 Jinými slovy, abychom tyto pojmy upřesnili:
 
-- Parametr je hodnota uvedená v závorkách v deklaraci funkce (pojem používaný v okamžiku deklarace).
+- Parametr je proměnná uvedená v závorkách v deklaraci funkce (pojem používaný v okamžiku deklarace).
 - Argument je hodnota, která je předána funkci, když je volána (pojem používaný v okamžiku volání).
 
 Když funkce deklarujeme, vypisujeme jejich parametry, a pak je voláme předáním argumentů.
