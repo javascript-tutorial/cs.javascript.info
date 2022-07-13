@@ -4,7 +4,9 @@ importance: 4
 
 # Přepište funkci pomocí „?“ nebo „||“
 
-Následující funkce vrátí `true`, jestliže parametr `věk` je větší než `18`. Jinak se zeptá na povolení a vrátí výsledek dotazu:
+Následující funkce vrátí `true`, jestliže parametr `věk` je větší než `18`.
+
+Jinak se zeptá na povolení a vrátí výsledek dotazu:
 
 
 ```js
