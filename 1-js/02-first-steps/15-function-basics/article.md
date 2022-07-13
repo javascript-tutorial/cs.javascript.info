@@ -282,7 +282,7 @@ zobrazZprávu(); // prázdná zpráva
 
 ```js
 function zobrazZprávu(text) {
-  // je-li parametr text neuveden nebo je nepravdivý, nastaví se na 'prázdný'
+  // je-li argument parametru text neuveden nebo je nepravdivý, nastaví se na 'prázdný'
   text = text || 'prázdný';
   ...
 }
