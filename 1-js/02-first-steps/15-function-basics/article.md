@@ -521,7 +521,7 @@ function název(parametry, oddělené, čárkami) {
 
 Aby kód byl čistší a srozumitelnější, doporučuje se ve funkcích používat zejména lokální proměnné a parametry, ne vnější proměnné.
 
-Je vždy jednodušší pochopit funkci, která obdrží parametry, pracuje s nimi a vrátí výsledek, než funkci, která neobdrží žádné parametry, ale jako vedlejší efekt modifikuje vnější proměnné.
+Je vždy jednodušší pochopit funkci, která obdrží argumenty, pracuje s nimi a vrátí výsledek, než funkci, která neobdrží žádné argumenty, ale jako vedlejší efekt modifikuje vnější proměnné.
 
 Pojmenování funkcí:
 
