@@ -397,7 +397,7 @@ return*!*;*/!*
 
 Z příkazu se tedy stane prázdný `return`.
 
-Jestliže chceme rozdělit vracený výraz na více řádků, měli bychom jej zahájit na stejném řádku jako `return`, nebo aspoň tam umístit levou závorku následovně:
+Jestliže chceme rozdělit vracený výraz na více řádků, měli bychom jej zahájit na stejném řádku jako `return`, nebo tam aspoň umístit levou závorku:
 
 ```js
 return (
