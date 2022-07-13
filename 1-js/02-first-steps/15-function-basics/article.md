@@ -154,7 +154,7 @@ zobrazZprávu('Anna', "Co se děje?"); // Anna: Co se děje? (**)
 
 Když se na řádcích `(*)` a `(**)` volá funkce, zadané hodnoty se zkopírují do lokálních proměnných `odKoho` a `text`. Pak je funkce použije.
 
-Další příklad: máme proměnnou `odKoho` a předáme ji funkci. Všimněte si, že funkce změní hodnotu `odKoho`, ale tato změna není vidět zvnějšku, jelikož funkce obdrží vždy kopii hodnoty:
+Další příklad: máme proměnnou `odKoho` a předáme ji funkci. Všimněte si, že funkce změní hodnotu `odKoho`, ale tato změna není vidět zvenčí, jelikož funkce obdrží vždy kopii hodnoty:
 
 ```js run
 function zobrazZprávu(odKoho, text) {
