@@ -69,7 +69,6 @@ O práci s čísly si povíme víc v kapitole <info:number>.
 
 ## BigInt [#bigint-type]
 
-<<<<<<< HEAD
 Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>.
 
 Abychom byli opravdu přesní, typ `číslo` umí ukládat větší celá čísla (až do <code>1.7976931348623157 * 10<sup>308</sup></code>), ale mimo bezpečného celočíselného intervalu <code>±(2<sup>53</sup>-1)</code> nastane chyba přesnosti, jelikož do pevného 64-bitového úložiště se nevejdou všechny číslice. Může být tedy uložena „přibližná“ hodnota.
