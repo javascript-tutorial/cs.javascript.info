@@ -17,4 +17,4 @@ if(prohlížeč == 'Edge') {
 
 Všimněte si, že konstrukce `prohlížeč == 'Chrome' || prohlížeč == 'Firefox' …` je pro lepší čitelnost rozdělena do několika řádků.
 
-I tak je ovšem konstrukce `switch` jasnější a přehlednější.
+Ale i přesto je `switch` jasnější a přehlednější.
