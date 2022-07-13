@@ -125,7 +125,7 @@ switch (a) {
     break;
 
 *!*
-  case 3: // (*) dvě seskupené větve case
+  case 3: // (*) dvě seskupené varianty
   case 5:
     alert('Špatně!');
     alert("Proč nenavštěvujete kurz matematiky?");
