@@ -445,7 +445,7 @@ Několik příkladů porušení tohoto pravidla:
 
 - `vraťVěk` -- bylo by špatně, kdyby zobrazovala `alert` s věkem (měla by ho jen vrátit).
 - `vytvořFormulář` -- bylo by špatně, kdyby modifikovala dokument a formulář do něj přidávala (měla by ho jen vytvořit a vrátit).
-- `ověřPrávo` -- bylo by špatně, kdyby zobrazovala zprávu `přístup povolen/zamítnut` (měla by jen ověřit právo přístupu a vrátit výsledek).
+- `ověřOprávnění` -- bylo by špatně, kdyby zobrazovala zprávu `přístup povolen/zamítnut` (měla by jen ověřit právo přístupu a vrátit výsledek).
 
 Tyto příklady předpokládají běžný význam prefixů. Se svým týmem se můžete dohodnout na jiném významu, ale obvykle se příliš neliší. V každém případě byste měli jasně rozumět tomu, co prefix znamená a co funkce s tímto prefixem v názvu může a nemůže dělat. Tato pravidla by měly dodržovat všechny funkce se stejným prefixem a celý tým by je měl znát.
 ```
