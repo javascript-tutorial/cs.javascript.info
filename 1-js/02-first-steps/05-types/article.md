@@ -70,25 +70,20 @@ O práci s čísly si povíme víc v kapitole <info:number>.
 ## BigInt [#bigint-type]
 
 <<<<<<< HEAD
-Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>. Toto technické omezení je dáno jeho vnitřní reprezentací.
+Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>.
 
-Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy.
-=======
-In JavaScript, the "number" type cannot safely represent integer values larger than <code>(2<sup>53</sup>-1)</code> (that's `9007199254740991`), or less than <code>-(2<sup>53</sup>-1)</code> for negatives.
+Abychom byli opravdu přesní, typ `číslo` umí ukládat větší celá čísla (až do <code>1.7976931348623157 * 10<sup>308</sup></code>), ale mimo bezpečného celočíselného intervalu <code>±(2<sup>53</sup>-1)</code> nastane chyba přesnosti, jelikož do pevného 64-bitového úložiště se nevejdou všechny číslice. Může být tedy uložena „přibližná“ hodnota.
 
-To be really precise, the "number" type can store larger integers (up to <code>1.7976931348623157 * 10<sup>308</sup></code>), but outside of the safe integer range <code>±(2<sup>53</sup>-1)</code> there'll be a precision error, because not all digits fit into the fixed 64-bit storage. So an "approximate" value may be stored.
-
-For example, these two numbers (right above the safe range) are the same:
+Například tato dvě čísla (těsně nad bezpečným intervalem) budou stejná:
 
 ```js
 console.log(9007199254740991 + 1); // 9007199254740992
 console.log(9007199254740991 + 2); // 9007199254740992
 ```
 
-So to say, all odd integers greater than <code>(2<sup>53</sup>-1)</code> can't be stored at all in the "number" type.
+Dá se tedy říci, že do typu `number` nelze uložit žádné liché celé číslo větší než <code>(2<sup>53</sup>-1)</code>.
 
-For most purposes <code>±(2<sup>53</sup>-1)</code> range is quite enough, but sometimes we need the entire range of really big integers, e.g. for cryptography or microsecond-precision timestamps.
->>>>>>> 82ed8f11b40bd40797427a5dd1763edbe1fca523
+Pro většinu účelů je interval <code>±(2<sup>53</sup>-1)</code> dostačující, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy.
 
 Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
 
