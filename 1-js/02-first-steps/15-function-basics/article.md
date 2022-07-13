@@ -209,7 +209,7 @@ zobrazZprávu("Anna"); // Anna: text není zadán
 
 Jestliže argument k parametru `text` nebude předán, bude mít hodnotu `"text není zadán"`.
 
-Zde `"text není zadán"` je řetězec, ale může to být složitější výraz, který se vyhodnotí a přiřadí jen tehdy, jestliže parametr chybí. Je tedy možné i toto:
+Zde `"text není zadán"` je řetězec, ale může to být složitější výraz, který se vyhodnotí a přiřadí jen tehdy, jestliže argument chybí. Je tedy možné i toto:
 
 ```js run
 function zobrazZprávu(odKoho, text = jináFunkce()) {
