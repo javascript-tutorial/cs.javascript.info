@@ -112,7 +112,7 @@ Zde `+a` dává `1`, to se v `case` porovná s `b + 1` a spustí se příslušn�
 
 ## Seskupování „case“
 
-Je možné seskupit několik variant větví `case`, které mají mít stejný kód.
+Je možné seskupit několik `case` variant, které mají mít stejný kód.
 
 Například když chceme, aby se stejný kód spustil pro `case 3` a `case 5`:
 
