@@ -132,7 +132,7 @@ Proměnné deklarované mimo jakoukoli funkci, například `uživatelskéJméno`
 
 Globální proměnné jsou viditelné z každé funkce (pokud nejsou zastíněny lokálními).
 
-Je dobrým zvykem minimalizovat používání globálních proměnných. Moderní kód obsahuje jen málo globálních proměnných nebo vůbec žádné. Většina proměnných spočívá ve svých funkcích. Někdy ovšem mohou být globální proměnné užitečné k ukládání dat na úrovni projektu.
+Je dobrým zvykem minimalizovat používání globálních proměnných. Moderní kód obsahuje jen málo globálních proměnných nebo vůbec žádné. Většina proměnných je uvnitř svých funkcí. Někdy ovšem mohou být globální proměnné užitečné k ukládání dat na úrovni projektu.
 ```
 
 ## Parametry
