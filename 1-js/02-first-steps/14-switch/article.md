@@ -1,6 +1,8 @@
 # Příkaz „switch“
 
-Příkaz `switch` dokáže nahradit několik podmíněných příkazů `if`. Poskytuje přehlednější způsob, jak porovnat hodnotu s několika variantami.
+Příkaz `switch` dokáže nahradit několik podmíněných příkazů `if`. 
+
+Poskytuje přehlednější způsob, jak porovnat hodnotu s několika variantami.
 
 ## Syntaxe
 
