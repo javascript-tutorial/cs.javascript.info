@@ -174,7 +174,7 @@ zobrazZprávu(odKoho, "Ahoj"); // *Anna*: Ahoj
 alert( odKoho ); // Anna
 ```
 
-Když je nějaká hodnota předána jako parametr funkce, nazývá se také *argument*.
+Když je nějaká hodnota předána funkci jako parametr, můžeme ji označovat jako *argument*.
 
 Jinými slovy, abychom tyto pojmy upřesnili:
 
