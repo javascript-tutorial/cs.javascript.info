@@ -66,7 +66,7 @@ function zobrazZprávu() {
 
 zobrazZprávu(); // Ahoj, já jsem JavaScript!
 
-alert( zpráva ); // <-- Chyba! Proměnná je lokální uvnitř funkce
+alert( zpráva ); // <-- Chyba! Proměnná je dostupná jen uvnitř funkce
 ```
 
 ## Vnější proměnné
