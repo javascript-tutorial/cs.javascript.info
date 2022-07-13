@@ -8,7 +8,7 @@ Poskytuje přehlednější způsob, jak porovnat hodnotu s několika variantami.
 
 Příkaz `switch` obsahuje jeden nebo více bloků `case` a nepovinný blok `default`.
 
-Vypadá takto:
+Vypadá to takto:
 
 ```js no-beautify
 switch(x) {
