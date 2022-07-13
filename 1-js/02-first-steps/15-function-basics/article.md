@@ -20,7 +20,7 @@ function zobrazZprávu() {
 }
 ```
 
-Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, pak v závorkách seznam *parametrů* (jsou odděleny čárkami, v uvedeném příkladu je seznam prázdný, jeho příklady uvidíme později) a nakonec ve složených závorkách kód funkce, nazývaný také „tělo funkce“.
+Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, potom máme závorky a v nich seznam *parametrů* (jsou odděleny čárkami, v uvedeném příkladu je seznam prázdný, jeho příklady uvidíme později) a nakonec následují složené závorky, ve kterých je obsažen kód funkce, nazývaný také „tělo funkce“.
 
 ```js
 function název(parametr1, parametr2, ... parametrN) {
