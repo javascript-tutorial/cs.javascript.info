@@ -137,7 +137,7 @@ Je dobrým zvykem minimalizovat používání globálních proměnných. Modern�
 
 ## Parametry
 
-Do funkcí můžeme předávat jakákoli data pomocí parametrů.
+Do funkcí můžeme předávat data pomocí parametrů.
 
 V níže uvedeném příkladu má funkce dva parametry: `odKoho` a `text`.
 
