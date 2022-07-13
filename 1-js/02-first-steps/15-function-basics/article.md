@@ -431,7 +431,7 @@ zobrazZprávu(..)    // zobrazí zprávu
 vraťVěk(..)         // vrátí věk (nějak jej zjistí)
 vypočítejSoučet(..) // vypočítá součet a vrátí výsledek
 vytvořFormulář(..)  // vytvoří formulář (a obvykle jej vrátí)
-ověřPrávo(..)       // ověří právo, vrátí true nebo false
+ověřOprávnění(..)       // ověří oprávnění, vrátí true nebo false
 ```
 
 Když jsou použity prefixy, pohled na název funkce nám umožňuje lépe porozumět, jaký druh činnosti funkce provádí a jaký druh hodnoty vrací.
