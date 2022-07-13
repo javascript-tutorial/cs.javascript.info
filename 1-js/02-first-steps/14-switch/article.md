@@ -143,7 +143,7 @@ Schopnost „seskupovat“ varianty je vedlejší efekt toho, jak `switch/case` 
 
 ## Na datovém typu záleží
 
-Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musejí být stejného typu.
+Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musí být stejného typu.
 
 Uvažujme například tento kód:
 
