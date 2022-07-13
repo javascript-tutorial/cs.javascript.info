@@ -58,7 +58,7 @@ Zde `switch` začne porovnávat `a` od první varianty, kterou je `3`. Porovnán
 
 Pak `4`. Tady je nalezena shoda, takže se začne vykonávat kód obsažený v `case 4` a skončí na nejbližším `break`.
 
-**Není-li přítomen příkaz `break`, výkon pokračuje další větví `case` bez jakéhokoli porovnání.**
+**Není-li přítomen příkaz `break`, spustí se kód v dalších `case` bez jakéhokoliv porovnání.**
 
 Příklad bez `break`:
 
