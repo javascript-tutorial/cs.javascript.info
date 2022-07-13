@@ -2,18 +2,18 @@ importance: 4
 
 ---
 
-# Which values get shown by the "for" loop?
+# Které hodnoty zobrazí cyklus „for“?
 
-For each loop write down which values it is going to show. Then compare with the answer.
+Pro oba cykly zapište hodnoty, které budou zobrazeny, a pak je porovnejte s řešením.
 
-Both loops `alert` same values or not?
+Vypíše `alert` v obou cyklech stejné hodnoty, nebo ne?
 
-1. The postfix form:
+1. Postfixová notace:
 
     ```js
     for (let i = 0; i < 5; i++) alert( i );
     ```
-2. The prefix form:
+2. Prefixová notace:
 
     ```js
     for (let i = 0; i < 5; ++i) alert( i );
