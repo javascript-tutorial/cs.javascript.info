@@ -207,7 +207,7 @@ function zobrazZprávu(odKoho, *!*text = "text není zadán"*/!*) {
 zobrazZprávu("Anna"); // Anna: text není zadán
 ```
 
-Jestliže nyní parametr `text` nebude předán, bude mít hodnotu `"text není zadán"`.
+Jestliže argument k parametru `text` nebude předán, bude mít hodnotu `"text není zadán"`.
 
 Zde `"text není zadán"` je řetězec, ale může to být složitější výraz, který se vyhodnotí a přiřadí jen tehdy, jestliže parametr chybí. Je tedy možné i toto:
 
