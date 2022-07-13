@@ -316,7 +316,7 @@ let výsledek = součet(1, 2);
 alert( výsledek ); // 3
 ```
 
-Direktiva `return` může být ve funkci umístěna kdekoli. Když na ni výkon funkce narazí, ukončí se a vrátí zadanou hodnotu volajícímu kódu (v uvedeném příkladu se přiřadí do proměnné `výsledek`).
+Direktiva `return` může být ve funkci umístěna kdekoli. Když na ni vykonávající se funkce narazí, ukončí se a vrátí zadanou hodnotu volajícímu kódu (v uvedeném příkladu se přiřadí do proměnné `výsledek`).
 
 V jedné funkci se může `return` vyskytovat mnohokrát. Příklad:
 
