@@ -45,7 +45,7 @@ zobrazZprávu();
 
 Volání `zobrazZprávu()` vykoná kód funkce. Zde tedy uvidíme tuto zprávu dvakrát.
 
-Tento příklad jasně demonstruje jeden z hlavních účelů funkcí: zdržet se duplikace kódu.
+Tento příklad jasně demonstruje jeden z hlavních účelů funkcí: vyhnout se duplikaci kódu.
 
 Jestliže někdy budeme potřebovat změnit text zprávy nebo způsob, jakým je zobrazována, bude nám stačit modifikovat kód na jediném místě: ve funkci, která zprávu vypisuje.
 
