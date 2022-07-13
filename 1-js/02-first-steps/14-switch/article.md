@@ -141,7 +141,7 @@ Nyní `3` a `5` zobrazí stejnou zprávu.
 
 Schopnost „seskupovat“ varianty je vedlejší efekt toho, jak `switch/case` funguje bez `break`. Zde provádění `case 3` začne od řádku `(*)` a projde přes `case 5`, protože tam není žádný `break`.
 
-## Na typu záleží
+## Na datovém typu záleží
 
 Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musejí být stejného typu.
 
