@@ -99,7 +99,7 @@ let b = 0;
 switch (+a) {
 *!*
   case b + 1:
-    alert("toto se vykoná, protože +a je 1, což se přesně rovná b+1");
+    alert("toto se vykoná, protože +a je 1, což se rovná b+1");
     break;
 */!*
 
