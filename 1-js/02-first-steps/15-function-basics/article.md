@@ -4,7 +4,7 @@ Poměrně často potřebujeme vykonat podobnou akci na mnoha místech ve skriptu
 
 Například chceme zobrazit pěkně vypadající zprávu, když se návštěvník přihlásí, odhlásí a možná i někde jinde.
 
-Funkce jsou hlavní „stavební kameny“ programu. Umožňují volat kód mnohokrát, aniž by bylo nutné ho opakovat.
+Funkce jsou hlavní „stavební kameny“ programu. Umožňují volat kód vícekrát, aniž by bylo nutné ho psát znova.
 
 Už jsme viděli příklady vestavěných funkcí, např. `alert(zpráva)`, `prompt(zpráva, default)` a `confirm(otázka)`. Můžeme si však vytvořit i své vlastní funkce.
 
