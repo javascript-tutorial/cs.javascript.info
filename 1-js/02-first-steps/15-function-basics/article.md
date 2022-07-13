@@ -226,7 +226,7 @@ Ve výše uvedeném příkladu nebude `jináFunkce()` vůbec volána, jestliže 
 Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude argument parametru `text` chybět.
 ```
 
-````smart header="Výchozí parametry ve starém JavaScriptovém kódu"
+````smart header="Výchozí argumenty ve starém JavaScriptovém kódu"
 Před několika lety JavaScript nepodporoval syntaxi pro výchozí parametry. Lidé tedy používali jiné způsoby, jak je specifikovat.
 
 V současnosti na ně můžeme narazit ve starých skriptech.
