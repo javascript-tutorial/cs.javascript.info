@@ -197,7 +197,7 @@ zobrazZprávu("Anna");
 
 To není chyba. Takové volání vypíše `"*Anna*: undefined"`. Protože hodnota `text` nebyla předána, stane se `undefined`.
 
-V deklaraci funkce můžeme specifikovat tzv. „výchozí“ (používanou, není-li uvedena jiná) hodnotu parametru pomocí `=`:
+V deklaraci funkce můžeme specifikovat tzv. „výchozí“ hodnotu parametru (pokud argument chybí) pomocí `=`:
 
 ```js run
 function zobrazZprávu(odKoho, *!*text = "text není zadán"*/!*) {
