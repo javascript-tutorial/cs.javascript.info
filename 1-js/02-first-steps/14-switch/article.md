@@ -145,7 +145,7 @@ Schopnost „seskupovat“ varianty je vedlejší efekt toho, jak `switch/case` 
 
 Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musí být stejného typu.
 
-Uvažujme například tento kód:
+Jako příklad poslouží tento kód:
 
 ```js run
 let arg = prompt("Zadejte hodnotu");
