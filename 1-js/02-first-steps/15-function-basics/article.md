@@ -114,7 +114,7 @@ let uživatelskéJméno = 'Jan';
 
 function zobrazZprávu() {
 *!*
-  let uživatelskéJméno = "Bob"; // deklarace lokální proměnné
+  let uživatelskéJméno = "Pavel"; // deklarace lokální proměnné
 */!*
 
   let zpráva = 'Ahoj, ' + uživatelskéJméno; // *!*Bob*/!*
