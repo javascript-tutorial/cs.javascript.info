@@ -92,7 +92,7 @@ Příklad:
 let *!*uživatelskéJméno*/!* = 'Jan';
 
 function zobrazZprávu() {
-  *!*uživatelskéJméno*/!* = "Bob"; // (1) změna vnější proměnné
+  *!*uživatelskéJméno*/!* = "Pavel"; // (1) změna vnější proměnné
 
   let zpráva = 'Ahoj, ' + *!*uživatelskéJméno*/!*;
   alert(zpráva);
