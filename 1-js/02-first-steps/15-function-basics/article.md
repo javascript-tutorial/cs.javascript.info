@@ -267,7 +267,7 @@ function zobrazZprávu(text) {
   // ...
 
 *!*
-  if (text === undefined) { // jestliže parametr chybí
+  if (text === undefined) { // jestliže argument chybí
     text = 'prázdná zpráva';
   }
 */!*
