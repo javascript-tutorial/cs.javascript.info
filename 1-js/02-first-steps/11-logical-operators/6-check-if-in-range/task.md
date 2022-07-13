@@ -2,8 +2,8 @@ importance: 3
 
 ---
 
-# Check the range between
+# Ověřte, zda je hodnota v rozsahu
 
-Write an `if` condition to check that `age` is between `14` and `90` inclusively.
+Napište podmínku „if“, která ověří, že proměnná `věk` má hodnotu mezi `14` a `90` včetně. 
 
-"Inclusively" means that `age` can reach the edges `14` or `90`.
+„Včetně“ znamená, že podmínka je splněna i tehdy, je-li `věk` `14` nebo `90`.

@@ -2,16 +2,16 @@ importance: 5
 
 ---
 
-# String quotes
+# Uvozovky řetězců
 
-What is the output of the script?
+Jaký je výstup tohoto skriptu?
 
 ```js
-let name = "Ilya";
+let jméno = "Ilja";
 
-alert( `hello ${1}` ); // ?
+alert( `ahoj ${1}` ); // ?
 
-alert( `hello ${"name"}` ); // ?
+alert( `ahoj ${"jméno"}` ); // ?
 
-alert( `hello ${name}` ); // ?
+alert( `ahoj ${jméno}` ); // ?
 ```

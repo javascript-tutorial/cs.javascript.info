@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Fix the addition
+# Opravte sčítání
 
-Here's a code that asks the user for two numbers and shows their sum.
+Následující kód se zeptá uživatele na dvě čísla a zobrazí jejich součet.
 
-It works incorrectly. The output in the example below is `12` (for default prompt values).
+Nefunguje však správně. Výstup v níže uvedeném příkladu (pro defaultní hodnoty v dotazech) je `12`.
 
-Why? Fix it. The result should be `3`.
+Proč? Opravte jej. Výsledek by měl být `3`.
 
 ```js run
-let a = prompt("First number?", 1);
-let b = prompt("Second number?", 2);
+let a = prompt("První číslo?", 1);
+let b = prompt("Druhé číslo?", 2);
 
 alert(a + b); // 12
 ```

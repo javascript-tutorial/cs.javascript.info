@@ -2,7 +2,7 @@
 
 ```js no-beautify
 5 > 4 → true
-"apple" > "pineapple" → false
+"ananas" > "jablko" → false
 "2" > "12" → true
 undefined == null → true
 undefined === null → false
@@ -10,12 +10,12 @@ null == "\n0\n" → false
 null === +"\n0\n" → false
 ```
 
-Some of the reasons:
+Některé z důvodů:
 
-1. Obviously, true.
-2. Dictionary comparison, hence false. `"a"` is smaller than `"p"`.
-3. Again, dictionary comparison, first char `"2"` is greater than the first char `"1"`.
-4. Values `null` and `undefined` equal each other only.
-5. Strict equality is strict. Different types from both sides lead to false.
-6. Similar to `(4)`, `null` only equals `undefined`.
-7. Strict equality of different types.
+1. Samozřejmě true.
+2. Slovníkové porovnání, proto false. `"a"` je menší než `"j"`.
+3. Opět slovníkové porovnání, první znak `"2"` je větší než první znak `"1"`.
+4. Hodnoty `null` a `undefined` se rovnají jedině sobě navzájem.
+5. Striktní rovnost je striktní. Různé typy na obou stranách vedou k výsledku false.
+6. Obdobně jako ve `(4)` se `null` rovná jedině `undefined`.
+7. Striktní rovnost s různými typy vrací false.
