@@ -354,7 +354,7 @@ function zobrazFilm(věk) {
 */!*
   }
 
-  alert( "Zobrazím vám film" ); // (*)
+  alert( "Ukážu vám ten film" ); // (*)
   // ...
 }
 ```
