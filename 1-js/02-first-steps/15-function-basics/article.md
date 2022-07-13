@@ -102,7 +102,7 @@ alert( uživatelskéJméno ); // *!*Jan*/!* před voláním funkce
 
 zobrazZprávu();
 
-alert( uživatelskéJméno ); // *!*Bob*/!*, funkce změnila hodnotu proměnné
+alert( uživatelskéJméno ); // *!*Pavel*/!*, funkce změnila hodnotu proměnné
 ```
 
 Vnější proměnná se použije jen tehdy, neexistuje-li stejnojmenná lokální. Pokud je uvnitř funkce deklarována proměnná se stejným názvem, *zastíní* tu vnější. Například v níže uvedeném kódu funkce používá lokální `uživatelskéJméno` a vnější ignoruje:
