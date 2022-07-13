@@ -227,7 +227,7 @@ Na druhou stranu bude nezávisle na sobě volána pokaždé, když bude argument
 ```
 
 ````smart header="Výchozí argumenty ve starém JavaScriptovém kódu"
-Před několika lety JavaScript nepodporoval syntaxi pro výchozí parametry. Lidé tedy používali jiné způsoby, jak je specifikovat.
+Před několika lety JavaScript nepodporoval syntaxi pro výchozí argumenty. Lidé tedy používali jiné způsoby, jak je specifikovat.
 
 V současnosti na ně můžeme narazit ve starých skriptech.
 
