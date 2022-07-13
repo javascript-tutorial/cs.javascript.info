@@ -6,7 +6,7 @@ Například chceme zobrazit pěkně vypadající zprávu, když se návštěvní
 
 Funkce jsou hlavní „stavební kameny“ programu. Umožňují volat kód vícekrát, aniž by bylo nutné ho psát znova.
 
-Už jsme viděli příklady vestavěných funkcí, např. `alert(zpráva)`, `prompt(zpráva, default)` a `confirm(otázka)`. Můžeme si však vytvořit i své vlastní funkce.
+Už jsme viděli příklady vestavěných funkcí, např. `alert(zpráva)`, `prompt(zpráva, výchozí hodnota)` a `confirm(otázka)`. Můžeme si však vytvořit i své vlastní funkce.
 
 ## Deklarace funkcí
 
