@@ -1,4 +1,4 @@
-První dvě podmínky se dají napsat každá pomocí jednoho `case`, třetí musíme rozdělit do dvou `case`:
+První dvě podmínky můžeme přepsat do samostatné varianty, třetí musí být ve dvou variantách:
 
 ```js run
 let a = +prompt('a?', '');
