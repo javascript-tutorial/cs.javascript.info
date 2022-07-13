@@ -181,7 +181,7 @@ Jinými slovy, abychom tyto pojmy upřesnili:
 - Parametr je proměnná uvedená v závorkách v deklaraci funkce (pojem používaný v okamžiku deklarace).
 - Argument je hodnota, která je předána funkci, když je volána (pojem používaný v okamžiku volání).
 
-Když funkce deklarujeme, vypisujeme jejich parametry, a pak je voláme předáním argumentů.
+Když funkce deklarujeme, značíme jejich parametry. Když funkce voláme, voláme je spolu s argumenty.
 
 Ve výše uvedeném příkladu bychom mohli říci: „funkce `zobrazZprávu` je deklarována se dvěma parametry a pak je volána se dvěma argumenty: `odKoho` a `"Ahoj"`.“
 
