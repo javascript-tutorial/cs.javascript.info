@@ -213,7 +213,7 @@ Zde `"text není zadán"` je řetězec, ale může to být složitější výraz
 
 ```js run
 function zobrazZprávu(odKoho, text = jináFunkce()) {
-  // jináFunkce() se vykoná jen tehdy, když text není předán
+  // jináFunkce() se vykoná jen tehdy, když argument u parametru text chybí
   // její výsledek pak bude hodnotou parametru text
 }
 ```
