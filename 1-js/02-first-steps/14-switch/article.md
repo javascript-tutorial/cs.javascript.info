@@ -27,7 +27,7 @@ switch(x) {
 ```
 
 - Je ověřena striktní rovnost hodnoty `x` s hodnotou z prvního `case` (tj. `hodnota1`), pak s druhou `hodnota2`, a tak dále.
-- Pokud je rovnost nalezena, `switch` začne vykonávat kód od odpovídajícího `case` až do nejbližšího `break` (nebo do konce `switch`).
+- Pokud je rovnost nalezena, `switch` začne vykonávat kód od odpovídajícího `case` až do nejbližšího `break` (nebo do konce bloku `switch`).
 - Není-li nalezena žádná rovnost, je vykonán kód `default` (pokud je uveden).
 
 ## Příklad
