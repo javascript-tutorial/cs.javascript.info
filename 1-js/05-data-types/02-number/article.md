@@ -2,9 +2,9 @@
 
 V moderním JavaScriptu jsou dva druhy čísel:
 
-1. Běžná čísla v JavaScriptu jsou uložena v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754-2008_revision). Jsou známa také jako „čísla s pohyblivou řádovou čárkou s dvojnásobnou přesností“. To jsou čísla, která budeme většinou používat a v této kapitole o nich budeme hovořit.
+1. Běžná čísla v JavaScriptu jsou uložena v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754). Jsou známa také jako „čísla s pohyblivou řádovou čárkou s dvojnásobnou přesností“. To jsou čísla, která většinou používáme a v této kapitole o nich budeme hovořit.
 
-2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné číslo nemůže bezpečně překročit <code>2<sup>53</sup></code> nebo být menší než <code>-2<sup>53</sup></code>. Jelikož biginty se používají jen v několika speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
+2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné celé číslo nemůže bezpečně překročit <code>2<sup>53</sup></code> nebo být menší než <code>-2<sup>53</sup></code>, jak jsme uvedli již dříve v kapitole <info:types>. Jelikož biginty se používají jen v některých speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
 
 Zde tedy budeme hovořit o běžných číslech. Rozšiřme si své znalosti o nich.
 
@@ -192,7 +192,7 @@ Existují dva způsoby, jak to udělat:
 
 ## Nepřesné výpočty
 
-Číslo je vnitřně reprezentováno v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754-2008_revision), takže se ukládá přesně do 64 bitů: 52 z nich se používá k uložení číslic, v 11 z nich je uložena pozice desetinné čárky (u celých čísel jsou tyto bity nulové) a 1 bit je pro znaménko.
+Číslo je vnitřně reprezentováno v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754), takže se ukládá přesně do 64 bitů: 52 z nich se používá k uložení číslic, v 11 z nich je uložena pozice desetinné čárky  a 1 bit je pro znaménko.
 
 Je-li číslo opravdu obrovské, může toto 64-bitové úložiště překročit a stát se speciální číselnou hodnotou `Infinity` (nekonečno):
 

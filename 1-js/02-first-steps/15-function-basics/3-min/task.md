@@ -6,7 +6,7 @@ importance: 1
 
 Napište funkci `min(a,b)`, která vrátí menší ze dvou čísel `a` a `b`.
 
-Příklady:
+Příklady použítí:
 
 ```js
 min(2, 5) == 2

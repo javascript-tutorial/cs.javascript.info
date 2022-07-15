@@ -1,12 +1,14 @@
 # Příkaz „switch“
 
-Příkaz `switch` dokáže nahradit několik podmíněných příkazů `if`. Poskytuje přehlednější způsob, jak porovnat hodnotu s několika variantami.
+Příkaz `switch` dokáže nahradit několik podmíněných příkazů `if`. 
+
+Poskytuje přehlednější způsob, jak porovnat hodnotu s několika variantami.
 
 ## Syntaxe
 
 Příkaz `switch` obsahuje jeden nebo více bloků `case` a nepovinný blok `default`.
 
-Vypadá takto:
+Vypadá to takto:
 
 ```js no-beautify
 switch(x) {
@@ -25,7 +27,7 @@ switch(x) {
 ```
 
 - Je ověřena striktní rovnost hodnoty `x` s hodnotou z prvního `case` (tj. `hodnota1`), pak s druhou `hodnota2`, a tak dále.
-- Pokud je rovnost nalezena, `switch` začne vykonávat kód od odpovídajícího `case` až do nejbližšího `break` (nebo do konce `switch`).
+- Pokud je rovnost nalezena, `switch` začne vykonávat kód od odpovídajícího `case` až do nejbližšího `break` (nebo do konce bloku `switch`).
 - Není-li nalezena žádná rovnost, je vykonán kód `default` (pokud je uveden).
 
 ## Příklad
@@ -52,11 +54,11 @@ switch (a) {
 }
 ```
 
-Zde `switch` začne porovnávat `a` od první varianty `case`, kterou je `3`. Porovnání neuspěje.
+Zde `switch` začne porovnávat `a` od první varianty, kterou je `3`. Porovnání neuspěje.
 
-Pak `4`. Tady je nalezena shoda, takže výkon začne od `case 4` a skončí na nejbližším `break`.
+Pak `4`. Tady je nalezena shoda, takže se začne vykonávat kód obsažený v `case 4` a skončí na nejbližším `break`.
 
-**Není-li přítomen příkaz `break`, výkon pokračuje další větví `case` bez jakéhokoli porovnání.**
+**Není-li přítomen příkaz `break`, spustí se kód v dalších `case` bez jakéhokoliv porovnání.**
 
 Příklad bez `break`:
 
@@ -97,7 +99,7 @@ let b = 0;
 switch (+a) {
 *!*
   case b + 1:
-    alert("toto se vykoná, protože +a je 1, což se přesně rovná b+1");
+    alert("toto se vykoná, protože +a je 1, což se rovná b+1");
     break;
 */!*
 
@@ -110,7 +112,7 @@ Zde `+a` dává `1`, to se v `case` porovná s `b + 1` a spustí se příslušn�
 
 ## Seskupování „case“
 
-Je možné seskupit několik variant větví `case`, které mají mít stejný kód.
+Je možné seskupit několik `case` variant, které mají mít stejný kód.
 
 Například když chceme, aby se stejný kód spustil pro `case 3` a `case 5`:
 
@@ -123,7 +125,7 @@ switch (a) {
     break;
 
 *!*
-  case 3: // (*) dvě seskupené větve case
+  case 3: // (*) dvě seskupené varianty
   case 5:
     alert('Špatně!');
     alert("Proč nenavštěvujete kurz matematiky?");
@@ -137,13 +139,13 @@ switch (a) {
 
 Nyní `3` a `5` zobrazí stejnou zprávu.
 
-Schopnost „seskupovat“ větve je vedlejší efekt toho, jak `switch/case` funguje bez `break`. Zde provádění `case 3` začne od řádku `(*)` a projde přes `case 5`, protože tam není žádný `break`.
+Schopnost „seskupovat“ varianty je vedlejší efekt toho, jak `switch/case` funguje bez `break`. Zde provádění `case 3` začne od řádku `(*)` a projde přes `case 5`, protože tam není žádný `break`.
 
-## Na typu záleží
+## Na datovém typu záleží
 
-Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musejí být stejného typu.
+Zdůrazňujeme, že ověření rovnosti je vždy striktní. Aby se hodnoty rovnaly, musí být stejného typu.
 
-Uvažujme například tento kód:
+Jako příklad poslouží tento kód:
 
 ```js run
 let arg = prompt("Zadejte hodnotu");

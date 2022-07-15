@@ -4,7 +4,9 @@ importance: 4
 
 # Je nutné „else“?
 
-Následující funkce vrátí `true`, jestliže parametr `věk` je větší než `18`. Jinak se zeptá na povolení a vrátí výsledek dotazu:
+Následující funkce vrátí `true`, jestliže parametr `věk` je větší než `18`. 
+
+Jinak se zeptá na povolení a vrátí výsledek dotazu:
 
 ```js
 function ověřVěk(věk) {

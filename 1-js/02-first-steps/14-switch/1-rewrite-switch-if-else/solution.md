@@ -9,7 +9,7 @@ if(prohlížeč == 'Edge') {
  || prohlížeč == 'Firefox'
  || prohlížeč == 'Safari'
  || prohlížeč == 'Opera') {
-  alert( 'Dobrá, tyto prohlížeče také podporujeme' );
+  alert( 'V pořádku, tyto prohlížeče také podporujeme' );
 } else {
   alert( 'Doufáme, že tato stránka vypadá dobře!' );
 }
@@ -17,4 +17,4 @@ if(prohlížeč == 'Edge') {
 
 Všimněte si, že konstrukce `prohlížeč == 'Chrome' || prohlížeč == 'Firefox' …` je pro lepší čitelnost rozdělena do několika řádků.
 
-I tak je ovšem konstrukce `switch` jasnější a přehlednější.
+Ale i přesto je `switch` jasnější a přehlednější.

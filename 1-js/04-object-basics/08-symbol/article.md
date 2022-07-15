@@ -169,7 +169,7 @@ for (let klíč in uživatel) alert(klíč); // jméno, věk (žádné symboly)
 */!*
 
 // přímý přístup k symbolu funguje
-alert( "Přímo: " + uživatel[id] );
+alert( "Přímo: " + uživatel[id] ); // Přímo: 123
 ```
 
 Ignoruje je i metoda [Object.keys(uživatel)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys). To je součást obecného principu „skrývání symbolických vlastností“. Jestliže jiný skript nebo knihovna provádí cyklus nad naším objektem, nepřistoupí nečekaně k symbolické vlastnosti.

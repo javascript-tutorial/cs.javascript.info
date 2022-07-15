@@ -16,7 +16,7 @@ switch (prohlížeč) {
   case 'Firefox':
   case 'Safari':
   case 'Opera':
-    alert( 'Dobrá, tyto prohlížeče také podporujeme' );
+    alert( 'V pořádku, tyto prohlížeče také podporujeme' );
     break;
 
   default:
