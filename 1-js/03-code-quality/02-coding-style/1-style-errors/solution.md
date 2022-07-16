@@ -14,7 +14,7 @@ let x=prompt("x?",''), n=prompt("n?",'') // <-- technicky je to možné,
 // ale lepší je to rozdělit na 2 řádky, navíc tam chybějí mezery a ;
 if (n<=0)  // <- chybějí mezery uvnitř (n <= 0) a nad ním by měl být prázdný řádek
 {   // <- levá složená závorka na zvláštním řádku
-  // níže uvedený řádek - dlouhé řádky by měly být rozděleny na více řádků pro lepší čitelnost
+  // níže - dlouhé řádky by měly být rozděleny na více řádků pro lepší čitelnost
   alert(`${n}-tá mocnina není podporována, zadejte prosím celé číslo větší než nula`);
 }
 else // <- toto může být na jediném řádku: "} else {"

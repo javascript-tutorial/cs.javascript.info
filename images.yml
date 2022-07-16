@@ -1,13 +1,15 @@
 code-style.svg:
+  "A space between parameters":
+    text: "Mezera mezi parametry"
   "No space":
     text: "Bez mezer"
     position: "center"
   "between the function name and parentheses":
     position: "center"
-    text: "mezi názvem funkcí a závorkami"
+    text: "mezi názvem funkcí a závorkou"
   "between the parentheses and the parameter":
     position: "center"
-    text: "mezi závorkami a parametrem"
+    text: "mezi závorkou a parametrem"
   "Indentation":
     position: "center"
     text: "Odsazení"
@@ -32,7 +34,7 @@ code-style.svg:
     text: "mezi logickými bloky"
   "Lines are not very long": "Řádky nejsou příliš dlouhé"
   "A semicolon ;": "Středník ;"
-  "is mandatory": "je povinná"
+  "is mandatory": "je povinný"
   "Spaces":
     position: "center"
     text: "Mezery"

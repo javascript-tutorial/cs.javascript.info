@@ -60,12 +60,12 @@ Uvádíme jednotlivé varianty s komentářem, takže můžete sami posoudit jej
     ```js
     if (n < 0) *!*{*/!*alert(`${n}-tá mocnina není podporována`);*!*}*/!*
     ```
-2. 😠 Oddělení na samostatný řádek bez složených závorek. Tohle nikdy nedělejte, jelikož snadno uděláte chybu, když budete přidávat další řádky:
+2. 😠 Umístění na samostatný řádek bez složených závorek. Tohle nikdy nedělejte, jelikož snadno uděláte chybu, když budete přidávat další řádky:
     ```js
     if (n < 0)
       alert(`${n}-tá mocnina není podporována`);
     ```
-3. 😏 Jeden řádek bez složených závorek - přijatelné, pokud je krátký:
+3. 😏 Jeden řádek bez složených závorek - to je přijatelné, pokud je krátký:
     ```js
     if (n < 0) alert(`${n}-tá mocnina není podporována`);
     ```
@@ -84,7 +84,7 @@ Nikdo není rád, když musí číst dlouhý vodorovný řádek kódu. Lepší p
 
 Například:
 ```js
-// obrácené čárky ` umožňují rozdělit řádek na více řádků
+// zpětné uvozovky ` umožňují rozdělit řádek na více řádků
 let řetězec = `  
   TC39 v ECMA International je skupina JavaScriptových vývojářů,
   implementátorů, akademiků a dalších, kteří spolupracují s komunitou,
@@ -145,13 +145,13 @@ Existují dva druhy odsazení:
     }
     ```
 
-    Vkládejte prázdný nový řádek všude, kde pomáhá učinit kód čitelnějším. V kódu by nemělo být více než devět řádků bez svislého odsazení.
+    Vkládejte prázdný nový řádek všude, kde pomáhá učinit kód čitelnějším. V kódu by nemělo být více než devět řádků za sebou bez svislého odsazení.
 
 ### Středníky
 
 Středník by měl být uveden za každým příkazem, i kdyby mohl být vynechán.
 
-Existují jazyky, v nichž je středník zcela dobrovolný a používá se jen zřídka. V JavaScriptu však existují případy, kdy se zlom řádku neinterpretuje jako středník, čímž se kód stává náchylnější k chybám. Více o tom se píše v kapitole <info:structure#semicolon>.
+Existují jazyky, v nichž je středník zcela dobrovolný a používá se jen zřídka. V JavaScriptu však existují případy, kdy se zlom řádku neinterpretuje jako středník, čímž se kód stává náchylnějším k chybám. Více o tom se píše v kapitole <info:structure#semicolon>.
 
 Jste-li zkušený programátor v JavaScriptu, můžete se rozhodnout pro bezstředníkový kódovací styl, např. [StandardJS](https://standardjs.com/). Jinak je však lepší středníky používat, abyste se vyhnuli možným úskalím. Většina vývojářů středníky uvádí.
 
@@ -221,7 +221,7 @@ function mocnina(x, n) {
 }
 ```
 
-Druhá konstrukce je čitelnější, protože „zvláštní případ“ `n < 0` je ošetřen dříve. Když je kontrola provedena, můžeme se přesunout k „hlavnímu“ proudu kódu, aniž bychom potřebovali další vnoření.
+Druhá konstrukce je čitelnější, protože „zvláštní případ“ `n < 0` je ošetřen hned na začátku. Když je kontrola provedena, můžeme se přesunout k „hlavnímu“ toku kódu, aniž bychom potřebovali další vnoření.
 
 ## Umístění funkcí
 
@@ -277,7 +277,7 @@ Je to proto, že při čtení kódu chceme nejdříve vědět, *co kód dělá*.
 
 ## Styloví průvodci
 
-Stylový průvodce obsahuje obecná pravidla o tom, „jak psát“ kód, tj. které uvozovky používat, o kolik mezer odsazovat, maximální délku řádku atd. A mnoho vedlejších věcí.
+Stylový průvodce obsahuje obecná pravidla o tom, „jak psát“ kód, tj. které uvozovky používat, o kolik mezer odsazovat, maximální délku řádku atd. Mnoho vedlejších věcí.
 
 Když všichni členové týmu používají stejného stylového průvodce, bude kód vypadat jednotně bez ohledu na to, který člen týmu ho napsal.
 
