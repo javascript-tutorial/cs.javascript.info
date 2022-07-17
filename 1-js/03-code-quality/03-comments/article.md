@@ -8,7 +8,7 @@ Na první pohled může být komentování samozřejmé, ale začínající prog
 
 ## Špatné komentáře
 
-Začátečníci tíhnou k používání komentářů, které vysvětlují, „co se v kódu děje“. Například:
+Začátečníci tíhnou k psaní komentářů, které vysvětlují, „co se v kódu děje“. Například:
 
 ```js
 // Tento kód dělá toto (...) a toto (...)
@@ -153,7 +153,7 @@ Proč se tato úloha řeší zrovna takhle?
     Bez takových komentářů může nastat následující situace:
     1. Vy (nebo váš kolega) otevřete kód, napsaný před nějakou dobou, a vidíte, že je „suboptimální“.
     2. Pomyslíte si: „To jsem byl tehdy ale hloupý, teď jsem o hodně chytřejší“, a přepíšete ho na „jasnější a korektnější“ variantu.
-    3. ...Potřeba přepsat kód byla dobrá. Ale v procesu uvidíte, že „jasnější“ řešení je ve skutečnosti horší. Matně si vzpomenete proč, jelikož jste je už před dlouhou dobou zkoušeli. Vrátíte kód na korektní variantu, ale byla to ztráta času.
+    3. ...Potřeba přepsat kód byla dobrá. Ale po spuštění uvidíte, že „jasnější“ řešení je ve skutečnosti horší. Matně si vzpomenete proč, jelikož jste je už před dlouhou dobou zkoušeli. Vrátíte kód na korektní variantu, ale byla to ztráta času.
 
     Komentáře, které vysvětlují řešení, jsou velmi důležité, protože nám pomáhají vyvíjet správnou cestou.
 
