@@ -11,13 +11,13 @@ it("Umocní x na n-tou", function() {
   let x = 5;
 
   let výsledek = x;
-  assert.equal(pow(x, 1), výsledek);
+  assert.equal(mocnina(x, 1), výsledek);
 
   výsledek *= x;
-  assert.equal(pow(x, 2), výsledek);
+  assert.equal(mocnina(x, 2), výsledek);
 
   výsledek *= x;
-  assert.equal(pow(x, 3), výsledek);
+  assert.equal(mocnina(x, 3), výsledek);
 });
 ```
 

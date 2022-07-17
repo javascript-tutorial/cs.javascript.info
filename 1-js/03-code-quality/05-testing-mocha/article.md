@@ -1,12 +1,12 @@
 # Automatické testování pomocí Mochy
 
-Automatické testování bude používáno v dalších úkolech a široce se používá i ve skutečných projektech.
+Automatické testování bude používáno v dalších úlohách a široce se používá i ve skutečných projektech.
 
 ## K čemu potřebujeme testy?
 
 Když píšeme funkci, můžeme si obvykle představit, co by měla dělat: jaké parametry by měly dávat jaké výsledky.
 
-Během vývoje můžeme tuto funkci ověřit tak, že ji spustíme a porovnáme výsledek s očekávaným. Například to můžeme udělat na konzoli.
+Během vývoje můžeme tuto funkci zkontrolovat tak, že ji spustíme a porovnáme její výsledek s očekávaným. Můžeme to udělat například na konzoli.
 
 Jestliže je něco špatně -- pak opravíme kód, znovu spustíme funkci, zkontrolujeme výsledek -- a tak dále, dokud to nebude fungovat.
 
@@ -18,7 +18,7 @@ Například vytváříme funkci `f`. Napíšeme kód a testujeme: `f(1)` funguje
 
 To je velmi typické. Když něco vyvíjíme, máme na paměti mnoho možných případů použití. Těžko však očekávat od programátora, že je po každé změně všechny znovu ručně prověří. Lehce se tedy stává, že opravíme jednu věc a rozbijeme jinou.
 
-**Automatické testování znamená, že testy jsou psány odděleně navíc ke kódu. Různými způsoby spouštějí naše funkce a porovnávají výsledky s očekávanými.**
+**Automatické testování znamená, že testy jsou psány odděleně navíc ke kódu. Různými způsoby spouštějí naše funkce a porovnávají jejich výsledky s očekávanými.**
 
 ## Vývoj řízený chováním (BDD)
 
@@ -61,7 +61,7 @@ Specifikace má tři hlavní stavební bloky, které vidíte výše:
 
 Funkce `assert.*` se používají k ověření, zda `mocnina` funguje tak, jak očekáváme. Právě zde používáme jednu z nich -- `assert.equal`, která porovná argumenty a vyvolá chybu, pokud si nejsou rovny. Zde zkontroluje, zda výsledek `mocnina(2, 3)` se rovná `8`. Existují i jiné druhy porovnání a kontrol, které přidáme později.
 
-Specifikaci můžeme spustit a pak spustí test specifikovaný v bloku `it`. To uvidíme později.
+Specifikaci můžeme spustit a ta pak spustí test specifikovaný v bloku `it`. To uvidíme později.
 
 ## Proces vývoje
 
@@ -69,7 +69,7 @@ Proces vývoje obvykle vypadá takto:
 
 1. Napíše se úvodní specifikace s testy pro většinu základní funkcionality.
 2. Vytvoří se úvodní implementace.
-3. Abychom prověřili, zda funguje, spustíme testovací framework [Mocha](http://mochajs.org/) (více později), který spustí specifikaci. Dokud funkcionalita není úplná, budou se zobrazovat chyby. Provádíme opravy, dokud nebude vše fungovat.
+3. Abychom prověřili, zda funguje, spustíme testovací rámec [Mocha](http://mochajs.org/) (více později), který spustí specifikaci. Dokud funkcionalita není úplná, budou se zobrazovat chyby. Provádíme opravy, dokud nebude vše fungovat.
 4. Nyní máme funkční úvodní implementaci s testy.
 5. Do specifikace přidáváme další případy použití, které implementace pravděpodobně nepodporuje. Testy začnou selhávat.
 6. Vrátíme se ke kroku 3 a vylepšujeme implementaci, dokud testy nepřestanou vydávat chyby.
@@ -85,13 +85,13 @@ První krok je již téměř hotov: máme úvodní specifikaci funkce `mocnina`.
 
 V tomto tutoriálu budeme pro testy používat následující JavaScriptové knihovny:
 
-- [Mocha](http://mochajs.org/) -- jádro frameworku: poskytuje běžné testovací funkce včetně `describe` a `it` a hlavní funkci, která spouští testy.
+- [Mocha](http://mochajs.org/) -- jádro rámce: poskytuje běžné testovací funkce včetně `describe` a `it` a hlavní funkci, která spouští testy.
 - [Chai](http://chaijs.com) -- knihovna s mnoha kontrolami. Umožňuje nám použít spoustu různých kontrol, ale nyní budeme potřebovat jen `assert.equal`.
 - [Sinon](http://sinonjs.org/) -- knihovna k prozkoumávání funkcí, emulování vestavěných funkcí a podobně. Budeme ji potřebovat až mnohem později.
 
 Tyto knihovny jsou vhodné pro testování v prohlížeči i na straně serveru. Zde budeme uvažovat prohlížečovou variantu.
 
-Celá HTML stránka s těmito frameworky a specifikací funkce `mocnina`:
+Celá HTML stránka s těmito rámci a specifikací funkce `mocnina`:
 
 ```html src="index.html"
 ```
@@ -100,7 +100,7 @@ Tuto stránku lze rozdělit do pěti částí:
 
 1. `<head>` -- přidává knihovny třetích stran a styly pro testy.
 2. `<script>` s funkcí k testování, v našem případě s kódem funkce `mocnina`.
-3. Testy -- v našem případě externí skript `test.js`, který má výše uvedené `describe("mocnina", ...)`.
+3. Testy -- v našem případě externí skript `test.js`, který obsahuje výše uvedené `describe("mocnina", ...)`.
 4. HTML značka `<div id="mocha">`, kterou bude používat Mocha k výstupu výsledků.
 5. Testy jsou zahájeny příkazem `mocha.run()`.
 
@@ -168,7 +168,7 @@ Zde si můžeme vybrat jeden ze dvou způsobů, jak test organizovat:
 
 Principiální rozdíl je v tom, že když `assert` vyvolá chybu, blok `it` se okamžitě ukončí. Jestliže tedy v první variantě první `assert` neuspěje, neuvidíme výsledek druhého `assert`.
 
-Rozdělit testy je užitečné pro získání více informací o tom, co se děje, takže druhá varianta je lepší.
+Rozdělení testů je užitečné pro získání více informací o tom, co se děje, takže druhá varianta je lepší.
 
 A kromě toho existuje ještě jedno pravidlo, které se vyplatí dodržovat.
 
@@ -259,10 +259,10 @@ Vnořené `describe` definuje novou „podskupinu“ testů. Na výstupu můžem
 
 [iframe height=250 src="pow-4" edit border="1"]
 
-V budoucnosti můžeme přidávat další `it` a `describe` do nejvyšší úrovně s vlastními pomocnými funkcemi, které neuvidí `vytvořTest`.
+V budoucnosti můžeme přidávat další `it` a `describe` na nejvyšší úrovni s vlastními pomocnými funkcemi. V nich nebude vidět `vytvořTest`.
 
 ````smart header="`before/after` a `beforeEach/afterEach`"
-Můžeme nastavit funkce `before/after`, které se spustí před/po provedení testů, a také funkce `beforeEach/afterEach`, které se spustí před/po provedení *každého* `it`.
+Můžeme nastavit funkce `before/after`, které se spustí před provedením/po provedení testů, a také funkce `beforeEach/afterEach`, které se spustí před provedením/po provedení *každého* `it`.
 
 Například:
 
@@ -333,7 +333,7 @@ Výsledek s novými testy:
 
 [iframe height=530 src="pow-nan" edit border="1"]
 
-Nově přidané testy selžou, protože je naše implementace nepodporuje. Tímto způsobem se provádí BDD: nejprve napíšeme selhávající testy, pak pro ně vytvoříme implementaci.
+Nově přidané testy selžou, protože je naše implementace nepodporuje. Tímto způsobem se provádí BDD: nejprve napíšeme selhávající testy, až pak pro ně vytvoříme implementaci.
 
 ```smart header="Další kontroly"
 Všimněte si prosím kontroly `assert.isNaN`: kontroluje hodnotu `NaN`.
@@ -348,7 +348,7 @@ V [Chai](http://chaijs.com) jsou i jiné kontroly, například:
 - ...úplný seznam najdete v [dokumentaci](http://chaijs.com/api/assert/)
 ```
 
-Do `mocnina` bychom tedy měli přidat několik řádků:
+Do funkce `mocnina` bychom tedy měli přidat několik řádků:
 
 ```js
 function mocnina(x, n) {
@@ -375,7 +375,7 @@ Nyní to funguje a všechny testy projdou:
 
 ## Shrnutí
 
-V BDD přichází nejprve specifikace, pak následuje implementace. Na konci máme jak specifikaci, tak kód.
+V BDD se nejprve vytváří specifikace, pak až následuje implementace. Nakonec máme jak specifikaci, tak kód.
 
 Specifikaci můžeme použít třemi způsoby:
 
@@ -383,9 +383,9 @@ Specifikaci můžeme použít třemi způsoby:
 2. Jako **dokumentaci** -- titulky `describe` a `it` nám říkají, co funkce provádí.
 3. Jako **příklady** -- testy jsou v podstatě fungující příklady, které nám ukazují, jak může být funkce použita.
 
-S touto specifikací můžeme bezpečně zlepšovat, měnit nebo i přepisovat funkci znova a máme jistotu, že stále bude fungovat správně.
+S touto specifikací můžeme funkci bezpečně zlepšovat, měnit nebo i od začátku přepisovat a máme jistotu, že stále bude fungovat správně.
 
-To je obzvláště důležité ve velkých projektech, v nichž se funkce používá na mnoha místech. Když takovou funkci změníme, není žádný způsob, jak ručně ověřit, zda stále funguje správně na všech místech, kde se používá.
+To je obzvláště důležité ve velkých projektech, v nichž se funkce používá na mnoha místech. Když takovou funkci změníme, nemáme žádný způsob, jak ručně ověřit, zda stále funguje správně na všech místech, kde se používá.
 
 Bez testů mají lidé dvě možnosti:
 
@@ -394,7 +394,7 @@ Bez testů mají lidé dvě možnosti:
 
 **Automatické testování pomáhá předejít těmto problémům!**
 
-Jestliže je projekt pokryt testy, žádný takový problém nenastane. Po každé změně můžeme provést testy a uvidíme spoustu kontrol, které se provedou v řádu sekund.
+Jestliže je projekt pokryt testy, žádný takový problém nenastane. Po každé změně můžeme provést testy a uvidíme spoustu kontrol, které se provedou během několika sekund.
 
 **Kromě toho dobře testovaný kód má lepší architekturu.**
 
