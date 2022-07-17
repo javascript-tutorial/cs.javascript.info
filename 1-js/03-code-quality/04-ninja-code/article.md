@@ -19,7 +19,7 @@ Mnozí lidé se snaží následovat cesty ninjů. Jen málokteří uspějí.
 ```
 
 
-## Krátkost je matka duchaplnosti
+## Stručnost je duší důvtipu
 
 Snažte se napsat kód co nejkratší. Ukažte všem, jak jste chytří.
 
@@ -46,7 +46,7 @@ Další způsob, jak zkrátit kód, je všude používat jednopísmenné názvy 
 
 Krátká proměnná se v kódu ztratí jako opravdový ninja v lese. Nikdo ji nebude moci najít pomocí funkce hledání v editoru. A i kdyby ano, nedokáže „rozšifrovat“, co názvy `a` nebo `b` znamenají.
 
-...Je tady však jedna výjimka. Opravdový ninja nikdy nepoužije `i` jako čítač v cyklu `"for"`. Všude, jen ne tam. Jen se rozhlédněte kolem, existuje spousta exotičtějších písmen, např. `x` nebo `y`.
+...Je tady však jedna výjimka. Opravdový ninja nikdy nepoužije `i` jako čítač v cyklu `„for“`. Všude, jen ne tam. Jen se rozhlédněte kolem, existuje spousta exotičtějších písmen, např. `x` nebo `y`.
 
 Exotická proměnná jako čítač v cyklu je obzvláště půvabná, jestliže tělo cyklu zabírá 1-2 stránky (můžete-li, napište je co nejdelší). Když se potom někdo podívá hlouběji do cyklu, nebude schopen rychle přijít na to, že proměnná `x` je čítač cyklu.
 
@@ -72,23 +72,23 @@ velký tón není slyšet<br>
 velká podoba je bez tvaru<br>
 ```
 
-Když vybíráte název, snažte se použít co nejabstraktnější slovo. Třeba `obj`, `data`, `hodnota`, `prvek`, `element` a podobně.
+Když volíte název, snažte se použít co nejabstraktnější slovo. Třeba `obj`, `data`, `hodnota`, `prvek`, `element` a podobně.
 
 - **Ideální název proměnné je `data`.** Používejte jej všude, kde můžete. Každá proměnná přece obsahuje nějaká *data*, ne?
 
     ...Ale co když je název `data` už zabrán? Zkuste `hodnota`, to je také univerzální. Koneckonců každá proměnná nakonec bude mít nějakou *hodnotu*.
 
-- **Pojmenujte proměnnou podle jejího typu: `str`, `num`...**
+- **Pojmenujte proměnnou podle jejího typu: `řetězec`, `číslo`...**
 
     Zkuste to. Mladý učedník se může divit -- jsou takové názvy pro ninju opravdu užitečné? Ale ano, jsou!
 
-    Jistě, takový název proměnné stále něco znamená. Říká, co proměnná obsahuje: řetězec (string), číslo (number) nebo něco jiného. Když se však outsider pokusí porozumět kódu, bude překvapen, že vidí, že název neobsahuje vlastně vůbec žádnou informaci! A nakonec se mu nepodaří váš dobře myšlený kód změnit.
+    Jistě, takový název proměnné stále něco znamená. Říká, co proměnná obsahuje: řetězec, číslo nebo něco jiného. Když se však outsider pokusí porozumět kódu, bude překvapen, že vidí, že název neobsahuje vlastně vůbec žádnou informaci! A nakonec se mu nepodaří váš skvěle promyšlený kód změnit.
 
-    Typ proměnné lze snadno najít při ladění. Ale jaký je význam proměnné? Jaký řetězec nebo číslo je v ní uloženo?
+    Datový typ proměnné lze snadno odhalit při ladění. Ale jaký je význam proměnné? Jaký řetězec nebo číslo je v ní uloženo?
 
     Není způsob, jak to odhalit bez dobré meditace!
 
-- **...Ale co když žádné další takové názvy už nejsou?** Stačí přidat číslo: `data1, prvek2, element5`...
+- **...Ale co když žádné další takové názvy už nezbývají?** Stačí přidat číslo: `data1, prvek2, element5`...
 
 ## Zkouška pozornosti
 
@@ -98,7 +98,7 @@ Vašemu kódu by měl porozumět jen skutečně pozorný programátor. Ale jak t
 
 Směšujte je všude, kde je to možné.
 
-Takový kód je pak nemožné rychle přečíst. A když je někde překlep... Ummm... Už jsme se zdrželi dost dlouho, je čas na čaj.
+Takový kód je pak nemožné rychle přečíst. A když je někde překlep... Hmmm... Nadlouho nás to zdrží, uděláme si přestávku na čaj.
 
 
 ## Chytrá synonyma
@@ -137,7 +137,7 @@ Jinak místo toho opakovaně používejte již existující názvy. Jen do nich 
 
 Ve funkci se snažte používat jedině proměnné, které byly předány jako parametry.
 
-Díky tomu je opravdu těžké rozpoznat, co je vlastně v proměnné *právě teď*. A také, odkud to přišlo. Cílem je procvičit intuici a paměť člověka, který čte kód. Osoba se slabou intuicí bude muset analyzovat kód řádek po řádku a stopovat změny v každé větvi.
+Díky tomu je opravdu těžké poznat, co vlastně proměnná obsahuje *právě teď*. A také, odkud to přišlo. Cílem je procvičit intuici a paměť člověka, který čte kód. Osoba se slabou intuicí bude muset analyzovat kód řádek po řádku a stopovat změny v každé větvi.
 
 **Pokročilá varianta tohoto přístupu je utajeně (!) nahradit hodnotu něčím podobným uvnitř cyklu nebo funkce.**
 
@@ -155,7 +155,7 @@ function ninjovaFunkce(elem) {
 
 Kolega, který bude chtít pracovat s proměnnou `elem` ve druhé polovině funkce, bude překvapen... Teprve při ladění po prozkoumání kódu přijde na to, že pracuje s klonem!
 
-Toto je v kódu často vidět. Je to efektivně smrtící i proti zkušenému ninjovi.
+Toto je v kódu často vidět. Je to hrozivě efektivní i proti zkušenému ninjovi.
 
 
 ## Legrace s podtržítky
@@ -203,17 +203,17 @@ Pak se pokusí pracovat s proměnnou `uživatel` předpokládaje, že je to exte
 
 ## Všude vedlejší efekty!
 
-Existují funkce, které vypadají, jako by nic neměnily. Například `jePřipraven()`, `zkontrolujPrávo()`, `najdiZnačky()`... Předpokládá se, že provedou výpočty a najdou a vrátí data, aniž by měnily cokoli mimo ně. Jinými slovy, bez „vedlejších efektů“.
+Existují funkce, které vypadají, jako by nic neměnily. Například `jePřipraven()`, `ověřOprávnění()`, `najdiZnačky()`... Předpokládá se, že provedou výpočty a najdou a vrátí data, aniž by měnily cokoli mimo ně. Jinými slovy, bez „vedlejších efektů“.
 
 **Opravdu krásný trik je přidat do nich kromě hlavního úkolu ještě nějakou „užitečnou“ akci navíc.**
 
-Pohled na překvapenou tvář vašeho kolegy, který zjistí, že funkce pojmenovaná `je..`, `zkontroluj..` nebo `najdi..` něco mění, zaručeně posune hranice vašeho rozumu.
+Pohled na překvapenou tvář vašeho kolegy, který zjistí, že funkce pojmenovaná `je..`, `ověř..` nebo `najdi..` něco mění, zaručeně posune hranice vašeho rozumu.
 
 **Další cestou, jak překvapit, je vrátit nestandardní výsledek.**
 
-Předveďte své originální myšlení! Nechte funkci `zkontrolujPrávo` vrátit nikoli `true/false`, ale složitý objekt s výsledky kontroly.
+Předveďte své originální myšlení! Nechte funkci `ověřOprávnění` vrátit nikoli `true/false`, ale složitý objekt s výsledky ověření.
 
-Vývojáři, kteří se pokusí napsat `if (zkontrolujPrávo(..))`, se budou divit, proč to nefunguje. Řekněte jim: „Přečtěte si dokumentaci!“ A dejte jim odkaz na tento článek.
+Vývojáři, kteří se pokusí napsat `if (ověřOprávnění(..))`, se budou divit, proč to nefunguje. Řekněte jim: „Přečtěte si dokumentaci!“ A dejte jim odkaz na tento článek.
 
 
 ## Silné funkce!
