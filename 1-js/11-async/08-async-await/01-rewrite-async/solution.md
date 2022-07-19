@@ -1,33 +1,33 @@
 
-The notes are below the code:
+Poznámky jsou pod kódem:
 
 ```js run
-async function loadJson(url) { // (1)
-  let response = await fetch(url); // (2)
+async function načtiJson(url) { // (1)
+  let odpověď = await fetch(url); // (2)
 
-  if (response.status == 200) {
-    let json = await response.json(); // (3)
+  if (odpověď.status == 200) {
+    let json = await odpověď.json(); // (3)
     return json;
   }
 
-  throw new Error(response.status);
+  throw new Error(odpověď.status);
 }
 
-loadJson('https://javascript.info/no-such-user.json')
-  .catch(alert); // Error: 404 (4)
+načtiJson('https://javascript.info/zadny-takovy-uzivatel.json')
+  .catch(alert); // Chyba: 404 (4)
 ```
 
-Notes:
+Poznámky:
 
-1. The function `loadJson` becomes `async`.
-2. All `.then` inside are replaced with `await`.
-3. We can `return response.json()` instead of awaiting for it, like this:
+1. Funkce `načtiJson` se stává asynchronní (`async`).
+2. Všechna `.then` uvnitř jsou nahrazena za `await`.
+3. Můžeme vrátit `return odpověď.json()` místo čekání na ni, například:
 
     ```js
-    if (response.status == 200) {
-      return response.json(); // (3)
+    if (odpověď.status == 200) {
+      return odpověď.json(); // (3)
     }
     ```
 
-    Then the outer code would have to `await` for that promise to resolve. In our case it doesn't matter.
-4. The error thrown from `loadJson` is handled by `.catch`. We can't use `await loadJson(…)` there, because we're not in an `async` function.
+    Pak by vnější kód musel počkat pomocí `await`, než se tento příslib vyhodnotí. V našem případě na tom nezáleží.
+4. Chyba vyvolaná z `načtiJson` je ošetřena pomocí `.catch`. Nemůžeme zde použít `await načtiJson(…)`, protože nejsme uvnitř funkce s `async`.

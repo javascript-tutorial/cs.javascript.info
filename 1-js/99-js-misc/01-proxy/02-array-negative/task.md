@@ -1,33 +1,33 @@
 
-# Accessing array[-1]
+# Přístup k poli[-1]
 
-In some programming languages, we can access array elements using negative indexes, counted from the end.
+V některých programovacích jazycích můžeme přistupovat k prvkům pole pomocí záporných indexů, počítaných od konce.
 
-Like this:
+Například:
 
 ```js
-let array = [1, 2, 3];
+let pole = [1, 2, 3];
 
-array[-1]; // 3, the last element
-array[-2]; // 2, one step from the end
-array[-3]; // 1, two steps from the end
+pole[-1]; // 3, poslední prvek
+pole[-2]; // 2, jeden krok od konce
+pole[-3]; // 1, dva kroky od konce
 ```
 
-In other words, `array[-N]` is the same as `array[array.length - N]`.
+Jinými slovy, `pole[-N]` je totéž jako `pole[pole.length - N]`.
 
-Create a proxy to implement that behavior.
+Vytvořte proxy, která bude toto chování implementovat.
 
-That's how it should work:
+Měla by fungovat takto:
 
 ```js
-let array = [1, 2, 3];
+let pole = [1, 2, 3];
 
-array = new Proxy(array, {
-  /* your code */
+pole = new Proxy(pole, {
+  /* váš kód */
 });
 
-alert( array[-1] ); // 3
-alert( array[-2] ); // 2
+alert( pole[-1] ); // 3
+alert( pole[-2] ); // 2
 
-// Other array functionality should be kept "as is"
+// Ostatní funkcionalita pole by měla zůstat tak, „jak je“
 ```

@@ -1,301 +1,301 @@
-# Custom errors, extending Error
+# Vlastní chyby, rozšíření třídy Error
 
-When we develop something, we often need our own error classes to reflect specific things that may go wrong in our tasks. For errors in network operations we may need `HttpError`, for database operations `DbError`, for searching operations `NotFoundError` and so on.
+Když něco vyvíjíme, často potřebujeme, aby naše vlastní chybové třídy odrážely specifické věci, které se v našich úlohách mohou pokazit. Pro chyby v síťových operacích můžeme potřebovat třídu `ChybaHttp`, pro databázové operace `ChybaDb`, pro operace hledání `ChybaNenalezeno` a tak dále.
 
-Our errors should support basic error properties like `message`, `name` and, preferably, `stack`. But they also may have other properties of their own, e.g. `HttpError` objects may have a `statusCode` property with a value like `404` or `403` or `500`.
+Naše chyby by měly podporovat základní vlastnosti chyb jako `message`, `name` a pokud možno `stack`. Mohou však mít i jiné, své vlastní vlastnosti, např. objekty třídy `ChybaHttp` mohou mít vlastnost `stavovýKód` s hodnotami jako `404` nebo `403` nebo `500`.
 
-JavaScript allows to use `throw` with any argument, so technically our custom error classes don't need to inherit from `Error`. But if we inherit, then it becomes possible to use `obj instanceof Error` to identify error objects. So it's better to inherit from it.
+JavaScript nám umožňuje používat `throw` s libovolným argumentem, takže technicky naše vlastní chybové třídy nemusejí dědit ze třídy `Error`. Pokud z ní však dědíme, bude možné k identifikaci chybových objektů používat `obj instanceof Error`. Je tedy lepší z ní dědit.
 
-As the application grows, our own errors naturally form a hierarchy. For instance, `HttpTimeoutError` may inherit from `HttpError`, and so on.
+Když aplikace poroste, naše vlastní chyby budou přirozeně tvořit hierarchii. Například `ChybaHttpTimeout` může dědit z `ChybaHttp` a tak dále.
 
-## Extending Error
+## Rozšiřování třídy Error
 
-As an example, let's consider a function `readUser(json)` that should read JSON with user data.
+Jako příklad uvažujme funkci `načtiUživatele(json)`, která by měla načíst JSON s uživatelskými daty.
 
-Here's an example of how a valid `json` may look:
+Zde je příklad, jak může vypadat platný `json`:
 ```js
-let json = `{ "name": "John", "age": 30 }`;
+let json = `{ "jméno": "Jan", "věk": 30 }`;
 ```
 
-Internally, we'll use `JSON.parse`. If it receives malformed `json`, then it throws `SyntaxError`. But even if `json` is syntactically correct, that doesn't mean that it's a valid user, right? It may miss the necessary data. For instance, it may not have `name` and `age` properties that are essential for our users.
+Interně použijeme `JSON.parse`. Jestliže obdrží poškozený `json`, vyvolá `SyntaxError`. Ale i když je `json` syntakticky správně, neznamená to, že obsahuje platného uživatele, že? Mohou v něm chybět nezbytná data. Například nemusí obsahovat vlastnosti `jméno` a `věk`, které jsou pro naše uživatele nezbytné.
 
-Our function `readUser(json)` will not only read JSON, but check ("validate") the data. If there are no required fields, or the format is wrong, then that's an error. And that's not a `SyntaxError`, because the data is syntactically correct, but another kind of error. We'll call it `ValidationError` and create a class for it. An error of that kind should also carry the information about the offending field.
+Naše funkce `načtiUživatele(json)` tedy nebude jenom načítat JSON, ale také ověřovat („validovat“) data. Pokud v nich nebudou požadovaná pole nebo formát nebude správný, nastane chyba. A nebude to `SyntaxError`, protože data jsou syntakticky správně, ale chyba jiného druhu. Nazveme ji `ChybaValidace` a vytvoříme pro ni třídu. Chyba tohoto druhu by měla obsahovat také informaci o vadném poli.
 
-Our `ValidationError` class should inherit from the `Error` class.
+Naše třída `ChybaValidace` by měla být zděděna ze třídy `Error`.
 
-The `Error` class is built-in, but here's its approximate code so we can understand what we're extending:
+Třída `Error` je vestavěná, ale zde je její přibližný kód, abychom porozuměli tomu, co rozšiřujeme:
 
 ```js
-// The "pseudocode" for the built-in Error class defined by JavaScript itself
+// „Pseudokód“ pro vestavěnou třídu Error definovanou samotným JavaScriptem
 class Error {
-  constructor(message) {
-    this.message = message;
-    this.name = "Error"; // (different names for different built-in error classes)
-    this.stack = <call stack>; // non-standard, but most environments support it
+  constructor(zpráva) {
+    this.message = zpráva;
+    this.name = "Error"; // (různé názvy pro různé vestavěné chybové třídy)
+    this.stack = <zásobník volání>; // nestandardní, ale většina prostředí jej podporuje
   }
 }
 ```
 
-Now let's inherit `ValidationError` from it and try it in action:
+Nyní z ní zděďme třídu `ChybaValidace` a vyzkoušejme ji v akci:
 
 ```js run untrusted
 *!*
-class ValidationError extends Error {
+class ChybaValidace extends Error {
 */!*
-  constructor(message) {
-    super(message); // (1)
-    this.name = "ValidationError"; // (2)
+  constructor(zpráva) {
+    super(zpráva); // (1)
+    this.name = "ChybaValidace"; // (2)
   }
 }
 
 function test() {
-  throw new ValidationError("Whoops!");
+  throw new ChybaValidace("Ouha!");
 }
 
 try {
   test();
 } catch(err) {
-  alert(err.message); // Whoops!
-  alert(err.name); // ValidationError
-  alert(err.stack); // a list of nested calls with line numbers for each
+  alert(err.message); // Ouha!
+  alert(err.name); // ChybaValidace
+  alert(err.stack); // seznam vnořených volání s číslem řádku u každého
 }
 ```
 
-Please note: in the line `(1)` we call the parent constructor. JavaScript requires us to call `super` in the child constructor, so that's obligatory. The parent constructor sets the `message` property.
+Prosíme všimněte si: na řádku `(1)` zavoláme rodičovský konstruktor. JavaScript vyžaduje, abychom v konstruktoru potomka volali `super`, takže to je povinné. Rodičovský konstruktor nastaví vlastnost `message`.
 
-The parent constructor also sets the `name` property to `"Error"`, so in the line `(2)` we reset it to the right value.
+Rodičovský konstruktor také nastaví vlastnost `name` na `"Error"`, takže ji na řádku `(2)` přenastavíme na správnou hodnotu.
 
-Let's try to use it in `readUser(json)`:
+Použijme chybu v metodě `načtiUživatele(json)`:
 
 ```js run
-class ValidationError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ValidationError";
+class ChybaValidace extends Error {
+  constructor(zpráva) {
+    super(zpráva);
+    this.name = "ChybaValidace";
   }
 }
 
-// Usage
-function readUser(json) {
-  let user = JSON.parse(json);
+// Použití
+function načtiUživatele(json) {
+  let uživatel = JSON.parse(json);
 
-  if (!user.age) {
-    throw new ValidationError("No field: age");
+  if (!uživatel.věk) {
+    throw new ChybaValidace("Chybí pole: věk");
   }
-  if (!user.name) {
-    throw new ValidationError("No field: name");
+  if (!uživatel.name) {
+    throw new ChybaValidace("Chybí pole: jméno");
   }
 
-  return user;
+  return uživatel;
 }
 
-// Working example with try..catch
+// Příklad fungování s try..catch
 
 try {
-  let user = readUser('{ "age": 25 }');
-} catch (err) {
-  if (err instanceof ValidationError) {
+  let uživatel = načtiUživatele('{ "věk": 25 }');
+} catch (chyba) {
+  if (chyba instanceof ChybaValidace) {
 *!*
-    alert("Invalid data: " + err.message); // Invalid data: No field: name
+    alert("Vadná data: " + chyba.message); // Vadná data: Chybí pole: jméno
 */!*
-  } else if (err instanceof SyntaxError) { // (*)
-    alert("JSON Syntax Error: " + err.message);
+  } else if (chyba instanceof SyntaxError) { // (*)
+    alert("Syntaktická chyba JSONu: " + chyba.message);
   } else {
-    throw err; // unknown error, rethrow it (**)
+    throw chyba; // neznámá chyba, vyvoláme ji znovu (**)
   }
 }
 ```
 
-The `try..catch` block in the code above handles both our `ValidationError` and the built-in `SyntaxError` from `JSON.parse`.
+Ve výše uvedeném kódu blok `try..catch` ošetřuje jak naši chybu `ChybaValidace`, tak vestavěnou chybu `SyntaxError` z `JSON.parse`.
 
-Please take a look at how we use `instanceof` to check for the specific error type in the line `(*)`.
+Prosíme podívejte se, jak na řádku `(*)` používáme `instanceof` k ověřování specifického typu chyby.
 
-We could also look at `err.name`, like this:
+Můžeme se podívat i do `chyba.name`, například:
 
 ```js
 // ...
-// instead of (err instanceof SyntaxError)
-} else if (err.name == "SyntaxError") { // (*)
+// místo (chyba instanceof SyntaxError)
+} else if (chyba.name == "SyntaxError") { // (*)
 // ...
 ```
 
-The `instanceof` version is much better, because in the future we are going to extend `ValidationError`, make subtypes of it, like `PropertyRequiredError`. And `instanceof` check will continue to work for new inheriting classes. So that's future-proof.
+Verze s `instanceof` je mnohem lepší, protože v budoucnu se chystáme třídu `ChybaValidace` rozšiřovat, vytvářet její podtypy, např. `ChybaPožadovanéVlastnosti`. A ověření pomocí `instanceof` bude fungovat i pro nově zděděné třídy. Je tedy dopředně kompatibilní.
 
-Also it's important that if `catch` meets an unknown error, then it rethrows it in the line `(**)`. The `catch` block only knows how to handle validation and syntax errors, other kinds (caused by a typo in the code or other unknown reasons) should fall through.
+Je také důležité, že pokud `catch` zachytí neznámou chybu, na řádku `(**)` ji opětovně vyvolá. Blok `catch` umí ošetřit jen validační a syntaktické chyby, ostatní druhy chyb (způsobené překlepem v kódu nebo jinými neznámými příčinami) by měly vypadnout dál.
 
-## Further inheritance
+## Budoucí dědičnost
 
-The `ValidationError` class is very generic. Many things may go wrong. The property may be absent or it may be in a wrong format (like a string value for `age` instead of a number). Let's make a more concrete class `PropertyRequiredError`, exactly for absent properties. It will carry additional information about the property that's missing.
+Třída `ChybaValidace` je velmi obecná. Pokazit se může spousta věcí. Vlastnost může chybět nebo může být v nesprávném formátu (například řetězcová hodnota místo čísla u vlastnosti `věk`). Vytvořme tedy konkrétnější třídu `ChybaPožadovanéVlastnosti` sloužící výhradně pro případy absence vlastnosti. Bude obsahovat další informace o vlastnosti, která schází.
 
 ```js run
-class ValidationError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ValidationError";
+class ChybaValidace extends Error {
+  constructor(zpráva) {
+    super(zpráva);
+    this.name = "ChybaValidace";
   }
 }
 
 *!*
-class PropertyRequiredError extends ValidationError {
-  constructor(property) {
-    super("No property: " + property);
-    this.name = "PropertyRequiredError";
-    this.property = property;
+class ChybaPožadovanéVlastnosti extends ChybaValidace {
+  constructor(vlastnost) {
+    super("Chybí vlastnost: " + vlastnost);
+    this.name = "ChybaPožadovanéVlastnosti";
+    this.vlastnost = vlastnost;
   }
 }
 */!*
 
-// Usage
-function readUser(json) {
-  let user = JSON.parse(json);
+// Použití
+function načtiUživatele(json) {
+  let uživatel = JSON.parse(json);
 
-  if (!user.age) {
-    throw new PropertyRequiredError("age");
+  if (!uživatel.věk) {
+    throw new ChybaPožadovanéVlastnosti("věk");
   }
-  if (!user.name) {
-    throw new PropertyRequiredError("name");
+  if (!uživatel.jméno) {
+    throw new ChybaPožadovanéVlastnosti("jméno");
   }
 
-  return user;
+  return uživatel;
 }
 
-// Working example with try..catch
+// Příklad fungování s try..catch
 
 try {
-  let user = readUser('{ "age": 25 }');
-} catch (err) {
-  if (err instanceof ValidationError) {
+  let uživatel = načtiUživatele('{ "věk": 25 }');
+} catch (chyba) {
+  if (chyba instanceof ChybaValidace) {
 *!*
-    alert("Invalid data: " + err.message); // Invalid data: No property: name
-    alert(err.name); // PropertyRequiredError
-    alert(err.property); // name
+    alert("Vadná data: " + chyba.message); // Vadná data: Chybí vlastnost: jméno
+    alert(chyba.name); // ChybaPožadovanéVlastnosti
+    alert(chyba.vlastnost); // jméno
 */!*
-  } else if (err instanceof SyntaxError) {
-    alert("JSON Syntax Error: " + err.message);
+  } else if (chyba instanceof SyntaxError) {
+    alert("Syntaktická chyba JSONu: " + chyba.message);
   } else {
-    throw err; // unknown error, rethrow it
+    throw chyba; // neznámá chyba, vyvoláme ji znovu
   }
 }
 ```
 
-The new class `PropertyRequiredError` is easy to use: we only need to pass the property name: `new PropertyRequiredError(property)`. The human-readable `message` is generated by the constructor.
+Používání nové třídy `ChybaPožadovanéVlastnosti` je snadné: postačí předat název vlastnosti: `new ChybaPožadovanéVlastnosti(vlastnost)`. Konstruktor vygeneruje člověkem čitelnou zprávu `message`.
 
-Please note that `this.name` in `PropertyRequiredError` constructor is again assigned manually. That may become a bit tedious -- to assign `this.name = <class name>` in every custom error class. We can avoid it by making our own "basic error" class that assigns `this.name = this.constructor.name`. And then inherit all our custom errors from it.
+Prosíme všimněte si, že `this.name` v konstruktoru `ChybaPožadovanéVlastnosti` se opět přiřazuje ručně. To může být poněkud úmorné -- přiřazovat `this.name = <název třídy>` v každé vlastní chybové třídě. Můžeme se tomu vyhnout, když si vytvoříme vlastní „základní chybovou“ třídu, která bude přiřazovat `this.name = this.constructor.name`, a pak budeme všechny naše chyby dědit z ní.
 
-Let's call it `MyError`.
+Nazvěme ji `MojeChyba`.
 
-Here's the code with `MyError` and other custom error classes, simplified:
+Zde je kód s třídou `MojeChyba` a dalšími vlastními chybovými třídami, zjednodušeně:
 
 ```js run
-class MyError extends Error {
-  constructor(message) {
-    super(message);
+class MojeChyba extends Error {
+  constructor(zpráva) {
+    super(zpráva);
 *!*
     this.name = this.constructor.name;
 */!*
   }
 }
 
-class ValidationError extends MyError { }
+class ChybaValidace extends MojeChyba { }
 
-class PropertyRequiredError extends ValidationError {
-  constructor(property) {
-    super("No property: " + property);
-    this.property = property;
+class ChybaPožadovanéVlastnosti extends ChybaValidace {
+  constructor(vlastnost) {
+    super("Chybí vlastnost: " + vlastnost);
+    this.vlastnost = vlastnost;
   }
 }
 
-// name is correct
-alert( new PropertyRequiredError("field").name ); // PropertyRequiredError
+// název je správně
+alert( new ChybaPožadovanéVlastnosti("pole").name ); // ChybaPožadovanéVlastnosti
 ```
 
-Now custom errors are much shorter, especially `ValidationError`, as we got rid of the `"this.name = ..."` line in the constructor.
+Nyní jsou naše chyby, konkrétně `ChybaValidace`, mnohem kratší, jelikož jsme se zbavili řádku `"this.name = ..."` v konstruktoru.
 
-## Wrapping exceptions
+## Wrapování výjimek
 
-The purpose of the function `readUser` in the code above is "to read the user data". There may occur different kinds of errors in the process. Right now we have `SyntaxError` and `ValidationError`, but in the future `readUser` function may grow and probably generate other kinds of errors.
+Účelem funkce `načtiUživatele` ve výše uvedeném kódu je „načíst uživatelská data“. V procesu mohou nastat chyby různých druhů. Momentálně máme `SyntaxError` a `ChybaValidace`, ale v budoucnu se funkce `načtiUživatele` může rozrůst a pravděpodobně bude generovat chyby dalších druhů.
 
-The code which calls `readUser` should handle these errors. Right now it uses multiple `if`s in the `catch` block, that check the class and handle known errors and rethrow the unknown ones.
+Tyto chyby by měl ošetřovat kód, který funkci `načtiUživatele` volá. Momentálně používá v bloku `catch` několik příkazů `if`, které prozkoumají třídu, ošetří známé chyby a opětovně vyvolají neznámé.
 
-The scheme is like this:
+Schéma je následující:
 
 ```js
 try {
   ...
-  readUser()  // the potential error source
+  načtiUživatele()  // potenciální zdroj chyb
   ...
-} catch (err) {
-  if (err instanceof ValidationError) {
-    // handle validation errors
-  } else if (err instanceof SyntaxError) {
-    // handle syntax errors
+} catch (chyba) {
+  if (chyba instanceof ChybaValidace) {
+    // ošetření validačních chyb
+  } else if (chyba instanceof SyntaxError) {
+    // ošetření syntaktických chyb
   } else {
-    throw err; // unknown error, rethrow it
+    throw chyba; // neznámá chyba, vyvoláme ji znovu
   }
 }
 ```
 
-In the code above we can see two types of errors, but there can be more.
+Ve výše uvedeném kódu vidíme dva typy chyb, ale může jich tam být víc.
 
-If the `readUser` function generates several kinds of errors, then we should ask ourselves: do we really want to check for all error types one-by-one every time?
+Jestliže funkce `načtiUživatele` generuje chyby několika druhů, měli bychom se zeptat sami sebe: opravdu chceme pokaždé ověřovat všechny typy chyb jeden po druhém?
 
-Often the answer is "No": we'd like to be "one level above all that". We just want to know if there was a "data reading error" -- why exactly it happened is often irrelevant (the error message describes it). Or, even better, we'd like to have a way to get the error details, but only if we need to.
+Často zní odpověď „ne“: chtěli bychom být „o úroveň výš nad tím vším“. Chceme vědět jen to, zda to byla „chyba načítání dat“ -- proč přesně se stala, je často nepodstatné (popisuje to chybová zpráva). Nebo, ještě lépe, bychom rádi měli způsob, jak získat podrobnosti o chybě, ale jen když je budeme potřebovat.
 
-The technique that we describe here is called "wrapping exceptions".
+Technika, kterou tady popisujeme, se nazývá „wrapování výjimek“.
 
-1. We'll make a new class `ReadError` to represent a generic "data reading" error.
-2. The function `readUser` will catch data reading errors that occur inside it, such as `ValidationError` and `SyntaxError`, and generate a `ReadError` instead.
-3. The `ReadError` object will keep the reference to the original error in its `cause` property.
+1. Vytvoříme novou třídu `ChybaČtení`, která bude představovat obecnou chybu „čtení dat“.
+2. Funkce `načtiUživatele` bude zachytávat chyby načítání dat, které nastanou uvnitř ní, např. `ChybaValidace` a `SyntaxError`, a místo nich generovat chybu `ChybaČtení`.
+3. Objekt `ChybaČtení` si ve své vlastnosti `příčina` bude udržovat odkaz na původní chybu.
 
-Then the code that calls `readUser` will only have to check for `ReadError`, not for every kind of data reading errors. And if it needs more details of an error, it can check its `cause` property.
+Pak kód, který volá funkci `načtiUživatele`, bude muset ověřovat jen chybu `ChybaČtení`, ne každý druh chyby načítání dat. A pokud bude potřebovat podrobnosti o chybě, může se podívat na vlastnost `příčina`.
 
-Here's the code that defines `ReadError` and demonstrates its use in `readUser` and `try..catch`:
+Zde je kód, který definuje `ChybaČtení` a demonstruje její použití ve funkci `načtiUživatele` a `try..catch`:
 
 ```js run
-class ReadError extends Error {
-  constructor(message, cause) {
-    super(message);
-    this.cause = cause;
-    this.name = 'ReadError';
+class ChybaČtení extends Error {
+  constructor(zpráva, příčina) {
+    super(zpráva);
+    this.příčina = příčina;
+    this.name = 'ChybaČtení';
   }
 }
 
-class ValidationError extends Error { /*...*/ }
-class PropertyRequiredError extends ValidationError { /* ... */ }
+class ChybaValidace extends Error { /*...*/ }
+class ChybaPožadovanéVlastnosti extends ChybaValidace { /* ... */ }
 
-function validateUser(user) {
-  if (!user.age) {
-    throw new PropertyRequiredError("age");
+function validujUživatele(uživatel) {
+  if (!uživatel.věk) {
+    throw new ChybaPožadovanéVlastnosti("věk");
   }
 
-  if (!user.name) {
-    throw new PropertyRequiredError("name");
+  if (!uživatel.jméno) {
+    throw new ChybaPožadovanéVlastnosti("jméno");
   }
 }
 
-function readUser(json) {
-  let user;
+function načtiUživatele(json) {
+  let uživatel;
 
   try {
-    user = JSON.parse(json);
-  } catch (err) {
+    uživatel = JSON.parse(json);
+  } catch (chyba) {
 *!*
-    if (err instanceof SyntaxError) {
-      throw new ReadError("Syntax Error", err);
+    if (chyba instanceof SyntaxError) {
+      throw new ChybaČtení("Syntaktická chyba", chyba);
     } else {
-      throw err;
+      throw chyba;
     }
 */!*
   }
 
   try {
-    validateUser(user);
-  } catch (err) {
+    validujUživatele(uživatel);
+  } catch (chyba) {
 *!*
-    if (err instanceof ValidationError) {
-      throw new ReadError("Validation Error", err);
+    if (chyba instanceof ChybaValidace) {
+      throw new ChybaČtení("Chyba validace", chyba);
     } else {
-      throw err;
+      throw chyba;
     }
 */!*
   }
@@ -303,13 +303,13 @@ function readUser(json) {
 }
 
 try {
-  readUser('{bad json}');
+  načtiUživatele('{špatný json}');
 } catch (e) {
-  if (e instanceof ReadError) {
+  if (e instanceof ChybaČtení) {
 *!*
     alert(e);
-    // Original error: SyntaxError: Unexpected token b in JSON at position 1
-    alert("Original error: " + e.cause);
+    // Původní chyba: SyntaxError: Unexpected token š in JSON at position 1
+    alert("Původní chyba: " + e.příčina);
 */!*
   } else {
     throw e;
@@ -317,14 +317,14 @@ try {
 }
 ```
 
-In the code above, `readUser` works exactly as described -- catches syntax and validation errors and throws `ReadError` errors instead (unknown errors are rethrown as usual).
+Ve výše uvedeném kódu `načtiUživatele` funguje přesně tak, jak je popsáno -- zachytává syntaktické a validační chyby a místo nich vyvolává chyby `ChybaČtení` (neznámé chyby se vyvolávají znovu jako obvykle).
 
-So the outer code checks `instanceof ReadError` and that's it. No need to list all possible error types.
+Vnější kód si tedy ověří `instanceof ChybaČtení` a to je vše. Není třeba vyjmenovávat všechny možné typy chyb.
 
-The approach is called "wrapping exceptions", because we take "low level" exceptions and "wrap" them into `ReadError` that is more abstract. It is widely used in object-oriented programming.
+Tento přístup se nazývá „wrapování (obalování) výjimek“, protože přejímáme výjimky „nižší úrovně“ a obalujeme *(anglicky „wrap“)* je do výjimky `ChybaČtení`, která je abstraktnější. V objektově orientovaném programování se zeširoka používá.
 
-## Summary
+## Shrnutí
 
-- We can inherit from `Error` and other built-in error classes normally. We just need to take care of the `name` property and don't forget to call `super`.
-- We can use `instanceof` to check for particular errors. It also works with inheritance. But sometimes we have an error object coming from a 3rd-party library and there's no easy way to get its class. Then `name` property can be used for such checks.
-- Wrapping exceptions is a widespread technique: a function handles low-level exceptions and creates higher-level errors instead of various low-level ones. Low-level exceptions sometimes become properties of that object like `err.cause` in the examples above, but that's not strictly required.
+- Ze třídy `Error` a jiných vestavěných tříd můžeme běžně dědit. Jen se musíme postarat o vlastnost `name` a nesmíme zapomenout volat `super`.
+- K ověření chyb určitého druhu můžeme použít `instanceof`. Ten funguje i s dědičností. Někdy však máme chybový objekt pocházející z knihovny třetí strany a neexistuje žádný snadný způsob, jak získat jeho třídu. Pak můžeme pro taková ověření použít vlastnost `name`.
+- Široce používaná technika je wrapování výjimek: funkce ošetří výjimky nižší úrovně a namísto různých chyb nižší úrovně vyvolá chybu vyšší úrovně. Jejími vlastnostmi se někdy stávají výjimky nižší úrovně, například `chyba.příčina` ve výše uvedených příkladech, ale to není striktně vyžadováno.

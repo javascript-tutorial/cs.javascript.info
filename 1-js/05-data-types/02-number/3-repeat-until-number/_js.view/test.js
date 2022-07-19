@@ -6,33 +6,33 @@ afterEach(function() {
   prompt.restore();
 });
 
-describe("readNumber", function() {
+describe("načtiČíslo", function() {
 
-  it("if a number, returns it", function() {
+  it("je-li to číslo, vrátí je", function() {
     prompt.returns("123");
-    assert.strictEqual(readNumber(), 123);
+    assert.strictEqual(načtiČíslo(), 123);
   });
 
-  it("if 0, returns it", function() {
+  it("je-li to 0, vrátí ji", function() {
     prompt.returns("0");
-    assert.strictEqual(readNumber(), 0);
+    assert.strictEqual(načtiČíslo(), 0);
   });
 
-  it("continues the loop until meets a number", function() {
-    prompt.onCall(0).returns("not a number");
-    prompt.onCall(1).returns("not a number again");
+  it("pokračuje ve smyčce, dokud nenajde číslo", function() {
+    prompt.onCall(0).returns("to není číslo");
+    prompt.onCall(1).returns("to taky není číslo");
     prompt.onCall(2).returns("1");
-    assert.strictEqual(readNumber(), 1);
+    assert.strictEqual(načtiČíslo(), 1);
   });
 
-  it("if an empty line, returns null", function() {
+  it("je-li zadán prázdný řádek, vrátí null", function() {
     prompt.returns("");
-    assert.isNull(readNumber());
+    assert.isNull(načtiČíslo());
   });
 
-  it("if cancel, returns null", function() {
+  it("je-li stisknuto Storno, vrátí null", function() {
     prompt.returns(null);
-    assert.isNull(readNumber());
+    assert.isNull(načtiČíslo());
   });
 
 });
