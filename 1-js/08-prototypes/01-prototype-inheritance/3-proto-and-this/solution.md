@@ -1,7 +1,7 @@
-**The answer: `rabbit`.**
+**Odpověď zní: `králík`.**
 
-That's because `this` is an object before the dot, so `rabbit.eat()` modifies `rabbit`.
+Je to proto, že `this` je objekt před tečkou, takže `králík.žer()` změní objekt `králík`.
 
-Property lookup and execution are two different things.
+Hledání vlastnosti a provádění jsou dvě různé věci.
 
-The method `rabbit.eat` is first found in the prototype, then executed with `this=rabbit`.
+Metoda `králík.žer` je nejprve nalezena v prototypu a pak je spuštěna s `this=králík`.

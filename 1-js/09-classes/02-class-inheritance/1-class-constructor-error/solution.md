@@ -1,27 +1,27 @@
-That's because the child constructor must call `super()`.
+Je to proto, že konstruktor potomka musí volat `super()`.
 
-Here's the corrected code:
+Zde je opravený kód:
 
 ```js run
-class Animal {
+class Zvíře {
 
-  constructor(name) {
-    this.name = name;
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 
 }
 
-class Rabbit extends Animal {
-  constructor(name) {  
+class Králík extends Zvíře {
+  constructor(jméno) {  
     *!*
-    super(name);
+    super(jméno);
     */!*
-    this.created = Date.now();
+    this.datumVytvoření = Date.now();
   }
 }
 
 *!*
-let rabbit = new Rabbit("White Rabbit"); // ok now
+let králík = new Králík("Bílý králík"); // nyní v pořádku
 */!*
-alert(rabbit.name); // White Rabbit
+alert(králík.jméno); // Bílý králík
 ```

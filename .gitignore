@@ -21,4 +21,7 @@ sftp-config.json
 Thumbs.db
 
 
+*.bak
+token.txt
 /svgs
+

@@ -1,24 +1,22 @@
+Jistě že to bude fungovat správně.
 
-Surely it will work just fine.
-
-Both nested functions are created within the same outer Lexical Environment, so they share access to the same `count` variable:
+Obě vnořené funkce jsou vytvořeny uvnitř stejného vnějšího lexikálního prostředí, takže mají společný přístup ke stejné proměnné `počet`:
 
 ```js run
-function Counter() {
-  let count = 0;
+function Čítač() {
+  let počet = 0;
 
-  this.up = function() {
-    return ++count;
+  this.zvyš = function() {
+    return ++počet;
   };
-  
-  this.down = function() {
-    return --count;
+  this.sniž = function() {
+    return --počet;
   };
 }
 
-let counter = new Counter();
+let čítač = new Čítač();
 
-alert( counter.up() ); // 1
-alert( counter.up() ); // 2
-alert( counter.down() ); // 1
+alert( čítač.zvyš() ); // 1
+alert( čítač.zvyš() ); // 2
+alert( čítač.sniž() ); // 1
 ```

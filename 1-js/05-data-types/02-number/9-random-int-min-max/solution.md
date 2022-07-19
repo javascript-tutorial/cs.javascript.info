@@ -1,6 +1,6 @@
-# The simple but wrong solution
+# Jednoduché, ale nesprávné řešení
 
-The simplest, but wrong solution would be to generate a value from `min` to `max` and round it:
+Jednoduchým, ale nesprávným řešením by bylo generovat hodnotu od `min` do `max` a zaokrouhlit ji:
 
 ```js run
 function randomInteger(min, max) {
@@ -11,28 +11,28 @@ function randomInteger(min, max) {
 alert( randomInteger(1, 3) );
 ```
 
-The function works, but it is incorrect. The probability to get edge values `min` and `max` is two times less than any other.
+Tato funkce funguje, ale nekorektně. Pravděpodobnost, že získáme krajní hodnoty `min` a `max`, je dvakrát nižší, než u ostatních hodnot.
 
-If you run the example above many times, you would easily see that `2` appears the most often.
+Jestliže si mnohokrát za sebou spustíte výše uvedený příklad, snadno uvidíte, že `2` se objevuje nejčastěji.
 
-That happens because `Math.round()` gets random numbers from the interval `1..3` and rounds them as follows:
+Děje se to proto, že `Math.round()` získává náhodná čísla z intervalu `1..3` a zaokrouhluje je následovně:
 
 ```js no-beautify
-values from 1    ... to 1.4999999999  become 1
-values from 1.5  ... to 2.4999999999  become 2
-values from 2.5  ... to 2.9999999999  become 3
+hodnoty od 1    ... do 1.4999999999  se zaokrouhlí na 1
+hodnoty od 1.5  ... do 2.4999999999  se zaokrouhlí na 2
+hodnoty od 2.5  ... do 2.9999999999  se zaokrouhlí na 3
 ```
 
-Now we can clearly see that `1` gets twice less values than `2`. And the same with `3`.
+Nyní jasně vidíme, že `1` má dvakrát méně hodnot než `2`. Totéž platí pro `3`.
 
-# The correct solution
+# Správné řešení
 
-There are many correct solutions to the task. One of them is to adjust interval borders. To ensure the same intervals, we can generate values from `0.5 to 3.5`, thus adding the required probabilities to the edges:
+Tato úloha má mnoho správných řešení. Jedno z nich je přizpůsobit hranice intervalu. Abychom zajistili stejné intervaly, můžeme generovat hodnoty od `0.5` do `3.5` a tím přidat požadované pravděpodobnosti krajních hodnot:
 
 ```js run
 *!*
 function randomInteger(min, max) {
-  // now rand is from  (min-0.5) to (max+0.5)
+  // nyní rand je od (min-0.5) do (max+0.5)
   let rand = min - 0.5 + Math.random() * (max - min + 1);
   return Math.round(rand);
 }
@@ -41,12 +41,12 @@ function randomInteger(min, max) {
 alert( randomInteger(1, 3) );
 ```
 
-An alternative way could be to use `Math.floor` for a random number from `min` to `max+1`:
+Alternativním způsobem by bylo použít `Math.floor` pro náhodné číslo od `min` do `max+1`:
 
 ```js run
 *!*
 function randomInteger(min, max) {
-  // here rand is from min to (max+1)
+  // zde rand je od min do (max+1)
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 }
@@ -55,12 +55,12 @@ function randomInteger(min, max) {
 alert( randomInteger(1, 3) );
 ```
 
-Now all intervals are mapped this way:
+Nyní jsou všechny intervaly mapovány tímto způsobem:
 
 ```js no-beautify
-values from 1  ... to 1.9999999999  become 1
-values from 2  ... to 2.9999999999  become 2
-values from 3  ... to 3.9999999999  become 3
+hodnoty od 1  ... do 1.9999999999  se zaokrouhlí na 1
+hodnoty od 2  ... do 2.9999999999  se zaokrouhlí na 2
+hodnoty od 3  ... do 3.9999999999  se zaokrouhlí na 3
 ```
 
-All intervals have the same length, making the final distribution uniform.
+Všechny intervaly mají stejnou délku, takže konečné rozložení je rovnoměrné.
