@@ -359,7 +359,6 @@ uvítání(); // nyní je to v pořádku
 */!*
 ```
 
-
 ```smart header="Kdy zvolit deklaraci funkce a kdy funkční výraz?"
 Orientační pravidlo zní, že když potřebujeme deklarovat funkci, měli bychom napřed zvážit syntaxi deklarace funkce. Ta nám dává více svobody v tom, jak zorganizovat kód, protože takovou funkci můžeme volat ještě předtím, než je deklarována.
 
