@@ -1,14 +1,14 @@
-Metoda `datum.getDay()` vrací číslo dne v týdnu počínajíc nedělí.
+The method `date.getDay()` returns the number of the weekday, starting from sunday.
 
-Vytvoříme pole dnů v týdnu, abychom mohli získat název příslušného dne podle jeho čísla:
+Let's make an array of weekdays, so that we can get the proper day name by its number:
 
 ```js run demo
-function vraťDenVTýdnu(datum) {
-  let dny = ['NE', 'PO', 'ÚT', 'ST', 'ČT', 'PÁ', 'SO'];
+function getWeekDay(date) {
+  let days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-  return dny[datum.getDay()];
+  return days[date.getDay()];
 }
 
-let datum = new Date(2014, 0, 3); // 3. leden 2014
-alert( vraťDenVTýdnu(datum) ); // PÁ
+let date = new Date(2014, 0, 3); // 3 Jan 2014
+alert( getWeekDay(date) ); // FR
 ```

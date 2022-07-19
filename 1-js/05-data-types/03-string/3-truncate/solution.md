@@ -1,10 +1,10 @@
-Maximální délka musí být `maxDélka`, takže musíme odříznout o něco kratší řetězec, abychom získali místo pro výpustku.
+The maximal length must be `maxlength`, so we need to cut it a little shorter, to give space for the ellipsis.
 
-Všimněte si, že pro výpustku existuje v Unicode jediný znak. Nejsou to tři tečky za sebou.
+Note that there is actually a single Unicode character for an ellipsis. That's not three dots.
 
 ```js run demo
-function zkrať(řetězec, maxDélka) {
-  return (řetězec.length > maxDélka) ?
-    řetězec.slice(0, maxDélka - 1) + '…' : řetězec;
+function truncate(str, maxlength) {
+  return (str.length > maxlength) ?
+    str.slice(0, maxlength - 1) + '…' : str;
 }
 ```

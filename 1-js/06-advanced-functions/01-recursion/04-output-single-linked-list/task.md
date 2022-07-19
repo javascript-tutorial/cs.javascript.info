@@ -2,28 +2,28 @@ importance: 5
 
 ---
 
-# Vypište lineární spojový seznam
+# Output a single-linked list
 
-Dejme tomu, že máme lineární spojový seznam (popsaný v kapitole <info:recursion>):
+Let's say we have a single-linked list (as described in the chapter <info:recursion>):
 
 ```js
-let seznam = {
-  hodnota: 1,
-  další: {
-    hodnota: 2,
-    další: {
-      hodnota: 3,
-      další: {
-        hodnota: 4,
-        další: null
+let list = {
+  value: 1,
+  next: {
+    value: 2,
+    next: {
+      value: 3,
+      next: {
+        value: 4,
+        next: null
       }
     }
   }
 };
 ```
 
-Napište funkci `vypišSeznam(seznam)`, která vypíše prvky seznamu jeden po druhém.
+Write a function `printList(list)` that outputs list items one-by-one.
 
-Vytvořte dvě varianty řešení: pomocí cyklu a pomocí rekurze.
+Make two variants of the solution: using a loop and using recursion.
 
-Která je lepší: s rekurzí nebo bez ní?
+What's better: with recursion or without it?

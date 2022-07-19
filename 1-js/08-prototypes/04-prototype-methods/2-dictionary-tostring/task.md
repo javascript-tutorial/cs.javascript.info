@@ -2,30 +2,30 @@ importance: 5
 
 ---
 
-# Přidejte toString do slovníku
+# Add toString to the dictionary
 
-Máme objekt `slovník`, vytvořený použitím `Object.create(null)`, k ukládání libovolných dvojic `klíč/hodnota`.
+There's an object `dictionary`, created as `Object.create(null)`, to store any `key/value` pairs.
 
-Přidejte do něj metodu `slovník.toString()`, která by měla vracet seznam klíčů oddělených čárkou. Vaše metoda `toString` by se neměla ukazovat v cyklu `for..in` nad objektem.
+Add method `dictionary.toString()` into it, that should return a comma-delimited list of keys. Your `toString` should not show up in `for..in` over the object.
 
-Takto by to mělo fungovat:
+Here's how it should work:
 
 ```js
-let slovník = Object.create(null);
+let dictionary = Object.create(null);
 
 *!*
-// váš kód k přidání metody slovník.toString
+// your code to add dictionary.toString method
 */!*
 
-// přidáme nějaká data
-slovník.jablko = "Jablko";
-slovník.__proto__ = "test"; // __proto__ je zde klíč obvyklé vlastnosti
+// add some data
+dictionary.apple = "Apple";
+dictionary.__proto__ = "test"; // __proto__ is a regular property key here
 
-// v cyklu jsou jen jablko a __proto__
-for(let klíč in slovník) {
-  alert(klíč); // "jablko", pak "__proto__"
+// only apple and __proto__ are in the loop
+for(let key in dictionary) {
+  alert(key); // "apple", then "__proto__"
 }  
 
-// váš toString v akci
-alert(slovník); // "jablko,__proto__"
+// your toString in action
+alert(dictionary); // "apple,__proto__"
 ```

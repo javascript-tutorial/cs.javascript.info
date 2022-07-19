@@ -1,17 +1,17 @@
 
 
 ```js run demo
-function Akumulátor(počátečníHodnota) {
-  this.hodnota = počátečníHodnota;
+function Accumulator(startingValue) {
+  this.value = startingValue;
 
-  this.načti = function() {
-    this.hodnota += +prompt('Kolik přičíst?', 0);
+  this.read = function() {
+    this.value += +prompt('How much to add?', 0);
   };
 
 }
 
-let akumulátor = new Akumulátor(1);
-akumulátor.načti();
-akumulátor.načti();
-alert(akumulátor.hodnota);
+let accumulator = new Accumulator(1);
+accumulator.read();
+accumulator.read();
+alert(accumulator.value);
 ```

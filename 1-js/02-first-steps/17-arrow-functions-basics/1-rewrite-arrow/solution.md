@@ -1,17 +1,17 @@
 
 ```js run
-function zeptejSe(otázka, ano, ne) {
-  if (confirm(otázka)) ano();
-  else ne();
+function ask(question, yes, no) {
+  if (confirm(question)) yes();
+  else no();
 }
 
-zeptejSe(
-  "Souhlasíte?",
+ask(
+  "Do you agree?",
 *!*
-  () => alert("Souhlasil jste."),
-  () => alert("Zrušil jste provádění.")
+  () => alert("You agreed."),
+  () => alert("You canceled the execution.")
 */!*
 );
 ```
 
-Vypadá to stručně a čistě, že?
+Looks short and clean, right?

@@ -2,27 +2,27 @@ importance: 4
 
 ---
 
-# Špatný styl
+# Bad style
 
-Co je špatného na stylu níže uvedeného kódu?
+What's wrong with the code style below?
 
 ```js no-beautify
-function mocnina(x,n)
+function pow(x,n)
 {
-  let výsledek=1;
-  for(let i=0;i<n;i++) {výsledek*=x;}
-  return výsledek;
+  let result=1;
+  for(let i=0;i<n;i++) {result*=x;}
+  return result;
 }
 
 let x=prompt("x?",''), n=prompt("n?",'')
 if (n<=0)
 {
-  alert(`${n}-tá mocnina není podporována, zadejte prosím celé číslo větší než nula`);
+  alert(`Power ${n} is not supported, please enter an integer number greater than zero`);
 }
 else
 {
-  alert(mocnina(x,n))
+  alert(pow(x,n))
 }
 ```
 
-Opravte ho.
+Fix it.

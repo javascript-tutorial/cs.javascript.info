@@ -1,4 +1,4 @@
-function vraťPosledníDenVMěsíci(rok, měsíc) {
-  let datum = new Date(rok, měsíc + 1, 0);
-  return datum.getDate();
+function getLastDayOfMonth(year, month) {
+  let date = new Date(year, month + 1, 0);
+  return date.getDate();
 }

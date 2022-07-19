@@ -2,40 +2,40 @@ importance: 5
 
 ---
 
-# Vyřaďte zpětné odkazy
+# Exclude backreferences
 
-V jednoduchých případech kruhových odkazů můžeme závadnou vlastnost vyřadit ze serializace podle jejího názvu.
+In simple cases of circular references, we can exclude an offending property from serialization by its name.
 
-Někdy však nemůžeme použít jen název, protože stejný název může být použit jak v kruhových odkazech, tak v normálních vlastnostech. Můžeme tedy zkontrolovat vlastnost podle její hodnoty.
+But sometimes we can't just use the name, as it may be used both in circular references and normal properties. So we can check the property by its value.
 
-Napište funkci `replacer`, která zřetězí všechno, ale odstraní vlastnosti, které se odkazují na `mítink`:
+Write `replacer` function to stringify everything, but remove properties that reference `meetup`:
 
 ```js run
-let místnost = {
-  číslo: 23
+let room = {
+  number: 23
 };
 
-let mítink = {
-  titul: "Konference",
-  obsazenoČím: [{jméno: "Jan"}, {jméno: "Alice"}],
-  místo: místnost
+let meetup = {
+  title: "Conference",
+  occupiedBy: [{name: "John"}, {name: "Alice"}],
+  place: room
 };
 
 *!*
-// kruhové odkazy
-místnost.obsazenoČím = mítink;
-mítink.self = mítink;
+// circular references
+room.occupiedBy = meetup;
+meetup.self = meetup;
 */!*
 
-alert( JSON.stringify(mítink, function replacer(klíč, hodnota) {
-  /* váš kód */
+alert( JSON.stringify(meetup, function replacer(key, value) {
+  /* your code */
 }));
 
-/* výsledek by měl být:
+/* result should be:
 {
-  "titul":"Konference",
-  "obsazenoČím":[{"jméno":"Jan"},{"jméno":"Alice"}],
-  "místo":{"číslo":23}
+  "title":"Conference",
+  "occupiedBy":[{"name":"John"},{"name":"Alice"}],
+  "place":{"number":23}
 }
 */
 ```

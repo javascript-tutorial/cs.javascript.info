@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# Co je na tomto testu špatně?
+# What's wrong in the test?
 
-Co je špatně na níže uvedeném testu funkce `mocnina`?
+What's wrong in the test of `pow` below?
 
 ```js
-it("Umocní x na n-tou", function() {
+it("Raises x to the power n", function() {
   let x = 5;
 
-  let výsledek = x;
-  assert.equal(mocnina(x, 1), výsledek);
+  let result = x;
+  assert.equal(pow(x, 1), result);
 
-  výsledek *= x;
-  assert.equal(mocnina(x, 2), výsledek);
+  result *= x;
+  assert.equal(pow(x, 2), result);
 
-  výsledek *= x;
-  assert.equal(mocnina(x, 3), výsledek);
+  result *= x;
+  assert.equal(pow(x, 3), result);
 });
 ```
 
-P.S. Syntakticky je tento test korektní a projde.
+P.S. Syntactically the test is correct and passes.

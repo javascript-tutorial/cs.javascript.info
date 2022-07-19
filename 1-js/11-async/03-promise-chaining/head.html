@@ -1,13 +1,13 @@
 <script>
-function načtiSkript(src) {
+function loadScript(src) {
   return new Promise(function(resolve, reject) {
-    let skript = document.createElement('script');
-    skript.src = src;
+    let script = document.createElement('script');
+    script.src = src;
 
-    skript.onload = () => resolve(skript);
-    skript.onerror = () => reject(new Error("Chyba při načítání skriptu: " + src));
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error("Script load error: " + src));
 
-    document.head.append(skript);
+    document.head.append(script);
   });
 }
 </script>

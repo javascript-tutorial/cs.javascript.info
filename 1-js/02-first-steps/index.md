@@ -1,3 +1,3 @@
-# Základy JavaScriptu
+# JavaScript Fundamentals
 
-Naučíme se základům vytváření skriptů.
+Let's learn the fundamentals of script building.

@@ -1,41 +1,41 @@
 
 
 ```js run
-Function.prototype.odlož = function(ms) {
+Function.prototype.defer = function(ms) {
   let f = this;
-  return function(...argumenty) {
-    setTimeout(() => f.apply(this, argumenty), ms);
+  return function(...args) {
+    setTimeout(() => f.apply(this, args), ms);
   }
 };
 
-// zkontrolujeme to
+// check it
 function f(a, b) {
   alert( a + b );
 }
 
-f.odlož(1000)(1, 2); // zobrazí 3 za 1 sekundu
+f.defer(1000)(1, 2); // shows 3 after 1 sec
 ```
 
-Prosíme všimněte si: ve `f.apply` používáme `this`, aby naše dekorace fungovala pro objektové metody.
+Please note: we use `this` in `f.apply` to make our decoration work for object methods.
 
-Jestliže je tedy wrapper volán jako objektová metoda, pak se `this` předá původní metodě `f`.
+So if the wrapper function is called as an object method, then `this` is passed to the original method `f`.
 
 ```js run
-Function.prototype.odlož = function(ms) {
+Function.prototype.defer = function(ms) {
   let f = this;
-  return function(...argumenty) {
-    setTimeout(() => f.apply(this, argumenty), ms);
+  return function(...args) {
+    setTimeout(() => f.apply(this, args), ms);
   }
 };
 
-let uživatel = {
-  jméno: "Jan",
-  řekniAhoj() {
-    alert(this.jméno);
+let user = {
+  name: "John",
+  sayHi() {
+    alert(this.name);
   }
 }
 
-uživatel.řekniAhoj = uživatel.řekniAhoj.odlož(1000);
+user.sayHi = user.sayHi.defer(1000);
 
-uživatel.řekniAhoj();
+user.sayHi();
 ```
