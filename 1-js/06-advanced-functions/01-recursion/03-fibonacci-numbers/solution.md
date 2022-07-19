@@ -1,6 +1,6 @@
-První řešení, o které se pokusíme, bude rekurzívní.
+The first solution we could try here is the recursive one.
 
-Fibonacciho čísla jsou podle definice rekurzívní:
+Fibonacci numbers are recursive by definition:
 
 ```js run
 function fib(n) {
@@ -9,14 +9,14 @@ function fib(n) {
 
 alert( fib(3) ); // 2
 alert( fib(7) ); // 13
-// fib(77); // bude extrémně pomalé!
+// fib(77); // will be extremely slow!
 ```
 
-...Ale pro velké hodnoty `n` to bude velmi pomalé. Například `fib(77)` může na nějaký čas zablokovat engine, protože spotřebuje všechny zdroje CPU.
+...But for big values of `n` it's very slow. For instance, `fib(77)` may hang up the engine for some time eating all CPU resources.
 
-Je to proto, že funkce učiní příliš mnoho vnořených volání. Stejné hodnoty se budou počítat znovu a znovu.
+That's because the function makes too many subcalls. The same values are re-evaluated again and again.
 
-Podívejme se například na část výpočtu `fib(5)`:
+For instance, let's see a piece of calculations for `fib(5)`:
 
 ```js no-beautify
 ...
@@ -25,68 +25,68 @@ fib(4) = fib(3) + fib(2)
 ...
 ```
 
-Zde vidíme, že hodnota `fib(3)` je zapotřebí pro `fib(5)` i pro `fib(4)`. Takže `fib(3)` bude volána a vyhodnocena dvakrát zcela nezávisle na sobě.
+Here we can see that the value of `fib(3)` is needed for both `fib(5)` and `fib(4)`. So `fib(3)` will be called and evaluated two times completely independently.
 
-Zde je úplný rekurzívní strom:
+Here's the full recursion tree:
 
-![rekurzívní strom Fibonacciho čísel](fibonacci-recursion-tree.svg)
+![fibonacci recursion tree](fibonacci-recursion-tree.svg)
 
-Můžeme jasně vidět, že `fib(3)` se vypočítá dvakrát a `fib(2)` třikrát. Celkový počet výpočtů roste mnohem rychleji než `n`, takže už pro `n=77` bude obrovský.
+We can clearly notice that `fib(3)` is evaluated two times and `fib(2)` is evaluated three times. The total amount of computations grows much faster than `n`, making it enormous even for `n=77`.
 
-Můžeme to optimalizovat tak, že si budeme pamatovat již vypočtené hodnoty: jestliže se např. hodnota `fib(3)` vypočítá jednou, budeme ji pak moci využít k dalším výpočtům.
+We can optimize that by remembering already-evaluated values: if a value of say `fib(3)` is calculated once, then we can just reuse it in future computations.
 
-Další variantou by bylo vzdát se rekurze a použít úplně jiný algoritmus založený na cyklu.
+Another variant would be to give up recursion and use a totally different loop-based algorithm.
 
-Místo abychom šli od `n` dolů k nižším hodnotám, můžeme vytvořit cyklus, který začne od `1` a `2`, pak vypočítá `fib(3)` jako jejich součet, pak `fib(4)` jako součet předchozích dvou hodnot, pak `fib(5)` a tak to jde výš a výš, až se dostaneme k požadované hodnotě. V každém kroku si musíme pamatovat jen dvě předchozí hodnoty.
+Instead of going from `n` down to lower values, we can make a loop that starts from `1` and `2`, then gets `fib(3)` as their sum, then `fib(4)` as the sum of two previous values, then `fib(5)` and goes up and up, till it gets to the needed value. On each step we only need to remember two previous values.
 
-Zde jsou kroky nového algoritmu podrobně.
+Here are the steps of the new algorithm in details.
 
-Začátek:
+The start:
 
 ```js
-// a = fib(1), b = fib(2), tyto hodnoty jsou podle definice 1
+// a = fib(1), b = fib(2), these values are by definition 1
 let a = 1, b = 1;
 
-// získáme c = fib(3) jako jejich součet
+// get c = fib(3) as their sum
 let c = a + b;
 
-/* nyní máme fib(1), fib(2), fib(3)
+/* we now have fib(1), fib(2), fib(3)
 a  b  c
 1, 1, 2
 */
 ```
 
-Nyní chceme získat `fib(4) = fib(2) + fib(3)`.
+Now we want to get `fib(4) = fib(2) + fib(3)`.
 
-Posuneme proměnné: `a,b` budou představovat `fib(2),fib(3)` a `c` bude jejich součet:
+Let's shift the variables: `a,b` will get `fib(2),fib(3)`, and `c` will get their sum:
 
 ```js no-beautify
-a = b; // nyní a = fib(2)
-b = c; // nyní b = fib(3)
+a = b; // now a = fib(2)
+b = c; // now b = fib(3)
 c = a + b; // c = fib(4)
 
-/* nyní máme posloupnost:
+/* now we have the sequence:
    a  b  c
 1, 1, 2, 3
 */
 ```
 
-Další krok nám dává další číslo v posloupnosti:
+The next step gives another sequence number:
 
 ```js no-beautify
-a = b; // nyní a = fib(3)
-b = c; // nyní b = fib(4)
+a = b; // now a = fib(3)
+b = c; // now b = fib(4)
 c = a + b; // c = fib(5)
 
-/* posloupnost nyní je (jedno další číslo):
+/* now the sequence is (one more number):
       a  b  c
 1, 1, 2, 3, 5
 */
 ```
 
-...A tak dále, dokud nezískáme požadovanou hodnotu. Je to mnohem rychlejší než rekurze a neobsahuje žádné dvojí výpočty.
+...And so on until we get the needed value. That's much faster than recursion and involves no duplicate computations.
 
-Úplný kód:
+The full code:
 
 ```js run
 function fib(n) {
@@ -105,6 +105,6 @@ alert( fib(7) ); // 13
 alert( fib(77) ); // 5527939700884757
 ```
 
-Cyklus začíná `i=3`, protože první a druhá hodnota posloupnosti jsou napevno zakódovány do proměnných `a=1`, `b=1`.
+The loop starts with `i=3`, because the first and the second sequence values are hard-coded into variables `a=1`, `b=1`.
 
-Tento přístup se nazývá [dynamické programování](https://cs.wikipedia.org/wiki/Dynamické_programování).
+The approach is called [dynamic programming bottom-up](https://en.wikipedia.org/wiki/Dynamic_programming).

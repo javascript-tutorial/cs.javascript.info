@@ -2,35 +2,35 @@ importance: 5
 
 ---
 
-# Opravte funkci, která ztrácí „this“
+# Fix a function that loses "this"
 
-Volání `zeptejSeNaHeslo()` v níže uvedeném kódu by mělo zkontrolovat heslo a pak podle odpovědi zavolat `uživatel.přihlášeníOK/přihlášeníSelhalo`.
+The call to `askPassword()` in the code below should check the password and then call `user.loginOk/loginFail` depending on the answer.
 
-Vede však k chybě. Proč?
+But it leads to an error. Why?
 
-Opravte zvýrazněný řádek tak, aby všechno začalo fungovat správně (ostatní řádky neměňte).
+Fix the highlighted line for everything to start working right (other lines are not to be changed).
 
 ```js run
-function zeptejSeNaHeslo(ok, selhal) {
-  let heslo = prompt("Heslo?", '');
-  if (heslo == "rockstar") ok();
-  else selhal();
+function askPassword(ok, fail) {
+  let password = prompt("Password?", '');
+  if (password == "rockstar") ok();
+  else fail();
 }
 
-let uživatel = {
-  jméno: 'Jan',
+let user = {
+  name: 'John',
 
-  přihlášeníOK() {
-    alert(`${this.jméno} přihlášen`);
+  loginOk() {
+    alert(`${this.name} logged in`);
   },
 
-  přihlášeníSelhalo() {
-    alert(`${this.jméno} se nedokázal přihlásit`);
+  loginFail() {
+    alert(`${this.name} failed to log in`);
   },
 
 };
 
 *!*
-zeptejSeNaHeslo(uživatel.přihlášeníOK, uživatel.přihlášeníSelhalo);
+askPassword(user.loginOk, user.loginFail);
 */!*
 ```

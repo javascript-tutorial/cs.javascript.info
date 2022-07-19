@@ -2,28 +2,28 @@ importance: 5
 
 ---
 
-# Objekt čítače
+# Counter object
 
-Zde je vytvořen objekt čítače s pomocí konstruktoru.
+Here a counter object is made with the help of the constructor function.
 
-Bude to fungovat? Co se zobrazí?
+Will it work? What will it show?
 
 ```js
-function Čítač() {
-  let počet = 0;
+function Counter() {
+  let count = 0;
 
-  this.zvyš = function() {
-    return ++počet;
+  this.up = function() {
+    return ++count;
   };
-  this.sniž = function() {
-    return --počet;
+  this.down = function() {
+    return --count;
   };
 }
 
-let čítač = new Čítač();
+let counter = new Counter();
 
-alert( čítač.zvyš() ); // ?
-alert( čítač.zvyš() ); // ?
-alert( čítač.sniž() ); // ?
+alert( counter.up() ); // ?
+alert( counter.up() ); // ?
+alert( counter.down() ); // ?
 ```
 

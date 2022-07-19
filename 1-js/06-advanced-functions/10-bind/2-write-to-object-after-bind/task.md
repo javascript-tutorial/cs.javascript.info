@@ -2,19 +2,19 @@ importance: 5
 
 ---
 
-# Vázaná funkce jako metoda
+# Bound function as a method
 
-Jaký bude výstup?
+What will be the output?
 
 ```js
 function f() {
   alert( this ); // ?
 }
 
-let uživatel = {
+let user = {
   g: f.bind(null)
 };
 
-uživatel.g();
+user.g();
 ```
 

@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Mohu přidat vlastnost do řetězce?
+# Can I add a string property?
 
 
-Uvažujme následující kód:
+Consider the following code:
 
 ```js
-let str = "Ahoj";
+let str = "Hello";
 
 str.test = 5;
 
 alert(str.test);
 ```
 
-Co myslíte, bude to fungovat? Co se zobrazí?
+What do you think, will it work? What will be shown?

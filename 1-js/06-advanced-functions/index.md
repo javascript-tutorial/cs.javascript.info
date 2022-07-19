@@ -1,1 +1,1 @@
-# Pokročilá práce s funkcemi
+# Advanced working with functions

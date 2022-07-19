@@ -1,10 +1,10 @@
 
-let pole = [1, 2, 3, 4, 5, 6, 7];
+let arr = [1, 2, 3, 4, 5, 6, 7];
 
-function mezi(a, b) {
-  // ...váš kód...
+function inBetween(a, b) {
+  // ...your code...
 }
 
-function vPoli(pole) {
-  // ...váš kód...
+function inArray(arr) {
+  // ...your code...
 }

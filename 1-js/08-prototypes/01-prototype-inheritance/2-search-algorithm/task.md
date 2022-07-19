@@ -2,30 +2,30 @@ importance: 5
 
 ---
 
-# Vyhledávací algoritmus
+# Searching algorithm
 
-Tato úloha má dvě části.
+The task has two parts.
 
-Máme následující objekty:
+Given the following objects:
 
 ```js
-let hlava = {
-  brýle: 1
+let head = {
+  glasses: 1
 };
 
-let stůl = {
-  pero: 3
+let table = {
+  pen: 3
 };
 
-let postel = {
-  peřina: 1,
-  polštář: 2
+let bed = {
+  sheet: 1,
+  pillow: 2
 };
 
-let kapsy = {
-  peníze: 2000
+let pockets = {
+  money: 2000
 };
 ```
 
-1. Použijte `__proto__` k přiřazení prototypů takovým způsobem, že každé hledání vlastností bude dodržovat cestu: `kapsy` -> `postel` -> `stůl` -> `hlava`. Například `kapsy.pero` by mělo být `3` (nalezeno ve `stůl`) a `postel.brýle` by mělo být `1` (nalezeno v `hlava`).
-2. Odpovězte na otázku: je rychlejší získat `brýle` jako `kapsy.brýle` nebo `hlava.brýle`? Proveďte benchmark, bude-li zapotřebí.
+1. Use `__proto__` to assign prototypes in a way that any property lookup will follow the path: `pockets` -> `bed` -> `table` -> `head`. For instance, `pockets.pen` should be `3` (found in `table`), and `bed.glasses` should be `1` (found in `head`).
+2. Answer the question: is it faster to get `glasses` as `pockets.glasses` or `head.glasses`? Benchmark if needed.

@@ -1,168 +1,168 @@
-# Ověřování tříd: „instanceof“
+# Class checking: "instanceof"
 
-Operátor `instanceof` umožňuje ověřit, zda objekt patří určité třídě. Bere v úvahu i dědičnost.
+The `instanceof` operator allows to check whether an object belongs to a certain class. It also takes inheritance into account.
 
-Toto ověření může být zapotřebí v mnoha případech. Například může být použito k vytvoření *polymorfní* funkce, takové, která zachází se svými argumenty odlišně v závislosti na jejich typu.
+Such a check may be necessary in many cases. For example, it can be used for building a *polymorphic* function, the one that treats arguments differently depending on their type.
 
-## Operátor instanceof [#ref-instanceof]
+## The instanceof operator [#ref-instanceof]
 
-Syntaxe je:
+The syntax is:
 ```js
-obj instanceof Třída
+obj instanceof Class
 ```
 
-Vrací `true`, jestliže `obj` patří třídě `Třída` nebo třídě, která je z ní zděděna.
+It returns `true` if `obj` belongs to the `Class` or a class inheriting from it.
 
-Například:
+For instance:
 
 ```js run
-class Králík {}
-let králík = new Králík();
+class Rabbit {}
+let rabbit = new Rabbit();
 
-// je to objekt třídy Králík?
+// is it an object of Rabbit class?
 *!*
-alert( králík instanceof Králík ); // true
+alert( rabbit instanceof Rabbit ); // true
 */!*
 ```
 
-Funguje to i s konstruktory:
+It also works with constructor functions:
 
 ```js run
 *!*
-// namísto třídy
-function Králík() {}
+// instead of class
+function Rabbit() {}
 */!*
 
-alert( new Králík() instanceof Králík ); // true
+alert( new Rabbit() instanceof Rabbit ); // true
 ```
 
-...A se zabudovanými třídami jako `Array`:
+...And with built-in classes like `Array`:
 
 ```js run
-let pole = [1, 2, 3];
-alert( pole instanceof Array ); // true
-alert( pole instanceof Object ); // true
+let arr = [1, 2, 3];
+alert( arr instanceof Array ); // true
+alert( arr instanceof Object ); // true
 ```
 
-Prosíme všimněte si, že `pole` patří i do třídy `Object`. Je to proto, že `Array` je prototypově zděděna z třídy `Object`.
+Please note that `arr` also belongs to the `Object` class. That's because `Array` prototypically inherits from `Object`.
 
-Normálně `instanceof` při ověřování prozkoumává řetězec prototypů. Můžeme si také nastavit vlastní logiku ve statické metodě `Symbol.hasInstance`.
+Normally, `instanceof` examines the prototype chain for the check. We can also set a custom logic in the static method `Symbol.hasInstance`.
 
-Algoritmus operátoru `obj instanceof Třída` funguje zhruba následovně:
+The algorithm of `obj instanceof Class` works roughly as follows:
 
-1. Pokud existuje statická metoda `Symbol.hasInstance`, pak ji jen zavolá: `Třída[Symbol.hasInstance](obj)`. Ta by měla vrátit buď `true`, nebo `false`, a jsme hotovi. Tímto způsobem si můžeme chování `instanceof` sami nastavit.
+1. If there's a static method `Symbol.hasInstance`, then just call it: `Class[Symbol.hasInstance](obj)`. It should return either `true` or `false`, and we're done. That's how we can customize the behavior of `instanceof`.
 
-    Například:
+    For example:
 
     ```js run
-    // nastavíme ověření instanceOf, které předpokládá, že
-    // všechno, co má vlastnost můžeŽrát, je zvíře
-    class Zvíře {
+    // setup instanceOf check that assumes that
+    // anything with canEat property is an animal
+    class Animal {
       static [Symbol.hasInstance](obj) {
-        if (obj.můžeŽrát) return true;
+        if (obj.canEat) return true;
       }
     }
 
-    let obj = { můžeŽrát: true };
+    let obj = { canEat: true };
 
-    alert(obj instanceof Zvíře); // true: zavolá se Zvíře[Symbol.hasInstance](obj)
+    alert(obj instanceof Animal); // true: Animal[Symbol.hasInstance](obj) is called
     ```
 
-2. Většina tříd nemá `Symbol.hasInstance`. V tom případě je použita standardní logika: `obj instanceOf Třída` zjistí, zda `Třída.prototype` se rovná některému z prototypů v prototypovém řetězci objektu `obj`.
+2. Most classes do not have `Symbol.hasInstance`. In that case, the standard logic is used: `obj instanceOf Class` checks whether `Class.prototype` is equal to one of the prototypes in the `obj` prototype chain.
 
-    Jinými slovy, porovnává jeden po druhém:
+    In other words, compare one after another:
     ```js
-    obj.__proto__ === Třída.prototype?
-    obj.__proto__.__proto__ === Třída.prototype?
-    obj.__proto__.__proto__.__proto__ === Třída.prototype?
+    obj.__proto__ === Class.prototype?
+    obj.__proto__.__proto__ === Class.prototype?
+    obj.__proto__.__proto__.__proto__ === Class.prototype?
     ...
-    // je-li kterákoli odpověď true, vrátí true
-    // jinak, pokud jsme dosáhli konce řetězce, vrátí false
+    // if any answer is true, return true
+    // otherwise, if we reached the end of the chain, return false
     ```
 
-    Ve výše uvedeném příkladu `králík.__proto__ === Králík.prototype`, takže to vydá okamžitou odpověď.
+    In the example above `rabbit.__proto__ === Rabbit.prototype`, so that gives the answer immediately.
 
-    V případě dědičnosti bude shoda nalezena ve druhém kroku:
+    In the case of an inheritance, the match will be at the second step:
 
     ```js run
-    class Zvíře {}
-    class Králík extends Zvíře {}
+    class Animal {}
+    class Rabbit extends Animal {}
 
-    let králík = new Králík();
+    let rabbit = new Rabbit();
     *!*
-    alert(králík instanceof Zvíře); // true
+    alert(rabbit instanceof Animal); // true
     */!*
 
-    // králík.__proto__ === Zvíře.prototype (není shoda)
+    // rabbit.__proto__ === Animal.prototype (no match)
     *!*
-    // králík.__proto__.__proto__ === Zvíře.prototype (shoda!)
+    // rabbit.__proto__.__proto__ === Animal.prototype (match!)
     */!*
     ```
 
-Zde je ilustrace toho, co `králík instanceof Zvíře` porovnává se `Zvíře.prototype`:
+Here's the illustration of what `rabbit instanceof Animal` compares with `Animal.prototype`:
 
 ![](instanceof.svg)
 
-Mimochodem, existuje také metoda [objA.isPrototypeOf(objB)](mdn:js/object/isPrototypeOf), která vrátí `true`, jestliže `objA` je někde v řetězci prototypů pro `objB`. Test `obj instanceof Třída` tedy lze přepsat na `Třída.prototype.isPrototypeOf(obj)`.
+By the way, there's also a method [objA.isPrototypeOf(objB)](mdn:js/object/isPrototypeOf), that returns `true` if `objA` is somewhere in the chain of prototypes for `objB`. So the test of `obj instanceof Class` can be rephrased as `Class.prototype.isPrototypeOf(obj)`.
 
-Je to legrační, ale samotný konstruktor `Třída` se na ověřování nepodílí! Záleží jen na řetězci prototypů a na `Třída.prototype`.
+It's funny, but the `Class` constructor itself does not participate in the check! Only the chain of prototypes and `Class.prototype` matters.
 
-To může vést k zajímavým důsledkům, když je vlastnost `prototype` změněna po vytvoření objektu.
+That can lead to interesting consequences when a `prototype` property is changed after the object is created.
 
-Například zde:
+Like here:
 
 ```js run
-function Králík() {}
-let králík = new Králík();
+function Rabbit() {}
+let rabbit = new Rabbit();
 
-// změníme prototyp
-Králík.prototype = {};
+// changed the prototype
+Rabbit.prototype = {};
 
-// ...už to není králík!
+// ...not a rabbit any more!
 *!*
-alert( králík instanceof Králík ); // false
+alert( rabbit instanceof Rabbit ); // false
 */!*
 ```
 
-## Bonus: Object.prototype.toString pro typ
+## Bonus: Object.prototype.toString for the type
 
-Už víme, že plané objekty se převádějí na řetězec jako `[object Object]`:
+We already know that plain objects are converted to string as `[object Object]`:
 
 ```js run
 let obj = {};
 
 alert(obj); // [object Object]
-alert(obj.toString()); // totéž
+alert(obj.toString()); // the same
 ```
 
-Taková je jejich implementace metody `toString`. Existuje však skrytá vlastnost, která činí `toString` ve skutečnosti mnohem silnější. Můžeme ji používat jako rozšířený `typeof` a alternativu pro `instanceof`.
+That's their implementation of `toString`. But there's a hidden feature that makes `toString` actually much more powerful than that. We can use it as an extended `typeof` and an alternative for `instanceof`.
 
-Zní to zvláštně? Určitě ano. Odhalme to.
+Sounds strange? Indeed. Let's demystify.
 
-Podle [specifikace](https://tc39.github.io/ecma262/#sec-object.prototype.tostring) může být vestavěný `toString` extrahován z objektu a spuštěn v kontextu jakékoli jiné hodnoty. A jeho výsledek závisí na oné hodnotě.
+By [specification](https://tc39.github.io/ecma262/#sec-object.prototype.tostring), the built-in `toString` can be extracted from the object and executed in the context of any other value. And its result depends on that value.
 
-- Pro číslo to bude `[object Number]`
-- Pro boolean to bude `[object Boolean]`
-- Pro `null`: `[object Null]`
-- Pro `undefined`: `[object Undefined]`
-- Pro pole: `[object Array]`
-- ...atd. (nastavitelně).
+- For a number, it will be `[object Number]`
+- For a boolean, it will be `[object Boolean]`
+- For `null`: `[object Null]`
+- For `undefined`: `[object Undefined]`
+- For arrays: `[object Array]`
+- ...etc (customizable).
 
-Předveďme si to:
+Let's demonstrate:
 
 ```js run
-// pro přehlednost si zkopírujeme metodu toString do proměnné
+// copy toString method into a variable for convenience
 let objectToString = Object.prototype.toString;
 
-// jakého typu je tohle?
-let pole = [];
+// what type is this?
+let arr = [];
 
-alert( objectToString.call(pole) ); // [object *!*Array*/!*]
+alert( objectToString.call(arr) ); // [object *!*Array*/!*]
 ```
 
-Zde jsme použili metodu [call](mdn:js/function/call), popsanou v kapitole [](info:call-apply-decorators), ke spuštění funkce `objectToString` v kontextu `this=pole`.
+Here we used [call](mdn:js/function/call) as described in the chapter [](info:call-apply-decorators) to execute the function `objectToString` in the context `this=arr`.
 
-Interně algoritmus metody `toString` prozkoumává `this` a vrací odpovídající výsledek. Další příklady:
+Internally, the `toString` algorithm examines `this` and returns the corresponding result. More examples:
 
 ```js run
 let s = Object.prototype.toString;
@@ -174,22 +174,22 @@ alert( s.call(alert) ); // [object Function]
 
 ### Symbol.toStringTag
 
-Chování metody `toString` můžeme nastavit pomocí speciální objektové vlastnosti `Symbol.toStringTag`.
+The behavior of Object `toString` can be customized using a special object property `Symbol.toStringTag`.
 
-Například:
+For instance:
 
 ```js run
-let uživatel = {
-  [Symbol.toStringTag]: "Uživatel"
+let user = {
+  [Symbol.toStringTag]: "User"
 };
 
-alert( {}.toString.call(uživatel) ); // [object Uživatel]
+alert( {}.toString.call(user) ); // [object User]
 ```
 
-Taková vlastnost existuje u většiny objektů specifických pro určité prostředí. Zde jsou některé příklady specifické pro prohlížeč:
+For most environment-specific objects, there is such a property. Here are some browser specific examples:
 
 ```js run
-// toStringTag v objektu a třídě specifických pro určité prostředí:
+// toStringTag for the environment-specific object and class:
 alert( window[Symbol.toStringTag]); // Window
 alert( XMLHttpRequest.prototype[Symbol.toStringTag] ); // XMLHttpRequest
 
@@ -197,22 +197,22 @@ alert( {}.toString.call(window) ); // [object Window]
 alert( {}.toString.call(new XMLHttpRequest()) ); // [object XMLHttpRequest]
 ```
 
-Jak vidíte, výsledek je přesně `Symbol.toStringTag` (pokud existuje), zabalený do `[object ...]`.
+As you can see, the result is exactly `Symbol.toStringTag` (if exists), wrapped into `[object ...]`.
 
-Nakonec tedy máme „typeof na steroidech“, který funguje nejen pro primitivní datové typy, ale i pro zabudované objekty a dokonce se dá nastavit.
+At the end we have "typeof on steroids" that not only works for primitive data types, but also for built-in objects and even can be customized.
 
-Pro vestavěné objekty můžeme používat `{}.toString.call` namísto `instanceof`, když chceme zjistit typ v podobě řetězce a ne ho jen ověřit.
+We can use `{}.toString.call` instead of `instanceof` for built-in objects when we want to get the type as a string rather than just to check.
 
-## Shrnutí
+## Summary
 
-Shrňme si metody pro ověření typu, které známe:
+Let's summarize the type-checking methods that we know:
 
-|               | funguje pro   |  vrací      |
+|               | works for   |  returns      |
 |---------------|-------------|---------------|
-| `typeof`      | primitivy  |  řetězec       |
-| `{}.toString` | primitivy, vestavěné objekty, objekty se `Symbol.toStringTag`   |       řetězec |
-| `instanceof`  | objekty     |  true/false   |
+| `typeof`      | primitives  |  string       |
+| `{}.toString` | primitives, built-in objects, objects with `Symbol.toStringTag`   |       string |
+| `instanceof`  | objects     |  true/false   |
 
-Jak vidíme, `{}.toString` je technicky „pokročilejší“ `typeof`.
+As we can see, `{}.toString` is technically a "more advanced" `typeof`.
 
-A operátor `instanceof` opravdu zazáří, když pracujeme s třídní hierarchií a chceme si ověřit třídu, přičemž chceme vzít v úvahu dědičnost.
+And `instanceof` operator really shines when we are working with a class hierarchy and want to check for the class taking into account inheritance.

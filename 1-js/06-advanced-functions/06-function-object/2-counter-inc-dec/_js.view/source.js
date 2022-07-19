@@ -1,18 +1,18 @@
-function vytvořČítač() {
-  let počet = 0;
+function makeCounter() {
+  let count = 0;
 
-  // ... váš kód ...
+  // ... your code ...
 }
 
-let čítač = vytvořČítač();
+let counter = makeCounter();
 
-alert( čítač() ); // 0
-alert( čítač() ); // 1
+alert( counter() ); // 0
+alert( counter() ); // 1
 
-čítač.nastav(10); // nastaví nový počet
+counter.set(10); // set the new count
 
-alert( čítač() ); // 10
+alert( counter() ); // 10
 
-čítač.sniž(); // sníží počet o 1
+counter.decrease(); // decrease the count by 1
 
-alert( čítač() ); // 10 (místo 11)
+alert( counter() ); // 10 (instead of 11)

@@ -1,20 +1,20 @@
-describe("armáda", function() {
+describe("army", function() {
 
-  let armáda;
+  let army;
   
   before(function() {
-    armáda = vytvořArmádu();
+    army = makeArmy();
     window.alert = sinon.stub(window, "alert");
   });
 
-  it("armáda[0] zobrazí 0", function() {
-    armáda[0]();
+  it("army[0] shows 0", function() {
+    army[0]();
     assert(alert.calledWith(0));
   });
 
 
-  it("armáda[5] zobrazí 5", function() {
-    armáda[5]();
+  it("army[5] shows 5", function() {
+    army[5]();
     assert(alert.calledWith(5));
   });
 

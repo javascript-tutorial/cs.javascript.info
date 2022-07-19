@@ -1,13 +1,13 @@
-Vytvořme datum z následujícího měsíce, ale jako den předáme nulu:
+Let's create a date using the next month, but pass zero as the day:
 ```js run demo
-function vraťPosledníDenVMěsíci(rok, měsíc) {
-  let datum = new Date(rok, měsíc + 1, 0);
-  return datum.getDate();
+function getLastDayOfMonth(year, month) {
+  let date = new Date(year, month + 1, 0);
+  return date.getDate();
 }
 
-alert( vraťPosledníDenVMěsíci(2012, 0) ); // 31
-alert( vraťPosledníDenVMěsíci(2012, 1) ); // 29
-alert( vraťPosledníDenVMěsíci(2013, 1) ); // 28
+alert( getLastDayOfMonth(2012, 0) ); // 31
+alert( getLastDayOfMonth(2012, 1) ); // 29
+alert( getLastDayOfMonth(2013, 1) ); // 28
 ```
 
-Normálně dny začínají od 1, ale technicky můžeme předat jakékoli číslo a datum se samo přizpůsobí. Když tedy předáme 0, bude to znamenat „jeden den před 1. dnem v měsíci“, jinými slovy: „poslední den předcházejícího měsíce“.
+Normally, dates start from 1, but technically we can pass any number, the date will autoadjust itself. So when we pass 0, then it means "one day before 1st day of the month", in other words: "the last day of the previous month".

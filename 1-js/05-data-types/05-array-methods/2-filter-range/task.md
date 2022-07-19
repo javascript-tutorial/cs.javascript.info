@@ -2,21 +2,21 @@ importance: 4
 
 ---
 
-# Filtrace podle rozsahu
+# Filter range
 
-Napište funkci `filtrujPodleRozsahu(pole, a, b)`, která obdrží pole `pole`, najde prvky, jejichž hodnoty jsou vyšší nebo rovny `a` a nižší nebo rovny `b` a vrátí výsledek jako pole.
+Write a function `filterRange(arr, a, b)` that gets an array `arr`, looks for elements with values higher or equal to `a` and lower or equal to `b` and return a result as an array.
 
-Funkce by neměla pole modifikovat. Měla by vrátit nové pole.
+The function should not modify the array. It should return the new array.
 
-Příklad:
+For instance:
 
 ```js
-let pole = [5, 3, 8, 1];
+let arr = [5, 3, 8, 1];
 
-let filtrovanéPole = filtrujPodleRozsahu(pole, 1, 4); 
+let filtered = filterRange(arr, 1, 4); 
 
-alert( filtrovanéPole ); // 3,1 (odpovídající hodnoty)
+alert( filtered ); // 3,1 (matching values)
 
-alert( pole ); // 5,3,8,1 (nezměněno)
+alert( arr ); // 5,3,8,1 (not modified)
 ```
 

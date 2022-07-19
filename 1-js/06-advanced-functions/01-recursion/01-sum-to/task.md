@@ -2,35 +2,35 @@ importance: 5
 
 ---
 
-# Sečtěte všechna čísla až do zadaného
+# Sum all numbers till the given one
 
-Napište funkci `sečtiDo(n)`, která vypočítá součet čísel `1 + 2 + ... + n`.
+Write a function `sumTo(n)` that calculates the sum of numbers `1 + 2 + ... + n`.
 
-Například:
+For instance:
 
 ```js no-beautify
-sečtiDo(1) = 1
-sečtiDo(2) = 2 + 1 = 3
-sečtiDo(3) = 3 + 2 + 1 = 6
-sečtiDo(4) = 4 + 3 + 2 + 1 = 10
+sumTo(1) = 1
+sumTo(2) = 2 + 1 = 3
+sumTo(3) = 3 + 2 + 1 = 6
+sumTo(4) = 4 + 3 + 2 + 1 = 10
 ...
-sečtiDo(100) = 100 + 99 + ... + 2 + 1 = 5050
+sumTo(100) = 100 + 99 + ... + 2 + 1 = 5050
 ```
 
-Vytvořte 3 varianty řešení:
+Make 3 solution variants:
 
-1. Pomocí cyklu for.
-2. Pomocí rekurze `sečtiDo(n) = n + sečtiDo(n-1)` pro `n > 1`.
-3. Pomocí vzorce pro [aritmetickou posloupnost](https://cs.wikipedia.org/wiki/Aritmetická_posloupnost).
+1. Using a for loop.
+2. Using a recursion, cause `sumTo(n) = n + sumTo(n-1)` for `n > 1`.
+3. Using the [arithmetic progression](https://en.wikipedia.org/wiki/Arithmetic_progression) formula.
 
-Příklad výsledku:
+An example of the result:
 
 ```js
-function sečtiDo(n) { /*... váš kód ... */ }
+function sumTo(n) { /*... your code ... */ }
 
-alert( sečtiDo(100) ); // 5050
+alert( sumTo(100) ); // 5050
 ```
 
-P.S. Která varianta řešení je nejrychlejší? A nejpomalejší? Proč?
+P.S. Which solution variant is the fastest? The slowest? Why?
 
-P.P.S. Můžeme použít rekurzi k výpočtu `sečtiDo(100000)`? 
+P.P.S. Can we use recursion to count `sumTo(100000)`? 

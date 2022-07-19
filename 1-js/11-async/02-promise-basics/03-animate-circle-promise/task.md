@@ -1,15 +1,15 @@
 
-# Animovaný kruh s příslibem
+# Animated circle with promise
 
-Přepište funkci `zobrazKruh` v řešení úlohy <info:task/animate-circle-callback> tak, aby místo přijímání callbacku vracela příslib.
+Rewrite the `showCircle` function in the solution of the task <info:task/animate-circle-callback> so that it returns a promise instead of accepting a callback.
 
-Nové použití:
+The new usage:
 
 ```js
-zobrazKruh(150, 150, 100).then(div => {
+showCircle(150, 150, 100).then(div => {
   div.classList.add('message-ball');
-  div.append("Ahoj, světe!");
+  div.append("Hello, world!");
 });
 ```
 
-Jako základ vezměte řešení úlohy <info:task/animate-circle-callback>.
+Take the solution of the task <info:task/animate-circle-callback> as the base.
