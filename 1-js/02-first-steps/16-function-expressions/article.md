@@ -88,6 +88,7 @@ let funkce = řekniAhoj;
 
 Všechno bude fungovat stejně.
 
+
 ````smart header="Proč je na konci středník?"
 Možná se divíte, proč funkční výraz obsahuje na konci středník `;`, ale deklarace funkce ne:
 
