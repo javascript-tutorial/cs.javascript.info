@@ -22,10 +22,6 @@ let řekniAhoj = function() {
 };
 ```
 
-Zde je funkce vytvořena a výslovně přiřazena do proměnné jako kterákoli jiná hodnota. Nezáleží na tom, jak je funkce definována. Je to jen hodnota uložená do proměnné `řekniAhoj`.
-
-Význam obou částí kódu je stejný: „vytvořit funkci a uložit ji do proměnné `řekniAhoj`“.
-
 Zde vidíme proměnnou `řekniAhoj`, do níž je uložena hodnota, kterou je nová funkce, vytvořená jako `function() { alert("Ahoj"); }`.
 
 Protože k vytvoření funkce dochází v kontextu přiřazovacího výrazu (na pravé straně `=`), je to *funkční výraz*.
@@ -56,7 +52,9 @@ Všimněte si, že poslední řádek nevolá funkci, protože za `řekniAhoj` ne
 
 V JavaScriptu je funkce hodnota, takže s ní můžeme zacházet jako s hodnotou. Výše uvedený kód zobrazí její řetězcovou reprezentaci, kterou je zdrojový kód funkce.
 
-Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`. Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
+Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`.
+
+Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
 
 Můžeme zkopírovat funkci do jiné proměnné:
 
@@ -292,7 +290,7 @@ if (věk < 18) {
   uvítání();               // \   (spustí se)
 */!*
                            //  |
-  function uvítání() {     //  |  
+  function uvítání() {     //  |
     alert("Ahoj!");        //  |  deklarace funkce je k dispozici
   }                        //  |  všude v bloku, v němž je funkce deklarována
                            //  |
@@ -302,7 +300,7 @@ if (věk < 18) {
 
 } else {
 
-  function uvítání() {    
+  function uvítání() {
     alert("Zdravíme vás!");
   }
 }
