@@ -1,12 +1,12 @@
-In the code below, each line corresponds to the item in the task list.
+V níže uvedeném kódu každý řádek odpovídá jednomu bodu v zadání.
 
 ```js run
-let admin, name; // can declare two variables at once
+let správce, jméno; // můžeme deklarovat dvě proměnné najednou
 
-name = "John";
+jméno = "Jan";
 
-admin = name;
+správce = jméno;
 
-alert( admin ); // "John"
+alert( správce ); // "Jan"
 ```
 

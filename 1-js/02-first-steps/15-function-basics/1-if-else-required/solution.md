@@ -1,3 +1,3 @@
-No difference!
+Žádný rozdíl v nich není.
 
-In both cases, `return confirm('Did parents allow you?')` executes exactly when the `if` condition is falsy.
+V obou případech se příkaz `return confirm('Dovolili ti to rodiče?');` spustí právě tehdy, když podmínka za `if` není splněna.

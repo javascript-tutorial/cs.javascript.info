@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# The result of OR AND OR
+# Výsledek OR AND OR
 
-What will the result be?
+Jaký bude výsledek?
 
 ```js
 alert( null || 2 && 3 || 4 );

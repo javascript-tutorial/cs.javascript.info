@@ -1,17 +1,17 @@
-# Hello, world!
+# Ahoj, světe!
 
-This part of the tutorial is about core JavaScript, the language itself.
+Tato část tutoriálu pojednává o základech JavaScriptu, o samotném jazyce.
 
-But we need a working environment to run our scripts and, since this book is online, the browser is a good choice. We'll keep the amount of browser-specific commands (like `alert`) to a minimum so that you don't spend time on them if you plan to concentrate on another environment (like Node.js). We'll focus on JavaScript in the browser in the [next part](/ui) of the tutorial.
+Potřebujeme však pracovní prostředí, v němž budeme spouštět skripty. Protože tato kniha je online, prohlížeč je dobrá volba. Budeme však udržovat množství příkazů specifických pro prohlížeč (např. `alert`) na minimu, abyste nad nimi nemuseli ztrácet čas, jestliže se plánujete zaměřit na jiné prostředí (např. Node.js). Na JavaScript v prohlížeči se zaměříme v [další části](/ui) tutoriálu.
 
-So first, let's see how we attach a script to a webpage. For server-side environments (like Node.js), you can execute the script with a command like `"node my.js"`.
+Nejprve se podíváme, jak vložit skript na webovou stránku. V prostředích na straně serveru (např. Node.js) můžete spustit skript příkazem, například `"node my.js"`.
 
 
-## The "script" tag
+## Značka „script“
 
-JavaScript programs can be inserted almost anywhere into an HTML document using the `<script>` tag.
+Programy v JavaScriptu můžeme vložit téměř kamkoli v HTML dokumentu pomocí značky `<script>`.
 
-For instance:
+Příklad:
 
 ```html run height=100
 <!DOCTYPE HTML>
@@ -19,15 +19,15 @@ For instance:
 
 <body>
 
-  <p>Before the script...</p>
+  <p>Před skriptem...</p>
 
 *!*
   <script>
-    alert( 'Hello, world!' );
+    alert( 'Ahoj, světe!' );
   </script>
 */!*
 
-  <p>...After the script.</p>
+  <p>...a za skriptem.</p>
 
 </body>
 
@@ -35,24 +35,24 @@ For instance:
 ```
 
 ```online
-You can run the example by clicking the "Play" button in the right-top corner of the box above.
+Příklad si můžete přehrát kliknutím na tlačítko „Přehrát“ v pravém horním rohu ve výše uvedeném okně.
 ```
 
-The `<script>` tag contains JavaScript code which is automatically executed when the browser processes the tag.
+Značka `<script>` obsahuje kód v JavaScriptu, který se spustí automaticky, když prohlížeč začne tuto značku zpracovávat.
 
 
-## Modern markup
+## Moderní značení
 
-The `<script>` tag has a few attributes that are rarely used nowadays but can still be found in old code:
+Značka `<script>` má některé atributy, které se v současnosti používají jen zřídka, ale stále je můžeme najít ve starším kódu:
 
-The `type` attribute: <code>&lt;script <u>type</u>=...&gt;</code>
-: The old HTML standard, HTML4, required a script to have a `type`. Usually it was `type="text/javascript"`. It's not required anymore. Also, the modern HTML standard totally changed the meaning of this attribute. Now, it can be used for JavaScript modules. But that's an advanced topic, we'll talk about modules in another part of the tutorial.
+Atribut `type`: <code>&lt;script <u>type</u>=...&gt;</code>
+: Starý standard HTML, HTML4, vyžadoval, aby skript byl určitého typu (`type`). Obvykle to byl `type="text/javascript"`. To už dnes není nutné. Kromě toho moderní standard HTML zcela změnil význam tohoto atributu, který se dnes může používat pro moduly JavaScriptu. To je však pokročilejší záležitost. Na moduly se zaměříme v další části tohoto tutoriálu.
 
-The `language` attribute: <code>&lt;script <u>language</u>=...&gt;</code>
-: This attribute was meant to show the language of the script. This attribute no longer makes sense because JavaScript is the default language. There is no need to use it.
+Atribut `language`: <code>&lt;script <u>language</u>=...&gt;</code>
+: Tento atribut měl oznamovat jazyk (language) skriptu. Protože výchozím jazykem je dnes JavaScript, nemá již tento atribut smysl a není třeba jej používat.
 
-Comments before and after scripts.
-: In really ancient books and guides, you may find comments inside `<script>` tags, like this:
+Komentáře před a za skripty.
+: V zastaralých knihách a průvodcích můžete uvnitř značky `<script>` najít takovéto komentáře:
 
     ```html no-beautify
     <script type="text/javascript"><!--
@@ -60,28 +60,28 @@ Comments before and after scripts.
     //--></script>
     ```
 
-    This trick isn't used in modern JavaScript. These comments hide JavaScript code from old browsers that didn't know how to process the `<script>` tag. Since browsers released in the last 15 years don't have this issue, this kind of comment can help you identify really old code.
+    Tento trik se v moderním JavaScriptu již nepoužívá. Tyto komentáře znepřístupňovaly JavaScriptový kód starým prohlížečům, které neuměly zpracovat značku `<script>`. Protože každý prohlížeč vydaný v posledních 15 letech to umí, můžete podle tohoto komentáře poznat opravdu starý kód.
 
 
-## External scripts
+## Externí skripty
 
-If we have a lot of JavaScript code, we can put it into a separate file.
+Máme-li větší množství kódu v JavaScriptu, můžeme jej uložit do samostatného souboru.
 
-Script files are attached to HTML with the `src` attribute:
+Tyto soubory se přidávají do HTML pomocí atributu `src`:
 
 ```html
-<script src="/path/to/script.js"></script>
+<script src="/cesta/ke/skriptu.js"></script>
 ```
 
-Here, `/path/to/script.js` is an absolute path to the script from the site root. One can also provide a relative path from the current page. For instance, `src="script.js"`, just like `src="./script.js"`, would mean a file `"script.js"` in the current folder.
+Zde `/cesta/ke/skriptu.js` je absolutní cesta ke skriptu z kořenové složky webového sídla. Můžeme uvést i relativní cestu od aktuální stránky. Například `src="script.js"`, stejně jako `src="./script.js"`, by znamenalo soubor `"script.js"` v aktuální složce.
 
-We can give a full URL as well. For instance:
+Můžeme poskytnout i úplné URL. Například:
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
 ```
 
-To attach several scripts, use multiple tags:
+Chceme-li připojit více skriptů, použijeme více značek:
 
 ```html
 <script src="/js/script1.js"></script>
@@ -90,43 +90,43 @@ To attach several scripts, use multiple tags:
 ```
 
 ```smart
-As a rule, only the simplest scripts are put into HTML. More complex ones reside in separate files.
+Bývá pravidlem, že do HTML se ukládají jen ty nejjednodušší skripty. Složitější se umisťují do oddělených souborů.
 
-The benefit of a separate file is that the browser will download it and store it in its [cache](https://en.wikipedia.org/wiki/Web_cache).
+Výhodou odděleného souboru je, že prohlížeč si jej stáhne a uloží do své [mezipaměti](https://en.wikipedia.org/wiki/Web_cache).
 
-Other pages that reference the same script will take it from the cache instead of downloading it, so the file is actually downloaded only once.
+Jiné stránky, které se odkazují na stejný skript, si jej místo opětovného stažení nahrají z mezipaměti, takže se soubor ve skutečnosti stáhne pouze jednou.
 
-That reduces traffic and makes pages faster.
+Tím se snižuje přenos dat a načítání stránek je tak rychlejší.
 ```
 
-````warn header="If `src` is set, the script content is ignored."
-A single `<script>` tag can't have both the `src` attribute and code inside.
+````warn header="Je-li nastaveno `src`, obsah značky se ignoruje."
+Jedna značka `<script>` nemůže obsahovat atribut `src` a kód současně.
 
-This won't work:
+Tohle nebude fungovat:
 
 ```html
-<script *!*src*/!*="file.js">
-  alert(1); // the content is ignored, because src is set
+<script *!*src*/!*="soubor.js">
+  alert(1); // obsah je ignorován, protože je nastaveno src
 </script>
 ```
 
-We must choose either an external `<script src="…">` or a regular `<script>` with code.
+Musíme si vybrat mezi externím `<script src="…">` a vloženým `<script>` skriptem.
 
-The example above can be split into two scripts to work:
+Výše uvedený příklad může fungovat, když jej rozdělíme do dvou skriptů:
 
 ```html
-<script src="file.js"></script>
+<script src="soubor.js"></script>
 <script>
   alert(1);
 </script>
 ```
 ````
 
-## Summary
+## Shrnutí
 
-- We can use a `<script>` tag to add JavaScript code to a page.
-- The `type` and `language` attributes are not required.
-- A script in an external file can be inserted with `<script src="path/to/script.js"></script>`.
+- JavaScriptový kód můžeme umístit na stránku pomocí značky `<script>`.
+- Atributy `type` a `language` nejsou vyžadovány.
+- Skript v externím souboru lze vložit pomocí `<script src="cesta/ke/skriptu.js"></script>`.
 
 
-There is much more to learn about browser scripts and their interaction with the webpage. But let's keep in mind that this part of the tutorial is devoted to the JavaScript language, so we shouldn't distract ourselves with browser-specific implementations of it. We'll be using the browser as a way to run JavaScript, which is very convenient for online reading, but only one of many.
+O skriptech v prohlížeči a jejich interakcí s webovou stránkou toho lze napsat mnohem více. Mějme však na paměti, že tato část tutoriálu je věnována pouze jazyku JavaScript, takže bychom se zde neměli zatěžovat specifiky jeho implementací v prohlížečích. Ke spouštění skriptů v JavaScriptu budeme používat prohlížeč, což je při online čtení velmi výhodné, ale je to jen jedna z mnoha možností.
