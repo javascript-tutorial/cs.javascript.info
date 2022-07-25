@@ -34,7 +34,7 @@ alert( součet(1, 2) ); // 3
 
 Jak vidíte, `(a, b) => a + b` značí funkci, která má dva parametry `a` a `b`. Když je vykonána, vyhodnotí výraz `a + b` a vrátí jeho výsledek.
 
-- Máme-li pouze jeden argument, můžeme závorky kolem něj vynechat, čímž se zápis ještě zkrátí.
+- Máme-li pouze jeden parametr, můžeme závorky kolem něj vynechat, čímž se zápis ještě zkrátí.
 
     Příklad:
 
