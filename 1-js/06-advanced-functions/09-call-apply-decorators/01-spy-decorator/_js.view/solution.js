@@ -1,12 +1,12 @@
-function špión(funkce) {
+function spy(func) {
 
-  function wrapper(...argumenty) {
-    // použijeme ...argumenty místo arguments, abychom do wrapper.volání uložili „skutečné“ pole
-    wrapper.volání.push(argumenty);
-    return funkce.apply(this, argumenty);
+  function wrapper(...args) {
+    // using ...args instead of arguments to store "real" array in wrapper.calls
+    wrapper.calls.push(args);
+    return func.apply(this, args);
   }
 
-  wrapper.volání = [];
+  wrapper.calls = [];
 
   return wrapper;
 }

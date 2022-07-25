@@ -1,12 +1,12 @@
 
 
 ```js run demo
-let a = +prompt("První číslo?", "");
-let b = +prompt("Druhé číslo?", "");
+let a = +prompt("The first number?", "");
+let b = +prompt("The second number?", "");
 
 alert( a + b );
 ```
 
-Všimněte si unárního plus `+` před `prompt`, které okamžitě konvertuje hodnotu na číslo.
+Note the unary plus `+` before `prompt`. It immediately converts the value to a number.
 
-Jinak by `a` a `b` byly řetězce a součtem by bylo jejich zřetězení, tedy: `"1" + "2" = "12"`.
+Otherwise, `a` and `b` would be string their sum would be their concatenation, that is: `"1" + "2" = "12"`.

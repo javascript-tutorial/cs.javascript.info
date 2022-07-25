@@ -1,37 +1,37 @@
-**Chyba!**
+**Error**!
 
-Zkuste si to:
+Try it:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  jdi: function() { alert(this.jméno) }
+let user = {
+  name: "John",
+  go: function() { alert(this.name) }
 }
 
-(uživatel.jdi)() // chyba!
+(user.go)() // error!
 ```
 
-Chybová zpráva ve většině prohlížečů nám nedává mnoho informací o tom, co bylo špatně.
+The error message in most browsers does not give us much of a clue about what went wrong.
 
-**Chyba se objevila proto, že za `uživatel = {...}` chybí středník.**
+**The error appears because a semicolon is missing after `user = {...}`.**
 
-JavaScript automaticky nevloží středník před závorku `(uživatel.jdi)()`, takže přečte kód jako:
+JavaScript does not auto-insert a semicolon before a bracket `(user.go)()`, so it reads the code like:
 
 ```js no-beautify
-let uživatel = { jdi:... }(uživatel.jdi)()
+let user = { go:... }(user.go)()
 ```
 
-Pak také vidíme, že takový spojený výraz je syntakticky voláním objektu `{ jdi: ... }` jako funkce s argumentem `(uživatel.jdi)`. A to se také odehrává na stejném řádku jako `let uživatel`, takže objekt `uživatel` ještě ani nebyl definován, proto nastane chyba.
+Then we can also see that such a joint expression is syntactically a call of the object `{ go: ... }` as a function with the argument `(user.go)`. And that also happens on the same line with `let user`, so the `user` object has not yet even been defined, hence the error.
 
-Jestliže vložíme středník, bude vše v pořádku:
+If we insert the semicolon, all is fine:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  jdi: function() { alert(this.jméno) }
+let user = {
+  name: "John",
+  go: function() { alert(this.name) }
 }*!*;*/!*
 
-(uživatel.jdi)() // Jan
+(user.go)() // John
 ```
 
-Prosíme všimněte si, že závorky okolo `(uživatel.jdi)` tady nic nedělají. Obvykle nastavují pořadí operací, ale tady jako první zafunguje tečka `.` tak jako tak, takže závorky nemají žádný efekt. Vadí jenom chybějící středník.
+Please note that parentheses around `(user.go)` do nothing here. Usually they setup the order of operations, but here the dot `.` works first anyway, so there's no effect. Only the semicolon thing matters.

@@ -1,98 +1,98 @@
-# Dynamické importy
+# Dynamic imports
 
-Příkazy exportu a importu, které jsme uvedli v předchozích kapitolách, se nazývají „statické“. Jejich syntaxe je velmi jednoduchá a striktní.
+Export and import statements that we covered in previous chapters are called "static". The syntax is very simple and strict.
 
-Za prvé, žádné parametry příkazu `import` nemůžeme dynamicky generovat.
+First, we can't dynamically generate any parameters of `import`.
 
-Cesta k modulu musí být primitivní řetězec, ne volání funkce. Tohle nebude fungovat:
+The module path must be a primitive string, can't be a function call. This won't work:
 
 ```js
-import ... from *!*vraťNázevModulu()*/!*; // Chyba, povoleno je jen from "řetězec"
+import ... from *!*getModuleName()*/!*; // Error, only from "string" is allowed
 ```
 
-Za druhé, nemůžeme importovat podmíněně nebo za běhu skriptu:
+Second, we can't import conditionally or at run-time:
 
 ```js
 if(...) {
-  import ...; // Chyba, tohle není dovoleno!
+  import ...; // Error, not allowed!
 }
 
 {
-  import ...; // Chyba, nemůžeme umístit import do bloku
+  import ...; // Error, we can't put import in any block
 }
 ```
 
-Je to proto, že záměrem příkazů `import`/`export` je poskytnout páteř struktury kódu. To je dobrá věc, protože strukturu kódu můžeme analyzovat, moduly můžeme speciálními nástroji shromažďovat a spojovat do jednoho souboru, nepoužité exporty můžeme odstraňovat („třesení stromem“). To je možné jen proto, že struktura importů/exportů je jednoduchá a pevná.
+That's because `import`/`export` aim to provide a backbone for the code structure. That's a good thing, as code structure can be analyzed, modules can be gathered and bundled into one file by special tools, unused exports can be removed ("tree-shaken"). That's possible only because the structure of imports/exports is simple and fixed.
 
-Jak ale můžeme importovat modul dynamicky, na požádání?
+But how can we import a module dynamically, on-demand?
 
-## Výraz import()
+## The import() expression
 
-Výraz `import(modul)` načte modul a vrátí příslib, který se vyhodnotí do objektu modulu obsahujícího všechny jeho exporty. Může být volán z kteréhokoli místa v kódu.
+The `import(module)` expression loads the module and returns a promise that resolves into a module object that contains all its exports. It can be called from any place in the code.
 
-Můžeme jej používat dynamicky na kterémkoli místě kódu, například:
+We can use it dynamically in any place of the code, for instance:
 
 ```js
-let cestaModulu = prompt("Který modul načíst?");
+let modulePath = prompt("Which module to load?");
 
-import(cestaModulu)
-  .then(obj => <objekt modulu>)
-  .catch(chyba => <chyba při načítání, např. takový modul neexistuje>)
+import(modulePath)
+  .then(obj => <module object>)
+  .catch(err => <loading error, e.g. if no such module>)
 ```
 
-Nebo můžeme použít `let modul = await import(cestaModulu)`, jsme-li uvnitř asynchronní funkce.
+Or, we could use `let module = await import(modulePath)` if inside an async function.
 
-Například jestliže máme následující modul `řekni.js`:
+For instance, if we have the following module `say.js`:
 
 ```js
-// 📁 řekni.js
-export function ahoj() {
-  alert(`Ahoj`);
+// 📁 say.js
+export function hi() {
+  alert(`Hello`);
 }
 
-export function nashle() {
-  alert(`Nashle`);
+export function bye() {
+  alert(`Bye`);
 }
 ```
 
-...Pak dynamický import může vypadat takto:
+...Then dynamic import can be like this:
 
 ```js
-let {ahoj, nashle} = await import('./řekni.js');
+let {hi, bye} = await import('./say.js');
 
-ahoj();
-nashle();
+hi();
+bye();
 ```
 
-Nebo jestliže `řekni.js` má defaultní export:
+Or, if `say.js` has the default export:
 
 ```js
-// 📁 řekni.js
+// 📁 say.js
 export default function() {
-  alert("Modul načten (defaultní export)!");
+  alert("Module loaded (export default)!");
 }
 ```
 
-...Pak, abychom k němu přistoupili, můžeme použít vlastnost `default` objektu modulu:
+...Then, in order to access it, we can use `default` property of the module object:
 
 ```js
-let obj = await import('./řekni.js');
-let řekni = obj.default;
-// nebo na jednom řádku: let {default: řekni} = await import('./řekni.js');
+let obj = await import('./say.js');
+let say = obj.default;
+// or, in one line: let {default: say} = await import('./say.js');
 
-řekni();
+say();
 ```
 
-Zde je celý příklad:
+Here's the full example:
 
 [codetabs src="say" current="index.html"]
 
 ```smart
-Dynamické importy fungují v běžných skriptech, nevyžadují `script type="module"`.
+Dynamic imports work in regular scripts, they don't require `script type="module"`.
 ```
 
 ```smart
-Ačkoli `import()` vypadá jako volání funkce, je to speciální syntaxe, která prostě jen používá závorky (podobně jako `super()`).
+Although `import()` looks like a function call, it's a special syntax that just happens to use parentheses (similar to `super()`).
 
-Nemůžeme tedy kopírovat `import` do proměnné nebo s ním používat `call/apply`. Není to funkce.
+So we can't copy `import` to a variable or use `call/apply` with it. It's not a function.
 ```

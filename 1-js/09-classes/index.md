@@ -1,1 +1,1 @@
-# Třídy
+# Classes

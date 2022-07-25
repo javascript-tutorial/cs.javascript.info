@@ -2,25 +2,25 @@ importance: 5
 
 ---
 
-# Čekací dekorátor
+# Delaying decorator
 
-Vytvořte dekorátor `čekej(f, ms)`, který zpozdí každé volání funkce `f` o `ms` milisekund.
+Create a decorator `delay(f, ms)` that delays each call of `f` by `ms` milliseconds.
 
-Například:
+For instance:
 
 ```js
 function f(x) {
   alert(x);
 }
 
-// vytvoření wrapperů
-let f1000 = čekej(f, 1000);
-let f1500 = čekej(f, 1500);
+// create wrappers
+let f1000 = delay(f, 1000);
+let f1500 = delay(f, 1500);
 
-f1000("test"); // zobrazí "test" za 1000 ms
-f1500("test"); // zobrazí "test" za 1500 ms
+f1000("test"); // shows "test" after 1000ms
+f1500("test"); // shows "test" after 1500ms
 ```
 
-Jinými slovy, `čekej(f, ms)` vrátí variantu `f` „zpožděnou o `ms`“.
+In other words, `delay(f, ms)` returns a "delayed by `ms`" variant of `f`.
 
-Ve výše uvedeném kódu je `f` funkce s jediným argumentem, ale vaše řešení by mělo předávat všechny argumenty a kontextové `this`.
+In the code above, `f` is a function of a single argument, but your solution should pass all arguments and the context `this`.

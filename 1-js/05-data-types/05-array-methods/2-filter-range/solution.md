@@ -1,14 +1,14 @@
 ```js run demo
-function filtrujPodleRozsahu(pole, a, b) {
-  // závorky kolem výrazu jsou přidány pro lepší čitelnost
-  return pole.filter(prvek => (a <= prvek && prvek <= b));
+function filterRange(arr, a, b) {
+  // added brackets around the expression for better readability
+  return arr.filter(item => (a <= item && item <= b));
 }
 
-let testovacíPole = [5, 3, 8, 1];
+let arr = [5, 3, 8, 1];
 
-let filtrovanéPole = filtrujPodleRozsahu(testovacíPole, 1, 4); 
+let filtered = filterRange(arr, 1, 4);
 
-alert( filtrovanéPole ); // 3,1 (odpovídající hodnoty)
+alert( filtered ); // 3,1 (matching values)
 
-alert( testovacíPole ); // 5,3,8,1 (nezměněno)
+alert( arr ); // 5,3,8,1 (not modified)
 ```

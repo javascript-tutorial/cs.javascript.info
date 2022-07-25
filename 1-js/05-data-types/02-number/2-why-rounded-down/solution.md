@@ -1,33 +1,33 @@
-Interně je desetinné číslo `6.35` nekonečné binární číslo. Jako vždy v takových případech je uloženo se ztrátou přesnosti.
+Internally the decimal fraction `6.35` is an endless binary. As always in such cases, it is stored with a precision loss.
 
-Podívejme se:
+Let's see:
 
 ```js run
 alert( 6.35.toFixed(20) ); // 6.34999999999999964473
 ```
 
-Ztráta přesnosti může číslo zvýšit i snížit. V tomto konkrétním případě se číslo stane o něco menším, proto bude zaokrouhleno dolů.
+The precision loss can cause both increase and decrease of a number. In this particular case the number becomes a tiny bit less, that's why it rounded down.
 
-A co `1.35`?
+And what's for `1.35`?
 
 ```js run
 alert( 1.35.toFixed(20) ); // 1.35000000000000008882
 ```
 
-Zde ztráta přesnosti číslo trošičku zvětšila, takže se zaokrouhlilo nahoru.
+Here the precision loss made the number a little bit greater, so it rounded up.
 
-**Jak můžeme problém s `6.35` vyřešit, chceme-li, aby se zaokrouhlilo správně?**
+**How can we fix the problem with `6.35` if we want it to be rounded the right way?**
 
-Měli bychom je před zaokrouhlením přiblížit k celému číslu:
+We should bring it closer to an integer prior to rounding:
 
 ```js run
 alert( (6.35 * 10).toFixed(20) ); // 63.50000000000000000000
 ```
 
-Všimněte si, že `63.5` nemá vůbec žádnou ztrátu přesnosti. Je to proto, že desetinná část `0.5` je ve skutečnosti `1/2`. Zlomky dělené mocninami `2` jsou v binární soustavě reprezentovány přesně, takže je nyní můžeme zaokrouhlit:
+Note that `63.5` has no precision loss at all. That's because the decimal part `0.5` is actually `1/2`. Fractions divided by powers of `2` are exactly represented in the binary system, now we can round it:
 
 
 ```js run
-alert( Math.round(6.35 * 10) / 10); // 6.35 -> 63.5 -> 64(zaokrouhleno) -> 6.4
+alert( Math.round(6.35 * 10) / 10); // 6.35 -> 63.5 -> 64(rounded) -> 6.4
 ```
 

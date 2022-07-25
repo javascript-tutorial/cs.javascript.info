@@ -1,87 +1,78 @@
-Abychom získali čas, který uplynul od data `datum` do nynějška, odečteme data.
+To get the time from `date` till now -- let's substract the dates.
 
 ```js run demo
-function formátujDatum(datum) {
-  let rozdíl = new Date() - datum; // rozdíl v milisekundách
+function formatDate(date) {
+  let diff = new Date() - date; // the difference in milliseconds
 
-  if (rozdíl < 1000) { // méně než 1 sekunda
-    return 'právě teď';
+  if (diff < 1000) { // less than 1 second
+    return 'right now';
   }
 
-  let sec = Math.floor(rozdíl / 1000); // převedeme rozdíl na sekundy
+  let sec = Math.floor(diff / 1000); // convert diff to seconds
 
   if (sec < 60) {
-    return 'před ' + sec + ' s';
+    return sec + ' sec. ago';
   }
 
-  let min = Math.floor(rozdíl / 60000); // převedeme rozdíl na minuty
+  let min = Math.floor(diff / 60000); // convert diff to minutes
   if (min < 60) {
-    return 'před ' + min + ' min.';
+    return min + ' min. ago';
   }
 
-  // naformátujeme datum
-  // před jednočíslicový den/měsíc/hodiny/minuty přidáme nulu
-  let d = datum;
+  // format the date
+  // add leading zeroes to single-digit day/month/hours/minutes
+  let d = date;
   d = [
     '0' + d.getDate(),
     '0' + (d.getMonth() + 1),
     '' + d.getFullYear(),
     '0' + d.getHours(),
     '0' + d.getMinutes()
-  ].map(složka => složka.slice(-2)); // z každé složky vezmeme poslední 2 číslice
+  ].map(component => component.slice(-2)); // take last 2 digits of every component
 
-  // spojíme složky do data
+  // join the components into date
   return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':');
 }
 
-alert( formátujDatum(new Date(new Date - 1)) ); // "právě teď"
+alert( formatDate(new Date(new Date - 1)) ); // "right now"
 
-alert( formátujDatum(new Date(new Date - 30 * 1000)) ); // "před 30 s"
+alert( formatDate(new Date(new Date - 30 * 1000)) ); // "30 sec. ago"
 
-alert( formátujDatum(new Date(new Date - 5 * 60 * 1000)) ); // "před 5 min."
+alert( formatDate(new Date(new Date - 5 * 60 * 1000)) ); // "5 min. ago"
 
-// včerejší datum, např. 31.12.2016 20:00
-alert( formátujDatum(new Date(new Date - 86400 * 1000)) );
+// yesterday's date like 31.12.2016 20:00
+alert( formatDate(new Date(new Date - 86400 * 1000)) );
 ```
 
-Alternativní řešení:
+Alternative solution:
 
 ```js run
-function formátujDatum(datum) {
-  let denVMěsíci = datum.getDate();
-  let měsíc = datum.getMonth() + 1;
-  let rok = datum.getFullYear();
-  let hodina = datum.getHours();
-  let minuta = datum.getMinutes();
-  let rozdílMs = new Date() - datum;
-  let rozdílSec = Math.round(rozdílMs / 1000);
-  let rozdílMin = rozdílSec / 60;
-  let rozdílHod = rozdílMin / 60;
+function formatDate(date) {
+  let dayOfMonth = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  let hour = date.getHours();
+  let minutes = date.getMinutes();
+  let diffMs = new Date() - date;
+  let diffSec = Math.round(diffMs / 1000);
+  let diffMin = diffSec / 60;
+  let diffHour = diffMin / 60;
 
-  // formátování
-  rok = rok.toString().slice(-2);
-  měsíc = měsíc < 10 ? '0' + měsíc : měsíc;
-  denVMěsíci = denVMěsíci < 10 ? '0' + denVMěsíci : denVMěsíci;
-  hodina = hodina < 10 ? '0' + hodina : hodina;
-  minuta = minuta < 10 ? '0' + minuta : minuta;
+  // formatting
+  year = year.toString().slice(-2);
+  month = month < 10 ? '0' + month : month;
+  dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
+  hour = hour < 10 ? '0' + hour : hour;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
 
-  if (rozdílSec < 1) {
-    return 'právě teď';  
-  } else if (rozdílMin < 1) {
-    return `před ${rozdílSec} s`
-  } else if (rozdílHod < 1) {
-    return `před ${rozdílMin} min.`
+  if (diffSec < 1) {
+    return 'right now';  
+  } else if (diffMin < 1) {
+    return `${diffSec} sec. ago`
+  } else if (diffHour < 1) {
+    return `${diffMin} min. ago`
   } else {
-    return `${denVMěsíci}.${měsíc}.${rok} ${hodina}:${minuta}`
+    return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`
   }
 }
-
-alert( formátujDatum(new Date(new Date - 1)) ); // "právě teď"
-
-alert( formátujDatum(new Date(new Date - 30 * 1000)) ); // "před 30 s"
-
-alert( formátujDatum(new Date(new Date - 5 * 60 * 1000)) ); // "před 5 min."
-
-// včerejší datum, např. 31.12.2016 20:00
-alert( formátujDatum(new Date(new Date - 86400 * 1000)) );
 ```

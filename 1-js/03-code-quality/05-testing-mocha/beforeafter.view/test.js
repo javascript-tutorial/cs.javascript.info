@@ -1,16 +1,16 @@
 describe("test", function() {
   
-   // Mocha obvykle čeká na provedení testu 2 sekundy a pak jej považuje za špatný
+   // Mocha usually waits for the tests for 2 seconds before considering them wrong
   
-  this.timeout(200000); // S tímto kódem to můžeme zvýšit - v tomto případě na 200 000 milisekund
+  this.timeout(200000); // With this code we increase this - in this case to 200,000 milliseconds
 
-  // To je kvůli funkci "alert", protože jestliže budete zaváhat se stisknutím tlačítka "OK", testy neprojdou!
+  // This is because of the "alert" function, because if you delay pressing the "OK" button the tests will not pass!
   
-  before(() => alert("Začíná testování - před všemi testy"));
-  after(() => alert("Končí testování - po všech testech"));
+  before(() => alert("Testing started – before all tests"));
+  after(() => alert("Testing finished – after all tests"));
 
-  beforeEach(() => alert("Před testem - vstup do testu"));
-  afterEach(() => alert("Po testu - výstup z testu"));
+  beforeEach(() => alert("Before a test – enter a test"));
+  afterEach(() => alert("After a test – exit a test"));
 
   it('test 1', () => alert(1));
   it('test 2', () => alert(2));

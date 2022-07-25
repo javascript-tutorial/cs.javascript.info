@@ -2,88 +2,88 @@ importance: 5
 
 ---
 
-# Změna „prototype“
+# Changing "prototype"
 
-V níže uvedeném kódu vytvoříme `new Králík` a pak se pokusíme změnit jeho prototyp.
+In the code below we create `new Rabbit`, and then try to modify its prototype.
 
-Na začátku máme tento kód:
+In the start, we have this code:
 
 ```js run
-function Králík() {}
-Králík.prototype = {
-  žere: true
+function Rabbit() {}
+Rabbit.prototype = {
+  eats: true
 };
 
-let králík = new Králík();
+let rabbit = new Rabbit();
 
-alert( králík.žere ); // true
+alert( rabbit.eats ); // true
 ```
 
 
-1. Přidáme další řádek (zvýrazněný). Co nyní zobrazí `alert`?
+1. We added one more string (emphasized). What will `alert` show now?
 
     ```js
-    function Králík() {}
-    Králík.prototype = {
-      žere: true
+    function Rabbit() {}
+    Rabbit.prototype = {
+      eats: true
     };
 
-    let králík = new Králík();
+    let rabbit = new Rabbit();
 
     *!*
-    Králík.prototype = {};
+    Rabbit.prototype = {};
     */!*
 
-    alert( králík.žere ); // ?
+    alert( rabbit.eats ); // ?
     ```
 
-2. ...A když kód vypadá takto (jeden řádek změněn)?
+2. ...And if the code is like this (replaced one line)?
 
     ```js
-    function Králík() {}
-    Králík.prototype = {
-      žere: true
+    function Rabbit() {}
+    Rabbit.prototype = {
+      eats: true
     };
 
-    let králík = new Králík();
+    let rabbit = new Rabbit();
 
     *!*
-    Králík.prototype.žere = false;
+    Rabbit.prototype.eats = false;
     */!*
 
-    alert( králík.žere ); // ?
+    alert( rabbit.eats ); // ?
     ```
 
-3. A takto (jeden řádek změněn)?
+3. And like this (replaced one line)?
 
     ```js
-    function Králík() {}
-    Králík.prototype = {
-      žere: true
+    function Rabbit() {}
+    Rabbit.prototype = {
+      eats: true
     };
 
-    let králík = new Králík();
+    let rabbit = new Rabbit();
 
     *!*
-    delete králík.žere;
+    delete rabbit.eats;
     */!*
 
-    alert( králík.žere ); // ?
+    alert( rabbit.eats ); // ?
     ```
 
-4. Poslední varianta:
+4. The last variant:
 
     ```js
-    function Králík() {}
-    Králík.prototype = {
-      žere: true
+    function Rabbit() {}
+    Rabbit.prototype = {
+      eats: true
     };
 
-    let králík = new Králík();
+    let rabbit = new Rabbit();
 
     *!*
-    delete Králík.prototype.žere;
+    delete Rabbit.prototype.eats;
     */!*
 
-    alert( králík.žere ); // ?
+    alert( rabbit.eats ); // ?
     ```

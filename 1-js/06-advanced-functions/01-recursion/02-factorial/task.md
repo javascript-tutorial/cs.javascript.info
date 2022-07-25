@@ -2,17 +2,17 @@ importance: 4
 
 ---
 
-# Výpočet faktoriálu
+# Calculate factorial
 
-[Faktoriál](https://cs.wikipedia.org/wiki/Faktoriál) přirozeného čísla je toto číslo násobené `„sebou samým minus 1“`, pak `„sebou samým minus 2“` a tak dále, až do `1`. Faktoriál `n` se značí `n!`.
+The [factorial](https://en.wikipedia.org/wiki/Factorial) of a natural number is a number multiplied by `"number minus one"`, then by `"number minus two"`, and so on till `1`. The factorial of `n` is denoted as `n!`
 
-Můžeme napsat definici faktoriálu takto:
+We can write a definition of factorial like this:
 
 ```js
 n! = n * (n - 1) * (n - 2) * ...*1
 ```
 
-Hodnoty faktoriálů pro různá `n`:
+Values of factorials for different `n`:
 
 ```js
 1! = 1
@@ -22,10 +22,10 @@ Hodnoty faktoriálů pro různá `n`:
 5! = 5 * 4 * 3 * 2 * 1 = 120
 ```
 
-Úkolem je napsat funkci `faktoriál(n)`, která vypočítá `n!` pomocí rekurzívních volání.
+The task is to write a function `factorial(n)` that calculates `n!` using recursive calls.
 
 ```js
-alert( faktoriál(5) ); // 120
+alert( factorial(5) ); // 120
 ```
 
-P.S. Rada: `n!` lze zapsat jako `n * (n-1)!`. Například: `3! = 3*2! = 3*2*1! = 6`.
+P.S. Hint: `n!` can be written as `n * (n-1)!` For instance: `3! = 3*2! = 3*2*1! = 6`
