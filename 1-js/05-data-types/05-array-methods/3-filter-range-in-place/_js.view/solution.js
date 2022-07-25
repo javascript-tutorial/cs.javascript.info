@@ -1,12 +1,12 @@
 
-function filtrujPodleRozsahuNaMístě(arr, a, b) {
+function filterRangeInPlace(arr, a, b) {
 
-  for (let i = 0; i < pole.length; i++) {
-    let hodnota = pole[i];
+  for (let i = 0; i < arr.length; i++) {
+    let val = arr[i];
 
-    // odstraní hodnotu, jestliže je mimo interval
-    if (hodnota < a || hodnota > b) {
-      pole.splice(i, 1);
+    // remove if outside of the interval
+    if (val < a || val > b) {
+      arr.splice(i, 1);
       i--;
     }
   }

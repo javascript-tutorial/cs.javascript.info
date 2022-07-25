@@ -1,5 +1,5 @@
-function ověřSpam(řetězec) {
-  let řetězecMalýmiPísmeny = řetězec.toLowerCase();
+function checkSpam(str) {
+  let lowerStr = str.toLowerCase();
 
-  return řetězecMalýmiPísmeny.includes('viagra') || řetězecMalýmiPísmeny.includes('xxx');
+  return lowerStr.includes('viagra') || lowerStr.includes('xxx');
 }

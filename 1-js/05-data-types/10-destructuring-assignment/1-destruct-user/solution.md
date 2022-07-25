@@ -1,13 +1,13 @@
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
-  roky: 30
+let user = {
+  name: "John",
+  years: 30
 };
 
-let {jméno, roky: věk, jeAdmin = false} = uživatel;
+let {name, years: age, isAdmin = false} = user;
 
-alert( jméno ); // Jan
-alert( věk ); // 30
-alert( jeAdmin ); // false
+alert( name ); // John
+alert( age ); // 30
+alert( isAdmin ); // false
 ```

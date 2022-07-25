@@ -1,14 +1,14 @@
-describe("mocnina", function() {
+describe("pow", function() {
 
-  function vytvořTest(x) {
-    let očekáváno = x * x * x;
-    it(`${x} na 3 je ${očekáváno}`, function() {
-      assert.equal(mocnina(x, 3), očekáváno);
+  function makeTest(x) {
+    let expected = x * x * x;
+    it(`${x} in the power 3 is ${expected}`, function() {
+      assert.equal(pow(x, 3), expected);
     });
   }
 
   for (let x = 1; x <= 5; x++) {
-    vytvořTest(x);
+    makeTest(x);
   }
 
 });

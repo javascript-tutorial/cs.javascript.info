@@ -1,22 +1,22 @@
-function vytvořArmádu() {
-  let střelci = [];
+function makeArmy() {
+  let shooters = [];
 
   let i = 0;
   while (i < 10) {
-    let střelec = function() { // funkce střelec
-      alert( i );              // by měla zobrazit své číslo
+    let shooter = function() { // shooter function
+      alert( i ); // should show its number
     };
-    střelci.push(střelec);
+    shooters.push(shooter);
     i++;
   }
 
-  return střelci;
+  return shooters;
 }
 
 /*
-let armáda = vytvořArmádu();
+let army = makeArmy();
 
-armáda[0](); // střelec číslo 0 zobrazí 10
-armáda[5](); // a číslo 5 zobrazí také 10...
-// ... všichni střelci zobrazí 10 místo svého čísla 0, 1, 2, 3...
+army[0](); // the shooter number 0 shows 10
+army[5](); // and number 5 also outputs 10...
+// ... all shooters show 10 instead of their 0, 1, 2, 3...
 */

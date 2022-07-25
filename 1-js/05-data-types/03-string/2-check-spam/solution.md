@@ -1,14 +1,14 @@
-Aby hledání nerozlišovalo malá a velká písmena, převedeme řetězec na malá písmena a pak budeme hledat:
+To make the search case-insensitive, let's bring the string to lower case and then search:
 
 ```js run demo
-function ověřSpam(řetězec) {
-  let řetězecMalýmiPísmeny = řetězec.toLowerCase();
+function checkSpam(str) {
+  let lowerStr = str.toLowerCase();
 
-  return řetězecMalýmiPísmeny.includes('viagra') || řetězecMalýmiPísmeny.includes('xxx');
+  return lowerStr.includes('viagra') || lowerStr.includes('xxx');
 }
 
-alert( ověřSpam('levná ViAgRA zde') );
-alert( ověřSpam('zdarma xxxxx') );
-alert( ověřSpam("nevinný králíček") );
+alert( checkSpam('buy ViAgRA now') );
+alert( checkSpam('free xxxxx') );
+alert( checkSpam("innocent rabbit") );
 ```
 

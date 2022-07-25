@@ -1,331 +1,332 @@
-# Mapa a množina
 
-Prozatím jsme se naučili dvěma následujícím složitým datovým strukturám:
+# Map and Set
 
-- Objekty se používají k ukládání klíčovaných kolekcí.
-- Pole se používají k ukládání seřazených kolekcí.
+Till now, we've learned about the following complex data structures:
 
-Pro skutečný život to však nestačí. Proto existují také `Map` (mapa) a `Set` (množina).
+- Objects are used for storing keyed collections.
+- Arrays are used for storing ordered collections.
 
-## Mapa
+But that's not enough for real life. That's why `Map` and `Set` also exist.
 
-[Mapa](mdn:js/Map) je kolekce datových prvků uložených pod klíči, podobně jako `Object`. Hlavní rozdíl je však v tom, že `Map` umožňuje klíče libovolného typu.
+## Map
 
-Její metody a vlastnosti jsou:
+[Map](mdn:js/Map) is a collection of keyed data items, just like an `Object`. But the main difference is that `Map` allows keys of any type.
 
-- `new Map()` -- vytvoří mapu.
-- `mapa.set(klíč, hodnota)` -- uloží hodnotu pod klíčem.
-- `mapa.get(klíč)` -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
-- `mapa.has(klíč)` -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
-- `mapa.delete(klíč)` -- odstraní hodnotu pod zadaným klíčem.
-- `mapa.clear()` -- odstraní z mapy všechny hodnoty.
-- `mapa.size` -- vrátí aktuální počet prvků.
+Methods and properties are:
 
-Příklad:
+- `new Map()` -- creates the map.
+- `map.set(key, value)` -- stores the value by the key.
+- `map.get(key)` -- returns the value by the key, `undefined` if `key` doesn't exist in map.
+- `map.has(key)` -- returns `true` if the `key` exists, `false` otherwise.
+- `map.delete(key)` -- removes the value by the key.
+- `map.clear()` -- removes everything from the map.
+- `map.size` -- returns the current element count.
 
-```js run
-let mapa = new Map();
-
-mapa.set('1', 'str1');   // řetězcový klíč
-mapa.set(1, 'num1');     // číselný klíč
-mapa.set(true, 'bool1'); // booleovský klíč
-
-// pamatujete si na obvyklý Object? ten převádí klíče na řetězce
-// Map si pamatuje typ klíče, takže tyto dva klíče jsou rozdílné:
-alert( mapa.get(1)   ); // 'num1'
-alert( mapa.get('1') ); // 'str1'
-
-alert( mapa.size ); // 3
-```
-
-Jak vidíme, na rozdíl od objektů zde nejsou klíče převáděny na řetězce. Je povolen jakýkoli typ klíče.
-
-```smart header="`mapa[klíč]` není správný způsob, jak používat mapu"
-Ačkoli `mapa[klíč]` funguje také, např. můžeme nastavit `mapa[klíč] = 2`, zachází s mapou jako s planým JavaScriptovým objektem, takže pro něj platí všechna příslušná omezení (jen řetězcové/symbolické klíče a podobně).
-
-Měli bychom tedy používat metody mapy: `set`, `get` a tak dále.
-```
-
-**Mapa může používat jako klíče i objekty.**
-
-Příklad:
+For instance:
 
 ```js run
-let jan = { jméno: "Jan" };
+let map = new Map();
 
-// pro každého uživatele budeme ukládat počet jeho návštěv
-let mapaPočetNávštěv = new Map();
+map.set('1', 'str1');   // a string key
+map.set(1, 'num1');     // a numeric key
+map.set(true, 'bool1'); // a boolean key
 
-// jan je klíč mapy
-mapaPočetNávštěv.set(jan, 123);
+// remember the regular Object? it would convert keys to string
+// Map keeps the type, so these two are different:
+alert( map.get(1)   ); // 'num1'
+alert( map.get('1') ); // 'str1'
 
-alert( mapaPočetNávštěv.get(jan) ); // 123
+alert( map.size ); // 3
 ```
 
-Používání objektů jako klíčů je jedna z nejpozoruhodnějších a nejdůležitějších vlastností map. Pro `Object` to neplatí. Řetězec jako klíč objektu je správně, ale jako klíč objektu nemůžeme použít jiný `Object`.
+As we can see, unlike objects, keys are not converted to strings. Any type of key is possible.
 
-Zkusme to:
+```smart header="`map[key]` isn't the right way to use a `Map`"
+Although `map[key]` also works, e.g. we can set `map[key] = 2`, this is treating `map` as a plain JavaScript object, so it implies all corresponding limitations (only string/symbol keys and so on).
+
+So we should use `map` methods: `set`, `get` and so on.
+```
+
+**Map can also use objects as keys.**
+
+For instance:
 
 ```js run
-let jan = { jméno: "Jan" };
-let ben = { jméno: "Ben" };
+let john = { name: "John" };
 
-let objPočetNávštěv = {}; // zkusíme použít objekt
+// for every user, let's store their visits count
+let visitsCountMap = new Map();
 
-objPočetNávštěv[ben] = 234; // zkusíme použít jako klíč objekt ben
-objPočetNávštěv[jan] = 123; // zkusíme použít jako klíč objekt jan, objekt ben bude nahrazen
+// john is the key for the map
+visitsCountMap.set(john, 123);
+
+alert( visitsCountMap.get(john) ); // 123
+```
+
+Using objects as keys is one of the most notable and important `Map` features. The same does not count for `Object`. String as a key in `Object` is fine, but we can't use another `Object` as a key in `Object`.
+
+Let's try:
+
+```js run
+let john = { name: "John" };
+let ben = { name: "Ben" };
+
+let visitsCountObj = {}; // try to use an object
+
+visitsCountObj[ben] = 234; // try to use ben object as the key
+visitsCountObj[john] = 123; // try to use john object as the key, ben object will get replaced
 
 *!*
-// Toto bude zapsáno!
-alert( objPočetNávštěv["[object Object]"] ); // 123 
+// That's what got written!
+alert( visitsCountObj["[object Object]"] ); // 123 
 */!*
 ```
 
-Jelikož `objPočetNávštěv` je objekt, převede všechny klíče typu `Object`, např. výše uvedené `jan` a `ben`, na stejný řetězec `"[object Object]"`. To rozhodně není to, co jsme chtěli.
+As `visitsCountObj` is an object, it converts all `Object` keys, such as `john` and `ben` above, to same string `"[object Object]"`. Definitely not what we want.
 
-```smart header="Jak `Map` porovnává klíče"
-Pro testování ekvivalence klíčů `Map` používá algoritmus [SameValueZero](https://tc39.github.io/ecma262/#sec-samevaluezero). Je to zhruba totéž jako striktní rovnost `===`, ale rozdíl spočívá v tom, že `NaN` se považuje za rovné `NaN`. Jako klíč tedy můžeme použít i `NaN`.
+```smart header="How `Map` compares keys"
+To test keys for equivalence, `Map` uses the algorithm [SameValueZero](https://tc39.github.io/ecma262/#sec-samevaluezero). It is roughly the same as strict equality `===`, but the difference is that `NaN` is considered equal to `NaN`. So `NaN` can be used as the key as well.
 
-Tento algoritmus nemůžeme změnit nebo si ho přizpůsobit.
+This algorithm can't be changed or customized.
 ```
 
-````smart header="Zřetězení"
-Každé volání `mapa.set` vrátí samotnou mapu, takže volání můžeme „zřetězit“:
+````smart header="Chaining"
+Every `map.set` call returns the map itself, so we can "chain" the calls:
 
 ```js
-mapa.set('1', 'str1')
+map.set('1', 'str1')
   .set(1, 'num1')
   .set(true, 'bool1');
 ```
 ````
 
 
-## Iterace nad mapou
+## Iteration over Map
 
-Pro procházení prvků mapy existují 3 metody:
+For looping over a `map`, there are 3 methods:
 
-- `mapa.keys()` -- vrátí iterovatelný objekt klíčů,
-- `mapa.values()` -- vrátí iterovatelný objekt hodnot,
-- `mapa.entries()` --  vrátí iterovatelný objekt dvojic `[klíč, hodnota]`, používá se standardně ve `for..of`.
+- `map.keys()` -- returns an iterable for keys,
+- `map.values()` -- returns an iterable for values,
+- `map.entries()` -- returns an iterable for entries `[key, value]`, it's used by default in `for..of`.
 
-Příklad:
+For instance:
 
 ```js run
-let mapaRecept = new Map([
-  ['okurky',  500],
-  ['rajčata', 350],
-  ['cibule',  50]
+let recipeMap = new Map([
+  ['cucumber', 500],
+  ['tomatoes', 350],
+  ['onion',    50]
 ]);
 
-// iterace nad klíči (zelenina)
-for (let zelenina of mapaRecept.keys()) {
-  alert(zelenina); // okurky, rajčata, cibule
+// iterate over keys (vegetables)
+for (let vegetable of recipeMap.keys()) {
+  alert(vegetable); // cucumber, tomatoes, onion
 }
 
-// iterace nad hodnotami (množství)
-for (let množství of mapaRecept.values()) {
-  alert(množství); // 500, 350, 50
+// iterate over values (amounts)
+for (let amount of recipeMap.values()) {
+  alert(amount); // 500, 350, 50
 }
 
-// iterace nad dvojicemi [klíč, hodnota]
-for (let dvojice of mapaRecept) { // totéž jako mapaRecept.entries()
-  alert(dvojice); // okurky,500 (a tak dále)
+// iterate over [key, value] entries
+for (let entry of recipeMap) { // the same as of recipeMap.entries()
+  alert(entry); // cucumber,500 (and so on)
 }
 ```
 
-```smart header="Zachovává se pořadí vložení"
-Iterace probíhá ve stejném pořadí, v jakém byly hodnoty vloženy. `Map` toto pořadí na rozdíl od `Object` zachovává.
+```smart header="The insertion order is used"
+The iteration goes in the same order as the values were inserted. `Map` preserves this order, unlike a regular `Object`.
 ```
 
-Navíc `Map` obsahuje vestavěnou metodu `forEach`, podobně jako `Array`:
+Besides that, `Map` has a built-in `forEach` method, similar to `Array`:
 
 ```js
-// spustí tuto funkci pro každou dvojici (klíč, hodnota)
-mapaRecepty.forEach( (hodnota, klíč, mapa) => {
-  alert(`${klíč}: ${hodnota}`); // okurky: 500 atd.
+// runs the function for each (key, value) pair
+recipeMap.forEach( (value, key, map) => {
+  alert(`${key}: ${value}`); // cucumber: 500 etc
 });
 ```
 
-## Object.entries: mapa z objektu
+## Object.entries: Map from Object
 
-Když je vytvořena mapa, můžeme do ní při inicializaci předat pole (nebo jiný iterovatelný objekt) dvojic klíč/hodnota, například:
+When a `Map` is created, we can pass an array (or another iterable) with key/value pairs for initialization, like this:
 
 ```js run
-// pole dvojic [klíč, hodnota]
-let mapa = new Map([
+// array of [key, value] pairs
+let map = new Map([
   ['1',  'str1'],
   [1,    'num1'],
   [true, 'bool1']
 ]);
 
-alert( mapa.get('1') ); // str1
+alert( map.get('1') ); // str1
 ```
 
-Máme-li planý objekt a rádi bychom z něj vytvořili mapu, můžeme použít vestavěnou metodu [Object.entries(obj)](mdn:js/Object/entries), která vrací pole dvojic klíč/hodnota objektu přesně v tomto formátu.
+If we have a plain object, and we'd like to create a `Map` from it, then we can use built-in method [Object.entries(obj)](mdn:js/Object/entries) that returns an array of key/value pairs for an object exactly in that format.
 
-Můžeme tedy vytvořit mapu z objektu takto:
+So we can create a map from an object like this:
 
 ```js run
 let obj = {
-  jméno: "Jan",
-  věk: 30
+  name: "John",
+  age: 30
 };
 
 *!*
-let mapa = new Map(Object.entries(obj));
+let map = new Map(Object.entries(obj));
 */!*
 
-alert( mapa.get('jméno') ); // Jan
+alert( map.get('name') ); // John
 ```
 
-Zde `Object.entries` vrací pole dvojic klíč/hodnota: `[ ["jméno","Jan"], ["věk", 30] ]`. To je přesně to, co potřebuje `Map`.
+Here, `Object.entries` returns the array of key/value pairs: `[ ["name","John"], ["age", 30] ]`. That's what `Map` needs.
 
 
-## Object.fromEntries: objekt z mapy
+## Object.fromEntries: Object from Map
 
-Právě jsme viděli, jak vytvořit `Map` z planého objektu pomocí `Object.entries(obj)`.
+We've just seen how to create `Map` from a plain object with `Object.entries(obj)`.
 
-Existuje i metoda `Object.fromEntries`, která provádí opak -- když jí předáme pole dvojic `[klíč, hodnota]`, vytvoří z něj objekt:
+There's `Object.fromEntries` method that does the reverse: given an array of `[key, value]` pairs, it creates an object from them:
 
 ```js run
-let ceny = Object.fromEntries([
-  ['banán', 1],
-  ['pomeranč', 2],
-  ['maso', 4]
+let prices = Object.fromEntries([
+  ['banana', 1],
+  ['orange', 2],
+  ['meat', 4]
 ]);
 
-// nyní ceny = { banán: 1, pomeranč: 2, maso: 4 }
+// now prices = { banana: 1, orange: 2, meat: 4 }
 
-alert(ceny.pomeranč); // 2
+alert(prices.orange); // 2
 ```
 
-Použitím `Object.fromEntries` můžeme získat z mapy planý objekt.
+We can use `Object.fromEntries` to get a plain object from `Map`.
 
-Například uložíme do mapy data, ale potřebujeme je předat kódu třetí strany, který očekává planý objekt.
+E.g. we store the data in a `Map`, but we need to pass it to a 3rd-party code that expects a plain object.
 
-Postupujeme takto:
+Here we go:
 
 ```js run
-let mapa = new Map();
-mapa.set('banán', 1);
-mapa.set('pomeranč', 2);
-mapa.set('maso', 4);
+let map = new Map();
+map.set('banana', 1);
+map.set('orange', 2);
+map.set('meat', 4);
 
 *!*
-let obj = Object.fromEntries(mapa.entries()); // vytvoří planý objekt (*)
+let obj = Object.fromEntries(map.entries()); // make a plain object (*)
 */!*
 
-// hotovo!
-// obj = { banán: 1, pomeranč: 2, maso: 4 }
+// done!
+// obj = { banana: 1, orange: 2, meat: 4 }
 
-alert(obj.pomeranč); // 2
+alert(obj.orange); // 2
 ```
 
-Volání `mapa.entries()` vrací iterovatelný objekt dvojic klíč/hodnota, přesně ve správném formátu pro `Object.fromEntries`.
+A call to `map.entries()` returns an iterable of key/value pairs, exactly in the right format for `Object.fromEntries`.
 
-Řádek `(*)` můžeme také zkrátit:
+We could also make line `(*)` shorter:
 ```js
-let obj = Object.fromEntries(mapa); // vypustíme .entries()
+let obj = Object.fromEntries(map); // omit .entries()
 ```
 
-To je totéž, protože `Object.fromEntries` očekává jako argument iterovatelný objekt, ne nutně pole. A standardní iterace mapy vrací stejné dvojice klíč/hodnota jako `mapa.entries()`. Dostaneme tedy planý objekt se stejnými dvojicemi klíč/hodnota, jaké obsahuje `mapa`.
+That's the same, because `Object.fromEntries` expects an iterable object as the argument. Not necessarily an array. And the standard iteration for `map` returns same key/value pairs as `map.entries()`. So we get a plain object with same key/values as the `map`.
 
-## Množina
+## Set
 
-Množina `Set` je speciální typ kolekce -- „množina hodnot“ (bez klíčů), v níž se každá hodnota může vyskytnout pouze jednou.
+A `Set` is a special type collection - "set of values" (without keys), where each value may occur only once.
 
-Její hlavní metody jsou:
+Its main methods are:
 
-- `new Set(iterovatelnýObjekt)` -- vytvoří množinu, a je-li poskytnut `iterovatelnýObjekt` (obvykle pole), zkopíruje do ní hodnoty z tohoto objektu.
-- `množina.add(hodnota)` -- přidá hodnotu, vrátí samotnou množinu.
-- `množina.delete(hodnota)` -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
-- `množina.has(hodnota)` -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
-- `množina.clear()` -- odstraní z množiny všechny hodnoty.
-- `množina.size` -- je počet hodnot.
+- `new Set(iterable)` -- creates the set, and if an `iterable` object is provided (usually an array), copies values from it into the set.
+- `set.add(value)` -- adds a value, returns the set itself.
+- `set.delete(value)` -- removes the value, returns `true` if `value` existed at the moment of the call, otherwise `false`.
+- `set.has(value)` -- returns `true` if the value exists in the set, otherwise `false`.
+- `set.clear()` -- removes everything from the set.
+- `set.size` -- is the elements count.
 
-Hlavní vlastností množiny je, že opakovaná volání `množina.add(hodnota)` se stejnou hodnotou nic neprovedou. To je důvod, proč se každá hodnota v množině objeví pouze jednou.
+The main feature is that repeated calls of `set.add(value)` with the same value don't do anything. That's the reason why each value appears in a `Set` only once.
 
-Například máme přicházející návštěvníky a rádi bychom si je všechny pamatovali. Avšak opakované návštěvy by neměly vést ke zdvojení. Každý návštěvník musí být „započítán“ jen jednou.
+For example, we have visitors coming, and we'd like to remember everyone. But repeated visits should not lead to duplicates. A visitor must be "counted" only once.
 
-`Set` je pro tento účel to pravé:
+`Set` is just the right thing for that:
 
 ```js run
-let množina = new Set();
+let set = new Set();
 
-let jan = { jméno: "Jan" };
-let petr = { jméno: "Petr" };
-let marie = { jméno: "Marie" };
+let john = { name: "John" };
+let pete = { name: "Pete" };
+let mary = { name: "Mary" };
 
-// návštěvy, někteří uživatelé přišli vícekrát
-množina.add(jan);
-množina.add(petr);
-množina.add(marie);
-množina.add(jan);
-množina.add(marie);
+// visits, some users come multiple times
+set.add(john);
+set.add(pete);
+set.add(mary);
+set.add(john);
+set.add(mary);
 
-// množina si pamatuje jen unikátní hodnoty
-alert( množina.size ); // 3
+// set keeps only unique values
+alert( set.size ); // 3
 
-for (let uživatel of množina) {
-  alert(uživatel.jméno); // Jan (pak Petr a Marie)
+for (let user of set) {
+  alert(user.name); // John (then Pete and Mary)
 }
 ```
 
-Alternativou pro `Set` by mohlo být pole uživatelů a kód, který při každém vložení hledá duplikáty pomocí [arr.find](mdn:js/Array/find). Výkon by však byl mnohem horší, protože tato metoda prochází celým polem a ověřuje každý prvek. `Set` je interně pro kontrolu unikátnosti mnohem lépe optimalizována.
+The alternative to `Set` could be an array of users, and the code to check for duplicates on every insertion using [arr.find](mdn:js/Array/find). But the performance would be much worse, because this method walks through the whole array checking every element. `Set` is much better optimized internally for uniqueness checks.
 
-## Iterace nad množinou
+## Iteration over Set
 
-Množinu můžeme procházet buď pomocí `for..of`, nebo pomocí `forEach`:
+We can loop over a set either with `for..of` or using `forEach`:
 
 ```js run
-let množina = new Set(["pomeranče", "jablka", "banány"]);
+let set = new Set(["oranges", "apples", "bananas"]);
 
-for (let hodnota of množina) alert(hodnota);
+for (let value of set) alert(value);
 
-// totéž s forEach:
-množina.forEach((hodnota, hodnotaZnovu, množina) => {
-  alert(hodnota);
+// the same with forEach:
+set.forEach((value, valueAgain, set) => {
+  alert(value);
 });
 ```
 
-Všimněte si něčeho legračního. Callbacková funkce předávaná do `forEach` má 3 argumenty: `hodnota`, pak *stejnou hodnotu* `hodnotaZnovu` a pak cílový objekt. Opravdu, stejná hodnota se v argumentech objevuje dvakrát.
+Note the funny thing. The callback function passed in `forEach` has 3 arguments: a `value`, then *the same value* `valueAgain`, and then the target object. Indeed, the same value appears in the arguments twice.
 
-To slouží ke kompatibilitě s `Map`, v níž callback předávaný do `forEach` má tři argumenty. Jistě, vypadá to trochu zvláštně. Může to však pomoci v některých případech snadno nahradit mapu množinou a naopak.
+That's for compatibility with `Map` where the callback passed `forEach` has three arguments. Looks a bit strange, for sure. But may help to replace `Map` with `Set` in certain cases with ease, and vice versa.
 
-Rovněž jsou podporovány stejné metody, jaké má `Map` pro iterovatelné objekty:
+The same methods `Map` has for iterators are also supported:
 
-- `množina.keys()` -- vrátí iterovatelný objekt s hodnotami,
-- `množina.values()` -- totéž jako `množina.keys()`, kvůli kompatibilitě s `Map`,
-- `množina.entries()` -- vrátí iterovatelný objekt s dvojicemi `[hodnota, hodnota]`, existuje kvůli kompatibilitě s `Map`.
+- `set.keys()` -- returns an iterable object for values,
+- `set.values()` -- same as `set.keys()`, for compatibility with `Map`,
+- `set.entries()` -- returns an iterable object for entries `[value, value]`, exists for compatibility with `Map`.
 
-## Shrnutí
+## Summary
 
-`Map` -- je kolekce hodnot s klíči.
+`Map` -- is a collection of keyed values.
 
-Metody a vlastnosti:
+Methods and properties:
 
-- `new Map([iterovatelnýObjekt])` -- vytvoří mapu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje dvojice `[klíč,hodnota]` pro inicializaci.
-- `mapa.set(klíč, hodnota)` -- uloží hodnotu pod klíčem, vrátí samotnou mapu.
-- `mapa.get(klíč)` -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
-- `mapa.has(klíč)` -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
-- `mapa.delete(klíč)` -- odstraní hodnotu pod zadaným klíčem, vrátí `true`, jestliže `klíč` v okamžiku volání existoval, jinak `false`.
-- `mapa.clear()` -- odstraní z mapy všechny hodnoty.
-- `mapa.size` -- vrátí aktuální počet prvků.
+- `new Map([iterable])` -- creates the map, with optional `iterable` (e.g. array) of `[key,value]` pairs for initialization.
+- `map.set(key, value)` -- stores the value by the key, returns the map itself.
+- `map.get(key)` -- returns the value by the key, `undefined` if `key` doesn't exist in map.
+- `map.has(key)` -- returns `true` if the `key` exists, `false` otherwise.
+- `map.delete(key)` -- removes the value by the key, returns `true` if `key` existed at the moment of the call, otherwise `false`.
+- `map.clear()` -- removes everything from the map.
+- `map.size` -- returns the current element count.
 
-Rozdíly oproti běžnému objektu:
+The differences from a regular `Object`:
 
-- Klíče mohou být libovolné včetně objektů.
-- Další příhodné metody, vlastnost `size`.
+- Any keys, objects can be keys.
+- Additional convenient methods, the `size` property.
 
-`Set` -- je kolekce unikátních hodnot.
+`Set` -- is a collection of unique values.
 
-Metody a vlastnosti:
+Methods and properties:
 
-- `new Set(iterovatelnýObjekt)` -- vytvoří množinu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje hodnoty pro inicializaci.
-- `množina.add(hodnota)` -- přidá hodnotu (pokud `hodnota` již existuje, neudělá nic), vrátí samotnou množinu.
-- `množina.delete(hodnota)` -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
-- `množina.has(hodnota)` -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
-- `množina.clear()` -- odstraní z množiny všechny hodnoty.
-- `množina.size` -- je počet hodnot.
+- `new Set([iterable])` -- creates the set, with optional `iterable` (e.g. array) of values for initialization.
+- `set.add(value)` -- adds a value (does nothing if `value` exists), returns the set itself.
+- `set.delete(value)` -- removes the value, returns `true` if `value` existed at the moment of the call, otherwise `false`.
+- `set.has(value)` -- returns `true` if the value exists in the set, otherwise `false`.
+- `set.clear()` -- removes everything from the set.
+- `set.size` -- is the elements count.
 
-Iterace nad mapou a množinou probíhá vždy ve stejném pořadí, v jakém byly prvky vloženy. Nemůžeme tedy říci, že tyto kolekce nejsou seřazené, ale nemůžeme prvky seřadit jinak ani přímo získat prvek podle jeho pořadí.
+Iteration over `Map` and `Set` is always in the insertion order, so we can't say that these collections are unordered, but we can't reorder elements or directly get an element by its number.

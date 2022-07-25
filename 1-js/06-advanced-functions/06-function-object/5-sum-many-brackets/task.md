@@ -2,16 +2,16 @@ importance: 2
 
 ---
 
-# Sčítání s libovolným počtem závorek
+# Sum with an arbitrary amount of brackets
 
-Napište funkci `součet`, která bude fungovat takto:
+Write function `sum` that would work like this:
 
 ```js
-součet(1)(2) == 3; // 1 + 2
-součet(1)(2)(3) == 6; // 1 + 2 + 3
-součet(5)(-1)(2) == 6
-součet(6)(-1)(-2)(-3) == 0
-součet(0)(1)(2)(3)(4)(5) == 15
+sum(1)(2) == 3; // 1 + 2
+sum(1)(2)(3) == 6; // 1 + 2 + 3
+sum(5)(-1)(2) == 6
+sum(6)(-1)(-2)(-3) == 0
+sum(0)(1)(2)(3)(4)(5) == 15
 ```
 
-P.S. Rada: možná budete pro svou funkci potřebovat nastavit vlastní konverzi objektu na primitiv.
+P.S. Hint: you may need to setup custom object to primitive conversion for your function.

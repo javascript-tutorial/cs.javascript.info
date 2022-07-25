@@ -2,14 +2,14 @@ importance: 2
 
 ---
 
-# Náhodné celé číslo od min do max
+# A random integer from min to max
 
-Vytvořte funkci `randomInteger(min, max)`, která vygeneruje náhodné *celé* číslo od `min` do `max`, přičemž možnými hodnotami budou i `min` a `max`.
+Create a function `randomInteger(min, max)` that generates a random *integer* number from `min` to `max` including both `min` and `max` as possible values.
 
-Každé číslo z intervalu `min..max` se musí objevit se stejnou pravděpodobností.
+Any number from the interval `min..max` must appear with the same probability.
 
 
-Příklady, jak má fungovat:
+Examples of its work:
 
 ```js
 alert( randomInteger(1, 5) ); // 1
@@ -17,4 +17,4 @@ alert( randomInteger(1, 5) ); // 3
 alert( randomInteger(1, 5) ); // 5
 ```
 
-Jako základ můžete použít řešení z [předchozí úlohy](info:task/random-min-max).
+You can use the solution of the [previous task](info:task/random-min-max) as the base.

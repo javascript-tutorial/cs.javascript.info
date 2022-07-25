@@ -1,64 +1,64 @@
 
-Pomocí `setInterval`:
+Using `setInterval`:
 
 ```js run
-function vypišČísla(začátek, konec) {
-  let aktuální = začátek;
+function printNumbers(from, to) {
+  let current = from;
 
-  let idČasovače = setInterval(function() {
-    alert(aktuální);
-    if (aktuální == konec) {
-      clearInterval(idČasovače);
+  let timerId = setInterval(function() {
+    alert(current);
+    if (current == to) {
+      clearInterval(timerId);
     }
-    aktuální++;
+    current++;
   }, 1000);
 }
 
-// použití:
-vypišČísla(5, 10);
+// usage:
+printNumbers(5, 10);
 ```
 
-Pomocí vnořeného `setTimeout`:
+Using nested `setTimeout`:
 
 
 ```js run
-function vypišČísla(začátek, konec) {
-  let aktuální = začátek;
+function printNumbers(from, to) {
+  let current = from;
 
   setTimeout(function go() {
-    alert(aktuální);
-    if (aktuální < konec) {
+    alert(current);
+    if (current < to) {
       setTimeout(go, 1000);
     }
-    aktuální++;
+    current++;
   }, 1000);
 }
 
-// použití:
-vypišČísla(5, 10);
+// usage:
+printNumbers(5, 10);
 ```
 
-Všimněte si, že v obou řešeních je úvodní prodleva před prvním výstupem. Funkce je poprvé volána za `1000 ms`.
+Note that in both solutions, there is an initial delay before the first output. The function is called after `1000ms` the first time.
 
-Jestliže chceme, aby se funkce spustila okamžitě, můžeme přidat další volání na samostatný řádek, například takto:
+If we also want the function to run immediately, then we can add an additional call on a separate line, like this:
 
 ```js run
-function vypišČísla(začátek, konec) {
-  let aktuální = začátek;
+function printNumbers(from, to) {
+  let current = from;
 
-  function spusť() {
-    alert(aktuální);
-    if (aktuální == konec) {
-      clearInterval(idČasovače);
+  function go() {
+    alert(current);
+    if (current == to) {
+      clearInterval(timerId);
     }
-    aktuální++;
+    current++;
   }
 
 *!*
-  spusť();
+  go();
 */!*
-  let idČasovače = setInterval(spusť, 1000);
+  let timerId = setInterval(go, 1000);
 }
 
-vypišČísla(5, 10);
+printNumbers(5, 10);
 ```

@@ -1,94 +1,94 @@
-# Pomalé řešení
+# Slow solution
 
-Můžeme spočítat všechny možné podsoučty.
+We can calculate all possible subsums.
 
-Nejjednodušším způsobem je vzít každý prvek a počítat součty všech podpolí, která jím začínají.
+The simplest way is to take every element and calculate sums of all subarrays starting from it.
 
-Například pro `[-1, 2, 3, -9, 11]`:
+For instance, for `[-1, 2, 3, -9, 11]`:
 
 ```js no-beautify
-// Začínající -1:
+// Starting from -1:
 -1
 -1 + 2
 -1 + 2 + 3
 -1 + 2 + 3 + (-9)
 -1 + 2 + 3 + (-9) + 11
 
-// Začínající 2:
+// Starting from 2:
 2
 2 + 3
 2 + 3 + (-9)
 2 + 3 + (-9) + 11
 
-// Začínající 3:
+// Starting from 3:
 3
 3 + (-9)
 3 + (-9) + 11
 
-// Začínající -9
+// Starting from -9
 -9
 -9 + 11
 
-// Začínající 11
+// Starting from 11
 11
 ```
 
-Kód je ve skutečnosti vnořený cyklus: vnější cyklus prochází prvky pole, vnitřní počítá podsoučty počínaje aktuálním prvkem.
+The code is actually a nested loop: the external loop over array elements, and the internal counts subsums starting with the current element.
 
 ```js run
-function vraťMaxSoučetPod(pole) {
-  let maxSoučet = 0; // nevezmeme-li žádné prvky, vrátí se nula
+function getMaxSubSum(arr) {
+  let maxSum = 0; // if we take no elements, zero will be returned
 
-  for (let i = 0; i < pole.length; i++) {
-    let součetPevnýZačátek = 0;
-    for (let j = i; j < pole.length; j++) {
-      součetPevnýZačátek += pole[j];
-      maxSoučet = Math.max(maxSoučet, součetPevnýZačátek);
+  for (let i = 0; i < arr.length; i++) {
+    let sumFixedStart = 0;
+    for (let j = i; j < arr.length; j++) {
+      sumFixedStart += arr[j];
+      maxSum = Math.max(maxSum, sumFixedStart);
     }
   }
 
-  return maxSoučet;
+  return maxSum;
 }
 
-alert( vraťMaxSoučetPod([-1, 2, 3, -9]) ); // 5
-alert( vraťMaxSoučetPod([-1, 2, 3, -9, 11]) ); // 11
-alert( vraťMaxSoučetPod([-2, -1, 1, 2]) ); // 3
-alert( vraťMaxSoučetPod([1, 2, 3]) ); // 6
-alert( vraťMaxSoučetPod([100, -9, 2, -3, 5]) ); // 100
+alert( getMaxSubSum([-1, 2, 3, -9]) ); // 5
+alert( getMaxSubSum([-1, 2, 3, -9, 11]) ); // 11
+alert( getMaxSubSum([-2, -1, 1, 2]) ); // 3
+alert( getMaxSubSum([1, 2, 3]) ); // 6
+alert( getMaxSubSum([100, -9, 2, -3, 5]) ); // 100
 ```
 
-Toto řešení má časovou složitost [O(n<sup>2</sup>)](https://cs.wikipedia.org/wiki/Landauova_notace). Jinými slovy, když zvětšíme pole dvojnásobně, algoritmus bude pracovat čtyřikrát déle.
+The solution has a time complexity of [O(n<sup>2</sup>)](https://en.wikipedia.org/wiki/Big_O_notation). In other words, if we increase the array size 2 times, the algorithm will work 4 times longer.
 
-Pro velká pole (1000, 10000 nebo více prvků) mohou takové algoritmy vést k vážnému zpomalení.
+For big arrays (1000, 10000 or more items) such algorithms can lead to a serious sluggishness.
 
-# Rychlé řešení
+# Fast solution
 
-Budeme procházet prvky pole a pamatovat si aktuální částečný součet prvků v proměnné `s`. Bude-li `s` v některém bodě záporné, přiřadíme `s=0`. Odpovědí bude maximum všech takových `s`.
+Let's walk the array and keep the current partial sum of elements in the variable `s`. If `s` becomes negative at some point, then assign `s=0`. The maximum of all such `s` will be the answer.
 
-Pokud je popis příliš vágní, prosíme nahlédněte do kódu, je dosti krátký:
+If the description is too vague, please see the code, it's short enough:
 
 ```js run demo
-function vraťMaxSoučetPod(pole) {
-  let maxSoučet = 0;
-  let částečnýSoučet = 0;
+function getMaxSubSum(arr) {
+  let maxSum = 0;
+  let partialSum = 0;
 
-  for (let prvek of pole) { // pro každý prvek pole
-    částečnýSoučet += prvek; // přičteme jej do částečnýSoučet
-    maxSoučet = Math.max(maxSoučet, částečnýSoučet); // zapamatujeme si maximum
-    if (částečnýSoučet < 0) částečnýSoučet = 0; // je-li součet záporný, vynulujeme ho
+  for (let item of arr) { // for each item of arr
+    partialSum += item; // add it to partialSum
+    maxSum = Math.max(maxSum, partialSum); // remember the maximum
+    if (partialSum < 0) partialSum = 0; // zero if negative
   }
 
-  return maxSoučet;
+  return maxSum;
 }
 
-alert( vraťMaxSoučetPod([-1, 2, 3, -9]) ); // 5
-alert( vraťMaxSoučetPod([-1, 2, 3, -9, 11]) ); // 11
-alert( vraťMaxSoučetPod([-2, -1, 1, 2]) ); // 3
-alert( vraťMaxSoučetPod([100, -9, 2, -3, 5]) ); // 100
-alert( vraťMaxSoučetPod([1, 2, 3]) ); // 6
-alert( vraťMaxSoučetPod([-1, -2, -3]) ); // 0
+alert( getMaxSubSum([-1, 2, 3, -9]) ); // 5
+alert( getMaxSubSum([-1, 2, 3, -9, 11]) ); // 11
+alert( getMaxSubSum([-2, -1, 1, 2]) ); // 3
+alert( getMaxSubSum([100, -9, 2, -3, 5]) ); // 100
+alert( getMaxSubSum([1, 2, 3]) ); // 6
+alert( getMaxSubSum([-1, -2, -3]) ); // 0
 ```
 
-Tento algoritmus vyžaduje přesně 1 průchod polem, takže jeho časová složitost je O(n).
+The algorithm requires exactly 1 array pass, so the time complexity is O(n).
 
-Podrobnější informace o algoritmu můžete najít zde: [Maximum subarray problem (Problém maximálního podpole)](http://en.wikipedia.org/wiki/Maximum_subarray_problem). Není-li stále jasné, proč to funguje, potom si prosíme projděte algoritmus na výše uvedených příkladech a podívejte se, jak funguje. Je to lepší než jakákoli slova.
+You can find more detail information about the algorithm here: [Maximum subarray problem](http://en.wikipedia.org/wiki/Maximum_subarray_problem). If it's still not obvious why that works, then please trace the algorithm on the examples above, see how it works, that's better than any words.

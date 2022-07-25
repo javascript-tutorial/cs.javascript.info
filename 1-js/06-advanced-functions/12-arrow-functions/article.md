@@ -1,126 +1,126 @@
-# Šipkové funkce podruhé
+# Arrow functions revisited
 
-Podívejme se nyní znovu na šipkové funkce.
+Let's revisit arrow functions.
 
-Šipkové funkce nejsou jen „zkratka“ pro zápis krátkého kódu. Mají určité velmi specifické a užitečné vlastnosti.
+Arrow functions are not just a "shorthand" for writing small stuff. They have some very specific and useful features.
 
-JavaScript má spoustu situací, kdy potřebujeme napsat malou funkci, kterou budeme spouštět někde jinde.
+JavaScript is full of situations where we need to write a small function that's executed somewhere else.
 
-Například:
+For instance:
 
-- `pole.forEach(funkce)` -- `funkce` je spouštěna funkcí `forEach` pro každý prvek pole.
-- `setTimeout(funkce)` -- `funkce` je spouštěna zabudovaným plánovačem.
-- ...a jsou i jiné.
+- `arr.forEach(func)` -- `func` is executed by `forEach` for every array item.
+- `setTimeout(func)` -- `func` is executed by the built-in scheduler.
+- ...there are more.
 
-Je naprosto v duchu JavaScriptu vytvořit funkci a někam ji předat.
+It's in the very spirit of JavaScript to create a function and pass it somewhere.
 
-A v takových funkcích obvykle nechceme opustit aktuální kontext. Tehdy šipkové funkce přijdou vhod.
+And in such functions we usually don't want to leave the current context. That's where arrow functions come in handy.
 
-## Šipkové funkce nemají „this“
+## Arrow functions have no "this"
 
-Jak si pamatujeme z kapitoly <info:object-methods>, šipkové funkce nemají `this`. Jestliže k `this` přistupujeme, vezme se zvnějšku.
+As we remember from the chapter <info:object-methods>, arrow functions do not have `this`. If `this` is accessed, it is taken from the outside.
 
-Například je můžeme použít k iteraci uvnitř objektové metody:
+For instance, we can use it to iterate inside an object method:
 
 ```js run
-let skupina = {
-  název: "Naše skupina",
-  studenti: ["Jan", "Petr", "Alice"],
+let group = {
+  title: "Our Group",
+  students: ["John", "Pete", "Alice"],
 
-  zobrazSeznam() {
+  showList() {
 *!*
-    this.studenti.forEach(
-      student => alert(this.název + ': ' + student)
+    this.students.forEach(
+      student => alert(this.title + ': ' + student)
     );
 */!*
   }
 };
 
-skupina.zobrazSeznam();
+group.showList();
 ```
 
-Zde je ve `forEach` použita šipková funkce, takže `this.název` je přesně stejný, jako ve vnější metodě `zobrazSeznam`. Tedy: `skupina.název`.
+Here in `forEach`, the arrow function is used, so `this.title` in it is exactly the same as in the outer method `showList`. That is: `group.title`.
 
-Kdybychom použili „obyčejnou“ funkci, nastala by chyba:
+If we used a "regular" function, there would be an error:
 
 ```js run
-let skupina = {
-  název: "Naše skupina",
-  studenti: ["Jan", "Petr", "Alice"],
+let group = {
+  title: "Our Group",
+  students: ["John", "Pete", "Alice"],
 
-  zobrazSeznam() {
+  showList() {
 *!*
-    this.studenti.forEach(function(student) {
-      // Chyba: Nelze načíst vlastnost 'název' z undefined
-      alert(this.název + ': ' + student)
+    this.students.forEach(function(student) {
+      // Error: Cannot read property 'title' of undefined
+      alert(this.title + ': ' + student);
     });
 */!*
   }
 };
 
-skupina.zobrazSeznam();
+group.showList();
 ```
 
-Chyba nastane proto, že `forEach` defaultně spouští funkci s `this=undefined`, takže je učiněn pokus o přístup k `undefined.název`.
+The error occurs because `forEach` runs functions with `this=undefined` by default, so the attempt to access `undefined.title` is made.
 
-Na šipkové funkce to vliv nemá, protože ty prostě `this` nemají.
+That doesn't affect arrow functions, because they just don't have `this`.
 
-```warn header="Šipkové funkce nelze spouštět s `new`"
-Neexistence `this` pochopitelně znamená další omezení: šipkové funkce nelze používat jako konstruktory. Nemůžeme je volat pomocí `new`.
+```warn header="Arrow functions can't run with `new`"
+Not having `this` naturally means another limitation: arrow functions can't be used as constructors. They can't be called with `new`.
 ```
 
-```smart header="Šipkové funkce versus bind"
-Existuje drobný rozdíl mezi šipkovou funkcí `=>` a obyčejnou funkcí volanou pomocí `.bind(this)`:
+```smart header="Arrow functions VS bind"
+There's a subtle difference between an arrow function `=>` and a regular function called with `.bind(this)`:
 
-- `.bind(this)` vytvoří „vázanou verzi“ funkce.
-- Šipka `=>` žádnou vazbu nevytváří. Funkce prostě nemá `this`. Hledání `this` se provádí přesně stejně jako hledání běžné proměnné: ve vnějším lexikálním prostředí.
+- `.bind(this)` creates a "bound version" of the function.
+- The arrow `=>` doesn't create any binding. The function simply doesn't have `this`. The lookup of `this` is made exactly the same way as a regular variable search: in the outer lexical environment.
 ```
 
-## Šipkové funkce nemají „arguments“
+## Arrows have no "arguments"
 
-Šipkové funkce také nemají proměnnou `arguments`.
+Arrow functions also have no `arguments` variable.
 
-To je vynikající pro dekorátory, když potřebujeme předat volání s aktuálním `this` a `arguments`.
+That's great for decorators, when we need to forward a call with the current `this` and `arguments`.
 
-Například `odlož(f, ms)` přijímá funkci a vrací wrapper kolem ní, který odloží její volání o `ms` milisekund:
+For instance, `defer(f, ms)` gets a function and returns a wrapper around it that delays the call by `ms` milliseconds:
 
 ```js run
-function odlož(f, ms) {
+function defer(f, ms) {
   return function() {
-    setTimeout(() => f.apply(this, arguments), ms)
+    setTimeout(() => f.apply(this, arguments), ms);
   };
 }
 
-function řekniAhoj(kdo) {
-  alert('Ahoj, ' + kdo);
+function sayHi(who) {
+  alert('Hello, ' + who);
 }
 
-let řekniAhojOdložené = odlož(řekniAhoj, 2000);
-řekniAhojOdložené("Jan"); // Ahoj, Jan po 2 sekundách
+let sayHiDeferred = defer(sayHi, 2000);
+sayHiDeferred("John"); // Hello, John after 2 seconds
 ```
 
-Totéž bez šipkové funkce by vypadalo následovně:
+The same without an arrow function would look like:
 
 ```js
-function odlož(f, ms) {
-  return function(...argumenty) {
-    let kontext = this;
+function defer(f, ms) {
+  return function(...args) {
+    let ctx = this;
     setTimeout(function() {
-      return f.apply(kontext, argumenty);
+      return f.apply(ctx, args);
     }, ms);
   };
 }
 ```
 
-Zde jsme museli vytvořit navíc proměnné `argumenty` a `kontext`, aby je mohla převzít funkce uvnitř `setTimeout`.
+Here we had to create additional variables `args` and `ctx` so that the function inside `setTimeout` could take them.
 
-## Shrnutí
+## Summary
 
-Šipkové funkce:
+Arrow functions:
 
-- Nemají `this`.
-- Nemají `arguments`.
-- Nemohou být volány pomocí `new`.
-- Nemají také `super`, ale to jsme ještě neprostudovali. Učiníme tak v kapitole <info:class-inheritance>.
+- Do not have `this`
+- Do not have `arguments`
+- Can't be called with `new`
+- They also don't have `super`, but we didn't study it yet. We will on the chapter <info:class-inheritance>
 
-Je to proto, že jsou zamýšleny jako krátké části kódu, které nemají svůj vlastní „kontext“, ale místo toho pracují v aktuálním. A v tomto způsobu použití opravdu vynikají.
+That's because they are meant for short pieces of code that do not have their own "context", but rather work in the current one. And they really shine in that use case.

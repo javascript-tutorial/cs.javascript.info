@@ -2,14 +2,14 @@ importance: 5
 
 ---
 
-# Rozšířené hodiny
+# Extended clock
 
-Máme třídu `Hodiny`, která nyní vypíše čas každou sekundu.
+We've got a `Clock` class. As of now, it prints the time every second.
 
 
 [js src="source.view/clock.js"]
 
-Vytvořte novou třídu `RozšířenéHodiny`, která je zděděna z třídy `Hodiny` a přidává parametr `přesnost` -- počet milisekund mezi „tiky“. Defaultně by měla být `1000` (1 sekunda).
+Create a new class `ExtendedClock` that inherits from `Clock` and adds the parameter `precision` -- the number of `ms` between "ticks". Should be `1000` (1 second) by default.
 
-- Váš kód by měl být v souboru `extended-clock.js`.
-- Neměňte originální soubor `clock.js`. Rozšiřte jej.
+- Your code should be in the file `extended-clock.js`
+- Don't modify the original `clock.js`. Extend it.
