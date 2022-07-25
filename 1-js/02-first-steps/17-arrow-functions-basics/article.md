@@ -106,5 +106,5 @@ Prozatím už můžeme používat šipkové funkce pro jednořádkové akce a ca
 
 Šipkové funkce se hodí pro jednoduché akce, zvláště pro jednořádkové funkce. Dají se napsat dvěma způsoby:
 
-1. Bez složených závorek: `(...args) => výraz` -- na pravé straně je výraz: funkce jej vyhodnotí a vrátí jeho výsledek. Závorky můžeme vynechat, má-li funkce pouze jeden argument, např. `n => n*2`.
+1. Bez složených závorek: `(...args) => výraz` -- na pravé straně je výraz: funkce jej vyhodnotí a vrátí jeho výsledek. Kulaté závorky můžeme vynechat, má-li funkce pouze jeden parametr, např. `n => n*2`.
 2. Se složenými závorkami: `(...args) => { tělo }` -- složené závorky nám umožňují uvést ve funkci více příkazů, ale aby funkce něco vrátila, musíme výslovně uvést `return`.
