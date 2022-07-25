@@ -1,9 +1,9 @@
-The answer is: **Pete**.
+Odpověď zní: **Petr**.
 
-The `work()` function in the code below gets `name` from the place of its origin through the outer lexical environment reference:
+Funkce `pracuj()` uvedená v kódu níže načte `jméno` z místa svého vzniku skrz odkaz na vnější lexikální prostředí:
 
 ![](lexenv-nested-work.svg)
 
-So, the result is `"Pete"` here.
+Výsledkem zde je tedy `"Petr"`.
 
-But if there were no `let name` in `makeWorker()`, then the search would go outside and take the global variable as we can see from the chain above. In that case the result would be `"John"`.
+Kdyby však ve funkci `vytvořPracovníka()` nebylo `let jméno`, pak by hledání pokračovalo dál ven a převzalo globální proměnnou, jak vidíme z výše uvedeného řetězce. V tom případě by výsledek byl `"Jan"`.

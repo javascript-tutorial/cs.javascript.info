@@ -1,18 +1,18 @@
 ```js run no-beautify
-function sortByAge(arr) {
-  arr.sort((a, b) => a.age - b.age);
+function seřaďPodleVěku(pole) {
+  pole.sort((a, b) => a.věk - b.věk);
 }
 
-let john = { name: "John", age: 25 };
-let pete = { name: "Pete", age: 30 };
-let mary = { name: "Mary", age: 28 };
+let jan = { jméno: "Jan", věk: 25 };
+let petr = { jméno: "Petr", věk: 30 };
+let marie = { jméno: "Marie", věk: 28 };
 
-let arr = [ pete, john, mary ];
+let pole = [ petr, jan, marie ];
 
-sortByAge(arr);
+seřaďPodleVěku(pole);
 
-// now sorted is: [john, mary, pete]
-alert(arr[0].name); // John
-alert(arr[1].name); // Mary
-alert(arr[2].name); // Pete
+// nyní seřazenéPole je: [jan, marie, petr]
+alert(pole[0].jméno); // Jan
+alert(pole[1].jméno); // Marie
+alert(pole[2].jméno); // Petr
 ```

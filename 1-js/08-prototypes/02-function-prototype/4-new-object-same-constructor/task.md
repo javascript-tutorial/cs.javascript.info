@@ -2,14 +2,14 @@ importance: 5
 
 ---
 
-# Create an object with the same constructor
+# Vytvoření objektu se stejným konstruktorem
 
-Imagine, we have an arbitrary object `obj`, created by a constructor function -- we don't know which one, but we'd like to create a new object using it.
+Představme si, že máme libovolný objekt `obj`, který je vytvořen konstruktorem -- nevíme jakým, ale rádi bychom pomocí něj vytvořili nový objekt.
 
-Can we do it like that?
+Můžeme to udělat takto?
 
 ```js
 let obj2 = new obj.constructor();
 ```
 
-Give an example of a constructor function for `obj` which lets such code work right. And an example that makes it work wrong.
+Uveďte příklad konstruktoru pro `obj`, pro který by takový kód správně fungoval. A příklad, pro který by fungoval špatně.

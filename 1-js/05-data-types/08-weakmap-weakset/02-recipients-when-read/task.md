@@ -2,20 +2,20 @@ importance: 5
 
 ---
 
-# Store read dates
+# Uložení data přečtení
 
-There's an array of messages as in the [previous task](info:task/recipients-read). The situation is similar.
+Máme stejné pole zpráv, jako [v předchozí úloze](info:task/recipients-read). Situace je obdobná.
 
 ```js
-let messages = [
-  {text: "Hello", from: "John"},
-  {text: "How goes?", from: "John"},
-  {text: "See you soon", from: "Alice"}
+let zprávy = [
+  {text: "Ahoj", od: "Jan"},
+  {text: "Jak se máš?", od: "Jan"},
+  {text: "Brzy se uvidíme", od: "Alice"}
 ];
 ```
 
-The question now is: which data structure you'd suggest to store the information: "when the message was read?".
+Otázka teď zní: kterou datovou strukturu byste doporučili k uložení informace „kdy byla zpráva přečtena“?
 
-In the previous task we only needed to store the "yes/no" fact. Now we need to store the date, and it should only remain in memory until the message is garbage collected.
+V předchozí úloze jsme potřebovali ukládat jen skutečnost „ano/ne“. Nyní musíme ukládat datum, které by mělo zůstat v paměti jen do doby, než bude zpráva odklizena garbage collectorem.
 
-P.S. Dates can be stored as objects of built-in `Date` class, that we'll cover later.
+P.S. Data lze ukládat jako objekty vestavěné třídy `Date`, kterou probereme později.

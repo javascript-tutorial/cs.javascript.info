@@ -1,195 +1,197 @@
-# Debugging in the browser
+# Ladění v prohlížeči
 
-Before writing more complex code, let's talk about debugging.
+Než začneme psát složitější kód, pohovořme si o ladění.
 
-[Debugging](https://en.wikipedia.org/wiki/Debugging) is the process of finding and fixing errors within a script. All modern browsers and most other environments support debugging tools -- a special UI in developer tools that makes debugging much easier. It also allows to trace the code step by step to see what exactly is going on.
+[Ladění](https://cs.wikipedia.org/wiki/Ladění_(programování)) je proces hledání a opravování chyb ve skriptu. Ve všech moderních prohlížečích i ve většině ostatních prostředí jsou podporovány ladicí nástroje -- speciální uživatelské rozhraní ve vývojářských nástrojích, které ladění znatelně ulehčuje. Umožňuje také procházet kód krok za krokem, abychom viděli, co přesně se v něm děje.
 
-We'll be using Chrome here, because it has enough features, most other browsers have a similar process.
+Zde budeme používat Chrome, protože má dostatek potřebných prvků. Většina ostatních prohlížečů má podobný proces.
 
-## The "Sources" panel
+## Panel „Zdroje“
 
-Your Chrome version may look a little bit different, but it still should be obvious what's there.
+Vaše verze Chrome může vypadat trochu odlišně, ale i tak by mělo být zřejmé, o co jde.
 
-- Open the [example page](debugging/index.html) in Chrome.
-- Turn on developer tools with `key:F12` (Mac: `key:Cmd+Opt+I`).
-- Select the `Sources` panel.
+- Otevřete v Chrome [stránku s příkladem](debugging/index.html).
+- Zapněte vývojářské nástroje klávesou `key:F12` (Mac: `key:Cmd+Opt+I`).
+- Zvolte panel `Sources` (v české verzi `Zdroje`).
 
-Here's what you should see if you are doing it for the first time:
+Když to uděláte napoprvé, měli byste vidět toto:
 
 ![](chrome-open-sources.svg)
 
-The toggler button <span class="devtools" style="background-position:-172px -98px"></span> opens the tab with files.
+Přepínač <span class="devtools" style="background-position:-172px -98px"></span> otevírá záložku se soubory.
 
-Let's click it and select `hello.js` in the tree view. Here's what should show up:
+Klikněme na něj a a zvolme `hello.js` ve stromovém zobrazení. Mělo by se zobrazit toto:
 
 ![](chrome-tabs.svg)
 
-The Sources panel has 3 parts:
+Panel zdrojů má 3 části:
 
-1. The **File Navigator** pane lists HTML, JavaScript, CSS and other files, including images that are attached to the page. Chrome extensions may appear here too.
-2. The **Code Editor** pane shows the source code.
-3. The **JavaScript Debugging** pane is for debugging, we'll explore it soon.
+1. Záložka **File Navigator** (**Navigační panel**)  zobrazuje soubory HTML, JavaScript, CSS a jiné, včetně obrázků, které jsou připojeny ke stránce. Zde se mohou objevit i rozšíření Chrome.
+2. Záložka **Code Editor** (**Editor kódu**) zobrazuje zdrojový kód.
+3. Záložka **JavaScript Debugging** (**Ladicí nástroj**) slouží k ladění. Brzy ji prozkoumáme.
 
-Now you could click the same toggler <span class="devtools" style="background-position:-172px -122px"></span> again to hide the resources list and give the code some space.
+Nyní můžete kliknout na stejný přepínač <span class="devtools" style="background-position:-172px -122px"></span> znovu, abyste skryli seznam zdrojů a poskytli prostor kódu.
 
-## Console
+## Konzole
 
-If we press `key:Esc`, then a console opens below. We can type commands there and press `key:Enter` to execute.
+Pokud stiskneme `key:Esc`, otevře se dole konzole. Můžeme tam psát příkazy a pak stisknout `key:Enter`, aby se vykonaly.
 
-After a statement is executed, its result is shown below.
+Poté, co se příkaz vykoná, se dole zobrazí jeho výsledek.
 
-For example, here `1+2` results in `3`, while the function call `hello("debugger")` returns nothing, so the result is `undefined`:
+Například `1+2` zde vydá výsledek `3`, zatímco volání funkce `ahoj("debugger")` nevrátí nic, takže výsledek bude `undefined`:
 
 ![](chrome-sources-console.svg)
 
-## Breakpoints
+## Zarážky
 
-Let's examine what's going on within the code of the [example page](debugging/index.html). In `hello.js`, click at line number `4`. Yes, right on the `4` digit, not on the code.
+Nyní prozkoumáme, co se přesně děje v kódu na [stránce s příkladem](debugging/index.html). V `hello.js` klikněte na číslo řádku `4`. Ano, přímo na číslici `4`, ne na kód.
 
-Congratulations! You've set a breakpoint. Please also click on the number for line `8`.
+Gratulujeme! Právě jste nastavili zarážku. Klikněte prosím také na číslo řádku `8`.
 
-It should look like this (blue is where you should click):
+Mělo by to vypadat takto (modrá barva označuje, kam byste měli kliknout):
 
 ![](chrome-sources-breakpoint.svg)
 
-A *breakpoint* is a point of code where the debugger will automatically pause the JavaScript execution.
+*Zarážka* je místo, na němž ladicí nástroj automaticky pozastaví běh JavaScriptu.
 
-While the code is paused, we can examine current variables, execute commands in the console etc. In other words, we can debug it.
+Když je kód pozastaven, můžeme prozkoumávat aktuální proměnné, spouštět příkazy v konzoli a podobně. Jinými slovy, můžeme kód ladit.
 
-We can always find a list of breakpoints in the right panel. That's useful when we have many breakpoints in various files. It allows us to:
-- Quickly jump to the breakpoint in the code (by clicking on it in the right panel).
-- Temporarily disable the breakpoint by unchecking it.
-- Remove the breakpoint by right-clicking and selecting Remove.
-- ...And so on.
+V pravém panelu vždy najdeme seznam zarážek. To je užitečné, když máme mnoho zarážek v různých souborech. Seznam nám umožňuje:
+- Rychle přeskočit na zarážku v kódu (když na ni klikneme v pravém panelu).
+- Dočasně zarážku zakázat tím, že zrušíme její zaškrtnutí.
+- Odstranit zarážku tím, že na ni klikneme pravým tlačítkem myši a zvolíme Remove (Odstranit zarážku).
+- ...A tak dále.
 
-```smart header="Conditional breakpoints"
-*Right click* on the line number allows to create a *conditional* breakpoint. It only triggers when the given expression, that you should provide when you create it, is truthy.
+```smart header="Podmíněné zarážky"
+*Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněnou* zarážku. Ta se aktivuje, jen když je zadaný výraz, který byste měli uvést při jejím vytvoření, pravdivý.
 
-That's handy when we need to stop only for a certain variable value or for certain function parameters.
+To se hodí, když potřebujeme pozastavit skript jen při určité hodnotě proměnné nebo při určitých parametrech funkce.
 ```
 
-## The command "debugger"
+## Příkaz „debugger“
 
-We can also pause the code by using the `debugger` command in it, like this:
+Pozastavit kód můžeme také tím, že v něm použijeme příkaz `debugger`, například:
 
 ```js
-function hello(name) {
-  let phrase = `Hello, ${name}!`;
+function ahoj(jméno) {
+  let věta = `Ahoj, ${jméno}!`;
 
 *!*
-  debugger;  // <-- the debugger stops here
+  debugger;  // <-- ladicí nástroj se tady zastaví
 */!*
 
-  say(phrase);
+  řekni(věta);
 }
 ```
 
-Such command works only when the development tools are open, otherwise the browser ignores it.
+Tento příkaz funguje jen tehdy, když jsou otevřené vývojářské nástroje, jinak jej prohlížeč ignoruje.
 
-## Pause and look around
+## Pozastavení a rozhlédnutí
 
-In our example, `hello()` is called during the page load, so the easiest way to activate the debugger (after we've set the breakpoints) is to reload the page. So let's press `key:F5` (Windows, Linux) or `key:Cmd+R` (Mac).
+V našem příkladu je během nahrání stránky zavoláno `ahoj()`, takže nejjednodušším způsobem, jak aktivovat ladicí nástroj (po nastavení zarážek), je znovu načíst stránku. Stiskneme tedy `key:F5` (Windows, Linux) nebo `key:Cmd+R` (Mac).
 
-As the breakpoint is set, the execution pauses at the 4th line:
+Když je zarážka nastavena, běh se zastaví na 4. řádku:
 
 ![](chrome-sources-debugger-pause.svg)
 
-Please open the informational dropdowns to the right (labeled with arrows). They allow you to examine the current code state:
+Prosíme otevřete si informační dropdowny vpravo (označené šipkami), které vám umožní prozkoumávat aktuální stav kódu:
 
-1. **`Watch` -- shows current values for any expressions.**
+1. **`Watch` (`Sledované výrazy`) -- zobrazuje aktuální hodnoty libovolných výrazů.**
 
-    You can click the plus `+` and input an expression. The debugger will show its value, automatically recalculating it in the process of execution.
+    Můžete kliknout na plus `+` a zadat výraz. Ladicí nástroj bude zobrazovat jeho hodnotu, kterou při běhu skriptu automaticky přepočítá.
 
-2. **`Call Stack` -- shows the nested calls chain.**
+2. **`Call Stack` (`Zásobník volání`) -- zobrazuje řetězec vnořených volání funkcí.**
 
-    At the current moment the debugger is inside `hello()` call, called by a script in `index.html` (no function there, so it's called "anonymous").
+    V aktuálním okamžiku je ladicí nástroj uvnitř volání `ahoj()`, kterou zavolal skript v `index.html` (není zde žádná funkce, takže se nazývá „anonymní“).
 
-    If you click on a stack item (e.g. "anonymous"), the debugger jumps to the corresponding code, and all its variables can be examined as well.
-3. **`Scope` -- current variables.**
+    Když kliknete na prvek zásobníku (např. „anonymní“), ladicí nástroj přeskočí na odpovídající kód a vy můžete prozkoumávat všechny jeho proměnné.
+    
+3. **`Scope` (`Rozsah`) -- aktuální proměnné.**
 
-    `Local` shows local function variables. You can also see their values highlighted right over the source.
+    `Local` (`Místní`) zobrazuje lokální funkční proměnné. Vidíte také jejich hodnoty zvýrazněné přímo nad zdrojovým kódem.
 
-    `Global` has global variables (out of any functions).
+    `Global` (`Globální`) obsahuje globální proměnné (mimo všechny funkce).
 
-    There's also `this` keyword there that we didn't study yet, but we'll do that soon.
+    Je zde také klíčové slovo `this`, které jsme zatím neprobírali, ale brzy tak učiníme.
 
-## Tracing the execution
+## Sledování běhu skriptu
 
-Now it's time to *trace* the script.
+Nyní nastal čas *krokovat* skript.
 
-There are buttons for it at the top of the right panel. Let's engage them.
+K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <!-- https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/src/largeIcons.svg -->
-<span class="devtools" style="background-position:-146px -168px"></span> -- "Resume": continue the execution, hotkey `key:F8`.
-: Resumes the execution. If there are no additional breakpoints, then the execution just continues and the debugger loses control.
+<span class="devtools" style="background-position:-146px -168px"></span> -- „Resume“ („Obnovit běh skriptu“): pokračuje v běhu, klávesa `key:F8`.
 
-    Here's what we can see after a click on it:
+: Pokračuje v běhu skriptu. Nejsou-li už žádné další zarážky, skript se bude prostě vykonávat dál a ladicí nástroj nad ním ztratí kontrolu.
+
+    Toto uvidíme poté, co na něj klikneme:
 
     ![](chrome-sources-debugger-trace-1.svg)
 
-    The execution has resumed, reached another breakpoint inside `say()` and paused there. Take a look at the "Call Stack" at the right. It has increased by one more call. We're inside `say()` now.
+    Běh skriptu se obnovil, dosáhl další zarážky uvnitř `řekni()` a zastavil se tam. Podívejte se na zásobník volání („Call Stack“) vpravo. Zvětšil se o jedno volání. Nyní jsme uvnitř `řekni()`.
 
-<span class="devtools" style="background-position:-200px -190px"></span> -- "Step": run the next command, hotkey `key:F9`.
-: Run the next statement. If we click it now, `alert` will be shown.
+<span class="devtools" style="background-position:-200px -190px"></span> -- „Step“ („Krokovat“): spustí další příkaz, klávesa `key:F9`.
+: Spustí další příkaz. Když na něj nyní klikneme, zobrazí se `alert`.
 
-    Clicking this again and again will step through all script statements one by one.
+    Dalším a dalším klikáním můžeme krokovat všechny příkazy skriptu jeden po druhém.
 
-<span class="devtools" style="background-position:-62px -192px"></span> -- "Step over": run the next command, but *don't go into a function*, hotkey `key:F10`.
-: Similar to the previous "Step" command, but behaves differently if the next statement is a function call (not a built-in, like `alert`, but a function of our own).
+<span class="devtools" style="background-position:-62px -192px"></span> -- „Step over“ („Překročit další volání funkce“): spustí další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
+: Podobá se předchozímu příkazu „Krokovat“, ale chová se jinak, jestliže dalším příkazem je volání funkce (ne vestavěné funkce jako `alert`, ale naší vlastní funkce).
 
-    If we compare them, the "Step" command goes into a nested function call and pauses the execution at its first line, while "Step over" executes the nested function call invisibly to us, skipping the function internals.
+    Když si je srovnáme, příkaz „Krokovat“ vstoupí do vnořeného volání funkce a pozastaví běh na jejím prvním řádku, zatímco „Překročit další volání funkce“ spustí vnořené volání funkce, aniž bychom je viděli, a překročí její vnitřek.
+    
+    Běh se pak ihned po volání této funkce pozastaví.
 
-    The execution is then paused immediately after that function call.
+    To se hodí, když si nepřejeme vidět, co se děje uvnitř volané funkce.
 
-    That's good if we're not interested to see what happens inside the function call.
+<span class="devtools" style="background-position:-4px -194px"></span> -- „Step into“ („Pokročit do dalšího volání funkce“), klávesa `key:F11`.
+: Podobá se „Krokovat“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož asynchronní volání funkcí ještě neznáme.
 
-<span class="devtools" style="background-position:-4px -194px"></span> -- "Step into", hotkey `key:F11`.
-: That's similar to "Step", but behaves differently in case of asynchronous function calls. If you're only starting to learn JavaScript, then you can ignore the difference, as we don't have asynchronous calls yet.
+    Do budoucna jen poznamenejme, že příkaz „Krokovat“ ignoruje asynchronní akce, například `setTimeout` (vyvolání funkce za určitou dobu), které se vykonávají později. Příkaz „Pokročit do dalšího volání funkce“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
 
-    For the future, just note that "Step" command ignores async actions, such as `setTimeout` (scheduled function call), that execute later. The "Step into" goes into their code, waiting for them if necessary. See [DevTools manual](https://developers.google.com/web/updates/2018/01/devtools#async) for more details.
+<span class="devtools" style="background-position:-32px -194px"></span> -- „Step out“ („Postoupit ven z aktuální funkce“) pokračuje v běhu až do konce vykonávané funkce, klávesa `key:Shift+F11`.
+: Pokračuje v běhu a zastaví se až na posledním řádku právě vykonávané funkce. To se hodí, když jsme omylem vstoupili do volání funkce pomocí <span class="devtools" style="background-position:-200px -190px"></span>, ale ta nás nezajímá, a tak chceme co nejrychleji dospět k jejímu konci.
 
-<span class="devtools" style="background-position:-32px -194px"></span> -- "Step out": continue the execution till the end of the current function, hotkey `key:Shift+F11`.
-: Continue the execution and stop it at the very last line of the current function. That's handy when we accidentally entered a nested call using <span class="devtools" style="background-position:-200px -190px"></span>, but it does not interest us, and we want to continue to its end as soon as possible.
+<span class="devtools" style="background-position:-61px -74px"></span> -- povolí/zakáže všechny zarážky.
+: Toto tlačítko nemá vliv na běh skriptu, jen hromadně zapne/vypne všechny zarážky.
 
-<span class="devtools" style="background-position:-61px -74px"></span> -- enable/disable all breakpoints.
-: That button does not move the execution. Just a mass on/off for breakpoints.
+<span class="devtools" style="background-position:-90px -146px"></span> -- povolí/zakáže automatické pozastavení v případě chyby.
+: Když je povoleno a vývojářské nástroje jsou otevřeny, chyba během výkonu skriptu jej automaticky pozastaví. Pak můžeme v ladicím nástroji analyzovat proměnné, abychom viděli, co se pokazilo. Když tedy náš skript skončí s chybou, můžeme otevřít ladicí nástroj, povolit tuto možnost a znovu načíst stránku, abychom viděli, kde spadl a jaký je v tom okamžiku jeho kontext.
 
-<span class="devtools" style="background-position:-90px -146px"></span> -- enable/disable automatic pause in case of an error.
-: When enabled, if the developer tools is open, an error during the script execution automatically pauses it. Then we can analyze variables in the debugger to see what went wrong. So if our script dies with an error, we can open debugger, enable this option and reload the page to see where it dies and what's the context at that moment.
+```smart header="Pokračovat až sem"
+Po kliknutí pravým tlačítkem myši na řádek kódu se otevře kontextové menu s výtečnou možností „Continue to here“ („Pokračovat sem“).
 
-```smart header="Continue to here"
-Right click on a line of code opens the context menu with a great option called "Continue to here".
-
-That's handy when we want to move multiple steps forward to the line, but we're too lazy to set a breakpoint.
+To se hodí, když chceme provést větší množství kroků až k tomuto řádku, ale nechce se nám nastavovat zarážku.
 ```
 
-## Logging
+## Logování
 
-To output something to console from our code, there's `console.log` function.
+Chceme-li vypsat něco z našeho kódu na konzoli, máme k tomu funkci `console.log`.
 
-For instance, this outputs values from `0` to `4` to console:
+Například tento kód vypíše na konzoli hodnoty od `0` do `4`:
 
 ```js run
-// open console to see
+// otevřete si konzoli a uvidíte
 for (let i = 0; i < 5; i++) {
-  console.log("value,", i);
+  console.log("hodnota,", i);
 }
 ```
 
-Regular users don't see that output, it is in the console. To see it, either open the Console panel of developer tools or press `key:Esc` while in another panel: that opens the console at the bottom.
+Běžní uživatelé tento výstup neuvidí, vypíše se na konzoli. Abyste jej viděli, otevřete panel Console (Konzole) vývojářských nástrojů nebo stiskněte `key:Esc`, když jste v jiném panelu: tím se dole otevře konzole.
 
-If we have enough logging in our code, then we can see what's going on from the records, without the debugger.
+Máme-li v kódu dostatek logování, uvidíme z těchto záznamů, co se děje, i bez ladicího nástroje.
 
-## Summary
+## Shrnutí
 
-As we can see, there are three main ways to pause a script:
-1. A breakpoint.
-2. The `debugger` statements.
-3. An error (if dev tools are open and the button <span class="devtools" style="background-position:-90px -146px"></span> is "on").
+Jak vidíme, existují tři hlavní způsoby, jak pozastavit skript:
+1. Zarážka.
+2. Příkaz `debugger`.
+3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
 
-When paused, we can debug: examine variables and trace the code to see where the execution goes wrong.
+Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a krokovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
 
-There are many more options in developer tools than covered here. The full manual is at <https://developers.google.com/web/tools/chrome-devtools>.
+Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 
-The information from this chapter is enough to begin debugging, but later, especially if you do a lot of browser stuff, please go there and look through more advanced capabilities of developer tools.
+Informace z této kapitoly postačí k začátku ladění, ale později, zvláště budete-li vytvářet hodně materiálu v prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
 
-Oh, and also you can click at various places of dev tools and just see what's showing up. That's probably the fastest route to learn dev tools. Don't forget about the right click and context menus!
+A také můžete klikat na různá místa vývojářských nástrojů a jen se dívat, co se ukáže. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
