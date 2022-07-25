@@ -1,19 +1,19 @@
 <script>
 class HttpError extends Error {
-  constructor(response) {
-    super(`${response.status} for ${response.url}`);
+  constructor(odpověď) {
+    super(`${odpověď.status} for ${odpověď.url}`);
     this.name = 'HttpError';
-    this.response = response;
+    this.odpověď = odpověď;
   }
 }
 
 function loadJson(url) {
   return fetch(url)
-    .then(response => {
-      if (response.status == 200) {
-        return response.json();
+    .then(odpověď => {
+      if (odpověď.status == 200) {
+        return odpověď.json();
       } else {
-        throw new HttpError(response);
+        throw new HttpError(odpověď);
       }
     })
 }

@@ -5,19 +5,19 @@ libs:
 
 # Currying
 
-[Currying](https://en.wikipedia.org/wiki/Currying) is an advanced technique of working with functions. It's used not only in JavaScript, but in other languages as well.
+[Currying neboli curryování](https://en.wikipedia.org/wiki/Currying) je pokročilá technika práce s funkcemi. Používá se nejen v JavaScriptu, ale i v jiných jazycích.
 
-Currying is a transformation of functions that translates a function from callable as `f(a, b, c)` into callable as `f(a)(b)(c)`.
+Currying je transformace funkce, která přeloží funkci volatelnou způsobem `f(a, b, c)` na volatelnou způsobem `f(a)(b)(c)`.
 
-Currying doesn't call a function. It just transforms it.
+Currying nevolá funkci, jen ji transformuje.
 
-Let's see an example first, to better understand what we're talking about, and then practical applications.
+Nejprve se podívejme na příklad, abychom lépe porozuměli tomu, o čem se tady mluví, a pak na praktické aplikace.
 
-We'll create a helper function `curry(f)` that performs currying for a two-argument `f`. In other words, `curry(f)` for two-argument `f(a, b)` translates it into a function that runs as `f(a)(b)`:
+Vytvořme pomocnou funkci `curry(f)`, která provádí currying dvouargumentové funkce `f`. Jinými slovy, `curry(f)` na dvouargumentové funkci `f(a, b)` ji přeloží na funkci, která se bude spouštět jako `f(a)(b)`:
 
 ```js run
 *!*
-function curry(f) { // curry(f) does the currying transform
+function curry(f) { // curry(f) provede curryingovou transformaci
   return function(a) {
     return function(b) {
       return f(a, b);
@@ -26,104 +26,104 @@ function curry(f) { // curry(f) does the currying transform
 }
 */!*
 
-// usage
-function sum(a, b) {
+// použití
+function součet(a, b) {
   return a + b;
 }
 
-let curriedSum = curry(sum);
+let curryovanýSoučet = curry(součet);
 
-alert( curriedSum(1)(2) ); // 3
+alert( curryovanýSoučet(1)(2) ); // 3
 ```
 
-As you can see, the implementation is straightforward: it's just two wrappers.
+Jak vidíte, implementace je přímočará: jsou to pouhé dva wrappery.
 
-- The result of `curry(func)` is a wrapper `function(a)`.
-- When it is called like `curriedSum(1)`, the argument is saved in the Lexical Environment, and a new wrapper is returned `function(b)`.
-- Then this wrapper is called with `2` as an argument, and it passes the call to the original `sum`.
+- Výsledkem `curry(func)` je wrapper `function(a)`.
+- Když je zavolán způsobem `curryovanýSoučet(1)`, argument se uloží do lexikálního prostředí a vrátí se nový wrapper `function(b)`.
+- Pak je tento wrapper volán s argumentem `2` a předá volání původní funkci `součet`.
 
-More advanced implementations of currying, such as [_.curry](https://lodash.com/docs#curry) from lodash library, return a wrapper that allows a function to be called both normally and partially:
+Pokročilejší implementace curryingu, např. [_.curry](https://lodash.com/docs#curry) z knihovny lodash, vrátí wrapper, který umožní, aby funkce mohla být volána jak normálně, tak parciálně:
 
 ```js run
-function sum(a, b) {
+function součet(a, b) {
   return a + b;
 }
 
-let curriedSum = _.curry(sum); // using _.curry from lodash library
+let curryovanýSoučet = _.curry(součet); // použijeme _.curry z knihovny lodash
 
-alert( curriedSum(1, 2) ); // 3, still callable normally
-alert( curriedSum(1)(2) ); // 3, called partially
+alert( curryovanýSoučet(1, 2) ); // 3, stále volatelná normálně
+alert( curryovanýSoučet(1)(2) ); // 3, voláno parciálně
 ```
 
-## Currying? What for?
+## Currying? K čemu to je?
 
-To understand the benefits we need a worthy real-life example.
+Abychom pochopili výhody, potřebujeme cenný příklad z reálného života.
 
-For instance, we have the logging function `log(date, importance, message)` that formats and outputs the information. In real projects such functions have many useful features like sending logs over the network, here we'll just use `alert`:
+Mějme například logovací funkci `log(datum, důležitost, zpráva)`, která naformátuje a vypíše informaci. Ve skutečných projektech mají takové funkce mnoho užitečných možností, např. posílání logů po síti, zde jenom zavoláme `alert`:
 
 ```js
-function log(date, importance, message) {
-  alert(`[${date.getHours()}:${date.getMinutes()}] [${importance}] ${message}`);
+function log(datum, důležitost, zpráva) {
+  alert(`[${datum.getHours()}:${datum.getMinutes()}] [${důležitost}] ${zpráva}`);
 }
 ```
 
-Let's curry it!
+Zcurryujme ji!
 
 ```js
 log = _.curry(log);
 ```
 
-After that `log` works normally:
+Pak bude `log` fungovat normálně:
 
 ```js
-log(new Date(), "DEBUG", "some debug"); // log(a, b, c)
+log(new Date(), "DEBUG", "nějaký debug"); // log(a, b, c)
 ```
 
-...But also works in the curried form:
+...Ale bude fungovat i v curryované formě:
 
 ```js
-log(new Date())("DEBUG")("some debug"); // log(a)(b)(c)
+log(new Date())("DEBUG")("nějaký debug"); // log(a)(b)(c)
 ```
 
-Now we can easily make a convenience function for current logs:
+Nyní můžeme snadno vytvořit pohodlnou funkci pro aktuální logování:
 
 ```js
-// logNow will be the partial of log with fixed first argument
-let logNow = log(new Date());
+// logNyní bude parciální log s pevným prvním argumentem
+let logNyní = log(new Date());
 
-// use it
-logNow("INFO", "message"); // [HH:mm] INFO message
+// použijeme ji
+logNyní("INFO", "zpráva"); // [HH:mm] INFO zpráva
 ```
 
-Now `logNow` is `log` with fixed first argument, in other words "partially applied function" or "partial" for short.
+Nyní `logNyní` je `log` s pevným prvním argumentem, jinými slovy „parciálně aplikovaná funkce“ nebo krátce „parciální funkce“.
 
-We can go further and make a convenience function for current debug logs:
+Můžeme jít dál a vytvořit pohodlnou funkci pro aktuální logování debugů:
 
 ```js
-let debugNow = logNow("DEBUG");
+let debugNyní = logNyní("DEBUG");
 
-debugNow("message"); // [HH:mm] DEBUG message
+debugNyní("zpráva"); // [HH:mm] DEBUG zpráva
 ```
 
-So:
-1. We didn't lose anything after currying: `log` is still callable normally.
-2. We can easily generate partial functions such as for today's logs.
+Tedy:
+1. Po curryingu nic neztratíme: `log` se stále dá volat normálně.
+2. Můžeme snadno generovat parciální funkce, např. pro logování s dnešním datem.
 
-## Advanced curry implementation
+## Pokročilá implementace curryingu
 
-In case you'd like to get in to the details, here's the "advanced" curry implementation for multi-argument functions that we could use above.
+V případě, že byste chtěli zajít do detailů, zde je „pokročilá“ implementace curryingu pro víceargumentové funkce, kterou bychom mohli použít výše.
 
-It's pretty short:
+Je opravdu krátká:
 
 ```js
-function curry(func) {
+function curry(funkce) {
 
-  return function curried(...args) {
-    if (args.length >= func.length) {
-      return func.apply(this, args);
+  return function curryovaná(...args) {
+    if (args.length >= funkce.length) {
+      return funkce.apply(this, args);
     } else {
       return function(...args2) {
-        return curried.apply(this, args.concat(args2));
+        return curryovaná.apply(this, args.concat(args2));
       }
     }
   };
@@ -131,58 +131,58 @@ function curry(func) {
 }
 ```
 
-Usage examples:
+Příklady použití:
 
 ```js
-function sum(a, b, c) {
+function součet(a, b, c) {
   return a + b + c;
 }
 
-let curriedSum = curry(sum);
+let curryovanýSoučet = curry(součet);
 
-alert( curriedSum(1, 2, 3) ); // 6, still callable normally
-alert( curriedSum(1)(2,3) ); // 6, currying of 1st arg
-alert( curriedSum(1)(2)(3) ); // 6, full currying
+alert( curryovanýSoučet(1, 2, 3) ); // 6, stále normálně volatelná
+alert( curryovanýSoučet(1)(2,3) ); // 6, currying 1. argumentu
+alert( curryovanýSoučet(1)(2)(3) ); // 6, úplný currying
 ```
 
-The new `curry` may look complicated, but it's actually easy to understand.
+Nová funkce `curry` může vypadat komplikovaně, ale ve skutečnosti je snadné jí porozumět.
 
-The result of `curry(func)` call is the wrapper `curried` that looks like this:
+Výsledkem volání `curry(funkce)` je wrapper `curryovaná`, který vypadá takto:
 
 ```js
-// func is the function to transform
-function curried(...args) {
-  if (args.length >= func.length) { // (1)
-    return func.apply(this, args);
+// funkce je funkce, která se má transformovat
+function curryovaná(...args) {
+  if (args.length >= funkce.length) { // (1)
+    return funkce.apply(this, args);
   } else {
     return function(...args2) { // (2)
-      return curried.apply(this, args.concat(args2));
+      return curryovaná.apply(this, args.concat(args2));
     }
   }
 };
 ```
 
-When we run it, there are two `if` execution branches:
+Když ji spustíme, obsahuje dvě výkonové větve `if`:
 
-1. If passed `args` count is the same or more than the original function has in its definition (`func.length`) , then just pass the call to it using `func.apply`. 
-2. Otherwise, get a partial: we don't call `func` just yet. Instead, another wrapper is returned, that will re-apply `curried` providing previous arguments together with the new ones. 
+1. Je-li počet předaných argumentů `args` stejný nebo větší, než v definici původní funkce (`funkce.length`), pak jí jen předáme volání pomocí `funkce.apply`. 
+2. V opačném případě získáme parciální funkci: ještě funkci `funkce` nebudeme volat. Místo toho se vrátí další wrapper, který znovu aplikuje funkci `curryovaná` a poskytne jí předchozí argumenty společně s novými.
 
-Then, if we call it, again, we'll get either a new partial (if not enough arguments) or, finally, the result.
+Když ji pak znovu zavoláme, získáme buď novou parciální funkci (nemáme-li ještě dost argumentů), nebo nakonec výsledek.
 
-```smart header="Fixed-length functions only"
-The currying requires the function to have a fixed number of arguments.
+```smart header="Jen pro funkce s pevnou délkou"
+Currying vyžaduje, aby funkce měla pevný počet argumentů.
 
-A function that uses rest parameters, such as `f(...args)`, can't be curried this way.
+Funkci, která používá zbytkové parametry, např. `f(...args)`, nelze tímto způsobem curryovat.
 ```
 
-```smart header="A little more than currying"
-By definition, currying should convert `sum(a, b, c)` into `sum(a)(b)(c)`.
+```smart header="Víc než jen currying"
+Podle definice by currying měl převést `součet(a, b, c)` na `součet(a)(b)(c)`.
 
-But most implementations of currying in JavaScript are advanced, as described: they also keep the function callable in the multi-argument variant.
+Většina implementací curryingu v JavaScriptu je však pokročilá, jak bylo popsáno: udržují funkci volatelnou i ve víceargumentové variantě.
 ```
 
-## Summary
+## Shrnutí
 
-*Currying* is a transform that makes `f(a,b,c)` callable as `f(a)(b)(c)`. JavaScript implementations usually both keep the function callable normally and return the partial if the arguments count is not enough.
+*Currying* je transformace, která umožní volat `f(a,b,c)` jako `f(a)(b)(c)`. Implementace v JavaScriptu obvykle současně ponechají funkci volatelnou normálně a vrátí parciální funkci, není-li poskytnuto dost argumentů.
 
-Currying allows us to easily get partials. As we've seen in the logging example, after currying the three argument universal function `log(date, importance, message)` gives us partials when called with one argument (like `log(date)`) or two arguments (like `log(date, importance)`).  
+Currying nám umožní snadno získat parciální funkci. Jak jsme viděli v příkladu s logováním, univerzální tříargumentová funkce `log(datum, důležitost, zpráva)` nám po curryingu vydá parciální funkci, když je volána s jedním argumentem (např. `log(datum)`) nebo se dvěma argumenty (např. `log(datum, důležitost)`).  

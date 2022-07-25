@@ -1,32 +1,36 @@
-To get the number of milliseconds till tomorrow, we can from "tomorrow 00:00:00" substract the current date.
+Abychom získali počet milisekund zbývajících do zítřka, můžeme odečíst aktuální datum od „zítřka 00:00:00“.
 
-First, we generate that "tomorrow", and then do it:
-
-```js run
-function getSecondsToTomorrow() {
-  let now = new Date();
-
-  // tomorrow date
-  let tomorrow = new Date(now.getFullYear(), now.getMonth(), *!*now.getDate()+1*/!*);
-
-  let diff = tomorrow - now; // difference in ms
-  return Math.round(diff / 1000); // convert to seconds
-}
-```
-
-Alternative solution:
+Nejprve tento „zítřek“ vygenerujeme a pak to provedeme:
 
 ```js run
-function getSecondsToTomorrow() {
-  let now = new Date();
-  let hour = now.getHours();
-  let minutes = now.getMinutes();
-  let seconds = now.getSeconds();
-  let totalSecondsToday = (hour * 60 + minutes) * 60 + seconds;
-  let totalSecondsInADay = 86400;
+function vraťSekundyDoZítřka() {
+  let nyní = new Date();
 
-  return totalSecondsInADay - totalSecondsToday;
+  // zítřejší datum
+  let zítřek = new Date(nyní.getFullYear(), nyní.getMonth(), *!*nyní.getDate()+1*/!*);
+
+  let rozdíl = zítřek - nyní; // rozdíl v ms
+  return Math.round(rozdíl / 1000); // převod na sekundy
 }
+
+alert(vraťSekundyDoZítřka());
 ```
 
-Please note that many countries have Daylight Savings Time (DST), so there may be days with 23 or 25 hours. We may want to treat such days separately.
+Alternativní řešení:
+
+```js run
+function vraťSekundyDoZítřka() {
+  let nyní = new Date();
+  let hodiny = nyní.getHours();
+  let minuty = nyní.getMinutes();
+  let sekundy = nyní.getSeconds();
+  let celkemSekundDnes = (hodiny * 60 + minuty) * 60 + sekundy;
+  let celkemSekundZaDen = 86400;
+
+  return celkemSekundZaDen - celkemSekundDnes;
+}
+
+alert(vraťSekundyDoZítřka());
+```
+
+Prosíme všimněte si, že mnoho zemí používá letní čas, takže mohou existovat dny, které mají 23 nebo 25 hodin. S takovými dny můžeme chtít zacházet odlišně.
