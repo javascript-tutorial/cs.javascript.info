@@ -215,7 +215,7 @@ Deklarace funkcí jsou odlišné.
 
 Například globální deklarace funkce je viditelná v celém skriptu, ať se nachází kdekoli.
 
-Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „inicializační krok“.
+Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „přípravnou fázi“.
 
 Teprve až jsou všechny deklarace funkcí zpracovány, kód se vykoná. Proto má k těmto funkcím přístup.
 
