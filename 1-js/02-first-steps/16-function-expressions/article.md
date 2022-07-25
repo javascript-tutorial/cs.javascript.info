@@ -22,10 +22,6 @@ let řekniAhoj = function() {
 };
 ```
 
-Zde je funkce vytvořena a výslovně přiřazena do proměnné jako kterákoli jiná hodnota. Nezáleží na tom, jak je funkce definována. Je to jen hodnota uložená do proměnné `řekniAhoj`.
-
-Význam obou částí kódu je stejný: „vytvořit funkci a uložit ji do proměnné `řekniAhoj`“.
-
 Zde vidíme proměnnou `řekniAhoj`, do níž je uložena hodnota, kterou je nová funkce, vytvořená jako `function() { alert("Ahoj"); }`.
 
 Protože k vytvoření funkce dochází v kontextu přiřazovacího výrazu (na pravé straně `=`), je to *funkční výraz*.
@@ -56,7 +52,9 @@ Všimněte si, že poslední řádek nevolá funkci, protože za `řekniAhoj` ne
 
 V JavaScriptu je funkce hodnota, takže s ní můžeme zacházet jako s hodnotou. Výše uvedený kód zobrazí její řetězcovou reprezentaci, kterou je zdrojový kód funkce.
 
-Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`. Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
+Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`.
+
+Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
 
 Můžeme zkopírovat funkci do jiné proměnné:
 
@@ -68,7 +66,7 @@ function řekniAhoj() {   // (1) vytvoření
 let funkce = řekniAhoj;  // (2) zkopírování
 
 funkce(); // Ahoj        // (3) spustíme kopii (funguje to!)
-řekniAhoj(); // Ahoj     //     tohle pořád funguje taky (proč by nemělo)
+řekniAhoj(); // Ahoj     //     i tohle stále funguje (proč by nemělo)
 ```
 
 Co se v uvedeném příkladu přesně stane:
@@ -90,6 +88,7 @@ let funkce = řekniAhoj;
 
 Všechno bude fungovat stejně.
 
+
 ````smart header="Proč je na konci středník?"
 Možná se divíte, proč funkční výraz obsahuje na konci středník `;`, ale deklarace funkce ne:
 
@@ -108,7 +107,7 @@ Odpověď je jednoduchá: funkční výraz je zde vytvořen jako `function(…) 
 Středník by zde byl i u jednoduššího přiřazení, například `let řekniAhoj = 5;`, a je zde také u přiřazení funkce.
 ````
 
-## Callbackové funkce
+## Funkce zpětného volání (callbackové funkce)
 
 Podíváme se na další příklady předávání funkcí jako hodnot a používání funkčních výrazů.
 
@@ -216,7 +215,7 @@ Deklarace funkcí jsou odlišné.
 
 Například globální deklarace funkce je viditelná v celém skriptu, ať se nachází kdekoli.
 
-Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „inicializační krok“.
+Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „přípravnou fázi“.
 
 Teprve až jsou všechny deklarace funkcí zpracovány, kód se vykoná. Proto má k těmto funkcím přístup.
 
@@ -292,7 +291,7 @@ if (věk < 18) {
   uvítání();               // \   (spustí se)
 */!*
                            //  |
-  function uvítání() {     //  |  
+  function uvítání() {     //  |
     alert("Ahoj!");        //  |  deklarace funkce je k dispozici
   }                        //  |  všude v bloku, v němž je funkce deklarována
                            //  |
@@ -302,7 +301,7 @@ if (věk < 18) {
 
 } else {
 
-  function uvítání() {    
+  function uvítání() {
     alert("Zdravíme vás!");
   }
 }
@@ -358,6 +357,7 @@ let uvítání = (věk < 18) ?
 uvítání(); // nyní je to v pořádku
 */!*
 ```
+
 
 ```smart header="Kdy zvolit deklaraci funkce a kdy funkční výraz?"
 Orientační pravidlo zní, že když potřebujeme deklarovat funkci, měli bychom napřed zvážit syntaxi deklarace funkce. Ta nám dává více svobody v tom, jak zorganizovat kód, protože takovou funkci můžeme volat ještě předtím, než je deklarována.
