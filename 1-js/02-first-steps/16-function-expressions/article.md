@@ -66,7 +66,7 @@ function řekniAhoj() {   // (1) vytvoření
 let funkce = řekniAhoj;  // (2) zkopírování
 
 funkce(); // Ahoj        // (3) spustíme kopii (funguje to!)
-řekniAhoj(); // Ahoj     //     tohle pořád funguje taky (proč by nemělo)
+řekniAhoj(); // Ahoj     //     i tohle stále funguje (proč by nemělo)
 ```
 
 Co se v uvedeném příkladu přesně stane:
