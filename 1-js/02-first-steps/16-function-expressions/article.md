@@ -107,7 +107,7 @@ Odpověď je jednoduchá: funkční výraz je zde vytvořen jako `function(…) 
 Středník by zde byl i u jednoduššího přiřazení, například `let řekniAhoj = 5;`, a je zde také u přiřazení funkce.
 ````
 
-## Callbackové funkce
+## Funkce zpětného volaní (callbackové funkce)
 
 Podíváme se na další příklady předávání funkcí jako hodnot a používání funkčních výrazů.
 
