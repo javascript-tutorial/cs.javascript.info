@@ -47,7 +47,7 @@ Jak vidíte, `(a, b) => a + b` značí funkci, která má dva parametry `a` a `b
     alert( dvojnásobek(3) ); // 6
     ```
 
-- Nejsou-li žádné argumenty, závorky budou prázdné, ale musejí být uvedeny:
+- Nejsou-li žádné parametry, závorky budou prázdné, ale musí být uvedeny:
 
     ```js run
     let řekniAhoj = () => alert("Ahoj!");
