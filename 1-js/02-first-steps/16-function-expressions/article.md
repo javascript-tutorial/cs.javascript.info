@@ -22,24 +22,6 @@ let řekniAhoj = function() {
 };
 ```
 
-Zde je funkce vytvořena a výslovně přiřazena do proměnné jako kterákoli jiná hodnota. Nezáleží na tom, jak je funkce definována. Je to jen hodnota uložená do proměnné `řekniAhoj`.
-
-Význam obou částí kódu je stejný: „vytvořit funkci a uložit ji do proměnné `řekniAhoj`“.
-
-Zde vidíme proměnnou `řekniAhoj`, do níž je uložena hodnota, kterou je nová funkce, vytvořená jako `function() { alert("Ahoj"); }`.
-
-Protože k vytvoření funkce dochází v kontextu přiřazovacího výrazu (na pravé straně `=`), je to *funkční výraz*.
-
-Prosíme všimněte si, že za klíčovým slovem `function` není žádný název. Ve funkčních výrazech je vynechání názvu dovoleno.
-
-Zde okamžitě přiřazujeme funkci proměnné, takže význam tohoto příkladu kódu je stejný: „vytvoř funkci a ulož ji do proměnné `řekniAhoj`“.
-
-V pokročilejších situacích, na které narazíme později, můžeme funkci vytvořit a okamžitě volat nebo naplánovat její pozdější spuštění, aniž bychom ji někam uložili, takže funkce zůstane anonymní.
-
-## Funkce je hodnota
-
-Zopakujme si: bez ohledu na to, jak je funkce vytvořena, funkce je hodnota. V obou výše uvedených příkladech je funkce uložena do proměnné `řekniAhoj`.
-
 Tuto hodnotu dokonce můžeme zobrazit pomocí `alert`:
 
 ```js run
@@ -90,6 +72,7 @@ let funkce = řekniAhoj;
 
 Všechno bude fungovat stejně.
 
+
 ````smart header="Proč je na konci středník?"
 Možná se divíte, proč funkční výraz obsahuje na konci středník `;`, ale deklarace funkce ne:
 
@@ -108,7 +91,7 @@ Odpověď je jednoduchá: funkční výraz je zde vytvořen jako `function(…) 
 Středník by zde byl i u jednoduššího přiřazení, například `let řekniAhoj = 5;`, a je zde také u přiřazení funkce.
 ````
 
-## Callbackové funkce
+## Funkce zpětného volaní (callbackové funkce)
 
 Podíváme se na další příklady předávání funkcí jako hodnot a používání funkčních výrazů.
 
@@ -216,7 +199,7 @@ Deklarace funkcí jsou odlišné.
 
 Například globální deklarace funkce je viditelná v celém skriptu, ať se nachází kdekoli.
 
-Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „inicializační krok“.
+Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „přípravnou fázi“.
 
 Teprve až jsou všechny deklarace funkcí zpracovány, kód se vykoná. Proto má k těmto funkcím přístup.
 
@@ -292,7 +275,7 @@ if (věk < 18) {
   uvítání();               // \   (spustí se)
 */!*
                            //  |
-  function uvítání() {     //  |  
+  function uvítání() {     //  |
     alert("Ahoj!");        //  |  deklarace funkce je k dispozici
   }                        //  |  všude v bloku, v němž je funkce deklarována
                            //  |
@@ -302,7 +285,7 @@ if (věk < 18) {
 
 } else {
 
-  function uvítání() {    
+  function uvítání() {
     alert("Zdravíme vás!");
   }
 }
