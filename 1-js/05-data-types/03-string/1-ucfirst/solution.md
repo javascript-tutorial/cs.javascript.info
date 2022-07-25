@@ -1,27 +1,27 @@
-We can't "replace" the first character, because strings in JavaScript are immutable.
+Nemůžeme „nahradit“ první znak, protože řetězce v JavaScriptu jsou neměnné.
 
-But we can make a new string based on the existing one, with the uppercased first character:
+Můžeme však vytvořit z existujícího řetězce nový, který bude mít první znak převedený na velké písmeno:
 
 ```js
-let newStr = str[0].toUpperCase() + str.slice(1);
+let novýŘetězec = řetězec[0].toUpperCase() + řetězec.slice(1);
 ```
 
-There's a small problem though. If `str` is empty, then `str[0]` is `undefined`, and as `undefined` doesn't have the `toUpperCase()` method, we'll get an error.
+Je tady však malý problém. Jestliže `řetězec` je prázdný, pak `řetězec[0]` je `undefined`, a protože `undefined` nemá metodu `toUpperCase()`, dostaneme chybu.
 
-There are two variants here:
+Jsou zde dvě varianty řešení:
 
-1. Use `str.charAt(0)`, as it always returns a string (maybe empty).
-2. Add a test for an empty string.
+1. Použít `řetězec.charAt(0)`, jelikož ta vždy vrátí řetězec (možná prázdný).
+2. Přidat kontrolu na prázdný řetězec.
 
-Here's the 2nd variant:
+Zde je druhá varianta:
 
 ```js run demo
-function ucFirst(str) {
-  if (!str) return str;
+function velkéPrvníPísmeno(řetězec) {
+  if (!řetězec) return řetězec;
 
-  return str[0].toUpperCase() + str.slice(1);
+  return řetězec[0].toUpperCase() + řetězec.slice(1);
 }
 
-alert( ucFirst("john") ); // John
+alert( velkéPrvníPísmeno("jan") ); // Jan
 ```
 

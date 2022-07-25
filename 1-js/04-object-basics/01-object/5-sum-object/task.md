@@ -2,18 +2,18 @@ importance: 5
 
 ---
 
-# Sum object properties
+# Sečtěte vlastnosti objektu
 
-We have an object storing salaries of our team:
+Máme objekt, v němž jsou uloženy platy našeho týmu:
 
 ```js
-let salaries = {
-  John: 100,
-  Ann: 160,
-  Pete: 130
+let platy = {
+  Jan: 100,
+  Anna: 160,
+  Petr: 130
 }
 ```
 
-Write the code to sum all salaries and store in the variable `sum`. Should be `390` in the example above.
+Napište kód, který všechny platy sečte a uloží do proměnné `součet`. Ve výše uvedeném příkladu by mělo vyjít `390`.
 
-If `salaries` is empty, then the result must be `0`.
+Je-li objekt `platy` prázdný, výsledek musí být `0`.

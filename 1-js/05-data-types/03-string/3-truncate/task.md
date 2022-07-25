@@ -2,16 +2,16 @@ importance: 5
 
 ---
 
-# Truncate the text
+# Zkrácení textu
 
-Create a function `truncate(str, maxlength)` that checks the length of the `str` and, if it exceeds `maxlength` -- replaces the end of `str` with the ellipsis character `"…"`, to make its length equal to `maxlength`.
+Vytvořte funkci `zkrať(řetězec, maxDélka)`, která zkontroluje délku řetězce `řetězec`, a pokud překročí `maxDélka`, nahradí konec řetězce `řetězec` znakem tří teček (výpustkou) `"…"`, aby jeho délka byla přesně `maxDélka`.
 
-The result of the function should be the truncated (if needed) string.
+Výsledkem funkce by měl být zkrácený (je-li to nutné) řetězec.
 
-For instance:
+Například:
 
 ```js
-truncate("What I'd like to tell on this topic is:", 20) = "What I'd like to te…"
+zkrať("To, co bych k tomuto tématu rád řekl, je:", 20) = "To, co bych k tomut…"
 
-truncate("Hi everyone!", 20) = "Hi everyone!"
+zkrať("Ahoj všichni!", 20) = "Ahoj všichni!"
 ```

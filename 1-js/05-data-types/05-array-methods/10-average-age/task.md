@@ -2,20 +2,20 @@ importance: 4
 
 ---
 
-# Get average age
+# Zjištění průměrného věku
 
-Write the function `getAverageAge(users)` that gets an array of objects with property `age` and returns the average age.
+Napište funkci `vraťPrůměrnýVěk(uživatelé)`, která obdrží pole objektů s vlastností `věk` a vrátí průměrný věk.
 
-The formula for the average is `(age1 + age2 + ... + ageN) / N`.
+Vzorec pro výpočet průměru je `(věk1 + věk2 + ... + věkN) / N`.
 
-For instance:
+Příklad:
 
 ```js no-beautify
-let john = { name: "John", age: 25 };
-let pete = { name: "Pete", age: 30 };
-let mary = { name: "Mary", age: 29 };
+let jan = { jméno: "Jan", věk: 25 };
+let petr = { jméno: "Petr", věk: 30 };
+let marie = { jméno: "Marie", věk: 29 };
 
-let arr = [ john, pete, mary ];
+let pole = [ jan, petr, marie ];
 
-alert( getAverageAge(arr) ); // (25 + 30 + 29) / 3 = 28
+alert( vraťPrůměrnýVěk(pole) ); // (25 + 30 + 29) / 3 = 28
 ```

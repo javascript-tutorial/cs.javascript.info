@@ -1,31 +1,31 @@
 
-The method can take all enumerable keys using `Object.keys` and output their list.
+Metoda může vzít všechny enumerovatelné klíče pomocí `Object.keys` a vydat jejich seznam.
 
-To make `toString` non-enumerable, let's define it using a property descriptor. The syntax of `Object.create` allows us to provide an object with property descriptors as the second argument.
+Abychom učinili `toString` neenumerovatelnou, definujme ji pomocí deskriptoru vlastnosti. Syntaxe `Object.create` nám umožní poskytnout objekt s deskriptory vlastností jako druhým argumentem.
 
 ```js run
 *!*
-let dictionary = Object.create(null, {
-  toString: { // define toString property
-    value() { // the value is a function
+let slovník = Object.create(null, {
+  toString: { // definujeme vlastnost toString
+    value() { // value je funkce
       return Object.keys(this).join();
     }
   }
 });
 */!*
 
-dictionary.apple = "Apple";
-dictionary.__proto__ = "test";
+slovník.jablko = "Jablko";
+slovník.__proto__ = "test";
 
-// apple and __proto__ is in the loop
-for(let key in dictionary) {
-  alert(key); // "apple", then "__proto__"
+// v cyklu jsou jablko a __proto__
+for(let klíč in slovník) {
+  alert(klíč); // "jablko", pak "__proto__"
 }  
 
-// comma-separated list of properties by toString
-alert(dictionary); // "apple,__proto__"
+// seznam vlastností oddělených čárkou, vydaný metodou toString
+alert(slovník); // "jablko,__proto__"
 ```
 
-When we create a property using a descriptor, its flags are `false` by default. So in the code above, `dictionary.toString` is non-enumerable.
+Když vytvoříme vlastnost použitím deskriptoru, její přepínače jsou standardně `false`. Ve výše uvedeném kódu je tedy `slovník.toString` neenumerovatelná.
 
-See the chapter [](info:property-descriptors) for review.
+Pro přehled viz kapitolu [](info:property-descriptors).

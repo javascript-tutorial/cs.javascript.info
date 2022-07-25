@@ -1,27 +1,27 @@
 
-describe("calculator", function() {
-  let calculator;
+describe("kalkulátor", function() {
+  let kalkulátor;
   before(function() {
     sinon.stub(window, "prompt")
 
     prompt.onCall(0).returns("2");
     prompt.onCall(1).returns("3");
 
-    calculator = new Calculator();
-    calculator.read();
+    kalkulátor = new Kalkulátor();
+    kalkulátor.read();
   });
   
-  it("the read method asks for two values using prompt and remembers them in object properties", function() {
-    assert.equal(calculator.a, 2);
-    assert.equal(calculator.b, 3);
+  it("funkce načti se zeptá na dvě hodnoty pomocí prompt a zapamatuje si je jako vlastnosti objektu", function() {
+    assert.equal(kalkulátor.a, 2);
+    assert.equal(kalkulátor.b, 3);
   });
 
-  it("when 2 and 3 are entered, the sum is 5", function() {
-    assert.equal(calculator.sum(), 5);
+  it("když zadáme 2 a 3, součet je 5", function() {
+    assert.equal(kalkulátor.součet(), 5);
   });
 
-  it("when 2 and 3 are entered, the product is 6", function() {
-    assert.equal(calculator.mul(), 6);
+  it("když zadáme 2 a 3, součin je 6", function() {
+    assert.equal(kalkulátor.součin(), 6);
   });
 
   after(function() {

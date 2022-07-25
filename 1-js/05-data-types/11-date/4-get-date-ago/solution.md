@@ -1,27 +1,27 @@
-The idea is simple: to substract given number of days from `date`:
+Myšlenka je jednoduchá: odečíst zadaný počet dní od `datum`:
 
 ```js
-function getDateAgo(date, days) {
-  date.setDate(date.getDate() - days);
-  return date.getDate();
+function vraťDenPřed(datum, dny) {
+  datum.setDate(datum.getDate() - dny);
+  return datum.getDate();
 }
 ```
 
-...But the function should not change `date`. That's an important thing, because the outer code which gives us the date does not expect it to change.
+...Funkce by však neměla měnit `datum`. To je důležité, jelikož vnější kód, který nám datum předává, neočekává, že bude změněno.
 
-To implement it let's clone the date, like this:
+Abychom to implementovali, naklonujeme datum, např. takto:
 
 ```js run demo
-function getDateAgo(date, days) {
-  let dateCopy = new Date(date);
+function vraťDenPřed(datum, dny) {
+  let kopieData = new Date(datum);
 
-  dateCopy.setDate(date.getDate() - days);
-  return dateCopy.getDate();
+  kopieData.setDate(datum.getDate() - dny);
+  return kopieData.getDate();
 }
 
-let date = new Date(2015, 0, 2);
+let datum = new Date(2015, 0, 2);
 
-alert( getDateAgo(date, 1) ); // 1, (1 Jan 2015)
-alert( getDateAgo(date, 2) ); // 31, (31 Dec 2014)
-alert( getDateAgo(date, 365) ); // 2, (2 Jan 2014)
+alert( vraťDenPřed(datum, 1) ); // 1, (1. leden 2015)
+alert( vraťDenPřed(datum, 2) ); // 31, (31. prosinec 2014)
+alert( vraťDenPřed(datum, 365) ); // 2, (2. leden 2014)
 ```
