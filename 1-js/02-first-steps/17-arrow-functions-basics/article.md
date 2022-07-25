@@ -1,5 +1,4 @@
-# Šipkové funkce – základy 
-
+# Šipkové funkce (arrow funkce) – základy 
 Existuje ještě jedna velice jednoduchá a výstižná syntaxe vytváření funkcí, která často bývá lepší než funkční výrazy.
 
 Nazývá se „šipková funkce“, jelikož vypadá takto:
