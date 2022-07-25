@@ -1,38 +1,38 @@
 ```js run demo
-function* pseudoNáhodné(semínko) {
-  let hodnota = semínko;
+function* pseudoRandom(seed) {
+  let value = seed;
 
   while(true) {
-    hodnota = hodnota * 16807 % 2147483647
-    yield hodnota;
+    value = value * 16807 % 2147483647
+    yield value;
   }
 
 };
 
-let generátor = pseudoNáhodné(1);
+let generator = pseudoRandom(1);
 
-alert(generátor.next().value); // 16807
-alert(generátor.next().value); // 282475249
-alert(generátor.next().value); // 1622650073
+alert(generator.next().value); // 16807
+alert(generator.next().value); // 282475249
+alert(generator.next().value); // 1622650073
 ```
 
-Prosíme všimněte si, že totéž se dá provést i s obyčejnou funkcí, například:
+Please note, the same can be done with a regular function, like this:
 
 ```js run
-function pseudoNáhodné(semínko) {
-  let hodnota = semínko;
+function pseudoRandom(seed) {
+  let value = seed;
 
   return function() {
-    hodnota = hodnota * 16807 % 2147483647;
-    return hodnota;
+    value = value * 16807 % 2147483647;
+    return value;
   }
 }
 
-let generátor = pseudoNáhodné(1);
+let generator = pseudoRandom(1);
 
-alert(generátor()); // 16807
-alert(generátor()); // 282475249
-alert(generátor()); // 1622650073
+alert(generator()); // 16807
+alert(generator()); // 282475249
+alert(generator()); // 1622650073
 ```
 
-To funguje také. Ale pak ztratíme možnost iterovat pomocí `for..of` a používat skládání generátorů, které může být užitečné jinde.
+That also works. But then we lose ability to iterate with `for..of` and to use generator composition, that may be useful elsewhere.

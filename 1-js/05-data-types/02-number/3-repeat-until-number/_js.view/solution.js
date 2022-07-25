@@ -1,12 +1,12 @@
 
-function načtiČíslo() {
-  let číslo;
+function readNumber() {
+  let num;
 
   do {
-    číslo = prompt("Zadejte číslo, prosím:", 0);
-  } while ( !isFinite(číslo) );
+    num = prompt("Enter a number please?", 0);
+  } while ( !isFinite(num) );
 
-  if (číslo === null || číslo === '') return null;
+  if (num === null || num === '') return null;
   
-  return +číslo;
+  return +num;
 }

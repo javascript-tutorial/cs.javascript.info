@@ -1,25 +1,25 @@
-describe("Kalkulátor", function() {
-  let kalkulátor;
+describe("Calculator", function() {
+  let calculator;
 
   before(function() {
-    kalkulátor = new Kalkulátor;
+    calculator = new Calculator;
   });
 
-  it("vypočítej(12 + 34) = 46", function() {
-    assert.equal(kalkulátor.vypočítej("12 + 34"), 46);
+  it("calculate(12 + 34) = 46", function() {
+    assert.equal(calculator.calculate("12 + 34"), 46);
   });
 
-  it("vypočítej(34 - 12) = 22", function() {
-    assert.equal(kalkulátor.vypočítej("34 - 12"), 22);
+  it("calculate(34 - 12) = 22", function() {
+    assert.equal(calculator.calculate("34 - 12"), 22);
   });
 
-  it("přidáme násobení: vypočítej(2 * 3) = 6", function() {
-    kalkulátor.přidejMetodu("*", (a, b) => a * b);
-    assert.equal(kalkulátor.vypočítej("2 * 3"), 6);
+  it("add multiplication: calculate(2 * 3) = 6", function() {
+    calculator.addMethod("*", (a, b) => a * b);
+    assert.equal(calculator.calculate("2 * 3"), 6);
   });
 
-  it("přidáme umocňování: vypočítej(2 ** 3) = 8", function() {
-    kalkulátor.přidejMetodu("**", (a, b) => a ** b);
-    assert.equal(kalkulátor.vypočítej("2 ** 3"), 8);
+  it("add power: calculate(2 ** 3) = 8", function() {
+    calculator.addMethod("**", (a, b) => a ** b);
+    assert.equal(calculator.calculate("2 ** 3"), 8);
   });
 });

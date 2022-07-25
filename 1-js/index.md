@@ -1,6 +1,6 @@
-# Jazyk JavaScript
+# The JavaScript language
 
-Zde se naučíme JavaScript. Začneme od píky a postupně přejdeme k pokročilým konceptům, například OOP.
+Here we learn JavaScript, starting from scratch and go on to advanced concepts like OOP.
 
-Budeme se soustředit na samotný jazyk a uvedeme jen minimum poznámek specifických pro určité prostředí.
+We concentrate on the language itself here, with the minimum of environment-specific notes.
 

@@ -2,28 +2,28 @@ importance: 5
 
 ---
 
-# Které proměnné jsou dostupné?
+# Which variables are available?
 
-Níže uvedená funkce `vytvořPracovníka` vytvoří jinou funkci a vrátí ji. Nová funkce může být volána odjinud.
+The function `makeWorker` below makes another function and returns it. That new function can be called from somewhere else.
 
-Bude mít přístup k vnějším proměnným z místa svého vzniku, nebo z místa volání, nebo z obojího?
+Will it have access to the outer variables from its creation place, or the invocation place, or both?
 
 ```js
-function vytvořPracovníka() {
-  let jméno = "Petr";
+function makeWorker() {
+  let name = "Pete";
 
   return function() {
-    alert(jméno);
+    alert(name);
   };
 }
 
-let jméno = "Jan";
+let name = "John";
 
-// vytvoření funkce
-let pracuj = vytvořPracovníka();
+// create a function
+let work = makeWorker();
 
-// její volání
-pracuj(); // co zobrazí?
+// call it
+work(); // what will it show?
 ```
 
-Kterou hodnotu zobrazí? „Petr“ nebo „Jan“?
+Which value it will show? "Pete" or "John"?

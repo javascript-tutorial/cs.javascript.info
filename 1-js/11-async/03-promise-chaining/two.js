@@ -1,3 +1,3 @@
-function dvě() {
+function two() {
   alert(2);
 }

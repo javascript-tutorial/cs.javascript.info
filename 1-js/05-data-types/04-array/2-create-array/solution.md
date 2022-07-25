@@ -1,10 +1,10 @@
 
 
 ```js run
-let styly = ["Jazz", "Blues"];
-styly.push("Rock-n-Roll");
-styly[Math.floor((styly.length - 1) / 2)] = "Klasika";
-alert( styly.shift() );
-styly.unshift("Rap", "Reggae");
+let styles = ["Jazz", "Blues"];
+styles.push("Rock-n-Roll");
+styles[Math.floor((styles.length - 1) / 2)] = "Classics";
+alert( styles.shift() );
+styles.unshift("Rap", "Reggae");
 ```
 

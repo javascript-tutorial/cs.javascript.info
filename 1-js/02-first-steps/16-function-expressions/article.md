@@ -1,363 +1,380 @@
-# Funkční výrazy
+# Function expressions
 
-Funkce v JavaScriptu není nějaká „magická jazyková struktura“, ale speciální druh hodnoty.
+In JavaScript, a function is not a "magical language structure", but a special kind of value.
 
-Syntaxe, kterou jsme dosud používali, se nazývá *deklarace funkce*:
+The syntax that we used before is called a *Function Declaration*:
 
 ```js
-function řekniAhoj() {
-  alert( "Ahoj" );
+function sayHi() {
+  alert( "Hello" );
 }
 ```
 
-Existuje i jiná syntaxe pro vytváření funkce, která se nazývá *funkční výraz*.
+There is another syntax for creating a function that is called a *Function Expression*.
 
-Ten nám umožňuje vytvořit novou funkci uprostřed libovolného výrazu.
+It allows us to create a new function in the middle of any expression.
 
-Například:
+For example:
 
 ```js
-let řekniAhoj = function() {
-  alert( "Ahoj" );
+let sayHi = function() {
+  alert( "Hello" );
 };
 ```
 
-Tuto hodnotu dokonce můžeme zobrazit pomocí `alert`:
+Here we can see a variable `sayHi` getting a value, the new function, created as `function() { alert("Hello"); }`.
+
+As the function creation happens in the context of the assignment expression (to the right side of `=`), this is a *Function Expression*.
+
+Please note, there's no name after the `function` keyword. Omitting a name is allowed for Function Expressions.
+
+Here we immediately assign it to the variable, so the meaning of these code samples is the same: "create a function and put it into the variable `sayHi`".
+
+In more advanced situations, that we'll come across later, a function may be created and immediately called or scheduled for a later execution, not stored anywhere, thus remaining anonymous.
+
+## Function is a value
+
+Let's reiterate: no matter how the function is created, a function is a value. Both examples above store a function in the `sayHi` variable.
+
+We can even print out that value using `alert`:
 
 ```js run
-function řekniAhoj() {
-  alert( "Ahoj" );
+function sayHi() {
+  alert( "Hello" );
 }
 
 *!*
-alert( řekniAhoj ); // zobrazí kód funkce
+alert( sayHi ); // shows the function code
 */!*
 ```
 
-Všimněte si, že poslední řádek nevolá funkci, protože za `řekniAhoj` nejsou závorky. Existují programovací jazyky, v nichž je funkce zavolána pokaždé, když je uveden její název, ale to není případ JavaScriptu.
+Please note that the last line does not run the function, because there are no parentheses after `sayHi`. There are programming languages where any mention of a function name causes its execution, but JavaScript is not like that.
 
-V JavaScriptu je funkce hodnota, takže s ní můžeme zacházet jako s hodnotou. Výše uvedený kód zobrazí její řetězcovou reprezentaci, kterou je zdrojový kód funkce.
+In JavaScript, a function is a value, so we can deal with it as a value. The code above shows its string representation, which is the source code.
 
-Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`. Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
+Surely, a function is a special value, in the sense that we can call it like `sayHi()`.
 
-Můžeme zkopírovat funkci do jiné proměnné:
+But it's still a value. So we can work with it like with other kinds of values.
+
+We can copy a function to another variable:
 
 ```js run no-beautify
-function řekniAhoj() {   // (1) vytvoření
-  alert( "Ahoj" );
+function sayHi() {   // (1) create
+  alert( "Hello" );
 }
 
-let funkce = řekniAhoj;  // (2) zkopírování
+let func = sayHi;    // (2) copy
 
-funkce(); // Ahoj        // (3) spustíme kopii (funguje to!)
-řekniAhoj(); // Ahoj     //     tohle pořád funguje taky (proč by nemělo)
+func(); // Hello     // (3) run the copy (it works)!
+sayHi(); // Hello    //     this still works too (why wouldn't it)
 ```
 
-Co se v uvedeném příkladu přesně stane:
+Here's what happens above in detail:
 
-1. Deklarace funkce `(1)` vytvoří funkci a uloží ji do proměnné nazvané `řekniAhoj`.
-2. Řádek `(2)` ji zkopíruje do proměnné `funkce`. Opět si všimněte, že za `řekniAhoj` nejsou závorky. Kdyby tam byly, příkaz `funkce = řekniAhoj()` by zapsal do proměnné `funkce` *výsledek volání* `řekniAhoj`, ne samotnou *funkci* `řekniAhoj`.
-3. Nyní můžeme tuto funkci volat pomocí `řekniAhoj()` i pomocí `funkce()`.
+1. The Function Declaration `(1)` creates the function and puts it into the variable named `sayHi`.
+2. Line `(2)` copies it into the variable `func`. Please note again: there are no parentheses after `sayHi`. If there were, then `func = sayHi()` would write  *the result of the call* `sayHi()` into `func`, not *the function* `sayHi` itself.
+3. Now the function can be called as both `sayHi()` and `func()`.
 
-Na prvním řádku jsme mohli deklarovat `řekniAhoj` i pomocí funkčního výrazu:
+We could also have used a Function Expression to declare `sayHi`, in the first line:
 
 ```js
-let řekniAhoj = function() { // (1) vytvoření
-  alert( "Ahoj" );
+let sayHi = function() { // (1) create
+  alert( "Hello" );
 };
 
-let funkce = řekniAhoj;
+let func = sayHi;
 // ...
 ```
 
-Všechno bude fungovat stejně.
+Everything would work the same.
 
 
-````smart header="Proč je na konci středník?"
-Možná se divíte, proč funkční výraz obsahuje na konci středník `;`, ale deklarace funkce ne:
+````smart header="Why is there a semicolon at the end?"
+You might wonder, why do Function Expressions have a semicolon `;` at the end, but Function Declarations do not:
 
 ```js
-function řekniAhoj() {
+function sayHi() {
   // ...
 }
 
-let řekniAhoj = function() {
+let sayHi = function() {
   // ...
 }*!*;*/!*
 ```
 
-Odpověď je jednoduchá: funkční výraz je zde vytvořen jako `function(…) {…}` uvnitř příkazu přiřazení: `let řekniAhoj = …;`. Středník `;` se doporučuje uvádět na konci příkazu, není to součást syntaxe funkce.
+The answer is simple: a Function Expression is created here as `function(…) {…}` inside the assignment statement: `let sayHi = …;`. The semicolon `;` is recommended at the end of the statement, it's not a part of the function syntax.
 
-Středník by zde byl i u jednoduššího přiřazení, například `let řekniAhoj = 5;`, a je zde také u přiřazení funkce.
+The semicolon would be there for a simpler assignment, such as `let sayHi = 5;`, and it's also there for a function assignment.
 ````
 
-## Funkce zpětného volaní (callbackové funkce)
+## Callback functions
 
-Podíváme se na další příklady předávání funkcí jako hodnot a používání funkčních výrazů.
+Let's look at more examples of passing functions as values and using function expressions.
 
-Napíšeme funkci `zeptejSe(otázka, ano, ne)` se třemi parametry:
+We'll write a function `ask(question, yes, no)` with three parameters:
 
-`otázka`
-: Text otázky
+`question`
+: Text of the question
 
-`ano`
-: Funkce, která se spustí, je-li odpověď „ano“
+`yes`
+: Function to run if the answer is "Yes"
 
-`ne`
-: Funkce, která se spustí, je-li odpověď „ne“
+`no`
+: Function to run if the answer is "No"
 
-Funkce by měla položit otázku `otázka` a pak podle odpovědi uživatele zavolat `ano()` nebo `ne()`:
+The function should ask the `question` and, depending on the user's answer, call `yes()` or `no()`:
 
 ```js run
 *!*
-function zeptejSe(otázka, ano, ne) {
-  if (confirm(otázka)) ano()
-  else ne();
+function ask(question, yes, no) {
+  if (confirm(question)) yes()
+  else no();
 }
 */!*
 
-function zobrazOK() {
-  alert( "Souhlasil jste." );
+function showOk() {
+  alert( "You agreed." );
 }
 
-function zobrazStorno() {
-  alert( "Zrušil jste provádění." );
+function showCancel() {
+  alert( "You canceled the execution." );
 }
 
-// použití: funkce zobrazOK, zobrazStorno jsou předány funkci zeptejSe jako argumenty
-zeptejSe("Souhlasíte?", zobrazOK, zobrazStorno);
+// usage: functions showOk, showCancel are passed as arguments to ask
+ask("Do you agree?", showOk, showCancel);
 ```
 
-V praxi jsou takové funkce poměrně užitečné. Hlavním rozdílem mezi `zeptejSe` ve skutečném životě a uvedeným příkladem je, že skutečné funkce používají složitější způsoby interakce s uživatelem, než pouhé `confirm`. V prohlížeči taková funkce obvykle vykreslí pěkné dotazovací okno. To je však jiný příběh.
+In practice, such functions are quite useful. The major difference between a real-life `ask` and the example above is that real-life functions use more complex ways to interact with the user than a simple `confirm`. In the browser, such functions usually draw a nice-looking question window. But that's another story.
 
-**Argumenty `zobrazOK` a `zobrazStorno` funkce `zeptejSe` se nazývají *callbackové funkce* nebo jednoduše *callbacky*.**
+**The arguments `showOk` and `showCancel` of `ask` are called *callback functions* or just *callbacks*.**
 
-Myšlenkou je, že předáme funkci a očekáváme, že bude „zpětně volána“ (call = volání, back = zpět) později, až to bude nutné. V našem případě `zobrazOK` se stala callbackem pro odpověď „ano“ a `zobrazStorno` pro odpověď „ne“.
+The idea is that we pass a function and expect it to be "called back" later if necessary. In our case, `showOk` becomes the callback for "yes" answer, and `showCancel` for "no" answer.
 
-Pomocí funkčních výrazů můžeme napsat ekvivalentní, ale kratší funkci:
+We can use Function Expressions to write an equivalent, shorter function:
 
 ```js run no-beautify
-function zeptejSe(otázka, ano, ne) {
-  if (confirm(otázka)) ano()
-  else ne();
+function ask(question, yes, no) {
+  if (confirm(question)) yes()
+  else no();
 }
 
 *!*
-zeptejSe(
-  "Souhlasíte?",
-  function() { alert("Souhlasil jste."); },
-  function() { alert("Zrušil jste provádění."); }
+ask(
+  "Do you agree?",
+  function() { alert("You agreed."); },
+  function() { alert("You canceled the execution."); }
 );
 */!*
 ```
 
-Zde jsou funkce deklarovány přímo ve volání `zeptejSe(...)`. Nemají žádný název, a tak se nazývají *anonymní*. Takové funkce nejsou dostupné mimo `zeptejSe` (protože nejsou přiřazeny žádným proměnným), ale to je přesně to, co tady chceme.
+Here, functions are declared right inside the `ask(...)` call. They have no name, and so are called *anonymous*. Such functions are not accessible outside of `ask` (because they are not assigned to variables), but that's just what we want here.
 
-Takový kód se v našich skriptech objevuje zcela přirozeně a je přesně v duchu JavaScriptu.
+Such code appears in our scripts very naturally, it's in the spirit of JavaScript.
 
-```smart header="Funkce je hodnota představující „akci“"
-Běžné hodnoty, např. řetězce nebo čísla, představují *data*.
+```smart header="A function is a value representing an \"action\""
+Regular values like strings or numbers represent the *data*.
 
-Na funkci lze pohlížet jako na *akci*.
+A function can be perceived as an *action*.
 
-Můžeme ji předávat mezi proměnnými a zavolat, až budeme chtít.
+We can pass it between variables and run when we want.
 ```
 
 
-## Funkční výrazy vs. deklarace funkcí
+## Function Expression vs Function Declaration
 
-Zformulujme nyní základní rozdíly mezi deklaracemi funkcí a funkčními výrazy.
+Let's formulate the key differences between Function Declarations and Expressions.
 
-První rozdíl je syntaxe: jak je rozlišovat v kódu.
+First, the syntax: how to differentiate between them in the code.
 
-- *Deklarace funkce:* funkce deklarovaná samostatným příkazem v hlavním toku kódu:
+- *Function Declaration:* a function, declared as a separate statement, in the main code flow:
 
     ```js
-    // deklarace funkce
-    function součet(a, b) {
+    // Function Declaration
+    function sum(a, b) {
       return a + b;
     }
     ```
-- *Funkční výraz:* funkce vytvořená uprostřed výrazu nebo uvnitř jiného syntaktického konstruktu. Zde je funkce vytvořena na pravé straně „operátoru přiřazení“ `=`:
+- *Function Expression:* a function, created inside an expression or inside another syntax construct. Here, the function is created on the right side of the "assignment expression" `=`:
 
     ```js
-    // funkční výraz
-    let součet = function(a, b) {
+    // Function Expression
+    let sum = function(a, b) {
       return a + b;
     };
     ```
 
-Jemnější rozdíl spočívá v tom, *kdy* přesně je funkce vytvořena enginem JavaScriptu.
+The more subtle difference is *when* a function is created by the JavaScript engine.
 
-**Funkční výraz je vytvořen ve chvíli, kdy k němu dospěje vykonávání kódu, a je použitelný až od této chvíle.**
+**A Function Expression is created when the execution reaches it and is usable only from that moment.**
 
-Jakmile se provádění skriptu dostane k pravé straně přiřazení `let součet = function…` -- v tom okamžiku je funkce vytvořena a od nynějška může být používána (přiřazena, volána apod.).
+Once the execution flow passes to the right side of the assignment `let sum = function…` -- here we go, the function is created and can be used (assigned, called, etc. ) from now on.
 
-Deklarace funkcí jsou odlišné.
+Function Declarations are different.
 
-**Deklarovaná funkce může být volána ještě dříve, než je definována.**
+**A Function Declaration can be called earlier than it is defined.**
 
-Například globální deklarace funkce je viditelná v celém skriptu, ať se nachází kdekoli.
+For example, a global Function Declaration is visible in the whole script, no matter where it is.
 
-Je to způsobeno vnitřními algoritmy. Když JavaScript připravuje spuštění skriptu, nejprve v něm najde globální deklarace funkcí a tyto funkce vytvoří. Můžeme to považovat za „přípravnou fázi“.
+That's due to internal algorithms. When JavaScript prepares to run the script, it first looks for global Function Declarations in it and creates the functions. We can think of it as an "initialization stage".
 
-Teprve až jsou všechny deklarace funkcí zpracovány, kód se vykoná. Proto má k těmto funkcím přístup.
+And after all Function Declarations are processed, the code is executed. So it has access to these functions.
 
-Například toto funguje:
+For example, this works:
 
 ```js run refresh untrusted
 *!*
-řekniAhoj("Jan"); // Ahoj, Jan
+sayHi("John"); // Hello, John
 */!*
 
-function řekniAhoj(jméno) {
-  alert( `Ahoj, ${jméno}` );
+function sayHi(name) {
+  alert( `Hello, ${name}` );
 }
 ```
 
-Deklarace funkce `řekniAhoj` se vytvoří, když JavaScript připravuje spuštění skriptu, a je v něm všude viditelná.
+The Function Declaration `sayHi` is created when JavaScript is preparing to start the script and is visible everywhere in it.
 
-...Kdyby to však byl funkční výraz, nefungovalo by to:
+...If it were a Function Expression, then it wouldn't work:
 
 ```js run refresh untrusted
 *!*
-řekniAhoj("Jan"); // chyba!
+sayHi("John"); // error!
 */!*
 
-let řekniAhoj = function(jméno) {  // (*) už žádná magie
-  alert( `Ahoj, ${jméno}` );
+let sayHi = function(name) {  // (*) no magic any more
+  alert( `Hello, ${name}` );
 };
 ```
 
-Funkční výrazy se vytvoří, když k nim dorazí vykonávání kódu. To se stane až na řádku `(*)`. Pozdě.
+Function Expressions are created when the execution reaches them. That would happen only in the line `(*)`. Too late.
 
-Další speciální vlastností deklarací funkcí je blok jejich platnosti.
+Another special feature of Function Declarations is their block scope.
 
-**Ve striktním režimu platí, že když je deklarace funkce umístěna v bloku kódu, je viditelná všude uvnitř tohoto bloku, ale ne mimo něj.**
+**In strict mode, when a Function Declaration is within a code block, it's visible everywhere inside that block. But not outside of it.**
 
-Například si představme, že potřebujeme deklarovat funkci `uvítání()`, která závisí na proměnné `věk`, kterou získáme za běhu skriptu. A pak ji plánujeme použít o něco později.
+For instance, let's imagine that we need to declare a function `welcome()` depending on the `age` variable that we get during runtime. And then we plan to use it some time later.
 
-Kdybychom použili deklaraci funkce, nefungovalo by to tak, jak zamýšlíme:
+If we use Function Declaration, it won't work as intended:
 
 ```js run
-let věk = prompt("Kolik je vám let?", 18);
+let age = prompt("What is your age?", 18);
 
-// podmíněná deklarace funkce
-if (věk < 18) {
+// conditionally declare a function
+if (age < 18) {
 
-  function uvítání() {
-    alert("Ahoj!");
+  function welcome() {
+    alert("Hello!");
   }
 
 } else {
 
-  function uvítání() {
-    alert("Dobrý den!");
+  function welcome() {
+    alert("Greetings!");
   }
 
 }
 
-// ...použijeme ji později
+// ...use it later
 *!*
-uvítání(); // Chyba: uvítání není definováno
+welcome(); // Error: welcome is not defined
 */!*
 ```
 
-Je to proto, že deklarace funkce je viditelná jedině uvnitř bloku kódu, v němž se nachází.
+That's because a Function Declaration is only visible inside the code block in which it resides.
 
-Další příklad:
+Here's another example:
 
 ```js run
-let věk = 16; // vezmeme 16 jako příklad
+let age = 16; // take 16 as an example
 
-if (věk < 18) {
+if (age < 18) {
 *!*
-  uvítání();               // \   (spustí se)
+  welcome();               // \   (runs)
 */!*
                            //  |
-  function uvítání() {     //  |
-    alert("Ahoj!");        //  |  deklarace funkce je k dispozici
-  }                        //  |  všude v bloku, v němž je funkce deklarována
+  function welcome() {     //  |
+    alert("Hello!");       //  |  Function Declaration is available
+  }                        //  |  everywhere in the block where it's declared
                            //  |
 *!*
-  uvítání();               // /   (spustí se)
+  welcome();               // /   (runs)
 */!*
 
 } else {
 
-  function uvítání() {
-    alert("Zdravíme vás!");
+  function welcome() {
+    alert("Greetings!");
   }
 }
 
-// Tady už jsme mimo složené závorky,
-// takže nevidíme deklarace funkcí, které se nacházejí uvnitř nich.
+// Here we're out of curly braces,
+// so we can not see Function Declarations made inside of them.
 
 *!*
-uvítání(); // Chyba: uvítání není definováno
+welcome(); // Error: welcome is not defined
 */!*
 ```
 
-Jak můžeme `uvítání` učinit viditelným i mimo `if`?
+What can we do to make `welcome` visible outside of `if`?
 
-Správný přístup by byl použití funkčního výrazu a přiřazení `uvítání` do proměnné, která je deklarována mimo `if` a má náležitou viditelnost.
+The correct approach would be to use a Function Expression and assign `welcome` to the variable that is declared outside of `if` and has the proper visibility.
 
-Tento kód funguje tak, jak zamýšlíme:
+This code works as intended:
 
 ```js run
-let věk = prompt("Kolik je vám let?", 18);
+let age = prompt("What is your age?", 18);
 
-let uvítání;
+let welcome;
 
-if (věk < 18) {
+if (age < 18) {
 
-  uvítání = function() {
-    alert("Ahoj!");
+  welcome = function() {
+    alert("Hello!");
   };
 
 } else {
 
-  uvítání = function() {
-    alert("Dobrý den!");
+  welcome = function() {
+    alert("Greetings!");
   };
 
 }
 
 *!*
-uvítání(); // nyní je to v pořádku
+welcome(); // ok now
 */!*
 ```
 
-Nebo to můžeme ještě zjednodušit pomocí operátoru otazníku `?`:
+Or we could simplify it even further using a question mark operator `?`:
 
 ```js run
-let věk = prompt("Kolik je vám let?", 18);
+let age = prompt("What is your age?", 18);
 
-let uvítání = (věk < 18) ?
-  function() { alert("Ahoj!"); } :
-  function() { alert("Dobrý den!"); };
+let welcome = (age < 18) ?
+  function() { alert("Hello!"); } :
+  function() { alert("Greetings!"); };
 
 *!*
-uvítání(); // nyní je to v pořádku
+welcome(); // ok now
 */!*
 ```
 
-```smart header="Kdy zvolit deklaraci funkce a kdy funkční výraz?"
-Orientační pravidlo zní, že když potřebujeme deklarovat funkci, měli bychom napřed zvážit syntaxi deklarace funkce. Ta nám dává více svobody v tom, jak zorganizovat kód, protože takovou funkci můžeme volat ještě předtím, než je deklarována.
 
-Je také lépe čitelná, protože je jednodušší najít v kódu `function f(…) {…}` než `let f = function(…) {…};`. Deklarace funkcí lépe „padnou do oka“.
+```smart header="When to choose Function Declaration versus Function Expression?"
+As a rule of thumb, when we need to declare a function, the first thing to consider is Function Declaration syntax. It gives more freedom in how to organize our code, because we can call such functions before they are declared.
 
-...Jestliže nám však deklarace funkce pro naše účely nestačí nebo potřebujeme podmíněnou deklaraci (jak jsme právě viděli v příkladu), měli bychom použít funkční výraz.
+That's also better for readability, as it's easier to look up `function f(…) {…}` in the code than `let f = function(…) {…};`. Function Declarations are more "eye-catching".
+
+...But if a Function Declaration does not suit us for some reason, or we need a conditional declaration (we've just seen an example), then Function Expression should be used.
 ```
 
-## Shrnutí
+## Summary
 
-- Funkce jsou hodnoty. Kdekoli v kódu je můžeme přiřazovat, kopírovat nebo deklarovat.
-- Je-li funkce deklarována samostatným příkazem v hlavním kódu, nazývá se to „deklarace funkce“.
-- Je-li funkce vytvořena jako součást výrazu, nazývá se to „funkční výraz“.
-- Deklarace funkcí se zpracovávají ještě předtím, než je blok kódu vykonán. Jsou tedy viditelné všude v celém bloku.
-- Funkční výrazy se vytvoří až ve chvíli, kdy k nim dorazí výkon kódu.
+- Functions are values. They can be assigned, copied or declared in any place of the code.
+- If the function is declared as a separate statement in the main code flow, that's called a "Function Declaration".
+- If the function is created as a part of an expression, it's called a "Function Expression".
+- Function Declarations are processed before the code block is executed. They are visible everywhere in the block.
+- Function Expressions are created when the execution flow reaches them.
 
-Ve většině případů, kdy potřebujeme deklarovat funkci, dáváme přednost deklaraci funkce, protože pak je funkce viditelná ještě před samotnou deklarací. To nám dává více možností při organizaci kódu a je to zpravidla čitelnější.
+In most cases when we need to declare a function, a Function Declaration is preferable, because it is visible prior to the declaration itself. That gives us more flexibility in code organization, and is usually more readable.
 
-Funkční výrazy bychom tedy měli používat jen tehdy, když nám pro naše účely deklarace funkce nestačí. V této kapitole jsme viděli několik takových příkladů a v budoucnu uvidíme další.
+So we should use a Function Expression only when a Function Declaration is not fit for the task. We've seen a couple of examples of that in this chapter, and will see more in the future.

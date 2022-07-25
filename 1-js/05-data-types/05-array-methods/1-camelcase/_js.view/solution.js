@@ -1,10 +1,10 @@
-function camelizace(str) {
+function camelize(str) {
   return str
-    .split('-') // rozdělí 'mé-dlouhé-slovo' na pole ['mé', 'dlouhé', 'slovo']
+    .split('-') // splits 'my-long-word' into array ['my', 'long', 'word']
     .map(
-      // převede první písmena všech prvků pole kromě prvního na velká
-      // převede ['mé', 'dlouhé', 'slovo'] na ['mé', 'Dlouhé', 'Slovo']
-      (slovo, index) => index == 0 ? slovo : slovo[0].toUpperCase() + slovo.slice(1)
+      // capitalizes first letters of all array items except the first one
+      // converts ['my', 'long', 'word'] into ['my', 'Long', 'Word']
+      (word, index) => index == 0 ? word : word[0].toUpperCase() + word.slice(1)
     )
-    .join(''); // spojí ['mé', 'Dlouhé', 'Slovo'] do 'méDlouhéSlovo'
+    .join(''); // joins ['my', 'Long', 'Word'] into 'myLongWord'
 }

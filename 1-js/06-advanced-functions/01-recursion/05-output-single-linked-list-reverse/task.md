@@ -2,8 +2,8 @@ importance: 5
 
 ---
 
-# Vypište lineární spojový seznam v opačném pořadí
+# Output a single-linked list in the reverse order
 
-Vypište lineární spojový seznam z předcházející úlohy <info:task/output-single-linked-list> v obráceném pořadí.
+Output a single-linked list from the previous task <info:task/output-single-linked-list> in the reverse order.
 
-Vytvořte dvě řešení: pomocí cyklu a pomocí rekurze.
+Make two solutions: using a loop and using a recursion.

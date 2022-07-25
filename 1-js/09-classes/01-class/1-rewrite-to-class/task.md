@@ -2,8 +2,8 @@ importance: 5
 
 ---
 
-# Přepište na třídu
+# Rewrite to class
 
-Třída `Hodiny` (viz pískoviště) je napsána funkcionálním stylem. Přepište ji do „třídní“ syntaxe.
+The `Clock` class (see the sandbox) is written in functional style. Rewrite it in the "class" syntax.
 
-P.S. Hodiny tikají v konzoli, otevřete si ji, abyste to viděli.
+P.S. The clock ticks in the console, open it to see.

@@ -1,20 +1,20 @@
 
-První volání má `this == králík`, v ostatních je `this` rovno `Králík.prototype`, protože je to ve skutečnosti objekt před tečkou.
+The first call has `this == rabbit`, the other ones have `this` equal to `Rabbit.prototype`, because it's actually the object before the dot.
 
-Jedině první volání tedy zobrazí `Králík`, ostatní zobrazí `undefined`:
+So only the first call shows `Rabbit`, other ones show `undefined`:
 
 ```js run
-function Králík(jméno) {
-  this.jméno = jméno;
+function Rabbit(name) {
+  this.name = name;
 }
-Králík.prototype.řekniAhoj = function() {
-  alert( this.jméno );
+Rabbit.prototype.sayHi = function() {
+  alert( this.name );
 }
 
-let králík = new Králík("Králík");
+let rabbit = new Rabbit("Rabbit");
 
-králík.řekniAhoj();                        // Králík
-Králík.prototype.řekniAhoj();              // undefined
-Object.getPrototypeOf(králík).řekniAhoj(); // undefined
-králík.__proto__.řekniAhoj();              // undefined
+rabbit.sayHi();                        // Rabbit
+Rabbit.prototype.sayHi();              // undefined
+Object.getPrototypeOf(rabbit).sayHi(); // undefined
+rabbit.__proto__.sayHi();              // undefined
 ```

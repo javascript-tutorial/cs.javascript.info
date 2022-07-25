@@ -1,17 +1,17 @@
-Můžeme použít metodu `slice()`, aby vytvořila kopii, a spustit řazení na ní:
+We can use `slice()` to make a copy and run the sort on it:
 
 ```js run
-function zkopírujASeřaď(pole) {
-  return pole.slice().sort();
+function copySorted(arr) {
+  return arr.slice().sort();
 }
 
-let původníPole = ["HTML", "JavaScript", "CSS"];
+let arr = ["HTML", "JavaScript", "CSS"];
 
 *!*
-let seřazenéPole = zkopírujASeřaď(původníPole);
+let sorted = copySorted(arr);
 */!*
 
-alert( seřazenéPole );
-alert( původníPole );
+alert( sorted );
+alert( arr );
 ```
 

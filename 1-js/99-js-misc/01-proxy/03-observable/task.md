@@ -1,27 +1,27 @@
 
-# Pozorovatelný objekt
+# Observable
 
-Vytvořte funkci `učiňPozorovatelným(cíl)`, která „učiní objekt pozorovatelným“ tím, že vrátí proxy.
+Create a function `makeObservable(target)` that "makes the object observable" by returning a proxy.
 
-Mělo by to fungovat takto:
+Here's how it should work:
 
 ```js run
-function učiňPozorovatelným(cíl) {
-  /* váš kód */
+function makeObservable(target) {
+  /* your code */
 }
 
-let uživatel = {};
-uživatel = učiňPozorovatelným(uživatel);
+let user = {};
+user = makeObservable(user);
 
-uživatel.pozoruj((klíč, hodnota) => {
-  alert(`SET ${klíč}=${hodnota}`);
+user.observe((key, value) => {
+  alert(`SET ${key}=${value}`);
 });
 
-uživatel.jméno = "Jan"; // oznámí: SET jméno=Jan
+user.name = "John"; // alerts: SET name=John
 ```
 
-Jinými slovy, objekt vrácený funkcí `učiňPozorovatelným` je stejný jako původní, ale navíc obsahuje metodu `pozoruj(handler)`, která nastaví funkci `handler` tak, aby byla volána při každé změně vlastnosti.
+In other words, an object returned by `makeObservable` is just like the original one, but also has the method `observe(handler)` that sets `handler` function to be called on any property change.
 
-Kdykoli se změní některá vlastnost, je zavolán `handler(klíč, hodnota)` s názvem a hodnotou oné vlastnosti.
+Whenever a property changes, `handler(key, value)` is called with the name and value of the property.
 
-P.S. V této úloze se postarejte jen o zápis do vlastnosti. Ostatní operace mohou být implementovány podobně.
+P.S. In this task, please only take care about writing to a property. Other operations can be implemented in a similar way.
