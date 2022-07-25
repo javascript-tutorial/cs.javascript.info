@@ -1,15 +1,15 @@
 
-# Re-resolve a promise?
+# Znovusplnění příslibu?
 
 
-What's the output of the code below? 
+Jaký je výstup níže uvedeného kódu?
 
 ```js
-let promise = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(resolve, reject) {
   resolve(1);
 
   setTimeout(() => resolve(2), 1000);
 });
 
-promise.then(alert);
+příslib.then(alert);
 ```

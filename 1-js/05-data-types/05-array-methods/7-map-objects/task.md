@@ -2,35 +2,35 @@ importance: 5
 
 ---
 
-# Map to objects
+# Mapování na objekty
 
-You have an array of `user` objects, each one has `name`, `surname` and `id`.
+Máme pole objektů `uživatel`, každý z nich má `jméno`, `příjmení` a `id`.
 
-Write the code to create another array from it, of objects with `id` and `fullName`, where `fullName` is generated from `name` and `surname`.
+Napište kód, který z něj vytvoří jiné pole, které bude obsahovat objekty s `id` a `celéJméno`, kde `celéJméno` se vygeneruje ze `jméno` a `příjmení`.
 
-For instance:
+Příklad:
 
 ```js no-beautify
-let john = { name: "John", surname: "Smith", id: 1 };
-let pete = { name: "Pete", surname: "Hunt", id: 2 };
-let mary = { name: "Mary", surname: "Key", id: 3 };
+let jan = { jméno: "Jan", příjmení: "Novák", id: 1 };
+let petr = { jméno: "Petr", příjmení: "Horák", id: 2 };
+let marie = { jméno: "Marie", příjmení: "Králová", id: 3 };
 
-let users = [ john, pete, mary ];
+let uživatelé = [ jan, petr, marie ];
 
 *!*
-let usersMapped = /* ... your code ... */
+let mapovaníUživatelé = /* ... váš kód ... */
 */!*
 
 /*
-usersMapped = [
-  { fullName: "John Smith", id: 1 },
-  { fullName: "Pete Hunt", id: 2 },
-  { fullName: "Mary Key", id: 3 }
+mapovaníUživatelé = [
+  { celéJméno: "Jan Novák", id: 1 },
+  { celéJméno: "Petr Horák", id: 2 },
+  { celéJméno: "Marie Králová", id: 3 }
 ]
 */
 
-alert( usersMapped[0].id ) // 1
-alert( usersMapped[0].fullName ) // John Smith
+alert( mapovaníUživatelé[0].id ) // 1
+alert( mapovaníUživatelé[0].celéJméno ) // Jan Novák
 ```
 
-So, actually you need to map one array of objects to another. Try using `=>` here. There's a small catch.
+Ve skutečnosti tedy potřebujete namapovat jedno pole objektů na druhé. Zkuste zde použít `=>`. Je tady malý chyták.

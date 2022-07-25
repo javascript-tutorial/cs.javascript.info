@@ -22,20 +22,6 @@ let řekniAhoj = function() {
 };
 ```
 
-Zde vidíme proměnnou `řekniAhoj`, do níž je uložena hodnota, kterou je nová funkce, vytvořená jako `function() { alert("Ahoj"); }`.
-
-Protože k vytvoření funkce dochází v kontextu přiřazovacího výrazu (na pravé straně `=`), je to *funkční výraz*.
-
-Prosíme všimněte si, že za klíčovým slovem `function` není žádný název. Ve funkčních výrazech je vynechání názvu dovoleno.
-
-Zde okamžitě přiřazujeme funkci proměnné, takže význam tohoto příkladu kódu je stejný: „vytvoř funkci a ulož ji do proměnné `řekniAhoj`“.
-
-V pokročilejších situacích, na které narazíme později, můžeme funkci vytvořit a okamžitě volat nebo naplánovat její pozdější spuštění, aniž bychom ji někam uložili, takže funkce zůstane anonymní.
-
-## Funkce je hodnota
-
-Zopakujme si: bez ohledu na to, jak je funkce vytvořena, funkce je hodnota. V obou výše uvedených příkladech je funkce uložena do proměnné `řekniAhoj`.
-
 Tuto hodnotu dokonce můžeme zobrazit pomocí `alert`:
 
 ```js run
@@ -52,9 +38,7 @@ Všimněte si, že poslední řádek nevolá funkci, protože za `řekniAhoj` ne
 
 V JavaScriptu je funkce hodnota, takže s ní můžeme zacházet jako s hodnotou. Výše uvedený kód zobrazí její řetězcovou reprezentaci, kterou je zdrojový kód funkce.
 
-Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`.
-
-Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
+Samozřejmě, funkce je speciální hodnota v tom smyslu, že ji můžeme volat, např. `řekniAhoj()`. Je to však stále hodnota, a proto s ní můžeme pracovat jako s hodnotou jakéhokoli jiného druhu.
 
 Můžeme zkopírovat funkci do jiné proměnné:
 
@@ -66,7 +50,7 @@ function řekniAhoj() {   // (1) vytvoření
 let funkce = řekniAhoj;  // (2) zkopírování
 
 funkce(); // Ahoj        // (3) spustíme kopii (funguje to!)
-řekniAhoj(); // Ahoj     //     i tohle stále funguje (proč by nemělo)
+řekniAhoj(); // Ahoj     //     tohle pořád funguje taky (proč by nemělo)
 ```
 
 Co se v uvedeném příkladu přesně stane:
@@ -357,7 +341,6 @@ let uvítání = (věk < 18) ?
 uvítání(); // nyní je to v pořádku
 */!*
 ```
-
 
 ```smart header="Kdy zvolit deklaraci funkce a kdy funkční výraz?"
 Orientační pravidlo zní, že když potřebujeme deklarovat funkci, měli bychom napřed zvážit syntaxi deklarace funkce. Ta nám dává více svobody v tom, jak zorganizovat kód, protože takovou funkci můžeme volat ještě předtím, než je deklarována.

@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Create a calculator
+# Vytvořte kalkulátor
 
-Create an object `calculator` with three methods:
+Vytvořte objekt `kalkulátor` se třemi metodami:
 
-- `read()` prompts for two values and saves them as object properties with names `a` and `b` respectively.
-- `sum()` returns the sum of saved values.
-- `mul()` multiplies saved values and returns the result.
+- `načti()` se zeptá na dvě hodnoty a uloží je jako vlastnosti objektu pod názvy po řadě `a` a `b`.
+- `součet()` vrátí součet uložených hodnot.
+- `součin()` vynásobí uložené hodnoty mezi sebou a vrátí výsledek.
 
 ```js
-let calculator = {
-  // ... your code ...
+let kalkulátor = {
+  // ... váš kód ...
 };
 
-calculator.read();
-alert( calculator.sum() );
-alert( calculator.mul() );
+kalkulátor.načti();
+alert( kalkulátor.součet() );
+alert( kalkulátor.součin() );
 ```
 
 [demo]
