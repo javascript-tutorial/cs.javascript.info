@@ -1,48 +1,48 @@
 
-Měli byste si všimnout následujícího:
+You could note the following:
 
 ```js no-beautify
-function mocnina(x,n)  // <- chybí mezera mezi argumenty
-{  // <- levá složená závorka na zvláštním řádku
-  let výsledek=1;   // <- chybějí mezery před a za =
-  for(let i=0;i<n;i++) {výsledek*=x;}   // <- chybějí mezery
-  // obsah { ... } by měl být na novém řádku
-  return výsledek;
+function pow(x,n)  // <- no space between arguments
+{  // <- figure bracket on a separate line
+  let result=1;   // <- no spaces before or after =
+  for(let i=0;i<n;i++) {result*=x;}   // <- no spaces
+  // the contents of { ... } should be on a new line
+  return result;
 }
 
-let x=prompt("x?",''), n=prompt("n?",'') // <-- technicky je to možné,
-// ale lepší je to rozdělit na 2 řádky, navíc tam chybějí mezery a ;
-if (n<=0)  // <- chybějí mezery uvnitř (n <= 0) a nad ním by měl být prázdný řádek
-{   // <- levá složená závorka na zvláštním řádku
-  // níže - dlouhé řádky by měly být rozděleny na více řádků pro lepší čitelnost
-  alert(`${n}-tá mocnina není podporována, zadejte prosím celé číslo větší než nula`);
+let x=prompt("x?",''), n=prompt("n?",'') // <-- technically possible,
+// but better make it 2 lines, also there's no spaces and missing ;
+if (n<=0)  // <- no spaces inside (n <= 0), and should be extra line above it
+{   // <- figure bracket on a separate line
+  // below - long lines can be split into multiple lines for improved readability
+  alert(`Power ${n} is not supported, please enter an integer number greater than zero`);
 }
-else // <- toto může být na jediném řádku: "} else {"
+else // <- could write it on a single line like "} else {"
 {
-  alert(mocnina(x,n))  // chybějí mezery a ;
+  alert(pow(x,n))  // no spaces and missing ;
 }
 ```
 
-Opravená varianta:
+The fixed variant:
 
 ```js
-function mocnina(x, n) {
-  let výsledek = 1;
+function pow(x, n) {
+  let result = 1;
 
   for (let i = 0; i < n; i++) {
-    výsledek *= x;
+    result *= x;
   }
 
-  return výsledek;
+  return result;
 }
 
 let x = prompt("x?", "");
 let n = prompt("n?", "");
 
 if (n <= 0) {
-  alert(`${n}-tá mocnina není podporována,
-    zadejte prosím celé číslo větší než nula`);
+  alert(`Power ${n} is not supported,
+    please enter an integer number greater than zero`);
 } else {
-  alert( mocnina(x, n) );
+  alert( pow(x, n) );
 }
 ```

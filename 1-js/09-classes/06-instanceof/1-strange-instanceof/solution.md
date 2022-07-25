@@ -1,7 +1,7 @@
-Ano, určitě to vypadá podivně.
+Yeah, looks strange indeed.
 
-Ale `instanceof` se nezajímá o funkci, nýbrž jen o její `prototype`, který porovnává s řetězcem prototypů.
+But `instanceof` does not care about the function, but rather about its `prototype`, that it matches against the prototype chain.
 
-A zde je `a.__proto__ == B.prototype`, proto `instanceof` vrátí `true`.
+And here `a.__proto__ == B.prototype`, so `instanceof` returns `true`.
 
-Podle logiky `instanceof` je tedy typ ve skutečnosti definován vlastností `prototype`, ne konstruktorem.
+So, by the logic of `instanceof`, the `prototype` actually defines the type, not the constructor function.

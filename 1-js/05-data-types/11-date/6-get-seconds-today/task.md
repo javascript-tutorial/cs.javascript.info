@@ -2,14 +2,14 @@ importance: 5
 
 ---
 
-# Kolik sekund už dnes uplynulo?
+# How many seconds have passed today?
 
-Napište funkci `vraťDnešníSekundy()`, která vrátí počet sekund, které uplynuly od začátku dnešního dne.
+Write a function `getSecondsToday()` that returns the number of seconds from the beginning of today.
 
-Například jestliže je právě `22:00` a dnes se neměnil letní čas na zimní nebo naopak, pak:
+For instance, if now were `10:00 am`, and there was no daylight savings shift, then:
 
 ```js
-vraťDnešníSekundy() == 36000 // (3600 * 10)
+getSecondsToday() == 36000 // (3600 * 10)
 ```
 
-Funkce by měla fungovat v kterýkoli den. To znamená, že by neměla mít napevno zakódovanou hodnotu „dneška“.
+The function should work in any day. That is, it should not have a hard-coded value of "today".

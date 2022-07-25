@@ -2,32 +2,32 @@ importance: 5
 
 ---
 
-# Destrukturační přiřazení
+# Destructuring assignment
 
-Máme objekt:
+We have an object:
 
 ```js
-let uživatel = {
-  jméno: "Jan",
-  roky: 30
+let user = {
+  name: "John",
+  years: 30
 };
 ```
 
-Napište destrukturační přiřazení, které načte:
+Write the destructuring assignment that reads:
 
-- vlastnost `jméno` do proměnné `jméno`.
-- vlastnost `roky` do proměnné `věk`.
-- vlastnost `jeAdmin` do proměnné `jeAdmin` (false, pokud taková vlastnost není)
+- `name` property into the variable `name`.
+- `years` property into the variable `age`.
+- `isAdmin` property into the variable `isAdmin` (false, if no such property)
 
-Zde je příklad hodnot po vašem přiřazení:
+Here's an example of the values after your assignment:
 
 ```js
-let uživatel = { jméno: "Jan", roky: 30 };
+let user = { name: "John", years: 30 };
 
-// váš kód na levé straně:
-// ... = uživatel
+// your code to the left side:
+// ... = user
 
-alert( jméno ); // Jan
-alert( věk ); // 30
-alert( jeAdmin ); // false
+alert( name ); // John
+alert( age ); // 30
+alert( isAdmin ); // false
 ```

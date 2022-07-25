@@ -2,13 +2,13 @@ importance: 4
 
 ---
 
-# Seřaďte pole v sestupném pořadí
+# Sort in decreasing order
 
 ```js
-let pole = [5, 2, 1, -10, 8];
+let arr = [5, 2, 1, -10, 8];
 
-// ... váš kód je má seřadit v sestupném pořadí
+// ... your code to sort it in decreasing order
 
-alert( pole ); // 8, 5, 2, 1, -10
+alert( arr ); // 8, 5, 2, 1, -10
 ```
 

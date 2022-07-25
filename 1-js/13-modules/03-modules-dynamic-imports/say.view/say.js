@@ -1,11 +1,11 @@
-export function ahoj() {
-  alert(`Ahoj`);
+export function hi() {
+  alert(`Hello`);
 }
 
-export function nashle() {
-  alert(`Nashle`);
+export function bye() {
+  alert(`Bye`);
 }
 
 export default function() {
-  alert("Modul načten (defaultní export)!");
+  alert("Module loaded (export default)!");
 }

@@ -2,8 +2,8 @@ importance: 5
 
 ---
 
-# Vytvoření data
+# Create a date
 
-Vytvořte objekt `Date` pro datum: 20. února 2012, 3.12 hodin. Časové pásmo je místní.
+Create a `Date` object for the date: Feb 20, 2012, 3:12am. The time zone is local.
 
-Zobrazte jej pomocí `alert`.
+Show it using `alert`.

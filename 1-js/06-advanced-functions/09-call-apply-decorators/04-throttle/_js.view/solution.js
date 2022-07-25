@@ -1,31 +1,31 @@
-function tlumič(func, ms) {
+function throttle(func, ms) {
 
-  let jeTlumena = false,
-    uloženéArgumenty,
-    uloženéThis;
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
 
   function wrapper() {
 
-    if (jeTlumena) {
-      // zapamatujeme si poslední argumenty, abychom je mohli volat po vychladnutí
-      uloženéArgumenty = arguments;
-      uloženéThis = this;
+    if (isThrottled) {
+      // memo last arguments to call after the cooldown
+      savedArgs = arguments;
+      savedThis = this;
       return;
     }
 
-    // jinak přejdeme do stavu vychladnutí
+    // otherwise go to cooldown state
     func.apply(this, arguments);
 
-    jeTlumena = true;
+    isThrottled = true;
 
-    // načasujeme resetování jeTlumena po prodlevě
+    // plan to reset isThrottled after the delay
     setTimeout(function() {
-      jeTlumena = false;
-      if (uloženéArgumenty) {
-        // pokud byla nějaká volání, uloženéThis/uloženéArgumenty obsahují ty poslední
-        // rekurzívní volání spustí funkci a znovu nastaví vychladnutí
-        wrapper.apply(uloženéThis, uloženéArgumenty);
-        uloženéArgumenty = uloženéThis = null;
+      isThrottled = false;
+      if (savedArgs) {
+        // if there were calls, savedThis/savedArgs have the last one
+        // recursive call runs the function and sets cooldown again
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
       }
     }, ms);
   }

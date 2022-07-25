@@ -1,77 +1,77 @@
-Pro nalezení anagramů rozdělíme každé slovo na písmena a ta seřadíme. Po seřazení písmen budou všechny anagramy stejné.
+To find all anagrams, let's split every word to letters and sort them. When letter-sorted, all anagrams are same.
 
-Příklad:
+For instance:
 
 ```
-rak, kra -> akr
-kostel, stolek -> eklost
-reklama, makrela, karamel -> aaeklmr
+nap, pan -> anp
+ear, era, are -> aer
+cheaters, hectares, teachers -> aceehrst
 ...
 ```
 
-Varianty se seřazenými písmeny použijeme jako klíče mapy, abychom uložili pro každý klíč jen jednu hodnotu:
+We'll use the letter-sorted variants as map keys to store only one value per each key:
 
 ```js run
-function odstraňAnagramy(pole) {
-  let mapa = new Map();
+function aclean(arr) {
+  let map = new Map();
 
-  for (let slovo of pole) {
-    // rozdělíme slovo na písmena, seřadíme je a znovu spojíme
+  for (let word of arr) {
+    // split the word by letters, sort them and join back
 *!*
-    let seřazené = slovo.toLowerCase().split('').sort().join(''); // (*)
+    let sorted = word.toLowerCase().split('').sort().join(''); // (*)
 */!*
-    mapa.set(seřazené, slovo);
+    map.set(sorted, word);
   }
 
-  return Array.from(mapa.values());
+  return Array.from(map.values());
 }
 
-let pole = ["rak", "reklama", "makrela", "KRA", "kostel", "stolek", "karamel"];
+let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
 
-alert( odstraňAnagramy(pole) );
+alert( aclean(arr) );
 ```
 
-Seřazení písmen se děje ve zřetězeném volání na řádku `(*)`.
+Letter-sorting is done by the chain of calls in the line `(*)`.
 
-Pro přehlednost jej rozdělme na několik řádků:
+For convenience let's split it into multiple lines:
 
 ```js
-let seřazené = slovo // KRA
-  .toLowerCase() // kra
-  .split('') // ['k','r','a']
-  .sort() // ['a','k','r']
-  .join(''); // akr
+let sorted = word // PAN
+  .toLowerCase() // pan
+  .split('') // ['p','a','n']
+  .sort() // ['a','n','p']
+  .join(''); // anp
 ```
 
-Dvě různá slova `'KRA'` a `'rak'` budou seřazena stejně na `'akr'`.
+Two different words `'PAN'` and `'nap'` receive the same letter-sorted form `'anp'`.
 
-Další řádek vloží slovo do mapy:
+The next line put the word into the map:
 
 ```js
-mapa.set(seřazené, slovo);
+map.set(sorted, word);
 ```
 
-Jestliže příště přijde slovo se stejným seřazením písmen, přepíše v mapě předchozí hodnotu se stejným klíčem. Vždy tedy budeme mít pro každou formu písmen nejvýše jedno slovo.
+If we ever meet a word the same letter-sorted form again, then it would overwrite the previous value with the same key in the map. So we'll always have at maximum one word per letter-form.
 
-Nakonec `Array.from(mapa.values())` vezme iterovatelný objekt nad hodnotami mapy (klíče ve výsledku nepotřebujeme), vytvoří z něj pole a vrátí je.
+At the end `Array.from(map.values())` takes an iterable over map values (we don't need keys in the result) and returns an array of them.
 
-Zde bychom mohli místo `Map` použít i planý objekt, neboť klíče jsou řetězce.
+Here we could also use a plain object instead of the `Map`, because keys are strings.
 
-Řešení by pak mohlo vypadat následovně:
+That's how the solution can look:
 
 ```js run demo
-function odstraňAnagramy(pole) {
+function aclean(arr) {
   let obj = {};
 
-  for (let i = 0; i < pole.length; i++) {
-    let seřazené = pole[i].toLowerCase().split("").sort().join("");
-    obj[seřazené] = pole[i];
+  for (let i = 0; i < arr.length; i++) {
+    let sorted = arr[i].toLowerCase().split("").sort().join("");
+    obj[sorted] = arr[i];
   }
 
   return Object.values(obj);
 }
 
-let pole = ["rak", "reklama", "makrela", "KRA", "kostel", "stolek", "karamel"];
+let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
 
-alert( odstraňAnagramy(pole) );
+alert( aclean(arr) );
 ```
