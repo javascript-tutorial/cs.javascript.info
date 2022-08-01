@@ -105,7 +105,6 @@ Prosíme otevřete si informační dropdowny vpravo (označené šipkami), kter�
     V aktuálním okamžiku je ladicí nástroj uvnitř volání `ahoj()`, kterou zavolal skript v `index.html` (není zde žádná funkce, takže se nazývá „anonymní“).
 
     Když kliknete na prvek zásobníku (např. „anonymní“), ladicí nástroj přeskočí na odpovídající kód a vy můžete prozkoumávat všechny jeho proměnné.
-    
 3. **`Scope` (`Rozsah`) -- aktuální proměnné.**
 
     `Local` (`Místní`) zobrazuje lokální funkční proměnné. Vidíte také jejich hodnoty zvýrazněné přímo nad zdrojovým kódem.
@@ -121,7 +120,6 @@ Nyní nastal čas *krokovat* skript.
 K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <!-- https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/src/largeIcons.svg -->
 <span class="devtools" style="background-position:-146px -168px"></span> -- „Resume“ („Obnovit běh skriptu“): pokračuje v běhu, klávesa `key:F8`.
-
 : Pokračuje v běhu skriptu. Nejsou-li už žádné další zarážky, skript se bude prostě vykonávat dál a ladicí nástroj nad ním ztratí kontrolu.
 
     Toto uvidíme poté, co na něj klikneme:
@@ -139,7 +137,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 : Podobá se předchozímu příkazu „Krokovat“, ale chová se jinak, jestliže dalším příkazem je volání funkce (ne vestavěné funkce jako `alert`, ale naší vlastní funkce).
 
     Když si je srovnáme, příkaz „Krokovat“ vstoupí do vnořeného volání funkce a pozastaví běh na jejím prvním řádku, zatímco „Překročit další volání funkce“ spustí vnořené volání funkce, aniž bychom je viděli, a překročí její vnitřek.
-    
+
     Běh se pak ihned po volání této funkce pozastaví.
 
     To se hodí, když si nepřejeme vidět, co se děje uvnitř volané funkce.
