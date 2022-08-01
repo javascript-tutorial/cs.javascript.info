@@ -25,7 +25,7 @@
                 <use stroke="#7E7C7B" xlink:href="#rect-1" />
             </g><text id="open-sources" fill="#C06334" font-family="OpenSans-Bold, Open Sans" font-size="18"
                 font-weight="bold">
-                <tspan x="28" y="123">Otevřete lištu se zdrojovými soubory</tspan>
+                <tspan x="28" y="123">Otevřete záložku se zdrojovými soubory</tspan>
             </text>
             <path id="Line-2" fill="#C06334" fill-rule="nonzero"
                 d="M28.662 53.632l19.852 7.56-5.89 5.413 32.98 35.88 1.015 1.104-2.208 2.03-1.015-1.104-32.981-35.88-5.89 5.414-5.863-20.417z" />
