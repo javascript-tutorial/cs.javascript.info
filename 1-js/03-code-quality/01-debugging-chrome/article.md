@@ -133,7 +133,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 
     Dalším a dalším klikáním můžeme krokovat všechny příkazy skriptu jeden po druhém.
 
-<span class="devtools" style="background-position:-62px -192px"></span> -- „Step over“ („Překročit další volání funkce“): spustí další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
+<span class="devtools" style="background-position:-62px -192px"></span> -- „Step over“ („Překročit“): spustí další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
 : Podobá se předchozímu příkazu „Krokovat“, ale chová se jinak, jestliže dalším příkazem je volání funkce (ne vestavěné funkce jako `alert`, ale naší vlastní funkce).
 
     Když si je srovnáme, příkaz „Krokovat“ vstoupí do vnořeného volání funkce a pozastaví běh na jejím prvním řádku, zatímco „Překročit další volání funkce“ spustí vnořené volání funkce, aniž bychom je viděli, a překročí její vnitřek.
