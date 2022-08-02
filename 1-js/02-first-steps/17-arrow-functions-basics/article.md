@@ -1,111 +1,110 @@
-# Arrow functions, the basics
+# Šipkové funkce (arrow funkce) – základy 
+Existuje ještě jedna velice jednoduchá a výstižná syntaxe vytváření funkcí, která často bývá lepší než funkční výrazy.
 
-There's another very simple and concise syntax for creating functions, that's often better than Function Expressions.
-
-It's called "arrow functions", because it looks like this:
+Nazývá se „šipková funkce“, jelikož vypadá takto:
 
 ```js
-let func = (arg1, arg2, ..., argN) => expression;
+let funkce = (arg1, arg2, ..., argN) => výraz;
 ```
 
-This creates a function `func` that accepts arguments `arg1..argN`, then evaluates the `expression` on the right side with their use and returns its result.
+Tím se vytvoří funkce `funkce`, která přijímá argumenty `arg1..argN`, pak s jejich použitím vyhodnotí `výraz` na pravé straně a vrátí jeho výsledek.
 
-In other words, it's the shorter version of:
+Jinými slovy, je to kratší verze tohoto:
 
 ```js
-let func = function(arg1, arg2, ..., argN) {
-  return expression;
+let funkce = function(arg1, arg2, ..., argN) {
+  return výraz;
 };
 ```
 
-Let's see a concrete example:
+Podívejme se na konkrétní příklad:
 
 ```js run
-let sum = (a, b) => a + b;
+let součet = (a, b) => a + b;
 
-/* This arrow function is a shorter form of:
+/* Tato šipková funkce je zkrácenou formou této funkce:
 
-let sum = function(a, b) {
+let součet = function(a, b) {
   return a + b;
 };
 */
 
-alert( sum(1, 2) ); // 3
+alert( součet(1, 2) ); // 3
 ```
 
-As you can see, `(a, b) => a + b` means a function that accepts two arguments named `a` and `b`. Upon the execution, it evaluates the expression `a + b` and returns the result.
+Jak vidíte, `(a, b) => a + b` značí funkci, která má dva parametry `a` a `b`. Když je vykonána, vyhodnotí výraz `a + b` a vrátí jeho výsledek.
 
-- If we have only one argument, then parentheses around parameters can be omitted, making that even shorter.
+- Máme-li pouze jeden parametr, můžeme závorky kolem něj vynechat, čímž se zápis ještě zkrátí.
 
-    For example:
+    Příklad:
 
     ```js run
     *!*
-    let double = n => n * 2;
-    // roughly the same as: let double = function(n) { return n * 2 }
+    let dvojnásobek = n => n * 2;
+    // zhruba totéž jako: let dvojnásobek = function(n) { return n * 2 }
     */!*
 
-    alert( double(3) ); // 6
+    alert( dvojnásobek(3) ); // 6
     ```
 
-- If there are no arguments, parentheses are empty, but they must be present:
+- Nejsou-li žádné parametry, závorky budou prázdné, ale musí být uvedeny:
 
     ```js run
-    let sayHi = () => alert("Hello!");
+    let řekniAhoj = () => alert("Ahoj!");
 
-    sayHi();
+    řekniAhoj();
     ```
 
-Arrow functions can be used in the same way as Function Expressions.
+Šipkové funkce můžeme používat stejným způsobem jako funkční výrazy.
 
-For instance, to dynamically create a function:
+Například k dynamickému vytvoření funkce:
 
 ```js run
-let age = prompt("What is your age?", 18);
+let věk = prompt("Kolik je vám let?", 18);
 
-let welcome = (age < 18) ?
-  () => alert('Hello!') :
-  () => alert("Greetings!");
+let uvítání = (věk < 18) ?
+  () => alert('Ahoj!') :
+  () => alert("Dobrý den!");
 
-welcome();
+uvítání();
 ```
 
-Arrow functions may appear unfamiliar and not very readable at first, but that quickly changes as the eyes get used to the structure.
+Šipkové funkce mohou na první pohled vypadat podivně a nepříliš čitelně, ale to se rychle změní, jakmile si oči na tuto strukturu zvyknou.
 
-They are very convenient for simple one-line actions, when we're just too lazy to write many words.
+Jsou velmi vhodné pro jednoduché jednořádkové akce, kdy se nám prostě nechce psát příliš mnoho slov.
 
-## Multiline arrow functions
+## Víceřádkové šipkové funkce
 
-The arrow functions that we've seen so far were very simple. They took arguments from the left of `=>`, evaluated and returned the right-side expression with them.
+Šipkové funkce, které jsme doposud viděli, byly velmi jednoduché. Přebíraly argumenty z levé strany `=>`, vyhodnotily s nimi výraz na pravé straně a vrátily jeho hodnotu.
 
-Sometimes we need a more complex function, with multiple expressions and statements. In that case, we can enclose them in curly braces. The major difference is that curly braces require a `return` within them to return a value (just like a regular function does).
+Někdy potřebujeme složitější funkci s více výrazy a příkazy. V takovém případě je můžeme uzavřít do složených závorek. Hlavní rozdíl je v tom, že složené závorky vyžadují uvnitř `return`, aby mohly vrátit hodnotu (stejně jako běžná funkce).
 
-Like this:
+Například takto:
 
 ```js run
-let sum = (a, b) => {  // the curly brace opens a multiline function
-  let result = a + b;
+let součet = (a, b) => {  // složená závorka uvozuje víceřádkovou funkci
+  let výsledek = a + b;
 *!*
-  return result; // if we use curly braces, then we need an explicit "return"
+  return výsledek; // když používáme složené závorky, musíme výslovně uvést „return“
 */!*
 };
 
-alert( sum(1, 2) ); // 3
+alert( součet(1, 2) ); // 3
 ```
 
-```smart header="More to come"
-Here we praised arrow functions for brevity. But that's not all!
+```smart header="Bude toho víc"
+Zde jsme chválili šipkové funkce pro jejich stručnost, ale to ještě není všechno!
 
-Arrow functions have other interesting features.
+Šipkové funkce mají i jiné zajímavé vlastnosti.
 
-To study them in-depth, we first need to get to know some other aspects of JavaScript, so we'll return to arrow functions later in the chapter <info:arrow-functions>.
+Abychom je mohli prostudovat do hloubky, musíme napřed poznat některé další prvky JavaScriptu. K šipkovým funkcím se tedy vrátíme později v kapitole <info:arrow-functions>.
 
-For now, we can already use arrow functions for one-line actions and callbacks.
+Prozatím už můžeme používat šipkové funkce pro jednořádkové akce a callbacky.
 ```
 
-## Summary
+## Shrnutí
 
-Arrow functions are handy for simple actions, especially for one-liners. They come in two flavors:
+Šipkové funkce se hodí pro jednoduché akce, zvláště pro jednořádkové funkce. Dají se napsat dvěma způsoby:
 
-1. Without curly braces: `(...args) => expression` -- the right side is an expression: the function evaluates it and returns the result. Parentheses can be omitted, if there's only a single argument, e.g. `n => n*2`.
-2. With curly braces: `(...args) => { body }` -- brackets allow us to write multiple statements inside the function, but we need an explicit `return` to return something.
+1. Bez složených závorek: `(...args) => výraz` -- na pravé straně je výraz: funkce jej vyhodnotí a vrátí jeho výsledek. Kulaté závorky můžeme vynechat, má-li funkce pouze jeden parametr, např. `n => n*2`.
+2. Se složenými závorkami: `(...args) => { tělo }` -- složené závorky nám umožňují uvést ve funkci více příkazů, ale aby funkce něco vrátila, musíme výslovně uvést `return`.
