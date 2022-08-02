@@ -145,7 +145,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <span class="devtools" style="background-position:-4px -194px"></span> -- „Step into“ („Vnořit“), klávesa `key:F11`.
 : Podobá se variantě „Krokovat“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož asynchronní volání funkcí ještě neznáme.
 
-    Do budoucna jen poznamenejme, že příkaz „Krokovat“ ignoruje asynchronní akce, například `setTimeout` (vyvolání funkce za určitou dobu), které se vykonávají později. Příkaz „Pokročit do dalšího volání funkce“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
+    Do budoucna si jen poznamenejme, že příkaz „Krokovat“ ignoruje asynchronní akce, například `setTimeout` (vyvolání funkce za určitou dobu), které se vykonávají později. Příkaz „Vnořit“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
 
 <span class="devtools" style="background-position:-32px -194px"></span> -- „Step out“ („Postoupit ven z aktuální funkce“) pokračuje v běhu až do konce vykonávané funkce, klávesa `key:Shift+F11`.
 : Pokračuje v běhu a zastaví se až na posledním řádku právě vykonávané funkce. To se hodí, když jsme omylem vstoupili do volání funkce pomocí <span class="devtools" style="background-position:-200px -190px"></span>, ale ta nás nezajímá, a tak chceme co nejrychleji dospět k jejímu konci.
