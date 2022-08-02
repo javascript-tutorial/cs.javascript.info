@@ -186,7 +186,7 @@ Zjistili jsme, že existují tři hlavní způsoby, jak pozastavit skript:
 2. Pomocí příkazu `debugger`.
 3. Když se vyskytne chyba (jsou-li vývojářské nástroje otevřené a přepínač <span class="devtools" style="background-position:-90px -146px"></span> je „zapnutý“).
 
-Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a krokovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
+Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a krokovat kód, abychom viděli, kde a co se při jeho vykonávání pokazilo.
 
 Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 
