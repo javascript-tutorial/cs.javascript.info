@@ -94,7 +94,7 @@ Když je zarážka nastavena, běh se zastaví na 4. řádku:
 
 ![](chrome-sources-debugger-pause.svg)
 
-Prosíme otevřete si informační dropdowny vpravo (označené šipkami), které vám umožní prozkoumávat aktuální stav kódu:
+Rozevřete si rozbalovací menu, které se nachází vpravo (označené šipkami). Umožní vám prozkoumávat aktuální stav kódu:
 
 1. **`Watch` (`Sledované výrazy`) -- zobrazuje aktuální hodnoty libovolných výrazů.**
 
