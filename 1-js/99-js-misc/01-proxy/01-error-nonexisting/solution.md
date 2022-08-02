@@ -1,23 +1,23 @@
 
 ```js run
-let uživatel = {
-  jméno: "Jan"
+let user = {
+  name: "John"
 };
 
-function wrap(cíl) {
-  return new Proxy(cíl, {
-    get(cíl, vlastnost, příjemce) {
-      if (vlastnost in cíl) {
-        return Reflect.get(cíl, vlastnost, příjemce);
+function wrap(target) {
+  return new Proxy(target, {
+    get(target, prop, receiver) {
+      if (prop in target) {
+        return Reflect.get(target, prop, receiver);
       } else {
-        throw new ReferenceError(`Vlastnost neexistuje: "${vlastnost}"`)
+        throw new ReferenceError(`Property doesn't exist: "${prop}"`)
       }
     }
   });
 }
 
-uživatel = wrap(uživatel);
+user = wrap(user);
 
-alert(uživatel.jméno); // Jan
-alert(uživatel.věk); // ReferenceError: Vlastnost neexistuje: "věk"
+alert(user.name); // John
+alert(user.age); // ReferenceError: Property doesn't exist: "age"
 ```

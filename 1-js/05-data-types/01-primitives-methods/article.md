@@ -1,76 +1,76 @@
-# Metody primitivů
+# Methods of primitives
 
-JavaScript nám umožňuje pracovat s primitivy (řetězci, čísly atd.), jako by to byly objekty. Poskytuje i metody, které můžeme takto volat. Brzy je prostudujeme, ale nejprve se podíváme, jak to funguje, protože primitivy samozřejmě nejsou objekty (a zde to ještě více ozřejmíme).
+JavaScript allows us to work with primitives (strings, numbers, etc.) as if they were objects. They also provide methods to call as such. We will study those soon, but first we'll see how it works because, of course, primitives are not objects (and here we will make it even clearer).
 
-Podíváme se na klíčové rozdíly mezi primitivy a objekty.
+Let's look at the key distinctions between primitives and objects.
 
-Primitiv:
+A primitive
 
-- Je hodnota primitivního typu.
-- Existuje 7 primitivních typů: `string`, `number`, `bigint`, `boolean`, `symbol`, `null` a `undefined`.
+- Is a value of a primitive type.
+- There are 7 primitive types: `string`, `number`, `bigint`, `boolean`, `symbol`, `null` and `undefined`.
 
-Objekt:
+An object
 
-- Je schopen ukládat více hodnot jako své vlastnosti.
-- Může být vytvořen pomocí `{}`, např. `{jméno: "Jan", věk: 30}`. V JavaScriptu jsou i jiné druhy objektů, například funkce jsou objekty.
+- Is capable of storing multiple values as properties.
+- Can be created with `{}`, for instance: `{name: "John", age: 30}`. There are other kinds of objects in JavaScript: functions, for example, are objects.
 
-Jedna z nejlepších věcí na objektech je, že jako jejich vlastnost můžeme uložit funkci.
+One of the best things about objects is that we can store a function as one of its properties.
 
 ```js run
-let jan = {
-  jméno: "Jan",
-  řekniAhoj: function() {
-    alert("Ahoj kámo!");
+let john = {
+  name: "John",
+  sayHi: function() {
+    alert("Hi buddy!");
   }
 };
 
-jan.řekniAhoj(); // Ahoj kámo!
+john.sayHi(); // Hi buddy!
 ```
 
-Zde jsme tedy vytvořili objekt `jan` s metodou `řekniAhoj`.
+So here we've made an object `john` with the method `sayHi`.
 
-Mnoho objektů je již vestavěných, například ty, které pracují s daty, chybami, HTML prvky a podobně. Mají různé vlastnosti a metody.
+Many built-in objects already exist, such as those that work with dates, errors, HTML elements, etc. They have different properties and methods.
 
-Tyto vlastnosti však mají svou cenu!
+But, these features come with a cost!
 
-Objekty jsou „těžší“ než primitivy. Vyžadují více zdrojů, které zatěžují interní mašinérii.
+Objects are "heavier" than primitives. They require additional resources to support the internal machinery.
 
-## Primitiv jako objekt
+## A primitive as an object
 
-Tvůrce JavaScriptu čelil následujícímu paradoxu:
+Here's the paradox faced by the creator of JavaScript:
 
-- Existuje mnoho věcí, které člověk chce dělat s primitivy, jakými jsou řetězec nebo číslo. Bylo by skvělé přistupovat k nim pomocí metod.
-- Primitivy musejí být co nejrychlejší a co nejlehčí.
+- There are many things one would want to do with a primitive, like a string or a number. It would be great to access them using methods.
+- Primitives must be as fast and lightweight as possible.
 
-Řešení vypadá trochu těžkopádně, ale je zde:
+The solution looks a little bit awkward, but here it is:
 
-1. Primitiv je pořád primitiv. Jednoduchá hodnota, po jaké toužíme.
-2. Jazyk umožňuje přístup k metodám a vlastnostem řetězců, čísel, booleanů a symbolů.
-3. Aby to fungovalo, vytvoří se speciální objekt zvaný „wrapper“ *(česky se mu někdy říká „obal“ -- pozn. překl.)*, který poskytne tuto přídavnou funkcionalitu a pak bude zničen.
+1. Primitives are still primitive. A single value, as desired.
+2. The language allows access to methods and properties of strings, numbers, booleans and symbols.
+3. In order for that to work, a special "object wrapper" that provides the extra functionality is created, and then is destroyed.
 
-Tyto „objektové wrappery“ jsou pro každý primitivní typ jiné a nazývají se: `String`, `Number`, `Boolean`, `Symbol` a `BigInt`. Poskytují tedy různé sady metod.
+The "object wrappers" are different for each primitive type and are called: `String`, `Number`, `Boolean`, `Symbol` and `BigInt`. Thus, they provide different sets of methods.
 
-Například existuje řetězcová metoda [str.toUpperCase()](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase), která vrací řetězec `str` velkými písmeny.
+For instance, there exists a string method [str.toUpperCase()](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase) that returns a capitalized `str`.
 
-Funguje následovně:
+Here's how it works:
 
 ```js run
-let str = "Ahoj";
+let str = "Hello";
 
-alert( str.toUpperCase() ); // AHOJ
+alert( str.toUpperCase() ); // HELLO
 ```
 
-Jednoduché, že? Ve skutečnosti se ve `str.toUpperCase()` děje následující:
+Simple, right? Here's what actually happens in `str.toUpperCase()`:
 
-1. Řetězec `str` je primitiv. V okamžiku přístupu k jeho vlastnosti se tedy vytvoří speciální objekt, který zná hodnotu tohoto řetězce a obsahuje užitečné metody, např. `toUpperCase()`.
-2. Tato metoda se spustí a vrátí nový řetězec (který je zobrazen funkcí `alert`).
-3. Speciální objekt se zničí a zůstane samotný primitiv `str`.
+1. The string `str` is a primitive. So in the moment of accessing its property, a special object is created that knows the value of the string, and has useful methods, like `toUpperCase()`.
+2. That method runs and returns a new string (shown by `alert`).
+3. The special object is destroyed, leaving the primitive `str` alone.
 
-Primitivy tedy mohou poskytovat metody, ale samy zůstávají lehké.
+So primitives can provide methods, but they still remain lightweight.
 
-JavaScriptový engine tento proces vysoce optimalizuje. Může dokonce úplně vynechat vytvoření nového objektu. Stále však musí dodržovat specifikaci a chovat se tak, jako by jej vytvořil.
+The JavaScript engine highly optimizes this process. It may even skip the creation of the extra object at all. But it must still adhere to the specification and behave as if it creates one.
 
-I číslo má své vlastní metody, například [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) zaokrouhluje číslo na zadanou přesnost:
+A number has methods of its own, for instance, [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) rounds the number to the given precision:
 
 ```js run
 let n = 1.23456;
@@ -78,15 +78,15 @@ let n = 1.23456;
 alert( n.toFixed(2) ); // 1.23
 ```
 
-Další specifické metody uvidíme v kapitolách <info:number> a <info:string>.
+We'll see more specific methods in chapters <info:number> and <info:string>.
 
 
-````warn header="Konstruktory `String/Number/Boolean` jsou jen pro interní použití"
-Některé jazyky, např. Java, nám umožňují explicitně vytvářet „wrappery“ pro primitivy pomocí syntaxe typu `new Number(1)` nebo `new Boolean(false)`.
+````warn header="Constructors `String/Number/Boolean` are for internal use only"
+Some languages like Java allow us to explicitly create "wrapper objects" for primitives using a syntax like `new Number(1)` or `new Boolean(false)`.
 
-V JavaScriptu je to z historických důvodů také možné, ale silně **nedoporučované**. Věci začnou bláznit hned na několika místech.
+In JavaScript, that's also possible for historical reasons, but highly **unrecommended**. Things will go crazy in several places.
 
-Například:
+For instance:
 
 ```js run
 alert( typeof 0 ); // "number"
@@ -94,36 +94,36 @@ alert( typeof 0 ); // "number"
 alert( typeof new Number(0) ); // "object"!
 ```
 
-Objekty jsou v `if` vždy pravdivé, takže zde se zobrazí hlášení:
+Objects are always truthy in `if`, so here the alert will show up:
 
 ```js run
-let nula = new Number(0);
+let zero = new Number(0);
 
-if (nula) { // nula je pravdivá, protože je to objekt
-  alert( "nula je pravdivá!?!" );
+if (zero) { // zero is true, because it's an object
+  alert( "zero is truthy!?!" );
 }
 ```
 
-Na druhou stranu použití stejné funkce `String/Number/Boolean` bez `new` je zcela správná a užitečná věc. Funkce převede hodnotu na odpovídající typ: na řetězec, na číslo nebo na boolean (na primitiv).
+On the other hand, using the same functions `String/Number/Boolean` without `new` is totally fine and useful thing. They convert a value to the corresponding type: to a string, a number, or a boolean (primitive).
 
-Například tohle je zcela v pořádku:
+For example, this is entirely valid:
 
 ```js
-let num = Number("123"); // převede řetězec na číslo
+let num = Number("123"); // convert a string to number
 ```
 ````
 
 
-````warn header="null/undefined nemají žádné metody"
-Speciální primitivy `null` a `undefined` jsou výjimky. Nemají odpovídající „wrappery“ a neposkytují žádné metody. V určitém smyslu slova jsou vlastně „ty nejprimitivnější“.
+````warn header="null/undefined have no methods"
+The special primitives `null` and `undefined` are exceptions. They have no corresponding "wrapper objects" and provide no methods. In a sense, they are "the most primitive".
 
-Pokus o přístup k vlastnosti takové hodnoty ohlásí chybu:
+An attempt to access a property of such value would give the error:
 
 ```js run
-alert(null.test); // chyba
+alert(null.test); // error
 ````
 
-## Shrnutí
+## Summary
 
-- Primitivy s výjimkou `null` a `undefined` poskytují mnoho užitečných metod. Prostudujeme je v následujících kapitolách.
-- Formálně tyto metody pracují na dočasných objektech, ale JavaScriptové enginy jsou dobře vyladěny, aby je interně optimalizovaly, takže jejich volání není nákladné.
+- Primitives except `null` and `undefined` provide many helpful methods. We will study those in the upcoming chapters.
+- Formally, these methods work via temporary objects, but JavaScript engines are well tuned to optimize that internally, so they are not expensive to call.

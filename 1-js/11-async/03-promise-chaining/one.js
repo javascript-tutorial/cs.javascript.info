@@ -1,3 +1,3 @@
-function jedna() {
+function one() {
   alert(1);
 }

@@ -1,40 +1,40 @@
-Výsledek bude: **chyba**.
+The result is: **error**.
 
-Zkuste si to spustit:
+Try running it:
 
 ```js run
 let x = 1;
 
-function funkce() {
+function func() {
 *!*
-  console.log(x); // ReferenceError: Nelze přistupovat k 'x' před inicializací
+  console.log(x); // ReferenceError: Cannot access 'x' before initialization
 */!*
   let x = 2;
 }
 
-funkce();
+func();
 ```
 
-V tomto příkladu můžeme vidět podivný rozdíl mezi „neexistující“ a „neinicializovanou“ proměnnou.
+In this example we can observe the peculiar difference between a "non-existing" and "uninitialized" variable.
 
-Jak jste si mohli přečíst v článku [](info:closure), proměnná začíná v „neinicializovaném“ stavu ve chvíli, kdy výkon vstoupí do kódového bloku (nebo funkce). A zůstane neinicializovaná až do příslušného příkazu `let`.
+As you may have read in the article [](info:closure), a variable starts in the "uninitialized" state from the moment when the execution enters a code block (or a function). And it stays uninitalized until the corresponding `let` statement.
 
-Jinými slovy, před `let` proměnná technicky existuje, ale nemůže být používána.
+In other words, a variable technically exists, but can't be used before `let`.
 
-Výše uvedený kód to demonstruje.
+The code above demonstrates it.
 
 ```js
-function funkce() {
+function func() {
 *!*
-  // engine zná lokální proměnnou x od začátku této funkce,
-  // ale ta je „neinicializovaná“ (nepoužitelná) až do příkazu let („mrtvá zóna“)
-  // proto chyba
+  // the local variable x is known to the engine from the beginning of the function,
+  // but "uninitialized" (unusable) until let ("dead zone")
+  // hence the error
 */!*
 
-  console.log(x); // ReferenceError: Nelze přistupovat k 'x' před inicializací
+  console.log(x); // ReferenceError: Cannot access 'x' before initialization
 
   let x = 2;
 }
 ```
 
-Tato zóna dočasné nepoužitelnosti proměnné (od začátku kódového bloku do `let`) se někdy nazývá „mrtvá zóna“.
+This zone of temporary unusability of a variable (from the beginning of the code block till `let`) is sometimes called the "dead zone".

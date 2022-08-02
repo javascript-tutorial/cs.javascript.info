@@ -1,6 +1,6 @@
-function seskupPodleId(pole) {
-  return pole.reduce((obj, hodnota) => {
-    obj[hodnota.id] = hodnota;
+function groupById(array) {
+  return array.reduce((obj, value) => {
+    obj[value.id] = value;
     return obj;
   }, {})
 }

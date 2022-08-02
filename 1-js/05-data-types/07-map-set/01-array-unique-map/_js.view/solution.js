@@ -1,3 +1,3 @@
-function unikát(pole) {
-  return Array.from(new Set(pole));
+function unique(arr) {
+  return Array.from(new Set(arr));
 }

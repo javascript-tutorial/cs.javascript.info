@@ -1,52 +1,52 @@
 
-# Atributy a deskriptory vlastností
+# Property flags and descriptors
 
-Jak víme, do objektů můžeme ukládat vlastnosti.
+As we know, objects can store properties.
 
-Až dosud pro nás vlastnost byla pouhou dvojicí „klíč-hodnota“. Ale vlastnost objektu je ve skutečnosti něco flexibilnějšího a silnějšího.
+Until now, a property was a simple "key-value" pair to us. But an object property is actually a more flexible and powerful thing.
 
-V této kapitole prostudujeme další možnosti konfigurace a v další se podíváme, jak je neviditelně proměnit na funkce getterů a setterů.
+In this chapter we'll study additional configuration options, and in the next we'll see how to invisibly turn them into getter/setter functions.
 
-## Atributy vlastností
+## Property flags
 
-Vlastnosti objektů mají kromě hodnoty **`value`** tři speciální atributy (tzv. „vlajky“ nebo „přepínače“):
+Object properties, besides a **`value`**, have three special attributes (so-called "flags"):
 
-- **`writable`** *(zapisovatelná)* -- je-li `true`, může být hodnota vlastnosti změněna, jinak je jen pro čtení.
-- **`enumerable`** *(enumerovatelná)* -- je-li `true`, vlastnost se ukazuje v cyklech, jinak se v nich neukáže.
-- **`configurable`** *(konfigurovatelná)* -- je-li `true`, vlastnost může být smazána a tyto atributy mohou být měněny, jinak ne.
+- **`writable`** -- if `true`, the value can be changed, otherwise it's read-only.
+- **`enumerable`** -- if `true`, then listed in loops, otherwise not listed.
+- **`configurable`** -- if `true`, the property can be deleted and these attributes can be modified, otherwise not.
 
-Prozatím jsme je neviděli, protože se obecně neukazují. Když vytvoříme vlastnost „obvyklým způsobem“, všechny jsou `true`. Můžeme je však kdykoli změnit.
+We didn't see them yet, because generally they do not show up. When we create a property "the usual way", all of them are `true`. But we also can change them anytime.
 
-Nejprve se podíváme, jak tyto přepínače zjistit.
+First, let's see how to get those flags.
 
-Metoda [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor) nám umožňuje získat *úplnou* informaci o vlastnosti.
+The method [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor) allows to query the *full* information about a property.
 
-Syntaxe je:
+The syntax is:
 ```js
-let deskriptor = Object.getOwnPropertyDescriptor(obj, názevVlastnosti);
+let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
 ```
 
 `obj`
-: Objekt, z něhož chceme informaci získat.
+: The object to get information from.
 
-`názevVlastnosti`
-: Název vlastnosti.
+`propertyName`
+: The name of the property.
 
-Návratová hodnota je tzv. „deskriptor vlastnosti“: objekt, který obsahuje hodnotu a všechny přepínače.
+The returned value is a so-called "property descriptor" object: it contains the value and all the flags.
 
-Například:
+For instance:
 
 ```js run
-let uživatel = {
-  jméno: "Jan"
+let user = {
+  name: "John"
 };
 
-let deskriptor = Object.getOwnPropertyDescriptor(uživatel, 'jméno');
+let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
 
-alert( JSON.stringify(deskriptor, null, 2 ) );
-/* deskriptor vlastnosti:
+alert( JSON.stringify(descriptor, null, 2 ) );
+/* property descriptor:
 {
-  "value": "Jan",
+  "value": "John",
   "writable": true,
   "enumerable": true,
   "configurable": true
@@ -54,39 +54,39 @@ alert( JSON.stringify(deskriptor, null, 2 ) );
 */
 ```
 
-Chceme-li přepínače změnit, můžeme použít metodu [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
+To change the flags, we can use [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
-Syntaxe je:
+The syntax is:
 
 ```js
-Object.defineProperty(obj, názevVlastnosti, deskriptor)
+Object.defineProperty(obj, propertyName, descriptor)
 ```
 
-`obj`, `názevVlastnosti`
-: Objekt a jeho vlastnost, pro které se použije deskriptor.
+`obj`, `propertyName`
+: The object and its property to apply the descriptor.
 
-`deskriptor`
-: Deskriptor vlastnosti, který se použije.
+`descriptor`
+: Property descriptor object to apply.
 
-Jestliže vlastnost existuje, `defineProperty` změní její přepínače. V opačném případě tuto vlastnost vytvoří se zadanou hodnotou a přepínači; není-li v takovém případě některý přepínač uveden, předpokládá se, že je `false`.
+If the property exists, `defineProperty` updates its flags. Otherwise, it creates the property with the given value and flags; in that case, if a flag is not supplied, it is assumed `false`.
 
-Například zde vytvoříme vlastnost `jméno` se všemi přepínači nepravdivými:
+For instance, here a property `name` is created with all falsy flags:
 
 ```js run
-let uživatel = {};
+let user = {};
 
 *!*
-Object.defineProperty(uživatel, "jméno", {
-  value: "Jan"
+Object.defineProperty(user, "name", {
+  value: "John"
 });
 */!*
 
-let deskriptor = Object.getOwnPropertyDescriptor(uživatel, 'jméno');
+let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
 
-alert( JSON.stringify(deskriptor, null, 2 ) );
+alert( JSON.stringify(descriptor, null, 2 ) );
 /*
 {
-  "value": "Jan",
+  "value": "John",
 *!*
   "writable": false,
   "enumerable": false,
@@ -96,112 +96,112 @@ alert( JSON.stringify(deskriptor, null, 2 ) );
  */
 ```
 
-Porovnejte si ji s výše uvedenou vlastností `uživatel.jméno` „vytvořenou normálně“: nyní jsou všechny přepínače nepravdivé. Pokud to není to, co chceme, můžeme je v objektu `deskriptor` nastavit na `true`.
+Compare it with "normally created" `user.name` above: now all flags are falsy. If that's not what we want then we'd better set them to `true` in `descriptor`.
 
-Nyní se na efekty přepínačů podívejme na příkladu.
+Now let's see effects of the flags by example.
 
-## Nezapisovatelná
+## Non-writable
 
-Učiňme vlastnost `uživatel.jméno` nezapisovatelnou (nebude moci být změněna) změnou přepínače `writable`:
+Let's make `user.name` non-writable (can't be reassigned) by changing `writable` flag:
 
 ```js run
-let uživatel = {
-  jméno: "Jan"
+let user = {
+  name: "John"
 };
 
-Object.defineProperty(uživatel, "jméno", {
+Object.defineProperty(user, "name", {
 *!*
   writable: false
 */!*
 });
 
 *!*
-uživatel.jméno = "Petr"; // Chyba: Nelze přiřazovat do vlastnosti 'jméno', která je jen pro čtení
+user.name = "Pete"; // Error: Cannot assign to read only property 'name'
 */!*
 ```
 
-Nyní nikdo nemůže změnit jméno našeho uživatele, pokud sám nezavolá metodu `defineProperty`, která přebije tu naši.
+Now no one can change the name of our user, unless they apply their own `defineProperty` to override ours.
 
-```smart header="Chyby nastávají jen ve striktním režimu"
-V nestriktním režimu nenastane žádná chyba, když se pokusíme zapsat do nezapisovatelné vlastnosti a podobně. Operace se však stále neprovede. Akce porušující nastavení přepínačů se v nestriktním režimu prostě tiše ignorují.
+```smart header="Errors appear only in strict mode"
+In the non-strict mode, no errors occur when writing to non-writable properties and such. But the operation still won't succeed. Flag-violating actions are just silently ignored in non-strict.
 ```
 
-Zde je stejný příklad, ale vlastnost je vytvořena zcela nově:
+Here's the same example, but the property is created from scratch:
 
 ```js run
-let uživatel = { };
+let user = { };
 
-Object.defineProperty(uživatel, "jméno", {
+Object.defineProperty(user, "name", {
 *!*
-  value: "Jan",
-  // u nových vlastností musíme výslovně uvést, co je true
+  value: "John",
+  // for new properties we need to explicitly list what's true
   enumerable: true,
   configurable: true
 */!*
 });
 
-alert(uživatel.jméno); // Jan
-uživatel.jméno = "Petr"; // Chyba
+alert(user.name); // John
+user.name = "Pete"; // Error
 ```
 
-## Neenumerovatelná
+## Non-enumerable
 
-Přidejme nyní do objektu `uživatel` vlastní `toString`.
+Now let's add a custom `toString` to `user`.
 
-Normálně je vestavěná metoda `toString` v objektech neenumerovatelná, v cyklu `for..in` se neukazuje. Jestliže však přidáme náš vlastní `toString`, defaultně se ve `for..in` ukáže, například takto:
+Normally, a built-in `toString` for objects is non-enumerable, it does not show up in `for..in`. But if we add a `toString` of our own, then by default it shows up in `for..in`, like this:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
+let user = {
+  name: "John",
   toString() {
-    return this.jméno;
+    return this.name;
   }
 };
 
-// Defaultně budou zobrazeny obě naše vlastnosti:
-for (let klíč in uživatel) alert(klíč); // jméno, toString
+// By default, both our properties are listed:
+for (let key in user) alert(key); // name, toString
 ```
 
-Pokud se nám to nelíbí, můžeme nastavit `enumerable:false`. Vlastnost se pak neobjeví v cyklu `for..in`, stejně jako vestavěná:
+If we don't like it, then we can set `enumerable:false`. Then it won't appear in a `for..in` loop, just like the built-in one:
 
 ```js run
-let uživatel = {
-  jméno: "Jan",
+let user = {
+  name: "John",
   toString() {
-    return this.jméno;
+    return this.name;
   }
 };
 
-Object.defineProperty(uživatel, "toString", {
+Object.defineProperty(user, "toString", {
 *!*
   enumerable: false
 */!*
 });
 
 *!*
-// Nyní náš toString zmizí:
+// Now our toString disappears:
 */!*
-for (let klíč in uživatel) alert(klíč); // jméno
+for (let key in user) alert(key); // name
 ```
 
-Neenumerovatelné vlastnosti jsou také vyřazeny z metody `Object.keys`:
+Non-enumerable properties are also excluded from `Object.keys`:
 
 ```js
-alert(Object.keys(uživatel)); // jméno
+alert(Object.keys(user)); // name
 ```
 
-## Nekonfigurovatelná
+## Non-configurable
 
-Přepínač nekonfigurovatelnosti (`configurable:false`) je někdy přednastaven v zabudovaných objektech a vlastnostech.
+The non-configurable flag (`configurable:false`) is sometimes preset for built-in objects and properties.
 
-Nekonfigurovatelná vlastnost nemůže být smazána a její atributy nemohou být měněny.
+A non-configurable property can't be deleted, its attributes can't be modified.
 
-Například `Math.PI` je nezapisovatelná, neenumerovatelná a nekonfigurovatelná:
+For instance, `Math.PI` is non-writable, non-enumerable and non-configurable:
 
 ```js run
-let deskriptor = Object.getOwnPropertyDescriptor(Math, 'PI');
+let descriptor = Object.getOwnPropertyDescriptor(Math, 'PI');
 
-alert( JSON.stringify(deskriptor, null, 2 ) );
+alert( JSON.stringify(descriptor, null, 2 ) );
 /*
 {
   "value": 3.141592653589793,
@@ -211,139 +211,139 @@ alert( JSON.stringify(deskriptor, null, 2 ) );
 }
 */
 ```
-Programátor tedy nemůže změnit hodnotu `Math.PI` nebo tuto vlastnost přepsat.
+So, a programmer is unable to change the value of `Math.PI` or overwrite it.
 
 ```js run
-Math.PI = 3; // Chyba, protože má writable: false
+Math.PI = 3; // Error, because it has writable: false
 
-// delete Math.PI by rovněž nefungovalo
+// delete Math.PI won't work either
 ```
 
-Nemůžeme ani změnit `Math.PI` tak, aby byla znovu `writable` (zapisovatelná):
+We also can't change `Math.PI` to be `writable` again:
 
 ```js run
-// Chyba kvůli configurable: false
+// Error, because of configurable: false
 Object.defineProperty(Math, "PI", { writable: true });
 ```
 
-Neexistuje naprosto nic, co bychom mohli s `Math.PI` dělat.
+There's absolutely nothing we can do with `Math.PI`.
 
-Nastavit vlastnost nekonfigurovatelnou je jednosměrná cesta. Nemůžeme ji pomocí `defineProperty` změnit zpět.
+Making a property non-configurable is a one-way road. We cannot change it back with `defineProperty`.
 
-**Prosíme všimněte si: `configurable: false` brání ve změnách přepínačů vlastnosti a jejím smazání, ale umožňuje měnit její hodnotu.**
+**Please note: `configurable: false` prevents changes of property flags and its deletion, while allowing to change its value.**
 
-Zde je `uživatel.jméno` nekonfigurovatelná, ale stále ji můžeme měnit (je zapisovatelná):
+Here `user.name` is non-configurable, but we can still change it (as it's writable):
 
 ```js run
-let uživatel = {
-  jméno: "Jan"
+let user = {
+  name: "John"
 };
 
-Object.defineProperty(uživatel, "jméno", {
+Object.defineProperty(user, "name", {
   configurable: false
 });
 
-uživatel.jméno = "Petr"; // funguje správně
-delete uživatel.jméno; // Chyba
+user.name = "Pete"; // works fine
+delete user.name; // Error
 ```
 
-A zde učiníme `uživatel.jméno` „navěky zapečetěnou“ konstantou, právě jako zabudované `Math.PI`:
+And here we make `user.name` a "forever sealed" constant, just like the built-in `Math.PI`:
 
 ```js run
-let uživatel = {
-  jméno: "Jan"
+let user = {
+  name: "John"
 };
 
-Object.defineProperty(uživatel, "jméno", {
+Object.defineProperty(user, "name", {
   writable: false,
   configurable: false
 });
 
-// nebudeme moci změnit uživatel.jméno ani její přepínače
-// nic z tohoto nebude fungovat:
-uživatel.jméno = "Petr";
-delete uživatel.jméno;
-Object.defineProperty(uživatel, "jméno", { value: "Petr" });
+// won't be able to change user.name or its flags
+// all this won't work:
+user.name = "Pete";
+delete user.name;
+Object.defineProperty(user, "name", { value: "Pete" });
 ```
 
-```smart header="Jediná možná změna atributu: writable true -> false"
-Ve změně přepínačů je jedna drobná výjimka.
+```smart header="The only attribute change possible: writable true -> false"
+There's a minor exception about changing flags.
 
-U nekonfigurovatelné vlastnosti můžeme změnit `writable: true` na `false`, abychom zabránili modifikaci její hodnoty (abychom přidali další ochrannou vrstvu). Obráceně to však nejde.
+We can change `writable: true` to `false` for a non-configurable property, thus preventing its value modification (to add another layer of protection). Not the other way around though.
 ```
 
 ## Object.defineProperties
 
-Existuje metoda [Object.defineProperties(obj, deskriptory)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties), která nám umožňuje definovat mnoho vlastností najednou.
+There's a method [Object.defineProperties(obj, descriptors)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) that allows to define many properties at once.
 
-Syntaxe je:
+The syntax is:
 
 ```js
 Object.defineProperties(obj, {
-  vlastnost1: deskriptor1,
-  vlastnost2: deskriptor2
+  prop1: descriptor1,
+  prop2: descriptor2
   // ...
 });
 ```
 
-Například:
+For instance:
 
 ```js
-Object.defineProperties(uživatel, {
-  jméno: { value: "Jan", writable: false },
-  příjmení: { value: "Novák", writable: false },
+Object.defineProperties(user, {
+  name: { value: "John", writable: false },
+  surname: { value: "Smith", writable: false },
   // ...
 });
 ```
 
-Můžeme tedy nastavit mnoho vlastností najednou.
+So, we can set many properties at once.
 
 ## Object.getOwnPropertyDescriptors
 
-Chceme-li získat deskriptory všech vlastností najednou, můžeme použít metodu [Object.getOwnPropertyDescriptors(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptors).
+To get all property descriptors at once, we can use the method [Object.getOwnPropertyDescriptors(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptors).
 
-Společně s metodou `Object.defineProperties` ji můžeme použít jako způsob klonování objektu, který zachovává přepínače:
+Together with `Object.defineProperties` it can be used as a "flags-aware" way of cloning an object:
 
 ```js
-let klon = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));
+let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));
 ```
 
-Když běžně klonujeme objekt, kopírujeme vlastnosti pomocí přiřazení, například takto:
+Normally when we clone an object, we use an assignment to copy properties, like this:
 
 ```js
-for (let klíč in uživatel) {
-  klon[klíč] = uživatel[klíč]
+for (let key in user) {
+  clone[key] = user[key]
 }
 ```
 
-...To však nekopíruje přepínače. Chceme-li tedy „lepší“ klon, dáme přednost metodě `Object.defineProperties`.
+...But that does not copy flags. So if we want a "better" clone then `Object.defineProperties` is preferred.
 
-Další rozdíl je v tom, že `for..in` ignoruje symbolické a neenumerovatelné vlastnosti, ale `Object.getOwnPropertyDescriptors` vrací deskriptory *všech* vlastností včetně symbolických a neenumerovatelných.
+Another difference is that `for..in` ignores symbolic and non-enumerable properties, but `Object.getOwnPropertyDescriptors` returns *all* property descriptors including symbolic and non-enumerable ones.
 
-## Globální zapečetění objektu
+## Sealing an object globally
 
-Deskriptory vlastností fungují na úrovni jednotlivých vlastností.
+Property descriptors work at the level of individual properties.
 
-Existují však i metody, které omezují přístup k *celému* objektu:
+There are also methods that limit access to the *whole* object:
 
 [Object.preventExtensions(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions)
-: Zakazuje přidávání nových vlastností do objektu.
+: Forbids the addition of new properties to the object.
 
 [Object.seal(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)
-: Zakazuje přidávání/odstraňování vlastností. Nastaví `configurable: false` pro všechny existující vlastnosti.
+: Forbids adding/removing of properties. Sets `configurable: false` for all existing properties.
 
 [Object.freeze(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
-: Zakazuje přidávání/odstraňování/měnění vlastností. Nastaví `configurable: false, writable: false` pro všechny existující vlastnosti.
+: Forbids adding/removing/changing of properties. Sets `configurable: false, writable: false` for all existing properties.
 
-A existují i testy na ně:
+And also there are tests for them:
 
 [Object.isExtensible(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isExtensible)
-: Vrátí `false`, je-li zakázáno přidávání vlastností, jinak vrátí `true`.
+: Returns `false` if adding properties is forbidden, otherwise `true`.
 
 [Object.isSealed(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isSealed)
-: Vrátí `true`, je-li zakázáno přidávání/odstraňování vlastností a všechny existující vlastnosti mají `configurable: false`.
+: Returns `true` if adding/removing properties is forbidden, and all existing properties have `configurable: false`.
 
 [Object.isFrozen(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isFrozen)
-: Vrátí `true`, je-li zakázáno přidávání/odstraňování/měnění vlastností a všechny existující vlastnosti mají `configurable: false, writable: false`.
+: Returns `true` if adding/removing/changing properties is forbidden, and all current properties are `configurable: false, writable: false`.
 
-V praxi se však tyto metody používají jen zřídka.
+These methods are rarely used in practice.

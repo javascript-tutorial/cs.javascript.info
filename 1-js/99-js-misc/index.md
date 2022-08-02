@@ -1,2 +1,2 @@
 
-# Různé
+# Miscellaneous

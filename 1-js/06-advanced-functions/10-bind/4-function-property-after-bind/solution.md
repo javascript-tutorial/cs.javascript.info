@@ -1,4 +1,4 @@
-Odpověď: `undefined`.
+The answer: `undefined`.
 
-Výsledkem funkce `bind` je jiný objekt, který nemá vlastnost `test`.
+The result of `bind` is another object. It does not have the `test` property.
 

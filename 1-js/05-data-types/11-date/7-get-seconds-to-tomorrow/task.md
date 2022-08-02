@@ -2,14 +2,14 @@ importance: 5
 
 ---
 
-# Kolik sekund zbývá do zítřka?
+# How many seconds till tomorrow?
 
-Vytvořte funkci `vraťSekundyDoZítřka()`, která vrátí počet sekund, které zbývají do zítřka.
+Create a function `getSecondsToTomorrow()` that returns the number of seconds till tomorrow.
 
-Například jestliže právě je `23:00`, pak:
+For instance, if now is `23:00`, then:
 
 ```js
-vraťSekundyDoZítřka() == 3600
+getSecondsToTomorrow() == 3600
 ```
 
-P.S. Funkce by měla fungovat v kterémkoli dni, „dnešek“ v ní nemá být napevno zakódován.
+P.S. The function should work at any day, the "today" is not hardcoded.

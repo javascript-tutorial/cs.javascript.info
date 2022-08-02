@@ -1,42 +1,43 @@
 <script>
-let mixinUdálosti = {
+let eventMixin = {
+
   /**
-   * Přihlášení k naslouchání události, použití:
-   *  menu.on('vybrán', function(prvek) { ... })
+   * Subscribe to event, usage:
+   *  menu.on('select', function(item) { ... }
   */
-  on(názevUdálosti, handler) {
-    if (!this._handleryUdálostí) this._handleryUdálostí = {};
-    if (!this._handleryUdálostí[názevUdálosti]) {
-      this._handleryUdálostí[názevUdálosti] = [];
+  on(eventName, handler) {
+    if (!this._eventHandlers) this._eventHandlers = {};
+    if (!this._eventHandlers[eventName]) {
+      this._eventHandlers[eventName] = [];
     }
-    this._handleryUdálostí[názevUdálosti].push(handler);
+    this._eventHandlers[eventName].push(handler);
   },
 
   /**
-   * Odhlášení z naslouchání události, použití:
-   *  menu.off('vybrán', handler)
+   * Cancel the subscription, usage:
+   *  menu.off('select', handler)
    */
-  off(názevUdálosti, handler) {
-    let handlery = this._handleryUdálostí?.[názevUdálosti];
-    if (!handlery) return;
-    for (let i = 0; i < handlery.length; i++) {
-      if (handlery[i] === handler) {
-        handlery.splice(i--, 1);
+  off(eventName, handler) {
+    let handlers = this._eventHandlers?.[eventName];
+    if (!handlers) return;
+    for(let i = 0; i < handlers.length; i++) {
+      if (handlers[i] == handler) {
+        handlers.splice(i--, 1);
       }
     }
   },
 
   /**
-   * Generování události se zadaným názvem a daty
-   *  this.spusť('vybrán', data1, data2);
+   * Generate the event and attach the data to it
+   *  this.trigger('select', data1, data2);
    */
-  spusť(názevUdálosti, ...args) {
-    if (!this._handleryUdálostí?.[názevUdálosti]) {
-      return; // pro událost s tímto názvem nejsou žádné handlery
+  trigger(eventName, ...args) {
+    if (!this._eventHandlers || !this._eventHandlers[eventName]) {
+      return; // no handlers for that event name
     }
 
-    // volání handlerů
-    this._handleryUdálostí[názevUdálosti].forEach(handler => handler.apply(this, args));
+    // call the handlers
+    this._eventHandlers[eventName].forEach(handler => handler.apply(this, args));
   }
 };
 </script>

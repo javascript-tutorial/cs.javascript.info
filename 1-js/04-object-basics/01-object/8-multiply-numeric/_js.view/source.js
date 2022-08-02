@@ -1,17 +1,17 @@
 let menu = {
-  šířka: 200,
-  výška: 300,
-  titulek: "Moje menu"
+  width: 200,
+  height: 300,
+  title: "My menu"
 };
 
 
-function vynásobČísla(obj) {
+function multiplyNumeric(obj) {
   
-  /* váš kód */
+  /* your code */
 
 }
 
-vynásobČísla(menu);
+multiplyNumeric(menu);
 
-alert( "menu šířka=" + menu.šířka + " výška=" + menu.výška + " titulek=" + menu.titulek );
+alert( "menu width=" + menu.width + " height=" + menu.height + " title=" + menu.title );
 

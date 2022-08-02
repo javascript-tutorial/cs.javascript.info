@@ -1,428 +1,428 @@
 
-# Základní syntaxe tříd
+# Class basic syntax
 
-```quote author="Wikipedie (anglická verze)"
-V objektově orientovaném programování je *třída* rozšiřitelná šablona v programovém kódu pro vytváření objektů, která poskytuje počáteční hodnoty stavu (členské proměnné) a implementaci chování (členské funkce nebo metody).
+```quote author="Wikipedia"
+In object-oriented programming, a *class* is an extensible program-code-template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods).
 ```
 
-V praxi často potřebujeme vytvořit více objektů stejného druhu, např. uživatele, zboží nebo cokoli jiného.
+In practice, we often need to create many objects of the same kind, like users, or goods or whatever.
 
-Jak již víme z kapitoly <info:constructor-new>, může nám v tom pomocí `new function`.
+As we already know from the chapter <info:constructor-new>, `new function` can help with that.
 
-V moderním JavaScriptu však existuje pokročilejší konstrukce nazvaná „třída“, která zavádí vynikající nové prvky, užitečné pro objektově orientované programování.
+But in the modern JavaScript, there's a more advanced "class" construct, that introduces great new features which are useful for object-oriented programming.
 
-## Syntaxe „class“
+## The "class" syntax
 
-Základní syntaxe je:
+The basic syntax is:
 ```js
-class MojeTřída {
-  // třídní metody
+class MyClass {
+  // class methods
   constructor() { ... }
-  metoda1() { ... }
-  metoda2() { ... }
-  metoda3() { ... }
+  method1() { ... }
+  method2() { ... }
+  method3() { ... }
   ...
 }
 ```
 
-Pak použitím `new MojeTřída()` vytvoříte nový objekt se všemi uvedenými metodami.
+Then use `new MyClass()` to create a new object with all the listed methods.
 
-Metoda `constructor()` je při `new` volána automaticky, takže v ní můžeme objekt inicializovat.
+The `constructor()` method is called automatically by `new`, so we can initialize the object there.
 
-Například:
+For example:
 
 ```js run
-class Uživatel {
+class User {
 
-  constructor(jméno) {
-    this.jméno = jméno;
+  constructor(name) {
+    this.name = name;
   }
 
-  řekniAhoj() {
-    alert(this.jméno);
+  sayHi() {
+    alert(this.name);
   }
 
 }
 
-// Použití:
-let uživatel = new Uživatel("Jan");
-uživatel.řekniAhoj();
+// Usage:
+let user = new User("John");
+user.sayHi();
 ```
 
-Když je zavolán `new Uživatel("Jan")`:
-1. Vytvoří se nový objekt.
-2. Metoda `constructor` se spustí se zadaným argumentem a přiřadí jej do `this.jméno`.
+When `new User("John")` is called:
+1. A new object is created.
+2. The `constructor` runs with the given argument and assigns it to `this.name`.
 
-...Pak můžeme volat objektové metody, například `uživatel.řekniAhoj()`.
+...Then we can call object methods, such as `user.sayHi()`.
 
 
-```warn header="Mezi třídními metodami není čárka"
-Obvyklou chybou začínajících vývojářů je vkládat čárku mezi třídní metody, což má za následek syntaktickou chybu.
+```warn header="No comma between class methods"
+A common pitfall for novice developers is to put a comma between class methods, which would result in a syntax error.
 
-Uvedená notace nesmí být zaměňována za objektový literál. Uvnitř třídy nejsou čárky vyžadovány.
+The notation here is not to be confused with object literals. Within the class, no commas are required.
 ```
 
-## Co je to třída?
+## What is a class?
 
-Co přesně je tedy třída (`class`)? Není to úplně nová entita na úrovni jazyka, jak si můžeme myslet.
+So, what exactly is a `class`? That's not an entirely new language-level entity, as one might think.
 
-Odhoďme veškerou magii a podívejme se, co to ta třída doopravdy je. Pomůže nám to pochopit mnoho složitých aspektů.
+Let's unveil any magic and see what a class really is. That'll help in understanding many complex aspects.
 
-V JavaScriptu je třída druh funkce.
+In JavaScript, a class is a kind of function.
 
-Podívejme se sem:
+Here, take a look:
 
 ```js run
-class Uživatel {
-  constructor(jméno) { this.jméno = jméno; }
-  řekniAhoj() { alert(this.jméno); }
+class User {
+  constructor(name) { this.name = name; }
+  sayHi() { alert(this.name); }
 }
 
-// důkaz: Uživatel je funkce
+// proof: User is a function
 *!*
-alert(typeof Uživatel); // function
+alert(typeof User); // function
 */!*
 ```
 
-To, co ve skutečnosti provede konstrukce `class Uživatel {...}`, je:
+What `class User {...}` construct really does is:
 
-1. Vytvoří funkci jménem `Uživatel`, která se stane výslednou hodnotou deklarace třídy. Kód této funkce se převezme z metody `constructor` (pokud takovou metodu nenapíšeme, předpokládá se, že je prázdný).
-2. Uloží do `Uživatel.prototype` třídní metody, např. `řekniAhoj`.
+1. Creates a function named `User`, that becomes the result of the class declaration. The function code is taken from the `constructor` method (assumed empty if we don't write such method).
+2. Stores class methods, such as `sayHi`, in `User.prototype`.
 
-Když po vytvoření objektu `new Uživatel` zavoláme jeho metodu, převezme se z prototypu, přesně jak bylo popsáno v kapitole <info:function-prototype>. Objekt tedy má přístup ke třídním metodám.
+After `new User` object is created, when we call its method, it's taken from the prototype, just as described in the chapter <info:function-prototype>. So the object has access to class methods.
 
-Výsledek deklarace `class Uživatel` můžeme ilustrovat jako:
+We can illustrate the result of `class User` declaration as:
 
 ![](class-user.svg)
 
-Zde je kód, na kterém to můžeme vidět:
+Here's the code to introspect it:
 
 ```js run
-class Uživatel {
-  constructor(jméno) { this.jméno = jméno; }
-  řekniAhoj() { alert(this.jméno); }
+class User {
+  constructor(name) { this.name = name; }
+  sayHi() { alert(this.name); }
 }
 
-// třída je funkce
-alert(typeof Uživatel); // function
+// class is a function
+alert(typeof User); // function
 
-// ...nebo přesněji konstruktor
-alert(Uživatel === Uživatel.prototype.constructor); // true
+// ...or, more precisely, the constructor method
+alert(User === User.prototype.constructor); // true
 
-// Metody jsou v Uživatel.prototype, např.:
-alert(Uživatel.prototype.řekniAhoj); // kód metody řekniAhoj
+// The methods are in User.prototype, e.g:
+alert(User.prototype.sayHi); // the code of the sayHi method
 
-// v prototypu jsou právě dvě metody
-alert(Object.getOwnPropertyNames(Uživatel.prototype)); // constructor, řekniAhoj
+// there are exactly two methods in the prototype
+alert(Object.getOwnPropertyNames(User.prototype)); // constructor, sayHi
 ```
 
-## Není to jen syntaktický cukr
+## Not just a syntactic sugar
 
-Někdy lidé říkají, že `class` je „syntaktický cukr“ (syntaxe, která je navržena k tomu, aby byl kód snáze čitelný, ale nezavádí nic nového), protože ve skutečnosti můžeme totéž deklarovat i bez klíčového slova `class`:
+Sometimes people say that `class` is a "syntactic sugar" (syntax that is designed to make things easier to read, but doesn't introduce anything new), because we could actually declare the same thing without using the `class` keyword at all:
 
 ```js run
-// přepíšeme třídu Uživatel do čistých funkcí
+// rewriting class User in pure functions
 
-// 1. Vytvoříme funkci konstruktoru
-function Uživatel(jméno) {
-  this.jméno = jméno;
+// 1. Create constructor function
+function User(name) {
+  this.name = name;
 }
-// funkční prototyp má standardně vlastnost "constructor",
-// takže ji nemusíme vytvářet
+// a function prototype has "constructor" property by default,
+// so we don't need to create it
 
-// 2. Přidáme metodu do prototypu
-Uživatel.prototype.řekniAhoj = function() {
-  alert(this.jméno);
+// 2. Add the method to prototype
+User.prototype.sayHi = function() {
+  alert(this.name);
 };
 
-// Použití:
-let uživatel = new Uživatel("Jan");
-uživatel.řekniAhoj();
+// Usage:
+let user = new User("John");
+user.sayHi();
 ```
 
-Výsledek této definice je přibližně stejný. Nepochybně tedy existují důvody, proč můžeme `class` považovat za syntaktický cukr, kterým definujeme konstruktor spolu s jeho prototypovými metodami.
+The result of this definition is about the same. So, there are indeed reasons why `class` can be considered a syntactic sugar to define a constructor together with its prototype methods.
 
-Jsou zde však důležité rozdíly.
+Still, there are important differences.
 
-1. Za prvé, funkce vytvořená pomocí `class` obsahuje speciální vnitřní vlastnost `[[IsClassConstructor]]: true`. Není tedy přesně stejná, jako kdyby byla vytvořena ručně.
+1. First, a function created by `class` is labelled by a special internal property `[[IsClassConstructor]]: true`. So it's not entirely the same as creating it manually.
 
-    Jazyk si tuto vlastnost ověřuje na různých místech. Například na rozdíl od běžné funkce musí být volána pomocí `new`:
+    The language checks for that property in a variety of places. For example, unlike a regular function, it must be called with `new`:
 
     ```js run
-    class Uživatel {
+    class User {
       constructor() {}
     }
 
-    alert(typeof Uživatel); // function
-    Uživatel(); // Chyba: Konstruktor třídy Uživatel nesmí být volán bez 'new'
+    alert(typeof User); // function
+    User(); // Error: Class constructor User cannot be invoked without 'new'
     ```
 
-    Kromě toho řetězcová reprezentace třídního konstruktoru ve většině enginů JavaScriptu začíná „class...“
+    Also, a string representation of a class constructor in most JavaScript engines starts with the "class..."
 
     ```js run
-    class Uživatel {
+    class User {
       constructor() {}
     }
 
-    alert(Uživatel); // class Uživatel { ... }
+    alert(User); // class User { ... }
     ```
-    Jsou i jiné rozdíly, které uvidíme později.
+    There are other differences, we'll see them soon.
 
-2. Třídní metody nejsou enumerovatelné.
-    Definice třídy nastavuje přepínač `enumerable` na `false` u všech metod v `"prototype"`.
+2. Class methods are non-enumerable.
+    A class definition sets `enumerable` flag to `false` for all methods in the `"prototype"`.
 
-    To je dobře, protože když provádíme `for..in` nad objektem, nechceme zpravidla jeho třídní metody.
+    That's good, because if we `for..in` over an object, we usually don't want its class methods.
 
-3. Třídy vždy mají `use strict`.
-    Veškerý kód uvnitř konstrukce třídy je automaticky ve striktním režimu.
+3. Classes always `use strict`.
+    All code inside the class construct is automatically in strict mode.
 
-Kromě toho syntaxe `class` přináší mnoho dalších prvků, které probereme později.
+Besides, `class` syntax brings many other features that we'll explore later.
 
-## Třídní výraz
+## Class Expression
 
-Stejně jako funkce mohou i třídy být definovány uvnitř jiného výrazu, předávány, vraceny, přiřazovány atd.
+Just like functions, classes can be defined inside another expression, passed around, returned, assigned, etc.
 
-Zde je příklad třídního výrazu:
+Here's an example of a class expression:
 
 ```js
-let Uživatel = class {
-  řekniAhoj() {
-    alert("Ahoj");
+let User = class {
+  sayHi() {
+    alert("Hello");
   }
 };
 ```
 
-Obdobně jako pojmenované funkční výrazy, i třídní výrazy mohou mít název.
+Similar to Named Function Expressions, class expressions may have a name.
 
-Jestliže třídní výraz má název, je viditelný jen uvnitř třídy:
+If a class expression has a name, it's visible inside the class only:
 
 ```js run
-// „Pojmenovaný třídní výraz“
-// (takový pojem není ve specifikaci, ale to se podobá pojmenovanému funkčnímu výrazu)
-let Uživatel = class *!*MojeTřída*/!* {
-  řekniAhoj() {
-    alert(MojeTřída); // název MojeTřída je viditelný jen uvnitř třídy
+// "Named Class Expression"
+// (no such term in the spec, but that's similar to Named Function Expression)
+let User = class *!*MyClass*/!* {
+  sayHi() {
+    alert(MyClass); // MyClass name is visible only inside the class
   }
 };
 
-new Uživatel().řekniAhoj(); // funguje, zobrazí definici třídy MojeTřída
+new User().sayHi(); // works, shows MyClass definition
 
-alert(MojeTřída); // chyba, název MojeTřída není viditelný mimo třídu
+alert(MyClass); // error, MyClass name isn't visible outside of the class
 ```
 
-Můžeme dokonce vytvářet třídy dynamicky „na požádání“, například takto:
+We can even make classes dynamically "on-demand", like this:
 
 ```js run
-function vytvořTřídu(věta) {
-  // deklarujeme třídu a vrátíme ji
+function makeClass(phrase) {
+  // declare a class and return it
   return class {
-    řekniAhoj() {
-      alert(věta);
+    sayHi() {
+      alert(phrase);
     }
   };
 }
 
-// Vytvoříme novou třídu
-let Uživatel = vytvořTřídu("Ahoj");
+// Create a new class
+let User = makeClass("Hello");
 
-new Uživatel().řekniAhoj(); // Ahoj
+new User().sayHi(); // Hello
 ```
 
 
-## Gettery/settery
+## Getters/setters
 
-Stejně jako literální objekty mohou třídy obsahovat gettery/settery, vypočítávané vlastnosti a podobně.
+Just like literal objects, classes may include getters/setters, computed properties etc.
 
-Zde je příklad vlastnosti `uživatel.jméno` implementované pomocí `get/set`:
+Here's an example for `user.name` implemented using `get/set`:
 
 ```js run
-class Uživatel {
+class User {
 
-  constructor(jméno) {
-    // vyvolá setter
-    this.jméno = jméno;
+  constructor(name) {
+    // invokes the setter
+    this.name = name;
   }
 
 *!*
-  get jméno() {
+  get name() {
 */!*
-    return this._jméno;
+    return this._name;
   }
 
 *!*
-  set jméno(hodnota) {
+  set name(value) {
 */!*
-    if (hodnota.length < 3) {
-      alert("Jméno je příliš krátké.");
+    if (value.length < 4) {
+      alert("Name is too short.");
       return;
     }
-    this._jméno = hodnota;
+    this._name = value;
   }
 
 }
 
-let uživatel = new Uživatel("Jan");
-alert(uživatel.jméno); // Jan
+let user = new User("John");
+alert(user.name); // John
 
-uživatel = new Uživatel(""); // Jméno je příliš krátké.
+user = new User(""); // Name is too short.
 ```
 
-Technicky taková deklarace třídy funguje tak, že vytvoří gettery a settery v prototypu `Uživatel.prototype`.
+Technically, such class declaration works by creating getters and setters in `User.prototype`.
 
-## Vypočítávané názvy [...]
+## Computed names [...]
 
-Zde je příklad s vypočítávaným názvem metody pomocí hranatých závorek `[...]`:
+Here's an example with a computed method name using brackets `[...]`:
 
 ```js run
-class Uživatel {
+class User {
 
 *!*
-  ['řekni' + 'Ahoj']() {
+  ['say' + 'Hi']() {
 */!*
-    alert("Ahoj");
+    alert("Hello");
   }
 
 }
 
-new Uživatel().řekniAhoj();
+new User().sayHi();
 ```
 
-Takové vlastnosti se snadno pamatují, neboť připomínají vlastnosti literálních objektů.
+Such features are easy to remember, as they resemble that of literal objects.
 
-## Třídní pole
+## Class fields
 
-```warn header="Staré prohlížeče mohou potřebovat polyfill"
-Třídní pole byla do jazyka přidána teprve nedávno.
+```warn header="Old browsers may need a polyfill"
+Class fields are a recent addition to the language.
 ```
 
-Dosud naše třídy obsahovaly pouze metody.
+Previously, our classes only had methods.
 
-„Třídní pole“ je syntaxe, která umožňuje přidávat libovolné vlastnosti.
+"Class fields" is a syntax that allows to add any properties.
 
-Například přidáme vlastnost `jméno` do třídy `class Uživatel`:
+For instance, let's add `name` property to `class User`:
 
 ```js run
-class Uživatel {
+class User {
 *!*
-  jméno = "Jan";
+  name = "John";
 */!*
 
-  řekniAhoj() {
-    alert(`Ahoj, ${this.jméno}!`);
+  sayHi() {
+    alert(`Hello, ${this.name}!`);
   }
 }
 
-new Uživatel().řekniAhoj(); // Ahoj, Jan!
+new User().sayHi(); // Hello, John!
 ```
 
-Zapíšeme do deklarace jednoduše `<název vlastnosti> = <hodnota>` a to je vše.
+So, we just write "<property name> = <value>" in the declaration, and that's it.
 
-Důležitý rozdíl třídních polí spočívá v tom, že se nastavují na jednotlivých objektech, ne na `Uživatel.prototype`:
-
-```js run
-class Uživatel {
-*!*
-  jméno = "Jan";
-*/!*
-}
-
-let uživatel = new Uživatel();
-alert(uživatel.jméno); // Jan
-alert(Uživatel.prototype.jméno); // undefined
-```
-
-Můžeme také přiřazovat hodnoty pomocí složitějších výrazů a volání funkcí:
+The important difference of class fields is that they are set on individual objects, not `User.prototype`:
 
 ```js run
-class Uživatel {
+class User {
 *!*
-  jméno = prompt("Jméno, prosím?", "Jan");
+  name = "John";
 */!*
 }
 
-let uživatel = new Uživatel();
-alert(uživatel.jméno); // Jan
+let user = new User();
+alert(user.name); // John
+alert(User.prototype.name); // undefined
 ```
 
-
-### Vytváření vázaných metod pomocí třídních polí
-
-Jak jsme demonstrovali v kapitole <info:bind>, funkce v JavaScriptu mají vázané `this`, které závisí na kontextu volání.
-
-Jestliže je tedy objektová metoda předána jinam a volána v jiném kontextu, `this` už nebude obsahovat odkaz na její objekt.
-
-Například tento kód zobrazí `undefined`:
+We can also assign values using more complex expressions and function calls:
 
 ```js run
-class Tlačítko {
-  constructor(hodnota) {
-    this.hodnota = hodnota;
-  }
-
-  stiskni() {
-    alert(this.hodnota);
-  }
-}
-
-let tlačítko = new Tlačítko("ahoj");
-
+class User {
 *!*
-setTimeout(tlačítko.stiskni, 1000); // undefined
-*/!*
-```
-
-Tento problém se nazývá „ztráta `this`“.
-
-Jak jsme probrali v kapitole <info:bind>, existují dva přístupy, jak jej opravit:
-
-1. Předat wrapperovou funkci, například `setTimeout(() => tlačítko.stiskni(), 1000)`.
-2. Navázat metodu na objekt, např. v konstruktoru.
-
-Třídní pole poskytují další, docela elegantní syntaxi:
-
-```js run
-class Tlačítko {
-  constructor(hodnota) {
-    this.hodnota = hodnota;
-  }
-*!*
-  stiskni = () => {
-    alert(this.hodnota);
-  }
+  name = prompt("Name, please?", "John");
 */!*
 }
 
-let tlačítko = new Tlačítko("ahoj");
-
-setTimeout(tlačítko.stiskni, 1000); // ahoj
+let user = new User();
+alert(user.name); // John
 ```
 
-Třídní pole `stiskni = () => {...}` se vytvoří pro každý objekt zvlášť, je v něm samostatná funkce pro každý objekt `Tlačítko` a `this` uvnitř ní se odkazuje na tento objekt. Můžeme předávat `tlačítko.stiskni` kamkoli a hodnota `this` bude vždy správná.
 
-Obzvláště užitečné je to v prohlížečových prostředích u listenerů událostí.
+### Making bound methods with class fields
 
-## Shrnutí
+As demonstrated in the chapter <info:bind> functions in JavaScript have a dynamic `this`. It depends on the context of the call.
 
-Základní syntaxe třídy vypadá takto:
+So if an object method is passed around and called in another context, `this` won't be a reference to its object any more.
+
+For instance, this code will show `undefined`:
+
+```js run
+class Button {
+  constructor(value) {
+    this.value = value;
+  }
+
+  click() {
+    alert(this.value);
+  }
+}
+
+let button = new Button("hello");
+
+*!*
+setTimeout(button.click, 1000); // undefined
+*/!*
+```
+
+The problem is called "losing `this`".
+
+There are two approaches to fixing it, as discussed in the chapter <info:bind>:
+
+1. Pass a wrapper-function, such as `setTimeout(() => button.click(), 1000)`.
+2. Bind the method to object, e.g. in the constructor.
+
+Class fields provide another, quite elegant syntax:
+
+```js run
+class Button {
+  constructor(value) {
+    this.value = value;
+  }
+*!*
+  click = () => {
+    alert(this.value);
+  }
+*/!*
+}
+
+let button = new Button("hello");
+
+setTimeout(button.click, 1000); // hello
+```
+
+The class field `click = () => {...}` is created on a per-object basis, there's a separate function for each `Button` object, with `this` inside it referencing that object. We can pass `button.click` around anywhere, and the value of `this` will always be correct.
+
+That's especially useful in browser environment, for event listeners.
+
+## Summary
+
+The basic class syntax looks like this:
 
 ```js
-class MojeTřída {
-  vlastnost = hodnota; // vlastnost
+class MyClass {
+  prop = value; // property
 
-  constructor(...) { // konstruktor
+  constructor(...) { // constructor
     // ...
   }
 
-  metoda(...) {} // metoda
+  method(...) {} // method
 
-  get něco(...) {} // getter
-  set něco(...) {} // setter
+  get something(...) {} // getter method
+  set something(...) {} // setter method
 
-  [Symbol.iterator]() {} // metoda s vypočítávaným názvem (zde symbol)
+  [Symbol.iterator]() {} // method with computed name (symbol here)
   // ...
 }
 ```
 
-Technicky je `MojeTřída` funkce (ta, kterou poskytneme jako `constructor`), zatímco metody, gettery a settery se zapisují do prototypu `MojeTřída.prototype`.
+`MyClass` is technically a function (the one that we provide as `constructor`), while methods, getters and setters are written to `MyClass.prototype`.
 
-V dalších kapitolách se o třídách naučíme víc, včetně dědičnosti a jiných prvků.
+In the next chapters we'll learn more about classes, including inheritance and other features.

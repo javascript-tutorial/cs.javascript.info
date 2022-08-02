@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Zkopírujte a seřaďte pole
+# Copy and sort array
 
-Máme pole řetězců `pole`. Chtěli bychom mít jeho seřazenou kopii, ale `pole` chceme ponechat nezměněné.
+We have an array of strings `arr`. We'd like to have a sorted copy of it, but keep `arr` unmodified.
 
-Napište funkci `zkopírujASeřaď(pole)`, která takovou kopii vrátí.
+Create a function `copySorted(arr)` that returns such a copy.
 
 ```js
-let pole = ["HTML", "JavaScript", "CSS"];
+let arr = ["HTML", "JavaScript", "CSS"];
 
-let seřazenéPole = zkopírujASeřaď(pole);
+let sorted = copySorted(arr);
 
-alert( seřazenéPole ); // CSS, HTML, JavaScript
-alert( pole ); // HTML, JavaScript, CSS (beze změn)
+alert( sorted ); // CSS, HTML, JavaScript
+alert( arr ); // HTML, JavaScript, CSS (no changes)
 ```
