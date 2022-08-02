@@ -1,22 +1,22 @@
 <!doctype html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
 
-Funkce <code>handler</code> je volána na tomto vstupu:
+Function <code>handler</code> is called on this input:
 <br>
 <input id="input1" placeholder="type here">
 
 <p>
 
-Debouncovaná funkce <code>debounce(handler, 1000)</code> je volána na tomto vstupu:
+Debounced function <code>debounce(handler, 1000)</code> is called on this input:
 <br>
 <input id="input2" placeholder="type here">
 
 <p>
-<button id="result">Funkce <code>handler</code> umístí výsledek sem</button>
+<button id="result">The <code>handler</code> puts the result here</button>
 
 <script>
-  function handler(událost) {
-    result.innerHTML = událost.target.value;
+  function handler(event) {
+    result.innerHTML = event.target.value;
   }
 
   input1.oninput = handler;

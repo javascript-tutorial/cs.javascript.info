@@ -1,30 +1,30 @@
-Jednoduché řešení by mohlo být:
+The simple solution could be:
 
 ```js run
 *!*
-function zamíchej(pole) {
-  pole.sort(() => Math.random() - 0.5);
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
 }
 */!*
 
-let pole = [1, 2, 3];
-zamíchej(pole);
-alert(pole);
+let arr = [1, 2, 3];
+shuffle(arr);
+alert(arr);
 ```
 
-To jakžtakž funguje, protože `Math.random() - 0.5` je náhodné číslo, které může být kladné nebo záporné, takže řadicí funkce přehází prvky náhodně.
+That somewhat works, because `Math.random() - 0.5` is a random number that may be positive or negative, so the sorting function reorders elements randomly.
 
-Protože však řadicí funkce není určena k takovému použití, nebudou mít všechny permutace stejnou pravděpodobnost.
+But because the sorting function is not meant to be used this way, not all permutations have the same probability.
 
-Například uvažujte níže uvedený kód. Spustí `zamíchej` 1000000krát a spočítá výskyty všech možných výsledků:
+For instance, consider the code below. It runs `shuffle` 1000000 times and counts appearances of all possible results:
 
 ```js run
-function zamíchej(pole) {
-  pole.sort(() => Math.random() - 0.5);
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
 }
 
-// spočítáme výskyty všech možných permutací
-let počty = {
+// counts of appearances for all possible permutations
+let count = {
   '123': 0,
   '132': 0,
   '213': 0,
@@ -34,18 +34,18 @@ let počty = {
 };
 
 for (let i = 0; i < 1000000; i++) {
-  let pole = [1, 2, 3];
-  zamíchej(pole);
-  počty[pole.join('')]++;
+  let array = [1, 2, 3];
+  shuffle(array);
+  count[array.join('')]++;
 }
 
-// zobrazíme počty všech možných permutací
-for (let klíč in počty) {
-  alert(`${klíč}: ${počty[klíč]}`);
+// show counts of all possible permutations
+for (let key in count) {
+  alert(`${key}: ${count[key]}`);
 }
 ```
 
-Příklad výsledku (závisí na enginu JS):
+An example result (depends on JS engine):
 
 ```js
 123: 250706
@@ -56,41 +56,41 @@ Příklad výsledku (závisí na enginu JS):
 321: 125223
 ```
 
-Jasně vidíme odchylku: `123` a `213` se objevují mnohem častěji než ostatní.
+We can see the bias clearly: `123` and `213` appear much more often than others.
 
-Výsledek kódu se může u jednotlivých JavaScriptových enginů lišit, ale už vidíme, že tento přístup je nespolehlivý.
+The result of the code may vary between JavaScript engines, but we can already see that the approach is unreliable.
 
-Proč to nefunguje? Zhruba řečeno, `sort` je „černá skříňka“: vhodíme do ní pole a porovnávací funkci a očekáváme, že pole bude seřazeno. Kvůli naprosté náhodnosti řazení se však černá skříňka zblázní. To, jak přesně se zblázní, závisí na konkrétní implementaci, která se mezi jednotlivými enginy liší.
+Why it doesn't work? Generally speaking, `sort` is a "black box": we throw an array and a comparison function into it and expect the array to be sorted. But due to the utter randomness of the comparison the black box goes mad, and how exactly it goes mad depends on the concrete implementation that differs between engines.
 
-Existují jiné dobré způsoby, jak tuto úlohu vyřešit. Například existuje skvělý algoritmus nazvaný [Fisher-Yatesovo míchání](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle). Myšlenkou je procházet pole v obráceném pořadí a vyměnit každý prvek s jiným prvkem před ním, náhodně vybraným:
+There are other good ways to do the task. For instance, there's a great algorithm called [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle). The idea is to walk the array in the reverse order and swap each element with a random one before it:
 
 ```js
-function zamíchej(pole) {
-  for (let i = pole.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1)); // náhodný index od 0 do i
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
 
-    // vyměníme prvky pole[i] a pole[j]
-    // k dosažení tohoto použijeme syntaxi „destrukturačního přiřazení“
-    // podrobnosti o této syntaxi najdete v dalších kapitolách
-    // totéž lze zapsat jako:
-    // let t = pole[i]; pole[i] = pole[j]; pole[j] = t
-    [pole[i], pole[j]] = [pole[j], pole[i]];
+    // swap elements array[i] and array[j]
+    // we use "destructuring assignment" syntax to achieve that
+    // you'll find more details about that syntax in later chapters
+    // same can be written as:
+    // let t = array[i]; array[i] = array[j]; array[j] = t
+    [array[i], array[j]] = [array[j], array[i]];
   }
 }
 ```
 
-Otestujme to stejným způsobem:
+Let's test it the same way:
 
 ```js run
-function zamíchej(pole) {
-  for (let i = pole.length - 1; i > 0; i--) {
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    [pole[i], pole[j]] = [pole[j], pole[i]];
+    [array[i], array[j]] = [array[j], array[i]];
   }
 }
 
-// spočítáme výskyty všech možných permutací
-let počty = {
+// counts of appearances for all possible permutations
+let count = {
   '123': 0,
   '132': 0,
   '213': 0,
@@ -100,18 +100,18 @@ let počty = {
 };
 
 for (let i = 0; i < 1000000; i++) {
-  let pole = [1, 2, 3];
-  zamíchej(pole);
-  počty[pole.join('')]++;
+  let array = [1, 2, 3];
+  shuffle(array);
+  count[array.join('')]++;
 }
 
-// zobrazíme počty všech možných permutací
-for (let klíč in počty) {
-  alert(`${klíč}: ${počty[klíč]}`);
+// show counts of all possible permutations
+for (let key in count) {
+  alert(`${key}: ${count[key]}`);
 }
 ```
 
-Příklad výstupu:
+The example output:
 
 ```js
 123: 166693
@@ -122,6 +122,6 @@ Příklad výstupu:
 321: 166316
 ```
 
-Nyní to vypadá dobře: všechny permutace se objevují se stejnou pravděpodobností.
+Looks good now: all permutations appear with the same probability.
 
-Navíc je Fisher-Yatesův algoritmus mnohem méně náročný na výkon, jelikož v něm není žádné „řazení“.
+Also, performance-wise the Fisher-Yates algorithm is much better, there's no "sorting" overhead.

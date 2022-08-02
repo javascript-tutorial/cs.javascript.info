@@ -1,9 +1,9 @@
-function ahoj(jméno) {
-  let věta = `Ahoj, ${jméno}!`;
+function hello(name) {
+  let phrase = `Hello, ${name}!`;
 
-  řekni(věta);
+  say(phrase);
 }
 
-function řekni(věta) {
-  alert(`** ${věta} **`);
+function say(phrase) {
+  alert(`** ${phrase} **`);
 }

@@ -1,29 +1,29 @@
-describe("vraťDenVTýdnu", function() {
-  it("3. leden 2014 - pátek", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 3)), 'PÁ');
+describe("getWeekDay", function() {
+  it("3 January 2014 - friday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 3)), 'FR');
   });
 
-  it("4. leden 2014 - sobota", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 4)), 'SO');
+  it("4 January 2014 - saturday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 4)), 'SA');
   });
 
-  it("5. leden 2014 - neděle", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 5)), 'NE');
+  it("5 January 2014 - sunday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 5)), 'SU');
   });
 
-  it("6. leden 2014 - pondělí", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 6)), 'PO');
+  it("6 January 2014 - monday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 6)), 'MO');
   });
 
-  it("7. leden 2014 - úterý", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 7)), 'ÚT');
+  it("7 January 2014 - tuesday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 7)), 'TU');
   });
 
-  it("8. leden 2014 - středa", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 8)), 'ST');
+  it("8 January 2014 - wednesday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 8)), 'WE');
   });
 
-  it("9. leden 2014 - čtvrtek", function() {
-    assert.equal(vraťDenVTýdnu(new Date(2014, 0, 9)), 'ČT');
+  it("9 January 2014 - thursday", function() {
+    assert.equal(getWeekDay(new Date(2014, 0, 9)), 'TH');
   });
 });

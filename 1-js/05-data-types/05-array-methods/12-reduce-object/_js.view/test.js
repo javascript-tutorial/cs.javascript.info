@@ -1,21 +1,21 @@
-describe("seskupPodleId", function() {
+describe("groupById", function() {
 
-  it("vytvoří objekt seskupený podle id", function() {
-    let uživatelé = [
-      {id: 'jan', jméno: "Jan Novák", věk: 20},
-      {id: 'anna', jméno: "Anna Nováková", věk: 24},
-      {id: 'petr', jméno: "Petr Petřík", věk: 31},
+  it("creates an object grouped by id", function() {
+    let users = [
+      {id: 'john', name: "John Smith", age: 20},
+      {id: 'ann', name: "Ann Smith", age: 24},
+      {id: 'pete', name: "Pete Peterson", age: 31},
     ];
 
-    assert.deepEqual(seskupPodleId(uživatelé), {
-      jan: {id: 'jan', jméno: "Jan Novák", věk: 20},
-      anna: {id: 'anna', jméno: "Anna Nováková", věk: 24},
-      petr: {id: 'petr', jméno: "Petr Petřík", věk: 31},
+    assert.deepEqual(groupById(users), {
+      john: {id: 'john', name: "John Smith", age: 20},
+      ann: {id: 'ann', name: "Ann Smith", age: 24},
+      pete: {id: 'pete', name: "Pete Peterson", age: 31},
     });
   });
 
-  it("funguje s prázdným polem", function() {
-    uživatelé = [];
-    assert.deepEqual(seskupPodleId(uživatelé), {});
+  it("works with an empty array", function() {
+    users = [];
+    assert.deepEqual(groupById(users), {});
   });
 });

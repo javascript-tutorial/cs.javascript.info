@@ -1,43 +1,43 @@
 
-Chyba nastane proto, že funkce `zeptejSeNaHeslo` obdrží funkce `přihlášeníOK/přihlášeníSelhalo` bez objektu.
+The error occurs because `ask` gets functions `loginOk/loginFail` without the object.
 
-Když je zavolá, přirozeně předpokládají `this=undefined`.
+When it calls them, they naturally assume `this=undefined`.
 
-Navažme kontext funkcí `bind`:
+Let's `bind` the context:
 
 ```js run
-function zeptejSeNaHeslo(ok, selhal) {
-  let heslo = prompt("Heslo?", '');
-  if (heslo == "rockstar") ok();
-  else selhal();
+function askPassword(ok, fail) {
+  let password = prompt("Password?", '');
+  if (password == "rockstar") ok();
+  else fail();
 }
 
-let uživatel = {
-  jméno: 'Jan',
+let user = {
+  name: 'John',
 
-  přihlášeníOK() {
-    alert(`${this.jméno} se přihlásil`);
+  loginOk() {
+    alert(`${this.name} logged in`);
   },
 
-  přihlášeníSelhalo() {
-    alert(`${this.jméno} se nedokázal přihlásit`);
+  loginFail() {
+    alert(`${this.name} failed to log in`);
   },
 
 };
 
 *!*
-zeptejSeNaHeslo(uživatel.přihlášeníOK.bind(uživatel), uživatel.přihlášeníSelhalo.bind(uživatel));
+askPassword(user.loginOk.bind(user), user.loginFail.bind(user));
 */!*
 ```
 
-Teď to funguje.
+Now it works.
 
-Alternativní řešení by mohlo být:
+An alternative solution could be:
 ```js
 //...
-zeptejSeNaHeslo(() => uživatel.přihlášeníOK(), () => uživatel.přihlášeníSelhalo());
+askPassword(() => user.loginOk(), () => user.loginFail());
 ```
 
-Obvykle to také funguje a vypadá dobře.
+Usually that also works and looks good.
 
-Je to však méně spolehlivé ve složitějších situacích, kdy se proměnná `uživatel` může změnit *po* volání `zeptejSeNaHeslo`, ale *před* odpovědí návštěvníka a voláním `() => uživatel.přihlášeníOK()`. 
+It's a bit less reliable though in more complex situations where `user` variable might change *after* `askPassword` is called, but *before* the visitor answers and calls `() => user.loginOk()`. 

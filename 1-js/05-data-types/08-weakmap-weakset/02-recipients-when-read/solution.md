@@ -1,15 +1,15 @@
 
-K uložení data můžeme použít `WeakMap`:
+To store a date, we can use `WeakMap`:
 
 ```js
-let zprávy = [
-  {text: "Ahoj", od: "Jan"},
-  {text: "Jak se máš?", od: "Jan"},
-  {text: "Brzy se uvidíme", od: "Alice"}
+let messages = [
+  {text: "Hello", from: "John"},
+  {text: "How goes?", from: "John"},
+  {text: "See you soon", from: "Alice"}
 ];
 
-let mapaPřečtení = new WeakMap();
+let readMap = new WeakMap();
 
-mapaPřečtení.set(zprávy[0], new Date(2017, 1, 1));
-// objekty Date prostudujeme později
+readMap.set(messages[0], new Date(2017, 1, 1));
+// Date object we'll study later
 ```

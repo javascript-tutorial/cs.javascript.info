@@ -2,29 +2,29 @@ importance: 5
 
 ---
 
-# Špiónský dekorátor
+# Spy decorator
 
-Vytvořte dekorátor `špión(funkce)`, který by měl vrátit wrapper, který si bude ukládat všechna volání funkce do své vlastnosti `volání`.
+Create a decorator `spy(func)` that should return a wrapper that saves all calls to function in its `calls` property.
 
-Každé volání bude uloženo jako pole argumentů.
+Every call is saved as an array of arguments.
 
-Například:
+For instance:
 
 ```js
-function práce(a, b) {
-  alert( a + b ); // práce je jakákoli funkce nebo metoda
+function work(a, b) {
+  alert( a + b ); // work is an arbitrary function or method
 }
 
 *!*
-práce = špión(práce);
+work = spy(work);
 */!*
 
-práce(1, 2); // 3
-práce(4, 5); // 9
+work(1, 2); // 3
+work(4, 5); // 9
 
-for (let argumenty of práce.volání) {
-  alert( 'volání:' + argumenty.join() ); // "volání:1,2", "volání:4,5"
+for (let args of work.calls) {
+  alert( 'call:' + args.join() ); // "call:1,2", "call:4,5"
 }
 ```
 
-P.S. Takový dekorátor je někdy užitečný pro unit-testování. Jeho pokročilá forma je `sinon.spy` v knihovně [Sinon.JS](http://sinonjs.org/).
+P.S. That decorator is sometimes useful for unit-testing. Its advanced form is `sinon.spy` in [Sinon.JS](http://sinonjs.org/) library.

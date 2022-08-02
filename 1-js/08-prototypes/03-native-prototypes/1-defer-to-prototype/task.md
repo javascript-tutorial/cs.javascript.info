@@ -2,16 +2,16 @@ importance: 5
 
 ---
 
-# Přidejte do funkcí metodu „f.odlož(ms)“
+# Add method "f.defer(ms)" to functions
 
-Přidejte do prototypu všech funkcí metodu `odlož(ms)`, která tuto funkci spustí za `ms` milisekund.
+Add to the prototype of all functions the method `defer(ms)`, that runs the function after `ms` milliseconds.
 
-Poté, co to uděláte, by měl fungovat tento kód:
+After you do it, such code should work:
 
 ```js
 function f() {
-  alert("Ahoj!");
+  alert("Hello!");
 }
 
-f.odlož(1000); // zobrazí "Ahoj!" za 1 sekundu
+f.defer(1000); // shows "Hello!" after 1 second
 ```

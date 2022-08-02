@@ -1,36 +1,36 @@
-# Eval: spuštění řetězce kódu
+# Eval: run a code string
 
-Zabudovaná funkce `eval` nám umožňuje spustit řetězec kódu.
+The built-in `eval` function allows to execute a string of code.
 
-Syntaxe je:
+The syntax is:
 
 ```js
-let výsledek = eval(kód);
+let result = eval(code);
 ```
 
-Například:
+For example:
 
 ```js run
-let kód = 'alert("Ahoj")';
-eval(kód); // Ahoj
+let code = 'alert("Hello")';
+eval(code); // Hello
 ```
 
-Řetězec kódu může být dlouhý, může obsahovat konce řádku, deklarace funkcí, proměnné a podobně.
+A string of code may be long, contain line breaks, function declarations, variables and so on.
 
-Výsledkem funkce `eval` je výsledek posledního příkazu.
+The result of `eval` is the result of the last statement.
 
-Příklad:
+For example:
 ```js run
-let hodnota = eval('1+1');
-alert(hodnota); // 2
+let value = eval('1+1');
+alert(value); // 2
 ```
 
 ```js run
-let hodnota = eval('let i = 0; ++i');
-alert(hodnota); // 1
+let value = eval('let i = 0; ++i');
+alert(value); // 1
 ```
 
-Vyhodnocovaný kód je spouštěn v aktuálním lexikálním prostředí, takže vidí vnější proměnné:
+The eval'ed code is executed in the current lexical environment, so it can see outer variables:
 
 ```js run no-beautify
 let a = 1;
@@ -46,56 +46,56 @@ function f() {
 f();
 ```
 
-Může vnější proměnné také měnit:
+It can change outer variables as well:
 
 ```js untrusted refresh run
 let x = 5;
 eval("x = 10");
-alert(x); // 10, hodnota změněna
+alert(x); // 10, value modified
 ```
 
-Ve striktním režimu má `eval` své vlastní lexikální prostředí, takže funkce a proměnné deklarované uvnitř `eval` nejsou viditelné venku:
+In strict mode, `eval` has its own lexical environment. So functions and variables, declared inside eval, are not visible outside:
 
 ```js untrusted refresh run
-// pamatujte: 'use strict' je ve spustitelných příkladech standardně zapnuté
+// reminder: 'use strict' is enabled in runnable examples by default
 
 eval("let x = 5; function f() {}");
 
-alert(typeof x); // undefined (taková proměnná neexistuje)
-// funkce f rovněž není viditelná
+alert(typeof x); // undefined (no such variable)
+// function f is also not visible
 ```
 
-Bez `use strict` nemá `eval` své vlastní lexikální prostředí, takže bychom `x` a `f` venku viděli.
+Without `use strict`, `eval` doesn't have its own lexical environment, so we would see `x` and `f` outside.
 
-## Použití „eval“
+## Using "eval"
 
-V moderním programování se `eval` používá velmi vzácně. Často se říká, že „eval je zlo“ *(anglicky „eval is evil“ -- pozn. překl.)*.
+In modern programming `eval` is used very sparingly. It's often said that "eval is evil".
 
-Důvod je jednoduchý: před dávnými, dávnými časy býval JavaScript mnohem slabší jazyk a mnoho věcí bylo možné provést jedině pomocí `eval`. Ale tahle doba pominula už před deseti lety.
+The reason is simple: long, long time ago JavaScript was a much weaker language, many things could only be done with `eval`. But that time passed a decade ago.
 
-V současnosti není téměř žádný důvod, proč `eval` používat. Pokud ho někdo používá, je velká šance, že se dá nahradit nějakou moderní jazykovou konstrukcí nebo [JavaScriptovým modulem](info:modules).
+Right now, there's almost no reason to use `eval`. If someone is using it, there's a good chance they can replace it with a modern language construct or a [JavaScript Module](info:modules).
 
-Prosíme všimněte si, že jeho schopnost přistupovat k vnějším proměnným má vedlejší efekty.
+Please note that its ability to access outer variables has side-effects.
 
-Minifikátory kódu (nástroje používané před odesláním JS do produkce, aby jej zkomprimovaly) přejmenovávají lokální proměnné na kratší (např. `a`, `b` atd.), aby kód zkrátily. To je obvykle bezpečné, ale při použití `eval` ne, protože vyhodnocovaný řetězec kódu může k lokálním proměnným přistupovat. Minifikátory tedy toto přejmenování neprovádějí u proměnných, které mohou být viditelné z `eval`. To negativně ovlivňuje poměr komprese kódu.
+Code minifiers (tools used before JS gets to production, to compress it) rename local variables into shorter ones (like `a`, `b` etc) to make the code smaller. That's usually safe, but not if `eval` is used, as local variables may be accessed from eval'ed code string. So minifiers don't do that renaming for all variables potentially visible from `eval`. That negatively affects code compression ratio.
 
-Rovněž používání vnějších lokálních proměnných uvnitř `eval` se považuje za špatnou programátorskou praktiku, protože ztěžuje údržbu kódu.
+Using outer local variables inside `eval` is also considered a bad programming practice, as it makes maintaining the code more difficult.
 
-Existují dva způsoby, jak být před takovými problémy zcela v bezpečí.
+There are two ways how to be totally safe from such problems.
 
-**Jestliže vyhodnocovaný kód nepoužívá vnější proměnné, prosíme volejte `eval` jako `window.eval(...)`:**
+**If eval'ed code doesn't use outer variables, please call `eval` as `window.eval(...)`:**
 
-Tímto způsobem bude kód spuštěn v globálním rozsahu platnosti:
+This way the code is executed in the global scope:
 
 ```js untrusted refresh run
 let x = 1;
 {
   let x = 5;
-  window.eval('alert(x)'); // 1 (globální proměnná)
+  window.eval('alert(x)'); // 1 (global variable)
 }
 ```
 
-**Jestliže vyhodnocovaný kód potřebuje lokální proměnné, změňte `eval` na `new Function` a předejte je jako argumenty:**
+**If eval'ed code needs local variables, change `eval` to `new Function` and pass them as arguments:**
 
 ```js run
 let f = new Function('a', 'alert(a)');
@@ -103,12 +103,12 @@ let f = new Function('a', 'alert(a)');
 f(5); // 5
 ```
 
-Konstrukce `new Function` je vysvětlena v kapitole <info:new-function>. Vytvoří funkci z řetězce, rovněž v globálním rozsahu platnosti. Funkce tedy neuvidí lokální proměnné. Je však mnohem čistší předat je explicitně jako argumenty, tak jako v uvedeném příkladu.
+The `new Function` construct is explained in the chapter <info:new-function>. It creates a function from a string, also in the global scope. So it can't see local variables. But it's so much clearer to pass them explicitly as arguments, like in the example above.
 
-## Shrnutí
+## Summary
 
-Volání `eval(kód)` spustí řetězec kódu a vrátí výsledek posledního příkazu.
-- V moderním JavaScriptu se používá málokdy, jelikož obvykle není zapotřebí.
-- Může přistupovat k vnějším lokálním proměnným. To se považuje za špatnou praktiku.
-- Místo toho k vyhodnocení kódu v globálním rozsahu platnosti použijte `window.eval(kód)`.
-- Nebo, jestliže váš kód potřebuje data z vnějšího rozsahu, použijte `new Function` a předejte je jako argumenty.
+A call to `eval(code)` runs the string of code and returns the result of the last statement.
+- Rarely used in modern JavaScript, as there's usually no need.
+- Can access outer local variables. That's considered bad practice.
+- Instead, to `eval` the code in the global scope, use `window.eval(code)`.
+- Or, if your code needs some data from the outer scope, use `new Function` and pass it as arguments.

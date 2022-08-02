@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Převeďte objekt na JSON a zpět
+# Turn the object into JSON and back
 
-Převeďte objekt `uživatel` na JSON a pak jej načtěte zpět do jiné proměnné.
+Turn the `user` into JSON and then read it back into another variable.
 
 ```js
-let uživatel = {
-  jméno: "Jan Novák",
-  věk: 35
+let user = {
+  name: "John Smith",
+  age: 35
 };
 ```
