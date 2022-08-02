@@ -163,7 +163,7 @@ Porovnávání
     alert( 0 == '' ); // true
     ```
 
-    Také ostatní porovnání převádějí parametry na čísla.
+    Jiná porovnání se převádí také na čísla.
 
     Operátor striktní rovnosti `===` tuto konverzi neprovádí: různé typy pro něj vždy znamenají, že hodnoty se nerovnají.
 
