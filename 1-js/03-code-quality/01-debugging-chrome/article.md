@@ -147,7 +147,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 
     Do budoucna si jen poznamenejme, že příkaz „Krokovat“ ignoruje asynchronní akce, například `setTimeout` (vyvolání funkce za určitou dobu), které se vykonávají později. Příkaz „Vnořit“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
 
-<span class="devtools" style="background-position:-32px -194px"></span> -- „Step out“ („Postoupit ven z aktuální funkce“) pokračuje v běhu až do konce vykonávané funkce, klávesa `key:Shift+F11`.
+<span class="devtools" style="background-position:-32px -194px"></span> -- „Step out“ („Vyskočit“) pokračuje v běhu až do konce vykonávané funkce, klávesa `key:Shift+F11`.
 : Pokračuje v běhu a zastaví se až na posledním řádku právě vykonávané funkce. To se hodí, když jsme omylem vstoupili do volání funkce pomocí <span class="devtools" style="background-position:-200px -190px"></span>, ale ta nás nezajímá, a tak chceme co nejrychleji dospět k jejímu konci.
 
 <span class="devtools" style="background-position:-61px -74px"></span> -- povolí/zakáže všechny zarážky.
