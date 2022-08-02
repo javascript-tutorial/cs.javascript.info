@@ -1,13 +1,13 @@
 ```js demo
-function debounce(func, ms) {
+function debounce(funkce, ms) {
   let timeout;
   return function() {
     clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, arguments), ms);
+    timeout = setTimeout(() => funkce.apply(this, arguments), ms);
   };
 }
 
 ```
 
-A call to `debounce` returns a wrapper. When called, it schedules the original function call after given `ms` and cancels the previous such timeout.
+Volání `debounce` vrátí wrapper. Když je zavolán, načasuje volání původní funkce po zadané době `ms` a zruší předchozí takový timeout.
 

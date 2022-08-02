@@ -2,34 +2,34 @@ importance: 5
 
 ---
 
-# Why are both hamsters full?
+# Proč jsou oba křečci sytí?
 
-We have two hamsters: `speedy` and `lazy` inheriting from the general `hamster` object. 
+Máme dva křečky: `rychlý` a `líný`, kteří jsou zděděni z obecného objektu `křeček`.
 
-When we feed one of them, the other one is also full. Why? How can we fix it?
+Když jednoho z nich nakrmíme, bude sytý i ten druhý. Proč? Jak to můžeme opravit?
 
 ```js run
-let hamster = {
-  stomach: [],
+let křeček = {
+  žaludek: [],
 
-  eat(food) {
-    this.stomach.push(food);
+  žer(potrava) {
+    this.žaludek.push(potrava);
   }
 };
 
-let speedy = {
-  __proto__: hamster
+let rychlý = {
+  __proto__: křeček
 };
 
-let lazy = {
-  __proto__: hamster
+let líný = {
+  __proto__: křeček
 };
 
-// This one found the food
-speedy.eat("apple");
-alert( speedy.stomach ); // apple
+// Tento křeček nalezl potravu
+rychlý.žer("jablko");
+alert( rychlý.žaludek ); // jablko
 
-// This one also has it, why? fix please.
-alert( lazy.stomach ); // apple
+// Tento ji má také, proč? Opravte to, prosíme.
+alert( líný.žaludek ); // jablko
 ```
 
