@@ -1,11 +1,11 @@
-K výpočtu matematického výrazu použijme `eval`:
+Let's use `eval` to calculate the maths expression:
 
 ```js demo run
-let výraz = prompt("Zadejte aritmetický výraz:", '2*3+2');
+let expr = prompt("Type an arithmetic expression?", '2*3+2');
 
-alert( eval(výraz) );
+alert( eval(expr) );
 ```
 
-Uživatel však může zadat libovolný text nebo kód.
+The user can input any text or code though.
 
-Abychom všechno zabezpečili a omezili se jen na aritmetiku, můžeme zkontrolovat `výraz` pomocí [regulárního výrazu](info:regular-expressions), aby směl obsahovat jen číslice a operátory.
+To make things safe, and limit it to arithmetics only, we can check the `expr` using a [regular expression](info:regular-expressions), so that it only may contain digits and operators.

@@ -2,36 +2,35 @@ importance: 5
 
 ---
 
-# Vytvořte rozšiřitelný kalkulátor
+# Create an extendable calculator
 
-Vytvořte konstruktor `Kalkulátor`, který bude vytvářet „rozšiřitelné“ objekty kalkulátoru.
+Create a constructor function `Calculator` that creates "extendable" calculator objects.
 
-Úloha se skládá ze dvou částí.
+The task consists of two parts.
 
+1. First, implement the method `calculate(str)` that takes a string like `"1 + 2"` in the format "NUMBER operator NUMBER" (space-delimited) and returns the result. Should understand plus `+` and minus `-`.
 
-1. Nejprve implementujte metodu `vypočítej(str)`, která obdrží řetězec, např. `"1 + 2"`, ve formátu „ČÍSLO operátor ČÍSLO“ (oddělené mezerou) a vrátí výsledek. Měla by rozumět plusu `+` a minusu `-`.
-
-    Příklad použití:
-
-    ```js
-    let kalkulátor = new Kalkulátor;
-
-    alert( kalkulátor.vypočítej("3 + 7") ); // 10
-    ```
-2. Pak přidejte metodu `přidejMetodu(název, funkce)`, která naučí kalkulátor nové operaci. Obdrží operátor `název` a funkci o dvou argumentech `funkce(a,b)`, která jej implementuje.
-
-    Například přidáme násobení`*`, dělení `/` a umocňování `**`:
+    Usage example:
 
     ```js
-    let silnýKalkulátor = new Kalkulátor;
-    silnýKalkulátor.přidejMetodu("*", (a, b) => a * b);
-    silnýKalkulátor.přidejMetodu("/", (a, b) => a / b);
-    silnýKalkulátor.přidejMetodu("**", (a, b) => a ** b);
+    let calc = new Calculator;
 
-    let výsledek = silnýKalkulátor.vypočítej("2 ** 3");
-    alert( výsledek ); // 8
+    alert( calc.calculate("3 + 7") ); // 10
+    ```
+2. Then add the method `addMethod(name, func)` that teaches the calculator a new operation. It takes the operator `name` and the two-argument function `func(a,b)` that implements it.
+
+    For instance, let's add the multiplication `*`, division `/` and power `**`:
+
+    ```js
+    let powerCalc = new Calculator;
+    powerCalc.addMethod("*", (a, b) => a * b);
+    powerCalc.addMethod("/", (a, b) => a / b);
+    powerCalc.addMethod("**", (a, b) => a ** b);
+
+    let result = powerCalc.calculate("2 ** 3");
+    alert( result ); // 8
     ```
 
-- V této úloze nejsou závorky ani složité výrazy.
-- Čísla a operátor jsou oddělena právě jednou mezerou.
-- Pokud chcete přidat ošetřování chyb, můžete.
+- No parentheses or complex expressions in this task.
+- The numbers and the operator are delimited with exactly one space.
+- There may be error handling if you'd like to add it.

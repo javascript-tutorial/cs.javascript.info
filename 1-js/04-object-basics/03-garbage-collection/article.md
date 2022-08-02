@@ -1,214 +1,212 @@
 # Garbage collection
 
-*(Pozn. překladatele: výraz „garbage collection“ znamená česky „sbírání odpadu“, ale v programování se většinou ponechává anglický název.)*
+Memory management in JavaScript is performed automatically and invisibly to us. We create primitives, objects, functions... All that takes memory.
 
-Správa paměti v JavaScriptu se provádí automaticky a pro nás neviditelně. Vytváříme primitivy, objekty, funkce... To všechno zabírá paměť.
+What happens when something is not needed any more? How does the JavaScript engine discover it and clean it up?
 
-Co se stane, když něco už není potřeba? Jak to JavaScriptový engine odhalí a vyčistí?
+## Reachability
 
-## Dosažitelnost
+The main concept of memory management in JavaScript is *reachability*.
 
-Hlavním konceptem správy paměti v JavaScriptu je *dosažitelnost*.
+Simply put, "reachable" values are those that are accessible or usable somehow. They are guaranteed to be stored in memory.
 
-Jednoduše řečeno, „dosažitelné“ hodnoty jsou ty, které jsou odněkud přístupné nebo použitelné. U nich je zaručeno, že budou uloženy v paměti.
+1. There's a base set of inherently reachable values, that cannot be deleted for obvious reasons.
 
-1. Existuje základní sada zaručeně dosažitelných hodnot, které nelze smazat z pochopitelných důvodů.
+    For instance:
 
-    Například:
+    - The currently executing function, its local variables and parameters.
+    - Other functions on the current chain of nested calls, their local variables and parameters.
+    - Global variables.
+    - (there are some other, internal ones as well)
 
-    - Právě prováděná funkce, její lokální proměnné a parametry.
-    - Další funkce v právě prováděném řetězci vnořených volání, jejich lokální proměnné a parametry.
-    - Globální proměnné.
-    - (existují i některé další, stejně jako interní)
+    These values are called *roots*.
 
-    Tyto hodnoty se nazývají *kořenové hodnoty* nebo *kořeny*.
+2. Any other value is considered reachable if it's reachable from a root by a reference or by a chain of references.
 
-2. Jakákoli jiná hodnota se považuje za dosažitelnou, je-li dosažitelná z kořene nějakým odkazem nebo řetězcem odkazů.
+    For instance, if there's an object in a global variable, and that object has a property referencing another object, *that* object is considered reachable. And those that it references are also reachable. Detailed examples to follow.
 
-    Například obsahuje-li globální proměnná nějaký objekt a tento objekt má vlastnost, která se odkazuje na další objekt, pak *onen další* objekt se považuje za dosažitelný. I ty, na které se odkazuje on, jsou dosažitelné. Podrobné příklady budou následovat.
+There's a background process in the JavaScript engine that is called [garbage collector](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)). It monitors all objects and removes those that have become unreachable.
 
-V JavaScriptovém enginu v pozadí probíhá proces, který se nazývá [garbage collector](https://cs.wikipedia.org/wiki/Garbage_collection) *(česky se mu někdy říká „sběrač odpadků“ -- pozn. překl.)*. Monitoruje všechny objekty a odstraňuje ty, které se staly nedosažitelnými.
+## A simple example
 
-## Jednoduchý příklad
-
-Uveďme nejjednodušší příklad:
+Here's the simplest example:
 
 ```js
-// uživatel obsahuje odkaz na objekt
-let uživatel = {
-  jméno: "Jan"
+// user has a reference to the object
+let user = {
+  name: "John"
 };
 ```
 
 ![](memory-user-john.svg)
 
-Zde šipka představuje odkaz na objekt. Globální proměnná `"uživatel"` odkazuje na objekt `{jméno: "Jan"}` (pro zjednodušení mu budeme říkat Jan). Vlastnost `"jméno"` objektu Jan obsahuje primitiv, proto je zobrazena uvnitř objektu.
+Here the arrow depicts an object reference. The global variable `"user"` references the object `{name: "John"}` (we'll call it John for brevity). The `"name"` property of John stores a primitive, so it's painted inside the object.
 
-Je-li hodnota proměnné `uživatel` přepsána, odkaz je ztracen:
+If the value of `user` is overwritten, the reference is lost:
 
 ```js
-uživatel = null;
+user = null;
 ```
 
 ![](memory-user-john-lost.svg)
 
-Nyní se Jan stal nedosažitelným. Není žádný způsob, jak k němu přistoupit, neexistují na něj žádné odkazy. Garbage collector odstraní jeho data a uvolní paměť.
+Now John becomes unreachable. There's no way to access it, no references to it. Garbage collector will junk the data and free the memory.
 
-## Dva odkazy
+## Two references
 
-Nyní si představme, že zkopírujeme odkaz na objekt `uživatel` do objektu `admin`:
+Now let's imagine we copied the reference from `user` to `admin`:
 
 ```js
-// uživatel obsahuje odkaz na objekt
-let uživatel = {
-  jméno: "Jan"
+// user has a reference to the object
+let user = {
+  name: "John"
 };
 
 *!*
-let admin = uživatel;
+let admin = user;
 */!*
 ```
 
 ![](memory-user-john-admin.svg)
 
-Když nyní uděláme totéž:
+Now if we do the same:
 ```js
-uživatel = null;
+user = null;
 ```
 
-...Pak bude objekt stále dosažitelný z globální proměnné `admin`, a tedy musí zůstat v paměti. Jestliže přepíšeme i `admin`, bude možné jej odstranit.
+...Then the object is still reachable via `admin` global variable, so it must stay in memory. If we overwrite `admin` too, then it can be removed.
 
-## Propojené objekty
+## Interlinked objects
 
-Nyní složitější příklad. Rodina:
+Now a more complex example. The family:
 
 ```js
-function svatba(muž, žena) {
-  žena.manžel = muž;
-  muž.manželka = žena;
+function marry(man, woman) {
+  woman.husband = man;
+  man.wife = woman;
 
   return {
-    otec: muž,
-    matka: žena
+    father: man,
+    mother: woman
   }
 }
 
-let rodina = svatba({
-  jméno: "Jan"
+let family = marry({
+  name: "John"
 }, {
-  jméno: "Anna"
+  name: "Ann"
 });
 ```
 
-Funkce `svatba` „oddá“ dva objekty tak, že jim předá odkazy na sebe navzájem a vytvoří nový objekt, který je oba bude obsahovat.
+Function `marry` "marries" two objects by giving them references to each other and returns a new object that contains them both.
 
-Výsledná struktura paměti:
+The resulting memory structure:
 
 ![](family.svg)
 
-V této chvíli jsou všechny objekty dosažitelné.
+As of now, all objects are reachable.
 
-Nyní odstraňme dva odkazy:
+Now let's remove two references:
 
 ```js
-delete rodina.otec;
-delete rodina.matka.manžel;
+delete family.father;
+delete family.mother.husband;
 ```
 
 ![](family-delete-refs.svg)
 
-Nestačí smazat jen jeden z těchto dvou odkazů, jelikož všechny objekty by stále byly dosažitelné.
+It's not enough to delete only one of these two references, because all objects would still be reachable.
 
-Jestliže však smažeme oba, vidíme, že Jan již nemá žádné „příchozí“ odkazy, které by směřovaly k němu:
+But if we delete both, then we can see that John has no incoming reference any more:
 
 ![](family-no-father.svg)
 
-„Odchozí“ odkazy (směřující od Jana) nejsou podstatné. Objekt mohou učinit dosažitelným jedině příchozí odkazy. Jan je tedy nyní nedosažitelný a bude odstraněn z paměti i se všemi svými daty, která se také stala nedosažitelnými.
+Outgoing references do not matter. Only incoming ones can make an object reachable. So, John is now unreachable and will be removed from the memory with all its data that also became unaccessible.
 
-Po provedení garbage collection:
+After garbage collection:
 
 ![](family-no-father-2.svg)
 
-## Nedosažitelný ostrov
+## Unreachable island
 
-Může se stát, že se celý ostrov navzájem propojených objektů stane nedosažitelným a bude odstraněn z paměti.
+It is possible that the whole island of interlinked objects becomes unreachable and is removed from the memory.
 
-Zdrojový objekt je stejný jako ten uvedený výše. Pak:
+The source object is the same as above. Then:
 
 ```js
-rodina = null;
+family = null;
 ```
 
-Obrázek paměti bude vypadat takto:
+The in-memory picture becomes:
 
 ![](family-no-family.svg)
 
-Tento příklad demonstruje, jak důležitý je koncept dosažitelnosti.
+This example demonstrates how important the concept of reachability is.
 
-Je vidět, že Jan a Anna jsou stále spojeni a k oběma směřují nějaké odkazy. To ale nestačí.
+It's obvious that John and Ann are still linked, both have incoming references. But that's not enough.
 
-Bývalý objekt `"rodina"` byl odpojen od kořene, neexistuje na něj už žádný odkaz, takže se celý ostrov objektů stal nedosažitelným a bude odstraněn.
+The former `"family"` object has been unlinked from the root, there's no reference to it any more, so the whole island becomes unreachable and will be removed.
 
-## Interní algoritmy
+## Internal algorithms
 
-Základní algoritmus garbage collection se nazývá „mark-and-sweep“ *(česky „označ a zameť“ -- pozn. překl.)*.
+The basic garbage collection algorithm is called "mark-and-sweep".
 
-Pravidelně se provádějí následující kroky „garbage collection“:
+The following "garbage collection" steps are regularly performed:
 
-- Garbage collector vezme kořeny a „označí“ (zapamatuje) si je.
-- Pak navštíví a „označí“ všechny odkazy z nich.
-- Pak navštíví označené objekty a označí „jejich“ odkazy. Všechny navštívené objekty si pamatuje, aby v budoucnu nenavštívil stejný objekt dvakrát.
-- ...A tak dále, dokud nebudou navštíveny všechny (z kořenů) dosažitelné odkazy.
-- Všechny objekty, které nejsou označeny, se odstraní.
+- The garbage collector takes roots and "marks" (remembers) them.
+- Then it visits and "marks" all references from them.
+- Then it visits marked objects and marks *their* references. All visited objects are remembered, so as not to visit the same object twice in the future.
+- ...And so on until every reachable (from the roots) references are visited.
+- All objects except marked ones are removed.
 
-Například nechť naše objektová struktura vypadá takto:
+For instance, let our object structure look like this:
 
 ![](garbage-collection-1.svg)
 
-Jasně vidíme „nedosažitelný ostrov“ na pravé straně. Nyní se podívejme, jak si s ním poradí garbage collector typu „mark-and-sweep“.
+We can clearly see an "unreachable island" to the right side. Now let's see how "mark-and-sweep" garbage collector deals with it.
 
-První krok označí kořeny:
+The first step marks the roots:
 
 ![](garbage-collection-2.svg)
 
-Pak budeme následovat jejich odkazy a označíme odkazované objekty:
+Then we follow their references and mark referenced objects:
 
 ![](garbage-collection-3.svg)
 
-...A budeme dále následovat další odkazy, dokud to bude možné:
+...And continue to follow further references, while possible:
 
 ![](garbage-collection-4.svg)
 
-Nyní se objekty, které nemohly být v tomto procesu navštíveny, budou považovat za nedosažitelné a budou odstraněny:
+Now the objects that could not be visited in the process are considered unreachable and will be removed:
 
 ![](garbage-collection-5.svg)
 
-Můžeme si tento proces představit i jako rozlévání velkého kbelíku s barvou, která teče od kořenů všemi odkazy a dostane se ke všem dosažitelným objektům. Neoznačené objekty jsou poté odstraněny.
+We can also imagine the process as spilling a huge bucket of paint from the roots, that flows through all references and marks all reachable objects. The unmarked ones are then removed.
 
-Toto je koncept fungování sbírání odpadků. JavaScriptové motory aplikují mnoho optimalizací, které způsobí, že se jeho běh urychlí a nebude při běhu kódu způsobovat prodlevy.
+That's the concept of how garbage collection works. JavaScript engines apply many optimizations to make it run faster and not introduce any delays into the code execution.
 
-Některé z nich:
+Some of the optimizations:
 
-- **Generační sběr** -- objekty se rozdělí na dvě skupiny: „nové“ a „staré“. V typickém kódu má mnoho objektů jen krátký život: objeví se, odvedou svou práci a rychle zemřou, takže má smysl stopovat nové objekty a pokud nastane tento případ, vyčistit je z paměti. Ty, které přežijí dostatečně dlouho, se stanou „starými“ a budou prozkoumávány méně často.
-- **Inkrementální sběr** -- jestliže máme mnoho objektů a snažíme se projít a označit celou jejich sadu najednou, může to zabrat nějakou dobu a způsobit znatelné prodlevy při běhu skriptu. Motor se tedy snaží rozdělit celou sadu existujících objektů do více částí. A pak čistí tyto části jednu po druhé. Nastane tedy více malých sběrů odpadků místo jednoho celkového. To vyžaduje určitou další administraci mezi nimi, aby se zaznamenaly změny, ale pak získáme mnoho menších prodlev místo jedné velké.
-- **Sběr v čase nečinnosti** -- sběrač odpadků se snaží běžet jen tehdy, když je CPU nečinná, aby zmenšil svůj vliv na běh.
+- **Generational collection** -- objects are split into two sets: "new ones" and "old ones". In typical code, many objects have a short life span: they appear, do their job and die fast, so it makes sense to track new objects and clear the memory from them if that's the case. Those that survive for long enough, become "old" and are examined less often.
+- **Incremental collection** -- if there are many objects, and we try to walk and mark the whole object set at once, it may take some time and introduce visible delays in the execution. So the engine splits the whole set of existing objects into multiple parts. And then clear these parts one after another. There are many small garbage collections instead of a total one. That requires some extra bookkeeping between them to track changes, but we get many tiny delays instead of a big one.
+- **Idle-time collection** -- the garbage collector tries to run only while the CPU is idle, to reduce the possible effect on the execution.
 
-Existují i jiné optimalizace a doplňky algoritmů garbage collection. Rád bych je zde popsal, ale musím se toho vzdát, jelikož různé enginy implementují různá vylepšení a techniky. Co je ještě důležitější, během vývoje enginů se vše neustále mění, takže studovat je hlouběji „napřed“, aniž bychom je opravdu potřebovali, pravděpodobně nemá smysl. Pokud to ovšem není věc čistého zájmu, v kterémžto případě najdete některé odkazy níže.
+There exist other optimizations and flavours of garbage collection algorithms. As much as I'd like to describe them here, I have to hold off, because different engines implement different tweaks and techniques. And, what's even more important, things change as engines develop, so studying deeper "in advance", without a real need is probably not worth that. Unless, of course, it is a matter of pure interest, then there will be some links for you below.
 
-## Shrnutí
+## Summary
 
-Hlavní věci, které máme vědět:
+The main things to know:
 
-- Sběr odpadků se provádí automaticky. Nemůžeme si jej vynutit nebo mu zabránit.
-- Objekty zůstávají v paměti, dokud jsou dosažitelné.
-- Být odkazován není totéž jako být dosažitelný (z kořene): sada vzájemně propojených objektů se může jako celek stát nedosažitelnou, jak jsme viděli ve výše uvedeném příkladu.
+- Garbage collection is performed automatically. We cannot force or prevent it.
+- Objects are retained in memory while they are reachable.
+- Being referenced is not the same as being reachable (from a root): a pack of interlinked objects can become unreachable as a whole, as we've seen in the example above.
 
-Moderní enginy implementují pokročilé algoritmy garbage collection.
+Modern engines implement advanced algorithms of garbage collection.
 
-Některé z nich jsou pokryty v obecné knize „The Garbage Collection Handbook: The Art of Automatic Memory Management“ (R. Jones a kolektiv).
+A general book "The Garbage Collection Handbook: The Art of Automatic Memory Management" (R. Jones et al) covers some of them.
 
-Pokud jste obeznámeni s programováním na nízké úrovni, podrobnější informace o sběrači odpadků V8 najdete v článku [A tour of V8: Garbage Collection](http://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection).
+If you are familiar with low-level programming, more detailed information about V8's garbage collector is in the article [A tour of V8: Garbage Collection](http://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection).
 
-Rovněž [blog V8](https://v8.dev/) občas publikuje články o změnách ve správě paměti. Přirozeně, abyste se naučili o sbírání odpadků víc, měli byste se připravit tak, že se naučíte něco o interních záležitostech V8 obecně a přečtete si blog [Vjačeslava Jegorova](http://mrale.ph), který pracoval jako jeden z tvůrců V8. Říkám „V8“, protože ten je nejlépe pokryt články na internetu. V jiných motorech jsou mnohé přístupy podobné, ale sběrače odpadků se v mnoha aspektech liší.
+The [V8 blog](https://v8.dev/) also publishes articles about changes in memory management from time to time. Naturally, to learn more about garbage collection, you'd better prepare by learning about V8 internals in general and read the blog of [Vyacheslav Egorov](http://mrale.ph) who worked as one of the V8 engineers. I'm saying: "V8", because it is best covered by articles on the internet. For other engines, many approaches are similar, but garbage collection differs in many aspects.
 
-Hloubková znalost motorů se hodí, když potřebujete optimalizaci na nízké úrovni. Bylo by moudré naplánovat si to jako další krok poté, co se seznámíte s jazykem.
+In-depth knowledge of engines is good when you need low-level optimizations. It would be wise to plan that as the next step after you're familiar with the language.

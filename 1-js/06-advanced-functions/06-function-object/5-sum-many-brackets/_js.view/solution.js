@@ -1,14 +1,14 @@
-function součet(a) {
+function sum(a) {
 
-  let aktuálníSoučet = a;
+  let currentSum = a;
 
   function f(b) {
-    aktuálníSoučet += b;
+    currentSum += b;
     return f;
   }
 
   f.toString = function() {
-    return aktuálníSoučet;
+    return currentSum;
   };
 
   return f;

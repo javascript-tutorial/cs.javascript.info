@@ -1,22 +1,22 @@
 
-Zde je vysvětlení.
+Here's the explanations.
 
-1. Toto je běžné volání metody objektu.
+1. That's a regular object method call.
 
-2. Totéž, závorky tady nezmění pořadí operací, tečka je i tak první.
+2. The same, parentheses do not change the order of operations here, the dot is first anyway.
 
-3. Zde máme složitější volání `(výraz)()`. Toto volání funguje tak, jako by bylo rozděleno na dva řádky:
+3. Here we have a more complex call `(expression)()`. The call works as if it were split into two lines:
 
     ```js no-beautify
-    f = obj.jdi; // vypočítáme výraz
-    f();         // zavoláme to, co máme
+    f = obj.go; // calculate the expression
+    f();        // call what we have
     ```
 
-    Zde se `f()` spustí jako funkce bez `this`.
+    Here `f()` is executed as a function, without `this`.
 
-4. Podobně jako `(3)`, nalevo od závorek `()` máme výraz.
+4. The similar thing as `(3)`, to the left of the parentheses `()` we have an expression.
 
-Abychom vysvětlili chování `(3)` a `(4)`, musíme si vzpomenout, že accessory vlastností (tečka nebo hranaté závorky) vracejí hodnotu referenčního typu.
+To explain the behavior of `(3)` and `(4)` we need to recall that property accessors (dot or square brackets) return a value of the Reference Type.  
 
-Jakákoli operace na ní kromě volání metody (např. přiřazení `=`, nebo `||`) ji změní na obyčejnou hodnotu, která neobsahuje informaci umožňující nastavit `this`.
+Any operation on it except a method call (like assignment `=` or `||`) turns it into an ordinary value, which does not carry the information allowing to set `this`.
 

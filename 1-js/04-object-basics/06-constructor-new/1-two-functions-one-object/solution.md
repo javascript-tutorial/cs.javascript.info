@@ -1,8 +1,8 @@
-Ano, je to možné.
+Yes, it's possible.
 
-Jestliže funkce vrací objekt, pak jej `new` vrátí místo `this`.
+If a function returns an object then `new` returns it instead of `this`.
 
-Mohou tedy například vrátit stejný externě definovaný objekt `obj`:
+So they can, for instance, return the same externally defined object `obj`:
 
 ```js run no-beautify
 let obj = {};

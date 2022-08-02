@@ -1,46 +1,46 @@
-describe("čekej", function() {
+describe("delay", function() {
   before(function() {
-    this.hodiny = sinon.useFakeTimers();
+    this.clock = sinon.useFakeTimers();
   });
 
   after(function() {
-    this.hodiny.restore();
+    this.clock.restore();
   });
 
-  it("volá funkci až po specifikované době", function() {
-    let začátek = Date.now();
+  it("calls the function after the specified timeout", function() {
+    let start = Date.now();
 
     function f(x) {
-      assert.equal(Date.now() - začátek, 1000);
+      assert.equal(Date.now() - start, 1000);
     }
     f = sinon.spy(f);
 
-    let f1000 = čekej(f, 1000);
+    let f1000 = delay(f, 1000);
     f1000("test");
-    this.hodiny.tick(2000);
-    assert(f.calledOnce, 'test calledOnce selhal');
+    this.clock.tick(2000);
+    assert(f.calledOnce, 'calledOnce check fails');
   });
 
-  it("předává argumenty a this", function() {
-    let začátek = Date.now();
-    let uživatel = {
-      řekniAhoj: function(věta, kdo) {
-        assert.equal(this, uživatel);
-        assert.equal(věta, "Ahoj");
-        assert.equal(kdo, "Jan");
-        assert.equal(Date.now() - začátek, 1500);
+  it("passes arguments and this", function() {
+    let start = Date.now();
+    let user = {
+      sayHi: function(phrase, who) {
+        assert.equal(this, user);
+        assert.equal(phrase, "Hello");
+        assert.equal(who, "John");
+        assert.equal(Date.now() - start, 1500);
       }
     };
 
-    uživatel.řekniAhoj = sinon.spy(uživatel.řekniAhoj);
+    user.sayHi = sinon.spy(user.sayHi);
 
-    let spy = uživatel.řekniAhoj;
-    uživatel.řekniAhoj = čekej(uživatel.řekniAhoj, 1500);
+    let spy = user.sayHi;
+    user.sayHi = delay(user.sayHi, 1500);
 
-    uživatel.řekniAhoj("Ahoj", "Jan");
+    user.sayHi("Hello", "John");
 
-    this.hodiny.tick(2000);
+    this.clock.tick(2000);
 
-    assert(spy.calledOnce, 'test calledOnce selhal');
+    assert(spy.calledOnce, 'calledOnce check failed');
   });
 });

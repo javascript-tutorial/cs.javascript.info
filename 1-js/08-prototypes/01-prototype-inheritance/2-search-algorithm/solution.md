@@ -1,32 +1,32 @@
 
-1. Přidejme `__proto__`:
+1. Let's add `__proto__`:
 
     ```js run
-    let hlava = {
-      brýle: 1
+    let head = {
+      glasses: 1
     };
 
-    let stůl = {
-      pero: 3,
-      __proto__: hlava
+    let table = {
+      pen: 3,
+      __proto__: head
     };
 
-    let postel = {
-      peřina: 1,
-      polštář: 2,
-      __proto__: stůl
+    let bed = {
+      sheet: 1,
+      pillow: 2,
+      __proto__: table
     };
 
-    let kapsy = {
-      peníze: 2000,
-      __proto__: postel
+    let pockets = {
+      money: 2000,
+      __proto__: bed
     };
 
-    alert( kapsy.pero ); // 3
-    alert( postel.brýle ); // 1
-    alert( stůl.peníze ); // undefined
+    alert( pockets.pen ); // 3
+    alert( bed.glasses ); // 1
+    alert( table.money ); // undefined
     ```
 
-2. V moderních enginech s vylepšeným výkonem není rozdíl mezi tím, zda bereme vlastnost z objektu nebo jeho prototypu. Enginy si pamatují, kde byla vlastnost nalezena, a při dalším požadavku to využijí.
+2. In modern engines, performance-wise, there's no difference whether we take a property from an object or its prototype. They remember where the property was found and reuse it in the next request.
 
-    Například pro `kapsy.brýle` si pamatují, kde našly `brýle` (v objektu `hlava`), a příště budou hledat rovnou tam. Jsou také dostatečně chytré, aby si své interní cache aktualizovaly, když se něco změní, takže tato optimalizace je bezpečná.
+    For instance, for `pockets.glasses` they remember where they found `glasses` (in `head`), and next time will search right there. They are also smart enough to update internal caches if something changes, so that optimization is safe.

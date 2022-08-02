@@ -1,37 +1,37 @@
-function Hodiny({ šablona }) {
+function Clock({ template }) {
 
-  let časovač;
+  let timer;
 
-  function vypiš() {
-    let datum = new Date();
+  function render() {
+    let date = new Date();
 
-    let hodiny = datum.getHours();
-    if (hodiny < 10) hodiny = '0' + hodiny;
+    let hours = date.getHours();
+    if (hours < 10) hours = '0' + hours;
 
-    let minuty = datum.getMinutes();
-    if (minuty < 10) minuty = '0' + minuty;
+    let mins = date.getMinutes();
+    if (mins < 10) mins = '0' + mins;
 
-    let sekundy = datum.getSeconds();
-    if (sekundy < 10) sekundy = '0' + sekundy;
+    let secs = date.getSeconds();
+    if (secs < 10) secs = '0' + secs;
 
-    let výstup = šablona
-      .replace('h', hodiny)
-      .replace('m', minuty)
-      .replace('s', sekundy);
+    let output = template
+      .replace('h', hours)
+      .replace('m', mins)
+      .replace('s', secs);
 
-    console.log(výstup);
+    console.log(output);
   }
 
   this.stop = function() {
-    clearInterval(časovač);
+    clearInterval(timer);
   };
 
   this.start = function() {
-    vypiš();
-    časovač = setInterval(vypiš, 1000);
+    render();
+    timer = setInterval(render, 1000);
   };
 
 }
 
-let hodiny = new Hodiny({šablona: 'h:m:s'});
-hodiny.start();
+let clock = new Clock({template: 'h:m:s'});
+clock.start();

@@ -2,17 +2,17 @@ importance: 4
 
 ---
 
-# Filtrace podle rozsahu „na místě“
+# Filter range "in place"
 
-Napište funkci `filtrujPodleRozsahuNaMístě(pole, a, b)`, která obdrží pole `pole` a odstraní z něj všechny hodnoty, které neleží mezi `a` a `b`. Test je: `a ≤ pole[i] ≤ b`.
+Write a function `filterRangeInPlace(arr, a, b)` that gets an array `arr` and removes from it all values except those that are between `a` and `b`. The test is: `a ≤ arr[i] ≤ b`.
 
-Funkce by měla jen modifikovat pole. Neměla by nic vracet.
+The function should only modify the array. It should not return anything.
 
-Příklad:
+For instance:
 ```js
-let pole = [5, 3, 8, 1];
+let arr = [5, 3, 8, 1];
 
-filtrujPodleRozsahuNaMístě(pole, 1, 4); // odstraní čísla, která nejsou od 1 do 4
+filterRangeInPlace(arr, 1, 4); // removed the numbers except from 1 to 4
 
-alert( pole ); // [3, 1]
+alert( arr ); // [3, 1]
 ```

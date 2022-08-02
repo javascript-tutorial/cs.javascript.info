@@ -2,25 +2,25 @@ importance: 3
 
 ---
 
-# Vysvětlete hodnotu „this“
+# Explain the value of "this"
 
-V níže uvedeném kódu jsme zamýšleli volat metodu `obj.jdi()` čtyřikrát za sebou.
+In the code below we intend to call `obj.go()` method 4 times in a row.
 
-Avšak volání `(1)` a `(2)` fungují jinak než `(3)` a `(4)`. Proč?
+But calls `(1)` and `(2)` works differently from `(3)` and `(4)`. Why?
 
 ```js run no-beautify
-let obj, metoda;
+let obj, method;
 
 obj = {
-  jdi: function() { alert(this); }
+  go: function() { alert(this); }
 };
 
-obj.jdi();               // (1) [object Object]
+obj.go();               // (1) [object Object]
 
-(obj.jdi)();             // (2) [object Object]
+(obj.go)();             // (2) [object Object]
 
-(metoda = obj.jdi)();    // (3) undefined
+(method = obj.go)();    // (3) undefined
 
-(obj.jdi || obj.stůj)(); // (4) undefined
+(obj.go || obj.stop)(); // (4) undefined
 ```
 

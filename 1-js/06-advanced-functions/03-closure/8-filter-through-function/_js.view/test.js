@@ -1,21 +1,21 @@
 
-describe("vPoli", function() {
-  let pole = [1, 2, 3, 4, 5, 6, 7];
+describe("inArray", function() {
+  let arr = [1, 2, 3, 4, 5, 6, 7];
 
-  it("vrátí filtr pro hodnoty v poli", function() {
+  it("returns the filter for values in array", function() {
 
-    let filtr = vPoli(pole);
-    assert.isTrue(filtr(5));
-    assert.isFalse(filtr(0));
+    let filter = inArray(arr);
+    assert.isTrue(filter(5));
+    assert.isFalse(filter(0));
   });
 });
 
 
-describe("mezi", function() {
+describe("inBetween", function() {
 
-  it("vrátí filtr pro hodnoty mezi", function() {
-    let filtr = mezi(3, 6);
-    assert.isTrue(filtr(5));
-    assert.isFalse(filtr(0));
+  it("returns the filter for values between", function() {
+    let filter = inBetween(3, 6);
+    assert.isTrue(filter(5));
+    assert.isFalse(filter(0));
   });
 });

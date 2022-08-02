@@ -1,80 +1,80 @@
-Podívejme se pozorně na to, co se děje při volání `rychlý.žer("jablko")`.
+Let's look carefully at what's going on in the call `speedy.eat("apple")`.
 
-1. Metoda `rychlý.žer` je nalezena v prototypu (`=křeček`) a pak se spustí s `this=rychlý` (objekt před tečkou).
+1. The method `speedy.eat` is found in the prototype (`=hamster`), then executed with `this=speedy` (the object before the dot).
 
-2. Pak `this.žaludek.push()` musí najít vlastnost `žaludek` a zavolat na ní `push`. Hledá `žaludek` v `this` (`=rychlý`), ale nic nenajde.
+2. Then `this.stomach.push()` needs to find `stomach` property and call `push` on it. It looks for `stomach` in `this` (`=speedy`), but nothing found.
 
-3. Pak sleduje řetězec prototypů a najde `žaludek` v objektu `křeček`.
+3. Then it follows the prototype chain and finds `stomach` in `hamster`.
 
-4. Pak na něm volá `push`, čímž přidá potravu do *žaludku prototypu*.
+4. Then it calls `push` on it, adding the food into *the stomach of the prototype*.
 
-Všichni křečci tedy sdílejí jediný žaludek!
+So all hamsters share a single stomach!
 
-Jak pro `líný.žaludek.push(...)`, tak pro `rychlý.žaludek.push()` je vlastnost `žaludek` nalezena v prototypu (protože není v samotném objektu) a pak jsou do ní vložena nová data.
+Both for `lazy.stomach.push(...)` and `speedy.stomach.push()`, the property `stomach` is found in the prototype (as it's not in the object itself), then the new data is pushed into it.
 
-Prosíme všimněte si, že při jednoduchém přiřazení `this.žaludek=` se to nestane:
+Please note that such thing doesn't happen in case of a simple assignment `this.stomach=`:
 
 ```js run
-let křeček = {
-  žaludek: [],
+let hamster = {
+  stomach: [],
 
-  žer(potrava) {
+  eat(food) {
 *!*
-    // přiřazení do this.žaludek namísto this.žaludek.push
-    this.žaludek = [potrava];
+    // assign to this.stomach instead of this.stomach.push
+    this.stomach = [food];
 */!*
   }
 };
 
-let rychlý = {
-   __proto__: křeček
+let speedy = {
+   __proto__: hamster
 };
 
-let líný = {
-  __proto__: křeček
+let lazy = {
+  __proto__: hamster
 };
 
-// Rychlý křeček našel potravu
-rychlý.žer("jablko");
-alert( rychlý.žaludek ); // jablko
+// Speedy one found the food
+speedy.eat("apple");
+alert( speedy.stomach ); // apple
 
-// Žaludek líného křečka je prázdný
-alert( líný.žaludek ); // <nic>
+// Lazy one's stomach is empty
+alert( lazy.stomach ); // <nothing>
 ```
 
-Teď vše funguje správně, protože `this.žaludek=` nehledá `žaludek`. Hodnota se zapíše přímo do objektu `this`.
+Now all works fine, because `this.stomach=` does not perform a lookup of `stomach`. The value is written directly into `this` object.
 
-Problému se můžeme zcela vyhnout i tak, že zajistíme, aby každý křeček měl svůj vlastní žaludek:
+Also we can totally avoid the problem by making sure that each hamster has their own stomach:
 
 ```js run
-let křeček = {
-  žaludek: [],
+let hamster = {
+  stomach: [],
 
-  žer(potrava) {
-    this.žaludek.push(potrava);
+  eat(food) {
+    this.stomach.push(food);
   }
 };
 
-let rychlý = {
-  __proto__: křeček,
+let speedy = {
+  __proto__: hamster,
 *!*
-  žaludek: []
+  stomach: []
 */!*
 };
 
-let líný = {
-  __proto__: křeček,
+let lazy = {
+  __proto__: hamster,
 *!*
-  žaludek: []
+  stomach: []
 */!*
 };
 
-// Rychlý křeček našel potravu
-rychlý.žer("jablko");
-alert( rychlý.žaludek ); // jablko
+// Speedy one found the food
+speedy.eat("apple");
+alert( speedy.stomach ); // apple
 
-// Žaludek líného křečka je prázdný
-alert( líný.žaludek ); // <nic>
+// Lazy one's stomach is empty
+alert( lazy.stomach ); // <nothing>
 ```
 
-Běžné řešení je, že všechny vlastnosti, které popisují stav určitého objektu, jako třeba výše uvedený `žaludek`, by měly být zapisovány přímo do tohoto objektu. Tím předejdeme takovýmto problémům.
+As a common solution, all properties that describe the state of a particular object, like `stomach` above, should be written into that object. That prevents such problems.
