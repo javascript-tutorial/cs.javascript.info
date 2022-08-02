@@ -274,7 +274,7 @@ Uvedli jsme tři způsoby, jakými lze v JavaScriptu vytvořit funkci:
 
 
 - Funkce mohou obsahovat lokální proměnné: ty jsou deklarovány uvnitř jejich těla nebo v seznamu parametrů. Tyto proměnné jsou viditelné jen uvnitř funkce.
-- Parametry mohou mít předem nastavené hodnoty: `function součet(a = 1, b = 2) {...}`.
+- Parametry mohou mít nastavené výchozí hodnoty: `function součet(a = 1, b = 2) {...}`.
 - Funkce vždy něco vrátí. Neobsahuje-li příkaz `return`, jejím výsledkem je `undefined`.
 
 Více v kapitolách: <info:function-basics>, <info:arrow-functions-basics>.
