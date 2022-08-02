@@ -1,4 +1,4 @@
-The answer: `null`.
+Odpověď: `null`.
 
 
 ```js run
@@ -6,13 +6,13 @@ function f() {
   alert( this ); // null
 }
 
-let user = {
+let uživatel = {
   g: f.bind(null)
 };
 
-user.g();
+uživatel.g();
 ```
 
-The context of a bound function is hard-fixed. There's just no way to further change it.
+Kontext vázané funkce je napevno nastaven. Není žádný způsob, jak jej dále změnit.
 
-So even while we run `user.g()`, the original function is called with `this=null`.
+I když tedy spustíme `uživatel.g()`, původní funkce se volá s `this=null`.

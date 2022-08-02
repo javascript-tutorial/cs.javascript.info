@@ -1,34 +1,34 @@
 
-# Pseudo-random generator
+# Generátor pseudonáhodných čísel
 
-There are many areas where we need random data.
+Je mnoho oblastí, v nichž potřebujeme náhodná data.
 
-One of them is testing. We may need random data: text, numbers, etc. to test things out well.
+Jedna z nich je testování. Můžeme potřebovat náhodná data: texty, čísla atd., abychom vše pečlivě otestovali.
 
-In JavaScript, we could use `Math.random()`. But if something goes wrong, we'd like to be able to repeat the test, using exactly the same data.
+V JavaScriptu můžeme použít `Math.random()`. Pokud se však něco pokazí, rádi bychom měli možnost tento test zopakovat s přesně stejnými daty.
 
-For that, so called "seeded pseudo-random generators" are used. They take a "seed", the first value, and then generate the next ones using a formula so that the same seed yields the same sequence, and hence the whole flow is easily reproducible. We only need to remember the seed to repeat it.
+K tomu se používají tzv. „generátory pseudonáhodných čísel se semínkem". Vezmou „semínko“, první hodnotu, a pak generují další hodnoty podle nějakého vzorce tak, že stejné semínko vydá stejnou posloupnost, takže celý tok je snadno reprodukovatelný. Abychom jej zopakovali, stačí nám pamatovat si semínko.
 
-An example of such formula, that generates somewhat uniformly distributed values:
+Příklad takového vzorce, který generuje zhruba rovnoměrně rozložené hodnoty:
 
 ```
-next = previous * 16807 % 2147483647
+další = předchozí * 16807 % 2147483647
 ```
 
-If we use `1` as the seed, the values will be:
+Pokud jako semínko použijeme `1`, hodnoty budou:
 1. `16807`
 2. `282475249`
 3. `1622650073`
-4. ...and so on...
+4. ...a tak dále...
 
-The task is to create a generator function `pseudoRandom(seed)` that takes `seed` and creates the generator with this formula.
+Úkolem je vytvořit generátorovou funkci `pseudoNáhodné(semínko)`, která vezme `semínko` a vytvoří generátor s tímto vzorcem.
 
-Usage example:
+Příklad použití:
 
 ```js
-let generator = pseudoRandom(1);
+let generátor = pseudoNáhodné(1);
 
-alert(generator.next().value); // 16807
-alert(generator.next().value); // 282475249
-alert(generator.next().value); // 1622650073
+alert(generátor.next().value); // 16807
+alert(generátor.next().value); // 282475249
+alert(generátor.next().value); // 1622650073
 ```

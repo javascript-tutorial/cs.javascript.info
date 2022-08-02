@@ -1,11 +1,11 @@
-function unique(arr) {
-  let result = [];
+function unikát(pole) {
+  let výsledek = [];
 
-  for (let str of arr) {
-    if (!result.includes(str)) {
-      result.push(str);
+  for (let str of pole) {
+    if (!výsledek.includes(str)) {
+      výsledek.push(str);
     }
   }
 
-  return result;
+  return výsledek;
 }

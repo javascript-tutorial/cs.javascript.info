@@ -1,37 +1,37 @@
-**Error**!
+**Chyba!**
 
-Try it:
+Zkuste si to:
 
 ```js run
-let user = {
-  name: "John",
-  go: function() { alert(this.name) }
+let uživatel = {
+  jméno: "Jan",
+  jdi: function() { alert(this.jméno) }
 }
 
-(user.go)() // error!
+(uživatel.jdi)() // chyba!
 ```
 
-The error message in most browsers does not give us much of a clue about what went wrong.
+Chybová zpráva ve většině prohlížečů nám nedává mnoho informací o tom, co bylo špatně.
 
-**The error appears because a semicolon is missing after `user = {...}`.**
+**Chyba se objevila proto, že za `uživatel = {...}` chybí středník.**
 
-JavaScript does not auto-insert a semicolon before a bracket `(user.go)()`, so it reads the code like:
+JavaScript automaticky nevloží středník před závorku `(uživatel.jdi)()`, takže přečte kód jako:
 
 ```js no-beautify
-let user = { go:... }(user.go)()
+let uživatel = { jdi:... }(uživatel.jdi)()
 ```
 
-Then we can also see that such a joint expression is syntactically a call of the object `{ go: ... }` as a function with the argument `(user.go)`. And that also happens on the same line with `let user`, so the `user` object has not yet even been defined, hence the error.
+Pak také vidíme, že takový spojený výraz je syntakticky voláním objektu `{ jdi: ... }` jako funkce s argumentem `(uživatel.jdi)`. A to se také odehrává na stejném řádku jako `let uživatel`, takže objekt `uživatel` ještě ani nebyl definován, proto nastane chyba.
 
-If we insert the semicolon, all is fine:
+Jestliže vložíme středník, bude vše v pořádku:
 
 ```js run
-let user = {
-  name: "John",
-  go: function() { alert(this.name) }
+let uživatel = {
+  jméno: "Jan",
+  jdi: function() { alert(this.jméno) }
 }*!*;*/!*
 
-(user.go)() // John
+(uživatel.jdi)() // Jan
 ```
 
-Please note that parentheses around `(user.go)` do nothing here. Usually they setup the order of operations, but here the dot `.` works first anyway, so there's no effect. Only the semicolon thing matters.
+Prosíme všimněte si, že závorky okolo `(uživatel.jdi)` tady nic nedělají. Obvykle nastavují pořadí operací, ale tady jako první zafunguje tečka `.` tak jako tak, takže závorky nemají žádný efekt. Vadí jenom chybějící středník.
