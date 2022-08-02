@@ -1,4 +1,4 @@
 
-1. `true`, taken from `rabbit`.
-2. `null`, taken from `animal`.
-3. `undefined`, there's no such property any more.
+1. `true`, převezme se z `králík`.
+2. `null`, převezme se ze `zvíře`.
+3. `undefined`, taková vlastnost již neexistuje.

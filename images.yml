@@ -166,7 +166,7 @@ chrome-sources-debugger-trace-1.svg:
     position: "right"
 
 chrome-open-sources.svg:
-  open sources: 'Otevřete záložku se zdrojovými soubory'
+  open sources: 'otevřený zdrojový kód'
 
 object-user-empty.svg:
   empty:

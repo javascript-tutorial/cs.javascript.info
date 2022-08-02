@@ -2,40 +2,39 @@ importance: 5
 
 ---
 
-# Army of functions
+# Armáda funkcí
 
-The following code creates an array of `shooters`.
+Následující kód vytvoří pole `střelci`.
 
-Every function is meant to output its number. But something is wrong...
+Každá funkce má vypsat své číslo. Ale něco je špatně...
 
 ```js run
-function makeArmy() {
-  let shooters = [];
+function vytvořArmádu() {
+  let střelci = [];
 
   let i = 0;
   while (i < 10) {
-    let shooter = function() { // create a shooter function,
-      alert( i ); // that should show its number
+    let střelec = function() { // vytvoříme funkci střelec,
+      alert( i );              // která by měla zobrazit své číslo
     };
-    shooters.push(shooter); // and add it to the array
+    střelci.push(střelec); // a přidáme ji do pole
     i++;
   }
 
-  // ...and return the array of shooters
-  return shooters;
+  // ...a vrátíme pole střelci
+  return střelci;
 }
 
-let army = makeArmy();
+let armáda = vytvořArmádu();
 
 *!*
-// all shooters show 10 instead of their numbers 0, 1, 2, 3...
-army[0](); // 10 from the shooter number 0
-army[1](); // 10 from the shooter number 1
-army[2](); // 10 ...and so on.
+// všichni střelci zobrazí 10 místo svých čísel 0, 1, 2, 3...
+armáda[0](); // 10 od střelce číslo 0
+armáda[1](); // 10 od střelce číslo 1
+armáda[2](); // 10 ...a tak dále.
 */!*
 ```
 
-Why do all of the shooters show the same value? 
+Proč všichni střelci zobrazují stejnou hodnotu?
 
-Fix the code so that they work as intended.
-
+Opravte kód, aby fungoval tak, jak je zamýšleno.

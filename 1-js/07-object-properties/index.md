@@ -1,3 +1,3 @@
-# Object properties configuration
+# Konfigurace vlastností objektů
 
-In this section we return to objects and study their properties even more in-depth.
+V této části se vrátíme k objektům a prostudujeme jejich vlastnosti ještě hlouběji.
