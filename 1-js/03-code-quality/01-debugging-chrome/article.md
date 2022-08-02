@@ -182,7 +182,7 @@ Máme-li v kódu dostatek logování, uvidíme z těchto záznamů, co se děje,
 ## Shrnutí
 
 Zjistili jsme, že existují tři hlavní způsoby, jak pozastavit skript:
-1. Zarážka.
+1. Zarážkou.
 2. Příkaz `debugger`.
 3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
 
