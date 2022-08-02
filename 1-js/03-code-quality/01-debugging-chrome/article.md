@@ -65,7 +65,7 @@ V pravém panelu vždy najdeme seznam zarážek. To je užitečné, když máme 
 ```smart header="Podmíněné zarážky"
 *Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněnou* zarážku. Ta se aktivuje, jen když je zadaný výraz, který byste měli uvést při jejím vytvoření, pravdivý.
 
-To se hodí, když potřebujeme pozastavit skript jen při určité hodnotě proměnné nebo při určitých parametrech funkce.
+To se hodí, když potřebujeme pozastavit skript jen při určité hodnotě proměnné nebo při určitých argumentech pro funkci.
 ```
 
 ## Příkaz „debugger“
