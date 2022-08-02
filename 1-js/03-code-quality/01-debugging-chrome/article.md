@@ -140,7 +140,7 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 
     Běh se pak ihned po volání této funkce pozastaví.
 
-    To se hodí, když si nepřejeme vidět, co se děje uvnitř volané funkce.
+    To se hodí, když nás nezajímá, co se děje uvnitř volané funkce.
 
 <span class="devtools" style="background-position:-4px -194px"></span> -- „Step into“ („Pokročit do dalšího volání funkce“), klávesa `key:F11`.
 : Podobá se „Krokovat“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož asynchronní volání funkcí ještě neznáme.
