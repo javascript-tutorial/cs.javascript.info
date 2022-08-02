@@ -65,7 +65,7 @@ V pravém panelu vždy najdeme seznam zarážek. To je užitečné, když máme 
 ```smart header="Podmíněné zarážky"
 *Kliknutím pravým tlačítkem* na číslo řádku můžeme vytvořit *podmíněnou* zarážku. Ta se aktivuje, jen když je zadaný výraz, který byste měli uvést při jejím vytvoření, pravdivý.
 
-To se hodí, když potřebujeme pozastavit skript jen při určité hodnotě proměnné nebo při určitých parametrech funkce.
+To se hodí, když potřebujeme pozastavit skript jen při určité hodnotě proměnné nebo při určitých argumentech pro funkci.
 ```
 
 ## Příkaz „debugger“
@@ -94,7 +94,7 @@ Když je zarážka nastavena, běh se zastaví na 4. řádku:
 
 ![](chrome-sources-debugger-pause.svg)
 
-Prosíme otevřete si informační dropdowny vpravo (označené šipkami), které vám umožní prozkoumávat aktuální stav kódu:
+Rozevřete si rozbalovací menu, které se nachází vpravo (označené šipkami). Umožní vám prozkoumávat aktuální stav kódu:
 
 1. **`Watch` (`Sledované výrazy`) -- zobrazuje aktuální hodnoty libovolných výrazů.**
 
@@ -105,7 +105,6 @@ Prosíme otevřete si informační dropdowny vpravo (označené šipkami), kter�
     V aktuálním okamžiku je ladicí nástroj uvnitř volání `ahoj()`, kterou zavolal skript v `index.html` (není zde žádná funkce, takže se nazývá „anonymní“).
 
     Když kliknete na prvek zásobníku (např. „anonymní“), ladicí nástroj přeskočí na odpovídající kód a vy můžete prozkoumávat všechny jeho proměnné.
-    
 3. **`Scope` (`Rozsah`) -- aktuální proměnné.**
 
     `Local` (`Místní`) zobrazuje lokální funkční proměnné. Vidíte také jejich hodnoty zvýrazněné přímo nad zdrojovým kódem.
@@ -121,35 +120,34 @@ Nyní nastal čas *krokovat* skript.
 K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 <!-- https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/src/largeIcons.svg -->
 <span class="devtools" style="background-position:-146px -168px"></span> -- „Resume“ („Obnovit běh skriptu“): pokračuje v běhu, klávesa `key:F8`.
-
 : Pokračuje v běhu skriptu. Nejsou-li už žádné další zarážky, skript se bude prostě vykonávat dál a ladicí nástroj nad ním ztratí kontrolu.
 
     Toto uvidíme poté, co na něj klikneme:
-
+    
     ![](chrome-sources-debugger-trace-1.svg)
 
     Běh skriptu se obnovil, dosáhl další zarážky uvnitř `řekni()` a zastavil se tam. Podívejte se na zásobník volání („Call Stack“) vpravo. Zvětšil se o jedno volání. Nyní jsme uvnitř `řekni()`.
 
-<span class="devtools" style="background-position:-200px -190px"></span> -- „Step“ („Krokovat“): spustí další příkaz, klávesa `key:F9`.
+<span class="devtools" style="background-position:-200px -190px"></span> -- „\“ („Krokovat“): spustí další příkaz, klávesa `key:F9`.
 : Spustí další příkaz. Když na něj nyní klikneme, zobrazí se `alert`.
 
     Dalším a dalším klikáním můžeme krokovat všechny příkazy skriptu jeden po druhém.
 
-<span class="devtools" style="background-position:-62px -192px"></span> -- „Step over“ („Překročit další volání funkce“): spustí další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
+<span class="devtools" style="background-position:-62px -192px"></span> -- „Step over“ („Překročit“): spustí další příkaz, ale *nevstoupí do funkce*, klávesa `key:F10`.
 : Podobá se předchozímu příkazu „Krokovat“, ale chová se jinak, jestliže dalším příkazem je volání funkce (ne vestavěné funkce jako `alert`, ale naší vlastní funkce).
 
-    Když si je srovnáme, příkaz „Krokovat“ vstoupí do vnořeného volání funkce a pozastaví běh na jejím prvním řádku, zatímco „Překročit další volání funkce“ spustí vnořené volání funkce, aniž bychom je viděli, a překročí její vnitřek.
-    
+    Když si je srovnáme, příkaz „Krokovat“ vstoupí do vnořeného volání funkce a pozastaví běh na jejím prvním řádku, zatímco „Překročit“ spustí vnořené volání funkce a překročí její vnitřek.
+
     Běh se pak ihned po volání této funkce pozastaví.
 
-    To se hodí, když si nepřejeme vidět, co se děje uvnitř volané funkce.
+    To se hodí, když nás nezajímá, co se děje uvnitř volané funkce.
 
-<span class="devtools" style="background-position:-4px -194px"></span> -- „Step into“ („Pokročit do dalšího volání funkce“), klávesa `key:F11`.
-: Podobá se „Krokovat“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož asynchronní volání funkcí ještě neznáme.
+<span class="devtools" style="background-position:-4px -194px"></span> -- „Step into“ („Vnořit“), klávesa `key:F11`.
+: Podobá se variantě „Krokovat“, ale chová se jinak v případě asynchronního volání funkce. Jestliže se teprve začínáte učit JavaScript, můžete tento rozdíl ignorovat, jelikož asynchronní volání funkcí ještě neznáme.
 
-    Do budoucna jen poznamenejme, že příkaz „Krokovat“ ignoruje asynchronní akce, například `setTimeout` (vyvolání funkce za určitou dobu), které se vykonávají později. Příkaz „Pokročit do dalšího volání funkce“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
+    Do budoucna si jen poznamenejme, že příkaz „Krokovat“ ignoruje asynchronní akce, například `setTimeout` (vyvolání funkce za určitou dobu), které se vykonávají později. Příkaz „Vnořit“ vstoupí do jejich kódu a počká na ně, pokud je to nutné. Podrobnosti viz [manuál k vývojářským nástrojům](https://developers.google.com/web/updates/2018/01/devtools#async).
 
-<span class="devtools" style="background-position:-32px -194px"></span> -- „Step out“ („Postoupit ven z aktuální funkce“) pokračuje v běhu až do konce vykonávané funkce, klávesa `key:Shift+F11`.
+<span class="devtools" style="background-position:-32px -194px"></span> -- „Step out“ („Vyskočit“) pokračuje v běhu až do konce vykonávané funkce, klávesa `key:Shift+F11`.
 : Pokračuje v běhu a zastaví se až na posledním řádku právě vykonávané funkce. To se hodí, když jsme omylem vstoupili do volání funkce pomocí <span class="devtools" style="background-position:-200px -190px"></span>, ale ta nás nezajímá, a tak chceme co nejrychleji dospět k jejímu konci.
 
 <span class="devtools" style="background-position:-61px -74px"></span> -- povolí/zakáže všechny zarážky.
@@ -183,15 +181,15 @@ Máme-li v kódu dostatek logování, uvidíme z těchto záznamů, co se děje,
 
 ## Shrnutí
 
-Jak vidíme, existují tři hlavní způsoby, jak pozastavit skript:
-1. Zarážka.
-2. Příkaz `debugger`.
-3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
+Zjistili jsme, že existují tři hlavní způsoby, jak pozastavit skript:
+1. Zarážkou.
+2. Pomocí příkazu `debugger`.
+3. Když se vyskytne chyba (jsou-li vývojářské nástroje otevřené a přepínač <span class="devtools" style="background-position:-90px -146px"></span> je „zapnutý“).
 
-Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a krokovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
+Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a krokovat kód, abychom viděli, kde a co se při jeho vykonávání pokazilo.
 
 Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 
-Informace z této kapitoly postačí k začátku ladění, ale později, zvláště budete-li vytvářet hodně materiálu v prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
+Informace o ladění, zmíněné v této kapitole, vám do začátku postačí, ale později, zvlášť když budete hodně pracovat s prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
 
-A také můžete klikat na různá místa vývojářských nástrojů a jen se dívat, co se ukáže. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
+A také můžete klikat na různá místa vývojářských nástrojů a zkoušet, co se objeví. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
