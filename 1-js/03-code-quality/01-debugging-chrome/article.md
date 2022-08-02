@@ -183,7 +183,7 @@ Máme-li v kódu dostatek logování, uvidíme z těchto záznamů, co se děje,
 
 Zjistili jsme, že existují tři hlavní způsoby, jak pozastavit skript:
 1. Zarážkou.
-2. Příkaz `debugger`.
+2. Pomocí příkazu `debugger`.
 3. Chyba (jsou-li vývojářské nástroje otevřené a tlačítko <span class="devtools" style="background-position:-90px -146px"></span> je „zapnuté“).
 
 Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a krokovat kód, abychom viděli, kde se při jeho vykonávání něco pokazilo.
