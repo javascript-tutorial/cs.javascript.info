@@ -1,3 +1,3 @@
-Výstup je: `1`.
+The output is: `1`.
 
-Druhé volání `resolve` se ignoruje, protože v úvahu se bere vždy jen první volání `reject/resolve`. Další volání jsou ignorována.
+The second call to `resolve` is ignored, because only the first call of `reject/resolve` is taken into account. Further calls are ignored.

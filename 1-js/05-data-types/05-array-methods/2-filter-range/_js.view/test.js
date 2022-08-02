@@ -1,21 +1,21 @@
-describe("filtrujPodleRozsahu", function() {
+describe("filterRange", function() {
 
-  it("vrátí filtrované hodnoty", function() {
+  it("returns the filtered values", function() {
 
-    let pole = [5, 3, 8, 1];
+    let arr = [5, 3, 8, 1];
 
-    let filtrovanéPole = filtrujPodleRozsahu(pole, 1, 4); 
+    let filtered = filterRange(arr, 1, 4); 
 
-    assert.deepEqual(filtrovanéPole, [3, 1]);
+    assert.deepEqual(filtered, [3, 1]);
   });
 
-  it("nezmění pole", function() {
+  it("doesn't change the array", function() {
 
-    let pole = [5, 3, 8, 1];
+    let arr = [5, 3, 8, 1];
 
-    let filtrovanéPole = filtrujPodleRozsahu(pole, 1, 4); 
+    let filtered = filterRange(arr, 1, 4); 
 
-    assert.deepEqual(pole, [5,3,8,1]);
+    assert.deepEqual(arr, [5,3,8,1]);
   });
 
 });

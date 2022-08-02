@@ -2,18 +2,18 @@ importance: 2
 
 ---
 
-# Syntaktická kontrola
+# Syntax check
 
-Jaký je výsledek tohoto kódu?
+What is the result of this code?
 
 
 ```js no-beautify
-let uživatel = {
-  jméno: "Jan",
-  jdi: function() { alert(this.jméno) }
+let user = {
+  name: "John",
+  go: function() { alert(this.name) }
 }
 
-(uživatel.jdi)()
+(user.go)()
 ```
 
-P.S. Je tady chyták :)
+P.S. There's a pitfall :)

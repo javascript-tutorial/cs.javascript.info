@@ -1,47 +1,47 @@
-Rozdíl uvidíme, když se podíváme na kód uvnitř funkce.
+The difference becomes obvious when we look at the code inside a function.
 
-Chování se liší, pokud v něm je „vyskočení“ z `try...catch`.
+The behavior is different if there's a "jump out" of `try...catch`.
 
-Například když uvnitř `try...catch` je `return`. Klauzule `finally` se spustí při *jakémkoli* opuštění `try...catch`, dokonce i příkazem `return`: ihned po ukončení `try...catch`, ale ještě předtím, než řízení převezme volající kód.
+For instance, when there's a `return` inside `try...catch`. The `finally` clause works in case of *any* exit from `try...catch`, even via the `return` statement: right after `try...catch` is done, but before the calling code gets the control.
 
 ```js run
 function f() {
   try {
-    alert('začátek');
+    alert('start');
 *!*
-    return "výsledek";
+    return "result";
 */!*
-  } catch (chyba) {
+  } catch (err) {
     /// ...
   } finally {
-    alert('úklid!');
+    alert('cleanup!');
   }
 }
 
-f(); // úklid!
+f(); // cleanup!
 ```
 
-...Nebo když je tam `throw`, například:
+...Or when there's a `throw`, like here:
 
 ```js run
 function f() {
   try {
-    alert('začátek');
-    throw new Error("chyba");
-  } catch (chyba) {
+    alert('start');
+    throw new Error("an error");
+  } catch (err) {
     // ...
-    if("nemůžeme ošetřit chybu") {
+    if("can't handle the error") {
 *!*
-      throw chyba;
+      throw err;
 */!*
     }
 
   } finally {
-    alert('úklid!')
+    alert('cleanup!')
   }
 }
 
-f(); // úklid!
+f(); // cleanup!
 ```
 
-Je to právě `finally`, co nám zde úklid zajistí. Kdybychom umístili kód na konec funkce `f`, v těchto situacích by se nespustil.
+It's `finally` that guarantees the cleanup here. If we just put the code at the end of `f`, it wouldn't run in these situations.

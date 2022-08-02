@@ -1,59 +1,60 @@
-# Iterovatelné objekty
 
-*Iterovatelné* objekty jsou zobecněním polí. Je to koncept, který nám umožňuje učinit kterýkoli objekt použitelným v cyklu `for..of`.
+# Iterables
 
-Jistě, pole jsou iterovatelná. Existuje však mnoho dalších vestavěných objektů, které jsou rovněž iterovatelné. Například řetězce jsou také iterovatelné.
+*Iterable* objects are a generalization of arrays. That's a concept that allows us to make any object useable in a `for..of` loop.
 
-Jestliže objekt není technicky pole, ale představuje kolekci (seznam, množinu) nějakých prvků, pak je `for..of` skvělá syntaxe, jak tyto prvky procházet. Podívejme se tedy, jak ji rozběhnout.
+Of course, Arrays are iterable. But there are many other built-in objects, that are iterable as well. For instance, strings are also iterable.
+
+If an object isn't technically an array, but represents a collection (list, set) of something, then `for..of` is a great syntax to loop over it, so let's see how to make it work.
 
 
 ## Symbol.iterator
 
-Koncept iterovatelných objektů můžeme snadno pochopit tak, že si vytvoříme vlastní.
+We can easily grasp the concept of iterables by making one of our own.
 
-Například máme objekt, který sice není pole, ale zdá se být vhodný pro `for..of`.
+For instance, we have an object that is not an array, but looks suitable for `for..of`.
 
-Třeba objekt `rozsah`, který představuje interval čísel:
+Like a `range` object that represents an interval of numbers:
 
 ```js
-let interval = {
-  začátek: 1,
-  konec: 5
+let range = {
+  from: 1,
+  to: 5
 };
 
-// Chceme, aby for..of fungovalo:
-// for(let číslo of interval) ... číslo=1,2,3,4,5
+// We want the for..of to work:
+// for(let num of range) ... num=1,2,3,4,5
 ```
 
-Abychom učinili objekt `interval` iterovatelným (a tím zprovoznili `for..of`), musíme do tohoto objektu přidat metodu nazvanou `Symbol.iterator` (speciální vestavěný symbol právě pro tento účel).
+To make the `range` object iterable (and thus let `for..of` work) we need to add a method to the object named `Symbol.iterator` (a special built-in symbol just for that).
 
-1. Když `for..of` začne, jedenkrát tuto metodu zavolá (nebo ohlásí chybu, není-li nalezena). Metoda musí vracet *iterátor* -- objekt obsahující metodu `next`.
-2. Nadále `for..of` pracuje *pouze s tímto vráceným objektem*.
-3. Když `for..of` chce další hodnotu, volá na tomto objektu `next()`.
-4. Výsledek `next()` musí mít tvar `{done: Boolean, value: cokoli}`, kde `done=true` znamená, že cyklus má skončit, v opačném případě je `value` jeho další hodnotou.
+1. When `for..of` starts, it calls that method once (or errors if not found). The method must return an *iterator* -- an object with the method `next`.
+2. Onward, `for..of` works *only with that returned object*.
+3. When `for..of` wants the next value, it calls `next()` on that object.
+4. The result of `next()` must have the form `{done: Boolean, value: any}`, where `done=true` means that the loop is finished, otherwise `value` is the next value.
 
-Zde je úplná implementace objektu `interval` s komentáři:
+Here's the full implementation for `range` with remarks:
 
 ```js run
-let interval = {
-  začátek: 1,
-  konec: 5
+let range = {
+  from: 1,
+  to: 5
 };
 
-// 1. volání for..of nejprve zavolá tuto funkci
-interval[Symbol.iterator] = function() {
+// 1. call to for..of initially calls this
+range[Symbol.iterator] = function() {
 
-  // ...tato funkce vrátí objekt iterátoru:
-  // 2. Od této chvíle for..of pracuje jen s níže uvedeným objektem iterátoru a ptá se ho na další hodnoty
+  // ...it returns the iterator object:
+  // 2. Onward, for..of works only with the iterator object below, asking it for next values
   return {
-    aktuální: this.začátek,
-    poslední: this.konec,
+    current: this.from,
+    last: this.to,
 
-    // 3. next() je volána cyklem for..of při každé iteraci
+    // 3. next() is called on each iteration by the for..of loop
     next() {
-      // 4. měla by vrátit hodnotu jako objekt {done:..., value :...}
-      if (this.aktuální <= this.poslední) {
-        return { done: false, value: this.aktuální++ };
+      // 4. it should return the value as an object {done:.., value :...}
+      if (this.current <= this.last) {
+        return { done: false, value: this.current++ };
       } else {
         return { done: true };
       }
@@ -61,245 +62,246 @@ interval[Symbol.iterator] = function() {
   };
 };
 
-// teď to funguje!
-for (let číslo of interval) {
-  alert(číslo); // 1, pak 2, 3, 4, 5
+// now it works!
+for (let num of range) {
+  alert(num); // 1, then 2, 3, 4, 5
 }
 ```
 
-Prosíme všimněte si důležité vlastnosti iterovatelných objektů: jednotlivé záležitosti jsou odděleny.
+Please note the core feature of iterables: separation of concerns.
 
-- Sám objekt `interval` nemá metodu `next()`.
-- Místo toho se voláním `interval[Symbol.iterator]()` vytvoří jiný objekt, tzv. „iterátor“, a hodnoty pro iteraci generuje jeho metoda `next()`.
+- The `range` itself does not have the `next()` method.
+- Instead, another object, a so-called "iterator" is created by the call to `range[Symbol.iterator]()`, and its `next()` generates values for the iteration.
 
-Objekt iterátoru je tedy oddělen od objektu, nad nímž se iteruje.
+So, the iterator object is separate from the object it iterates over.
 
-Technicky je můžeme spojit a použít jako iterátor samotný `interval`, abychom kód zjednodušili.
+Technically, we may merge them and use `range` itself as the iterator to make the code simpler.
 
-Třeba takto:
+Like this:
 
 ```js run
-let interval = {
-  začátek: 1,
-  konec: 5,
+let range = {
+  from: 1,
+  to: 5,
 
   [Symbol.iterator]() {
-    this.aktuální = this.začátek;
+    this.current = this.from;
     return this;
   },
 
   next() {
-    if (this.aktuální <= this.konec) {
-      return { done: false, value: this.aktuální++ };
+    if (this.current <= this.to) {
+      return { done: false, value: this.current++ };
     } else {
       return { done: true };
     }
   }
 };
 
-for (let číslo of interval) {
-  alert(číslo); // 1, pak 2, 3, 4, 5
+for (let num of range) {
+  alert(num); // 1, then 2, 3, 4, 5
 }
 ```
 
-Nyní `interval[Symbol.iterator]()` vrátí samotný objekt `interval`: ten obsahuje potřebnou metodu `next()` a pamatuje si aktuální krok iterace v `this.current`. Je to kratší? Ano. A někdy je to i vhodné.
+Now `range[Symbol.iterator]()` returns the `range` object itself:  it has the necessary `next()` method and remembers the current iteration progress in `this.current`. Shorter? Yes. And sometimes that's fine too.
 
-Nevýhodou je, že nyní nemůžeme mít dva cykly `for..of`, které budou nad tímto objektem probíhat současně: sdílely by stav iterace, protože iterátor je pouze jeden -- samotný objekt. Ale dva paralelní cykly for-of jsou vzácností, dokonce i v asynchronních scénářích.
+The downside is that now it's impossible to have two `for..of` loops running over the object simultaneously: they'll share the iteration state, because there's only one iterator -- the object itself. But two parallel for-ofs is a rare thing, even in async scenarios.
 
-```smart header="Nekonečné iterátory"
-Nekonečné iterátory jsou rovněž možné. Například `interval` se stane nekonečným pro `interval.konec = Infinity`. Nebo můžeme vytvořit iterovatelný objekt, který bude generovat nekonečnou posloupnost pseudonáhodných čísel. I ten může být užitečný.
+```smart header="Infinite iterators"
+Infinite iterators are also possible. For instance, the `range` becomes infinite for `range.to = Infinity`. Or we can make an iterable object that generates an infinite sequence of pseudorandom numbers. Also can be useful.
 
-Na metodu `next` nejsou kladena žádná omezení, může vracet další a další hodnoty, to je normální.
+There are no limitations on `next`, it can return more and more values, that's normal.
 
-Samozřejmě cyklus `for..of` nad takovým iterovatelným objektem by byl nekonečný. Vždy ho však můžeme zastavit pomocí `break`.
+Of course, the `for..of` loop over such an iterable would be endless. But we can always stop it using `break`.
 ```
 
 
-## Řetězec je iterovatelný
+## String is iterable
 
-Nejčastěji používané iterovatelné objekty jsou pole a řetězce.
+Arrays and strings are most widely used built-in iterables.
 
-U řetězce `for..of` prochází jeho znaky:
+For a string, `for..of` loops over its characters:
 
 ```js run
-for (let znak of "test") {
-  // spustí se 4-krát: pro každý znak jednou
-  alert( znak ); // t, pak e, pak s, pak t
+for (let char of "test") {
+  // triggers 4 times: once for each character
+  alert( char ); // t, then e, then s, then t
 }
 ```
 
-Funguje to korektně i se surrogate pairy!
+And it works correctly with surrogate pairs!
 
 ```js run
 let str = '𝒳😂';
-for (let znak of str) {
-    alert( znak ); // 𝒳, a pak 😂
+for (let char of str) {
+    alert( char ); // 𝒳, and then 😂
 }
 ```
 
-## Explicitní volání iterátoru
+## Calling an iterator explicitly
 
-Abychom tomu hlouběji porozuměli, podíváme se, jak použít iterátor explicitně.
+For deeper understanding, let's see how to use an iterator explicitly.
 
-Budeme iterovat nad řetězcem přesně stejným způsobem jako `for..of`, ale přímými voláními. Tento kód vytvoří řetězcový iterátor a získá z něj hodnoty „ručně“:
+We'll iterate over a string in exactly the same way as `for..of`, but with direct calls. This code creates a string iterator and gets values from it "manually":
 
 ```js run
-let str = "Ahoj";
+let str = "Hello";
 
-// provádí totéž jako
-// for (let znak of str) alert(znak);
+// does the same as
+// for (let char of str) alert(char);
 
 *!*
 let iterator = str[Symbol.iterator]();
 */!*
 
 while (true) {
-  let výsledek = iterator.next();
-  if (výsledek.done) break;
-  alert(výsledek.value); // vypíše znaky jeden po druhém
+  let result = iterator.next();
+  if (result.done) break;
+  alert(result.value); // outputs characters one by one
 }
 ```
 
-Tohle potřebujeme jen vzácně, ale dává nám to více kontroly nad procesem než `for..of`. Například můžeme proces iterace rozdělit: trochu iterovat, pak to přerušit, udělat něco jiného a pak iteraci obnovit.
+That is rarely needed, but gives us more control over the process than `for..of`. For instance, we can split the iteration process: iterate a bit, then stop, do something else, and then resume later.
 
-## Iterovatelné objekty a polím podobné objekty [#array-like]
+## Iterables and array-likes [#array-like]
 
-Tyto dva oficiální pojmy vypadají podobně, ale jsou zcela odlišné. Prosíme ujistěte se, že jim dobře rozumíte, abyste předešli zmatkům.
+Two official terms look similar, but are very different. Please make sure you understand them well to avoid the confusion.
 
-- *Iterovatelné objekty* jsou objekty, které implementují metodu `Symbol.iterator`, jak je popsáno výše.
-- *Polím podobné objekty* jsou objekty, které mají indexy a vlastnost `length` (délku), takže vypadají jako pole.
+- *Iterables* are objects that implement the `Symbol.iterator` method, as described above.
+- *Array-likes* are objects that have indexes and `length`, so they look like arrays.
 
-Když používáme JavaScript pro praktické úkoly v prohlížeči nebo v kterémkoli jiném prostředí, můžeme se setkat s objekty, které jsou iterovatelné, podobné polím, nebo obojí.
+When we use JavaScript for practical tasks in a browser or any other environment, we may meet objects that are iterables or array-likes, or both.
 
-Například řetězce jsou jak iterovatelné (funguje na nich `for..of`), tak podobné polím (mají číselné indexy a vlastnost `length`).
+For instance, strings are both iterable (`for..of` works on them) and array-like (they have numeric indexes and `length`).
 
-Iterovatelný objekt však nemusí být podobný poli. A naopak, objekt podobný poli nemusí být iterovatelný.
+But an iterable may be not array-like. And vice versa an array-like may be not iterable.
 
-Například `interval` ve výše uvedeném příkladu je iterovatelný, ale ne podobný poli, jelikož nemá indexované vlastnosti a `length`.
+For example, the `range` in the example above is iterable, but not array-like, because it does not have indexed properties and `length`.
 
-A zde je objekt, který je podobný poli, ale ne iterovatelný:
+And here's the object that is array-like, but not iterable:
 
 ```js run
-let objektPodobnýPoli = { // má indexy a length => je podobný poli
-  0: "Ahoj",
-  1: "světe",
+let arrayLike = { // has indexes and length => array-like
+  0: "Hello",
+  1: "World",
   length: 2
 };
 
 *!*
-// Chyba (objekt neobsahuje Symbol.iterator)
-for (let prvek of objektPodobnýPoli) {}
+// Error (no Symbol.iterator)
+for (let item of arrayLike) {}
 */!*
 ```
 
-Jak iterovatelné objekty, tak objekty podobné polím zpravidla *nejsou pole*, tedy nemají `push`, `pop` atd. To je poněkud nepohodlné, když takový objekt máme a chceme s ním pracovat jako s polem. Například bychom chtěli pracovat s objektem `interval` pomocí metod polí. Jak toho docílit?
+Both iterables and array-likes are usually *not arrays*, they don't have `push`, `pop` etc. That's rather inconvenient if we have such an object and want to work with it as with an array. E.g. we would like to work with `range` using array methods. How to achieve that?
 
 ## Array.from
 
-Existuje univerzální metoda [Array.from](mdn:js/Array/from), která přijímá iterovatelnou nebo poli podobnou hodnotu a vytvoří z ní „opravdové“ pole `Array`. Na tom pak můžeme volat metody polí.
+There's a universal method [Array.from](mdn:js/Array/from) that takes an iterable or array-like value and makes a "real" `Array` from it. Then we can call array methods on it.
 
-Příklad:
+For instance:
 
 ```js run
-let objektPodobnýPoli = {
-  0: "Ahoj",
-  1: "světe",
+let arrayLike = {
+  0: "Hello",
+  1: "World",
   length: 2
 };
 
 *!*
-let pole = Array.from(objektPodobnýPoli); // (*)
+let arr = Array.from(arrayLike); // (*)
 */!*
-alert(pole.pop()); // světe (metoda funguje)
+alert(arr.pop()); // World (method works)
 ```
 
-`Array.from` na řádku `(*)` vezme objekt, prozkoumá, zda je iterovatelný nebo podobný poli, a pak vyrobí nové pole a zkopíruje do něj všechny jeho prvky.
+`Array.from` at the line `(*)` takes the object, examines it for being an iterable or array-like, then makes a new array and copies all items to it.
 
-Pro iterovatelný objekt se děje totéž:
+The same happens for an iterable:
 
 ```js
-// předpokládáme interval z výše uvedeného příkladu
-let pole = Array.from(interval);
-alert(pole); // 1,2,3,4,5 (konverze pole pomocí toString funguje)
+// assuming that range is taken from the example above
+let arr = Array.from(range);
+alert(arr); // 1,2,3,4,5 (array toString conversion works)
 ```
 
-Úplná syntaxe pro `Array.from` nám také umožňuje poskytnout nepovinnou „mapovací“ funkci:
+The full syntax for `Array.from` also allows us to provide an optional "mapping" function:
 ```js
 Array.from(obj[, mapFn, thisArg])
 ```
 
-Volitelný druhý argument `mapFn` může být funkce, která bude aplikována na každý prvek, než bude přidán do pole, a `thisArg` nám umožňuje nastavit v této funkci `this`.
+The optional second argument `mapFn` can be a function that will be applied to each element before adding it to the array, and `thisArg` allows us to set `this` for it.
 
-Příklad:
+For instance:
 
 ```js
-// předpokládáme interval z výše uvedeného příkladu
+// assuming that range is taken from the example above
 
-// každé číslo umocníme na druhou
-let pole = Array.from(interval, číslo => číslo * číslo);
+// square each number
+let arr = Array.from(range, num => num * num);
 
-alert(pole); // 1,4,9,16,25
+alert(arr); // 1,4,9,16,25
 ```
 
-Zde pomocí `Array.from` přetvoříme řetězec na pole znaků:
+Here we use `Array.from` to turn a string into an array of characters:
 
 ```js run
 let str = '𝒳😂';
 
-// rozdělí str na pole znaků
-let znaky = Array.from(str);
+// splits str into array of characters
+let chars = Array.from(str);
 
-alert(znaky[0]); // 𝒳
-alert(znaky[1]); // 😂
-alert(znaky.length); // 2
+alert(chars[0]); // 𝒳
+alert(chars[1]); // 😂
+alert(chars.length); // 2
 ```
 
-Na rozdíl od `str.split` tato metoda využívá iterovatelnou povahu řetězce, a proto, stejně jako `for..of`, funguje korektně se surrogate pairy.
+Unlike `str.split`, it relies on the iterable nature of the string and so, just like `for..of`, correctly works with surrogate pairs.
 
-Technicky zde provádí totéž jako:
+Technically here it does the same as:
 
 ```js run
 let str = '𝒳😂';
 
-let znaky = []; // Array.from interně vykonává stejný cyklus
-for (let znak of str) {
-  znaky.push(znak);
+let chars = []; // Array.from internally does the same loop
+for (let char of str) {
+  chars.push(char);
 }
 
-alert(znaky);
+alert(chars);
 ```
 
-...Ale je to kratší.
+...But it is shorter.
 
-Můžeme na ní dokonce postavit metodu `slice`, která bude rozpoznávat surrogate pairy:
+We can even build surrogate-aware `slice` on it:
 
 ```js run
-function slice(řetězec, začátek, konec) {
-  return Array.from(řetězec).slice(začátek, konec).join('');
+function slice(str, start, end) {
+  return Array.from(str).slice(start, end).join('');
 }
 
-let řetězec = '𝒳😂𩷶';
+let str = '𝒳😂𩷶';
 
-alert( slice(řetězec, 1, 3) ); // 😂𩷶
+alert( slice(str, 1, 3) ); // 😂𩷶
 
-// nativní metoda nepodporuje surrogate pairy
-alert( řetězec.slice(1, 3) ); // nesmysly (dvě části z různých surrogate pairů)
+// the native method does not support surrogate pairs
+alert( str.slice(1, 3) ); // garbage (two pieces from different surrogate pairs)
 ```
 
 
-## Shrnutí
+## Summary
 
-Objekty, které lze použít ve `for..of`, se nazývají *iterovatelné*.
+Objects that can be used in `for..of` are called *iterable*.
 
-- Technicky musejí iterovatelné objekty implementovat metodu nazvanou `Symbol.iterator`.
-    - Výsledek metody `obj[Symbol.iterator]()` se nazývá *iterátor*. Řídí další iterační proces.
-    - Iterátor musí obsahovat metodu jménem `next()`, která vrací objekt `{done: Boolean, value: cokoli}`, v němž `done:true` oznamuje konec iteračního procesu, jinak `value` je další hodnota.
-- Metoda `Symbol.iterator` je cyklem `for..of` volána automaticky, ale můžeme ji volat i přímo.
-- Metodu `Symbol.iterator` implementují i vestavěné iterovatelné objekty, např. řetězce nebo pole.
-- Řetězcový iterátor rozpoznává surrogate pairy.
+- Technically, iterables must implement the method named `Symbol.iterator`.
+    - The result of `obj[Symbol.iterator]()` is called an *iterator*. It handles further iteration process.
+    - An iterator must have the method named `next()` that returns an object `{done: Boolean, value: any}`, here `done:true` denotes the end of the iteration process, otherwise the `value` is the next value.
+- The `Symbol.iterator` method is called automatically by `for..of`, but we also can do it directly.
+- Built-in iterables like strings or arrays, also implement `Symbol.iterator`.
+- String iterator knows about surrogate pairs.
 
-Objekty, které mají indexované vlastnosti a vlastnost `length`, se nazývají *polím podobné*. Takové objekty mohou mít i jiné vlastnosti a metody, ale postrádají vestavěné metody polí.
 
-Podíváme-li se do specifikace, uvidíme, že většina vestavěných metod předpokládá, že pracují s iterovatelnými nebo polím podobnými objekty místo „opravdových“ polí, protože je to abstraktnější.
+Objects that have indexed properties and `length` are called *array-like*. Such objects may also have other properties and methods, but lack the built-in methods of arrays.
 
-`Array.from(obj[, mapFn, thisArg])` vytvoří opravdové pole `Array` z iterovatelného nebo poli podobného objektu `obj`. Na ně pak můžeme používat metody polí. Nepovinné argumenty `mapFn` a `thisArg` nám umožňují na každý prvek aplikovat funkci.
+If we look inside the specification -- we'll see that most built-in methods assume that they work with iterables or array-likes instead of "real" arrays, because that's more abstract.
+
+`Array.from(obj[, mapFn, thisArg])` makes a real `Array` from an iterable or array-like `obj`, and we can then use array methods on it. The optional arguments `mapFn` and `thisArg` allow us to apply a function to each item.

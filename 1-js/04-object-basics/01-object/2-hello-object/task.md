@@ -2,12 +2,13 @@ importance: 5
 
 ---
 
-# Ahoj, objekte
+# Hello, object
 
-Napište tento kód, pro každou akci jeden řádek:
+Write the code, one line for each action:
 
-1. Vytvořte prázdný objekt `uživatel`.
-2. Přidejte vlastnost `jméno` s hodnotou `Jan`.
-3. Přidejte vlastnost `příjmení` s hodnotou `Novák`.
-4. Změňte hodnotu vlastnosti `jméno` na `Petr`.
-5. Odstraňte vlastnost `jméno` z objektu.
+1. Create an empty object `user`.
+2. Add the property `name` with the value `John`.
+3. Add the property `surname` with the value `Smith`.
+4. Change the value of the `name` to `Pete`.
+5. Remove the property `name` from the object.
+

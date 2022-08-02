@@ -2,21 +2,21 @@ importance: 5
 
 ---
 
-# Nejvyšší plat
+# The maximal salary 
 
-Máme objekt `platy`:
+There is a `salaries` object:
 
 ```js
-let platy = {
-  "Jan": 100,
-  "Petr": 300,
-  "Marie": 250
+let salaries = {
+  "John": 100,
+  "Pete": 300,
+  "Mary": 250
 };
 ```
 
-Vytvořte funkci `nejvyššíPlat(platy)`, která vrátí jméno nejlépe placené osoby.
+Create the function `topSalary(salaries)` that returns the name of the top-paid person.
 
-- Je-li objekt `platy` prázdný, měla by vrátit `null`.
-- Jestliže je nejlépe placených osob více, může vrátit libovolnou z nich.
+- If `salaries` is empty, it should return `null`.
+- If there are multiple top-paid persons, return any of them.
 
-P.S. K iteraci nad dvojicemi klíč/hodnota použijte `Object.entries` a destrukturaci.
+P.S. Use `Object.entries` and destructuring to iterate over key/value pairs.

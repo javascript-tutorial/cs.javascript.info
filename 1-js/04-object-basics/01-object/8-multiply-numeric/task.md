@@ -2,32 +2,32 @@ importance: 3
 
 ---
 
-# Vynásobte hodnoty číselných vlastností dvěma
+# Multiply numeric property values by 2
 
-Vytvořte funkci `vynásobČísla(obj)`, která vynásobí hodnoty všech číselných vlastností objektu `obj` dvěma.
+Create a function `multiplyNumeric(obj)` that multiplies all numeric property values of `obj` by `2`.
 
-Například:
+For instance:
 
 ```js
-// před voláním
+// before the call
 let menu = {
-  šířka: 200,
-  výška: 300,
-  titulek: "Moje menu"
+  width: 200,
+  height: 300,
+  title: "My menu"
 };
 
-vynásobČísla(menu);
+multiplyNumeric(menu);
 
-// po volání
+// after the call
 menu = {
-  šířka: 400,
-  výška: 600,
-  titulek: "Moje menu"
+  width: 400,
+  height: 600,
+  title: "My menu"
 };
 ```
 
-Prosíme všimněte si, že `vynásobČísla` nemusí nic vracet. Měla by modifikovat samotný objekt.
+Please note that `multiplyNumeric` does not need to return anything. It should modify the object in-place.
 
-P.S. Pro kontrolu, zda hodnota je číslo, použijte `typeof`.
+P.S. Use `typeof` to check for a number here.
 
 

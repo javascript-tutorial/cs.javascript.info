@@ -2,29 +2,29 @@ importance: 5
 
 ---
 
-# Chyba při vytváření instance
+# Error creating an instance
 
-Zde je kód, v němž třída `Králík` rozšiřuje třídu `Zvíře`.
+Here's the code with `Rabbit` extending `Animal`.
 
-Naneštěstí objekty `Králík` nemohou být vytvořeny. Co je špatně? Opravte to.
+Unfortunately, `Rabbit` objects can't be created. What's wrong? Fix it.
 ```js run
-class Zvíře {
+class Animal {
 
-  constructor(jméno) {
-    this.jméno = jméno;
+  constructor(name) {
+    this.name = name;
   }
 
 }
 
-class Králík extends Zvíře {
-  constructor(jméno) {  
-    this.jméno = jméno;
-    this.datumVytvoření = Date.now();
+class Rabbit extends Animal {
+  constructor(name) {  
+    this.name = name;
+    this.created = Date.now();
   }
 }
 
 *!*
-let králík = new Králík("Bílý králík"); // Chyba: this není definováno
+let rabbit = new Rabbit("White Rabbit"); // Error: this is not defined
 */!*
-alert(králík.jméno);
+alert(rabbit.name);
 ```

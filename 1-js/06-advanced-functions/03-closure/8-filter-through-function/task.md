@@ -2,28 +2,28 @@ importance: 5
 
 ---
 
-# Filtrace pomocí funkce
+# Filter through function
 
-Máme vestavěnou metodu `pole.filter(f)` pro pole, která filtruje všechny prvky pomocí funkce `f`. Jestliže `f` vrátí `true`, bude prvek vrácen ve výsledném poli.
+We have a built-in method `arr.filter(f)` for arrays. It filters all elements through the function `f`. If it returns `true`, then that element is returned in the resulting array.
 
-Vytvořte sadu filtrů „připravených k použití“:
+Make a set of "ready to use" filters:
 
-- `mezi(a, b)` -- mezi `a` a `b` nebo rovno jim (inkluzívně).
-- `vPoli([...])` -- v zadaném poli.
+- `inBetween(a, b)` -- between `a` and `b` or equal to them (inclusively).
+- `inArray([...])` -- in the given array.
 
-Použití musí být takovéto:
+The usage must be like this:
 
-- `pole.filter(mezi(3,6))` -- vybere jen hodnoty mezi 3 a 6.
-- `pole.filter(vPoli([1,2,3]))` -- vybere jen prvky, které se rovnají některému z prvků pole `[1,2,3]`.
+- `arr.filter(inBetween(3,6))` -- selects only values between 3 and 6.
+- `arr.filter(inArray([1,2,3]))` -- selects only elements matching with one of the members of `[1,2,3]`.
 
-Například:
+For instance:
 
 ```js
-/* .. váš kód funkcí mezi a vPoli */
-let pole = [1, 2, 3, 4, 5, 6, 7];
+/* .. your code for inBetween and inArray */
+let arr = [1, 2, 3, 4, 5, 6, 7];
 
-alert( pole.filter(mezi(3, 6)) ); // 3,4,5,6
+alert( arr.filter(inBetween(3, 6)) ); // 3,4,5,6
 
-alert( pole.filter(vPoli([1, 2, 10])) ); // 1,2
+alert( arr.filter(inArray([1, 2, 10])) ); // 1,2
 ```
 

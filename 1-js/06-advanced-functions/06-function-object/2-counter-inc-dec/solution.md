@@ -1,2 +1,2 @@
 
-Řešení používá `počet` v lokální proměnné, ale přidané metody jsou vepsány přímo do `čítač`. Sdílejí stejné vnější lexikální prostředí a mohou také přistupovat k aktuální proměnné `počet`.
+The solution uses `count` in the local variable, but addition methods are written right into the `counter`. They share the same outer lexical environment and also can access the current `count`.

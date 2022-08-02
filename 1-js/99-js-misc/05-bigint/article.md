@@ -2,21 +2,21 @@
 
 [recent caniuse="bigint"]
 
-`BigInt` je speciální číselný typ, který poskytuje podporu celých čísel libovolné délky.
+`BigInt` is a special numeric type that provides support for integers of arbitrary length.
 
-Číslo typu BigInt se vytvoří přidáním písmene `n` na konec celočíselného literálu nebo voláním funkce `BigInt`, která vytváří biginty z řetězců, čísel apod.
+A bigint is created by appending `n` to the end of an integer literal or by calling the function `BigInt` that creates bigints from strings, numbers etc.
 
 ```js
 const bigint = 1234567890123456789012345678901234567890n;
 
-const stejnýBigint = BigInt("1234567890123456789012345678901234567890");
+const sameBigint = BigInt("1234567890123456789012345678901234567890");
 
-const bigintZČísla = BigInt(10); // totéž jako 10n
+const bigintFromNumber = BigInt(10); // same as 10n
 ```
 
-## Matematické operátory
+## Math operators
 
-`BigInt` lze většinou používat jako obvyklé číslo, například:
+`BigInt` can mostly be used like a regular number, for example:
 
 ```js run
 alert(1n + 2n); // 3
@@ -24,44 +24,44 @@ alert(1n + 2n); // 3
 alert(5n / 2n); // 2
 ```
 
-Prosíme všimněte si: dělení `5/2` vrací výsledek zaokrouhlený směrem k nule, bez desetinné části. Všechny operace na bigintech vracejí biginty.
+Please note: the division `5/2` returns the result rounded towards zero, without the decimal part. All operations on bigints return bigints.
 
-Nemůžeme směšovat biginty a běžná čísla:
-
-```js run
-alert(1n + 2); // Chyba: Nelze míchat dohromady BigInt a jiné typy
-```
-
-Když je potřeba, měli bychom je explicitně konvertovat: použitím buď `BigInt()`, nebo `Number()`, například:
+We can't mix bigints and regular numbers:
 
 ```js run
-let bigint = 1n;
-let číslo = 2;
-
-// číslo na bigint
-alert(bigint + BigInt(číslo)); // 3
-
-// bigint na číslo
-alert(Number(bigint) + číslo); // 3
+alert(1n + 2); // Error: Cannot mix BigInt and other types
 ```
 
-Konverzní operace jsou vždy tiché a nikdy neohlásí chybu, ale je-li bigint příliš velký a nevejde se do číselného typu, budou přebývající bity odříznuty, takže bychom při takové konverzi měli být opatrní.
+We should explicitly convert them if needed: using either `BigInt()` or `Number()`, like this:
 
-````smart header="Biginty nepodporují unární plus"
-Operátor unárního plusu `+hodnota` je dobře známý způsob, jak převést hodnotu `hodnota` na číslo.
-
-Aby nedocházelo ke zmatkům, biginty jej nepodporují:
 ```js run
 let bigint = 1n;
+let number = 2;
 
-alert( +bigint ); // chyba
+// number to bigint
+alert(bigint + BigInt(number)); // 3
+
+// bigint to number
+alert(Number(bigint) + number); // 3
 ```
-Ke konverzi bigintu na číslo bychom tedy měli používat `Number()`.
+
+The conversion operations are always silent, never give errors, but if the bigint is too huge and won't fit the number type, then extra bits will be cut off, so we should be careful doing such conversion.
+
+````smart header="The unary plus is not supported on bigints"
+The unary plus operator `+value` is a well-known way to convert `value` to a number.
+
+In order to avoid confusion, it's not supported on bigints:
+```js run
+let bigint = 1n;
+
+alert( +bigint ); // error
+```
+So we should use `Number()` to convert a bigint to a number.
 ````
 
-## Porovnávání
+## Comparisons
 
-Porovnávání, např. `<`, `>`, fungují s biginty a čísly správně:
+Comparisons, such as `<`, `>` work with bigints and numbers just fine:
 
 ```js run
 alert( 2n > 1n ); // true
@@ -69,7 +69,7 @@ alert( 2n > 1n ); // true
 alert( 2n > 1 ); // true
 ```
 
-Prosíme všimněte si však, že protože čísla a biginty patří k různým typům, mohou si být rovny `==`, ale ne striktně rovny `===`:
+Please note though, as numbers and bigints belong to different types, they can be equal `==`, but not strictly equal `===`:
 
 ```js run
 alert( 1 == 1n ); // true
@@ -77,54 +77,54 @@ alert( 1 == 1n ); // true
 alert( 1 === 1n ); // false
 ```
 
-## Booleovské operace
+## Boolean operations
 
-Když jsme uvnitř `if` nebo jiných booleovských operací, biginty se chovají jako čísla.
+When inside `if` or other boolean operations, bigints behave like numbers.
 
-Například v `if` je bigint `0n` nepravdivý, ostatní hodnoty jsou pravdivé:
+For instance, in `if`, bigint `0n` is falsy, other values are truthy:
 
 ```js run
 if (0n) {
-  // nikdy se nespustí
+  // never executes
 }
 ```
 
-Rovněž booleovské operátory, např. `||`, `&&` a jiné, fungují s biginty obdobně jako s čísly:
+Boolean operators, such as `||`, `&&` and others also work with bigints similar to numbers:
 
 ```js run
-alert( 1n || 2 ); // 1 (1n se považuje za pravdivé)
+alert( 1n || 2 ); // 1 (1n is considered truthy)
 
-alert( 0n || 2 ); // 2 (0n se považuje za nepravdivé)
+alert( 0n || 2 ); // 2 (0n is considered falsy)
 ```
 
-## Polyfilly
+## Polyfills
 
-Polyfillování bigintů je problematické. Příčinou je, že mnoho JavaScriptových operátorů, např. `+`, `-` a podobně, se chová na bigintech jinak oproti běžným číslům.
+Polyfilling bigints is tricky. The reason is that many JavaScript operators, such as `+`, `-` and so on behave differently with bigints compared to regular numbers.
 
-Například dělení bigintů vrátí vždy bigint (zaokrouhlený, je-li to nutné).
+For example, division of bigints always returns a bigint (rounded if necessary).
 
-Aby polyfill mohl takové chování emulovat, musel by analyzovat kód a nahradit všechny takové operátory svými funkcemi. Provést něco takového je však těžkopádné a značně by to snížilo výkon.
+To emulate such behavior, a polyfill would need to analyze the code and replace all such operators with its functions. But doing so is cumbersome and would cost a lot of performance.
 
-Dosud tedy není dobře znám žádný dobrý polyfill.
+So, there's no well-known good polyfill.
 
-Jinou cestičku kolem ovšem nabízejí vývojáři knihovny [JSBI](https://github.com/GoogleChromeLabs/jsbi).
+Although, the other way around is proposed by the developers of [JSBI](https://github.com/GoogleChromeLabs/jsbi) library.
 
-Tato knihovna implementuje velká čísla svými vlastními metodami. Můžeme je používat místo nativních bigintů:
+This library implements big numbers using its own methods. We can use them instead of native bigints:
 
-| Operace | Nativní `BigInt` | JSBI |
+| Operation | native `BigInt` | JSBI |
 |-----------|-----------------|------|
-| Vytvoření z čísla | `a = BigInt(789)` | `a = JSBI.BigInt(789)` |
-| Sčítání | `c = a + b` | `c = JSBI.add(a, b)` |
-| Odčítání	| `c = a - b` | `c = JSBI.subtract(a, b)` |
+| Creation from Number | `a = BigInt(789)` | `a = JSBI.BigInt(789)` |
+| Addition | `c = a + b` | `c = JSBI.add(a, b)` |
+| Subtraction	| `c = a - b` | `c = JSBI.subtract(a, b)` |
 | ... | ... | ... |
 
-...A pak použít polyfill (plugin Babel) ke konverzi volání JSBI na nativní biginty pro prohlížeče, které je podporují.
+...And then use the polyfill (Babel plugin) to convert JSBI calls to native bigints for those browsers that support them.
 
-Jinými slovy, tento přístup nám navrhuje, abychom místo používání nativních bigintů psali kód v JSBI. Avšak JSBI interně pracuje s čísly jako s biginty a emuluje je způsobem blízkým specifikaci, takže kód bude „připraven pro biginty“.
+In other words, this approach suggests that we write code in JSBI instead of native bigints. But JSBI works with numbers as with bigints internally, emulates them closely following the specification, so the code will be "bigint-ready".
 
-Takový kód s JSBI můžeme používat „tak, jak je“ na enginech, které biginty nepodporují, i na těch, které ano -- polyfill bude konvertovat volání na nativní biginty.
+We can use such JSBI code "as is" for engines that don't support bigints and for those that do support - the polyfill will convert the calls to native bigints.
 
-## Odkazy
+## References
 
-- [MDN dokumentace BigIntu](mdn:/JavaScript/Reference/Global_Objects/BigInt).
-- [Specifikace](https://tc39.es/ecma262/#sec-bigint-objects).
+- [MDN docs on BigInt](mdn:/JavaScript/Reference/Global_Objects/BigInt).
+- [Specification](https://tc39.es/ecma262/#sec-bigint-objects).

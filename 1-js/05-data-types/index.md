@@ -1,3 +1,3 @@
-# Datové typy
+# Data types
 
-Další datové struktury a další hloubkové studium typů.
+More data structures and more in-depth study of the types.
