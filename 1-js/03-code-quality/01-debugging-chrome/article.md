@@ -190,6 +190,6 @@ Když je skript pozastaven, můžeme jej ladit: prozkoumávat proměnné a kroko
 
 Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli. Kompletní manuál najdete na <https://developers.google.com/web/tools/chrome-devtools>.
 
-Informace z této kapitoly postačí k začátku ladění, ale později, zvláště budete-li vytvářet hodně materiálu v prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
+Informace o ladění, zmíněné v této kapitole, vám do začátku postačí, ale později, zvlášť když budete hodně pracovat s prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
 
 A také můžete klikat na různá místa vývojářských nástrojů a jen se dívat, co se ukáže. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
