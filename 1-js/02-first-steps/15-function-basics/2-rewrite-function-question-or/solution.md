@@ -1,17 +1,17 @@
-Using a question mark operator `'?'`:
+Pomocí operátoru otazníku `'?'`:
 
 ```js
-function checkAge(age) {
-  return (age > 18) ? true : confirm('Did parents allow you?');
+function ověřVěk(věk) {
+  return (věk > 18) ? true : confirm('Dovolili ti to rodiče?');
 }
 ```
 
-Using OR `||` (the shortest variant):
+Pomocí OR `||` (kratší varianta):
 
 ```js
-function checkAge(age) {
-  return (age > 18) || confirm('Did parents allow you?');
+function ověřVěk(věk) {
+  return (věk > 18) || confirm('Dovolili ti to rodiče?');
 }
 ```
 
-Note that the parentheses around `age > 18` are not required here. They exist for better readability.
+Závorky okolo `věk > 18` zde nejsou nutné. Slouží jen k lepší čitelnosti.

@@ -1,4 +1,4 @@
-The first two checks turn into two `case`. The third check is split into two cases:
+První dvě podmínky můžeme přepsat do samostatné varianty, třetí musí být ve dvou variantách:
 
 ```js run
 let a = +prompt('a?', '');
@@ -21,6 +21,6 @@ switch (a) {
 }
 ```
 
-Please note: the `break` at the bottom is not required. But we put it to make the code future-proof.
+Všimněte si, že `break` na konci není nezbytný, ale vložili jsme ho tam, aby byl kód zajištěný pro rozšiřování.
 
-In the future, there is a chance that we'd want to add one more `case`, for example `case 4`. And if we forget to add a break before it, at the end of `case 3`, there will be an error. So that's a kind of self-insurance.
+Je možné, že v budoucnu budeme chtít přidat další `case`, například `case 4`. Kdybychom před něj na konec `case 3` zapomněli umístit `break`, nastala by chyba. Je to tedy určitý druh pojistky.

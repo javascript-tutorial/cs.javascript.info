@@ -1,51 +1,51 @@
-# JavaScript specials
+# Speciality JavaScriptu
 
-This chapter briefly recaps the features of JavaScript that we've learned by now, paying special attention to subtle moments.
+Tato kapitola krátce opakuje prvky JavaScriptu, které jsme se doposud naučili. Zvláštní pozornost věnuje citlivým místům.
 
-## Code structure
+## Struktura kódu
 
-Statements are delimited with a semicolon:
-
-```js run no-beautify
-alert('Hello'); alert('World');
-```
-
-Usually, a line-break is also treated as a delimiter, so that would also work:
+Příkazy jsou ukončeny středníkem:
 
 ```js run no-beautify
-alert('Hello')
-alert('World')
+alert('Ahoj'); alert('světe');
 ```
 
-That's called "automatic semicolon insertion". Sometimes it doesn't work, for instance:
+Konec řádku se zpravidla také považuje za středník, takže fungovat bude i toto:
+
+```js run no-beautify
+alert('Ahoj')
+alert('světe')
+```
+
+To se nazývá „automatické vkládání středníku“. Někdy to však nefunguje, například:
 
 ```js run
-alert("There will be an error after this message")
+alert("Po této zprávě bude ohlášena chyba")
 
 [1, 2].forEach(alert)
 ```
 
-Most codestyle guides agree that we should put a semicolon after each statement.
+Většina průvodců stylem kódu se shoduje, že bychom měli uvádět středník za každým příkazem.
 
-Semicolons are not required after code blocks `{...}` and syntax constructs with them like loops:
+Středníky nejsou vyžadovány za bloky kódu `{...}` a syntaktickými konstrukcemi, které je obsahují, například cykly:
 
 ```js
 function f() {
-  // no semicolon needed after function declaration
+  // za deklarací funkce není středník zapotřebí
 }
 
 for(;;) {
-  // no semicolon needed after the loop
+  // za cyklem není středník zapotřebí
 }
 ```
 
-...But even if we can put an "extra" semicolon somewhere, that's not an error. It will be ignored.
+...Ale i když někde uvedeme středník „navíc“, není to chyba. Středník bude ignorován.
 
-More in: <info:structure>.
+Více v kapitole: <info:structure>.
 
-## Strict mode
+## Striktní režim
 
-To fully enable all features of modern JavaScript, we should start scripts with `"use strict"`.
+Abychom plně využili všechny vlastnosti moderního JavaScriptu, měli bychom zahajovat skripty direktivou `"use strict"`.
 
 ```js
 'use strict';
@@ -53,143 +53,143 @@ To fully enable all features of modern JavaScript, we should start scripts with 
 ...
 ```
 
-The directive must be at the top of a script or at the beginning of a function body.
+Tato direktiva musí být uvedena na začátku skriptu nebo těla funkce.
 
-Without `"use strict"`, everything still works, but some features behave in the old-fashioned, "compatible" way. We'd generally prefer the modern behavior.
+Bez `"use strict"` bude všechno stále fungovat, ale některé prvky se budou chovat staromódně, „kompatibilně“. Obvykle dáváme přednost modernímu chování.
 
-Some modern features of the language (like classes that we'll study in the future) enable strict mode implicitly.
+Některé moderní vlastnosti jazyka (např. třídy, které budeme probírat v budoucnu) implicitně umožňují striktní režim.
 
-More in: <info:strict-mode>.
+Více v kapitole: <info:strict-mode>.
 
-## Variables
+## Proměnné
 
-Can be declared using:
+Lze je deklarovat pomocí:
 
 - `let`
-- `const` (constant, can't be changed)
-- `var` (old-style, will see later)
+- `const` (konstanta, nemůže být měněna)
+- `var` (ve starém stylu, uvidíme později)
 
-A variable name can include:
-- Letters and digits, but the first character may not be a digit.
-- Characters `$` and `_` are normal, on par with letters.
-- Non-Latin alphabets and hieroglyphs are also allowed, but commonly not used.
+Název proměnné může obsahovat:
+- Písmena a číslice, ale první znak nesmí být číslice.
+- Znaky `$` a `_`, které lze používat běžně jako písmena.
+- Povoleny jsou i znaky nelatinských abeced a hieroglyfy, ale obvykle se nepoužívají.
 
-Variables are dynamically typed. They can store any value:
+Proměnné jsou dynamicky typovány. Může do nich být uložena jakákoli hodnota:
 
 ```js
 let x = 5;
-x = "John";
+x = "Jan";
 ```
 
-There are 8 data types:
+Existuje osm datových typů:
 
-- `number` for both floating-point and integer numbers,
-- `bigint` for integer numbers of arbitrary length,
-- `string` for strings,
-- `boolean` for logical values: `true/false`,
-- `null` -- a type with a single value `null`, meaning "empty" or "does not exist",
-- `undefined` -- a type with a single value `undefined`, meaning "not assigned",
-- `object` and `symbol` -- for complex data structures and unique identifiers, we haven't learnt them yet.
+- `number` pro čísla, a to jak celá, tak s pohyblivou řádovou čárkou,
+- `bigint` pro celá čísla libovolné délky,
+- `string` pro řetězce,
+- `boolean` pro logické hodnoty: `true/false`,
+- `null` -- typ s jedinou hodnotou `null`, která znamená „prázdná“ nebo „neexistující“,
+- `undefined` -- typ s jedinou hodnotou `undefined`, která znamená „nepřiřazená“,
+- `object` a `symbol` -- pro komplexní datové struktury a unikátní identifikátory, zatím jsme je neprobírali.
 
-The `typeof` operator returns the type for a value, with two exceptions:
+Operátor `typeof` vrací typ hodnoty se dvěma výjimkami:
 ```js
-typeof null == "object" // error in the language
-typeof function(){} == "function" // functions are treated specially
+typeof null == "object" // chyba v jazyce
+typeof function(){} == "function" // s funkcemi se zachází odlišně
 ```
 
-More in: <info:variables> and <info:types>.
+Více v kapitole: <info:variables> a <info:types>.
 
-## Interaction
+## Interakce
 
-We're using a browser as a working environment, so basic UI functions will be:
+Jako pracovní prostředí používáme prohlížeč, takže základní funkce uživatelského rozhraní budou:
 
-[`prompt(question, [default])`](mdn:api/Window/prompt)
-: Ask a `question`, and return either what the visitor entered or `null` if they clicked "cancel".
+[`prompt(otázka, [default])`](mdn:api/Window/prompt)
+: Položí otázku `otázka` a vrátí buď to, co návštěvník zadal, nebo `null`, jestliže stiskl „Storno“.
 
-[`confirm(question)`](mdn:api/Window/confirm)
-: Ask a `question` and suggest to choose between Ok and Cancel. The choice is returned as `true/false`.
+[`confirm(otázka)`](mdn:api/Window/confirm)
+: Položí otázku `otázka` a nabídne na výběr mezi OK a Storno. Zvolená možnost je vrácena jako `true/false`.
 
-[`alert(message)`](mdn:api/Window/alert)
-: Output a `message`.
+[`alert(zpráva)`](mdn:api/Window/alert)
+: Vypíše zprávu `zpráva`.
 
-All these functions are *modal*, they pause the code execution and prevent the visitor from interacting with the page until they answer.
+Všechny tyto funkce jsou *modální*. Pozastaví vykonávání kódu a znemožní uživateli jinou interakci se stránkou, dokud neodpoví.
 
-For instance:
+Příklad:
 
 ```js run
-let userName = prompt("Your name?", "Alice");
-let isTeaWanted = confirm("Do you want some tea?");
+let uživatelskéJméno = prompt("Jak se jmenujete?", "Alice");
+let dáSiČaj = confirm("Dáte si čaj?");
 
-alert( "Visitor: " + userName ); // Alice
-alert( "Tea wanted: " + isTeaWanted ); // true
+alert( "Návštěvník: " + uživatelskéJméno ); // Alice
+alert( "Dá si čaj: " + dáSiČaj ); // true
 ```
 
-More in: <info:alert-prompt-confirm>.
+Více v kapitole: <info:alert-prompt-confirm>.
 
-## Operators
+## Operátory
 
-JavaScript supports the following operators:
+JavaScript podporuje následující operátory:
 
-Arithmetical
-: Regular: `* + - /`, also `%` for the remainder and `**` for power of a number.
+Aritmetické
+: Obvyklé: `* + - /`, dále `%` pro zbytek po dělení a `**` pro mocninu.
 
-    The binary plus `+` concatenates strings. And if any of the operands is a string, the other one is converted to string too:
+    Binární plus `+` spojuje řetězce. Jestliže je jeden z operandů řetězec, bude na řetězec převeden i druhý operand:
 
     ```js run
-    alert( '1' + 2 ); // '12', string
-    alert( 1 + '2' ); // '12', string
+    alert( '1' + 2 ); // '12', řetězec
+    alert( 1 + '2' ); // '12', řetězec
     ```
 
-Assignments
-: There is a simple assignment: `a = b` and combined ones like `a *= 2`.
+Přiřazení
+: Existuje jednoduché přiřazení `a = b` a kombinovaná přiřazení, např. `a *= 2`.
 
-Bitwise
-: Bitwise operators work with 32-bit integers at the lowest, bit-level: see the [docs](mdn:/JavaScript/Guide/Expressions_and_Operators#bitwise_operators) when they are needed.
+Bitové
+: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Guide/Expressions_and_Operators#bitwise_operators).
 
-Conditional
-: The only operator with three parameters: `cond ? resultA : resultB`. If `cond` is truthy, returns `resultA`, otherwise `resultB`.
+Podmíněný
+: Jediný operátor se třemi parametry: `podmínka ? výsledekA : výsledekB`. Je-li `podmínka` pravdivá, vrátí `výsledekA`, jinak vrátí `výsledekB`.
 
-Logical operators
-: Logical AND `&&` and OR `||` perform short-circuit evaluation and then return the value where it stopped (not necessary `true`/`false`). Logical NOT `!` converts the operand to boolean type and returns the inverse value.
+Logické
+: Logické AND `&&` a OR `||` provádějí zkrácené vyhodnocování a pak vrátí hodnotu, na které se zastavily (nemusí to nutně být `true`/`false`). Logické NOT `!` převádí operand na typ boolean a vrací opačnou hodnotu.
 
-Nullish coalescing operator
-: The `??` operator provides a way to choose a defined value from a list of variables. The result of `a ?? b` is `a` unless it's `null/undefined`, then `b`.
+Koalescence
+: Operátor `??` poskytuje způsob, jak vybrat definovanou hodnotu ze seznamu proměnných. Výsledek `a ?? b` je `a`, pokud není `null/undefined`; v takovém případě je výsledek `b`.
 
-Comparisons
-: Equality check `==` for values of different types converts them to a number (except `null` and `undefined` that equal each other and nothing else), so these are equal:
+Porovnávání
+: Test rovnosti `==` pro hodnoty různých typů je převede na číslo (s výjimkou `null` a `undefined`, které se rovnají sobě navzájem a ničemu jinému), takže tyto hodnoty jsou si rovny:
 
     ```js run
     alert( 0 == false ); // true
     alert( 0 == '' ); // true
     ```
 
-    Other comparisons convert to a number as well.
+    Jiná porovnání se převádí také na čísla.
 
-    The strict equality operator `===` doesn't do the conversion: different types always mean different values for it.
+    Operátor striktní rovnosti `===` tuto konverzi neprovádí: různé typy pro něj vždy znamenají, že hodnoty se nerovnají.
 
-    Values `null` and `undefined` are special: they equal `==` each other and don't equal anything else.
+    Hodnoty `null` a `undefined` jsou speciální: rovnají se `==` sobě navzájem a nerovnají se ničemu jinému.
 
-    Greater/less comparisons compare strings character-by-character, other types are converted to a number.
+    Operátory porovnání větší/menší porovnávají řetězce znak po znaku, ostatní typy se převádějí na čísla.
 
-Other operators
-: There are few others, like a comma operator.
+Ostatní
+: Existuje několik dalších operátorů, např. operátor čárky.
 
-More in: <info:operators>, <info:comparison>, <info:logical-operators>, <info:nullish-coalescing-operator>.
+Více v kapitolách: <info:operators>, <info:comparison>, <info:logical-operators>, <info:nullish-coalescing-operator>.
 
-## Loops
+## Cykly
 
-- We covered 3 types of loops:
+- Probrali jsme tři druhy cyklů:
 
     ```js
     // 1
-    while (condition) {
+    while (podmínka) {
       ...
     }
 
     // 2
     do {
       ...
-    } while (condition);
+    } while (podmínka);
 
     // 3
     for(let i = 0; i < 10; i++) {
@@ -197,88 +197,87 @@ More in: <info:operators>, <info:comparison>, <info:logical-operators>, <info:nu
     }
     ```
 
-- The variable declared in `for(let...)` loop is visible only inside the loop. But we can also omit `let` and reuse an existing variable.
-- Directives `break/continue` allow to exit the whole loop/current iteration. Use labels to break nested loops.
+- Proměnná deklarovaná v cyklu `for(let...)` je viditelná jen uvnitř tohoto cyklu. Můžeme však také `let` vypustit a znovu použít již existující proměnnou.
+- Direktivy `break/continue` umožňují ukončit celý cyklus/aktuální iteraci. Pro opuštění vnořených cyklů používejte návěští.
 
-Details in: <info:while-for>.
+Více v kapitole: <info:while-for>.
 
-Later we'll study more types of loops to deal with objects.
+Později prostudujeme další druhy cyklů, které pracují s objekty.
 
-## The "switch" construct
+## Konstrukce „switch“
 
-The "switch" construct can replace multiple `if` checks. It uses `===` (strict equality) for comparisons.
+Konstrukce „switch“ dokáže nahradit několik testů `if`. K porovnávání používá `===` (striktní rovnost).
 
-For instance:
+Příklad:
 
 ```js run
-let age = prompt('Your age?', 18);
+let věk = prompt('Kolik je vám let?', 18);
 
-switch (age) {
+switch (věk) {
   case 18:
-    alert("Won't work"); // the result of prompt is a string, not a number
+    alert("Tohle nefunguje"); // výsledkem dotazu prompt je řetězec, ne číslo
     break;
 
   case "18":
-    alert("This works!");
+    alert("Tohle funguje!");
     break;
 
   default:
-    alert("Any value not equal to one above");
+    alert("Jakákoli hodnota, která se nerovná žádné výše uvedené");
 }
 ```
 
-Details in: <info:switch>.
+Více v kapitole: <info:switch>.
 
-## Functions
+## Funkce
 
-We covered three ways to create a function in JavaScript:
+Uvedli jsme tři způsoby, jakými lze v JavaScriptu vytvořit funkci:
 
-1. Function Declaration: the function in the main code flow
+1. Deklarace funkce: funkce v hlavním kódu
 
     ```js
-    function sum(a, b) {
-      let result = a + b;
+    function součet(a, b) {
+      let výsledek = a + b;
 
-      return result;
+      return výsledek;
     }
     ```
 
-2. Function Expression: the function in the context of an expression
+2. Funkční výraz: funkce v kontextu výrazu
 
     ```js
-    let sum = function(a, b) {
-      let result = a + b;
+    let součet = function(a, b) {
+      let výsledek = a + b;
 
-      return result;
+      return výsledek;
     };
     ```
 
-3. Arrow functions:
+3. Šipkové funkce:
 
     ```js
-    // expression on the right side
-    let sum = (a, b) => a + b;
+    // výraz na pravé straně
+    let součet = (a, b) => a + b;
 
-    // or multi-line syntax with { ... }, need return here:
-    let sum = (a, b) => {
+    // nebo víceřádková syntaxe s { ... }, zde potřebujeme return:
+    let součet = (a, b) => {
       // ...
       return a + b;
     }
 
-    // without arguments
-    let sayHi = () => alert("Hello");
+    // bez argumentů
+    let řekniAhoj = () => alert("Ahoj");
 
-    // with a single argument
-    let double = n => n * 2;
+    // s jediným argumentem
+    let dvojnásobek = n => n * 2;
     ```
 
+- Funkce mohou obsahovat lokální proměnné: ty jsou deklarovány uvnitř jejich těla nebo v seznamu parametrů. Tyto proměnné jsou viditelné jen uvnitř funkce.
+- Parametry mohou mít předem nastavené hodnoty: `function součet(a = 1, b = 2) {...}`.
+- Funkce vždy něco vrátí. Neobsahuje-li příkaz `return`, jejím výsledkem je `undefined`.
 
-- Functions may have local variables: those declared inside its body or its parameter list. Such variables are only visible inside the function.
-- Parameters can have default values: `function sum(a = 1, b = 2) {...}`.
-- Functions always return something. If there's no `return` statement, then the result is `undefined`.
+Více v kapitolách: <info:function-basics>, <info:arrow-functions-basics>.
 
-Details: see <info:function-basics>, <info:arrow-functions-basics>.
+## Bude toho víc
 
-## More to come
-
-That was a brief list of JavaScript features. As of now we've studied only basics. Further in the tutorial you'll find more specials and advanced features of JavaScript.
+Toto byl krátký seznam prvků JavaScriptu. Dosud jsme prostudovali pouze základy. Dále v tomto tutoriálu naleznete další speciální a pokročilé prvky JavaScriptu.

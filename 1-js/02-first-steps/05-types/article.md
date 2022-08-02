@@ -69,9 +69,20 @@ O práci s čísly si povíme víc v kapitole <info:number>.
 
 ## BigInt [#bigint-type]
 
-Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>. Toto technické omezení je dáno jeho vnitřní reprezentací.
+Typ „číslo“ v JavaScriptu nedokáže reprezentovat celočíselné hodnoty větší než <code>(2<sup>53</sup>-1)</code> (což je `9007199254740991`), nebo záporné hodnoty nižší než <code>-(-2<sup>53</sup>-1)</code>.
 
-Pro většinu účelů to stačí, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy.
+Abychom byli opravdu přesní, typ „číslo“ umí ukládat větší celá čísla (až do <code>1.7976931348623157 * 10<sup>308</sup></code>), ale mimo bezpečný celočíselný interval <code>±(2<sup>53</sup>-1)</code> nastane chyba přesnosti, jelikož do pevného 64-bitového úložiště se nevejdou všechny číslice. Může být tedy uložena „přibližná“ hodnota.
+
+Například tato dvě čísla (těsně nad bezpečným intervalem) budou stejná:
+
+```js
+console.log(9007199254740991 + 1); // 9007199254740992
+console.log(9007199254740991 + 2); // 9007199254740992
+```
+
+Dá se tedy říci, že do typu „číslo“ nelze uložit žádné liché celé číslo větší než <code>(2<sup>53</sup>-1)</code>.
+
+Pro většinu účelů je interval <code>±(2<sup>53</sup>-1)</code> dostačující, ale někdy potřebujeme opravdu velká čísla, např. pro kryptografii nebo časová razítka s přesností na mikrosekundy.
 
 Proto byl do jazyka nedávno přidán typ `BigInt`, který představuje celá čísla libovolné délky.
 

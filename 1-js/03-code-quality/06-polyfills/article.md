@@ -89,4 +89,3 @@ Good resources that show the current state of support for various features:
 - <https://caniuse.com/> - for browser-related functions.
 
 P.S. Google Chrome is usually the most up-to-date with language features, try it if a tutorial demo fails. Most tutorial demos work with any modern browser though.
-

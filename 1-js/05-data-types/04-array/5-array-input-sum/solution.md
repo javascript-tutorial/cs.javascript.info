@@ -1,28 +1,28 @@
-Please note the subtle, but important detail of the solution. We don't convert `value` to number instantly after `prompt`, because after `value = +value` we would not be able to tell an empty string (stop sign) from the zero (valid number). We do it later instead.
+Prosíme všimněte si drobného, ale důležitého detailu řešení. Nepřevádíme `hodnota` na číslo okamžitě po `prompt`, jelikož po `hodnota = +hodnota` bychom neměli jak poznat prázdný řetězec (znamení konce) od nuly (platné číslo). Děláme to až později.
 
 
 ```js run demo
-function sumInput() {
+function sečtiVstup() {
  
-  let numbers = [];
+  let čísla = [];
 
   while (true) {
 
-    let value = prompt("A number please?", 0);
+    let hodnota = prompt("Číslo, prosím?", 0);
 
-    // should we cancel?
-    if (value === "" || value === null || !isFinite(value)) break;
+    // měli bychom skončit?
+    if (hodnota === "" || hodnota === null || !isFinite(hodnota)) break;
 
-    numbers.push(+value);
+    čísla.push(+hodnota);
   }
 
-  let sum = 0;
-  for (let number of numbers) {
-    sum += number;
+  let součet = 0;
+  for (let číslo of čísla) {
+    součet += číslo;
   }
-  return sum;
+  return součet;
 }
 
-alert( sumInput() ); 
+alert( sečtiVstup() ); 
 ```
 

@@ -123,12 +123,12 @@ K tomu slouží tlačítka na vrchu pravého panelu. Podívejme se na ně.
 : Pokračuje v běhu skriptu. Nejsou-li už žádné další zarážky, skript se bude prostě vykonávat dál a ladicí nástroj nad ním ztratí kontrolu.
 
     Toto uvidíme poté, co na něj klikneme:
-
+    
     ![](chrome-sources-debugger-trace-1.svg)
 
     Běh skriptu se obnovil, dosáhl další zarážky uvnitř `řekni()` a zastavil se tam. Podívejte se na zásobník volání („Call Stack“) vpravo. Zvětšil se o jedno volání. Nyní jsme uvnitř `řekni()`.
 
-<span class="devtools" style="background-position:-200px -190px"></span> -- „Step“ („Krokovat“): spustí další příkaz, klávesa `key:F9`.
+<span class="devtools" style="background-position:-200px -190px"></span> -- „\“ („Krokovat“): spustí další příkaz, klávesa `key:F9`.
 : Spustí další příkaz. Když na něj nyní klikneme, zobrazí se `alert`.
 
     Dalším a dalším klikáním můžeme krokovat všechny příkazy skriptu jeden po druhém.
