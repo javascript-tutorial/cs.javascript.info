@@ -192,4 +192,4 @@ Vývojářské nástroje obsahují mnohem více možností, než jsme zde uvedli
 
 Informace o ladění, zmíněné v této kapitole, vám do začátku postačí, ale později, zvlášť když budete hodně pracovat s prohlížeči, se tam prosím podívejte a prostudujte si pokročilejší možnosti vývojářských nástrojů.
 
-A také můžete klikat na různá místa vývojářských nástrojů a jen se dívat, co se ukáže. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
+A také můžete klikat na různá místa vývojářských nástrojů a zkoušet, co se objeví. To je asi nejrychlejší způsob, jak se je naučit. Nezapomínejte na pravé tlačítko myši a kontextová menu!
