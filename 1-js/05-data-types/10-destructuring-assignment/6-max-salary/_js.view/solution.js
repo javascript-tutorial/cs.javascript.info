@@ -1,14 +1,14 @@
-function topSalary(salaries) {
+function nejvyššíPlat(platy) {
 
-  let maxSalary = 0;
-  let maxName = null;
+  let maxPlat = 0;
+  let maxJméno = null;
 
-  for(const [name, salary] of Object.entries(salaries)) {
-    if (maxSalary < salary) {
-      maxSalary = salary;
-      maxName = name;
+  for(const [jméno, plat] of Object.entries(platy)) {
+    if (maxPlat < plat) {
+      maxPlat = plat;
+      maxJméno = jméno;
     }
   }
 
-  return maxName;
+  return maxJméno;
 }
