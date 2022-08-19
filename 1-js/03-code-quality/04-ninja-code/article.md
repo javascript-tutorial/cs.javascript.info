@@ -157,7 +157,6 @@ Kolega, který bude chtít pracovat s proměnnou `elem` ve druhé polovině funk
 
 Toto je v kódu často vidět. Je to hrozivě efektivní i proti zkušenému ninjovi.
 
-
 ## Legrace s podtržítky
 
 Umisťujte před názvy proměnných podtržítka `_` a `__`. Například `_jméno` nebo `__hodnota`. Bude to legrace, když budete jejich význam znát jenom vy. Nebo ještě lépe: přidávejte je jen pro legraci, aniž by měla nějaký konkrétní význam. Nebo ať mají na různých místech různé významy.
@@ -165,7 +164,6 @@ Umisťujte před názvy proměnných podtržítka `_` a `__`. Například `_jmé
 Zabijete dvě mouchy jednou ranou. Za prvé, kód se prodlouží a stane se méně čitelným, a za druhé, kolega vývojář může strávit dlouhou dobu zjišťováním, co vlastně ta podtržítka znamenají.
 
 Elegantní ninja na jednom místě kódu podtržítka vkládá a na jiných se jim vyhýbá. Díky tomu je kód ještě zranitelnější a zvyšuje se pravděpodobnost budoucích chyb.
-
 
 ## Ukažte svou lásku
 
