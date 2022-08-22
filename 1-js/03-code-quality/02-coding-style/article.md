@@ -2,7 +2,7 @@
 
 Náš kód musí být co nejčistší a co nejsnadněji čitelný.
 
-To je v podstatě umění programování -- vzít složitou úlohu a zakódovat ji tak, aby kód byl současně správný a čitelný člověkem. Dobrý styl kódování tomu značně napomáhá.
+To je v podstatě umění programování -- vzít složitou úlohu a naprogramovat ji tak, aby kód byl současně správný a čitelný člověkem. Dobrý styl zápisu tomu značně napomáhá.
 
 ## Syntaxe
 
