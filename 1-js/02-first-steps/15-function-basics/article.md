@@ -24,7 +24,7 @@ Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, potom máme
 
 ```js
 function název(parametr1, parametr2, ... parametrN) {
-  ...tělo...
+  // tělo
 }
 ```
 
@@ -208,6 +208,12 @@ zobrazZprávu("Anna"); // Anna: text není zadán
 ```
 
 Jestliže argument k parametru `text` nebude předán, bude mít hodnotu `"text není zadán"`.
+
+Výchozí hodnota bude nastavena i tehdy, když parametr existuje, ale je striktně roven `undefined`, například:
+
+```js
+showMessage("Anna", undefined); // Anna: text není zadán
+```
 
 Zde `"text není zadán"` je řetězec, ale může to být složitější výraz, který se vyhodnotí a přiřadí jen tehdy, jestliže argument chybí. Je tedy možné i toto:
 

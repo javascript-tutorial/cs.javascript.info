@@ -18,9 +18,9 @@ složitý;
 kód;
 ```
 
-V dobrém kódu by však množství takových „vysvětlujících“ komentářů mělo být minimální. Opravdu by kód měl být srozumitelný i bez nich.
+V dobrém kódu by však množství takových „vysvětlujících“ komentářů mělo být minimální. Kód by měl být srozumitelný i bez nich.
 
-Platí jedno zlaté pravidlo: „Je-li kód natolik nejasný, že vyžaduje komentář, možná by místo toho měl být přepsán.“
+Platí jedno zlaté pravidlo: „Je-li kód natolik nejasný, že vyžaduje komentář, možná by měl být přepsán.“
 
 ### Recept: extrahujte funkce
 
@@ -120,7 +120,7 @@ V realitě se nemůžeme „vysvětlujícím“ komentářům úplně vyhnout. E
 Vysvětlující komentáře jsou tedy obecně špatné. Jaké komentáře jsou dobré?
 
 Popis architektury
-: Poskytují vysokoúrovňový pohled na komponenty, jak spolu interagují, jaký je řídicí tok v různých situacích... Stručně řečeno -- pohled na kód z ptačí perspektivy. Existuje i speciální jazyk [UML](http://wikipedia.org/wiki/Unified_Modeling_Language) určený k tvorbě diagramů na vysoké úrovni architektury, které popisují kód. Rozhodně má smysl si jej prostudovat.
+: Poskytují vysokoúrovňový pohled na komponenty, jak spolu komunikují, jaký je řídicí tok v různých situacích... Stručně řečeno -- pohled na kód z ptačí perspektivy. Existuje i speciální jazyk [UML](http://wikipedia.org/wiki/Unified_Modeling_Language) určený k tvorbě diagramů na vysoké úrovni architektury, které popisují kód. Rozhodně má smysl si jej prostudovat.
 
 Dokumentace parametrů a použití funkcí
 : Existuje speciální syntaxe [JSDoc](http://en.wikipedia.org/wiki/JSDoc) pro dokumentaci funkcí: použití, parametry, návratová hodnota.
@@ -141,19 +141,19 @@ function mocnina(x, n) {
 
 Takové komentáře nám umožňují porozumět účelu funkce a používat ji správně, aniž bychom se dívali na její kód.
 
-Mimochodem i mnoho editorů, například [WebStorm](https://www.jetbrains.com/webstorm/), jim dokáže porozumět a používá je k automatickému doplňování a určité automatické kontrole kódu.
+Mimochodem i mnoho editorů, například [WebStorm](https://www.jetbrains.com/webstorm/), jim dokáže porozumět a používá je k našeptávání a automatické kontrole kódu.
 
 Existují i nástroje jako [JSDoc 3](https://github.com/jsdoc/jsdoc), které umějí z těchto komentářů vygenerovat dokumentaci v HTML. Více informací o JSDoc si můžete přečíst na <https://jsdoc.app>.
 
 Proč se tato úloha řeší zrovna takhle?
 : To, co je psáno, je důležité. Ale to, co *není* psáno, může být ještě důležitější k pochopení toho, o co jde. Proč je tato úloha řešena právě tímto způsobem? Kód nám odpověď nedává.
 
-    Existuje-li mnoho způsobů, jak tuto úlohu řešit, proč zrovna tento? Zvláště pokud to není zrovna ten nejzřejmější.
+    Existuje-li mnoho způsobů, jak tuto úlohu řešit, proč zrovna tento? Zvláště pokud to není zrovna nejzřejmější způsob.
 
     Bez takových komentářů může nastat následující situace:
-    1. Vy (nebo váš kolega) otevřete kód, napsaný před nějakou dobou, a vidíte, že je „suboptimální“.
+    1. Vy (nebo váš kolega) otevřete kód, napsaný před nějakou dobou, a vidíte, že je „neoptimální“.
     2. Pomyslíte si: „To jsem byl tehdy ale hloupý, teď jsem o hodně chytřejší“, a přepíšete ho na „jasnější a korektnější“ variantu.
-    3. ...Potřeba přepsat kód byla dobrá. Ale po spuštění uvidíte, že „jasnější“ řešení je ve skutečnosti horší. Matně si vzpomenete proč, jelikož jste je už před dlouhou dobou zkoušeli. Vrátíte kód na korektní variantu, ale byla to ztráta času.
+    3. ...Potřeba přepsat kód byla dobrá. Ale po spuštění uvidíte, že „jasnější“ řešení je ve skutečnosti horší. Matně si vzpomenete proč, jelikož jste to kdysi už zkoušeli. Vrátíte kód na korektní variantu, ale byla to ztráta času.
 
     Komentáře, které vysvětlují řešení, jsou velmi důležité, protože nám pomáhají vyvíjet správnou cestou.
 

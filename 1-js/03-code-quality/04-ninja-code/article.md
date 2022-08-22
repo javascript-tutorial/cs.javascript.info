@@ -157,7 +157,6 @@ Kolega, který bude chtít pracovat s proměnnou `elem` ve druhé polovině funk
 
 Toto je v kódu často vidět. Je to hrozivě efektivní i proti zkušenému ninjovi.
 
-
 ## Legrace s podtržítky
 
 Umisťujte před názvy proměnných podtržítka `_` a `__`. Například `_jméno` nebo `__hodnota`. Bude to legrace, když budete jejich význam znát jenom vy. Nebo ještě lépe: přidávejte je jen pro legraci, aniž by měla nějaký konkrétní význam. Nebo ať mají na různých místech různé významy.
@@ -166,13 +165,13 @@ Zabijete dvě mouchy jednou ranou. Za prvé, kód se prodlouží a stane se mén
 
 Elegantní ninja na jednom místě kódu podtržítka vkládá a na jiných se jim vyhýbá. Díky tomu je kód ještě zranitelnější a zvyšuje se pravděpodobnost budoucích chyb.
 
-
 ## Ukažte svou lásku
 
 Dejte každému vědět, jak úžasné jsou vaše entity! Názvy jako `superElement`, `megaRámec` nebo `pěknýPrvek` čtenáře zaručeně osvítí.
 
 Jistě, na jednu stranu musíte něco napsat: `super..`, `mega..`, `pěkný..`. Ale na druhou stranu to neposkytuje žádné detaily. Čtenář se může rozhodnout hledat jejich skrytý význam a strávit meditací hodinu nebo dvě své placené pracovní doby.
 
+Dejte každému vědět, jak úžasné jsou vaše entity! Názvy jako `superElement`, `megaRámec` nebo `pěknýPrvek` čtenáře zaručeně osvítí.
 
 ## Překrývejte vnější proměnné
 

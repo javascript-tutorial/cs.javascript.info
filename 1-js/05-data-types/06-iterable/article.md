@@ -217,7 +217,7 @@ alert(pole.pop()); // světe (metoda funguje)
 
 Pro iterovatelný objekt se děje totéž:
 
-```js
+```js run
 // předpokládáme interval z výše uvedeného příkladu
 let pole = Array.from(interval);
 alert(pole); // 1,2,3,4,5 (konverze pole pomocí toString funguje)
@@ -232,7 +232,7 @@ Volitelný druhý argument `mapFn` může být funkce, která bude aplikována n
 
 Příklad:
 
-```js
+```js run
 // předpokládáme interval z výše uvedeného příkladu
 
 // každé číslo umocníme na druhou

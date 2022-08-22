@@ -334,6 +334,35 @@ alert( isFinite(číslo) );
 
 Prosíme všimněte si, že s prázdným řetězcem nebo s řetězcem složeným pouze z mezer se zachází jako s `0` ve všech číselných funkcích včetně `isFinite`.
 
+````smart header="`Number.isNaN` a `Number.isFinite`"
+Metody [Number.isNaN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN) a [Number.isFinite](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite) jsou „striktnější“ verze funkcí `isNaN` a `isFinite`. Automaticky nepřevádějí svůj argument na číslo, ale místo toho ověří, zda jejich argument je typu `number`.
+
+- `Number.isNaN(hodnota)` vrací `true`, jestliže argument je typu `number` a je `NaN`. V jakémkoli jiném případě vrací `false`.
+
+    ```js run
+    alert( Number.isNaN(NaN) ); // true
+    alert( Number.isNaN("str" / 2) ); // true
+
+    // Všimněte si rozdílu:
+    alert( Number.isNaN("str") ); // false, protože "str" je typu řetězec, ne typu číslo
+    alert( isNaN("str") ); // true, protože isNan převede řetězec "str" na číslo a jako výsledek této konverze získá NaN
+    ```
+
+- `Number.isFinite(value)` vrací `true`, jestliže argument je typu `number` a není `NaN/Infinity/-Infinity`. V jakémkoli jiném případě vrací `false`.
+
+    ```js run
+    alert( Number.isFinite(123) ); // true
+    alert( Number.isFinite(Infinity) ); // false
+    alert( Number.isFinite(2 / 0) ); // false
+
+    // Všimněte si rozdílu:
+    alert( Number.isFinite("123") ); // false, protože "123" je typu řetězec, ne typu číslo
+    alert( isFinite("123") ); // true, protože isFinite převede řetězec "123" na číslo 123
+    ```
+
+Svým způsobem jsou `Number.isNaN` a `Number.isFinite` jednodušší a přímější než funkce `isNaN` a `isFinite`. V praxi se však většinou používají `isNaN` a `isFinite`, jelikož jsou kratší na napsání.
+````
+
 ```smart header="Srovnání s `Object.is`"
 Existuje speciální vestavěná metoda `Object.is`, která porovnává hodnoty stejně jako `===`, ale ve dvou krajních případech je spolehlivější:
 
@@ -342,7 +371,7 @@ Existuje speciální vestavěná metoda `Object.is`, která porovnává hodnoty 
 
 Ve všech ostatních případech je `Object.is(a, b)` totéž jako `a === b`.
 
-Tento způsob porovnávání se často používá ve specifikaci JavaScriptu. Když interní algoritmus potřebuje porovnat, zda jsou dvě hodnoty přesně stejné, používá `Object.is` (interně nazvanou [SameValue](https://tc39.github.io/ecma262/#sec-samevalue)).
+Zmínili jsme zde `Object.is`, protože se často používá ve specifikaci JavaScriptu. Když interní algoritmus potřebuje porovnat, zda jsou dvě hodnoty přesně stejné, používá `Object.is` (interně nazvanou [SameValue](https://tc39.github.io/ecma262/#sec-samevalue)).
 ```
 
 
@@ -435,7 +464,9 @@ Pro různé číselné soustavy:
 Pro běžné testování čísel:
 
 - `isNaN(hodnota)` převede svůj argument na číslo a pak testuje, zda je `NaN`
-- `isFinite(hodnota)` převede svůj argument na číslo a vrátí `true`, pokud je to skutečné číslo a ne `NaN/Infinity/-Infinity`
+- `Number.isNaN(hodnota)` ověří, zda je její argument typu `number`, a pokud ano, testuje, zda je `NaN`
+- `isFinite(hodnota)` převede svůj argument na číslo a pak testuje, zda není `NaN/Infinity/-Infinity`
+- `Number.isFinite(hodnota)` ověří, zda je její argument typu `number`, a pokud ano, testuje, zda není `NaN/Infinity/-Infinity`
 
 Pro převod hodnot jako `12pt` nebo `100px` na číslo:
 

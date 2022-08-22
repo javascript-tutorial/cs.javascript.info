@@ -1,8 +1,8 @@
-# Styl kódování
+# Styl zápisu programu
 
 Náš kód musí být co nejčistší a co nejsnadněji čitelný.
 
-To je v podstatě umění programování -- vzít složitou úlohu a zakódovat ji tak, aby kód byl současně správný a čitelný člověkem. Dobrý styl kódování tomu značně napomáhá.
+To je v podstatě umění programování -- vzít složitou úlohu a naprogramovat ji tak, aby kód byl současně správný a čitelný člověkem. Dobrý styl zápisu tomu značně napomáhá.
 
 ## Syntaxe
 
@@ -225,7 +225,7 @@ Druhá konstrukce je čitelnější, protože „zvláštní případ“ `n < 0`
 
 ## Umístění funkcí
 
-Jestliže píšeme několik „pomocných“ funkcí a kód, který je používá, máme tři možnosti, jak funkce organizovat.
+Jestliže píšeme několik „pomocných“ funkcí a kód, který je používá, tak máme tři možnosti, jak funkce organizovat.
 
 1. Deklarovat funkce *před* kódem, který je používá:
 
@@ -297,7 +297,7 @@ Pokud jste začínající vývojář, začněte podle příkladu na začátku t�
 
 Lintery jsou nástroje, které umějí automaticky zkontrolovat styl vašeho kódu a navrhnout zlepšení.
 
-Výborné na nich je, že tato kontrola stylu umí najít i některé chyby, například překlepy v názvech proměnných nebo funkcí. Pro tuto jejich vlastnost se používání linteru doporučuje, i když se nechcete vázat k jednomu konkrétnímu „kódovacímu stylu“.
+Výborné na nich je, že tato kontrola stylu umí najít i některé chyby, například překlepy v názvech proměnných nebo funkcí. Pro tuto jejich vlastnost se používání linteru doporučuje, i když se nechcete vázat k jednomu konkrétnímu „stylu zápisu“.
 
 Zde jsou některé dobře známé lintery:
 
@@ -345,4 +345,4 @@ Všechna syntaktická pravidla uvedená v této kapitole (a v odkazovaných styl
 
 Když uvažujeme o psaní „lepšího“ kódu, měli bychom si klást otázky „Co učiní kód čitelnějším a snadnějším k porozumění?“ a „Co nám pomůže vyvarovat se chyb?“. To je to hlavní, co bychom měli mít na paměti, když si vybíráme styly kódování a diskutujeme o nich.
 
-Čtení oblíbených stylových průvodců nám umožní držet krok s nejnovějšími idejemi o trendech kódovacích stylů a nejlepších praktikách.
+Čtení oblíbených stylových průvodců nám umožní držet krok s nejnovějšími myšlenkami o trendech stylů zápisu programu a nejlepších praktikách.

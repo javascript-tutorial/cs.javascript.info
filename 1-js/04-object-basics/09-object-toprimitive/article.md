@@ -136,8 +136,8 @@ Jak vidíme z kódu, `uživatel` se stane sebepopisujícím řetězcem nebo pen�
 
 Neexistuje-li `Symbol.toPrimitive`, pak se JavaScript pokusí najít metody `toString` a `valueOf`:
 
-- Pro hint `"string"`: volá se metoda `toString`, a jestliže neexistuje, pak `valueOf` (při konverzi na řetězec má tedy přednost `toString`).
-- Pro jiné hinty: `valueOf`, a jestliže neexistuje, pak `toString` (při výpočtech má tedy přednost `valueOf`).
+- Pro hint `"string"`: volá se metoda `toString`, a jestliže neexistuje nebo vrátí objekt místo primitivní hodnoty, pak se volá `valueOf` (při konverzi na řetězec má tedy přednost `toString`).
+- Pro jiné hinty: volá se `valueOf`, a jestliže neexistuje nebo vrátí objekt místo primitivní hodnoty, pak se volá `toString` (při výpočtech má tedy přednost `valueOf`).
 
 Metody `toString` a `valueOf` pocházejí z dávných časů. Nejsou to symboly (symboly tak dávno ještě neexistovaly), ale „obvyklé“ metody pojmenované řetězcem. Poskytují alternativní způsob „ve starém stylu“, jak implementovat konverzi.
 

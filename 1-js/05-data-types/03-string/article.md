@@ -445,6 +445,8 @@ V JavaScriptu jsou 3 metody pro získání podřetězce: `substring`, `substr` a
     alert( řetězec.substr(-4, 2) ); // 'ze', od 4. pozice zprava vezme 2 znaky
     ```
 
+Tato metoda je obsažena v [Dodatku B](https://tc39.es/ecma262/#sec-string.prototype.substr) specifikace jazyka. Znamená to, že by ji měly podporovat jedině motory JavaScriptu uvnitř prohlížečů a nedoporučuje se ji používat. V praxi je však podporována všude.
+
 Abychom předešli zmatkům, všechny tyto metody si zrekapitulujme:
 
 | metoda | vybírá... | záporné hodnoty |
