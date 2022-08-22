@@ -18,7 +18,7 @@ složitý;
 kód;
 ```
 
-V dobrém kódu by však množství takových „vysvětlujících“ komentářů mělo být minimální. Opravdu by kód měl být srozumitelný i bez nich.
+V dobrém kódu by však množství takových „vysvětlujících“ komentářů mělo být minimální. Kód by měl být srozumitelný i bez nich.
 
 Platí jedno zlaté pravidlo: „Je-li kód natolik nejasný, že vyžaduje komentář, možná by místo toho měl být přepsán.“
 
