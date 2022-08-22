@@ -69,8 +69,13 @@ Pravidla pro konverzi na číslo:
 |---------|-------------------|
 |`undefined`|`NaN`|
 |`null`|`0`|
+<<<<<<< HEAD
 |<code>true</code>&nbsp;a&nbsp;<code>false</code> | `1` a `0` |
 | `řetězec` | Odstraní se bílé znaky (mezery, tabulátory, konce řádku) ze začátku a konce. Je-li výsledný řetězec prázdný, výsledkem je `0`. Jinak se číslo „přečte“ z řetězce. Při chybě je vydáno `NaN`. |
+=======
+|<code>true&nbsp;and&nbsp;false</code> | `1` and `0` |
+| `string` | Whitespaces (includes spaces, tabs `\t`, newlines `\n` etc.) from the start and end are removed. If the remaining string is empty, the result is `0`. Otherwise, the number is "read" from the string. An error gives `NaN`. |
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 
 Příklady:
 
@@ -130,7 +135,11 @@ Konverze se řídí těmito pravidly:
 |`undefined`|`NaN`|
 |`null`|`0`|
 |<code>true&nbsp;/&nbsp;false</code> | `1 / 0` |
+<<<<<<< HEAD
 | `řetězec` | Načte se „doslovně“, bílé znaky na obou stranách se ignorují. Z prázdného řetězce se stane `0`. Při chybě je vydáno `NaN`. |
+=======
+| `string` | The string is read "as is", whitespaces (includes spaces, tabs `\t`, newlines `\n` etc.) from both sides are ignored. An empty string becomes `0`. An error gives `NaN`. |
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 
 **`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(hodnota)`.
 

@@ -195,6 +195,7 @@ Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/doc
 | Priorita | Název | Znak |
 |----------|-------|------|
 | ... | ... | ... |
+<<<<<<< HEAD
 | 15 | unární plus | `+` |
 | 15 | unární negace | `-` |
 | 14 | umocňování | `**` |
@@ -202,11 +203,24 @@ Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/doc
 | 13 | dělení | `/` |
 | 12 | sčítání | `+` |
 | 12 | odčítání | `-` |
+=======
+| 14 | unary plus | `+` |
+| 14 | unary negation | `-` |
+| 13 | exponentiation | `**` |
+| 12 | multiplication | `*` |
+| 12 | division | `/` |
+| 11 | addition | `+` |
+| 11 | subtraction | `-` |
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 | ... | ... | ... |
 | 2 | přiřazení | `=` |
 | ... | ... | ... |
 
+<<<<<<< HEAD
 Jak vidíme, „unární plus“ má prioritu `15`, která je vyšší než priorita `12` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
+=======
+As we can see, the "unary plus" has a priority of `14` which is higher than the `11` of "addition" (binary plus). That's why, in the expression `"+apples + +oranges"`, unary pluses work before the addition.
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 
 ## Přiřazení
 
@@ -304,9 +318,13 @@ Tyto operátory mají stejnou prioritu jako běžné přiřazení, takže se pro
 ```js run
 let n = 2;
 
-n *= 3 + 5;
+n *= 3 + 5; // right part evaluated first, same as n *= 8
 
+<<<<<<< HEAD
 alert( n ); // 16  (napřed se provede část vpravo, totéž jako n *= 8)
+=======
+alert( n ); // 16  
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 ```
 
 ## Inkrementace a dekrementace

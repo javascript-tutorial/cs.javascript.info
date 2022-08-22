@@ -23,8 +23,13 @@ function zobrazZprávu() {
 Napřed je uvedeno klíčové slovo `function`, pak *název funkce*, potom máme závorky a v nich seznam *parametrů* (jsou odděleny čárkami, v uvedeném příkladu je seznam prázdný, jeho příklady uvidíme později) a nakonec následují složené závorky, ve kterých je obsažen kód funkce, nazývaný také „tělo funkce“.
 
 ```js
+<<<<<<< HEAD
 function název(parametr1, parametr2, ... parametrN) {
   ...tělo...
+=======
+function name(parameter1, parameter2, ... parameterN) {
+ // body
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 }
 ```
 
@@ -207,7 +212,17 @@ function zobrazZprávu(odKoho, *!*text = "text není zadán"*/!*) {
 zobrazZprávu("Anna"); // Anna: text není zadán
 ```
 
+<<<<<<< HEAD
 Jestliže argument k parametru `text` nebude předán, bude mít hodnotu `"text není zadán"`.
+=======
+Now if the `text` parameter is not passed, it will get the value `"no text given"`.
+
+The default value also jumps in if the parameter exists, but strictly equals `undefined`, like this:
+
+```js
+showMessage("Ann", undefined); // Ann: no text given
+```
+>>>>>>> 1edb0a38330b54d2e1916f5193fc043e6fbbea78
 
 Zde `"text není zadán"` je řetězec, ale může to být složitější výraz, který se vyhodnotí a přiřadí jen tehdy, jestliže argument chybí. Je tedy možné i toto:
 
