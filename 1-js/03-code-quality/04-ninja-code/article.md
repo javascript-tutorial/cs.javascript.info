@@ -135,7 +135,7 @@ Přidejte novou proměnnou jen tehdy, když je to absolutně nezbytné.
 
 Jinak místo toho opakovaně používejte již existující názvy. Jen do nich zapisujte nové hodnoty.
 
-Ve funkci se snažte používat jedině proměnné, které byly předány jako parametry.
+Ve funkci se snažte používat jedině proměnné, které byly předány jako argumenty.
 
 Díky tomu je opravdu těžké poznat, co vlastně proměnná obsahuje *právě teď*. A také, odkud to přišlo. Cílem je procvičit intuici a paměť člověka, který čte kód. Osoba se slabou intuicí bude muset analyzovat kód řádek po řádku a stopovat změny v každé větvi.
 
