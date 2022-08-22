@@ -225,7 +225,7 @@ Druhá konstrukce je čitelnější, protože „zvláštní případ“ `n < 0`
 
 ## Umístění funkcí
 
-Jestliže píšeme několik „pomocných“ funkcí a kód, který je používá, máme tři možnosti, jak funkce organizovat.
+Jestliže píšeme několik „pomocných“ funkcí a kód, který je používá, tak máme tři možnosti, jak funkce organizovat.
 
 1. Deklarovat funkce *před* kódem, který je používá:
 
