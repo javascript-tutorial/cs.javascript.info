@@ -141,7 +141,7 @@ function mocnina(x, n) {
 
 Takové komentáře nám umožňují porozumět účelu funkce a používat ji správně, aniž bychom se dívali na její kód.
 
-Mimochodem i mnoho editorů, například [WebStorm](https://www.jetbrains.com/webstorm/), jim dokáže porozumět a používá je k automatickému doplňování a určité automatické kontrole kódu.
+Mimochodem i mnoho editorů, například [WebStorm](https://www.jetbrains.com/webstorm/), jim dokáže porozumět a používá je k našeptávání a automatické kontrole kódu.
 
 Existují i nástroje jako [JSDoc 3](https://github.com/jsdoc/jsdoc), které umějí z těchto komentářů vygenerovat dokumentaci v HTML. Více informací o JSDoc si můžete přečíst na <https://jsdoc.app>.
 
