@@ -70,7 +70,7 @@ Pravidla pro konverzi na číslo:
 |`undefined`|`NaN`|
 |`null`|`0`|
 |<code>true</code>&nbsp;a&nbsp;<code>false</code> | `1` a `0` |
-| `řetězec` | Odstraní se bílé znaky (mezery, tabulátory, konce řádku) ze začátku a konce. Je-li výsledný řetězec prázdný, výsledkem je `0`. Jinak se číslo „přečte“ z řetězce. Při chybě je vydáno `NaN`. |
+| `řetězec` | Odstraní se bílé znaky (mezery, tabulátory `\t`, konce řádku `\n` atd.) ze začátku a konce. Je-li výsledný řetězec prázdný, výsledkem je `0`. Jinak se číslo „přečte“ z řetězce. Při chybě je vydáno `NaN`. |
 
 Příklady:
 
@@ -130,7 +130,7 @@ Konverze se řídí těmito pravidly:
 |`undefined`|`NaN`|
 |`null`|`0`|
 |<code>true&nbsp;/&nbsp;false</code> | `1 / 0` |
-| `řetězec` | Načte se „doslovně“, bílé znaky na obou stranách se ignorují. Z prázdného řetězce se stane `0`. Při chybě je vydáno `NaN`. |
+| `řetězec` | Načte se „doslovně“, bílé znaky (mezery, tabulátory `\t`, konce řádku `\n` atd.) na obou stranách se ignorují. Z prázdného řetězce se stane `0`. Při chybě je vydáno `NaN`. |
 
 **`Konverze na boolean`** -- Nastává při logických operacích. Můžeme ji provést pomocí `Boolean(hodnota)`.
 
