@@ -1,4 +1,4 @@
-# Styl kódování
+# Styl zápisu programu
 
 Náš kód musí být co nejčistší a co nejsnadněji čitelný.
 
