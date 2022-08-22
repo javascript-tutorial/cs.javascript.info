@@ -297,7 +297,7 @@ Pokud jste začínající vývojář, začněte podle příkladu na začátku t�
 
 Lintery jsou nástroje, které umějí automaticky zkontrolovat styl vašeho kódu a navrhnout zlepšení.
 
-Výborné na nich je, že tato kontrola stylu umí najít i některé chyby, například překlepy v názvech proměnných nebo funkcí. Pro tuto jejich vlastnost se používání linteru doporučuje, i když se nechcete vázat k jednomu konkrétnímu „kódovacímu stylu“.
+Výborné na nich je, že tato kontrola stylu umí najít i některé chyby, například překlepy v názvech proměnných nebo funkcí. Pro tuto jejich vlastnost se používání linteru doporučuje, i když se nechcete vázat k jednomu konkrétnímu „stylu zápisu“.
 
 Zde jsou některé dobře známé lintery:
 
