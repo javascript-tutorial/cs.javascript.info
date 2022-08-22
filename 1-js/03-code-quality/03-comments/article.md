@@ -120,7 +120,7 @@ V realitě se nemůžeme „vysvětlujícím“ komentářům úplně vyhnout. E
 Vysvětlující komentáře jsou tedy obecně špatné. Jaké komentáře jsou dobré?
 
 Popis architektury
-: Poskytují vysokoúrovňový pohled na komponenty, jak spolu interagují, jaký je řídicí tok v různých situacích... Stručně řečeno -- pohled na kód z ptačí perspektivy. Existuje i speciální jazyk [UML](http://wikipedia.org/wiki/Unified_Modeling_Language) určený k tvorbě diagramů na vysoké úrovni architektury, které popisují kód. Rozhodně má smysl si jej prostudovat.
+: Poskytují vysokoúrovňový pohled na komponenty, jak spolu komunikují, jaký je řídicí tok v různých situacích... Stručně řečeno -- pohled na kód z ptačí perspektivy. Existuje i speciální jazyk [UML](http://wikipedia.org/wiki/Unified_Modeling_Language) určený k tvorbě diagramů na vysoké úrovni architektury, které popisují kód. Rozhodně má smysl si jej prostudovat.
 
 Dokumentace parametrů a použití funkcí
 : Existuje speciální syntaxe [JSDoc](http://en.wikipedia.org/wiki/JSDoc) pro dokumentaci funkcí: použití, parametry, návratová hodnota.
