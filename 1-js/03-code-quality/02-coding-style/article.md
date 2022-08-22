@@ -345,4 +345,4 @@ Všechna syntaktická pravidla uvedená v této kapitole (a v odkazovaných styl
 
 Když uvažujeme o psaní „lepšího“ kódu, měli bychom si klást otázky „Co učiní kód čitelnějším a snadnějším k porozumění?“ a „Co nám pomůže vyvarovat se chyb?“. To je to hlavní, co bychom měli mít na paměti, když si vybíráme styly kódování a diskutujeme o nich.
 
-Čtení oblíbených stylových průvodců nám umožní držet krok s nejnovějšími idejemi o trendech kódovacích stylů a nejlepších praktikách.
+Čtení oblíbených stylových průvodců nám umožní držet krok s nejnovějšími myšlenkami o trendech stylů zápisu programu a nejlepších praktikách.
