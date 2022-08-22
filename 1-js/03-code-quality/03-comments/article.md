@@ -148,7 +148,7 @@ Existují i nástroje jako [JSDoc 3](https://github.com/jsdoc/jsdoc), které um�
 Proč se tato úloha řeší zrovna takhle?
 : To, co je psáno, je důležité. Ale to, co *není* psáno, může být ještě důležitější k pochopení toho, o co jde. Proč je tato úloha řešena právě tímto způsobem? Kód nám odpověď nedává.
 
-    Existuje-li mnoho způsobů, jak tuto úlohu řešit, proč zrovna tento? Zvláště pokud to není zrovna ten nejzřejmější.
+    Existuje-li mnoho způsobů, jak tuto úlohu řešit, proč zrovna tento? Zvláště pokud to není zrovna nejzřejmější způsob.
 
     Bez takových komentářů může nastat následující situace:
     1. Vy (nebo váš kolega) otevřete kód, napsaný před nějakou dobou, a vidíte, že je „suboptimální“.
