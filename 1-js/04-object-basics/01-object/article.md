@@ -3,7 +3,7 @@
 
 Jak víme z kapitoly <info:types>, JavaScript obsahuje osm datových typů. Sedm z nich se nazývá „primitivní typy“ nebo „primitivy“, protože jejich hodnoty obsahují pouze jednu věc (ať už je to řetězec, číslo nebo něco jiného).
 
-Naproti tomu objekty se používají k uložení klíčovaných kolekcí různých dat a složitějších entit. V JavaScriptu objekty pronikají do téměř všech aspektů jazyka. Musíme jim tedy porozumět předtím, než půjdeme do hloubky v něčem jiném.
+Naproti tomu objekty se používají k uložení kolekcí různých dat pod klíči a složitějších entit. V JavaScriptu objekty pronikají do téměř všech aspektů jazyka. Musíme jim tedy porozumět předtím, než půjdeme do hloubky v něčem jiném.
 
 Objekt můžeme vytvořit pomocí složených závorek `{…}` obsahujících nepovinný seznam *vlastností*. Vlastnost je dvojice „klíč: hodnota“, v níž `klíč` je řetězec (nazývá se také „název vlastnosti“) a `hodnota` může být cokoli.
 
@@ -54,10 +54,10 @@ alert( uživatel.jméno ); // Jan
 alert( uživatel.věk );   // 30
 ```
 
-Hodnota může být libovolného typu. Přidejme booleanovou:
+Hodnota může být libovolného typu. Přidejme hodnotu typu boolean:
 
 ```js
-uživatel.jeAdmin = true;
+uživatel.jeSprávce = true;
 ```
 
 ![user object 2](object-user-isadmin.svg)
@@ -90,7 +90,7 @@ let uživatel = {
   věk: 30*!*,*/!*
 }
 ```
-Tato čárka se nazývá „vlečná“ nebo „závěsná“ *(v angličtině „trailing“ nebo „hanging“, nevím o standardním českém názvu -- pozn. překl.)*. Díky ní je jednodušší přidávat, odebírat nebo přesunovat vlastnosti, protože všechny řádky budou vypadat podobně.
+Tato čárka se nazývá „vlečná“. Díky ní je jednodušší přidávat, odebírat nebo přesunovat vlastnosti, protože všechny řádky budou vypadat podobně.
 
 ## Hranaté závorky
 
@@ -113,7 +113,7 @@ let uživatel = {};
 // nastavit
 uživatel["má rád ptáky"] = true;
 
-// vrátit
+// načíst
 alert(uživatel["má rád ptáky"]); // true
 
 // smazat
@@ -161,7 +161,7 @@ alert( uživatel.klíč ) // undefined
 
 ### Vypočítávané vlastnosti
 
-Když vytváříme objekt, můžeme použít hranaté závorky v objektovém literálu. To se nazývá *vypočítávané vlastnosti*.
+Když vytváříme objekt, můžeme použít hranaté závorky v objektovém literálu. Takové vlastnosti se nazývají *vypočítávané*.
 
 Například:
 
@@ -323,7 +323,7 @@ alert( "věk" in uživatel );    // true, uživatel.věk existuje
 alert( "blabla" in uživatel ); // false, uživatel.blabla neexistuje
 ```
 
-Prosíme všimněte si, že na levé straně `in` musí být *název vlastnosti*, což bývá obvykle řetězec v uvozovkách.
+Prosíme všimněte si, že na levé straně `in` musí být *název vlastnosti*, což je obvykle řetězec v uvozovkách.
 
 Vypustíme-li uvozovky, znamená to proměnnou, která by měla obsahovat skutečný název, který bude prověřen. Například:
 
@@ -367,18 +367,18 @@ for (klíč in objekt) {
 }
 ```
 
-Například vydáme všechny vlastnosti objektu `uživatel`:
+Vypišme například všechny vlastnosti objektu `uživatel`:
 
 ```js run
 let uživatel = {
   jméno: "Jan",
   věk: 30,
-  jeAdmin: true
+  jeSprávce: true
 };
 
 for (let klíč in uživatel) {
   // klíče
-  alert( klíč );  // jméno, věk, jeAdmin
+  alert( klíč );  // jméno, věk, jeSprávce
   // hodnoty klíčů
   alert( uživatel[klíč] ); // Jan, 30, true
 }
@@ -386,11 +386,11 @@ for (let klíč in uživatel) {
 
 Všimněte si, že všechny konstrukce „for“ nám umožňují deklarovat uvnitř cyklu smyčkovou proměnnou, jako zde `let klíč`.
 
-Můžeme zde použít i jiný název proměnné namísto `klíč`. Například hojně se používá `"for (let vlastnost in obj)"` *(v angličtině `"for (let prop in obj)"` -- pozn. překl.)*.
+Můžeme zde použít i jiný název proměnné namísto `klíč`. Například hojně se používá `"for (let vlastnost in obj)"`.
 
 ### Seřazené jako objekt
 
-Jsou objekty seřazené? Jinými slovy: když procházíme objekt v cyklu, obdržíme všechny vlastnosti ve stejném pořadí, v jakém byly přidány? Můžeme se na to spolehnout?
+Jsou objekty seřazené? Jinými slovy: když cyklus prochází nad objektem, obdržíme všechny vlastnosti ve stejném pořadí, v jakém byly přidány? Můžeme se na to spolehnout?
 
 Krátká odpověď je: „seřazeny speciálním způsobem“: celočíselné vlastnosti jsou seřazeny, ostatní se objeví v pořadí vytvoření. Následují podrobnosti.
 
@@ -412,7 +412,7 @@ for (let předvolba in předvolby) {
 */!*
 ```
 
-Objekt můžeme použít k navržení seznamu možností pro uživatele. Například vytváříme-li stránku zejména pro návštěvníky z Německa, budeme pravděpodobně chtít, aby jako první bylo `49`.
+Objekt můžeme použít, abychom uživateli navrhli seznam možností. Například vytváříme-li stránku zejména pro návštěvníky z Německa, budeme pravděpodobně chtít, aby jako první bylo `49`.
 
 Jenže když kód spustíme, uvidíme úplně jiný obrázek:
 
@@ -498,6 +498,6 @@ V JavaScriptu však existuje i mnoho dalších druhů objektů:
 - `Error` (chyba) k ukládání informací o chybě,
 - ...a tak dále.
 
-Mají své speciální vlastnosti, které prostudujeme později. Někdy lidé říkají něco jako „typ Array“ nebo „typ Date“, ale formálně to nejsou samostatné typy, nýbrž patří do jednoduchého datového typu „objekt“ a různými způsoby jej rozšiřují.
+Mají své speciální vlastnosti, které prostudujeme později. Někdy lidé říkají „typ Array“ nebo „typ Date“, ale formálně to nejsou samostatné typy, nýbrž patří k jednoduchému datovému typu „objekt“ a různými způsoby jej rozšiřují.
 
 Objekty v JavaScriptu jsou velmi silné. Tady jsme jen lehce nakousli téma, které je opravdu obrovské. V dalších částech tohoto tutoriálu budeme s objekty pracovat blíže a dozvíme se o nich víc.

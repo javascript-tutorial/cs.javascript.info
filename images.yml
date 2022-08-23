@@ -592,12 +592,12 @@ object-user-isadmin.svg:
   user: uživatel
   name: jméno
   age: věk
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
   
 object-user-delete.svg:
   user: uživatel
   name: jméno
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
 
 object-user-props.svg:
   user: uživatel
