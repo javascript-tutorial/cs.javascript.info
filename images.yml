@@ -529,7 +529,21 @@ variable-change.svg:
   '"Hello!"': '"Ahoj!"'
   '"World!"': '"světe!"'
   'message': 'zpráva'
-
+  
+variable-copy-value.svg:
+  '"Hello!"': '"Ahoj!"'
+  'message': 'zpráva'
+  'phrase': 'věta'
+  
+variable-contains-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+   
+variable-copy-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+  'admin': 'správce'
+  
 rabbit-extends-object.svg:
   'class Rabbit': 'class Králík'
   'class Rabbit extends Object': 'class Králík extends Object'

@@ -39,7 +39,7 @@ Objekt je uložen někde v paměti (na obrázku vpravo), zatímco proměnná `u�
 
 Můžeme se dívat na objektovou proměnnou, např. `uživatel`, jako na kus papíru, na němž je napsána adresa objektu.
 
-Když provádíme akci nad objektem, např. zjišťujeme vlastnost `uživatel.jméno`, engine JavaScriptu se podívá, co je na této adrese, a provede operaci nad skutečným objektem.
+Když provádíme akci nad objektem, např. zjišťujeme vlastnost `uživatel.jméno`, motor JavaScriptu se podívá na to, co je na této adrese, a provede operaci nad skutečným objektem.
 
 Teď vysvětlíme, proč je to důležité.
 
@@ -50,7 +50,7 @@ Například:
 ```js no-beautify
 let uživatel = { jméno: "Jan" };
 
-let admin = uživatel; // kopírování odkazu
+let správce = uživatel; // kopírování odkazu
 ```
 
 Nyní máme dvě proměnné, v obou jsou uloženy odkazy na tentýž objekt:
@@ -64,20 +64,20 @@ Obě proměnné můžeme používat k přístupu k objektu a modifikaci jeho obs
 ```js run
 let uživatel = { jméno: 'Jan' };
 
-let admin = uživatel;
+let správce = uživatel;
 
 *!*
-admin.jméno = 'Petr'; // změna pomocí odkazu „admin“
+správce.jméno = 'Petr'; // změna pomocí odkazu „správce“
 */!*
 
 alert(*!*uživatel.jméno*/!*); // 'Petr', změny jsou vidět i z odkazu „uživatel“
 ```
 
-Je to, jako kdybychom měli skříň se dvěma klíči a použili jeden z nich (`admin`) k tomu, abychom se do ní dostali a provedli změny. Když poté použijeme druhý klíč (`uživatel`), budeme stále otevírat stejnou skříň a můžeme přistupovat ke změněnému obsahu.
+Je to, jako kdybychom měli skříň se dvěma klíči a použili jeden z nich (`správce`) k tomu, abychom se do ní dostali a provedli změny. Když poté použijeme druhý klíč (`uživatel`), budeme stále otevírat stejnou skříň a můžeme přistupovat ke změněnému obsahu.
 
 ## Porovnání pomocí odkazů
 
-Dva objekty jsou si rovny, jen když představují tentýž objekt.
+Dva objekty jsou si rovny, jen když je to jeden a tentýž objekt.
 
 Například zde `a` a `b` jsou odkazy na tentýž objekt, takže jsou si rovny:
 
@@ -148,12 +148,12 @@ Například ji můžeme použít ke sloučení několika objektů do jednoho:
 ```js
 let uživatel = { jméno: "Jan" };
 
-let práva1 = { můžeProhlížet: true };
-let práva2 = { můžeEditovat: true };
+let oprávnění1 = { můžeProhlížet: true };
+let oprávnění2 = { můžeEditovat: true };
 
 *!*
-// zkopíruje všechny vlastnosti z objektů práva1 a práva2 do objektu uživatel
-Object.assign(uživatel, práva1, práva2);
+// zkopíruje všechny vlastnosti z objektů oprávnění1 a oprávnění2 do objektu uživatel
+Object.assign(uživatel, oprávnění1, oprávnění2);
 */!*
 
 // nyní uživatel = { jméno: "Jan", můžeProhlížet: true, můžeEditovat: true }
@@ -169,7 +169,7 @@ Object.assign(uživatel, { jméno: "Petr" });
 alert(uživatel.jméno); // nyní uživatel = { jméno: "Petr" }
 ```
 
-Můžeme také využít `Object.assign` k nahrazení cyklu `for..in` jednoduchým klonováním:
+Můžeme také využít `Object.assign` k nahrazení cyklu `for..in` pro jednoduché klonování:
 
 ```js
 let uživatel = {
@@ -223,7 +223,7 @@ uživatel.míry.šířka++;  // změníme vlastnost na jednom místě
 alert(klon.míry.šířka); // 51, vidíme výsledek z jiného místa
 ```
 
-Abychom to opravili a učinily objekty `uživatel` a `klon` skutečně oddělenými, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ nebo „hluboké“.
+Abychom to opravili a učinili objekty `uživatel` a `klon` skutečně oddělenými, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ nebo „hluboké“.
 
 Můžeme to implementovat pomocí rekurze. Nebo, abychom znovu nevynalézali kolo, použít existující implementaci, např. [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) z JavaScriptové knihovny [lodash](https://lodash.com).
 
@@ -244,16 +244,16 @@ uživatel.jméno = "Petr"; // (*)
 alert(uživatel.jméno); // Petr
 ```
 
-Může se zdát, že řádek `(*)` ohlásí chybu, ale nestane se tak. Hodnota objektu `uživatel` je konstantní a musí pořád odkazovat na stejný objekt, ale vlastnosti tohoto objektu lze libovolně měnit.
+Může se zdát, že na řádku `(*)` bude ohlášena chyba, ale nestane se tak. Hodnota objektu `uživatel` je konstantní a musí pořád odkazovat na stejný objekt, ale vlastnosti tohoto objektu lze libovolně měnit.
 
-Jinými slovy, `const uživatel` způsobí chybu, jen pokud se pokusíme nastavit `uživatel=...` jako celek.
+Jinými slovy, `const uživatel` vyvolá chybu, jen pokud se pokusíme nastavit `uživatel=...` jako celek.
 
-Jestliže ovšem opravdu potřebujeme učinit vlastnosti objektů konstantní, je to rovněž možné, ale úplně jiným způsobem. Zmíníme se o tom v kapitole <info:property-descriptors>.
+Jestliže ovšem skutečně potřebujeme učinit vlastnosti objektů konstantní, je to rovněž možné, ale úplně jiným způsobem. Zmíníme se o tom v kapitole <info:property-descriptors>.
 ````
 
 ## Shrnutí
 
-Objekty se přiřazují a kopírují odkazem. Jinými slovy, v proměnné není uložena „hodnota objektu“, ale „odkaz“ (adresa v paměti) této hodnoty. Zkopírování této hodnoty nebo její předání jako argument funkce tedy zkopíruje tento odkaz, ne objekt samotný.
+Objekty se přiřazují a kopírují odkazem. Jinými slovy, v proměnné není uložena „hodnota objektu“, ale „odkaz“ (adresa v paměti) na tuto hodnotu. Zkopírování této hodnoty nebo její předání do funkce jako argument tedy zkopíruje tento odkaz, ne objekt samotný.
 
 Všechny operace na zkopírovaných odkazech (např. přidávání nebo odebírání vlastností) jsou prováděny na jednom a tomtéž objektu.
 
