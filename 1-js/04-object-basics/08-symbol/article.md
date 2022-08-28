@@ -30,7 +30,7 @@ Po vytvoření můžeme symbolu dát nějaký popis (nazývaný také název sym
 let id = Symbol("id");
 ```
 
-Symboly jsou zaručeně unikátní. I když vytvoříme mnoho symbolů s naprosto stejným popisem, budou představovat různé hodnoty. Popis je jenom štítek, který nemá na nic vliv.
+U symbolů je zaručeno, že jsou unikátní. I když vytvoříme mnoho symbolů s naprosto stejným popisem, budou představovat různé hodnoty. Popis je jenom štítek, který nemá na nic vliv.
 
 Například zde jsou dva symboly se stejným popisem -- přesto si nejsou rovny:
 
@@ -59,7 +59,7 @@ alert(id); // TypeError: Nelze převést hodnotu Symbol na řetězec
 */!*
 ```
 
-Je to „jazyková stráž“ proti nepořádku, jelikož řetězce a symboly jsou naprosto odlišné a neměly by se náhodně konvertovat jedny na druhé.
+Je to „jazyková stráž“ proti nepořádku, jelikož řetězce a symboly jsou naprosto odlišné a neměly by se neúmyslně konvertovat jedny na druhé.
 
 Jestliže opravdu chceme zobrazit symbol, musíme na něm explicitně zavolat `.toString()`, např. zde:
 
@@ -91,7 +91,7 @@ Použijeme pro ně symbolický klíč:
 
 ```js run
 let uživatel = { // patří do jiného kódu
-  name: "Jan"
+  jméno: "Jan"
 };
 
 let id = Symbol("id");
@@ -113,7 +113,7 @@ Pak tento skript může vytvořit svůj vlastní `Symbol("id")`, například tak
 // ...
 let id = Symbol("id");
 
-uživatel[id] = "Jeho hodnota id";
+uživatel[id] = "Jejich hodnota id";
 ```
 
 Nenastane žádný konflikt mezi našimi a jeho identifikátory, protože symboly jsou vždy různé, i když mají stejný název.
@@ -128,7 +128,7 @@ uživatel.id = "Naše hodnota id";
 
 // ...Jiný skript chce také „id“ pro své vlastní účely...
 
-uživatel.id = "Jeho hodnota id"
+uživatel.id = "Jejich hodnota id"
 // Bum! cizí skript nám ji přepsal!
 ```
 
@@ -195,9 +195,9 @@ Jak jsme viděli, všechny symboly jsou zpravidla různé, i když mají stejný
 
 K tomu, abychom toho mohli dosáhnout, existuje *globální registr symbolů*. V něm můžeme symboly vytvořit a později k nim přistupovat. Registr nám zaručuje, že opakovaný přístup stejným názvem vrátí přesně stejný symbol.
 
-K načtení (nebo vytvoření, pokud neexistuje) symbolu z registru použijeme `Symbol.for(klíč)`.
+K načtení (vytvoření, pokud neexistuje) symbolu z registru použijeme `Symbol.for(klíč)`.
 
-Tato metoda zavolá kontrolu globálního registru, a jestliže je v něm symbol popsaný jako `klíč`, vrátí jej, v opačném případě vytvoří nový symbol `Symbol(klíč)` a uloží ho do registru pod zadaným `klíč`em.
+Tato metoda zkontroluje globální registr, a jestliže je v něm symbol popsaný jako `klíč`, vrátí jej, v opačném případě vytvoří nový symbol `Symbol(klíč)` a uloží ho do registru pod zadaným `klíč`em.
 
 Například:
 
@@ -280,10 +280,10 @@ Symboly mají dvě hlavní použití:
 
 1. „Skryté“ vlastnosti objektů.
 
-    Chceme-li do objektu přidat vlastnost, která „patří“ do jiného skriptu nebo knihovny, můžeme vytvořit symbol a použít jej jako klíč vlastnosti. Symbolická vlastnost se neobjeví ve `for..in`, takže nebude neúmyslně zpracována společně s ostatními vlastnostmi. Nikdo jiný k ní také nebude přímo přistupovat, jelikož žádný jiný skript nebude mít náš symbol. Vlastnost tedy bude chráněna před náhodným použitím nebo přepsáním.
+    Chceme-li přidat vlastnost do objektu, který „patří“ do jiného skriptu nebo knihovny, můžeme vytvořit symbol a použít jej jako klíč vlastnosti. Symbolická vlastnost se neobjeví ve `for..in`, takže nebude neúmyslně zpracována společně s ostatními vlastnostmi. Nikdo jiný k ní také nebude přímo přistupovat, jelikož žádný jiný skript nebude mít náš symbol. Vlastnost tedy bude chráněna před náhodným použitím nebo přepsáním.
 
     Pomocí symbolických vlastností tedy můžeme „utajeně“ ukrýt do objektů něco, co potřebujeme, ale jiní by to neměli vidět.
 
-2. JavaScript používá mnoho systémových symbolů, které jsou dostupné pomocí `Symbol.*`. Někdy je můžeme použít, abychom změnili vestavěné chování. Například později v tomto tutoriálu budeme používat `Symbol.iterator` pro [iterovatelné objekty](info:iterable), `Symbol.toPrimitive` k nastavení [konverze objektů na primitivy](info:object-toprimitive) a tak dále.
+2. JavaScript používá mnoho systémových symbolů, které jsou dostupné pomocí `Symbol.*`. Můžeme je používat, abychom změnili vestavěné chování. Například později v tomto tutoriálu budeme používat `Symbol.iterator` pro [iterovatelné objekty](info:iterable), `Symbol.toPrimitive` k nastavení [konverze objektů na primitivy](info:object-toprimitive) a tak dále.
 
 Z technického hlediska nejsou symboly na 100% skryté. Existuje vestavěná metoda [Object.getOwnPropertySymbols(obj)](mdn:js/Object/getOwnPropertySymbols), která nám umožňuje získat všechny symboly. Existuje i metoda [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys), která vrátí *všechny* klíče objektu včetně symbolických. Většina knihoven, vestavěných funkcí a syntaktických konstruktů však tyto metody nepoužívá.
