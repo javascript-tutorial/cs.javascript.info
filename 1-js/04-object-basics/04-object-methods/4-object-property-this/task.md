@@ -6,18 +6,18 @@ importance: 5
 
 Zde funkce `vytvořUživatele` vrátí objekt.
 
-Jaký je výsledek přístupu k jejímu `ref`? Proč?
+Jaký je výsledek přístupu k jeho vlastnosti `odkaz`? Proč?
 
 ```js
 function vytvořUživatele() {
   return {
     jméno: "Jan",
-    ref: this
+    odkaz: this
   };
 }
 
 let uživatel = vytvořUživatele();
 
-alert( uživatel.ref.jméno ); // Jaký je výsledek?
+alert( uživatel.odkaz.jméno ); // Jaký je výsledek?
 ```
 

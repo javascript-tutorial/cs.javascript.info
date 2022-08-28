@@ -9,7 +9,7 @@ let uživatel = {
 };
 ```
 
-Ve skutečném světě může uživatel *konat* nějakou akci: vybrat si něco z nákupního vozíku, přihlásit se, odhlásit se atd.
+A ve skutečném světě může uživatel *konat* nějakou akci: vybrat si něco z nákupního vozíku, přihlásit se, odhlásit se atd.
 
 V JavaScriptu jsou tyto akce reprezentovány funkcemi ve vlastnostech.
 
@@ -61,7 +61,7 @@ uživatel.řekniAhoj(); // Ahoj!
 ```
 
 ```smart header="Objektově orientované programování"
-Programování, při kterém píšeme kód, který používá objekty představující entity, se nazývá [objektově orientované programování](https://cs.wikipedia.org/wiki/Objektově_orientované_programování), zkráceně „OOP“.
+Způsob programování, při kterém píšeme kód, který používá objekty představující entity, se nazývá [objektově orientované programování](https://cs.wikipedia.org/wiki/Objektově_orientované_programování), zkráceně „OOP“.
 
 OOP je velká věc a samo o sobě je zajímavou vědou. Jak zvolit správné entity? Jak zorganizovat interakci mezi nimi? To je architektura a o tomto tématu existují skvělé knihy, např. „Design Patterns: Elements of Reusable Object-Oriented Software“ od E. Gammy, R. Helma, R. Johnsona a J. Vissidese, nebo „Object-Oriented Analysis and Design with Applications“ od G. Booche a další.
 ```
@@ -90,7 +90,7 @@ uživatel = {
 
 Jak vidíme, můžeme vypustit slovo `"function"` a napsat jen `řekniAhoj()`.
 
-Upřímně řečeno, tyto notace nejsou zcela identické. Jsou v nich drobné rozdíly vztahující se k objektové dědičnosti (která bude vysvětlena později), ale na nich nám prozatím nezáleží. Téměř ve všech případech se dává přednost kratší syntaxi.
+Upřímně řečeno, tyto notace nejsou zcela identické. Jsou v nich drobné rozdíly týkající se objektové dědičnosti (která bude vysvětlena později), ale na nich nám prozatím nezáleží. Téměř ve všech případech se dává přednost kratší syntaxi.
 
 ## „this“ v metodách
 
@@ -139,9 +139,9 @@ let uživatel = {
 };
 ```
 
-...Takový kód je však nespolehlivý. Pokud se rozhodneme zkopírovat objekt `uživatel` do jiné proměnné, např. `admin = uživatel`, a přepsat proměnnou `uživatel` něčím jiným, pak budeme přistupovat k nesprávnému objektu.
+...Takový kód je však nespolehlivý. Pokud se rozhodneme zkopírovat objekt `uživatel` do jiné proměnné, např. `správce = uživatel`, a přepsat proměnnou `uživatel` něčím jiným, pak budeme přistupovat k nesprávnému objektu.
 
-To je ukázáno níže:
+To je ukázáno zde:
 
 ```js run
 let uživatel = {
@@ -157,11 +157,11 @@ let uživatel = {
 };
 
 
-let admin = uživatel;
+let správce = uživatel;
 uživatel = null; // přepíšeme, aby to bylo zřejmé
 
 *!*
-admin.řekniAhoj(); // TypeError: Cannot read property 'jméno' of null
+správce.řekniAhoj(); // TypeError: Cannot read property 'jméno' of null
 */!*
 ```
 
@@ -185,7 +185,7 @@ Například zde bude stejná funkce přiřazena dvěma různým objektům a ve v
 
 ```js run
 let uživatel = { jméno: "Jan" };
-let admin = { jméno: "Admin" };
+let správce = { jméno: "Správce" };
 
 function řekniAhoj() {
   alert( this.jméno );
@@ -194,18 +194,18 @@ function řekniAhoj() {
 *!*
 // použijeme stejnou funkci ve dvou objektech
 uživatel.f = řekniAhoj;
-admin.f = řekniAhoj;
+správce.f = řekniAhoj;
 */!*
 
 // tato volání mají různá this
 // „this“ uvnitř funkce je objekt „před tečkou“
 uživatel.f(); // Jan  (this == uživatel)
-admin.f(); // Admin  (this == admin)
+správce.f(); // Správce  (this == správce)
 
-admin['f'](); // Admin (k metodě přistupuje tečka nebo hranaté závorky - na tom nezáleží)
+správce['f'](); // Správce (k metodě přistupuje tečka nebo hranaté závorky - na tom nezáleží)
 ```
 
-Platí jednoduché pravidlo: je-li volána `obj.f()`, pak `this` během volání `f` je `obj`. Ve výše uvedeném příkladu je to tedy `uživatel` anebo `admin`.
+Platí jednoduché pravidlo: je-li volána `obj.f()`, pak `this` během volání `f` je `obj`. Ve výše uvedeném příkladu je to tedy `uživatel` anebo `správce`.
 
 ````smart header="Volání bez objektu: `this == undefined`"
 Můžeme tuto funkci volat dokonce zcela bez objektu:
@@ -230,7 +230,7 @@ Pokud přicházíte z jiného programovacího jazyka, pak jste pravděpodobně z
 
 V JavaScriptu je `this` „volné“, jeho hodnota se vypočítává až při volání a není závislá na tom, kde byla metoda deklarována, ale jen na tom, jaký objekt je „před tečkou“.
 
-Koncept vyhodnocování `this` za běhu má své výhody i nevýhody. Na jednu stranu můžeme funkci znovu použít pro různé objekty. Na druhou stranu větší flexibilita vytváří více prostoru pro chyby.
+Koncept vyhodnocování `this` za běhu má své výhody i nevýhody. Na jednu stranu můžeme tutéž funkci použít opakovaně pro různé objekty. Na druhou stranu větší flexibilita vytváří více prostoru pro chyby.
 
 Zde nám nepřísluší soudit, zda je toto rozhodnutí návrhářů jazyka dobré nebo špatné. Porozumíme tomu, jak s ním pracovat, jak využít jeho výhody a vyhnout se problémům.
 ```
@@ -253,7 +253,7 @@ let uživatel = {
 uživatel.řekniAhoj(); // Ilja
 ```
 
-To je speciální vlastnost šipkových funkcí. Je užitečná, když ve skutečnosti nechceme mít oddělené `this`, ale chceme je převzít z vnějšího kontextu. Šipkové funkce hlouběji prozkoumáme později v kapitole <info:arrow-functions>.
+To je speciální vlastnost šipkových funkcí. Je užitečná, když ve skutečnosti nechceme mít oddělené `this`, ale chceme je převzít z vnějšího kontextu. Později v kapitole <info:arrow-functions> prozkoumáme šipkové funkce více do hloubky.
 
 
 ## Shrnutí
@@ -264,7 +264,7 @@ To je speciální vlastnost šipkových funkcí. Je užitečná, když ve skute�
 
 Hodnota `this` je definována za běhu skriptu.
 - Když je funkce deklarována, může používat `this`, ale toto `this` nemá žádnou hodnotu, dokud není funkce volána.
-- Funkce může být kopírována mezi různými objekty.
+- Funkce může být kopírována mezi objekty.
 - Když je funkce volána „metodovou“ syntaxí `objekt.metoda()`, hodnota `this` během tohoto volání je `objekt`.
 
-Všimněte si, že šipkové funkce jsou zvláštní: nemají `this`. Když uvnitř šipkové funkce přistoupíme k `this`, převezme se zvnějšku.
+Prosíme všimněte si, že šipkové funkce jsou zvláštní: nemají `this`. Když uvnitř šipkové funkce přistoupíme k `this`, převezme se zvnějšku.

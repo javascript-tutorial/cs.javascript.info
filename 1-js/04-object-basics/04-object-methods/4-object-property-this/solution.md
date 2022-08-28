@@ -5,22 +5,22 @@ Zkuste to:
 function vytvořUživatele() {
   return {
     jméno: "Jan",
-    ref: this
+    odkaz: this
   };
 }
 
 let uživatel = vytvořUživatele();
 
-alert( uživatel.ref.jméno ); // Error: Cannot read property 'jméno' of undefined
+alert( uživatel.odkaz.jméno ); // Chyba: Nelze načíst vlastnost 'jméno' objektu undefined
 ```
 
-Je to proto, že pravidla, která nastavují `this`, se nedívají do definice objektu. Záleží jen na momentu volání.
+Je to proto, že pravidla, která nastavují `this`, se nedívají do definice objektu. Záleží jen na okamžiku volání.
 
 Zde je hodnota `this` uvnitř `vytvořUživatele()` `undefined`, protože tato funkce je volána jako funkce, ne jako metoda „tečkovou“ syntaxí.
 
 Hodnota `this` je stejná pro celou funkci, bloky kódu a objektové literály ji neovlivňují.
 
-Takže `ref: this` vezme ve skutečnosti aktuální `this` této funkce.
+Takže `odkaz: this` vezme ve skutečnosti aktuální `this` této funkce.
 
 Můžeme funkci přepsat a vrátit stejné `this` s hodnotou `undefined`:
 
@@ -29,9 +29,9 @@ function vytvořUživatele(){
   return this; // tentokrát tady není objektový literál
 }
 
-alert( vytvořUživatele().jméno ); // Error: Cannot read property 'jméno' of undefined
+alert( vytvořUživatele().jméno ); // Chyba: Nelze načíst vlastnost 'jméno' objektu undefined
 ```
-Jak vidíte, výsledek `alert( vytvořUživatele().jméno )` je stejný jako výsledek `alert( uživatel.ref.jméno )` z předchozího příkladu.
+Jak vidíte, výsledek `alert( vytvořUživatele().jméno )` je stejný jako výsledek `alert( uživatel.odkaz.jméno )` z předchozího příkladu.
 
 Toto je opačný příklad:
 
@@ -40,7 +40,7 @@ function vytvořUživatele() {
   return {
     jméno: "Jan",
 *!*
-    ref() {
+    odkaz() {
       return this;
     }
 */!*
@@ -49,7 +49,7 @@ function vytvořUživatele() {
 
 let uživatel = vytvořUživatele();
 
-alert( uživatel.ref().jméno ); // Jan
+alert( uživatel.odkaz().jméno ); // Jan
 ```
 
-Teď to funguje, protože `uživatel.ref()` je metoda. A hodnota `this` se nastaví na objekt před tečkou `.`.
+Teď to funguje, protože `uživatel.odkaz()` je metoda. A hodnota `this` se nastaví na objekt před tečkou `.`.
