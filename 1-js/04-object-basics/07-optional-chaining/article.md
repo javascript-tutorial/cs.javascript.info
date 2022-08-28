@@ -2,7 +2,7 @@
 
 [recent browser="new"]
 
-Volitelné zřetězení `?.` je bezpečný způsob, jak přistupovat k vnořeným vlastnostem objektu, i když vlastnost mezi nimi neexistuje.
+Volitelné zřetězení `?.` je bezpečný způsob, jak přistupovat k vnořeným vlastnostem objektu, i když vlastnost nacházející se mezi nimi neexistuje.
 
 ## Problém „neexistující vlastnosti“
 
@@ -53,14 +53,14 @@ let html = document.querySelector('.elem') ? document.querySelector('.elem').inn
 
 Vidíme, že hledání prvku `document.querySelector('.elem')` se zde ve skutečnosti volá dvakrát. To není dobré.
 
-Pro hlouběji vnořené vlastnosti to bude ještě ošklivější, protože bude vyžadováno více opakování.
+Pro hlouběji vnořené vlastnosti to bude ještě ošklivější, protože bude potřeba více opakování.
 
 Například zkusme podobným způsobem získat `uživatel.adresa.ulice.název`.
 
 ```js
 let uživatel = {}; // uživatel nemá adresu
 
-alert(uživatel.adresa ? uživatel.adresa.ulice ? uživatel.adresa.ulice.name : null : null);
+alert(uživatel.adresa ? uživatel.adresa.ulice ? uživatel.adresa.ulice.název : null : null);
 ```
 
 Je to ošklivé a člověk může mít problémy takovému kódu porozumět.
@@ -70,7 +70,7 @@ Existuje trochu lepší způsob, jak to napsat, a to pomocí operátoru `&&`:
 ```js run
 let uživatel = {}; // uživatel nemá adresu
 
-alert( uživatel.adresa && uživatel.adresa.ulice && uživatel.adresa.ulice.name ); // undefined (žádná chyba)
+alert( uživatel.adresa && uživatel.adresa.ulice && uživatel.adresa.ulice.název ); // undefined (žádná chyba)
 ```
 
 Spojení celé cesty k vlastnosti ANDem sice zajistí, že všechny komponenty existují (pokud ne, vyhodnocení se zastaví), ale ani to není ideální.
@@ -117,14 +117,14 @@ alert( uživatel?.adresa.ulice ); // undefined
 
 Prosíme všimněte si: syntaxe `?.` umožňuje, aby volitelná byla hodnota před ní, ale žádná další.
 
-Např. `?.` v `uživatel?.adresa.ulice.name` umožňuje, aby `uživatel` byl bezpečně `null/undefined` (a v takovém případě vrátí `undefined`), ale to platí jen pro objekt `uživatel`. K dalším vlastnostem se přistupuje obvyklým způsobem. Chceme-li, aby některá z nich byla volitelná, musíme nahradit další `.` za `?.`.
+Např. `?.` v `uživatel?.adresa.ulice.název` umožňuje, aby `uživatel` byl bezpečně `null/undefined` (a v takovém případě vrátí `undefined`), ale to platí jen pro objekt `uživatel`. K dalším vlastnostem se přistupuje obvyklým způsobem. Chceme-li, aby některá z nich byla volitelná, musíme nahradit další `.` za `?.`.
 
 ```warn header="Nepoužívejte volitelné zřetězení přehnaně často"
 Měli bychom používat `?.` jen tehdy, když je v pořádku, že něco neexistuje.
 
-Například pokud podle logiky našeho kódování musí objekt `uživatel` existovat, ale `adresa` je volitelná, pak bychom měli psát `uživatel.adresa?.ulice`, ale ne `uživatel?.adresa?.ulice`.
+Například pokud podle logiky našeho kódu musí objekt `uživatel` existovat, ale `adresa` je volitelná, pak bychom měli psát `uživatel.adresa?.ulice`, ale ne `uživatel?.adresa?.ulice`.
 
-Pak pokud se stane, že `uživatel` bude nedefinovaný, ohlásí se programátorská chyba a my ji opravíme. Kdybychom však přehnaně používali `?.`, mohly by se chyby v kódu neohlásit i tehdy, když to není vhodné, a jejich ladění by bylo obtížnější.
+Pak pokud se stane, že `uživatel` bude nedefinovaný, uvidíme programátorskou chybu a opravíme ji. Kdybychom však přehnaně používali `?.`, mohly by se chyby v kódu neohlásit i tehdy, když to není vhodné, a ladění by bylo obtížnější.
 ```
 
 ````warn header="Proměnná před `?.` musí být deklarovaná"
@@ -139,9 +139,9 @@ Proměnná musí být deklarovaná (tj. `let/const/var uživatel` nebo jako para
 
 ## Zkratování
 
-Jak bylo řečeno, `?.` okamžitě pozastaví („vyzkratuje“) vyhodnocování, jestliže levá část neexistuje.
+Jak bylo řečeno, `?.` okamžitě zastaví („vyzkratuje“) vyhodnocování, jestliže levá část neexistuje.
 
-Jestliže tedy za pozastaveným `?.` vpravo následují další volání funkcí nebo operace, nevykonají se.
+Jestliže tedy vpravo za `?.` následují další volání funkcí nebo operace, nevykonají se.
 
 Například:
 
@@ -149,42 +149,42 @@ Například:
 let uživatel = null;
 let x = 0;
 
-uživatel?.řekniAhoj(x++); // „uživatel“ není, takže výkon se nedostane k volání řekniAhoj a x++
+uživatel?.řekniAhoj(x++); // „uživatel“ není, takže běh se nedostane k volání řekniAhoj a x++
 
 alert(x); // 0, hodnota se nezvýšila
 ```
 
 ## Další varianty: ?.(), ?.[]
 
-Volitelné zřetězení `?.` není operátor, ale speciální syntaktická konstrukce, která funguje i s funkcemi a hranatými závorkami.
+Volitelné zřetězení `?.` není operátor, ale speciální syntaktický konstrukt, který funguje i s funkcemi a hranatými závorkami.
 
 Například `?.()` se používá k volání funkce, která nemusí existovat.
 
-V níže uvedeném kódu někteří z našich uživatelů mají metodu `admin` a někteří ne:
+V níže uvedeném kódu někteří z našich uživatelů mají metodu `správce` a někteří ne:
 
 ```js run
-let uživatelAdmin = {
-  admin() {
-    alert("Jsem admin");
+let uživatelSprávce = {
+  správce() {
+    alert("Jsem správce");
   }
 };
 
 let uživatelHost = {};
 
 *!*
-uživatelAdmin.admin?.(); // Jsem admin
+uživatelSprávce.správce?.(); // Jsem správce
 */!*
 
 *!*
-uživatelHost.admin?.(); // nic se nestane (taková metoda není)
+uživatelHost.správce?.(); // nic se nestane (taková metoda není)
 */!*
 ```
 
-Zde na obou řádcích nejprve použijeme tečku (`uživatelAdmin.admin`) k získání vlastnosti `admin`, protože předpokládáme, že objekt `uživatel` existuje, takže je bezpečné z něj číst.
+Zde na obou řádcích nejprve použijeme tečku (`uživatelSprávce.správce`) k získání vlastnosti `správce`, protože předpokládáme, že objekt `uživatel` existuje, takže je bezpečné z něj číst.
 
-Pak `?.()` prověří levou stranu: jestliže funkce `admin` existuje, pak se spustí (tak tomu je pro `uživatelAdmin`). Jinak (pro `uživatelHost`) se vyhodnocování zastaví bez chyb.
+Pak `?.()` prověří levou stranu: jestliže funkce `správce` existuje, pak se spustí (tak tomu je pro `uživatelSprávce`). Jinak (pro `uživatelHost`) se vyhodnocování zastaví bez chyb.
 
-Funguje také syntaxe `?.[]`, jestliže pro přístup k vlastnostem raději používáme hranaté závorky `[]` namísto tečky `.`. Podobně jako v předchozích případech nám umožňuje bezpečně načíst vlastnost objektu, která nemusí existovat.
+Funguje také syntaxe `?.[]`, jestliže pro přístup k vlastnostem raději používáme hranaté závorky `[]` namísto tečky `.`. Podobně jako v předchozích případech nám umožňuje bezpečně načíst vlastnost z objektu, který nemusí existovat.
 
 ```js run
 let klíč = "křestníJméno";
