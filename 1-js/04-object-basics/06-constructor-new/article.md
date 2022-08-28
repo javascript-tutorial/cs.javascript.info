@@ -6,7 +6,7 @@ To můžeme učinit pomocí konstruktorů a operátoru `"new"`.
 
 ## Konstruktor
 
-Konstruktory jsou z technického hlediska běžné funkce. Platí pro ně však dvě konvence:
+Konstruktory jsou z technického hlediska obvyklé funkce. Platí pro ně však dvě konvence:
 
 1. Jejich název začíná velkým písmenem.
 2. Měly by být volány jen pomocí operátoru `„new“`.
@@ -16,7 +16,7 @@ Například:
 ```js run
 function Uživatel(jméno) {
   this.jméno = jméno;
-  this.jeAdmin = false;
+  this.jeSprávce = false;
 }
 
 *!*
@@ -24,13 +24,13 @@ let uživatel = new Uživatel("Kuba");
 */!*
 
 alert(uživatel.jméno); // Kuba
-alert(uživatel.jeAdmin); // false
+alert(uživatel.jeSprávce); // false
 ```
 
 Když je funkce volána pomocí `new`, provedou se následující kroky:
 
 1. Vytvoří se nový prázdný objekt a přiřadí se do `this`.
-2. Vykoná se tělo funkce. To obvykle modifikuje `this` a přidá do něj nové vlastnosti.
+2. Vykoná se tělo funkce. To obvykle modifikuje `this`, do něhož přidá nové vlastnosti.
 3. Vrátí se hodnota `this`.
 
 Jinými slovy, `new Uživatel(...)` udělá něco jako:
@@ -41,9 +41,9 @@ function Uživatel(jméno) {
   // this = {};  (implicitně)
 */!*
 
-  // přidá do něj vlastnosti
+  // přidá vlastnosti do this
   this.jméno = jméno;
-  this.jeAdmin = false;
+  this.jeSprávce = false;
 
 *!*
   // return this;  (implicitně)
@@ -56,11 +56,11 @@ Takže `let uživatel = new Uživatel("Kuba")` vydá stejný výsledek jako:
 ```js
 let uživatel = {
   jméno: "Kuba",
-  jeAdmin: false
+  jeSprávce: false
 };
 ```
 
-Když nyní budeme chtít vytvořit jiné uživatele, můžeme volat `new Uživatel("Anna")`, `new Uživatel("Alice")` a tak dále. Je to mnohem kratší než pokaždé používat literály a je to i lépe čitelné.
+Když nyní budeme chtít vytvořit jiné uživatele, můžeme volat `new Uživatel("Anna")`, `new Uživatel("Alice")` a tak dále. Je to mnohem kratší než pokaždé používat literály a je to i snadno čitelné.
 
 To je hlavní smysl konstruktorů -- implementovat opakovaně použitelný kód pro vytváření objektů.
 
@@ -73,7 +73,7 @@ Máme-li mnoho řádků kódu a všechny se týkají vytvoření jediného slož
 // vytvoříme funkci a okamžitě ji zavoláme pomocí new
 let uživatel = new function() {
   this.jméno = "Jan";
-  this.jeAdmin = false;
+  this.jeSprávce = false;
 
   // ...další kód pro vytváření uživatele
   // možná složitá logika a příkazy
@@ -81,7 +81,7 @@ let uživatel = new function() {
 };
 ```
 
-Tento konstruktor nemůžeme opakovaně volat, protože není nikde uložen. Jen se vytvoří a zavolá. Smyslem tohoto triku je tedy zapouzdřit kód, který vytvoří jediný objekt a dále se nepoužívá.
+Tento konstruktor nemůžeme volat znovu, protože není nikde uložen, bude pouze vytvořen a zavolán. Smyslem tohoto triku je tedy zapouzdřit kód, který vytvoří jediný objekt a dále se nepoužívá.
 ````
 
 ## Test režimu konstruktoru: new.target
@@ -90,9 +90,9 @@ Tento konstruktor nemůžeme opakovaně volat, protože není nikde uložen. Jen
 Syntaxe z této části se používá málokdy. Pokud nechcete znát opravdu všechno, můžete ji přeskočit.
 ```
 
-Uvnitř funkce můžeme ověřit, zda byla volána pomocí `new` nebo bez něj, speciální vlastností `new.target`.
+Uvnitř funkce můžeme ověřit, zda byla volána pomocí `new` nebo bez něj, pomocí speciální vlastnosti `new.target`.
 
-Ta je při běžném volání `undefined`, ale pokud je funkce volána pomocí `new`, rovná se této funkci:
+Ta je při běžném volání `undefined`, ale pokud je funkce volána pomocí `new`, je rovna této funkci:
 
 ```js run
 function Uživatel() {
@@ -127,9 +127,9 @@ let jan = Uživatel("Jan"); // přesměruje volání na new Uživatel
 alert(jan.jméno); // Jan
 ```
 
-Tento přístup se někdy používá v knihovnách, aby byla syntaxe flexibilnější. Lidé pak mohou volat funkci s `new` nebo bez něj a funkce stále funguje.
+Tento přístup se někdy používá v knihovnách, aby byla syntaxe flexibilnější. Lidé pak mohou volat funkci s `new` nebo bez něj a funkce pokaždé funguje.
 
-Pravděpodobně však není dobré používat jej všude, protože bez uvedení `new` je trochu méně zřejmé, co se tady děje. Když je uvedeno `new`, všichni víme, že se vytváří nový objekt.
+Pravděpodobně však není dobré používat jej všude, protože bez uvedení `new` je trochu méně zřejmé, co se děje. Když je uvedeno `new`, všichni víme, že se vytváří nový objekt.
 
 ## Návrat z konstruktorů
 
@@ -217,8 +217,8 @@ K vytváření složitých objektů existuje i pokročilejší syntaxe -- [tří
 
 ## Shrnutí
 
-- Konstruktory jsou obvyklé funkce, avšak panuje běžná úmluva pojmenovávat je s velkým prvním písmenem.
-- Konstruktory by měly být volány jedině pomocí `new`. Takové volání způsobí, že se na začátku vytvoří prázdné `this` a to se pak na konci vrátí vyplněné.
+- Konstruktory jsou obvyklé funkce, avšak panuje běžná úmluva, že jejich název by měl mít velké první písmeno.
+- Konstruktory by měly být volány jedině pomocí `new`. Takové volání způsobí, že se na začátku vytvoří prázdné `this` a to se pak na konci vrátí naplněné.
 
 Konstruktory můžeme používat k vytváření více podobných objektů.
 

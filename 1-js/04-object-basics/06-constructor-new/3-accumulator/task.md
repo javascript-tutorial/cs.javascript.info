@@ -6,10 +6,10 @@ importance: 5
 
 Vytvořte konstruktor `Akumulátor(počátečníHodnota)`.
 
-Objekt, který tento konstruktor vytvoří, by měl:
+Objekt, který je tímto konstruktorem vytvořen, by měl:
 
-- Ukládat „aktuální hodnotu“ do vlastnosti `hodnota`. Počáteční hodnota se nastaví argumentem konstruktoru `počátečníHodnota`.
-- Metoda `načti()` by se měla pomocí `prompt` zeptat na nové číslo a přičíst je do vlastnosti `hodnota`.
+- Ukládat „aktuální hodnotu“ do vlastnosti `hodnota`. Počáteční hodnota se nastaví na argument konstruktoru `počátečníHodnota`.
+- Metoda `načti()` by se měla pomocí `prompt` zeptat na nové číslo a přičíst je k vlastnosti `hodnota`.
 
 Jinými slovy, vlastnost `hodnota` bude součet všech uživatelem zadaných hodnot a úvodní hodnoty `počátečníHodnota`.
 
