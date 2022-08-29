@@ -264,17 +264,9 @@ function zobrazZprávu(odKoho, text) {
 ````
 
 ### Alternativní výchozí argumenty
-Někdy má smysl nenastavovat výchozí hodnoty argumentů v deklaraci funkce, ale až později.
+Někdy má smysl nastavovat výchozí hodnoty argumentů až později po deklaraci funkce.
 
-<<<<<<< HEAD
 Abychom během provádění funkce ověřili, zda argument byl předán, můžeme jej porovnat s `undefined`:
-=======
-### Alternative default parameters
-
-Sometimes it makes sense to assign default values for parameters at a later stage after the function declaration.
-
-We can check if the parameter is passed during the function execution, by comparing it with `undefined`:
->>>>>>> 53b35c16835b7020a0a5046da5a47599d313bbb8
 
 ```js run
 function zobrazZprávu(text) {
