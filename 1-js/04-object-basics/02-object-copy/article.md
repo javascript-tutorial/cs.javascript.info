@@ -100,6 +100,30 @@ alert( a == b ); // false
 
 Při porovnání typu `obj1 > obj2` nebo při porovnání s primitivním typem `obj == 5` se objekty převádějí na primitivy. Jak funguje porovnávání objektů, prostudujeme velmi brzy, ale upřímně řečeno, taková porovnání jsou zapotřebí jen velmi zřídka -- obvykle se objevují v důsledku programátorské chyby.
 
+````smart header="Konstantní objekty můžeme modifikovat"
+Důležitým vedlejším efektem ukládání objektů jako odkazů je, že objekt deklarovaný jako `const` *může* být modifikován.
+
+Například:
+
+```js run
+const uživatel = {
+  jméno: "Jan"
+};
+
+*!*
+uživatel.jméno = "Petr"; // (*)
+*/!*
+
+alert(uživatel.jméno); // Petr
+```
+
+Může se zdát, že na řádku `(*)` bude ohlášena chyba, ale nestane se tak. Hodnota objektu `uživatel` je konstantní a musí pořád odkazovat na stejný objekt, ale vlastnosti tohoto objektu lze libovolně měnit.
+
+Jinými slovy, `const uživatel` vyvolá chybu, jen pokud se pokusíme nastavit `uživatel=...` jako celek.
+
+Jestliže ovšem skutečně potřebujeme učinit vlastnosti objektů konstantní, je to rovněž možné, ale úplně jiným způsobem. Zmíníme se o tom v kapitole <info:property-descriptors>.
+````
+
 ## Klonování a slučování, Object.assign [#cloning-and-merging-object-assign]
 
 Kopírování objektové proměnné tedy vytvoří další odkaz na tentýž objekt.
@@ -136,7 +160,7 @@ Můžeme také použít metodu [Object.assign](https://developer.mozilla.org/en-
 Její syntaxe je:
 
 ```js
-Object.assign(cíl, [zdroj1, zdroj2, zdroj3...])
+Object.assign(cíl, zdroj1[, zdroj2, zdroj3...])
 ```
 
 - První argument `cíl` je cílový objekt.
@@ -219,37 +243,70 @@ let klon = Object.assign({}, uživatel);
 alert( uživatel.míry === klon.míry ); // true, stejný objekt
 
 // uživatel a klon sdílejí tytéž míry
-uživatel.míry.šířka++;  // změníme vlastnost na jednom místě
-alert(klon.míry.šířka); // 51, vidíme výsledek z jiného místa
+uživatel.míry.šířka = 60; // změníme vlastnost na jednom místě
+alert(klon.míry.šířka);   // 60, získáme výsledek z jiného místa
 ```
 
-Abychom to opravili a učinili objekty `uživatel` a `klon` skutečně oddělenými, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ nebo „hluboké“.
+Abychom to opravili a učinili objekty `uživatel` a `klon` skutečně oddělenými, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ („hluboké“) anebo „strukturované“. Existuje metoda `structuredClone`, která implementuje hloubkové klonování.
 
-Můžeme to implementovat pomocí rekurze. Nebo, abychom znovu nevynalézali kolo, použít existující implementaci, např. [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) z JavaScriptové knihovny [lodash](https://lodash.com).
+### structuredClone
 
-````smart header="Konstantní objekty můžeme modifikovat"
-Důležitým vedlejším efektem ukládání objektů jako odkazů je, že objekt deklarovaný jako `const` *může* být modifikován.
+Volání `structuredClone(objekt)` vytvoří klon objektu `objekt` se všemi vnořenými vlastnostmi.
 
-Například:
+V našem příkladu ji můžeme použít následovně:
 
 ```js run
-const uživatel = {
-  jméno: "Jan"
+let uživatel = {
+  jméno: "Jan",
+  míry: {
+    výška: 182,
+    šířka: 50
+  }
 };
 
 *!*
-uživatel.jméno = "Petr"; // (*)
+let klon = structuredClone(uživatel);
 */!*
 
-alert(uživatel.jméno); // Petr
+alert( uživatel.míry === klon.míry ); // false, různé objekty
+
+// uživatel a klon nyní nejsou nijak propojeny
+uživatel.míry.šířka = 60; // změníme vlastnost na jednom místě
+alert(klon.míry.šířka);   // 50, nemělo to vliv
 ```
 
-Může se zdát, že na řádku `(*)` bude ohlášena chyba, ale nestane se tak. Hodnota objektu `uživatel` je konstantní a musí pořád odkazovat na stejný objekt, ale vlastnosti tohoto objektu lze libovolně měnit.
+Metoda `structuredClone` může klonovat většinu datových typů, např. objekty, pole, primitivní hodnoty.
 
-Jinými slovy, `const uživatel` vyvolá chybu, jen pokud se pokusíme nastavit `uživatel=...` jako celek.
+Podporuje i kruhové odkazy, kdy vlastnost nějakého objektu odkazuje na tento objekt samotný (přímo nebo skrz řetězec odkazů).
 
-Jestliže ovšem skutečně potřebujeme učinit vlastnosti objektů konstantní, je to rovněž možné, ale úplně jiným způsobem. Zmíníme se o tom v kapitole <info:property-descriptors>.
-````
+Příklad:
+
+```js run
+let uživatel = {};
+// vytvořme kruhový odkaz:
+// uživatel.já odkazuje na samotného uživatele
+uživatel.já = uživatel;
+
+let klon = structuredClone(uživatel);
+alert(klon.já === klon); // true
+```
+
+Jak vidíte, `klon.já` odkazuje na `klon`, ne na `uživatel`! Kruhový odkaz byl tedy rovněž správně naklonován.
+
+Existují však případy, kdy `structuredClone` selhává.
+
+Například když objekt má funkční vlastnost:
+
+```js run
+// chyba
+structuredClone({
+  f: function() {}
+});
+```
+
+Funkční vlastnosti nejsou podporovány.
+
+Abychom zvládli tak složité příklady, možná budeme muset použít kombinaci klonovacích metod, napsat si vlastní kód nebo, abychom znovu nevynalézali kolo, použít existující implementaci, například [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) z JavaScriptové knihovny [lodash](https://lodash.com).
 
 ## Shrnutí
 
@@ -257,4 +314,4 @@ Objekty se přiřazují a kopírují odkazem. Jinými slovy, v proměnné není 
 
 Všechny operace na zkopírovaných odkazech (např. přidávání nebo odebírání vlastností) jsou prováděny na jednom a tomtéž objektu.
 
-Abychom vytvořili „skutečnou kopii“ (klon), můžeme použít `Object.assign` pro tzv. „mělkou kopii“ (vnořené objekty se kopírují odkazem) nebo funkci pro „hloubkové klonování“, např. [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep).
+Abychom vytvořili „skutečnou kopii“ (klon), můžeme použít `Object.assign` pro tzv. „mělkou kopii“ (vnořené objekty se kopírují odkazem) nebo funkci `structuredClone` pro „hloubkové klonování“, nebo zákaznickou implementaci klonování, např. [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep).
