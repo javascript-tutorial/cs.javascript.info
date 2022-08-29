@@ -103,7 +103,7 @@ Zde je diagram (viz pravou část):
 
 Je to proto, že metody `řekniAhoj` a `řekniNashle` byly původně vytvořeny v `mixinŘekniAhoj`. I když jsou tedy zkopírovány, jejich interní vlastnost `[[HomeObject]]` se odkazuje na `mixinŘekniAhoj`, jak je vidět na obrázku výše.
 
-Když `super` hledá rodičovské metody v `[[HomeObject]].[[Prototype]]`, znamená to, že prohledává `mixinŘekniAhoj.[[Prototype]]`, ne `Uživatel.[[Prototype]]`.
+Když `super` hledá rodičovské metody v `[[HomeObject]].[[Prototype]]`, znamená to, že prohledává `mixinŘekniAhoj.[[Prototype]]`.
 
 ## MixinUdálosti
 
