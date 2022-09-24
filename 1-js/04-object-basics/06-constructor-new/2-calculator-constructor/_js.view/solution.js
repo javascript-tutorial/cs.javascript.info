@@ -1,15 +1,15 @@
-function Calculator() {
+function Kalkulátor() {
 
-  this.read = function() {
+  this.načti = function() {
     this.a = +prompt('a?', 0);
     this.b = +prompt('b?', 0);
   };
 
-  this.sum = function() {
+  this.součet = function() {
     return this.a + this.b;
   };
 
-  this.mul = function() {
+  this.součin = function() {
     return this.a * this.b;
   };
 }
