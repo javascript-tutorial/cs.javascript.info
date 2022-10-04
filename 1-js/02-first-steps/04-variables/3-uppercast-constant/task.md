@@ -12,24 +12,14 @@ const datumNarození = '18.04.1982';
 const věk = nějakýKód(datumNarození);
 ```
 
-<<<<<<< HEAD
-Zde máme konstantu `datumNarození` a pomocí nějakého kódu se z této proměnné vypočítá `věk` (kód není pro stručnost uveden, na podrobnostech zde nezáleží).
-=======
-Here we have a constant `birthday` for the date, and also the `age` constant.
+Zde máme konstantu `datumNarození` a také konstantu `věk`.
 
-The `age` is calculated from `birthday` using `someCode()`, which means a function call that we didn't explain yet (we will soon!), but the details don't matter here, the point is that `age` is calculated somehow based on the `birthday`.
->>>>>>> 18b1314af4e0ead5a2b10bb4bacd24cecbb3f18e
+Konstanta `věk` se vypočítá z konstanty `datumNarození` pomocí `nějakýKód()`, což znamená volání funkce, které jsme zatím nevysvětlili (ale brzy tak učiníme!), ale na podrobnostech zde nezáleží, podstatné je, že `věk` se vypočítá nějak podle `datumNarození`.
 
 Bylo by správné použít pro název proměnné `datumNarození` velká písmena? A pro `věk`? Nebo dokonce pro obě?
 
 ```js
-<<<<<<< HEAD
-const DATUM_NAROZENÍ = '18.04.1982'; // velkými písmeny?
+const DATUM_NAROZENÍ = '18.04.1982'; // napsat DATUM_NAROZENÍ velkými písmeny?
 
-const VĚK = nějakýKód(DATUM_NAROZENÍ); // velkými písmeny?
-=======
-const BIRTHDAY = '18.04.1982'; // make birthday uppercase?
-
-const AGE = someCode(BIRTHDAY); // make age uppercase?
->>>>>>> 18b1314af4e0ead5a2b10bb4bacd24cecbb3f18e
+const VĚK = nějakýKód(DATUM_NAROZENÍ); // napsat VĚK velkými písmeny?
 ```
