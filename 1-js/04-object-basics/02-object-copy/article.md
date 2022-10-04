@@ -160,15 +160,16 @@ Můžeme také použít metodu [Object.assign](https://developer.mozilla.org/en-
 Její syntaxe je:
 
 ```js
-Object.assign(cíl, zdroj1[, zdroj2, zdroj3...])
+Object.assign(cíl, ...zdroje])
 ```
 
 - První argument `cíl` je cílový objekt.
-- Další argumenty `zdroj1, ..., zdrojN` (může jich být tolik, kolik potřebujeme) jsou zdrojové objekty.
-- Metoda zkopíruje vlastnosti všech zdrojových objektů `zdroj1, ..., zdrojN` do cíle `cíl`. Jinými slovy, do cílového objektu se zkopírují vlastnosti všech argumentů počínaje druhým.
-- Volání vrátí `cíl`.
+- Další argumenty jsou seznam zdrojů.
 
-Například ji můžeme použít ke sloučení několika objektů do jednoho:
+Metoda zkopíruje vlastnosti všech zdrojových objektů do cíle `cíl` a ten pak vrátí jako svůj výsledek.
+
+Například máme objekt `uživatel`. Přidejme do něj několik oprávnění:
+
 ```js
 let uživatel = { jméno: "Jan" };
 
@@ -181,6 +182,9 @@ Object.assign(uživatel, oprávnění1, oprávnění2);
 */!*
 
 // nyní uživatel = { jméno: "Jan", můžeProhlížet: true, můžeEditovat: true }
+alert(uživatel.jméno); // John
+alert(uživatel.můžeProhlížet); // true
+alert(uživatel.můžeEditovat); // true
 ```
 
 Jestliže vlastnost s kopírovaným názvem již existuje, bude přepsána:
@@ -193,7 +197,7 @@ Object.assign(uživatel, { jméno: "Petr" });
 alert(uživatel.jméno); // nyní uživatel = { jméno: "Petr" }
 ```
 
-Můžeme také využít `Object.assign` k nahrazení cyklu `for..in` pro jednoduché klonování:
+Můžeme také využít `Object.assign` k provedení jednoduchého klonování objektu:
 
 ```js
 let uživatel = {
@@ -204,9 +208,12 @@ let uživatel = {
 *!*
 let klon = Object.assign({}, uživatel);
 */!*
+
+alert(clone.name); // John
+alert(clone.age); // 30
 ```
 
-Zkopíruje všechny vlastnosti objektu `uživatel` do prázdného objektu a ten pak vrátí.
+Zde metoda zkopíruje všechny vlastnosti objektu `uživatel` do prázdného objektu a ten pak vrátí.
 
 Existují i jiné metody klonování objektu, např. použitím [rozšířené syntaxe](info:rest-parameters-spread) `klon = {...uživatel}`, kterou vysvětlíme později v tomto tutoriálu.
 

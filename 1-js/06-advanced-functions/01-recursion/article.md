@@ -285,7 +285,7 @@ Iterativní `mocnina` používá jediný kontext, v jehož procesu se mění `i`
 
 **Každou rekurzi lze přepsat do smyčky. Variantu se smyčkou lze obvykle napsat efektivněji.**
 
-...Toto přepsání však někdy není triviální, zvláště když funkce používá různá rekurzívní volání v závislosti na podmínkách a spojuje jejich výsledky, nebo když je větvení složitější. A optimalizace může být nepotřebná a nemusí stát za tu námahu.
+...Toto přepsání však někdy není triviální, zvláště když funkce používá různá rekurzívní volání v závislosti na podmínkách a spojuje jejich výsledky, nebo když je větvení složitější. A optimalizace může být nepotřebná a nemusí vůbec stát za vynaloženou námahu.
 
 Rekurze mohou vydat kratší kód, jednodušší na porozumění a podporu. Optimalizace nejsou nutné všude, většinou potřebujeme dobrý kód, proto používáme rekurzi.   
 

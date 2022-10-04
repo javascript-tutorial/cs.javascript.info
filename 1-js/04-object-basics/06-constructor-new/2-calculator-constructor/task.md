@@ -6,7 +6,7 @@ importance: 5
 
 Vytvořte konstruktor `Kalkulátor`, který bude vytvářet objekty se třemi metodami:
 
-- `načti()` se funkcí `prompt` zeptá na dvě hodnoty a uloží je jako vlastnosti objektu.
+- `načti()` se funkcí `prompt` zeptá na dvě hodnoty a uloží je jako vlastnosti objektu s názvy po řadě `a` a `b`.
 - `součet()` vrátí součet těchto hodnot.
 - `součin()` vrátí součin těchto hodnot.
 

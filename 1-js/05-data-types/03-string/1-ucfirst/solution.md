@@ -8,12 +8,7 @@ let novýŘetězec = řetězec[0].toUpperCase() + řetězec.slice(1);
 
 Je tady však malý problém. Jestliže `řetězec` je prázdný, pak `řetězec[0]` je `undefined`, a protože `undefined` nemá metodu `toUpperCase()`, dostaneme chybu.
 
-Jsou zde dvě varianty řešení:
-
-1. Použít `řetězec.charAt(0)`, jelikož ta vždy vrátí řetězec (možná prázdný).
-2. Přidat kontrolu na prázdný řetězec.
-
-Zde je druhá varianta:
+Nejjednodušší způsob, jak to vyřešit, je přidat test na prázdný řetězec, například takto:
 
 ```js run demo
 function velkéPrvníPísmeno(řetězec) {
@@ -24,4 +19,3 @@ function velkéPrvníPísmeno(řetězec) {
 
 alert( velkéPrvníPísmeno("jan") ); // Jan
 ```
-

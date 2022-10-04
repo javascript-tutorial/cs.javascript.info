@@ -10,8 +10,8 @@ Je možné vytvořit funkce `A` a `B` tak, aby `new A() == new B()`?
 function A() { ... }
 function B() { ... }
 
-let a = new A;
-let b = new B;
+let a = new A();
+let b = new B();
 
 alert( a == b ); // true
 ```

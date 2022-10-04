@@ -93,25 +93,14 @@ Na první pohled vypadá „import všeho“ jako bezvadná věc, krátce se zap
 
 Je k tomu ovšem několik důvodů.
 
-1. Moderní sestavovací nástroje ([Webpack](https://webpack.js.org/) a jiné) spojují moduly dohromady a optimalizují je, aby urychlily načítání a odstranily nepoužité části.
+1. Explicitní uvedení toho, co se má importovat, nám umožňuje psát kratší názvy: `řekniAhoj()` místo `řekni.řekniAhoj()`.
+2. Explicitní seznam importů nám dává lepší přehled struktury kódu: co a kde je použito. Usnadňuje podporu a refaktorizaci kódu.
 
-    Řekněme, že jsme do našeho projektu přidali knihovnu třetí strany `řekni.js` s mnoha funkcemi:
-    ```js
-    // 📁 řekni.js
-    export function řekniAhoj() { ... }
-    export function řekniNashle() { ... }
-    export function buďZticha() { ... }
-    ```
+```smart header="Nebojte se, že importujete příliš mnoho"
+Moderní sestavovací nástroje, např. [webpack](https://webpack.js.org/) a jiné, spojují moduly dohromady a optimalizují je, aby urychlily načítání. Rovněž odstraňují nepoužité importy.
 
-    Pokud nyní v našem projektu využijeme jen jednu z funkcí `řekni.js`:
-    ```js
-    // 📁 main.js
-    import {řekniAhoj} from './řekni.js';
-    ```
-    ...Pak to optimalizátor uvidí a odstraní ze spojeného kódu ostatní funkce, čímž sestavený kód zkrátí. To se nazývá „třesení stromem“.
-
-2. Explicitní uvedení toho, co se má importovat, nám umožňuje psát kratší názvy: `řekniAhoj()` místo `řekni.řekniAhoj()`.
-3. Explicitní seznam importů nám dává lepší přehled struktury kódu: co a kde je použito. Usnadňuje podporu a refaktorizaci kódu.
+Například jestliže importujete `import * as knihovna` z obrovské knihovny kódu a pak použijete jen několik metod, nepoužité metody [nebudou zahrnuty](https://github.com/webpack/webpack/tree/main/examples/harmony-unused#examplejs) do optimalizovaného svazku.
+```
 
 ## Import „as“
 
@@ -224,7 +213,7 @@ Bez `default` by takový export ohlásil chybu:
 export class { // Chyba! (nedefaultní export vyžaduje název)
   constructor() {}
 }
-```     
+```
 
 ### „Defaultní“ název
 
@@ -399,7 +388,7 @@ Můžeme s tím narazit na dva problémy:
 
 1. `export Uživatel from './uživatel.js'` nefunguje. Povede k syntaktické chybě.
 
-    Abychom reexportovali defaultní export, musíme napsat `export {default as Uživatel}`, jako ve výše uvedeném příkladu.
+    Abychom reexportovali výchozí export, musíme napsat `export {default as Uživatel}`, jako ve výše uvedeném příkladu.
 
 2. `export * from './uživatel.js'` reexportuje pouze pojmenované exporty, ale ignoruje defaultní.
 
@@ -430,12 +419,12 @@ Import:
 
 - Import pojmenovaných exportů:
   - `import {x [as y], ...} from "modul"`
-- Import defaultního exportu:
+- Import výchozího exportu:
   - `import x from "modul"`
   - `import {default as x} from "modul"`
 - Import všeho:
   - `import * as obj from "modul"`
-- Import modulu (spustí se jeho kód, ale žádný jeho export se nepřiřadí do proměnné):
+- Import modulu (spustí se jeho kód), ale bez přiřazení jeho exportů do proměnných:
   - `import "modul"`
 
 Příkazy `import/export` můžeme uvést na začátku nebo na konci skriptu, na tom nezáleží.

@@ -28,6 +28,6 @@ Všimněte si, že `63.5` nemá vůbec žádnou ztrátu přesnosti. Je to proto,
 
 
 ```js run
-alert( Math.round(6.35 * 10) / 10); // 6.35 -> 63.5 -> 64(zaokrouhleno) -> 6.4
+alert( Math.round(6.35 * 10) / 10 ); // 6.35 -> 63.5 -> 64(zaokrouhleno) -> 6.4
 ```
 

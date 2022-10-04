@@ -8,16 +8,16 @@ Interní formát řetězce je vždy [UTF-16](https://cs.wikipedia.org/wiki/UTF-1
 
 Připomeňme si druhy uvozovek.
 
-Řetězce mohou být uzavřeny do apostrofů, uvozovek nebo gravisů (obrácených čárek):
+Řetězce mohou být uzavřeny do jednoduchých, dvojitých nebo zpětných uvozovek:
 
 ```js
-let apostrofy = 'apostrofy';
-let uvozovky = "uvozovky";
+let jednoduché = 'jednoduché uvozovky';
+let dvojité = "dvojité uvozovky";
 
-let gravisy = `gravisy`;
+let zpětné = `zpětné uvozovky`;
 ```
 
-Apostrofy a uvozovky jsou v zásadě stejné. Gravisy nám však umožňují vložit do řetězce jakýkoli výraz, když jej uzavřeme do `${…}`:
+Jednoduché a dvojité uvozovky fungují v zásadě stejně. Zpětné uvozovky nám však umožňují vložit do řetězce jakýkoli výraz, když jej uzavřeme do `${…}`:
 
 ```js run
 function součet(a, b) {
@@ -27,7 +27,7 @@ function součet(a, b) {
 alert(`1 + 2 = ${součet(1, 2)}.`); // 1 + 2 = 3.
 ```
 
-Další výhodou používání gravisů je, že umožňují rozdělit řetězec na více řádků:
+Další výhodou používání zpětných uvozovek je, že umožňují rozdělit řetězec na více řádků:
 
 ```js run
 let seznamHostů = `Hosté:
@@ -39,7 +39,7 @@ let seznamHostů = `Hosté:
 alert(seznamHostů); // seznam hostů, více řádků
 ```
 
-Vypadá to přirozeně, že? Ale apostrofy nebo uvozovky takto nefungují.
+Vypadá to přirozeně, že? Ale jednoduché nebo dvojité uvozovky takto nefungují.
 
 Jestliže je použijeme a pokusíme se rozdělit text na více řádků, nastane chyba:
 
@@ -50,57 +50,48 @@ let seznamHostů = "Hosté: // Error: Unexpected token ILLEGAL
 
 Jednoduché a dvojité uvozovky pocházejí ze starých časů vytváření jazyka, kdy potřeba víceřádkových řetězců nebyla brána v úvahu. Zpětné uvozovky se objevily mnohem později, a tak jsou univerzálnější.
 
-Zpětné uvozovky nám také umožňují specifikovat „šablonovou funkci“ před levou čárkou. Syntaxe je <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. To se nazývá „značkované vlastnosti“ *(anglicky „tagged templates“ -- pozn. překl.)*. Tato vlastnost nám umožňuje snadněji implementovat vlastní šablony, ale v praxi se používá jen málokdy. Více se o ní můžete dočíst v [manuálu](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
+Zpětné uvozovky nám také umožňují specifikovat „šablonovou funkci“ před levou uvozovkou. Syntaxe je: <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. Tato vlastnost se nazývá „značkované šablony“ *(„tagged templates“)*. Je k vidění jen zřídka, ale můžete si o ní přečíst v MDN: [Šablonové literály](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
 
 ## Speciální znaky
 
-Je ovšem možné vytvořit víceřádkové řetězce uzavřené do apostrofů nebo uvozovek pomocí tzv. „znaku nového řádku“, který se zapisuje `\n` a stanovuje konec řádku:
+Je ovšem možné vytvořit víceřádkové řetězce uzavřené do jednoduchých nebo dvojitých uvozovek pomocí tzv. „znaku nového řádku“, který se zapisuje `\n` a stanovuje konec řádku:
 
 ```js run
 let seznamHostů = "Hosté:\n * Jan\n * Petr\n * Marie";
 
-alert(seznamHostů); // víceřádkový seznam hostů
+alert(seznamHostů); // víceřádkový seznam hostů, stejný jako výše
 ```
 
-Například tyto dva řádky jsou stejné, jen jinak zapsané:
+Jednodušší příklad: tyto dva řádky jsou stejné, jen jinak zapsané:
 
 ```js run
 let řetězec1 = "Ahoj\nsvěte"; // dva řádky pomocí „symbolu konce řádku“
 
-// dva řádky pomocí obyčejného nového řádku a gravisů
+// dva řádky pomocí obyčejného nového řádku a zpětných uvozovek
 let řetězec2 = `Ahoj
 světe`;
 
 alert(řetězec1 == řetězec2); // true
 ```
 
-Existují i jiné, méně běžné „speciální“ znaky.
-
-Následuje jejich úplný seznam:
+Existují i jiné, méně běžné speciální znaky:
 
 | Znak | Popis |
 |------|-------|
 |`\n`|Nový řádek|
 |`\r`|V textových souborech ve Windows reprezentuje konec řádku kombinace dvou znaků `\r\n`, zatímco v jiných OS je to pouze `\n`. Je to z historických důvodů, většina softwaru pod Windows rozumí i `\n`.|
-|`\'`, `\"`|Apostrof, uvozovky|
+|`\'`,&nbsp;`\"`,&nbsp;<code>\\`</code>|Uvozovky|
 |`\\`|Zpětné lomítko|
 |`\t`|Tabulátor|
-|`\b`, `\f`, `\v`| Backspace, Form Feed, vertikální tabulátor -- ponechány kvůli kompatibilitě, v současnosti se nepoužívají. |
-|`\xXX`| Znak Unicode se zadaným hexadecimálním kódem v Unicode `XX`, např. `'\x7A'` je totéž jako `'z'`.|
-|`\uXXXX`|Symbol Unicode s hexadecimálním kódem `XXXX` v kódování UTF-16, např. `\u00A9` -- Unicode pro symbol copyrightu `©`. Musí obsahovat přesně 4 hexadecimální číslice. |
-|`\u{X…XXXXXX}` (1 až 6 hexadecimálních znaků)|Symbol Unicode se zadaným kódováním UTF-32. Pomocí dvou symbolů Unicode jsou zakódovány některé vzácné znaky, které zaberou 4 bajty. Tímto způsobem můžeme vkládat dlouhé kódy. |
+|`\b`, `\f`, `\v`| Backspace, Form Feed, vertikální tabulátor -- uvedeny jen pro úplnost, pocházejí z dřívější doby, v současnosti se nepoužívají (nyní na ně můžete zapomenout). |
 
-Příklady s Unicode:
+Jak vidíte, všechny speciální znaky začínají zpětným lomítkem `\`, které se také nazývá „únikový znak“.
 
 ```js run
-alert( "\u00A9" ); // ©
-alert( "\u{20331}" ); // 佫, vzácný čínský znak (dlouhý Unicode)
-alert( "\u{1F60D}" ); // 😍, symbol usmívající se tváře (další dlouhý Unicode)
+alert( `Zpětné lomítko: \\` ); // Zpětné lomítko: \
 ```
 
-Všechny speciální znaky začínají znakem zpětného lomítka `\`. Tomu se také říká „únikový *(escape)* znak“.
-
-Můžeme jej také použít, když chceme vložit do řetězce uvozovky nebo apostrof.
+Tzv. „únikované“ uvozovky `\'`, `\"`, <code>\\`</code> se používají k vložení uvozovek do řetězce, který je ohraničen stejným druhem uvozovek.
 
 Například:
 
@@ -110,21 +101,13 @@ alert( 'To*!*\'*/!*s přehnal!' ); // *!*To's*/!* přehnal!
 
 Jak vidíme, museli jsme před vnitřním apostrofem uvést zpětné lomítko `\'`, jinak by apostrof znamenal konec řetězce.
 
-Samozřejmě musíme předznamenat únikovým znakem jen stejný druh uvozovek jako ty, které obklopují řetězec. Jako elegantnější řešení bychom tedy mohli použít uvozovky nebo gravisy:
+Samozřejmě musíme předznamenat únikovým znakem jen stejný druh uvozovek jako ty, které obklopují řetězec. Jako elegantnější řešení bychom tedy mohli použít dvojité nebo zpětné uvozovky:
 
 ```js run
 alert( `To's přehnal!` ); // To's přehnal!
 ```
 
-Všimněte si, že zpětné lomítko `\` poslouží pro korektní načtení řetězce JavaScriptem a pak zmizí. Řetězec uložený v paměti neobsahuje žádné `\`. Můžete to jasně vidět v `alert` ve výše uvedených příkladech.
-
-Co ale, když potřebujeme zobrazit v řetězci skutečné zpětné lomítko  `\`?
-
-Je to možné, ale musíme je zdvojit `\\`:
-
-```js run
-alert( `Zpětné lomítko: \\` ); // Zpětné lomítko: \
-```
+Kromě těchto speciálních znaků existuje i speciální zápis pro kódy Unicode `\u…`. Používá se jen málokdy a je vysvětlen v nepovinné kapitole o [Unicode](info:unicode).
 
 ## Délka řetězce
 
@@ -139,33 +122,36 @@ Všimněte si, že `\n` je jediný „speciální“ znak, takže délka bude op
 ```warn header="`length` je vlastnost"
 Lidé zvyklí na některé jiné jazyky někdy nesprávně píší volání funkce `str.length()` místo `str.length`. To nefunguje.
 
-Prosíme všimněte si, že `str.length` je číselná vlastnost, ne funkce. Není důvod za ní uvádět závorky.
+Prosíme všimněte si, že `str.length` je číselná vlastnost, ne funkce. Není důvod za ní uvádět závorky. Nepíše se `.length()`, ale `.length`.
 ```
 
 ## Přístup ke znakům
 
-Abyste získali znak na pozici `poz`, použijte hranaté závorky `[poz]` nebo zavolejte metodu [str.charAt(pos)](mdn:js/String/charAt). První znak se nachází na pozici nula:
+Abyste získali znak na pozici `poz`, použijte hranaté závorky `[poz]` nebo zavolejte metodu [str.at(pos)](mdn:js/String/at). První znak se nachází na pozici nula:
 
 ```js run
 let řetězec = `Ahoj`;
 
 // první znak
 alert( řetězec[0] ); // A
-alert( řetězec.charAt(0) ); // A
+alert( řetězec.at(0) ); // A
 
 // poslední znak
 alert( řetězec[řetězec.length - 1] ); // j
+alert( řetězec.at(-1) );
 ```
 
-Moderním způsobem získání znaku jsou hranaté závorky, zatímco `charAt` existuje převážně z historických důvodů.
+Jak vidíte, metoda `.at(poz)` má výhodu v tom, že umožňuje zápornou pozici. Je-li `poz` záporná, počítá se od konce řetězce.
 
-Jediný rozdíl mezi nimi je v tom, že když není znak nalezen, `[]` vrátí `undefined`, ale `charAt` vrátí prázdný řetězec:
+Takže `.at(-1)` znamená poslední znak, `.at(-2)` je znak před ním atd.
+
+Hranaté závorky pro záporný index vrátí vždy `undefined`, například:
 
 ```js run
 let řetězec = `Ahoj`;
 
-alert( řetězec[1000] ); // undefined
-alert( řetězec.charAt(1000) ); // '' (prázdný řetězec)
+alert( řetězec[-2] ); // undefined
+alert( řetězec.at(-2) ); // h
 ```
 
 Můžeme také procházet jednotlivé znaky pomocí `for..of`:
@@ -310,45 +296,6 @@ if (řetězec.indexOf("Prorokovo") != -1) {
 }
 ```
 
-#### Trik s bitovým NOT
-
-Jeden z nejstarších zde používaných triků je operátor [bitového NOT](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_NOT) `~`, který převádí číslo na 32-bitové celé číslo (odstraní desetinnou část, pokud nějaká je) a pak převrátí všechny bity v jeho binární reprezentaci.
-
-V praxi to znamená jednoduchou věc: pro 32-bitová celá čísla se `~n` rovná `-(n+1)`.
-
-Například:
-
-```js run
-alert( ~2 ); // -3, totéž jako -(2+1)
-alert( ~1 ); // -2, totéž jako -(1+1)
-alert( ~0 ); // -1, totéž jako -(0+1)
-*!*
-alert( ~-1 ); // 0, totéž jako -(-1+1)
-*/!*
-```
-
-Jak vidíme, `~n` je nulová, jedině když `n == -1` (to platí pro kterékoli 32-bitové celé číslo `n` se znaménkem).
-
-Test `if ( ~řetězec.indexOf("...") )` je tedy pravdivý jedině tehdy, jestliže výsledek `indexOf` není `-1`. Jinými slovy, když je něco nalezeno.
-
-Lidé to používají ke zkrácení kontrol výsledku `indexOf`:
-
-```js run
-let řetězec = "Prorokovo";
-
-if (~řetězec.indexOf("Prorokovo")) {
-  alert( 'Nalezeno!' ); // funguje to
-}
-```
-
-Obecně se nedoporučuje používat vlastnosti jazyka neprůhledným způsobem, ale tento konkrétní trik se zhusta používá ve starých kódech, takže bychom mu měli rozumět.
-
-Jen si pamatujte: `if (~řetězec.indexOf(...))` se čte jako „jestliže je nalezeno“.
-
-Abychom však byli přesní, jelikož operátor `~` zkracuje velká čísla na 32 bitů, existují i jiná čísla, která dávají `0`, nejmenší z nich je `~4294967295=0`. Taková kontrola je tedy správná jen tehdy, není-li řetězec tak dlouhý.
-
-V současnosti vidíme tento trik jen ve starém kódu, jelikož moderní JavaScript poskytuje metodu `.includes` (viz níže).
-
 ### includes, startsWith, endsWith
 
 Modernější metoda [řetězec.includes(podřetězec, poz)](mdn:js/řetězecing/includes) vrátí `true/false` podle toho, zda `řetězec` v sobě obsahuje `podřetězec`.
@@ -407,9 +354,9 @@ V JavaScriptu jsou 3 metody pro získání podřetězce: `substring`, `substr` a
     ```
 
 `řetězec.substring(začátek [, konec])`
-: Vrátí část řetězce *mezi* pozicemi `začátek` a `konec`.
+: Vrátí část řetězce *mezi* pozicemi `začátek` a `konec` (nezahrnuje `konec`).
 
-    Je to téměř totéž jako `slice`, ale umožňuje, aby `začátek` byl větší než `konec`.
+    Je to téměř totéž jako `slice`, ale umožňuje, aby `začátek` byl větší než `konec` (v takovém případě hodnoty `začátek` a `konec` jednoduše prohodí).
 
     Například:
 
@@ -452,13 +399,15 @@ Abychom předešli zmatkům, všechny tyto metody si zrekapitulujme:
 | metoda | vybírá... | záporné hodnoty |
 |--------|-----------|-----------------|
 | `slice(začátek, konec)` | od `začátek` do `konec` (mimo `konec`) | umožňuje záporné hodnoty |
-| `substring(začátek, konec)` | mezi `začátek` a `konec` | záporné hodnoty znamenají `0` |
+| `substring(začátek, konec)` | mezi `začátek` a `konec` (mimo `konec`) | záporné hodnoty znamenají `0` |
 | `substr(začátek, délka)` | od `začátek` vezme `délka` znaků | umožňuje záporný `začátek` |
 
 ```smart header="Kterou zvolit?"
 Všechny odvedou svou práci. Formálně má `substr` drobnou nevýhodu: není popsána v jádru specifikace JavaScriptu, ale v Příloze B, která pokrývá pouze prohlížečové vlastnosti, existující zejména z historických důvodů. Neprohlížečová prostředí ji tedy nemusejí podporovat. V praxi však funguje všude.
 
-Ze zbývajících dvou variant je `slice` trochu flexibilnější, protože umožňuje záporné hodnoty a je kratší na napsání. Z těchto tří metod si tedy stačí pamatovat `slice`.
+Ze zbývajících dvou variant je `slice` trochu flexibilnější, protože umožňuje záporné hodnoty a je kratší na napsání. 
+
+Pro praktické použití si tedy stačí pamatovat jen `slice`.
 ```
 
 ## Porovnávání řetězců
@@ -481,17 +430,18 @@ Existují však některé zvláštnosti.
 
     To může vést ke zvláštním výsledkům, budeme-li řadit tyto názvy zemí. Obvykle se očekává, že `Zéland` bude v seznamu až za `Írán`.
 
-Abychom pochopili, co se tady děje, prohlédneme si vnitřní reprezentaci řetězců v JavaScriptu.
+Abychom pochopili, co se tady děje, měli bychom vědět, že všechny řetězce jsou zakódovány pomocí [UTF-16](https://cs.wikipedia.org/wiki/UTF-16). To je: každý znak má odpovídající číselný kód. 
 
-Všechny řetězce jsou zakódovány pomocí [UTF-16](https://cs.wikipedia.org/wiki/UTF-16). To je: každý znak má odpovídající číselný kód. Existují speciální metody, které umožňují získat znak pro zadaný kód a naopak.
+Existují speciální metody, které umožňují získat znak pro zadaný kód a naopak:
 
 `řetězec.codePointAt(poz)`
-: Vrátí kód znaku na pozici `poz`:
+: Vrátí desetinné číslo představující kód znaku na pozici `poz`:
 
     ```js run
-    // písmena různé velikosti mají různé kódy
-    alert( "z".codePointAt(0) ); // 122
+    // malá a velká písmena mají různé kódy
     alert( "Z".codePointAt(0) ); // 90
+    alert( "z".codePointAt(0) ); // 122
+    alert( "z".codePointAt(0).toString(16) ); // 7a (potřebujeme-li hexadecimální hodnotu)
     ```
 
 `String.fromCodePoint(kód)`
@@ -499,13 +449,7 @@ Všechny řetězce jsou zakódovány pomocí [UTF-16](https://cs.wikipedia.org/w
 
     ```js run
     alert( String.fromCodePoint(90) ); // Z
-    ```
-
-    Můžeme vytvořit znaky Unicode podle jejich kódů i pomocí `\u`, za nímž následuje hexadecimální kód:
-
-    ```js run
-    // 90 je 5a v hexadecimální soustavě
-    alert( '\u005a' ); // Z
+    alert( String.fromCodePoint(0x5a) ); // Z (jako argument můžeme použít i hexadecimální hodnotu)
     ```
 
 Nyní se podívejme na znaky s kódy `65..220` (latinská abeceda a něco navíc), když z nich vytvoříme řetězec:
@@ -517,6 +461,7 @@ for (let i = 65; i <= 220; i++) {
   řetězec += String.fromCodePoint(i);
 }
 alert( řetězec );
+// Výstup:
 // ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 // ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜ
 ```
@@ -536,7 +481,7 @@ Znaky se porovnávají podle svého číselného kódu. Vyšší kód znamená, 
 
 Prohlížeč tedy musí znát jazyk, v němž porovnává.
 
-Naštěstí všechny moderní prohlížeče (IE10- vyžaduje přidání knihovny [Intl.js](https://github.com/andyearnshaw/Intl.js/)) podporují internacionalizační standard [ECMA-402](http://www.ecma-international.org/ecma-402/1.0/ECMA-402.pdf).
+Naštěstí moderní prohlížeče podporují internacionalizační standard [ECMA-402](https://www.ecma-international.org/publications-and-standards/standards/ecma-402/).
 
 Ten poskytuje speciální metodu, jak porovnávat řetězce v různých jazycích podle jejich pravidel.
 
@@ -554,123 +499,15 @@ alert( 'Česko'.localeCompare('Zéland') ); // -1
 
 Tato metoda má ve skutečnosti ještě dva další argumenty specifikované v [dokumentaci](mdn:js/string/localeCompare), které umožňují specifikovat jazyk (standardně se vezme z prostředí, na jazyku závisí pořadí písmen) a nastavit další pravidla, např. velikost písmen, nebo zda se `"a"` a `"á"` mají brát jako stejné znaky, atd.
 
-## Vnitřní reprezentace, Unicode
-
-```warn header="Pokročilá znalost"
-Tato podkapitola zachází hlouběji do vnitřní reprezentace řetězců. Tato znalost vám bude užitečná, jestliže plánujete pracovat s emoji, vzácnými matematickými či hieroglyfickými znaky nebo jinými vzácnými symboly.
-
-Jestliže je neplánujete podporovat, můžete tuto podkapitolu přeskočit.
-```
-
-### Znaky kódované dvěma dvojicemi bajtů
-
-Všechny často používané znaky mají 2-bajtové kódy. Písmena většiny evropských jazyků, číslice a dokonce většina hieroglyfů má 2-bajtovou reprezentaci.
-
-Avšak 2 bajty umožňují jen 65536 kombinací, a to pro všechny možné symboly nestačí. Vzácné symboly se tedy kódují dvojicí 2-bajtových znaků, která se nazývá „surrogate pair“ *(není mi znám žádný používaný český ekvivalent -- pozn. překl.)*.
-
-Délka takových symbolů je `2`:
-
-```js run
-alert( '𝒳'.length ); // 2, VELKÉ X V MATEMATICKÉM SKRIPTU
-alert( '😂'.length ); // 2, TVÁŘ SE SLZAMI RADOSTI
-alert( '𩷶'.length ); // 2, vzácný čínský znak
-```
-
-Všimněte si, že v době, kdy byl JavaScript vytvořen, surrogate pairy ještě neexistovaly, a proto je jazyk nezpracovává korektně!
-
-Ve skutečnosti máme v každém z výše uvedených řetězců jediný symbol, ale `length` ukáže délku `2`.
-
-Jedny z mála vzácných metod, které pracují se surrogate pairy správně, jsou `String.fromCodePoint` a `řetězec.codePointAt`. Ty se objevily v jazyce teprve nedávno. Před nimi existovaly jen [String.fromCharCode](mdn:js/string/fromCharCode) a [řetězec.charCodeAt](mdn:js/string/charCodeAt). Tyto metody jsou ve skutečnosti totéž jako `fromCodePoint/codePointAt`, avšak nefungují se surrogate pairy.
-
-Získat symbol může být ošidné, jelikož se surrogate pairy se zachází jako se dvěma znaky:
-
-```js run
-alert( '𝒳'[0] ); // podivné symboly...
-alert( '𝒳'[1] ); // ...části surrogate pairu
-```
-
-Všimněte si, že části surrogate pairu nemají jedna bez druhé žádný význam. Funkce `alert` ve výše uvedeném příkladu tedy ve skutečnosti zobrazí nesmysly.
-
-Technicky jsou surrogate pairy detekovatelné i podle svého kódu: má-li znak kód v intervalu `0xd800..0xdbff`, je to první část surrogate pairu. Další znak (druhá část) musí mít kód v intervalu `0xdc00..0xdfff`. Tyto intervaly jsou standardem výslovně vyhrazeny pro surrogate pairy.
-
-Ve výše uvedeném příkladu:
-
-```js run
-// charCodeAt nezná surrogate pairy, takže vydá kódy pro jejich části
-
-alert( '𝒳'.charCodeAt(0).toString(16) ); // d835, mezi 0xd800 a 0xdbff
-alert( '𝒳'.charCodeAt(1).toString(16) ); // dcb3, mezi 0xdc00 a 0xdfff
-```
-
-Další způsoby, jak si poradit se surrogate pairy, najdete později v kapitole <info:iterable>. Existují pro ně pravděpodobně i speciální knihovny, ale žádná není natolik slavná, abych ji tady navrhl.
-
-### Diakritická znaménka a normalizace
-
-Mnoho jazyků obsahuje symboly, které se skládají ze základního znaku a znaménka nad nebo pod ním.
-
-Například písmeno `a` může být základním znakem pro: `àáâäãåā`. Většina běžných „složených“ znaků má v tabulce UTF-16 svůj vlastní kód, ale ne všechny, protože možných kombinací je příliš mnoho.
-
-Aby UTF-16 podporovalo libovolnou složeninu, umožňuje nám použít několik znaků Unicode: základní znak následovaný jedním nebo více „znaménky“, která jej „zdobí“.
-
-Například máme-li `S` následované speciálním znakem „tečka nahoře“ (kód `\u0307`), zobrazí se jako Ṡ.
-
-```js run
-alert( 'S\u0307' ); // Ṡ
-```
-
-Potřebujeme-li nad písmenem (nebo pod ním) další znaménko -- není to problém, prostě přidejte znak požadovaného znaménka.
-
-Například přidáme-li znak „tečka dole“ (kód `\u0323`), budeme mít „S s tečkami nahoře a dole“: `Ṩ`.
-
-Příklad:
-
-```js run
-alert( 'S\u0307\u0323' ); // Ṩ
-```
-
-To nám poskytuje velkou flexibilitu, ale také zajímavý problém: dva znaky mohou vizuálně vypadat stejně, ale jsou reprezentovány různými složeninami Unicode.
-
-Například:
-
-```js run
-let s1 = 'S\u0307\u0323'; // Ṩ, S + tečka nahoře + tečka dole
-let s2 = 'S\u0323\u0307'; // Ṩ, S + tečka dole + tečka nahoře
-
-alert( `s1: ${s1}, s2: ${s2}` );
-
-alert( s1 == s2 ); // false, ačkoli znaky vypadají stejně (?!)
-```
-
-Abychom to vyřešili, existuje algoritmus „normalizace Unicode“, který vytvoří z každého řetězce jedinou „normální“ formu.
-
-Je implementován ve funkci [řetězec.normalize()](mdn:js/string/normalize).
-
-```js run
-alert( "S\u0307\u0323".normalize() == "S\u0323\u0307".normalize() ); // true
-```
-
-Je veselé, že v naší situaci `normalize()` ve skutečnosti vytvoří z posloupnosti tří znaků jediný: `\u1e68` (S se dvěma tečkami).
-
-```js run
-alert( "S\u0307\u0323".normalize().length ); // 1
-
-alert( "S\u0307\u0323".normalize() == "\u1e68" ); // true
-```
-
-Ve skutečnosti tomu tak vždy není. Důvodem je, že symbol `Ṩ` je „dostatečně běžný“, takže jej tvůrci UTF-16 zahrnuli do hlavní tabulky a přiřadili mu kód.
-
-Chcete-li se dozvědět víc o pravidlech a variantách normalizace -- jsou popsány v příloze ke standardu Unicode: [Unicode Normalization Forms](http://www.unicode.org/reports/tr15/), ale pro většinu praktických účelů postačí informace z této podkapitoly.
-
 ## Shrnutí
 
-- Existují 3 druhy uvozovek. Gravisy umožňují rozdělit řetězec na více řádků a vnořit výrazy `${…}`.
-- Řetězce v JavaScriptu jsou kódovány pomocí UTF-16.
-- Můžeme používat speciální znaky jako `\n` a vkládat písmena podle jejich kódu Unicode pomocí `\u...`.
+- Existují 3 druhy uvozovek. Zpětné uvozovky umožňují rozdělit řetězec na více řádků a vnořit výrazy `${…}`.
+- Můžeme používat speciální znaky, například konec řádku `\n`.
 - Chceme-li získat znak, použijeme `[]`.
 - Chceme-li získat podřetězec, použijeme `slice` nebo `substring`.
 - Chceme-li převést řetězec na malá/velká písmena, použijeme `toLowerCase/toUpperCase`.
 - Chceme-li najít podřetězec, použijeme `indexOf` nebo pro jednoduché kontroly `includes/startsWith/endsWith`.
-- Chceme-li porovnat řetězce podle jazykových pravidel, použijeme `localeCompare`, jinak se budou porovnávat podle kódů znaků.
+- Chceme-li porovnat řetězce podle pravidel jazyka, použijeme `localeCompare`, jinak se budou porovnávat podle kódů znaků.
 
 Pro řetězce existuje i několik dalších užitečných metod:
 
@@ -678,4 +515,6 @@ Pro řetězce existuje i několik dalších užitečných metod:
 - `řetězec.repeat(n)` -- zopakuje řetězec `n`-krát.
 - ...a další lze najít v [manuálu](mdn:js/string).
 
-Řetězce mají také metody pro hledání a nahrazování pomocí regulárních výrazů. To je však rozsáhlé téma, které bude vysvětleno v samostatné části tutoriálu <info:regular-expressions>.
+Řetězce mají také metody pro hledání a nahrazování pomocí regulárních výrazů. To je však rozsáhlé téma, takže je vysvětleno v samostatné části tutoriálu <info:regular-expressions>.
+
+Od nynějška je také důležité vědět, že řetězce jsou založeny na kódování Unicode, a proto jsou zde určité záležitosti s porovnáváním. O Unicode se dozvíte víc v kapitole <info:unicode>.

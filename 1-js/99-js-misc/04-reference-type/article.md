@@ -87,7 +87,7 @@ Výsledkem přístupu k vlastnosti `uživatel.ahoj` není funkce, ale hodnota re
 (uživatel, "ahoj", true)
 ```
 
-Když se na referenčním typu zavolají závorky `()`, obdrží úplnou informaci o objektu a jeho metodě a mohou tedy nastavit správné `this` (v tomto případě `=uživatel`).
+Když se na referenčním typu zavolají závorky `()`, obdrží úplnou informaci o objektu a jeho metodě a mohou tedy nastavit správné `this` (v tomto případě `uživatel`).
 
 Referenční typ je speciální „prostřednický“ interní typ, jehož účelem je předat informaci z tečky `.` volajícím závorkám `()`.
 

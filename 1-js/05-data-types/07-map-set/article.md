@@ -14,12 +14,12 @@ Pro skutečný život to však nestačí. Proto existují také `Map` (mapa) a `
 Její metody a vlastnosti jsou:
 
 - `new Map()` -- vytvoří mapu.
-- `mapa.set(klíč, hodnota)` -- uloží hodnotu pod klíčem.
-- `mapa.get(klíč)` -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
-- `mapa.has(klíč)` -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
-- `mapa.delete(klíč)` -- odstraní hodnotu pod zadaným klíčem.
-- `mapa.clear()` -- odstraní z mapy všechny hodnoty.
-- `mapa.size` -- vrátí aktuální počet prvků.
+- [`mapa.set(klíč, hodnota)`](mdn:js/Map/set) -- uloží hodnotu pod klíčem.
+- [`mapa.get(klíč)`](mdn:js/Map/get) -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
+- [`mapa.has(klíč)`](mdn:js/Map/has) -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
+- [`mapa.delete(klíč)`](mdn:js/Map/delete) -- odstraní hodnotu pod zadaným klíčem.
+- [`mapa.clear()`](mdn:js/Map/clear) -- odstraní z mapy všechny hodnoty.
+- [`mapa.size`](mdn:js/Map/size) -- vrátí aktuální počet prvků.
 
 Příklad:
 
@@ -104,9 +104,9 @@ mapa.set('1', 'str1')
 
 Pro procházení prvků mapy existují 3 metody:
 
-- `mapa.keys()` -- vrátí iterovatelný objekt klíčů,
-- `mapa.values()` -- vrátí iterovatelný objekt hodnot,
-- `mapa.entries()` --  vrátí iterovatelný objekt dvojic `[klíč, hodnota]`, používá se standardně ve `for..of`.
+- [`mapa.keys()`](mdn:js/Map/keys) -- vrátí iterovatelný objekt klíčů,
+- [`mapa.values()`](mdn:js/Map/values) -- vrátí iterovatelný objekt hodnot,
+- [`mapa.entries()`](mdn:js/Map/entries) --  vrátí iterovatelný objekt dvojic `[klíč, hodnota]`, používá se standardně ve `for..of`.
 
 Příklad:
 
@@ -237,11 +237,11 @@ Množina `Set` je speciální typ kolekce -- „množina hodnot“ (bez klíčů
 Její hlavní metody jsou:
 
 - `new Set(iterovatelnýObjekt)` -- vytvoří množinu, a je-li poskytnut `iterovatelnýObjekt` (obvykle pole), zkopíruje do ní hodnoty z tohoto objektu.
-- `množina.add(hodnota)` -- přidá hodnotu, vrátí samotnou množinu.
-- `množina.delete(hodnota)` -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
-- `množina.has(hodnota)` -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
-- `množina.clear()` -- odstraní z množiny všechny hodnoty.
-- `množina.size` -- je počet hodnot.
+- [`množina.add(hodnota)`](mdn:js/Set/add) -- přidá hodnotu, vrátí samotnou množinu.
+- [`množina.delete(hodnota)`](mdn:js/Set/delete) -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
+- [`množina.has(hodnota)`](mdn:js/Set/has) -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
+- [`množina.clear()`](mdn:js/Set/clear) -- odstraní z množiny všechny hodnoty.
+- [`množina.size`](mdn:js/Set/size) -- je počet hodnot.
 
 Hlavní vlastností množiny je, že opakovaná volání `množina.add(hodnota)` se stejnou hodnotou nic neprovedou. To je důvod, proč se každá hodnota v množině objeví pouze jednou.
 
@@ -288,15 +288,15 @@ množina.forEach((hodnota, hodnotaZnovu, množina) => {
 });
 ```
 
-Všimněte si něčeho legračního. Callbacková funkce předávaná do `forEach` má 3 argumenty: `hodnota`, pak *stejnou hodnotu* `hodnotaZnovu` a pak cílový objekt. Opravdu, stejná hodnota se v argumentech objevuje dvakrát.
+Všimněte si něčeho legračního. Funkce zpětného volání předávaná do `forEach` má 3 argumenty: `hodnota`, pak *stejnou hodnotu* `hodnotaZnovu` a pak cílový objekt. Opravdu, stejná hodnota se v argumentech objevuje dvakrát.
 
-To slouží ke kompatibilitě s `Map`, v níž callback předávaný do `forEach` má tři argumenty. Jistě, vypadá to trochu zvláštně. Může to však pomoci v některých případech snadno nahradit mapu množinou a naopak.
+To slouží ke kompatibilitě s `Map`, v níž zpětné volání předávané do `forEach` má tři argumenty. Jistě, vypadá to trochu zvláštně. Může to však pomoci v některých případech snadno nahradit mapu množinou a naopak.
 
 Rovněž jsou podporovány stejné metody, jaké má `Map` pro iterovatelné objekty:
 
-- `množina.keys()` -- vrátí iterovatelný objekt s hodnotami,
-- `množina.values()` -- totéž jako `množina.keys()`, kvůli kompatibilitě s `Map`,
-- `množina.entries()` -- vrátí iterovatelný objekt s dvojicemi `[hodnota, hodnota]`, existuje kvůli kompatibilitě s `Map`.
+- [`množina.keys()`](mdn:js/Set/keys) -- vrátí iterovatelný objekt s hodnotami,
+- [`množina.values()`](mdn:js/Set/values) -- totéž jako `množina.keys()`, kvůli kompatibilitě s `Map`,
+- [`množina.entries()`](mdn:js/Set/entries) -- vrátí iterovatelný objekt s dvojicemi `[hodnota, hodnota]`, existuje kvůli kompatibilitě s `Map`.
 
 ## Shrnutí
 
@@ -305,12 +305,12 @@ Rovněž jsou podporovány stejné metody, jaké má `Map` pro iterovatelné obj
 Metody a vlastnosti:
 
 - `new Map([iterovatelnýObjekt])` -- vytvoří mapu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje dvojice `[klíč,hodnota]` pro inicializaci.
-- `mapa.set(klíč, hodnota)` -- uloží hodnotu pod klíčem, vrátí samotnou mapu.
-- `mapa.get(klíč)` -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
-- `mapa.has(klíč)` -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
-- `mapa.delete(klíč)` -- odstraní hodnotu pod zadaným klíčem, vrátí `true`, jestliže `klíč` v okamžiku volání existoval, jinak `false`.
-- `mapa.clear()` -- odstraní z mapy všechny hodnoty.
-- `mapa.size` -- vrátí aktuální počet prvků.
+- [`mapa.set(klíč, hodnota)`](mdn:js/Map/set) -- uloží hodnotu pod klíčem, vrátí samotnou mapu.
+- [`mapa.get(klíč)`](mdn:js/Map/get) -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
+- [`mapa.has(klíč)`](mdn:js/Map/has) -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
+- [`mapa.delete(klíč)`](mdn:js/Map/delete) -- odstraní hodnotu pod zadaným klíčem, vrátí `true`, jestliže `klíč` v okamžiku volání existoval, jinak `false`.
+- [`mapa.clear()`](mdn:js/Map/clear) -- odstraní z mapy všechny hodnoty.
+- [`mapa.size`](mdn:js/Map/size) -- vrátí aktuální počet prvků.
 
 Rozdíly oproti běžnému objektu:
 
@@ -322,10 +322,10 @@ Rozdíly oproti běžnému objektu:
 Metody a vlastnosti:
 
 - `new Set(iterovatelnýObjekt)` -- vytvoří množinu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje hodnoty pro inicializaci.
-- `množina.add(hodnota)` -- přidá hodnotu (pokud `hodnota` již existuje, neudělá nic), vrátí samotnou množinu.
-- `množina.delete(hodnota)` -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
-- `množina.has(hodnota)` -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
-- `množina.clear()` -- odstraní z množiny všechny hodnoty.
-- `množina.size` -- je počet hodnot.
+- [`množina.add(hodnota)`](mdn:js/Set/add) -- přidá hodnotu (pokud `hodnota` již existuje, neudělá nic), vrátí samotnou množinu.
+- [`množina.delete(hodnota)`](mdn:js/Set/delete) -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
+- [`množina.has(hodnota)`](mdn:js/Set/has) -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
+- [`množina.clear()`](mdn:js/Set/clear) -- odstraní z množiny všechny hodnoty.
+- [`množina.size`](mdn:js/Set/size) -- je počet hodnot.
 
 Iterace nad mapou a množinou probíhá vždy ve stejném pořadí, v jakém byly prvky vloženy. Nemůžeme tedy říci, že tyto kolekce nejsou seřazené, ale nemůžeme prvky seřadit jinak ani přímo získat prvek podle jeho pořadí.

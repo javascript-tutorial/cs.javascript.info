@@ -102,7 +102,7 @@ Jak vidíme z výstupu `alert`, v prohlížeči je identifikátorem časovače �
 
 Opakujeme, že pro tyto metody neexistuje žádná univerzální specifikace, takže je to v pořádku.
 
-Pro prohlížeče jsou časovače popsány v [sekci časovačů](https://www.w3.org/TR/html5/webappapis.html#timers) standardu HTML5.
+Pro prohlížeče jsou časovače popsány v [sekci časovačů](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers) HTML Living Standardu.
 
 ## setInterval
 
@@ -256,7 +256,7 @@ V prohlížečích existují i pokročilejší způsoby použití načasování 
 
 ````smart header="Nulová prodleva není ve skutečnosti nulová (v prohlížeči)"
 
-V prohlížeči je omezení, jak často se mohou vnořené časovače spouštět. [Standard HTML5](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers) říká: „po pěti vnořených časovačích musí být interval alespoň 4 milisekundy.“
+V prohlížeči je omezení, jak často se mohou vnořené časovače spouštět. [HTML Living Standard](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers) říká: „po pěti vnořených časovačích musí být interval alespoň 4 milisekundy.“
 
 Na níže uvedeném příkladu si předvedeme, co to znamená. Volání `setTimeout` v něm načasuje samo sebe s nulovou prodlevou. Každé volání si pamatuje skutečný čas od předchozího v poli `časy`. Jak budou vypadat skutečné prodlevy? Podívejme se:
 
