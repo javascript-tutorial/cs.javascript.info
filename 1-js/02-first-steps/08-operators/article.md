@@ -80,7 +80,11 @@ alert( 8 ** (1/3) ); // 2 (umocnění na 1/3 je totéž jako třetí odmocnina)
 
 ## Spojení řetězců pomocí binárního +
 
+<<<<<<< HEAD
 Přejděme nyní k vlastnostem JavaScriptu, které jsou za hranicemi školní aritmetiky.
+=======
+Let's meet the features of JavaScript operators that are beyond school arithmetics.
+>>>>>>> 5dff42ba283bce883428c383c080fa9392b71df8
 
 Operátor plus `+` obvykle sčítá čísla.
 
