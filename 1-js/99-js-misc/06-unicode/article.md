@@ -11,9 +11,9 @@ JavaScript nám umožňuje vložit znak do řetězce specifikací jeho hexadecim
 
 - `\xXX`
 
-    `XX` musí být dvě hexadecimální číslice s hodnotou mezi `00` a `FF`, pak je to znak, jehož kód v Unicode je `XX`.
+    `XX` musí být dvě hexadecimální číslice s hodnotou mezi `00` a `FF`, pak `\xXX` je znak, jehož kód v Unicode je `XX`.
 
-    Protože zápis `\xXX` podporuje jen dvě číslice, může být použit jedině pro prvních 256 znaků Unicode.
+    Protože zápis `\xXX` podporuje jen dvě hexadecimální číslice, může být použit jedině pro prvních 256 znaků Unicode.
 
     Těchto prvních 256 znaků obsahuje latinskou abecedu, většinu základních syntaktických znaků a některé další. Například `"\x7A"` je totéž jako `"z"` (Unicode `U+007A`).
 
@@ -26,7 +26,7 @@ JavaScript nám umožňuje vložit znak do řetězce specifikací jeho hexadecim
 
     `XXXX` musí být přesně 4 hexadecimální číslice s hodnotou mezi `0000` a `FFFF`, pak `\uXXXX` je znak, jehož kód v Unicode je `XXXX`.
 
-    Tímto zápisem mohou být reprezentovány i znaky s hodnotou v Unicode větší než `U+FFFF`, ale v takovém případě musíme použít takzvaný náhradní pár (o náhradních párech pohovoříme později v této kapitole).
+    Tímto zápisem mohou být reprezentovány i znaky, jejichž hodnoty v Unicode jsou větší než `U+FFFF`, ale v takovém případě musíme použít takzvaný náhradní pár (o náhradních párech pohovoříme později v této kapitole).
 
     ```js run
     alert( "\u00A9" ); // ©, totéž jako \xA9 s použitím 4-číslicového hexadecimálního zápisu
@@ -39,13 +39,13 @@ JavaScript nám umožňuje vložit znak do řetězce specifikací jeho hexadecim
     `X…XXXXXX` musí být hexadecimální hodnota 1 až 6 bytů mezi `0` a `10FFFF` (nejvyšší kódový bod definovaný v Unicode). Tento zápis nám umožňuje snadno reprezentovat všechny existující znaky v Unicode.
 
     ```js run
-    alert( "\u{20331}" ); // 佫, vzácný čínský hieroglyf (dlouhý Unicode)
+    alert( "\u{20331}" ); // 佫, vzácný čínský znak (dlouhý Unicode)
     alert( "\u{1F60D}" ); // 😍, symbol usmívající se tváře (další dlouhý Unicode)
     ```
 
 ## Náhradní páry
 
-Všechny často používané znaky mají 2-bytové kódy. Písmena ve většině evropských jazyků, číslice a dokonce i většina hieroglyfů má 2-bytovou reprezentaci.
+Všechny často používané znaky mají 2-bytové kódy (4 hexadecimální číslice). Písmena ve většině evropských jazyků, číslice a základní sjednocené ideografické sady CJK (CJK -- pro čínské, japonské a korejské písmenné soustavy) mají 2-bytovou reprezentaci.
 
 JavaScript byl původně založen na kódování UTF-16, které umožňovalo jen 2 byty na znak. Avšak 2 byty umožňují jen 65536 kombinací, a to pro každý možný symbol v Unicode nestačí.
 
@@ -56,7 +56,7 @@ Vedlejším efektem je, že délka takových symbolů je `2`:
 ```js run
 alert( '𝒳'.length ); // 2, VELKÉ X V MATEMATICKÉM PÍSMU
 alert( '😂'.length ); // 2, TVÁŘ SE SLZAMI RADOSTI
-alert( '𩷶'.length ); // 2, vzácný čínský hieroglyf
+alert( '𩷶'.length ); // 2, vzácný čínský znak
 ```
 
 Je to proto, že v době, kdy byl JavaScript vytvořen, ještě náhradní páry neexistovaly, a proto nejsou jazykem správně zpracovávány!
