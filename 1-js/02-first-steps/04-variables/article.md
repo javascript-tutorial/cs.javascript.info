@@ -150,8 +150,13 @@ let zpráva = "Tamto"; // Syntaktická chyba: 'zpráva' již byla deklarována
 Proměnnou bychom tedy měli deklarovat jen jednou a pak se na ni odkazovat bez použití `let`.
 ````
 
+<<<<<<< HEAD
 ```smart header="Funkcionální jazyky"
 Stojí za zmínku, že existují [funkcionální](https://cs.wikipedia.org/wiki/Funkcionální_programování) programovací jazyky, například [Scala](http://www.scala-lang.org/) nebo [Erlang](http://www.erlang.org/), které nedovolují měnit hodnotu proměnných.
+=======
+```smart header="Functional languages"
+It's interesting to note that there exist [functional](https://en.wikipedia.org/wiki/Functional_programming) programming languages, like [Scala](https://www.scala-lang.org/) or [Erlang](https://www.erlang.org/) that forbid changing variable values.
+>>>>>>> 8d9ecb724c7df59774d1e5ffb5e5167740b7d321
 
 Když je v takových jazycích hodnota jednou uložena „do krabičky“, zůstane tam navždy. Pokud chceme uložit něco jiného, jazyk nás přinutí vytvořit novou krabičku (deklarovat novou proměnnou). Nemůžeme znovu použít starou.
 
@@ -197,8 +202,13 @@ let moje-jméno; // spojovník '-' není v názvu povolen
 Proměnné s názvy `jablko` a `JABLKO` jsou dvě různé proměnné.
 ```
 
+<<<<<<< HEAD
 ````smart header="Nelatinská písmena jsou povolena, ale nedoporučují se"
 Je dovoleno použít písmena z jakéhokoli jazyka, včetně písmen z kyrilice nebo dokonce čínských znaků, třeba takto:
+=======
+````smart header="Non-Latin letters are allowed, but not recommended"
+It is possible to use any language, including cyrillic letters, Chinese logograms and so on, like this:
+>>>>>>> 8d9ecb724c7df59774d1e5ffb5e5167740b7d321
 
 ```js
 let имя = '...';

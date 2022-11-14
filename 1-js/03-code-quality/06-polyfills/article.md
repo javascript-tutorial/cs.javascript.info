@@ -1,7 +1,11 @@
 
 # Polyfilly a transpilátory
 
+<<<<<<< HEAD
 Jazyk JavaScript se neustále vyvíjí. Pravidelně se pro tento jazyk objevují nové návrhy, ty jsou analyzovány a jsou-li shledány užitečnými, přidají se na seznam na <https://tc39.github.io/ecma262/> a pak pokračují do [specifikace](http://www.ecma-international.org/publications/standards/Ecma-262.htm).
+=======
+The JavaScript language steadily evolves. New proposals to the language appear regularly, they are analyzed and, if considered worthy, are appended to the list at <https://tc39.github.io/ecma262/> and then progress to the [specification](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/).
+>>>>>>> 8d9ecb724c7df59774d1e5ffb5e5167740b7d321
 
 Týmy vyvíjející JavaScriptové motory mají své vlastní nápady ohledně toho, co implementovat jako první. Mohou se rozhodnout implementovat návrhy, které jsou teprve načrtnuty, a odložit věci, které jsou už ve specifikaci, protože jsou méně zajímavé nebo prostě jen těžší na implementaci.
 
@@ -71,9 +75,15 @@ if (!Math.trunc) { // není-li taková funkce
 
 JavaScript je vysoce dynamický jazyk. Skripty mohou přidávat nebo modifikovat libovolné funkce, dokonce i vestavěné.
 
+<<<<<<< HEAD
 Dvě zajímavé knihovny polyfillů jsou:
 - [core js](https://github.com/zloirock/core-js), která toho podporuje mnoho a umožňuje přidávat jen potřebné vlastnosti.
 - [polyfill.io](http://polyfill.io) je služba, která poskytuje skript s polyfilly podle vlastností a uživatelova prohlížeče.
+=======
+Two interesting polyfill libraries are:
+- [core js](https://github.com/zloirock/core-js) that supports a lot, allows to include only needed features.
+- [polyfill.io](https://polyfill.io/) service that provides a script with polyfills, depending on the features and user's browser.
+>>>>>>> 8d9ecb724c7df59774d1e5ffb5e5167740b7d321
 
 ## Shrnutí
 

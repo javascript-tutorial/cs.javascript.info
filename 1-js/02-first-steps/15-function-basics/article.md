@@ -459,7 +459,11 @@ Tyto příklady předpokládají běžný význam prefixů. Se svým týmem se m
 ```smart header="Ultrakrátké názvy funkcí"
 Funkce, které se používají *velmi často*, mají někdy ultrakrátké názvy.
 
+<<<<<<< HEAD
 Například knihovna [jQuery](http://jquery.com) definuje funkci s názvem `$`. Knihovna [Lodash](http://lodash.com/) má svou ústřední funkci pojmenovanou `_`.
+=======
+For example, the [jQuery](https://jquery.com/) framework defines a function with `$`. The [Lodash](https://lodash.com/) library has its core function named `_`.
+>>>>>>> 8d9ecb724c7df59774d1e5ffb5e5167740b7d321
 
 To jsou však výjimky. Obecně by názvy funkcí měly být stručné a popisné.
 ```

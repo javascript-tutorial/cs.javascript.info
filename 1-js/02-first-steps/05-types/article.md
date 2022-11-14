@@ -224,7 +224,11 @@ Typ `symbol` se používá k vytváření unikátních identifikátorů pro obje
 
 ## Operátor typeof [#type-typeof]
 
+<<<<<<< HEAD
 Operátor `typeof` vrací typ argumentu. Je užitečný, když chceme hodnoty různých typů zpracovávat různě anebo si jen chceme typ rychle ověřit.
+=======
+The `typeof` operator returns the type of the operand. It's useful when we want to process values of different types differently or just want to do a quick check.
+>>>>>>> 8d9ecb724c7df59774d1e5ffb5e5167740b7d321
 
 Volání `typeof x` vrátí řetězec s názvem typu:
 
