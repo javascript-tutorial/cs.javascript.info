@@ -1,6 +1,7 @@
+
 # Polyfilly a transpilátory
 
-Jazyk JavaScript se neustále vyvíjí. Pravidelně se pro tento jazyk objevují nové návrhy, ty jsou analyzovány a jsou-li shledány užitečnými, přidají se na seznam na <https://tc39.github.io/ecma262/> a pak pokračují do [specifikace](http://www.ecma-international.org/publications/standards/Ecma-262.htm).
+Jazyk JavaScript se neustále vyvíjí. Pravidelně se pro tento jazyk objevují nové návrhy, ty jsou analyzovány a jsou-li shledány užitečnými, přidají se na seznam na <https://tc39.github.io/ecma262/> a pak pokračují do [specifikace](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/).
 
 Týmy vyvíjející JavaScriptové motory mají své vlastní nápady ohledně toho, co implementovat jako první. Mohou se rozhodnout implementovat návrhy, které jsou teprve načrtnuty, a odložit věci, které jsou už ve specifikaci, protože jsou méně zajímavé nebo prostě jen těžší na implementaci.
 
@@ -72,7 +73,7 @@ JavaScript je vysoce dynamický jazyk. Skripty mohou přidávat nebo modifikovat
 
 Dvě zajímavé knihovny polyfillů jsou:
 - [core js](https://github.com/zloirock/core-js), která toho podporuje mnoho a umožňuje přidávat jen potřebné vlastnosti.
-- [polyfill.io](http://polyfill.io) je služba, která poskytuje skript s polyfilly podle vlastností a uživatelova prohlížeče.
+- [polyfill.io](https://polyfill.io/) je služba, která poskytuje skript s polyfilly podle vlastností a uživatelova prohlížeče.
 
 ## Shrnutí
 
@@ -87,3 +88,4 @@ Dobré zdroje, které ukazují aktuální stav podpory různých vlastností:
 - <https://caniuse.com/> - pro funkce vztahující se k prohlížeči.
 
 P.S. Pokud se týká vlastností jazyka, obvykle je nejaktuálnější Google Chrome. Pokud vám některé demo v tomto tutoriálu selže, zkuste ho. Většina dem v tutoriálu však funguje na kterémkoli moderním prohlížeči.
+
