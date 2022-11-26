@@ -50,8 +50,14 @@ Výsledkem `a % b` je [zbytek](https://cs.wikipedia.org/wiki/Zbytek_po_dělení)
 Příklad:
 
 ```js run
+<<<<<<< HEAD
 alert( 5 % 2 ); // 1, zbytek po dělení 5 děleno 2
 alert( 8 % 3 ); // 2, zbytek po dělení 8 děleno 3
+=======
+alert( 5 % 2 ); // 1, the remainder of 5 divided by 2
+alert( 8 % 3 ); // 2, the remainder of 8 divided by 3
+alert( 8 % 4 ); // 0, the remainder of 8 divided by 4
+>>>>>>> 746ad803c878e33182e7fab1578c0d15b9b75ca0
 ```
 
 ### Umocňování **
@@ -68,7 +74,11 @@ alert( 2 ** 3 ); // 2³ = 8
 alert( 2 ** 4 ); // 2⁴ = 16
 ```
 
+<<<<<<< HEAD
 Stejně jako v matematice je operátor umocňování definován i pro necelá čísla. 
+=======
+Just like in maths, the exponentiation operator is defined for non-integer numbers as well.
+>>>>>>> 746ad803c878e33182e7fab1578c0d15b9b75ca0
 
 Například odmocnina je umocnění na ½:
 
@@ -80,7 +90,11 @@ alert( 8 ** (1/3) ); // 2 (umocnění na 1/3 je totéž jako třetí odmocnina)
 
 ## Spojení řetězců pomocí binárního +
 
+<<<<<<< HEAD
 Přejděme nyní k vlastnostem JavaScriptu, které jsou za hranicemi školní aritmetiky.
+=======
+Let's meet the features of JavaScript operators that are beyond school arithmetics.
+>>>>>>> 746ad803c878e33182e7fab1578c0d15b9b75ca0
 
 Operátor plus `+` obvykle sčítá čísla.
 
@@ -306,7 +320,7 @@ let n = 2;
 
 n *= 3 + 5; // napřed se provede část vpravo, totéž jako n *= 8
 
-alert( n ); // 16  
+alert( n ); // 16
 ```
 
 ## Inkrementace a dekrementace
