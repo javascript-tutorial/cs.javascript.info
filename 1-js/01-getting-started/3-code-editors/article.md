@@ -43,7 +43,7 @@ Svět je velký a existují v něm i jiné skvělé editory. Vyberte si prosím 
 
 Výběr editoru, stejně jako výběr kteréhokoli jiného nástroje, je individuální záležitost a závisí na vašich projektech, zvyklostech a osobním vkusu.
 
-Autorovo osobní míjení:
+Autorovo osobní mínění:
 
 - Když vyvíjím převážně frontend, používám [Visual Studio Code](https://code.visualstudio.com/).
 - Jinak, pokud je to většinou jiný jazyk/platforma a částečně frontend, zvažte jiné editory, například XCode (Mac), Visual Studio (Windows) nebo rodinu Jetbrains (Webstorm, PHPStorm, RubyMine atd. v závislosti na jazyce).
