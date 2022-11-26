@@ -69,9 +69,9 @@ Proces vývoje obvykle vypadá takto:
 
 1. Napíše se úvodní specifikace s testy pro většinu základní funkcionality.
 2. Vytvoří se úvodní implementace.
-3. Abychom prověřili, zda funguje, spustíme testovací rámec [Mocha](http://mochajs.org/) (více později), který spustí specifikaci. Dokud funkcionalita není úplná, budou se zobrazovat chyby. Provádíme opravy, dokud nebude vše fungovat.
+3. Abychom prověřili, zda funguje, spustíme testovací rámec [Mocha](https://mochajs.org/) (více později), který spustí specifikaci. Dokud funkcionalita není úplná, budou se zobrazovat chyby. Provádíme opravy, dokud nebude vše fungovat.
 4. Nyní máme funkční úvodní implementaci s testy.
-5. Do specifikace přidáváme další případy použití, které implementace pravděpodobně nepodporuje. Testy začnou selhávat.
+5. Do specifikace přidáváme další případy použití, které implementace pravděpodobně ještě nepodporuje. Testy začnou selhávat.
 6. Vrátíme se ke kroku 3 a vylepšujeme implementaci, dokud testy nepřestanou vydávat chyby.
 7. Opakujeme kroky 3-6, dokud nebude funkcionalita připravena.
 
@@ -85,9 +85,9 @@ První krok je již téměř hotov: máme úvodní specifikaci funkce `mocnina`.
 
 V tomto tutoriálu budeme pro testy používat následující JavaScriptové knihovny:
 
-- [Mocha](http://mochajs.org/) -- jádro rámce: poskytuje běžné testovací funkce včetně `describe` a `it` a hlavní funkci, která spouští testy.
-- [Chai](http://chaijs.com) -- knihovna s mnoha kontrolami. Umožňuje nám použít spoustu různých kontrol, ale nyní budeme potřebovat jen `assert.equal`.
-- [Sinon](http://sinonjs.org/) -- knihovna k prozkoumávání funkcí, emulování vestavěných funkcí a podobně. Budeme ji potřebovat až mnohem později.
+- [Mocha](https://mochajs.org/) -- jádro rámce: poskytuje běžné testovací funkce včetně `describe` a `it` a hlavní funkci, která spouští testy.
+- [Chai](https://www.chaijs.com/) -- knihovna s mnoha kontrolami. Umožňuje nám použít spoustu různých kontrol, ale nyní budeme potřebovat jen `assert.equal`.
+- [Sinon](https://sinonjs.org/) -- knihovna k prozkoumávání funkcí, emulování vestavěných funkcí a podobně. Budeme ji potřebovat až mnohem později.
 
 Tyto knihovny jsou vhodné pro testování v prohlížeči i na straně serveru. Zde budeme uvažovat prohlížečovou variantu.
 
@@ -338,14 +338,14 @@ Nově přidané testy selžou, protože je naše implementace nepodporuje. Tímt
 ```smart header="Další kontroly"
 Všimněte si prosím kontroly `assert.isNaN`: kontroluje hodnotu `NaN`.
 
-V [Chai](http://chaijs.com) jsou i jiné kontroly, například:
+V [Chai](https://www.chaijs.com/) jsou i jiné kontroly, například:
 
 - `assert.equal(hodnota1, hodnota2)` -- prověří rovnost  `hodnota1 == hodnota2`.
 - `assert.strictEqual(hodnota1, hodnota2)` -- prověří striktní rovnost `hodnota1 === hodnota2`.
 - `assert.notEqual`, `assert.notStrictEqual` -- inverzní kontroly k výše uvedeným.
 - `assert.isTrue(hodnota)` -- prověří, zda `hodnota === true`
 - `assert.isFalse(hodnota)` -- prověří, zda `hodnota === false`
-- ...úplný seznam najdete v [dokumentaci](http://chaijs.com/api/assert/)
+- ...úplný seznam najdete v [dokumentaci](https://www.chaijs.com/api/assert/)
 ```
 
 Do funkce `mocnina` bychom tedy měli přidat několik řádků:

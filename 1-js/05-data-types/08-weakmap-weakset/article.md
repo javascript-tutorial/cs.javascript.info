@@ -1,8 +1,10 @@
+
 # Slabá mapa a slabá množina
 
 Jak víme z kapitoly <info:garbage-collection>, engine JavaScriptu si udržuje hodnotu v paměti, dokud je „dosažitelná“ a může být použita.
 
 Příklad:
+
 ```js
 let jan = { jméno: "Jan" };
 
@@ -54,13 +56,13 @@ jan = null; // přepíšeme odkaz
 */!*
 ```
 
-`WeakMap` („slabá mapa“) se v tomto ohledu zásadně liší. Nebrání odstraňování svých klíčových objektů garbage collectorem.
+[`WeakMap`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) („slabá mapa“) se v tomto ohledu zásadně liší. Nebrání odstraňování svých klíčových objektů sběračem odpadků.
 
 Na příkladech se podívejme, co to znamená.
 
 ## WeakMap
 
-Prvním rozdílem mezi `Map` a `WeakMap` je, že klíče musejí být objekty, ne primitivní hodnoty:
+Prvním rozdílem mezi [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) a [`WeakMap`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) je, že klíče musejí být objekty, ne primitivní hodnoty:
 
 ```js run
 let slabáMapa = new WeakMap();
@@ -94,10 +96,10 @@ Srovnejte si to s výše uvedeným příkladem běžné mapy `Map`. Když nyní 
 
 `WeakMap` má pouze následující metody:
 
-- `slabáMapa.get(klíč)`
-- `slabáMapa.set(klíč, hodnota)`
-- `slabáMapa.delete(klíč)`
-- `slabáMapa.has(klíč)`
+- [`slabáMapa.set(klíč, hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap/set)
+- [`slabáMapa.get(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap/get)
+- [`slabáMapa.delete(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap/delete)
+- [`slabáMapa.has(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap/has)
 
 Proč takové omezení? Je tomu tak z technických důvodů. Pokud objekt ztratil všechny ostatní odkazy (např. `jan` ve výše uvedeném kódu), má být automaticky odstraněn garbage collectorem. Technicky však není přesně specifikováno, *kdy k odstranění dojde*.
 
@@ -182,6 +184,7 @@ function proces(obj) {
     let výsledek = /* výpočet výsledku pro */ obj;
 
     cache.set(obj, výsledek);
+    return výsledek;
   }
 
   return cache.get(obj);
@@ -221,6 +224,7 @@ function proces(obj) {
     let výsledek = /* výpočet výsledku pro */ obj;
 
     cache.set(obj, výsledek);
+    return výsledek;
   }
 
   return cache.get(obj);
@@ -242,11 +246,11 @@ obj = null;
 
 ## WeakSet
 
-`WeakSet` („slabá množina“) se chová obdobně:
+[`WeakSet`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet) („slabá množina“) se chová obdobně:
 
 - Je analogická k `Set`, ale do `WeakSet` můžeme přidávat jedině objekty (ne primitivy).
 - Objekt v této množině existuje, dokud je dosažitelný odjinud.
-- Stejně jako `Set` podporuje `add`, `has` a `delete`, ale ne `size`, `keys()` ani žádné iterace.
+- Stejně jako `Set` podporuje [`add`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakset/add), [`has`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakset/has) a [`delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakset/delete), ale ne `size`, `keys()` ani žádné iterace.
 
 Přestože je „slabá“, může sloužit i jako dodatečné úložiště. Ne však pro libovolná data, ale jen pro skutečnost „ano/ne“. Členství ve `WeakSet` může o objektu něco znamenat.
 
@@ -280,11 +284,11 @@ Nejvýznamnějším omezením `WeakMap` a `WeakSet` je absence iterací a nemož
 
 ## Shrnutí
 
-`WeakMap` je kolekce podobná `Map`, která dovoluje používat jako klíče jen objekty a odstraňuje je i s připojenou hodnotou, jakmile se stanou nedosažitelnými jiným způsobem.
+[`WeakMap`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) je kolekce podobná `Map`, která dovoluje používat jako klíče jen objekty a odstraňuje je i s připojenou hodnotou, jakmile se stanou nedosažitelnými jiným způsobem.
 
-`WeakSet` je kolekce podobná `Set`, která ukládá jen objekty a odstraňuje je, jakmile se stanou nedosažitelnými jiným způsobem.
+[`WeakSet`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet) je kolekce podobná `Set`, která ukládá jen objekty a odstraňuje je, jakmile se stanou nedosažitelnými jiným způsobem.
 
-Jejich hlavní výhodou je, že obsahují slabé odkazy na objekty, takže ty mohou být snadno odklizeny garbage collectorem.
+Jejich hlavní výhodou je, že obsahují slabé odkazy na objekty, takže ty mohou být snadno odklizeny sběračem odpadků.
 
 Cenou za to je, že nejsou podporovány `clear`, `size`, `keys`, `values`...
 

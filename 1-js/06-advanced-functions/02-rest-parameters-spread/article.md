@@ -23,7 +23,7 @@ function součet(a, b) {
 alert( součet(1, 2, 3, 4, 5) );
 ```
 
-Kvůli „přebytečným“ argumentům nenastane chyba, ale do výsledku se samozřejmě budou počítat jen první dva.
+Kvůli „přebytečným“ argumentům nenastane chyba, ale do výsledku se samozřejmě budou počítat jen první dva, takže výsledek v uvedeném kódu je `3`.
 
 Zbytek parametrů můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi zbytek parametrů do pole“.
 

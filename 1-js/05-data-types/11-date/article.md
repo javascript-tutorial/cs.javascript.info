@@ -379,7 +379,7 @@ for (let i = 0; i < 10; i++) {
 ```warn header="Při mikrobenchmarkingu buďte opatrní"
 Moderní JavaScriptové enginy provádějí množství optimalizací, které mohou vylepšit výsledky „umělých testů“ ve srovnání s „běžným použitím“, zvláště když benchmarkujeme něco velmi malého, např. práci operátoru nebo vestavěnou funkci. Pokud tedy chcete skutečně porozumět výkonu, pak si prosíme prostudujte, jak funguje JavaScriptový engine. A pak už pravděpodobně nebudete mikrobenchmarky vůbec potřebovat.
 
-Výborný balík článků o V8 naleznete na <http://mrale.ph>.
+Výborný balík článků o V8 naleznete na <https://mrale.ph>.
 ```
 
 ## Parsování data z řetězce

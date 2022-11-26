@@ -631,7 +631,7 @@ Například:
 
 Úkolem globálního handleru `window.onerror` obvykle nebývá obnovit výkon skriptu -- to je v případě programátorských chyb už zřejmě nemožné, ale poslat vývojářům chybovou zprávu.
 
-Existují i webové služby, které poskytují logování chyb pro tyto případy, například <https://errorception.com> nebo <http://www.muscula.com>.
+Existují i webové služby, které poskytují logování chyb pro tyto případy, například <https://errorception.com> nebo <https://www.muscula.com>.
 
 Fungují následovně:
 

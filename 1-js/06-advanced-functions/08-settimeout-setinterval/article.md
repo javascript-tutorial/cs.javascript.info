@@ -27,7 +27,7 @@ Obvykle to bývá funkce. Z historických důvodů lze předat i řetězec kódu
 : Prodleva před spuštěním v milisekundách (1000 ms = 1 sekunda), defaultně 0.
 
 `arg1`, `arg2`...
-: Argumenty této funkce (není podporováno v IE9-).
+: Argumenty této funkce.
 
 Například tento kód zavolá `řekniAhoj()` po uplynutí jedné sekundy:
 

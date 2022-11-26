@@ -151,11 +151,11 @@ Proměnnou bychom tedy měli deklarovat jen jednou a pak se na ni odkazovat bez 
 ````
 
 ```smart header="Funkcionální jazyky"
-Stojí za zmínku, že existují [funkcionální](https://cs.wikipedia.org/wiki/Funkcionální_programování) programovací jazyky, například [Scala](http://www.scala-lang.org/) nebo [Erlang](http://www.erlang.org/), které nedovolují měnit hodnotu proměnných.
+Stojí za zmínku, že existují tzv. [čistě funkcionální](https://en.wikipedia.org/wiki/Purely_functional_programming) programovací jazyky, například [Haskell](https://cs.wikipedia.org/wiki/Haskell_(programovací_jazyk)), které nedovolují měnit hodnotu proměnných.
 
 Když je v takových jazycích hodnota jednou uložena „do krabičky“, zůstane tam navždy. Pokud chceme uložit něco jiného, jazyk nás přinutí vytvořit novou krabičku (deklarovat novou proměnnou). Nemůžeme znovu použít starou.
 
-Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody. Prostudovat si takový jazyk (i když jej neplánujete v dohledné době používat) se doporučuje k rozšíření obzorů.
+Ačkoli to na první pohled může vypadat trochu zvláštně, i v takových jazycích je seriózní programování docela dobře možné. Kromě toho existují oblasti, např. paralelní výpočty, v nichž právě toto omezení přináší určité výhody.
 ```
 
 ## Názvy proměnných [#variable-naming]
@@ -198,7 +198,7 @@ Proměnné s názvy `jablko` a `JABLKO` jsou dvě různé proměnné.
 ```
 
 ````smart header="Nelatinská písmena jsou povolena, ale nedoporučují se"
-Je dovoleno použít písmena z jakéhokoli jazyka, včetně písmen z kyrilice nebo dokonce čínských znaků, třeba takto:
+Je dovoleno použít písmena z jakéhokoli jazyka, včetně písmen z kyrilice, čínských znaků a podobně, třeba takto:
 
 ```js
 let имя = '...';

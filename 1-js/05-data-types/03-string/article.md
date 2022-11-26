@@ -503,7 +503,7 @@ Tato metoda má ve skutečnosti ještě dva další argumenty specifikované v [
 
 - Existují 3 druhy uvozovek. Zpětné uvozovky umožňují rozdělit řetězec na více řádků a vnořit výrazy `${…}`.
 - Můžeme používat speciální znaky, například konec řádku `\n`.
-- Chceme-li získat znak, použijeme `[]`.
+- Chceme-li získat znak, použijeme `[]` nebo metodu `at`.
 - Chceme-li získat podřetězec, použijeme `slice` nebo `substring`.
 - Chceme-li převést řetězec na malá/velká písmena, použijeme `toLowerCase/toUpperCase`.
 - Chceme-li najít podřetězec, použijeme `indexOf` nebo pro jednoduché kontroly `includes/startsWith/endsWith`.

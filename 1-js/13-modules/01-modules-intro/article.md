@@ -9,8 +9,8 @@ Dlouhou dobu JavaScript existoval bez modulové syntaxe na jazykové úrovni. To
 
 Abychom vyjmenovali některé z nich (z historických důvodů):
 
-- [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) -- jeden z nejstarších modulových systémů, původně implementován knihovnou [require.js](http://requirejs.org/).
-- [CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1) -- modulový systém vytvořený pro server Node.js.
+- [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) -- jeden z nejstarších modulových systémů, původně implementován knihovnou [require.js](https://requirejs.org/).
+- [CommonJS](https://wiki.commonjs.org/wiki/Modules/1.1) -- modulový systém vytvořený pro server Node.js.
 - [UMD](https://github.com/umdjs/umd) -- další modulový systém, navržený jako univerzální, kompatibilní s AMD a CommonJS.
 
 Nyní se všechny pomalu odebírají do dějin, ale ve starých skriptech je pořád můžeme najít.

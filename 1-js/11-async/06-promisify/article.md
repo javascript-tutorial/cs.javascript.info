@@ -1,4 +1,4 @@
-    # Promisifikace
+# Promisifikace
 
 „Promisifikace“ *(česky lze přeložit jako „zpříslibování“ nebo „převedení do příslibů“ -- pozn. překl.)* je dlouhý výraz pro jednoduchou transformaci. Je to převod funkce, která přijímá callback, na funkci, která vrací příslib.
 
@@ -124,7 +124,7 @@ Pro exotičtější formáty callbacku, např. takové, které vůbec neobsahuj�
 Existují i moduly s trochu flexibilnějšími promisifikačními funkcemi, např. [es6-promisify](https://github.com/digitaldesignlabs/es6-promisify). V Node.js k tomu slouží zabudovaná funkce `util.promisify`.
 
 ```smart
-Promisifikace je skvělý přístup, zvláště když používáte `async/await` (viz příští kapitolu), ale není to úplná náhrada za callbacky.
+Promisifikace je skvělý přístup, zvláště když používáte `async/await` (vysvětleno později v kapitole <info:async-await>), ale není to úplná náhrada za callbacky.
 
 Pamatujte, že příslib může mít jen jediný výsledek, ale callback lze technicky volat mnohokrát.
 

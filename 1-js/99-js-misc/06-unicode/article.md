@@ -76,7 +76,7 @@ alert( '𝒳'[1] ); // ...části náhradního páru
 
 Technicky lze náhradní páry detekovat podle jejich kódu: jestliže znak má kód v intervalu `0xd800..0xdbff`, pak je to první část náhradního páru. Další znak (druhá část) musí mít kód v intervalu `0xdc00..0xdfff`. Tyto intervaly jsou ve standardu exkluzívně rezervovány pro náhradní páry.
 
-Proto byly do JavaScriptu přidány metody `String.fromCodePoint` a `řetězec.codePointAt`, které si dokáží s náhradními páry poradit.
+Proto byly do JavaScriptu přidány metody [String.fromCodePoint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCodePoint) a [str.codePointAt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt), které si dokáží s náhradními páry poradit.
 
 Jsou v zásadě stejné jako [String.fromCharCode](mdn:js/String/fromCharCode) a [řetězec.charCodeAt](mdn:js/String/charCodeAt), ale s náhradními páry zacházejí správně.
 

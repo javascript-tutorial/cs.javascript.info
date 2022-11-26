@@ -202,7 +202,7 @@ for (let klíč in uživatel) {
 }
 ```
 
-Knihovny JavaScriptu poskytují funkce i pro praktické hromadné navazování, např. [_.bindAll(obj)](http://lodash.com/docs#bindAll) v knihovně Lodash.
+Knihovny JavaScriptu poskytují funkce i pro praktické hromadné navazování, např. [_.bindAll(obj)](https://lodash.com/docs#bindAll) v knihovně Lodash.
 ````
 
 ## Parciální funkce

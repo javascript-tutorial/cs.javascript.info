@@ -205,8 +205,8 @@ Moderní motory implementují pokročilé algoritmy sběru odpadků.
 
 Některé z nich jsou probrány v obecné knize „The Garbage Collection Handbook: The Art of Automatic Memory Management“ (R. Jones a kolektiv).
 
-Pokud jste obeznámeni s programováním na nízké úrovni, podrobnější informace o sběrači odpadků V8 najdete v článku [A tour of V8: Garbage Collection](http://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection).
+Pokud jste obeznámeni s programováním na nízké úrovni, podrobnější informace o sběrači odpadků V8 najdete v článku [A tour of V8: Garbage Collection](https://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection).
 
-Rovněž [blog V8](https://v8.dev/) občas publikuje články o změnách ve správě paměti. Přirozeně, chcete-li se naučit o sběru odpadků víc, nejlépe se na to připravíte tak, že se poučíte o interních záležitostech V8 obecně a přečtete si blog [Vjačeslava Jegorova](http://mrale.ph), který pracoval jako jeden z tvůrců V8. Říkám „V8“, protože ten je nejlépe pokryt články na internetu. V jiných motorech jsou mnohé přístupy podobné, ale sběrače odpadků se v mnoha aspektech liší.
+Rovněž [blog V8](https://v8.dev/) občas publikuje články o změnách ve správě paměti. Přirozeně, chcete-li se naučit o sběru odpadků víc, nejlépe se na to připravíte tak, že se poučíte o interních záležitostech V8 obecně a přečtete si blog [Vjačeslava Jegorova](https://mrale.ph), který pracoval jako jeden z tvůrců V8. Říkám „V8“, protože ten je nejlépe pokryt články na internetu. V jiných motorech jsou mnohé přístupy podobné, ale sběrače odpadků se v mnoha aspektech liší.
 
 Hloubková znalost motorů se hodí, když potřebujete optimalizaci na nízké úrovni. Bylo by moudré naplánovat si to jako další krok poté, co se seznámíte s jazykem.

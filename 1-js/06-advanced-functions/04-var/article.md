@@ -170,7 +170,7 @@ Nejlépe to uvidíme na příkladu:
 
 ```js run
 function řekniAhoj() {
-  alert(věta);  
+  alert(věta);
 
 *!*
   var věta = "Ahoj";

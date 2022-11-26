@@ -9,17 +9,17 @@ Pro skutečný život to však nestačí. Proto existují také `Map` (mapa) a `
 
 ## Mapa
 
-[Mapa](mdn:js/Map) je kolekce datových prvků uložených pod klíči, podobně jako `Object`. Hlavní rozdíl je však v tom, že `Map` umožňuje klíče libovolného typu.
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) je kolekce datových prvků uložených pod klíči, podobně jako `Object`. Hlavní rozdíl je však v tom, že `Map` umožňuje klíče libovolného typu.
 
 Její metody a vlastnosti jsou:
 
 - `new Map()` -- vytvoří mapu.
-- [`mapa.set(klíč, hodnota)`](mdn:js/Map/set) -- uloží hodnotu pod klíčem.
-- [`mapa.get(klíč)`](mdn:js/Map/get) -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
-- [`mapa.has(klíč)`](mdn:js/Map/has) -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
-- [`mapa.delete(klíč)`](mdn:js/Map/delete) -- odstraní hodnotu pod zadaným klíčem.
-- [`mapa.clear()`](mdn:js/Map/clear) -- odstraní z mapy všechny hodnoty.
-- [`mapa.size`](mdn:js/Map/size) -- vrátí aktuální počet prvků.
+- [`mapa.set(klíč, hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/Map) -- uloží hodnotu pod klíčem.
+- [`mapa.get(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set) -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
+- [`mapa.has(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has) -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
+- [`mapa.delete(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete) -- odstraní prvek (dvojici klíč/hodnota) podle zadaného klíče.
+- [`mapa.clear()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear) -- odstraní z mapy všechny hodnoty.
+- [`mapa.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size) -- vrátí aktuální počet prvků.
 
 Příklad:
 
@@ -99,14 +99,13 @@ mapa.set('1', 'str1')
 ```
 ````
 
-
 ## Iterace nad mapou
 
 Pro procházení prvků mapy existují 3 metody:
 
-- [`mapa.keys()`](mdn:js/Map/keys) -- vrátí iterovatelný objekt klíčů,
-- [`mapa.values()`](mdn:js/Map/values) -- vrátí iterovatelný objekt hodnot,
-- [`mapa.entries()`](mdn:js/Map/entries) --  vrátí iterovatelný objekt dvojic `[klíč, hodnota]`, používá se standardně ve `for..of`.
+- [`mapa.keys()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys) -- vrátí iterovatelný objekt klíčů,
+- [`mapa.values()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values) -- vrátí iterovatelný objekt hodnot,
+- [`mapa.entries()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries) --  vrátí iterovatelný objekt dvojic `[klíč, hodnota]`, používá se standardně ve `for..of`.
 
 Příklad:
 
@@ -161,7 +160,7 @@ let mapa = new Map([
 alert( mapa.get('1') ); // str1
 ```
 
-Máme-li planý objekt a rádi bychom z něj vytvořili mapu, můžeme použít vestavěnou metodu [Object.entries(obj)](mdn:js/Object/entries), která vrací pole dvojic klíč/hodnota objektu přesně v tomto formátu.
+Máme-li planý objekt a rádi bychom z něj vytvořili mapu, můžeme použít vestavěnou metodu [Object.entries(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), která vrací pole dvojic klíč/hodnota objektu přesně v tomto formátu.
 
 Můžeme tedy vytvořit mapu z objektu takto:
 
@@ -232,16 +231,16 @@ To je totéž, protože `Object.fromEntries` očekává jako argument iterovatel
 
 ## Množina
 
-Množina `Set` je speciální typ kolekce -- „množina hodnot“ (bez klíčů), v níž se každá hodnota může vyskytnout pouze jednou.
+Množina [`Set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) je speciální typ kolekce -- „množina hodnot“ (bez klíčů), v níž se každá hodnota může vyskytnout pouze jednou.
 
 Její hlavní metody jsou:
 
-- `new Set(iterovatelnýObjekt)` -- vytvoří množinu, a je-li poskytnut `iterovatelnýObjekt` (obvykle pole), zkopíruje do ní hodnoty z tohoto objektu.
-- [`množina.add(hodnota)`](mdn:js/Set/add) -- přidá hodnotu, vrátí samotnou množinu.
-- [`množina.delete(hodnota)`](mdn:js/Set/delete) -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
-- [`množina.has(hodnota)`](mdn:js/Set/has) -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
-- [`množina.clear()`](mdn:js/Set/clear) -- odstraní z množiny všechny hodnoty.
-- [`množina.size`](mdn:js/Set/size) -- je počet hodnot.
+- [`new Set([iterovatelnýObjekt])`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/Set)  -- vytvoří množinu, a je-li poskytnut `iterovatelnýObjekt` (obvykle pole), zkopíruje do ní hodnoty z tohoto objektu.
+- [`množina.add(hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add) -- přidá hodnotu, vrátí samotnou množinu.
+- [`množina.delete(hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/delete) -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
+- [`množina.has(hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has) -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
+- [`množina.clear()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/clear) -- odstraní z množiny všechny hodnoty.
+- [`množina.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/size) -- je počet hodnot.
 
 Hlavní vlastností množiny je, že opakovaná volání `množina.add(hodnota)` se stejnou hodnotou nic neprovedou. To je důvod, proč se každá hodnota v množině objeví pouze jednou.
 
@@ -271,7 +270,7 @@ for (let uživatel of množina) {
 }
 ```
 
-Alternativou pro `Set` by mohlo být pole uživatelů a kód, který při každém vložení hledá duplikáty pomocí [arr.find](mdn:js/Array/find). Výkon by však byl mnohem horší, protože tato metoda prochází celým polem a ověřuje každý prvek. `Set` je interně pro kontrolu unikátnosti mnohem lépe optimalizována.
+Alternativou pro `Set` by mohlo být pole uživatelů a kód, který při každém vložení hledá duplikáty pomocí [arr.find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find). Výkon by však byl mnohem horší, protože tato metoda prochází celým polem a ověřuje každý prvek. `Set` je interně pro kontrolu unikátnosti mnohem lépe optimalizována.
 
 ## Iterace nad množinou
 
@@ -294,38 +293,38 @@ To slouží ke kompatibilitě s `Map`, v níž zpětné volání předávané do
 
 Rovněž jsou podporovány stejné metody, jaké má `Map` pro iterovatelné objekty:
 
-- [`množina.keys()`](mdn:js/Set/keys) -- vrátí iterovatelný objekt s hodnotami,
-- [`množina.values()`](mdn:js/Set/values) -- totéž jako `množina.keys()`, kvůli kompatibilitě s `Map`,
-- [`množina.entries()`](mdn:js/Set/entries) -- vrátí iterovatelný objekt s dvojicemi `[hodnota, hodnota]`, existuje kvůli kompatibilitě s `Map`.
+- [`množina.keys()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/keys) -- vrátí iterovatelný objekt s hodnotami,
+- [`množina.values()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/values) -- totéž jako `množina.keys()`, kvůli kompatibilitě s `Map`,
+- [`množina.entries()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/entries) -- vrátí iterovatelný objekt s dvojicemi `[hodnota, hodnota]`, existuje kvůli kompatibilitě s `Map`.
 
 ## Shrnutí
 
-`Map` -- je kolekce hodnot s klíči.
+[`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) -- je kolekce hodnot s klíči.
 
 Metody a vlastnosti:
 
-- `new Map([iterovatelnýObjekt])` -- vytvoří mapu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje dvojice `[klíč,hodnota]` pro inicializaci.
-- [`mapa.set(klíč, hodnota)`](mdn:js/Map/set) -- uloží hodnotu pod klíčem, vrátí samotnou mapu.
-- [`mapa.get(klíč)`](mdn:js/Map/get) -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
-- [`mapa.has(klíč)`](mdn:js/Map/has) -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
-- [`mapa.delete(klíč)`](mdn:js/Map/delete) -- odstraní hodnotu pod zadaným klíčem, vrátí `true`, jestliže `klíč` v okamžiku volání existoval, jinak `false`.
-- [`mapa.clear()`](mdn:js/Map/clear) -- odstraní z mapy všechny hodnoty.
-- [`mapa.size`](mdn:js/Map/size) -- vrátí aktuální počet prvků.
+- [`new Map([iterovatelnýObjekt])`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/Map) -- vytvoří mapu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje dvojice `[klíč,hodnota]` pro inicializaci.
+- [`mapa.set(klíč, hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set) -- uloží hodnotu pod klíčem, vrátí samotnou mapu.
+- [`mapa.get(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get) -- vrátí hodnotu podle klíče, jestliže `klíč` v mapě neexistuje, vrátí `undefined`.
+- [`mapa.has(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has) -- vrátí `true`, jestliže `klíč` existuje, jinak `false`.
+- [`mapa.delete(klíč)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete) -- odstraní prvek podle zadaného klíče, vrátí `true`, jestliže `klíč` v okamžiku volání existoval, jinak `false`.
+- [`mapa.clear()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear) -- odstraní z mapy všechny hodnoty.
+- [`mapa.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size) -- vrátí aktuální počet prvků.
 
 Rozdíly oproti běžnému objektu:
 
 - Klíče mohou být libovolné včetně objektů.
 - Další příhodné metody, vlastnost `size`.
 
-`Set` -- je kolekce unikátních hodnot.
+[`Set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) -- je kolekce unikátních hodnot.
 
 Metody a vlastnosti:
 
-- `new Set(iterovatelnýObjekt)` -- vytvoří množinu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje hodnoty pro inicializaci.
-- [`množina.add(hodnota)`](mdn:js/Set/add) -- přidá hodnotu (pokud `hodnota` již existuje, neudělá nic), vrátí samotnou množinu.
-- [`množina.delete(hodnota)`](mdn:js/Set/delete) -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
-- [`množina.has(hodnota)`](mdn:js/Set/has) -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
-- [`množina.clear()`](mdn:js/Set/clear) -- odstraní z množiny všechny hodnoty.
-- [`množina.size`](mdn:js/Set/size) -- je počet hodnot.
+- [`new Set(iterovatelnýObjekt)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/Set) -- vytvoří množinu, nepovinný objekt `iterovatelnýObjekt` (např. pole) obsahuje hodnoty pro inicializaci.
+- [`množina.add(hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add) -- přidá hodnotu (pokud `hodnota` již existuje, neudělá nic), vrátí samotnou množinu.
+- [`množina.delete(hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/delete) -- odstraní hodnotu, vrátí `true`, jestliže `hodnota` v okamžiku volání existovala, jinak `false`.
+- [`množina.has(hodnota)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has) -- vrátí `true`, jestliže hodnota v množině existuje, jinak `false`.
+- [`množina.clear()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/clear) -- odstraní z množiny všechny hodnoty.
+- [`množina.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/size) -- je počet hodnot.
 
 Iterace nad mapou a množinou probíhá vždy ve stejném pořadí, v jakém byly prvky vloženy. Nemůžeme tedy říci, že tyto kolekce nejsou seřazené, ale nemůžeme prvky seřadit jinak ani přímo získat prvek podle jeho pořadí.

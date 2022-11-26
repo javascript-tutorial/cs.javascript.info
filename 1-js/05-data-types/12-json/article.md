@@ -450,7 +450,7 @@ let json = `{
 
 Kromě toho JSON nepodporuje komentáře. Přidání komentáře do JSON jej učiní neplatným.
 
-Existuje i jiný formát jménem [JSON5](http://json5.org/), který umožňuje klíče bez uvozovek, komentáře apod. To je však samostatná knihovna a není ve specifikaci jazyka.
+Existuje i jiný formát jménem [JSON5](https://json5.org/), který umožňuje klíče bez uvozovek, komentáře apod. To je však samostatná knihovna, která není obsažena ve specifikaci jazyka.
 
 Standardní JSON je tak přísný ne proto, že by jeho vývojáři byli líní, ale proto, aby umožnil snadnou, spolehlivou a velmi rychlou implementaci parsovacího algoritmu.
 
