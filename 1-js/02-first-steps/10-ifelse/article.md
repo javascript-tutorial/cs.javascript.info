@@ -180,10 +180,17 @@ alert( zpráva );
 
 Na první pohled může být obtížné pochopit, o co tady jde. Po bližším prozkoumání však vidíme, že to je jen obyčejná posloupnost testů:
 
+<<<<<<< HEAD
 1. První otazník ověří, zda `věk < 3`.
 2. Pokud ano, vrátí `'Nazdar, mimino!'`. Jinak pokračuje výrazem za dvojtečkou `:` a ověří `věk < 18`.
 3. Pokud to platí, vrátí `'Ahoj!'`. Jinak pokračuje výrazem za další dvojtečkou `:` a ověří `věk < 100`.
 4. Pokud to platí, vrátí `'Dobrý den!'`. Jinak pokračuje výrazem za poslední dvojtečkou `:` a vrátí `'To je ale vysoký věk!'`.
+=======
+1. The first question mark checks whether `age < 3`.
+2. If true -- it returns `'Hi, baby!'`. Otherwise, it continues to the expression after the colon ":", checking `age < 18`.
+3. If that's true -- it returns `'Hello!'`. Otherwise, it continues to the expression after the next colon ":", checking `age < 100`.
+4. If that's true -- it returns `'Greetings!'`. Otherwise, it continues to the expression after the last colon ":", returning `'What an unusual age!'`.
+>>>>>>> 1ce5644a15ee141fbe78c0fb79c8f40d870d7043
 
 Při použití `if..else` by to vypadalo následovně:
 
