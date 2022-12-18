@@ -68,11 +68,7 @@ if (podmínka) {
 
 ## Klauzule „else“
 
-<<<<<<< HEAD
-Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka je nepravdivá.
-=======
-The `if` statement may contain an optional `else` block. It executes when the condition is falsy.
->>>>>>> ea7738bb7c3616bb51ff14ae3db2a2747d7888ff
+Příkaz `if` může obsahovat nepovinný blok `else`, který se vykoná, když podmínka je nepravdivá.
 
 Příklad:
 ```js run
