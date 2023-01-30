@@ -34,7 +34,11 @@ Konverze na řetězec je většinou zřejmá: `false` se převede na `"false"`, 
 
 ## Konverze na číslo
 
+<<<<<<< HEAD
 Konverze na číslo se automaticky odehrává v matematických funkcích a výrazech.
+=======
+Numeric conversion in mathematical functions and expressions happens automatically.
+>>>>>>> 9e3fa1351f80cfd6353a778a55b2c86bca9e895f
 
 Například když použijeme dělení `/` na něco jiného než čísla:
 
