@@ -103,25 +103,14 @@ Více v kapitole: <info:variables> a <info:types>.
 
 Jako pracovní prostředí používáme prohlížeč, takže základní funkce uživatelského rozhraní budou:
 
-<<<<<<< HEAD
-[`prompt(otázka, [default])`](mdn:api/Window/prompt)
+[`prompt(otázka, [default])`](https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt)
 : Položí otázku `otázka` a vrátí buď to, co návštěvník zadal, nebo `null`, jestliže stiskl „Storno“.
 
-[`confirm(otázka)`](mdn:api/Window/confirm)
+[`confirm(otázka)`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)
 : Položí otázku `otázka` a nabídne na výběr mezi OK a Storno. Zvolená možnost je vrácena jako `true/false`.
 
-[`alert(zpráva)`](mdn:api/Window/alert)
+[`alert(zpráva)`](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)
 : Vypíše zprávu `zpráva`.
-=======
-[`prompt(question, [default])`](https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt)
-: Ask a `question`, and return either what the visitor entered or `null` if they clicked "cancel".
-
-[`confirm(question)`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)
-: Ask a `question` and suggest to choose between Ok and Cancel. The choice is returned as `true/false`.
-
-[`alert(message)`](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)
-: Output a `message`.
->>>>>>> 9e3fa1351f80cfd6353a778a55b2c86bca9e895f
 
 Všechny tyto funkce jsou *modální*. Pozastaví vykonávání kódu a znemožní uživateli jinou interakci se stránkou, dokud neodpoví.
 
@@ -154,13 +143,8 @@ Aritmetické
 Přiřazení
 : Existuje jednoduché přiřazení `a = b` a kombinovaná přiřazení, např. `a *= 2`.
 
-<<<<<<< HEAD
 Bitové
-: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Guide/Expressions_and_Operators#bitwise_operators).
-=======
-Bitwise
-: Bitwise operators work with 32-bit integers at the lowest, bit-level: see the [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#bitwise_operators) when they are needed.
->>>>>>> 9e3fa1351f80cfd6353a778a55b2c86bca9e895f
+: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#bitwise_operators).
 
 Podmíněný
 : Jediný operátor se třemi parametry: `podmínka ? výsledekA : výsledekB`. Je-li `podmínka` pravdivá, vrátí `výsledekA`, jinak vrátí `výsledekB`.
