@@ -76,7 +76,11 @@ alert(jméno || příjmení || přezdívka || "anonym"); // Supercoder
 */!*
 ```
 
+<<<<<<< HEAD
 Historicky tu operátor OR `||` byl dříve. Existuje již od začátků JavaScriptu, takže jej vývojáři pro tyto účely dlouhou dobu skutečně používali.
+=======
+Historically, the OR `||` operator was there first. It's been there since the beginning of JavaScript, so developers were using it for such purposes for a long time.
+>>>>>>> 733ff697c6c1101c130e2996f7eca860b2aa7ab9
 
 Naproti tomu operátor koalescence `??` byl do JavaScriptu přidán teprve nedávno a důvodem bylo, že lidé nebyli s operátorem `||` zcela spokojeni.
 
