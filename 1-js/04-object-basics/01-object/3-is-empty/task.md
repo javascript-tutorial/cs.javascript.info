@@ -2,19 +2,19 @@ importance: 5
 
 ---
 
-# Check for emptiness
+# Ověření prázdnoty
 
-Write the function `isEmpty(obj)` which returns `true` if the object has no properties, `false` otherwise.
+Napište funkci `jePrázdný(obj)`, která vrátí `true`, jestliže objekt nemá žádné vlastnosti, a `false` jinak.
 
-Should work like that:
+Měla by fungovat takto:
 
 ```js
-let schedule = {};
+let rozvrh = {};
 
-alert( isEmpty(schedule) ); // true
+alert( jePrázdný(rozvrh) ); // true
 
-schedule["8:30"] = "get up";
+rozvrh["8:30"] = "vstát";
 
-alert( isEmpty(schedule) ); // false
+alert( jePrázdný(rozvrh) ); // false
 ```
 
