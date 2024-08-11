@@ -88,26 +88,16 @@ Ve starších skriptech můžete najít i jiné klíčové slovo: `var` namísto
 *!*var*/!* zpráva = 'Ahoj';
 ```
 
-<<<<<<< HEAD
 Klíčové slovo `var` znamená *skoro* totéž jako `let`. Rovněž deklaruje proměnnou, ale trochu jiným, „staroškolským“ způsobem.
 
 Mezi `let` a `var` existují drobné rozdíly, ale ty nás zatím nezajímají. Podrobně je probereme v kapitole <info:var>.
-=======
-The `var` keyword is *almost* the same as `let`. It also declares a variable but in a slightly different, "old-school" way.
-
-There are subtle differences between `let` and `var`, but they do not matter to us yet. We'll cover them in detail in the chapter <info:var>.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 ````
 
 ## Analogie s reálným životem
 
 Koncept „proměnné“ můžeme snadno pochopit, když si ji představíme jako „krabičku“ na data, na níž je nalepen štítek s unikátním názvem.
 
-<<<<<<< HEAD
 Například proměnnou `zpráva` si můžeme představit jako krabičku se štítkem `"zpráva"`, v níž je hodnota `"Ahoj!"`:
-=======
-For instance, the variable `message` can be imagined as a box labelled `"message"` with the value `"Hello!"` in it:
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 ![](variable.svg)
 
@@ -207,24 +197,15 @@ let moje-jméno; // spojovník '-' není v názvu povolen
 Proměnné s názvy `jablko` a `JABLKO` jsou dvě různé proměnné.
 ```
 
-<<<<<<< HEAD
 ````smart header="Nelatinská písmena jsou povolena, ale nedoporučují se"
 Je dovoleno použít písmena z jakéhokoli jazyka, včetně písmen z kyrilice, čínských znaků a podobně, třeba takto:
-=======
-````smart header="Non-Latin letters are allowed, but not recommended"
-It is possible to use any language, including Cyrillic letters, Chinese logograms and so on, like this:
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 ```js
 let имя = '...';
 let 我 = '...';
 ```
 
-<<<<<<< HEAD
 Technicky zde není žádná chyba. Takové názvy jsou povoleny, ale podle mezinárodní konvence se v názvech proměnných používá angličtina. I když píšeme malý skript, může mít před sebou dlouhý život a lidé z jiných zemí si ho možná někdy budou potřebovat přečíst.
-=======
-Technically, there is no error here. Such names are allowed, but there is an international convention to use English in variable names. Even if we're writing a small script, it may have a long life ahead. People from other countries may need to read it sometime.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 ````
 
 ````warn header="Rezervované názvy"
@@ -279,19 +260,11 @@ const mojeDatumNarození = '18.04.1982';
 mojeDatumNarození = '01.01.2001'; // chyba, nelze změnit konstantu!
 ```
 
-<<<<<<< HEAD
 Když má programátor jistotu, že hodnota proměnné se nikdy nezmění, může ji deklarovat pomocí `const`, aby tuto skutečnost pojistil a všem jasně sdělil.
-=======
-When a programmer is sure that a variable will never change, they can declare it with `const` to guarantee and communicate that fact to everyone.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 ### Konstanty velkými písmeny
 
-<<<<<<< HEAD
 Je široce rozšířenou praktikou používat konstanty jako názvy obtížně zapamatovatelných hodnot, které jsou známy ještě před spuštěním programu.
-=======
-There is a widespread practice to use constants as aliases for difficult-to-remember values that are known before execution.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 Názvy takových konstant se uvádějí velkými písmeny a s podtržítky.
 
@@ -316,11 +289,7 @@ Výhody:
 
 Kdy bychom měli používat pro konstantu velká písmena a kdy bychom ji měli pojmenovat obvyklým způsobem? Ujasníme si to.
 
-<<<<<<< HEAD
-Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Existují však konstanty, které jsou známy již před spuštěním programu (například hexadecimální hodnota červené barvy), a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
-=======
-Being a "constant" just means that a variable's value never changes. But some constants are known before execution (like a hexadecimal value for red) and some constants are *calculated* in run-time, during the execution, but do not change after their initial assignment.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
+Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Některé konstanty jsou však známy již před spuštěním programu (například hexadecimální hodnota červené barvy) a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
 
 Příklad:
 
@@ -328,11 +297,7 @@ Příklad:
 const dobaNačítáníStránky = /* doba, kterou trvá načíst webovou stránku */;
 ```
 
-<<<<<<< HEAD
 Hodnota proměnné `dobaNačítáníStránky` není známa dříve, než se stránka načte, proto je pojmenována obvyklým způsobem. Je to však konstanta, protože se po přiřazení již nezmění.
-=======
-The value of `pageLoadTime` is not known before the page load, so it's named normally. But it's still a constant because it doesn't change after the assignment.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 Jinými slovy, názvy konstant zapsané velkými písmeny se používají jen pro pojmenování „natvrdo uvedených“ hodnot.
 
@@ -342,31 +307,18 @@ Když už mluvíme o proměnných, je tady jedna velice důležitá věc.
 
 Název proměnné by měl mít jasný a jednoznačný význam a měl by popisovat data, která jsou v proměnné uložena.
 
-<<<<<<< HEAD
 Pojmenovávání proměnných je jednou z nejdůležitějších a nejsložitějších dovedností v programování. Rychlý pohled na názvy proměnných nám může prozradit, zda kód psal začátečník nebo zkušený vývojář.
 
 V reálných projektech většinu času nezabere psaní něčeho úplně nového od základů, ale úprava a rozšiřování již existujícího kódu. Když se vrátíme k nějakému kódu poté, co jsme nějakou dobu dělali něco jiného, je mnohem jednodušší najít potřebné informace, když jsou vhodně pojmenovány. Nebo, jinými slovy, když proměnné mají vhodné názvy.
-=======
-Variable naming is one of the most important and complex skills in programming. A glance at variable names can reveal which code was written by a beginner versus an experienced developer.
-
-In a real project, most of the time is spent modifying and extending an existing code base rather than writing something completely separate from scratch. When we return to some code after doing something else for a while, it's much easier to find information that is well-labelled. Or, in other words, when the variables have good names.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 Než deklarujete proměnnou, dobře si promyslete její název. Bohatě se vám to vyplatí.
 
 Některá pravidla, která je vhodné dodržovat, jsou:
 
-<<<<<<< HEAD
 - Používejte názvy čitelné člověkem, například `uživatelskéJméno` nebo `nákupníVozík`.
 - Zdržte se zkratek nebo krátkých názvů typu `a`, `b`, `c`, leda že byste opravdu dobře věděli, co děláte.
 - Volte názvy co nejpopisnější a nejstručnější. Příklady špatných názvů jsou `data` nebo `hodnota`. Takové názvy nic neříkají. Je vhodné je používat jen tehdy, když je z kontextu kódu naprosto zřejmé, jaká data nebo hodnota se v proměnné nachází.
 - Dohodněte se na pojmech se svým týmem a promyslete si je. Jestliže se návštěvník stránky nazývá „uživatel“, pak byste příslušné proměnné měli pojmenovat `aktuálníUživatel` nebo `novýUživatel`, a ne `aktuálníNávštěvník` nebo `novýPánVeMěstě`.
-=======
-- Use human-readable names like `userName` or `shoppingCart`.
-- Stay away from abbreviations or short names like `a`, `b`, and `c`, unless you know what you're doing.
-- Make names maximally descriptive and concise. Examples of bad names are `data` and `value`. Such names say nothing. It's only okay to use them if the context of the code makes it exceptionally obvious which data or value the variable is referencing.
-- Agree on terms within your team and in your mind. If a site visitor is called a "user" then we should name related variables `currentUser` or `newUser` instead of `currentVisitor` or `newManInTown`.
->>>>>>> b258d7d5b635c88228f7556e14fbe5e5ca7f736d
 
 Zní to jednoduše? Bezpochyby ano, ale vytvářet popisné a stručné názvy proměnných v praxi jednoduché není.
 
