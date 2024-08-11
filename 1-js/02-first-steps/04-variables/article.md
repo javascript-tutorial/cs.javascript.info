@@ -289,7 +289,7 @@ Výhody:
 
 Kdy bychom měli používat pro konstantu velká písmena a kdy bychom ji měli pojmenovat obvyklým způsobem? Ujasníme si to.
 
-Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Existují však konstanty, které jsou známy již před spuštěním programu (například hexadecimální hodnota červené barvy), a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
+Být „konstanta“ znamená prostě to, že hodnota proměnné se nikdy nezmění. Některé konstanty jsou však známy již před spuštěním programu (například hexadecimální hodnota červené barvy) a pak jsou konstanty, které se *vypočítají* až za běhu programu, ale jejich vypočtená hodnota se nikdy nezmění.
 
 Příklad:
 
