@@ -35,7 +35,7 @@ Výše uvedené pojmy je dobré si pamatovat, protože se používají ve vývoj
 Enginy jsou složité, ale jejich základy jsou jednoduché.
 
 1. Engine (v případě prohlížeče zahrnutý do něj) načte („rozebere“, „parsuje“) skript.
-2. Pak přeloží („zkompiluje“) skript do strojového jazyka.
+2. Pak přeloží („zkompiluje“) skript do strojového kódu.
 3. A pak se strojový kód hezky rychle spustí.
 
 Při každém kroku procesu engine aplikuje optimalizace. Dokonce sleduje, jak zkompilovaný skript běží, analyzuje data, která jím protékají, a podle těchto znalostí dále optimalizuje strojový kód.
@@ -59,7 +59,7 @@ Například JavaScript v prohlížeči může:
 
 ## Co NEMŮŽE JavaScript v prohlížeči dělat?
 
-Schopnosti JavaScriptu v prohlížeči jsou omezeny v zájmu bezpečnosti uživatele. Cílem je zabránit zlé webové stránce v přístupu k soukromým informacím nebo v poškození uživatelových dat.
+Schopnosti JavaScriptu v prohlížeči jsou omezeny, aby byla chráněna bezpečnost uživatele. Cílem je zabránit zlé webové stránce v přístupu k soukromým informacím nebo v poškození uživatelových dat.
 
 Příklady takových omezení:
 
@@ -70,9 +70,9 @@ Příklady takových omezení:
 	Existují způsoby, jak komunikovat s kamerou, mikrofonem nebo jinými zařízeními, ale ty vyžadují výslovné svolení uživatele. Stránka s povoleným JavaScriptem tedy nemůže bez vědomí uživatele zapnout webovou kameru, nasnímat okolí a nahrávku poslat do [NSA](https://cs.wikipedia.org/wiki/Národní_bezpečnostní_agentura).
 - Různé záložky a okna o sobě navzájem obvykle nevědí. Někdy ano, například tehdy, když jedno okno používá JavaScript k otevření druhého. Ale ani v tomto případě JavaScript z jedné stránky nemůže přistupovat k jiné, pokud pocházejí z různých webových sídel (z jiné domény, protokolu nebo portu).
 
-	Tento postup se nazývá „politika stejného původu“. Je možné ji obejít tak, že *obě stránky* souhlasí s výměnou dat a obsahují speciální JavaScriptový kód, který to umožňuje. V tomto tutoriálu to budeme probírat.
+	Tento postup se nazývá „politika stejného původu“. Je možné ji obejít tak, že *obě stránky* musí souhlasit s výměnou dat a musí obsahovat speciální JavaScriptový kód, který to umožňuje. V tomto tutoriálu to budeme probírat.
 
-	Toto omezení je zde opět pro bezpečnost uživatele. Stránka z `http://anysite.com`, kterou uživatel otevřel, nesmí mít možnost přistupovat k jiné záložce prohlížeče s URL `http://gmail.com` a krást odtamtud informace.
+	Toto omezení je zde opět pro bezpečnost uživatele. Stránka z `http://anysite.com`, kterou uživatel otevřel, nesmí mít možnost přistupovat k jiné záložce prohlížeče s URL například `http://gmail.com` a krást odtamtud informace.
 - JavaScript může jednoduše komunikovat po síti se serverem, z něhož přišla aktuální stránka, ale jeho schopnost získávat data z jiných sídel/domén je značně omezená. Přestože je to možné, vyžaduje to výslovný souhlas (uvedený v HTTP hlavičce) vzdálené strany. I to je bezpečnostní omezení.
 
 ![](limitations.svg)
@@ -92,7 +92,7 @@ JavaScript je jediná prohlížečová technologie, která má všechny tyto tř
 
 To vše činí JavaScript unikátním. To vše je důvodem, proč je dnes nejrozšířenějším nástrojem pro vytváření prohlížečových rozhraní.
 
-Při tom všem však JavaScript umožňuje vytvářet i servery, mobilní aplikace a podobně.
+Při tom všem však lze JavaScript použít i k vytváření serverů, mobilních aplikací a podobně.
 
 ## Jazyky „nad“ JavaScriptem
 
@@ -113,7 +113,7 @@ Příklady takových jazyků:
 - [Brython](https://brython.info/) je transpiler Pythonu do JavaScriptu, který umožňuje psát aplikace v čistém Pythonu bez JavaScriptu.
 - [Kotlin](https://kotlinlang.org/docs/reference/js-overview.html) je moderní, stručný a bezpečný programovací jazyk, jehož cílem může být prohlížeč nebo Node.
 
-Jsou i další. Samozřejmě i když používáme některý z transpilovaných jazyků, měli bychom znát i JavaScript, abychom skutečně porozuměli tomu, co se děje.
+Jsou i další. Samozřejmě i když používáme některý z těchto transpilovaných jazyků, měli bychom znát i JavaScript, abychom skutečně porozuměli tomu, co se děje.
 
 ## Shrnutí
 

@@ -7,7 +7,7 @@ Týmy vyvíjející JavaScriptové motory mají své vlastní nápady ohledně t
 
 Je tedy poměrně běžné, že motor implementuje pouze část standardu.
 
-Dobrá stránka, na které uvidíte aktuální stav podpory vlastností jazyka, je <https://kangax.github.io/compat-table/es6/> (je to velká tabulka, máme ještě hodně co studovat).
+Dobrá stránka, na které uvidíte aktuální stav podpory vlastností jazyka, je <https://compat-table.github.io/compat-table/es6/> (je to velká tabulka, máme ještě hodně co studovat).
 
 Jako programátoři rádi používáme nejnovější vlastnosti. Čím více dobrých věcí, tím lépe!
 
@@ -73,7 +73,6 @@ JavaScript je vysoce dynamický jazyk. Skripty mohou přidávat nebo modifikovat
 
 Dvě zajímavé knihovny polyfillů jsou:
 - [core js](https://github.com/zloirock/core-js), která toho podporuje mnoho a umožňuje přidávat jen potřebné vlastnosti.
-- [polyfill.io](https://polyfill.io/) je služba, která poskytuje skript s polyfilly podle vlastností a uživatelova prohlížeče.
 
 ## Shrnutí
 
@@ -87,5 +86,5 @@ Dobré zdroje, které ukazují aktuální stav podpory různých vlastností:
 - <https://kangax.github.io/compat-table/es6/> - pro čistý JavaScript.
 - <https://caniuse.com/> - pro funkce vztahující se k prohlížeči.
 
-P.S. Pokud se týká vlastností jazyka, obvykle je nejaktuálnější Google Chrome. Pokud vám některé demo v tomto tutoriálu selže, zkuste ho. Většina dem v tutoriálu však funguje na kterémkoli moderním prohlížeči.
 
+P.S. Pokud se týká vlastností jazyka, obvykle je nejaktuálnější Google Chrome. Pokud vám některé demo v tomto tutoriálu selže, zkuste ho. Většina dem v tutoriálu však funguje na kterémkoli moderním prohlížeči.
