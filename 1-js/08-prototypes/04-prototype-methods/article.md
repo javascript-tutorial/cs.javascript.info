@@ -14,7 +14,7 @@ Jediné využití `__proto__`, nad kterým se lze nezamračit, je jako vlastnost
 
 Ačkoli i pro to existuje speciální metoda:
 
-- [Object.create(proto, [deskriptory])](mdn:js/Object/create) -- vytvoří prázdný objekt, jehož `[[Prototype]]` bude `proto`, s nepovinnými deskriptory vlastností.
+- [Object.create(proto[, deskriptory])](mdn:js/Object/create) -- vytvoří prázdný objekt, jehož `[[Prototype]]` bude `proto`, s nepovinnými deskriptory vlastností.
 
 Například:
 
@@ -200,7 +200,7 @@ alert(Object.keys(čínskýSlovník)); // ahoj,sbohem
 - K vytvoření objektu se zadaným prototypem použijeme:
 
     - literální syntaxi: `{ __proto__: ... }`, která umožňuje specifikovat více vlastností
-    - nebo  [Object.create(proto, [deskriptory])](mdn:js/Object/create), která umožňuje specifikovat deskriptory vlastností.
+    - nebo  [Object.create(proto[, deskriptory])](mdn:js/Object/create), která umožňuje specifikovat deskriptory vlastností.
     
     Metoda `Object.create` poskytuje snadný způsob, jak vytvořit mělkou kopii objektu se všemi deskriptory:
 

@@ -1,6 +1,6 @@
 # Metody polí
 
-Pole poskytují mnoho metod. Pro zjednodušení jsme je v této kapitole rozdělili do skupin.
+Pole poskytují mnoho metod. Pro zjednodušení jsme je v této kapitole rozdělili do několika skupin.
 
 ## Přidávání a odebírání prvků
 
@@ -32,7 +32,7 @@ alert( pole.length ); // 3
 
 Prvek byl odstraněn, ale pole má stále 3 prvky. Vidíme, že `pole.length == 3`.
 
-To je přirozené, poněvadž `delete obj.klíč` odstraňuje hodnotu podle `klíč`. To je vše, co udělá. Pro objekty je to dobře. Ale u polí zpravidla chceme, aby se ostatní prvky posunuly a obsadily prázdné místo. Očekáváme, že nyní budeme mít kratší pole.
+To je přirozené, poněvadž `delete obj.klíč` odstraňuje hodnotu podle `klíč`. To je vše, co udělá. Pro objekty je to dobře. Ale u polí zpravidla chceme, aby se ostatní prvky posunuly a obsadily uvolněné místo. Očekáváme, že nyní budeme mít kratší pole.
 
 Měli bychom tedy použít speciální metody.
 
@@ -84,7 +84,7 @@ let odstraněno = pole.splice(0, 2);
 alert( odstraněno ); // "Já", "studuji" <-- pole odstraněných prvků
 ```
 
-Metoda `splice` dokáže také vkládat prvky bez odstraňování. K tomu musíme nastavit `početSmazaných` na `0`:
+Metoda `splice` dokáže také vkládat prvky bez odstraňování. Toho dosáhneme tak, že nastavíme `početSmazaných` na `0`:
 
 ```js run
 let pole = ["Já", "studuji", "JavaScript"];
@@ -239,7 +239,7 @@ Metody [pole.indexOf](mdn:js/Array/indexOf) a [pole.includes](mdn:js/Array/inclu
 - `pole.indexOf(prvek, odkud)` -- hledá `prvek` počínajíc indexem `odkud` a vrátí index, na němž byl prvek nalezen, anebo `-1`, když nalezen nebyl.
 - `pole.includes(prvek, odkud)` -- hledá `prvek` počínajíc indexem `odkud` a vrátí `true`, pokud byl nalezen.
 
-Tyto metody se obvykle používají jen s jedním argumentem: `prvek`, který se má hledat. Standardně se hledá od začátku pole.
+Tyto metody se obvykle používají jen s jedním argumentem: tím je `prvek`, který se má hledat. Standardně se hledá od začátku pole.
 
 Příklad:
 
@@ -255,7 +255,7 @@ alert( pole.includes(1) ); // true
 
 Prosíme všimněte si, že metoda `indexOf` používá striktní porovnávání `===`. Hledáme-li tedy `false`, najde přesně `false` a ne nulu.
 
-Chceme-li si jen ověřit, zda `prvek` je obsažen v poli, a nepotřebujeme jeho přesný index, dává se přednost metodě `pole.includes`.
+Pokud chceme jen ověřit, zda `prvek` je obsažen v poli, a nepotřebujeme jeho index, dává se přednost metodě `pole.includes`.
 
 Metoda [arr.lastIndexOf](mdn:js/Array/lastIndexOf) je totéž jako `indexOf`, ale hledá zprava doleva.
 
@@ -272,9 +272,9 @@ Drobný, ale zaznamenatelný rozdíl metody `includes` je také v tom, že na ro
 ```js run
 const pole = [NaN];
 alert( pole.indexOf(NaN) ); // -1 (mělo by být 0, ale rovnost === pro NaN nefunguje)
-alert( pole.includes(NaN) );// true (správně)
+alert( pole.includes(NaN) ); // true (správně)
 ```
-Je to proto, že `includes` byla do JavaScriptu přidána mnohem později a interně používá novější algoritmus porovnávání.
+Je to proto, že metohda `includes` byla do JavaScriptu přidána mnohem později a interně používá aktuálnější algoritmus porovnávání.
 ````
 
 ### find a findIndex/findLastIndex
@@ -313,11 +313,11 @@ let uživatel = uživatelé.find(prvek => prvek.id == 1);
 alert(uživatel.jméno); // Jan
 ```
 
-V reálném životě jsou pole objektů běžnou věcí, takže metoda `find` je velmi užitečná.
+V reálném životě se pole objektů běžně používají, takže metoda `find` je velmi užitečná.
 
 Všimněte si, že v tomto příkladu poskytujeme metodě `find` funkci `prvek => prvek.id == 1` s jedním argumentem. To je typické, ostatní argumenty této funkce se používají málokdy.
 
-Metoda [pole.findIndex](mdn:js/Array/findIndex) má stejnou syntaxi, ale namísto samotného prvku vrací index, na němž byl prvek nalezen. Jestliže nebylo nalezeno nic, vrátí se hodnota `-1`.
+Metoda [pole.findIndex](mdn:js/Array/findIndex) má stejnou syntaxi, ale namísto samotného prvku vrací index, na němž byl prvek nalezen. Jestliže nebylo nalezeno nic, vrátí hodnotu `-1`.
 
 Metoda [pole.findLastIndex](mdn:js/Array/findLastIndex) je podobná metodě `findIndex`, ale hledá zprava doleva, podobně jako `lastIndexOf`.
 
@@ -450,7 +450,7 @@ alert(pole);  // *!*1, 2, 15*/!*
 
 Nyní to funguje tak, jak jsme zamýšleli.
 
-Pojďme teď stranou a zamysleme se nad tím, co se děje. `pole` může být pole čehokoli, že? Může obsahovat čísla, řetězce, objekty, zkrátka cokoli. Máme sadu *nějakých prvků*. Abychom ji seřadili, potřebujeme *řadicí funkci*, která umí porovnat své prvky. Standardní řazení je řetězcové.
+Udělejme nyní krok stranou a zamysleme se nad tím, co se děje. `pole` může obsahovat cokoli, že? Může obsahovat čísla, řetězce, objekty, zkrátka cokoli. Máme sadu *nějakých prvků*. Abychom ji seřadili, potřebujeme *řadicí funkci*, která umí její prvky porovnat. Standardní řazení je řetězcové.
 
 Metoda `pole.sort(fn)` implementuje generický algoritmus řazení. Nemusíme se zajímat o to, jak vnitřně funguje (většinou je to optimalizovaný [quicksort](https://cs.wikipedia.org/wiki/Rychlé_řazení) nebo [Timsort](https://en.wikipedia.org/wiki/Timsort)). Projde pole, porovná jeho prvky poskytnutou funkcí a seřadí je. Vše, co potřebujeme, je poskytnout funkci `fn`, která provede porovnání.
 
@@ -691,7 +691,7 @@ Téměř všechny metody polí, které volají funkce -- např. `find`, `filter`
 
 Tento parametr nebyl vysvětlen ve výše uvedených podkapitolách, protože se používá jen zřídka. Ale pro úplnost jej musíme uvést.
 
-Zde je plná syntaxe těchto metod:
+Zde je úplná syntaxe těchto metod:
 
 ```js
 pole.find(funkce, thisArg);

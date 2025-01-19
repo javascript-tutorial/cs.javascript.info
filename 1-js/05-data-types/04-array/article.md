@@ -98,7 +98,7 @@ Styl „koncové *(trailing)* čárky“ zjednodušuje přidávání a odstraňo
 
 Let's say we want the last element of the array.
 
-Some programming languages allow to use negative indexes for the same purpose, like `fruits[-1]`.
+Some programming languages allow the use of negative indexes for the same purpose, like `fruits[-1]`.
 
 Although, in JavaScript it won't work. The result will be `undefined`, because the index in square brackets is treated literally.
 
@@ -426,7 +426,7 @@ let matice = [
   [7, 8, 9]
 ];
 
-alert( matice[1][1] ); // 5, prostřední prvek
+alert( matice[0][1] ); // 2, druhá hodnota prvního vnitřního pole
 ```
 
 ## toString

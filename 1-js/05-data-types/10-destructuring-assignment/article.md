@@ -5,11 +5,11 @@ Dvě nejpoužívanější datové struktury v JavaScriptu jsou objekty a pole.
 - Objekty nám umožňují vytvořit jednoduchou entitu, v níž jsou datové prvky uloženy podle klíčů.
 - Pole nám umožňují shromáždit datové prvky do seřazeného seznamu.
 
-Když je však předáváme funkci, funkce nemusí potřebovat objekt nebo pole jako celek. Může potřebovat jen jednotlivé části.
+Když je však předáváme nějaké funkci, nemusíme je potřebovat celé. Funkce může požadovat jen určité prvky nebo vlastnosti.
 
 *Destrukturační přiřazení* je speciální syntaxe, která nám umožňuje „rozbalit“ pole nebo objekty do svazku proměnných, což bývá někdy vhodnější.
 
-Destrukturace také skvěle funguje se složitými funkcemi, které mají spoustu parametrů, defaultní hodnoty a tak dále. Brzy to uvidíme.
+Destrukturace také skvěle funguje se složitými funkcemi, které mají spoustu parametrů, standardní hodnoty a tak dále. Brzy to uvidíme.
 
 ## Destrukturace polí
 
@@ -43,7 +43,7 @@ alert(příjmení);  // Novák
 Jak vidíte, syntaxe je jednoduchá. Je tady však několik zvláštních detailů. Podíváme se na další příklady, abychom tomu lépe porozuměli.
 
 ````smart header="„Destrukturace“ neznamená „destrukce“"
-Nazývá se to „destrukturační přiřazení“, protože provádí „destrukturaci“ kopírováním prvků do proměnných. Samotné pole se však nemění.
+Tato technika se nazývá „destrukturační přiřazení“, protože provádí „destrukturaci“ kopírováním prvků do proměnných. Samotné pole se však nemění.
 
 Je to jen kratší způsob, jak napsat:
 ```js
@@ -418,7 +418,7 @@ alert( titulek ); // Menu
 
 ## Vnořená destrukturace
 
-Jestliže objekt nebo pole obsahuje jiné vnořené objekty a pole, můžeme vyjmout zahloubené části pomocí složitějších vzorů na levé straně.
+Jestliže objekt nebo pole obsahuje jiné vnořené objekty a pole, můžeme vyjmout hlubší části pomocí složitějších konstrukcí na levé straně.
 
 V níže uvedeném kódu objekt `možnosti` obsahuje jiný objekt ve vlastnosti `velikost` a pole ve vlastnosti `prvky`. Vzor na levé straně přiřazení má stejnou strukturu jako objekt, z něhož vybíráme hodnoty:
 
@@ -469,7 +469,7 @@ function zobrazMenu(titulek = "Bez názvu", šířka = 200, výška = 100, prvky
 }
 ```
 
-Problém v reálném životě spočívá v tom, jak si pamatovat pořadí argumentů. IDE se nám s tím obvykle snaží pomoci, zvláště je-li kód dobře dokumentován, ale i tak... Další problém je v tom, jak volat funkci, když většina parametrů má být defaultních.
+Problém v reálném životě spočívá v tom, jak si pamatovat pořadí argumentů. IDE se nám s tím obvykle snaží pomoci, zvláště je-li kód dobře dokumentován, ale i tak... Další problém je v tom, jak volat funkci, když u většiny parametrů chceme ponechat standardní hodnoty.
 
 Takhle?
 
@@ -529,14 +529,14 @@ zobrazMenu(možnosti);
 Úplná syntaxe je stejná jako u destrukturačního přiřazení:
 ```js
 function({
-  vstupujícíVlastnost: názevProměnné = defaultníHodnota
+  vstupujícíVlastnost: názevProměnné = standardníHodnota
   ...
 })
 ```
 
-Pak budeme mít vlastnost `vstupujícíVlastnost` objektu parametrů uloženou v proměnné `názevProměnné`, jejíž defaultní hodnota bude `defaultníHodnota`.
+Pak budeme mít pro objekt parametrů proměnnou `názevProměnné` obsahující vlastnost `vstupujícíVlastnost`, jejíž standardní hodnota bude `standardníHodnota`.
 
-Prosíme všimněte si, že taková destrukturace předpokládá, že `zobrazMenu()` má argument. Chceme-li všechny hodnoty defaultní, měli bychom uvést prázdný objekt:
+Prosíme všimněte si, že taková destrukturace předpokládá, že `zobrazMenu()` má argument. Chceme-li všechny hodnoty standardní, měli bychom uvést prázdný objekt:
 
 ```js
 zobrazMenu({}); // ok, všechny hodnoty jsou defaultní
@@ -561,19 +561,19 @@ V uvedeném kódu je celý argumentový objekt defaultně `{}`, takže vždy bud
 - Destrukturační přiřazení umožňuje okamžité mapování objektu nebo pole do mnoha proměnných.
 - Úplná syntaxe pro objekt:
     ```js
-    let {vlastnost : názevProměnné = defaultníHodnota, ...zbytek} = objekt
+    let {vlastnost : názevProměnné = standardníHodnota, ...zbytek} = objekt
     ```
 
-    To znamená, že vlastnost `vlastnost` má přijít do proměnné `názevProměnné`, a pokud taková vlastnost neexistuje, měla by se použít hodnota `defaultníHodnota`.
+    To znamená, že vlastnost `vlastnost` má přijít do proměnné `názevProměnné`, a pokud taková vlastnost neexistuje, měla by se použít hodnota `standardníHodnota`.
 
     Objektové vlastnosti, které nejsou mapovány, se zkopírují do objektu `zbytek`.
 
 - Úplná syntaxe pro pole:
 
     ```js
-    let [prvek1 = defaultníHodnota, prvek2, ...zbytek] = pole
+    let [prvek1 = standardníHodnota, prvek2, ...zbytek] = pole
     ```
 
-    První prvek přijde do proměnné `prvek1`, druhý do `prvek2`, všechny ostatní prvky se stanou polem `zbytek`.
+    První prvek se uloží do proměnné `prvek1`, druhý do `prvek2`, ze všech ostatních prvků se vytvoří pole `zbytek`.
 
 - Je možné extrahovat data z vnořených polí nebo objektů. V tom případě musí mít levá strana stejnou strukturu jako pravá.

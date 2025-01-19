@@ -253,7 +253,7 @@ let obj = {
   }
 };
 
-alert(obj + 2); // 22 ("2" + 2), konverze na primitiv vrátila řetězec => zřetězení
+alert(obj + 2); // "22" ("2" + 2), konverze na primitiv vrátila řetězec => zřetězení
 ```
 
 ## Shrnutí

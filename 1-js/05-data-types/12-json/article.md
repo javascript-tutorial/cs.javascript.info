@@ -404,7 +404,7 @@ K dekódování řetězce JSON potřebujeme další metodu, která se nazývá [
 
 Syntaxe:
 ```js
-let hodnota = JSON.parse(řetězec, [reviver]);
+let hodnota = JSON.parse(řetězec[, reviver]);
 ```
 
 řetězec

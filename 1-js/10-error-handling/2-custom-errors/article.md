@@ -38,7 +38,7 @@ class Error {
 
 Nyní z ní zděďme třídu `ChybaValidace` a vyzkoušejme ji v akci:
 
-```js run untrusted
+```js run
 *!*
 class ChybaValidace extends Error {
 */!*

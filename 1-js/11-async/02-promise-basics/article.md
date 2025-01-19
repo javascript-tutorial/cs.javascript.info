@@ -46,7 +46,7 @@ Později uvidíme, jak se na tyto změny mohou zapsat „fanoušci“.
 
 Zde je příklad konstruktoru příslibu a jednoduchý exekutor s „produkujícím kódem“, který zabere nějaký čas (pomocí `setTimeout`):
 
-```js run
+```js
 let příslib = new Promise(function(resolve, reject) {
   // tato funkce se spustí automaticky, když se vytvoří příslib
 

@@ -4,7 +4,7 @@ V moderním JavaScriptu jsou dva druhy čísel:
 
 1. Běžná čísla v JavaScriptu jsou uložena v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754). Jsou známa také jako „čísla s pohyblivou řádovou čárkou s dvojnásobnou přesností“. To jsou čísla, která většinou používáme a v této kapitole o nich budeme hovořit.
 
-2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné celé číslo nemůže bezpečně překročit <code>2<sup>53</sup></code> nebo být menší než <code>-2<sup>53</sup></code>, jak jsme uvedli již dříve v kapitole <info:types>. Jelikož biginty se používají jen v některých speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
+2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné celé číslo nemůže bezpečně překročit <code>(2<sup>53</sup>-1)</code> nebo být menší než <code>-(2<sup>53</sup>-1)</code>, jak jsme uvedli již dříve v kapitole <info:types>. Jelikož biginty se používají jen v některých speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
 
 Zde tedy budeme hovořit o běžných číslech. Rozšiřme si své znalosti o nich.
 
@@ -41,7 +41,7 @@ Jinými slovy, `e` toto číslo násobí číslem `1` se zadaným počtem nul.
 1.23e6 === 1.23 * 1000000 // e6 znamená *1000000
 ```
 
-Nyní zapišme něco velmi malého. Třeba 1 mikrosekundu (jednu milióntinu sekundy):
+Nyní zapišme nějaké velmi malé číslo. Třeba 1 mikrosekundu (jednu milióntinu sekundy):
 
 ```js
 let mcs = 0.000001;
@@ -136,7 +136,7 @@ Pro zaokrouhlování existuje několik vestavěných funkcí:
 : Zaokrouhluje nahoru: `3.1` se zaokrouhlí na `4`, `-1.1` se zaokrouhlí na `-1`.
 
 `Math.round`
-: Zaokrouhluje na nejbližší celé číslo: `3.1` se zaokrouhlí na `3`, `3.6` se zaokrouhlí na `4`, prostřední případ `3.5` se také zaokrouhlí na `4`.
+: Zaokrouhluje na nejbližší celé číslo: `3.1` se zaokrouhlí na `3`, `3.6` se zaokrouhlí na `4`. V prostředních případech se `3.5` zaokrouhlí nahoru na `4` a `-3.5` se zaokrouhlí nahoru na `-3`.
 
 `Math.trunc` (není podporována v Internet Exploreru)
 : Odstraní vše za desetinnou čárkou bez zaokrouhlení: `3.1` se převede na `3`, `-1.1` se převede na `-1`.
@@ -146,8 +146,10 @@ Rozdíly mezi těmito funkcemi shrnuje následující tabulka:
 |   | `Math.floor` | `Math.ceil` | `Math.round` | `Math.trunc` |
 |---|---------|--------|---------|---------|
 |`3.1`|  `3`    |   `4`  |    `3`  |   `3`   |
+|`3.5`|  `3`    |   `4`  |    `4`  |   `3`   |
 |`3.6`|  `3`    |   `4`  |    `4`  |   `3`   |
 |`-1.1`|  `-2`    |   `-1`  |    `-1`  |   `-1`   |
+|`-1.5`|  `-2`    |   `-1`  |    `-1`  |   `-1`   |
 |`-1.6`|  `-2`    |   `-1`  |    `-2`  |   `-1`   |
 
 
@@ -222,7 +224,13 @@ Ale proč se to děje?
 
 Číslo je v paměti uloženo ve své binární podobě, jako posloupnost bitů -- jedniček a nul. Ale desetinná čísla jako `0.1` nebo `0.2`, která v desítkové soustavě vypadají jednoduše, jsou ve své binární podobě ve skutečnosti nekonečná.
 
-Co je `0.1`? Je to jedna děleno deseti `1/10`, jedna desetina. V desítkové soustavě lze taková čísla snadno reprezentovat. Srovnejme si to s jednou třetinou: `1/3`. Z ní se stane nekonečné desetinné číslo `0.33333(3)`.
+```js run
+alert(0.1.toString(2)); // 0.0001100110011001100110011001100110011001100110011001101
+alert(0.2.toString(2)); // 0.001100110011001100110011001100110011001100110011001101
+alert((0.1 + 0.2).toString(2)); // 0.0100110011001100110011001100110011001100110011001101
+```
+
+Co je vlastně `0.1`? Je to jedna děleno deseti `1/10`, jedna desetina. V desítkové soustavě lze taková čísla snadno reprezentovat. Srovnejme si to s jednou třetinou: `1/3`. Z ní se stane nekonečné desetinné číslo `0.33333(3)`.
 
 Je tedy zaručeno, že dělení mocninami `10` bude v desítkové soustavě fungovat dobře, ale dělení třemi ne. Ze stejného důvodu je v binární soustavě zaručeno, že bude fungovat dělení mocninami `2`, ale z `1/10` se stane nekonečné binární číslo.
 
@@ -266,7 +274,7 @@ alert( (0.1 * 10 + 0.2 * 10) / 10 ); // 0.3
 alert( (0.28 * 100 + 0.14 * 100) / 100); // 0.4200000000000001
 ```
 
-Přístup násobení a dělení tedy chybu zredukuje, ale úplně ji neodstraní.
+Použití násobení a dělení tedy chybu zredukuje, ale úplně ji neodstraní.
 
 Někdy se snažíme úplně se desetinným číslům vyhnout. Například když vytváříme obchod, můžeme ukládat ceny v centech namísto v dolarech. Ale co když aplikujeme slevu 30%? V praxi je úplné vyhnutí se desetinným číslům možné jen zřídka. Prostě je zaokrouhlujte, abyste odřízli „zbytky“, když je třeba.
 
@@ -288,7 +296,7 @@ Dalším legračním důsledkem interní reprezentace čísel je existence dvou 
 
 Je to proto, že znaménko je reprezentováno jediným bitem, který může být nastaven na 1 nebo 0 pro jakékoli číslo včetně nuly.
 
-Ve většině případů je tento rozdíl neznatelný, protože operátory jsou vytvořeny tak, aby s nimi zacházely stejně.
+Ve většině případů je tento rozdíl neznatelný, protože operátory jsou vytvořeny tak, aby s oběma nulami zacházely stejně.
 ```
 
 ## Testy: isFinite a isNaN
@@ -366,8 +374,8 @@ Svým způsobem jsou `Number.isNaN` a `Number.isFinite` jednodušší a přímě
 ```smart header="Srovnání s `Object.is`"
 Existuje speciální vestavěná metoda `Object.is`, která porovnává hodnoty stejně jako `===`, ale ve dvou krajních případech je spolehlivější:
 
-1. Funguje s `NaN`: `Object.is(NaN, NaN) === true`, což je dobrá věc.
-2. Hodnoty `0` a `-0` jsou rozdílné: `Object.is(0, -0) === false`, technicky je to pravda, protože interně má číslo znaménkový bit, který se může lišit, i když jsou všechny ostatní bity nulové.
+1. Funguje pro `NaN`: `Object.is(NaN, NaN) === true`, což je dobrá věc.
+2. Hodnoty `0` a `-0` jsou rozdílné: `Object.is(0, -0) === false`, technicky je to správně, protože vnitřně číslo obsahuje znaménkový bit, který se může lišit, i když jsou všechny ostatní bity nulové.
 
 Ve všech ostatních případech je `Object.is(a, b)` totéž jako `a === b`.
 
@@ -479,4 +487,4 @@ Pro desetinná čísla:
 
 Další matematické funkce:
 
-- Až je budete potřebovat, viz objekt [Math](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math). Je to velmi malá knihovna, ale základní potřeby dokáže pokrýt.
+- Až je budete potřebovat, podívejte se na objekt [Math](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math). Je to velmi malá knihovna, ale základní potřeby dokáže pokrýt.

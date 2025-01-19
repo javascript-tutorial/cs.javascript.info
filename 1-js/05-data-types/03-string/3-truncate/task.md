@@ -11,7 +11,7 @@ Výsledkem funkce by měl být zkrácený (je-li to nutné) řetězec.
 Například:
 
 ```js
-zkrať("To, co bych k tomuto tématu rád řekl, je:", 20) = "To, co bych k tomut…"
+zkrať("To, co bych k tomuto tématu rád řekl, je:", 20) == "To, co bych k tomut…"
 
-zkrať("Ahoj všichni!", 20) = "Ahoj všichni!"
+zkrať("Ahoj všichni!", 20) == "Ahoj všichni!"
 ```
