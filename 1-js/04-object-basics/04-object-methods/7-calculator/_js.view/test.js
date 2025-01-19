@@ -1,32 +1,31 @@
 
-
-describe("calculator", function() {
+describe("kalkulátor", function() {
   
-  context("when 2 and 3 entered", function() {
+  context("když zadáme 2 a 3", function() {
     beforeEach(function() {
       sinon.stub(window, "prompt");
 
       prompt.onCall(0).returns("2");
       prompt.onCall(1).returns("3");
 
-      calculator.read();
+      kalkulátor.načti();
     });
 
     afterEach(function() {
       prompt.restore();
     });
     
-    it('the read get two values and saves them as object properties', function () {
-      assert.equal(calculator.a, 2);
-      assert.equal(calculator.b, 3);
+    it('funkce načti načte dvě hodnoty a uloží je jako vlastnosti objektu', function () {
+      assert.equal(kalkulátor.a, 2);
+      assert.equal(kalkulátor.b, 3);
     });
 
-    it("the sum is 5", function() {
-      assert.equal(calculator.sum(), 5);
+    it("součet je 5", function() {
+      assert.equal(kalkulátor.součet(), 5);
     });
 
-    it("the multiplication product is 6", function() {
-      assert.equal(calculator.mul(), 6);
+    it("součin je 6", function() {
+      assert.equal(kalkulátor.součin(), 6);
     });
   });
 

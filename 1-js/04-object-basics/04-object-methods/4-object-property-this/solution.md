@@ -1,55 +1,55 @@
-**Answer: an error.**
+**Odpověď: chyba.**
 
-Try it:
+Zkuste to:
 ```js run
-function makeUser() {
+function vytvořUživatele() {
   return {
-    name: "John",
-    ref: this
+    jméno: "Jan",
+    odkaz: this
   };
 }
 
-let user = makeUser();
+let uživatel = vytvořUživatele();
 
-alert( user.ref.name ); // Error: Cannot read property 'name' of undefined
+alert( uživatel.odkaz.jméno ); // Chyba: Nelze načíst vlastnost 'jméno' objektu undefined
 ```
 
-That's because rules that set `this` do not look at object definition. Only the moment of call matters.
+Je to proto, že pravidla, která nastavují `this`, se nedívají do definice objektu. Záleží jen na okamžiku volání.
 
-Here the value of `this` inside `makeUser()` is `undefined`, because it is called as a function, not as a method with "dot" syntax.
+Zde je hodnota `this` uvnitř `vytvořUživatele()` `undefined`, protože tato funkce je volána jako funkce, ne jako metoda „tečkovou“ syntaxí.
 
-The value of `this` is one for the whole function, code blocks and object literals do not affect it.
+Hodnota `this` je stejná pro celou funkci, bloky kódu a objektové literály ji neovlivňují.
 
-So `ref: this` actually takes current `this` of the function.
+Takže `odkaz: this` vezme ve skutečnosti aktuální `this` této funkce.
 
-We can rewrite the function and return the same `this` with `undefined` value: 
+Můžeme funkci přepsat a vrátit stejné `this` s hodnotou `undefined`:
 
 ```js run
-function makeUser(){
-  return this; // this time there's no object literal
+function vytvořUživatele(){
+  return this; // tentokrát tady není objektový literál
 }
 
-alert( makeUser().name ); // Error: Cannot read property 'name' of undefined
+alert( vytvořUživatele().jméno ); // Chyba: Nelze načíst vlastnost 'jméno' objektu undefined
 ```
-As you can see the result of `alert( makeUser().name )` is the same as the result of `alert( user.ref.name )` from the previous example.
+Jak vidíte, výsledek `alert( vytvořUživatele().jméno )` je stejný jako výsledek `alert( uživatel.odkaz.jméno )` z předchozího příkladu.
 
-Here's the opposite case:
+Toto je opačný příklad:
 
 ```js run
-function makeUser() {
+function vytvořUživatele() {
   return {
-    name: "John",
+    jméno: "Jan",
 *!*
-    ref() {
+    odkaz() {
       return this;
     }
 */!*
   };
 }
 
-let user = makeUser();
+let uživatel = vytvořUživatele();
 
-alert( user.ref().name ); // John
+alert( uživatel.odkaz().jméno ); // Jan
 ```
 
-Now it works, because `user.ref()` is a method. And the value of `this` is set to the object before dot `.`.
+Teď to funguje, protože `uživatel.odkaz()` je metoda. A hodnota `this` se nastaví na objekt před tečkou `.`.

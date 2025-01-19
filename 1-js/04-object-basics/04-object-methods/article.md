@@ -1,270 +1,270 @@
-# Object methods, "this"
+# Objektové metody, „this“
 
-Objects are usually created to represent entities of the real world, like users, orders and so on:
+Objekty se obvykle vytvářejí tak, aby představovaly entity ze skutečného světa, například uživatele, objednávky a podobně:
 
 ```js
-let user = {
-  name: "John",
-  age: 30
+let uživatel = {
+  jméno: "Jan",
+  věk: 30
 };
 ```
 
-And, in the real world, a user can *act*: select something from the shopping cart, login, logout etc.
+A ve skutečném světě může uživatel *konat* nějakou akci: vybrat si něco z nákupního vozíku, přihlásit se, odhlásit se atd.
 
-Actions are represented in JavaScript by functions in properties.
+V JavaScriptu jsou tyto akce reprezentovány funkcemi ve vlastnostech.
 
-## Method examples
+## Příklady metod
 
-For a start, let's teach the `user` to say hello:
+Pro začátek naučme objekt `uživatel` říci ahoj:
 
 ```js run
-let user = {
-  name: "John",
-  age: 30
+let uživatel = {
+  jméno: "Jan",
+  věk: 30
 };
 
 *!*
-user.sayHi = function() {
-  alert("Hello!");
+uživatel.řekniAhoj = function() {
+  alert("Ahoj!");
 };
 */!*
 
-user.sayHi(); // Hello!
+uživatel.řekniAhoj(); // Ahoj!
 ```
 
-Here we've just used a Function Expression to create a function and assign it to the property `user.sayHi` of the object.
+Právě jsme použili funkční výraz, kterým jsme vytvořili funkci a přiřadili ji do vlastnosti objektu `uživatel.řekniAhoj`.
 
-Then we can call it as `user.sayHi()`. The user can now speak!
+Pak ji můžeme volat pomocí `uživatel.řekniAhoj()`. Uživatel nyní umí mluvit!
 
-A function that is a property of an object is called its *method*.
+Funkce, která je vlastností objektu, se nazývá jeho *metoda*.
 
-So, here we've got a method `sayHi` of the object `user`.
+Zde tedy máme metodu `řekniAhoj` objektu `uživatel`.
 
-Of course, we could use a pre-declared function as a method, like this:
+Samozřejmě můžeme použít jako metodu předem deklarovanou funkci, například takto:
 
 ```js run
-let user = {
+let uživatel = {
   // ...
 };
 
 *!*
-// first, declare
-function sayHi() {
-  alert("Hello!");
-}
+// nejprve ji deklarujeme
+function řekniAhoj() {
+  alert("Ahoj!");
+};
 
-// then add as a method
-user.sayHi = sayHi;
+// pak přidáme jako metodu
+uživatel.řekniAhoj = řekniAhoj;
 */!*
 
-user.sayHi(); // Hello!
+uživatel.řekniAhoj(); // Ahoj!
 ```
 
-```smart header="Object-oriented programming"
-When we write our code using objects to represent entities, that's called [object-oriented programming](https://en.wikipedia.org/wiki/Object-oriented_programming), in short: "OOP".
+```smart header="Objektově orientované programování"
+Způsob programování, při kterém píšeme kód, který používá objekty představující entity, se nazývá [objektově orientované programování](https://cs.wikipedia.org/wiki/Objektově_orientované_programování), zkráceně „OOP“.
 
-OOP is a big thing, an interesting science of its own. How to choose the right entities? How to organize the interaction between them? That's architecture, and there are great books on that topic, like "Design Patterns: Elements of Reusable Object-Oriented Software" by E. Gamma, R. Helm, R. Johnson, J. Vissides or "Object-Oriented Analysis and Design with Applications" by G. Booch, and more.
+OOP je velká věc a samo o sobě je zajímavou vědou. Jak zvolit správné entity? Jak zorganizovat interakci mezi nimi? To je architektura a o tomto tématu existují skvělé knihy, např. „Design Patterns: Elements of Reusable Object-Oriented Software“ od E. Gammy, R. Helma, R. Johnsona a J. Vissidese, nebo „Object-Oriented Analysis and Design with Applications“ od G. Booche a další.
 ```
-### Method shorthand
+### Zkratky metod
 
-There exists a shorter syntax for methods in an object literal:
+V objektovém literálu existuje i kratší syntaxe metod:
 
 ```js
-// these objects do the same
+// tyto objekty dělají totéž
 
-user = {
-  sayHi: function() {
-    alert("Hello");
+uživatel = {
+  řekniAhoj: function() {
+    alert("Ahoj");
   }
 };
 
-// method shorthand looks better, right?
-user = {
+// zkratka metody vypadá lépe, že?
+uživatel = {
 *!*
-  sayHi() { // same as "sayHi: function(){...}"
+  řekniAhoj() { // totéž jako „řekniAhoj: function(){...}“
 */!*
-    alert("Hello");
+    alert("Ahoj");
   }
 };
 ```
 
-As demonstrated, we can omit `"function"` and just write `sayHi()`.
+Jak vidíme, můžeme vypustit slovo `"function"` a napsat jen `řekniAhoj()`.
 
-To tell the truth, the notations are not fully identical. There are subtle differences related to object inheritance (to be covered later), but for now they do not matter. In almost all cases, the shorter syntax is preferred.
+Upřímně řečeno, tyto notace nejsou zcela identické. Jsou v nich drobné rozdíly týkající se objektové dědičnosti (která bude vysvětlena později), ale na nich nám prozatím nezáleží. Téměř ve všech případech se dává přednost kratší syntaxi.
 
-## "this" in methods
+## „this“ v metodách
 
-It's common that an object method needs to access the information stored in the object to do its job.
+Běžně se stává, že objektová metoda potřebuje přístup k informaci uložené v objektu, aby mohla vykonat svou práci.
 
-For instance, the code inside `user.sayHi()` may need the name of the `user`.
+Například kód uvnitř `uživatel.řekniAhoj()` může potřebovat jméno objektu `uživatel`.
 
-**To access the object, a method can use the `this` keyword.**
+**K přístupu do objektu může metoda používat klíčové slovo `this`.**
 
-The value of `this` is the object "before dot", the one used to call the method.
+Hodnota `this` je objekt „před tečkou“, tedy ten, který byl použit k volání metody.
 
-For instance:
+Například:
 
 ```js run
-let user = {
-  name: "John",
-  age: 30,
+let uživatel = {
+  jméno: "Jan",
+  věk: 30,
 
-  sayHi() {
+  řekniAhoj() {
 *!*
-    // "this" is the "current object"
-    alert(this.name);
+    // „this“ je „aktuální objekt“
+    alert(this.jméno);
 */!*
   }
 
 };
 
-user.sayHi(); // John
+uživatel.řekniAhoj(); // Jan
 ```
 
-Here during the execution of `user.sayHi()`, the value of `this` will be `user`.
+Zde během výkonu `uživatel.řekniAhoj()` hodnota `this` bude `uživatel`.
 
-Technically, it's also possible to access the object without `this`, by referencing it via the outer variable:
+Technicky je možné přistupovat k objektu i bez `this` tak, že se na něj odkážeme přes vnější proměnnou:
 
 ```js
-let user = {
-  name: "John",
-  age: 30,
+let uživatel = {
+  jméno: "Jan",
+  věk: 30,
 
-  sayHi() {
+  řekniAhoj() {
 *!*
-    alert(user.name); // "user" instead of "this"
+    alert(uživatel.jméno); // „uživatel“ namísto „this“
 */!*
   }
 
 };
 ```
 
-...But such code is unreliable. If we decide to copy `user` to another variable, e.g. `admin = user` and overwrite `user` with something else, then it will access the wrong object.
+...Takový kód je však nespolehlivý. Pokud se rozhodneme zkopírovat objekt `uživatel` do jiné proměnné, např. `správce = uživatel`, a přepsat proměnnou `uživatel` něčím jiným, pak budeme přistupovat k nesprávnému objektu.
 
-That's demonstrated below:
+To je ukázáno zde:
 
 ```js run
-let user = {
-  name: "John",
-  age: 30,
+let uživatel = {
+  jméno: "Jan",
+  věk: 30,
 
-  sayHi() {
+  řekniAhoj() {
 *!*
-    alert( user.name ); // leads to an error
+    alert( uživatel.jméno ); // povede k chybě
 */!*
   }
 
 };
 
 
-let admin = user;
-user = null; // overwrite to make things obvious
+let správce = uživatel;
+uživatel = null; // přepíšeme, aby to bylo zřejmé
 
 *!*
-admin.sayHi(); // TypeError: Cannot read property 'name' of null
+správce.řekniAhoj(); // TypeError: Cannot read property 'jméno' of null
 */!*
 ```
 
-If we used `this.name` instead of `user.name` inside the `alert`, then the code would work.
+Kdybychom uvnitř `alert` použili `this.jméno` namísto `uživatel.jméno`, kód by fungoval.
 
-## "this" is not bound
+## „this“ není vázané
 
-In JavaScript, keyword `this` behaves unlike most other programming languages. It can be used in any function, even if it's not a method of an object.
+V JavaScriptu se klíčové slovo `this` chová jinak než ve většině ostatních programovacích jazyků. Může být použito v libovolné funkci, i když to není metoda objektu.
 
-There's no syntax error in the following example:
+V následujícím příkladu není žádná syntaktická chyba:
 
 ```js
-function sayHi() {
-  alert( *!*this*/!*.name );
+function řekniAhoj() {
+  alert( *!*this*/!*.jméno );
 }
 ```
 
-The value of `this` is evaluated during the run-time, depending on the context.
+Hodnota `this` se vyhodnocuje za běhu skriptu v závislosti na kontextu.
 
-For instance, here the same function is assigned to two different objects and has different "this" in the calls:
+Například zde bude stejná funkce přiřazena dvěma různým objektům a ve voláních bude mít různá „this“:
 
 ```js run
-let user = { name: "John" };
-let admin = { name: "Admin" };
+let uživatel = { jméno: "Jan" };
+let správce = { jméno: "Správce" };
 
-function sayHi() {
-  alert( this.name );
+function řekniAhoj() {
+  alert( this.jméno );
 }
 
 *!*
-// use the same function in two objects
-user.f = sayHi;
-admin.f = sayHi;
+// použijeme stejnou funkci ve dvou objektech
+uživatel.f = řekniAhoj;
+správce.f = řekniAhoj;
 */!*
 
-// these calls have different this
-// "this" inside the function is the object "before the dot"
-user.f(); // John  (this == user)
-admin.f(); // Admin  (this == admin)
+// tato volání mají různá this
+// „this“ uvnitř funkce je objekt „před tečkou“
+uživatel.f(); // Jan  (this == uživatel)
+správce.f(); // Správce  (this == správce)
 
-admin['f'](); // Admin (dot or square brackets access the method – doesn't matter)
+správce['f'](); // Správce (k metodě přistupuje tečka nebo hranaté závorky - na tom nezáleží)
 ```
 
-The rule is simple: if `obj.f()` is called, then `this` is `obj` during the call of `f`. So it's either `user` or `admin` in the example above.
+Platí jednoduché pravidlo: je-li volána `obj.f()`, pak `this` během volání `f` je `obj`. Ve výše uvedeném příkladu je to tedy `uživatel` anebo `správce`.
 
-````smart header="Calling without an object: `this == undefined`"
-We can even call the function without an object at all:
+````smart header="Volání bez objektu: `this == undefined`"
+Můžeme tuto funkci volat dokonce zcela bez objektu:
 
 ```js run
-function sayHi() {
+function řekniAhoj() {
   alert(this);
 }
 
-sayHi(); // undefined
+řekniAhoj(); // undefined
 ```
 
-In this case `this` is `undefined` in strict mode. If we try to access `this.name`, there will be an error.
+Ve striktním režimu je `this` v tomto případě `undefined`. Pokud se pokusíme přistoupit k `this.jméno`, nastane chyba.
 
-In non-strict mode the value of `this` in such case will be the *global object* (`window` in a browser, we'll get to it later in the chapter [](info:global-object)). This is a historical behavior that `"use strict"` fixes.
+V nestriktním režimu bude hodnota `this` v takovém případě *globální objekt* (v prohlížeči `window`, dostaneme se k tomu později v kapitole [](info:global-object)). To je historické chování, které `"use strict"` opravuje.
 
-Usually such call is a programming error. If there's `this` inside a function, it expects to be called in an object context.
+Takové volání je obvykle programovací chyba. Jestliže je `this` uvnitř funkce, očekává se, že funkce bude volána v kontextu objektu.
 ````
 
-```smart header="The consequences of unbound `this`"
-If you come from another programming language, then you are probably used to the idea of a "bound `this`", where methods defined in an object always have `this` referencing that object.
+```smart header="Důsledky nevázaného `this`"
+Pokud přicházíte z jiného programovacího jazyka, pak jste pravděpodobně zvyklí na myšlenku „vázaného `this`“, kdy v metodách definovaných v nějakém objektu `this` vždy odkazuje na tento objekt.
 
-In JavaScript `this` is "free", its value is evaluated at call-time and does not depend on where the method was declared, but rather on what object is "before the dot".
+V JavaScriptu je `this` „volné“, jeho hodnota se vypočítává až při volání a není závislá na tom, kde byla metoda deklarována, ale jen na tom, jaký objekt je „před tečkou“.
 
-The concept of run-time evaluated `this` has both pluses and minuses. On the one hand, a function can be reused for different objects. On the other hand, the greater flexibility creates more possibilities for mistakes.
+Koncept vyhodnocování `this` za běhu má své výhody i nevýhody. Na jednu stranu můžeme tutéž funkci použít opakovaně pro různé objekty. Na druhou stranu větší flexibilita vytváří více prostoru pro chyby.
 
-Here our position is not to judge whether this language design decision is good or bad. We'll understand how to work with it, how to get benefits and avoid problems.
+Zde nám nepřísluší soudit, zda je toto rozhodnutí návrhářů jazyka dobré nebo špatné. Porozumíme tomu, jak s ním pracovat, jak využít jeho výhody a vyhnout se problémům.
 ```
 
-## Arrow functions have no "this"
+## Šipkové funkce nemají „this“
 
-Arrow functions are special: they don't have their "own" `this`. If we reference `this` from such a function, it's taken from the outer "normal" function.
+Šipkové funkce jsou zvláštní: nemají „své vlastní“ `this`. Pokud se v takové funkci odkážeme na `this`, bude převzato z vnější „normální“ funkce.
 
-For instance, here `arrow()` uses `this` from the outer `user.sayHi()` method:
+Například zde `šipka()` používá `this` z vnější metody `uživatel.řekniAhoj()`:
 
 ```js run
-let user = {
-  firstName: "Ilya",
-  sayHi() {
-    let arrow = () => alert(this.firstName);
-    arrow();
+let uživatel = {
+  křestníJméno: "Ilja",
+  řekniAhoj() {
+    let šipka = () => alert(this.křestníJméno);
+    šipka();
   }
 };
 
-user.sayHi(); // Ilya
+uživatel.řekniAhoj(); // Ilja
 ```
 
-That's a special feature of arrow functions, it's useful when we actually do not want to have a separate `this`, but rather to take it from the outer context. Later in the chapter <info:arrow-functions> we'll go more deeply into arrow functions.
+To je speciální vlastnost šipkových funkcí. Je užitečná, když ve skutečnosti nechceme mít oddělené `this`, ale chceme je převzít z vnějšího kontextu. Později v kapitole <info:arrow-functions> prozkoumáme šipkové funkce více do hloubky.
 
 
-## Summary
+## Shrnutí
 
-- Functions that are stored in object properties are called "methods".
-- Methods allow objects to "act" like `object.doSomething()`.
-- Methods can reference the object as `this`.
+- Funkce uložené ve vlastnostech objektu se nazývají „metody“.
+- Metody umožňují objektům „konat akce“, např. `objekt.dělejNěco()`.
+- Metody se na tento objekt mohou odkazovat klíčovým slovem `this`.
 
-The value of `this` is defined at run-time.
-- When a function is declared, it may use `this`, but that `this` has no value until the function is called.
-- A function can be copied between objects.
-- When a function is called in the "method" syntax: `object.method()`, the value of `this` during the call is `object`.
+Hodnota `this` je definována za běhu skriptu.
+- Když je funkce deklarována, může používat `this`, ale toto `this` nemá žádnou hodnotu, dokud není funkce volána.
+- Funkce může být kopírována mezi objekty.
+- Když je funkce volána „metodovou“ syntaxí `objekt.metoda()`, hodnota `this` během tohoto volání je `objekt`.
 
-Please note that arrow functions are special: they have no `this`. When `this` is accessed inside an arrow function, it is taken from outside.
+Prosíme všimněte si, že šipkové funkce jsou zvláštní: nemají `this`. Když uvnitř šipkové funkce přistoupíme k `this`, převezme se zvnějšku.
