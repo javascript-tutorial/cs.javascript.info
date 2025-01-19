@@ -68,7 +68,7 @@ if (podmínka) {
 
 ## Klauzule „else“
 
-Příkaz `if` může obsahovat nepovinný blok „else“, který se vykoná, když podmínka je nepravdivá.
+Příkaz `if` může obsahovat nepovinný blok `else`, který se vykoná, když podmínka je nepravdivá.
 
 Příklad:
 ```js run
@@ -181,9 +181,9 @@ alert( zpráva );
 Na první pohled může být obtížné pochopit, o co tady jde. Po bližším prozkoumání však vidíme, že to je jen obyčejná posloupnost testů:
 
 1. První otazník ověří, zda `věk < 3`.
-2. Pokud ano, vrátí `'Nazdar, mimino!'`. Jinak pokračuje výrazem za dvojtečkou `:` a ověří `věk < 18`.
-3. Pokud to platí, vrátí `'Ahoj!'`. Jinak pokračuje výrazem za další dvojtečkou `:` a ověří `věk < 100`.
-4. Pokud to platí, vrátí `'Dobrý den!'`. Jinak pokračuje výrazem za poslední dvojtečkou `:` a vrátí `'To je ale vysoký věk!'`.
+2. Pokud ano, vrátí `'Nazdar, mimino!'`. Jinak pokračuje výrazem za dvojtečkou ":" a ověří `věk < 18`.
+3. Pokud to platí, vrátí `'Ahoj!'`. Jinak pokračuje výrazem za další dvojtečkou ":" a ověří `věk < 100`.
+4. Pokud to platí, vrátí `'Dobrý den!'`. Jinak pokračuje výrazem za poslední dvojtečkou ":" a vrátí `'To je ale vysoký věk!'`.
 
 Při použití `if..else` by to vypadalo následovně:
 

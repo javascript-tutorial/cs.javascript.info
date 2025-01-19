@@ -264,7 +264,7 @@ function zobrazZprávu(odKoho, text) {
 ````
 
 ### Alternativní výchozí argumenty
-Někdy má smysl nenastavovat výchozí hodnoty argumentů v deklaraci funkce, ale až později.
+Někdy má smysl nastavovat výchozí hodnoty argumentů až později po deklaraci funkce.
 
 Abychom během provádění funkce ověřili, zda argument byl předán, můžeme jej porovnat s `undefined`:
 
@@ -459,7 +459,7 @@ Tyto příklady předpokládají běžný význam prefixů. Se svým týmem se m
 ```smart header="Ultrakrátké názvy funkcí"
 Funkce, které se používají *velmi často*, mají někdy ultrakrátké názvy.
 
-Například knihovna [jQuery](http://jquery.com) definuje funkci s názvem `$`. Knihovna [Lodash](http://lodash.com/) má svou ústřední funkci pojmenovanou `_`.
+Například knihovna [jQuery](https://jquery.com) definuje funkci s názvem `$`. Knihovna [Lodash](https://lodash.com/) má svou ústřední funkci pojmenovanou `_`.
 
 To jsou však výjimky. Obecně by názvy funkcí měly být stručné a popisné.
 ```

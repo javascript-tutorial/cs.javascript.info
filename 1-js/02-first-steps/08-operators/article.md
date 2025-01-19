@@ -52,6 +52,7 @@ Příklad:
 ```js run
 alert( 5 % 2 ); // 1, zbytek po dělení 5 děleno 2
 alert( 8 % 3 ); // 2, zbytek po dělení 8 děleno 3
+alert( 8 % 4 ); // 0, zbytek po dělení 8 děleno 4
 ```
 
 ### Umocňování **
@@ -306,7 +307,7 @@ let n = 2;
 
 n *= 3 + 5; // napřed se provede část vpravo, totéž jako n *= 8
 
-alert( n ); // 16  
+alert( n ); // 16
 ```
 
 ## Inkrementace a dekrementace
