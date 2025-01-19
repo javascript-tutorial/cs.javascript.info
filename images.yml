@@ -174,10 +174,6 @@ object-user-empty.svg:
     position: "center"
   user: uživatel
 
-garbage-collection-5.svg:
-  unreachables:
-    text: nedosažitelný
-
 array-shift.svg:
   clear:
     text: vymazat
@@ -452,13 +448,6 @@ proto-animal-rabbit.svg:
   'eats: true': 'žere: true'
   'jumps: true': 'skáče: true'
   
-proto-constructor-animal-rabbit.svg:
-  'Rabbit': 'Králík'
-  'animal': 'zvíře'
-  'eats: true': 'žere: true'
-  'rabbit': 'králík'
-  'name: "White Rabbit"': 'jméno: "Bílý králík"'
-  
 native-prototypes-classes.svg:
   'other object methods': 'jiné metody objektů'
   'other array methods': 'jiné metody polí'
@@ -529,7 +518,21 @@ variable-change.svg:
   '"Hello!"': '"Ahoj!"'
   '"World!"': '"světe!"'
   'message': 'zpráva'
-
+  
+variable-copy-value.svg:
+  '"Hello!"': '"Ahoj!"'
+  'message': 'zpráva'
+  'phrase': 'věta'
+  
+variable-contains-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+   
+variable-copy-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+  'admin': 'správce'
+  
 rabbit-extends-object.svg:
   'class Rabbit': 'class Králík'
   'class Rabbit extends Object': 'class Králík extends Object'
@@ -592,15 +595,91 @@ object-user-isadmin.svg:
   user: uživatel
   name: jméno
   age: věk
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
   
 object-user-delete.svg:
   user: uživatel
   name: jméno
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
 
 object-user-props.svg:
   user: uživatel
   name: jméno
   age: věk
   likes birds: má rád ptáky
+  
+memory-user-john.svg:
+  '<global>': '<globální>'
+  user: uživatel
+  'name: "John"': 'jméno: "Jan"'
+  
+memory-user-john-lost.svg:
+  '<global>': '<globální>'
+  'user: null': 'uživatel: null'
+  'name: "John"': 'jméno: "Jan"'
+  
+memory-user-john-admin.svg:
+  '<global>': '<globální>'
+  user: uživatel
+  admin: správce
+  'name: "John"': 'jméno: "Jan"'
+
+family.svg:
+  '<global variable>': '<globální proměnná>'
+  family: rodina
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+  
+family-delete-refs.svg:
+  '<global variable>': '<globální proměnná>'
+  family: rodina
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-father.svg:
+  '<global>': '<globální>'
+  family: rodina
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-father-2.svg:
+  '<global>': '<globální>'
+  family: rodina
+  mother: matka
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-family.svg:
+  '<global>': '<globální>'
+  'family: null': 'rodina: null'
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+  
+garbage-collection-1.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-2.svg:
+  '<global>': '<globální>'
+    
+garbage-collection-3.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-4.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-5.svg:
+  '<global>': '<globální>'
+  unreachables: nedosažitelné

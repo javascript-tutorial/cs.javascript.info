@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Output every second
+# Výstup každou sekundu
 
-Write a function `printNumbers(from, to)` that outputs a number every second, starting from `from` and ending with `to`.
+Napište funkci `vypišČísla(začátek, konec)`, která každou sekundu vypíše číslo, přičemž začne číslem `začátek` a skončí číslem `konec`.
 
-Make two variants of the solution.
+Vytvořte dvě varianty řešení.
 
-1. Using `setInterval`.
-2. Using nested `setTimeout`.
+1. Pomocí `setInterval`.
+2. Pomocí vnořeného `setTimeout`.

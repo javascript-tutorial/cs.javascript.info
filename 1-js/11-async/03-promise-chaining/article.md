@@ -1,366 +1,366 @@
 
-# Promises chaining
+# Zřetězení příslibů
 
-Let's return to the problem mentioned in the chapter <info:callbacks>: we have a sequence of asynchronous tasks to be performed one after another — for instance, loading scripts. How can we code it well?
+Vraťme se k problému zmíněnému v kapitole <info:callbacks>: máme posloupnost asynchronních úloh, které mají být provedeny jedna po druhé -- například načítání skriptů. Jak ji můžeme správně zapsat do kódu?
 
-Promises provide a couple of recipes to do that.
+Přísliby nám k tomu poskytují spoustu receptů.
 
-In this chapter we cover promise chaining.
+V této kapitole vysvětlíme zřetězení příslibů.
 
-It looks like this:
+Vypadá takto:
 
 ```js run
 new Promise(function(resolve, reject) {
 
   setTimeout(() => resolve(1), 1000); // (*)
 
-}).then(function(result) { // (**)
+}).then(function(výsledek) { // (**)
 
-  alert(result); // 1
-  return result * 2;
+  alert(výsledek); // 1
+  return výsledek * 2;
 
-}).then(function(result) { // (***)
+}).then(function(výsledek) { // (***)
 
-  alert(result); // 2
-  return result * 2;
+  alert(výsledek); // 2
+  return výsledek * 2;
 
-}).then(function(result) {
+}).then(function(výsledek) {
 
-  alert(result); // 4
-  return result * 2;
+  alert(výsledek); // 4
+  return výsledek * 2;
 
 });
 ```
 
-The idea is that the result is passed through the chain of `.then` handlers.
+Myšlenkou je, že výsledek se předává skrz řetěz handlerů `.then`.
 
-Here the flow is:
-1. The initial promise resolves in 1 second `(*)`,
-2. Then the `.then` handler is called `(**)`, which in turn creates a new promise (resolved with `2` value).
-3. The next `then` `(***)` gets the result of the previous one, processes it (doubles) and passes it to the next handler.
-4. ...and so on.
+Tok zde vypadá takto:
+1. Úvodní příslib se vyhodnotí za 1 sekundu `(*)`.
+2. Pak se volá handler `.then` `(**)`, který následně vytvoří nový příslib (splněn s hodnotou `2`).
+3. Další `then` `(***)` získá výsledek předchozího, zpracuje jej (vynásobí dvěma) a předá jej dalšímu handleru.
+4. ...a tak dále.
 
-As the result is passed along the chain of handlers, we can see a sequence of `alert` calls: `1` -> `2` -> `4`.
+Jak je výsledek předáván řetězem handlerů, vidíme posloupnost volání `alert`: `1` -> `2` -> `4`.
 
 ![](promise-then-chain.svg)
 
-The whole thing works, because every call to a `.then` returns a new promise, so that we can call the next `.then` on it.
+Celé to funguje proto, že každé volání `.then` vrátí nový příslib, takže na něm můžeme volat další `.then`.
 
-When a handler returns a value, it becomes the result of that promise, so the next `.then` is called with it.
+Když handler vrátí nějakou hodnotu, tato hodnota se stane výsledkem onoho příslibu, takže další `.then` se volá s ní.
 
-**A classic newbie error: technically we can also add many `.then` to a single promise. This is not chaining.**
+**Klasická začátečnická chyba: technicky můžeme také přidat mnoho handlerů `.then` k jedinému příslibu. To není zřetězení.**
 
-For example:
+Například:
 ```js run
-let promise = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(resolve, reject) {
   setTimeout(() => resolve(1), 1000);
 });
 
-promise.then(function(result) {
-  alert(result); // 1
-  return result * 2;
+příslib.then(function(výsledek) {
+  alert(výsledek); // 1
+  return výsledek * 2;
 });
 
-promise.then(function(result) {
-  alert(result); // 1
-  return result * 2;
+příslib.then(function(výsledek) {
+  alert(výsledek); // 1
+  return výsledek * 2;
 });
 
-promise.then(function(result) {
-  alert(result); // 1
-  return result * 2;
+příslib.then(function(výsledek) {
+  alert(výsledek); // 1
+  return výsledek * 2;
 });
 ```
 
-What we did here is just adding several handlers to one promise. They don't pass the result to each other; instead they process it independently.
+To, co jsme tady udělali, je připojení několika handlerů k jedinému příslibu. Ty však nepředávají výsledek jeden druhému, ale namísto toho jej nezávisle zpracovávají.
 
-Here's the picture (compare it with the chaining above):
+Zde je obrázek (porovnejte ho s výše uvedeným zřetězením):
 
 ![](promise-then-many.svg)
 
-All `.then` on the same promise get the same result -- the result of that promise. So in the code above all `alert` show the same: `1`.
+Všechny funkce `.then` na stejném příslibu obdrží stejný výsledek -- výsledek onoho příslibu. V uvedeném kódu tedy všechna volání `alert` zobrazí totéž: `1`.
 
-In practice we rarely need multiple handlers for one promise. Chaining is used much more often.
+V praxi jen zřídka potřebujeme více handlerů pro jeden příslib. Zřetězení se používá mnohem častěji.
 
-## Returning promises
+## Vracení příslibů
 
-A handler, used in `.then(handler)` may create and return a promise.
+Handler, použitý v `.then(handler)`, může vytvořit a vrátit příslib.
 
-In that case further handlers wait until it settles, and then get its result.
+V tom případě budoucí handlery počkají, než se usadí, a pak obdrží jeho výsledek.
 
-For instance:
+Například:
 
 ```js run
 new Promise(function(resolve, reject) {
 
   setTimeout(() => resolve(1), 1000);
 
-}).then(function(result) {
+}).then(function(výsledek) {
 
-  alert(result); // 1
+  alert(výsledek); // 1
 
 *!*
   return new Promise((resolve, reject) => { // (*)
-    setTimeout(() => resolve(result * 2), 1000);
+    setTimeout(() => resolve(výsledek * 2), 1000);
   });
 */!*
 
-}).then(function(result) { // (**)
+}).then(function(výsledek) { // (**)
 
-  alert(result); // 2
+  alert(výsledek); // 2
 
   return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(result * 2), 1000);
+    setTimeout(() => resolve(výsledek * 2), 1000);
   });
 
-}).then(function(result) {
+}).then(function(výsledek) {
 
-  alert(result); // 4
+  alert(výsledek); // 4
 
 });
 ```
 
-Here the first `.then` shows `1` and returns `new Promise(…)` in the line `(*)`. After one second it resolves, and the result (the argument of `resolve`, here it's `result * 2`) is passed on to the handler of the second `.then`. That handler is in the line `(**)`, it shows `2` and does the same thing.
+Zde první `.then` zobrazí `1` a vrátí `new Promise(…)` na řádku `(*)`. Tento příslib se po jedné sekundě vyhodnotí a výsledek (argument funkce `resolve`, zde je to `výsledek * 2`) se předá handleru druhé funkce `.then`. Tento handler je na řádku `(**)`. Zobrazí `2` a provede totéž.
 
-So the output is the same as in the previous example: 1 -> 2 -> 4, but now with 1 second delay between `alert` calls.
+Výsledek je tedy stejný jako v předchozím příkladu: 1 -> 2 -> 4, ale nyní s jednosekundovou prodlevou mezi jednotlivými voláními `alert`.
 
-Returning promises allows us to build chains of asynchronous actions.
+Vracení příslibů nám umožňuje vystavět řetězy asynchronních akcí.
 
-## Example: loadScript
+## Příklad: načtiSkript
 
-Let's use this feature with the promisified `loadScript`, defined in the [previous chapter](info:promise-basics#loadscript), to load scripts one by one, in sequence:
+Použijme tuto možnost s „promisifikovanou“ funkcí `načtiSkript`, definovanou v [předchozí kapitole](info:promise-basics#loadscript), k načtení skriptů po jednom za sebou:
 
 ```js run
-loadScript("/article/promise-chaining/one.js")
-  .then(function(script) {
-    return loadScript("/article/promise-chaining/two.js");
+načtiSkript("/article/promise-chaining/one.js")
+  .then(function(skript) {
+    return načtiSkript("/article/promise-chaining/two.js");
   })
-  .then(function(script) {
-    return loadScript("/article/promise-chaining/three.js");
+  .then(function(skript) {
+    return načtiSkript("/article/promise-chaining/three.js");
   })
-  .then(function(script) {
-    // use functions declared in scripts
-    // to show that they indeed loaded
-    one();
-    two();
-    three();
+  .then(function(skript) {
+    // použijeme funkce deklarované ve skriptech,
+    // abychom ukázali, že se opravdu načetly
+    jedna();
+    dvě();
+    tři();
   });
 ```
 
-This code can be made bit shorter with arrow functions:
+Tento kód lze trochu zkrátit použitím šipkových funkcí:
 
 ```js run
-loadScript("/article/promise-chaining/one.js")
-  .then(script => loadScript("/article/promise-chaining/two.js"))
-  .then(script => loadScript("/article/promise-chaining/three.js"))
-  .then(script => {
-    // scripts are loaded, we can use functions declared there
-    one();
-    two();
-    three();
+načtiSkript("/article/promise-chaining/one.js")
+  .then(skript => načtiSkript("/article/promise-chaining/two.js"))
+  .then(skript => načtiSkript("/article/promise-chaining/three.js"))
+  .then(skript => {
+    // skripty jsou načteny, můžeme použít funkce v nich deklarované
+    jedna();
+    dvě();
+    tři();
   });
 ```
 
 
-Here each `loadScript` call returns a promise, and the next `.then` runs when it resolves. Then it initiates the loading of the next script. So scripts are loaded one after another.
+Zde každé volání metody `načtiSkript` vrátí příslib a další `.then` se spustí, když se tento příslib vyhodnotí. Pak iniciuje načtení dalšího skriptu. Skripty se tedy načtou jeden po druhém.
 
-We can add more asynchronous actions to the chain. Please note that the code is still "flat" — it grows down, not to the right. There are no signs of the "pyramid of doom".
+Můžeme do řetězu přidat další asynchronní akce. Prosíme všimněte si, že kód je stále „plochý“ -- narůstá směrem dolů, ne doprava. Není zde ani stopa po „pyramidě zkázy“.
 
-Technically, we could add `.then` directly to each `loadScript`, like this:
+Technicky můžeme přidat `.then` přímo do každého volání `načtiSkript`, například:
 
 ```js run
-loadScript("/article/promise-chaining/one.js").then(script1 => {
-  loadScript("/article/promise-chaining/two.js").then(script2 => {
-    loadScript("/article/promise-chaining/three.js").then(script3 => {
-      // this function has access to variables script1, script2 and script3
-      one();
-      two();
-      three();
+načtiSkript("/article/promise-chaining/one.js").then(skript1 => {
+  načtiSkript("/article/promise-chaining/two.js").then(skript2 => {
+    načtiSkript("/article/promise-chaining/three.js").then(skript3 => {
+      // tato funkce má přístup k proměnným skript1, skript2 a skript3
+      jedna();
+      dvě();
+      tři();
     });
   });
 });
 ```
 
-This code does the same: loads 3 scripts in sequence. But it "grows to the right". So we have the same problem as with callbacks.
+Tento kód dělá totéž: načte 3 skripty za sebou. Avšak „narůstá směrem doprava“. Máme tedy stejný problém jako s callbacky.
 
-People who start to use promises sometimes don't know about chaining, so they write it this way. Generally, chaining is preferred.
+Začátečníci v používání příslibů někdy zřetězení neznají, takže píší tímto způsobem. Obecně se dává přednost zřetězení.
 
-Sometimes it's ok to write `.then` directly, because the nested function has access to the outer scope. In the example above the most nested callback has access to all variables `script1`, `script2`, `script3`. But that's an exception rather than a rule.
+Někdy se hodí napsat přímo `.then`, protože vnořená funkce má přístup k vnějšímu prostoru proměnných. Ve výše uvedeném příkladu má nejvnořenější callback přístup ke všem proměnným `skript1`, `skript2`, `skript3`. To je však spíše výjimka než pravidlo.
 
 
-````smart header="Thenables"
-To be precise, a handler may return not exactly a promise, but a so-called "thenable" object - an arbitrary object that has a method `.then`. It will be treated the same way as a promise.
+````smart header="Thenable objekty"
+Abychom byli přesní, handler může vrátit ne přímo příslib, ale tzv. „thenable“ objekt *(česky lze přeložit jako „schopný metody then“ -- pozn. překl.)* -- libovolný objekt, který obsahuje metodu `.then`. S ním se bude zacházet stejně jako s příslibem.
 
-The idea is that 3rd-party libraries may implement "promise-compatible" objects of their own. They can have an extended set of methods, but also be compatible with native promises, because they implement `.then`.
+Myšlenkou je, že knihovny třetích stran mohou implementovat objekty „kompatibilní s příslibem“ na vlastní pěst. Tyto objekty mohou mít rozšířenou množinu metod, ale současně být kompatibilní s nativními přísliby, protože implementují `.then`.
 
-Here's an example of a thenable object:
+Zde je příklad thenable objektu:
 
 ```js run
 class Thenable {
-  constructor(num) {
-    this.num = num;
+  constructor(číslo) {
+    this.číslo = číslo;
   }
   then(resolve, reject) {
     alert(resolve); // function() { native code }
-    // resolve with this.num*2 after the 1 second
-    setTimeout(() => resolve(this.num * 2), 1000); // (**)
+    // splní se s this.číslo*2 za 1 sekundu
+    setTimeout(() => resolve(this.číslo * 2), 1000); // (**)
   }
 }
 
 new Promise(resolve => resolve(1))
-  .then(result => {
+  .then(výsledek => {
 *!*
-    return new Thenable(result); // (*)
+    return new Thenable(výsledek); // (*)
 */!*
   })
-  .then(alert); // shows 2 after 1000ms
+  .then(alert); // za 1000 ms zobrazí 2
 ```
 
-JavaScript checks the object returned by the `.then` handler in line `(*)`: if it has a callable method named `then`, then it calls that method providing native functions `resolve`, `reject` as arguments (similar to an executor) and waits until one of them is called. In the example above `resolve(2)` is called after 1 second `(**)`. Then the result is passed further down the chain.
+JavaScript prověří objekt vrácený handlerem `.then` na řádku `(*)`: jestliže obsahuje volatelnou metodu jménem `then`, pak tuto metodu zavolá, přičemž jako argumenty jí poskytne nativní funkce `resolve`, `reject` (podobně jako exekutor) a počká, dokud není jedna z nich zavolána. V uvedeném příkladu se za 1 sekundu volá `resolve(2)` `(**)`. Pak se výsledek předá řetězem dál.
 
-This feature allows us to integrate custom objects with promise chains without having to inherit from `Promise`.
+Tato vlastnost nám umožňuje integrovat do zřetězení příslibů naše vlastní objekty, aniž bychom museli dědit z `Promise`.
 ````
 
 
-## Bigger example: fetch
+## Větší příklad: fetch
 
-In frontend programming, promises are often used for network requests. So let's see an extended example of that.
+Ve front-end programování se přísliby často používají pro síťové požadavky. Podívejme se tedy na rozšířený příklad.
 
-We'll use the [fetch](info:fetch) method to load the information about the user from the remote server. It has a lot of optional parameters covered in [separate chapters](info:fetch), but the basic syntax is quite simple:
+Použijme metodu [fetch](info:fetch) k načtení informací o uživateli ze vzdáleného serveru. Tato metoda má mnoho volitelných parametrů, které jsou popsány v [samostatných kapitolách](info:fetch), ale základní syntaxe je poměrně jednoduchá:
 
 ```js
-let promise = fetch(url);
+let příslib = fetch(url);
 ```
 
-This makes a network request to the `url` and returns a promise. The promise resolves with a `response` object when the remote server responds with headers, but *before the full response is downloaded*.
+To vytvoří síťový požadavek na `url` a vrátí příslib. Tento příslib se splní s objektem `odpověď`, když vzdálený server vrátí headery (hlavičky) odpovědi, ale *dříve, než je načtena celá odpověď*.
 
-To read the full response, we should call the method `response.text()`: it returns a promise that resolves when the full text is downloaded from the remote server, with that text as a result.
+Abychom načetli celou odpověď, měli bychom volat metodu `odpověď.text()`: vrátí příslib, který se splní, až bude ze vzdáleného serveru stažen celý text, a tento text bude výsledkem.
 
-The code below makes a request to `user.json` and loads its text from the server:
+Níže uvedený kód vytvoří požadavek na `user.json` a načte jeho text ze serveru:
 
 ```js run
 fetch('/article/promise-chaining/user.json')
-  // .then below runs when the remote server responds
-  .then(function(response) {
-    // response.text() returns a new promise that resolves with the full response text
-    // when it loads
-    return response.text();
+  // níže uvedené .then se spustí, až vzdálený server odpoví
+  .then(function(odpověď) {
+    // odpověď.text() vrátí nový příslib, který se splní s celým textem odpovědi,
+    // až se odpověď načte
+    return odpověď.text();
   })
   .then(function(text) {
-    // ...and here's the content of the remote file
+    // ...a zde je obsah vzdáleného souboru
     alert(text); // {"name": "iliakan", "isAdmin": true}
   });
 ```
 
-The `response` object returned from `fetch` also includes the method `response.json()` that reads the remote data and parses it as JSON. In our case that's even more convenient, so let's switch to it.
+Objekt `odpověď` vrácený metodou `fetch` obsahuje také metodu `odpověď.json()`, která načte vzdálená data a rozparsuje je jako JSON. V našem případě je to ještě vhodnější, takže k tomu přejděme.
 
-We'll also use arrow functions for brevity:
+Pro stručnost budeme používat šipkové funkce:
 
 ```js run
-// same as above, but response.json() parses the remote content as JSON
+// totéž jako výše, ale odpověď.json() parsuje vzdálený obsah jako JSON
 fetch('/article/promise-chaining/user.json')
-  .then(response => response.json())
-  .then(user => alert(user.name)); // iliakan, got user name
+  .then(odpověď => odpověď.json())
+  .then(uživatel => alert(uživatel.name)); // iliakan, získali jsme jméno uživatele
 ```
 
-Now let's do something with the loaded user.
+Nyní s načteným uživatelem něco udělejme.
 
-For instance, we can make one more request to GitHub, load the user profile and show the avatar:
+Například můžeme vytvořit další požadavek na GitHub, načíst uživatelský profil a zobrazit avatar:
 
 ```js run
-// Make a request for user.json
+// Vytvoříme požadavek na user.json
 fetch('/article/promise-chaining/user.json')
-  // Load it as json
-  .then(response => response.json())
-  // Make a request to GitHub
-  .then(user => fetch(`https://api.github.com/users/${user.name}`))
-  // Load the response as json
-  .then(response => response.json())
-  // Show the avatar image (githubUser.avatar_url) for 3 seconds (maybe animate it)
-  .then(githubUser => {
-    let img = document.createElement('img');
-    img.src = githubUser.avatar_url;
-    img.className = "promise-avatar-example";
-    document.body.append(img);
+  // Načteme ho jako json
+  .then(odpověď => odpověď.json())
+  // Vytvoříme požadavek na GitHub
+  .then(uživatel => fetch(`https://api.github.com/users/${uživatel.name}`))
+  // Načteme odpověď jako json
+  .then(odpověď => odpověď.json())
+  // Zobrazíme obrázek avatara (uživatelGitHubu.avatar_url) na 3 sekundy (může jej rozanimovat)
+  .then(uživatelGitHubu => {
+    let obrázek = document.createElement('img');
+    obrázek.src = uživatelGitHubu.avatar_url;
+    obrázek.className = "promise-avatar-example";
+    document.body.append(obrázek);
 
-    setTimeout(() => img.remove(), 3000); // (*)
+    setTimeout(() => obrázek.remove(), 3000); // (*)
   });
 ```
 
-The code works; see comments about the details. However, there's a potential problem in it, a typical error for those who begin to use promises.
+Kód funguje; podrobnosti viz komentáře. Je zde však potenciální problém, typická chyba začátečníků v používání příslibů.
 
-Look at the line `(*)`: how can we do something *after* the avatar has finished showing and gets removed? For instance, we'd like to show a form for editing that user or something else. As of now, there's no way.
+Podívejme se na řádek `(*)`: jak můžeme něco udělat *poté*, co se avatar přestal zobrazovat a byl odstraněn? Například bychom chtěli zobrazit formulář pro editaci tohoto uživatele nebo něco jiného. Zatím pro to žádný způsob není.
 
-To make the chain extendable, we need to return a promise that resolves when the avatar finishes showing.
+Abychom tento řetěz učinili rozšiřitelným, musíme vrátit příslib, který se splní, až se avatar přestane zobrazovat.
 
-Like this:
+Například:
 
 ```js run
 fetch('/article/promise-chaining/user.json')
-  .then(response => response.json())
-  .then(user => fetch(`https://api.github.com/users/${user.name}`))
-  .then(response => response.json())
+  .then(odpověď => odpověď.json())
+  .then(uživatel => fetch(`https://api.github.com/users/${uživatel.name}`))
+  .then(odpověď => odpověď.json())
 *!*
-  .then(githubUser => new Promise(function(resolve, reject) { // (*)
+  .then(uživatelGitHubu => new Promise(function(resolve, reject) { // (*)
 */!*
-    let img = document.createElement('img');
-    img.src = githubUser.avatar_url;
-    img.className = "promise-avatar-example";
-    document.body.append(img);
+    let obrázek = document.createElement('img');
+    obrázek.src = uživatelGitHubu.avatar_url;
+    obrázek.className = "promise-avatar-example";
+    document.body.append(obrázek);
 
     setTimeout(() => {
-      img.remove();
+      obrázek.remove();
 *!*
-      resolve(githubUser); // (**)
+      resolve(uživatelGitHubu); // (**)
 */!*
     }, 3000);
   }))
-  // triggers after 3 seconds
-  .then(githubUser => alert(`Finished showing ${githubUser.name}`));
+  // spustí se za 3 sekundy
+  .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.name}`));
 ```
 
-That is, the `.then` handler in line `(*)` now returns `new Promise`, that becomes settled only after the call of `resolve(githubUser)` in `setTimeout` `(**)`. The next `.then` in the chain will wait for that.
+Funguje to tak, že handler `.then` na řádku `(*)` nyní vrátí `new Promise`, který se usadí až po volání `resolve(uživatelGitHubu)` ve funkci `setTimeout` `(**)`. Další `.then` v řetězu na to bude čekat.
 
-As a good practice, an asynchronous action should always return a promise. That makes it possible to plan actions after it; even if we don't plan to extend the chain now, we may need it later.
+Je dobrým zvykem, že asynchronní akce by měla vždy vrátit příslib. Důsledkem toho je možné plánovat akce po ní; i když neplánujeme rozšířit řetěz hned, můžeme to potřebovat později.
 
-Finally, we can split the code into reusable functions:
+Nakonec rozdělíme kód na opakovaně použitelné funkce:
 
 ```js run
-function loadJson(url) {
+function načtiJson(url) {
   return fetch(url)
-    .then(response => response.json());
+    .then(odpověď => odpověď.json());
 }
 
-function loadGithubUser(name) {
-  return loadJson(`https://api.github.com/users/${name}`);
+function načtiUživateleGitHubu(jméno) {
+  return načtiJson(`https://api.github.com/users/${jméno}`);
 }
 
-function showAvatar(githubUser) {
+function zobrazAvatar(uživatelGitHubu) {
   return new Promise(function(resolve, reject) {
-    let img = document.createElement('img');
-    img.src = githubUser.avatar_url;
-    img.className = "promise-avatar-example";
-    document.body.append(img);
+    let obrázek = document.createElement('img');
+    obrázek.src = uživatelGitHubu.avatar_url;
+    obrázek.className = "promise-avatar-example";
+    document.body.append(obrázek);
 
     setTimeout(() => {
-      img.remove();
-      resolve(githubUser);
+      obrázek.remove();
+      resolve(uživatelGitHubu);
     }, 3000);
   });
 }
 
-// Use them:
-loadJson('/article/promise-chaining/user.json')
-  .then(user => loadGithubUser(user.name))
-  .then(showAvatar)
-  .then(githubUser => alert(`Finished showing ${githubUser.name}`));
+// Použijeme je:
+načtiJson('/article/promise-chaining/user.json')
+  .then(uživatel => načtiUživateleGitHubu(uživatel.name))
+  .then(zobrazAvatar)
+  .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.name}`));
   // ...
 ```
 
-## Summary
+## Shrnutí
 
-If a `.then` (or `catch/finally`, doesn't matter) handler returns a promise, the rest of the chain waits until it settles. When it does, its result (or error) is passed further.
+Pokud handler `.then` (nebo `catch/finally`, na tom nezáleží) vrátí příslib, zbytek řetězu počká, dokud se tento příslib neusadí. Až se tak stane, jeho výsledek (nebo chyba) se předá dál.
 
-Here's a full picture:
+Zde je úplný obrázek:
 
 ![](promise-handler-variants.svg)

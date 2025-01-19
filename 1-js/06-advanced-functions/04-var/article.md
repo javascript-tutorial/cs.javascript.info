@@ -1,287 +1,287 @@
 
-# The old "var"
+# Starý příkaz „var“
 
-```smart header="This article is for understanding old scripts"
-The information in this article is useful for understanding old scripts.
+```smart header="Tento článek slouží k pochopení starých skriptů"
+Informace v tomto článku je užitečná, abyste porozuměli starým skriptům.
 
-That's not how we write new code.
+Není to způsob, jak psát nový kód.
 ```
 
-In the very first chapter about [variables](info:variables), we mentioned three ways of variable declaration:
+V úplně první kapitole o [proměnných](info:variables) jsme zmínili tři způsoby deklarace proměnných:
 
 1. `let`
 2. `const`
 3. `var`
 
-The `var` declaration is similar to `let`. Most of the time we can replace `let` by `var` or vice-versa and expect things to work:
+Deklarace `var` je podobná `let`. Ve většině případů můžeme nahradit `let` za `var` nebo naopak a očekávat, že vše bude fungovat:
 
 ```js run
-var message = "Hi";
-alert(message); // Hi
+var zpráva = "Ahoj";
+alert(zpráva); // Ahoj
 ```
 
-But internally `var` is a very different beast, that originates from very old times. It's generally not used in modern scripts, but still lurks in the old ones.
+Interně je však `var` velmi odlišná potvůrka, která pochází z prastarých časů. V moderních skriptech se obvykle nepoužívá, ale ve starých stále číhá.
 
-If you don't plan on meeting such scripts you may even skip this chapter or postpone it.
+Pokud neplánujete se s takovými skripty setkat, můžete tuto kapitolu přeskočit nebo odložit na později.
 
-On the other hand, it's important to understand differences when migrating old scripts from `var` to `let`, to avoid odd errors.
+Na druhou stranu je důležité porozumět rozdílům, když převádíte staré skripty z `var` na `let`, abyste se vyhnuli podivným chybám.
 
-## "var" has no block scope
+## „var“ nemá blokovou platnost
 
-Variables, declared with `var`, are either function-scoped or global-scoped. They are visible through blocks.
+Proměnné deklarované pomocí `var` mají rozsah platnosti buď funkční, nebo globální. Jsou viditelné i skrz bloky.
 
-For instance:
-
-```js run
-if (true) {
-  var test = true; // use "var" instead of "let"
-}
-
-*!*
-alert(test); // true, the variable lives after if
-*/!*
-```
-
-As `var` ignores code blocks, we've got a global variable `test`.
-
-If we used `let test` instead of `var test`, then the variable would only be visible inside `if`:
+Například:
 
 ```js run
 if (true) {
-  let test = true; // use "let"
+  var test = true; // použijeme „var“ namísto „let“
 }
 
 *!*
-alert(test); // ReferenceError: test is not defined
+alert(test); // true, proměnná existuje i za if
 */!*
 ```
 
-The same thing for loops: `var` cannot be block- or loop-local:
+Protože `var` ignoruje kódové bloky, vytvořili jsme globální proměnnou `test`.
+
+Kdybychom použili `let test` namísto `var test`, pak by tato proměnná byla viditelná jen uvnitř `if`:
+
+```js run
+if (true) {
+  let test = true; // použijeme „let“
+}
+
+*!*
+alert(test); // ReferenceError: test není definován
+*/!*
+```
+
+Totéž platí pro cykly: `var` nemůže být lokální v bloku nebo ve smyčce:
 
 ```js run
 for (var i = 0; i < 10; i++) {
-  var one = 1;
+  var jedna = 1;
   // ...
 }
 
 *!*
-alert(i);   // 10, "i" is visible after loop, it's a global variable
-alert(one); // 1, "one" is visible after loop, it's a global variable
+alert(i);   // 10, „i“ je viditelná i za cyklem, je to globální proměnná
+alert(jedna); // 1, „jedna“ je viditelná i za cyklem, je to globální proměnná
 */!*
 ```
 
-If a code block is inside a function, then `var` becomes a function-level variable:
+Nachází-li se kódový blok uvnitř funkce, pak `var` deklaruje proměnnou na úrovni funkce:
 
 ```js run
-function sayHi() {
+function řekniAhoj() {
   if (true) {
-    var phrase = "Hello";
+    var věta = "Ahoj";
   }
 
-  alert(phrase); // works
+  alert(věta); // funguje
 }
 
-sayHi();
-alert(phrase); // ReferenceError: phrase is not defined
+řekniAhoj();
+alert(věta); // ReferenceError: věta není definována
 ```
 
-As we can see, `var` pierces through `if`, `for` or other code blocks. That's because a long time ago in JavaScript, blocks had no Lexical Environments, and `var` is a remnant of that.
+Jak vidíme, `var` se probije skrz `if`, `for` a jiné kódové bloky. Je to proto, že v dávných časech JavaScriptu bloky neměly lexikální prostředí a `var` je toho pozůstatkem.
 
-## "var" tolerates redeclarations
+## „var“ toleruje opakované deklarace
 
-If we declare the same variable with `let` twice in the same scope, that's an error:
+Jestliže deklarujeme stejnou proměnnou pomocí `let` ve stejné oblasti dvakrát, nastane chyba:
 
 ```js run
-let user;
-let user; // SyntaxError: 'user' has already been declared
+let uživatel;
+let uživatel; // SyntaxError: 'uživatel' již byl deklarován
 ```
 
-With `var`, we can redeclare a variable any number of times. If we use `var` with an already-declared variable, it's just ignored:
+Pomocí `var` můžeme znovu deklarovat proměnnou, kolikrát chceme. Použijeme-li `var` s již deklarovanou proměnnou, bude ignorováno:
 
 ```js run
-var user = "Pete";
+var uživatel = "Petr";
 
-var user = "John"; // this "var" does nothing (already declared)
-// ...it doesn't trigger an error
+var uživatel = "Jan"; // tento „var“ neudělá nic (proměnná je již deklarována)
+// ...nevyvolá chybu
 
-alert(user); // John
+alert(uživatel); // Jan
 ```
 
-## "var" variables can be declared below their use
+## Proměnné deklarované „var“ můžeme deklarovat až za jejich použitím
 
-`var` declarations are processed when the function starts (or script starts for globals).
+Deklarace `var` se zpracovávají, když se funkce spustí (nebo když se spustí skript, jsou-li globální).
 
-In other words, `var` variables are defined from the beginning of the function, no matter where the definition is (assuming that the definition is not in the nested function).
+Jinými slovy, proměnné `var` jsou definovány od začátku funkce bez ohledu na to, kde se tato definice nachází (předpokládáme, že definice není uvnitř vnořené funkce).
 
-So this code:
+Takže tento kód:
 
 ```js run
-function sayHi() {
-  phrase = "Hello";
+function řekniAhoj() {
+  věta = "Ahoj";
 
-  alert(phrase);
+  alert(věta);
 
 *!*
-  var phrase;
+  var věta;
 */!*
 }
-sayHi();
+řekniAhoj();
 ```
 
-...Is technically the same as this (moved `var phrase` above):
+...je technicky stejný jako tento (přesuneme `var věta` nahoru):
 
 ```js run
-function sayHi() {
+function řekniAhoj() {
 *!*
-  var phrase;
+  var věta;
 */!*
 
-  phrase = "Hello";
+  věta = "Ahoj";
 
-  alert(phrase);
+  alert(věta);
 }
-sayHi();
+řekniAhoj();
 ```
 
-...Or even as this (remember, code blocks are ignored):
+...Nebo i jako tento (pamatujte, že kódové bloky jsou ignorovány):
 
 ```js run
-function sayHi() {
-  phrase = "Hello"; // (*)
+function řekniAhoj() {
+  věta = "Ahoj"; // (*)
 
   *!*
   if (false) {
-    var phrase;
+    var věta;
   }
   */!*
 
-  alert(phrase);
+  alert(věta);
 }
-sayHi();
+řekniAhoj();
 ```
 
-People also call such behavior "hoisting" (raising), because all `var` are "hoisted" (raised) to the top of the function.
+Takovému chování lidé někdy říkají „stoupání“ *(anglicky „hoisting“ nebo „raising“ -- pozn. překl.)*, jelikož každý `var` „vystoupá“ *(„hoist“, „raise“)* až k vrcholu funkce.
 
-So in the example above, `if (false)` branch never executes, but that doesn't matter. The `var` inside it is processed in the beginning of the function, so at the moment of `(*)` the variable exists.
+Ve výše uvedeném příkladu se větev `if (false)` nikdy nespustí, ale na tom nezáleží. Příkaz `var` uvnitř se zpracuje na začátku funkce, takže ve chvíli `(*)` proměnná existuje.
 
-**Declarations are hoisted, but assignments are not.**
+**Deklarace stoupají, ale přiřazení ne.**
 
-That's best demonstrated with an example:
+Nejlépe to uvidíme na příkladu:
 
 ```js run
-function sayHi() {
-  alert(phrase);
+function řekniAhoj() {
+  alert(věta);
 
 *!*
-  var phrase = "Hello";
+  var věta = "Ahoj";
 */!*
 }
 
-sayHi();
+řekniAhoj();
 ```
 
-The line `var phrase = "Hello"` has two actions in it:
+Řádek `var věta = "Ahoj"` má v sobě dvě akce:
 
-1. Variable declaration `var`
-2. Variable assignment `=`.
+1. Deklaraci proměnné `var`.
+2. Přiřazení proměnné `=`.
 
-The declaration is processed at the start of function execution ("hoisted"), but the assignment always works at the place where it appears. So the code works essentially like this:
+Deklarace se vykonává na začátku spuštění funkce („stoupání“), ale přiřazení se provede vždy na místě, na němž se objevilo. Kód tedy funguje v zásadě následovně:
 
 ```js run
-function sayHi() {
+function řekniAhoj() {
 *!*
-  var phrase; // declaration works at the start...
+  var věta; // deklarace se provede na začátku...
 */!*
 
-  alert(phrase); // undefined
+  alert(věta); // undefined
 
 *!*
-  phrase = "Hello"; // ...assignment - when the execution reaches it.
+  věta = "Ahoj"; // ...přiřazení - když se na ně dostane provádění.
 */!*
 }
 
-sayHi();
+řekniAhoj();
 ```
 
-Because all `var` declarations are processed at the function start, we can reference them at any place. But variables are undefined until the assignments.
+Protože všechny deklarace `var` se zpracovávají na začátku funkce, můžeme se na ně odkazovat kdekoli. Ale proměnné jsou nedefinované až do přiřazení.
 
-In both examples above, `alert` runs without an error, because the variable `phrase` exists. But its value is not yet assigned, so it shows `undefined`.
+V obou příkladech se `alert` spustí bez chyby, protože proměnná `věta` existuje. Ale ještě jí není přiřazena hodnota, takže se zobrazí `undefined`.
 
 ## IIFE
 
-In the past, as there was only `var`, and it has no block-level visibility, programmers invented a way to emulate it. What they did was called "immediately-invoked function expressions" (abbreviated as IIFE).
+V minulosti, kdy bylo jenom `var` a neexistovala viditelnost na úrovni bloku, programátoři vymysleli způsob, jak ji emulovat. To, co vynalezli, nazvali „okamžitě volané funkční výrazy“, zkráceně IIFE *(z anglického „immediately-invoked function expressions“ - pozn. překl.)*.
 
-That's not something we should use nowadays, but you can find them in old scripts.
+Není to nic, co bychom měli používat v současnosti, ale ve starých skriptech je stále můžete najít.
 
-An IIFE looks like this:
+IIFE vypadá následovně:
 
 ```js run
 (function() {
 
-  var message = "Hello";
+  var zpráva = "Ahoj";
 
-  alert(message); // Hello
+  alert(zpráva); // Ahoj
 
 })();
 ```
 
-Here, a Function Expression is created and immediately called. So the code executes right away and has its own private variables.
+Zde se vytvoří a okamžitě zavolá funkční výraz. Kód se tedy okamžitě spustí a má své vlastní soukromé proměnné.
 
-The Function Expression is wrapped with parenthesis `(function {...})`, because when JavaScript engine encounters `"function"` in the main code, it understands it as the start of a Function Declaration. But a Function Declaration must have a name, so this kind of code will give an error:
+Funkční výraz je uzavřen do závorek `(function {...})`, protože když engine JavaScriptu narazí v hlavním kódu na `„function“`, chápe to jako začátek deklarace funkce. Avšak deklarace funkce musí mít svůj název, takže tento kód vyvolá chybu:
 
 ```js run
-// Tries to declare and immediately call a function
-function() { // <-- SyntaxError: Function statements require a function name
+// Snaží se deklarovat a okamžitě zavolat funkci
+function() { // <-- SyntaxError: Deklarace funkce vyžaduje název funkce
 
-  var message = "Hello";
+  var zpráva = "Ahoj";
 
-  alert(message); // Hello
+  alert(zpráva); // Ahoj
 
 }();
 ```
 
-Even if we say: "okay, let's add a name", that won't work, as JavaScript does not allow Function Declarations to be called immediately:
+I kdybychom si řekli: „dobře, tak přidáme název“, nebude to fungovat, protože JavaScript neumožňuje, aby byla deklarace funkce okamžitě volána:
 
 ```js run
-// syntax error because of parentheses below
-function go() {
+// syntaktická chyba kvůli závorkám níže
+function jdi() {
 
-}(); // <-- can't call Function Declaration immediately
+}(); // <-- deklaraci funkce nemůžeme okamžitě volat
 ```
 
-So, the parentheses around the function is a trick to show JavaScript that the function is created in the context of another expression, and hence it's a Function Expression: it needs no name and can be called immediately.
+Závorky kolem funkce jsou tedy trik, jak ukázat JavaScriptu, že funkce je vytvořena v kontextu jiného výrazu, a proto je to funkční výraz: nemusí mít název a může být okamžitě zavolán.
 
-There exist other ways besides parentheses to tell JavaScript that we mean a Function Expression:
+Kromě závorek existují i jiné způsoby, jak oznámit JavaScriptu, že máme na mysli funkční výraz:
 
 ```js run
-// Ways to create IIFE
+// Způsoby vytvoření IIFE
 
 *!*(*/!*function() {
-  alert("Parentheses around the function");
+  alert("Závorky okolo funkce");
 }*!*)*/!*();
 
 *!*(*/!*function() {
-  alert("Parentheses around the whole thing");
+  alert("Závorky okolo toho všeho");
 }()*!*)*/!*;
 
 *!*!*/!*function() {
-  alert("Bitwise NOT operator starts the expression");
+  alert("Bitový operátor NOT zahajuje výraz");
 }();
 
 *!*+*/!*function() {
-  alert("Unary plus starts the expression");
+  alert("Unární plus zahajuje výraz");
 }();
 ```
 
-In all the above cases we declare a Function Expression and run it immediately. Let's note again: nowadays there's no reason to write such code.
+Ve všech výše uvedených případech deklarujeme funkční výraz a okamžitě jej zavoláme. Znovu opakujeme: v dnešní době není důvod takový kód psát.
 
-## Summary
+## Shrnutí
 
-There are two main differences of `var` compared to `let/const`:
+Existují dva hlavní rozdíly `var` ve srovnání s `let/const`:
 
-1. `var` variables have no block scope, their visibility is scoped to current function, or global, if declared outside function.
-2. `var` declarations are processed at function start (script start for globals).
+1. Proměnné `var` nemají blokovou platnost a oblast jejich viditelnosti je celá aktuální funkce. Jsou-li deklarovány mimo funkci, jsou globální.
+2. Deklarace `var` se zpracovávají na začátku funkce (globální deklarace na začátku skriptu).
 
-There's one more very minor difference related to the global object, that we'll cover in the next chapter.
+Existuje ještě jeden velmi drobný rozdíl vztahující se ke globálnímu objektu, který probereme v příští kapitole.
 
-These differences make `var` worse than `let` most of the time. Block-level variables is such a great thing. That's why `let` was introduced in the standard long ago, and is now a major way (along with `const`) to declare a variable.
+Kvůli těmto rozdílům je `var` ve většině případů horší než `let`. Proměnné na úrovni bloku jsou vynikající věc. To je důvod, proč bylo do standardu již před dlouhou dobou zahrnuto `let`, a to je nyní hlavním způsobem (spolu s `const`) deklarace proměnných.

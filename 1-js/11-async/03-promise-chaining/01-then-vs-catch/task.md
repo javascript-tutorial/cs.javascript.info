@@ -1,13 +1,13 @@
-# Promise: then versus catch
+# Příslib: then oproti catch
 
-Are these code fragments equal? In other words, do they behave the same way in any circumstances, for any handler functions?
+Jsou tyto fragmenty kódu ekvivalentní? Jinými slovy, chovají se zcela stejně za každých okolností a pro jakékoli handlery?
 
 ```js
-promise.then(f1).catch(f2);
+příslib.then(f1).catch(f2);
 ```
 
-Versus:
+Oproti:
 
 ```js
-promise.then(f1, f2);
+příslib.then(f1, f2);
 ```

@@ -1,29 +1,29 @@
 ```js run demo
-function sumSalaries(salaries) {
+function sečtiProdeje(prodeje) {
 
-  let sum = 0;
-  for (let salary of Object.values(salaries)) {
-    sum += salary;
+  let součet = 0;
+  for (let prodej of Object.values(prodeje)) {
+    součet += prodej;
   }
 
-  return sum; // 650
+  return součet; // 650
 }
 
-let salaries = {
-  "John": 100,
-  "Pete": 300,
-  "Mary": 250
+let prodeje = {
+  "Jan": 100,
+  "Petr": 300,
+  "Marie": 250
 };
 
-alert( sumSalaries(salaries) ); // 650
+alert( sečtiProdeje(prodeje) ); // 650
 ```
-Or, optionally, we could also get the sum using `Object.values` and `reduce`:
+Nebo volitelně můžeme také získat součet použitím `Object.values` a `reduce`:
 
 ```js
-// reduce loops over array of salaries,
-// adding them up
-// and returns the result
-function sumSalaries(salaries) {
-  return Object.values(salaries).reduce((a, b) => a + b, 0) // 650
+// reduce cykluje nad polem prodejů,
+// sečte je
+// a vrátí výsledek
+function sečtiProdeje(prodeje) {
+  return Object.values(prodeje).reduce((a, b) => a + b, 0) // 650
 }
 ```

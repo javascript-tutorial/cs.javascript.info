@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Using "this" in object literal
+# Použití „this“ v objektovém literálu
 
-Here the function `makeUser` returns an object.
+Zde funkce `vytvořUživatele` vrátí objekt.
 
-What is the result of accessing its `ref`? Why?
+Jaký je výsledek přístupu k jeho vlastnosti `odkaz`? Proč?
 
 ```js
-function makeUser() {
+function vytvořUživatele() {
   return {
-    name: "John",
-    ref: this
+    jméno: "Jan",
+    odkaz: this
   };
 }
 
-let user = makeUser();
+let uživatel = vytvořUživatele();
 
-alert( user.ref.name ); // What's the result?
+alert( uživatel.odkaz.jméno ); // Jaký je výsledek?
 ```
 

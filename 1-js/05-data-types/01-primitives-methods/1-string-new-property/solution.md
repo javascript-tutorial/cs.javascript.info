@@ -1,24 +1,24 @@
 
-Try running it:
+Zkuste si to spustit:
 
 ```js run
-let str = "Hello";
+let str = "Ahoj";
 
 str.test = 5; // (*)
 
 alert(str.test);
 ```
 
-Depending on whether you have `use strict` or not, the result may be:
-1. `undefined` (no strict mode)
-2. An error (strict mode).
+Podle toho, zda máte `use strict` nebo ne, výsledek může být:
+1. `undefined` (nestriktní režim).
+2. Chyba (striktní režim).
 
-Why? Let's replay what's happening at line `(*)`:
+Proč? Přehrajme si, co se děje na řádku `(*)`:
 
-1. When a property of `str` is accessed, a "wrapper object" is created.
-2. In strict mode, writing into it is an error.
-3. Otherwise, the operation with the property is carried on, the object gets the `test` property, but after that the "wrapper object" disappears, so in the last line `str` has no trace of the property.
+1. Když přistoupíme k vlastnosti `str`, vytvoří se „wrapper“.
+2. Ve striktním režimu zápis do něj znamená chybu.
+3. Jinak bude operace s touto vlastností provedena, objekt získá vlastnost `test`, ale poté „wrapper“ zmizí, takže na posledním řádku nemá `str` po této vlastnosti ani stopu.
 
-**This example clearly shows that primitives are not objects.**
+**Tento příklad jednoznačně dokazuje, že primitivy nejsou objekty.**
 
-They can't store additional data.
+Nelze do nich ukládat další data.
