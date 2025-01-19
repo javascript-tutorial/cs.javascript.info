@@ -1,250 +1,250 @@
 
-# Object to primitive conversion
+# Konverze objektů na primitivní typy
 
-What happens when objects are added `obj1 + obj2`, subtracted `obj1 - obj2` or printed using `alert(obj)`?
+Co se stane, když se objekty sečtou `obj1 + obj2`, odečtou `obj1 - obj2` nebo zobrazí pomocí `alert(obj)`?
 
-JavaScript doesn't allow you to customize how operators work on objects. Unlike some other programming languages, such as Ruby or C++, we can't implement a special object method to handle addition (or other operators).
+JavaScript neumožňuje přesně nastavit způsob, jakým operátory fungují nad objekty. Na rozdíl od některých jiných programovacích jazyků, např. Ruby nebo C++, nemůžeme implementovat speciální objektovou metodu, která bude zpracovávat sčítání (nebo jiné operátory).
 
-In case of such operations, objects are auto-converted to primitives, and then the operation is carried out over these primitives and results in a primitive value.
+Při takovýchto operacích se objekty automaticky konvertují na primitivy a pak se nad těmito primitivy vykoná operace, jejímž výsledkem je primitivní hodnota.
 
-That's an important limitation: the result of `obj1 + obj2` (or another math operation) can't be another object!
+To je důležité omezení: výsledkem `obj1 + obj2` (nebo jiné matematické operace) nemůže být jiný objekt!
 
-E.g. we can't make objects representing vectors or matrices (or achievements or whatever), add them and expect a "summed" object as the result. Such architectural feats are automatically "off the board".
+Například nemůžeme vytvořit objekty představující vektory nebo matice (nebo výsledky či cokoli jiného), sečíst je a jako výsledek očekávat „sečtený“ objekt. Takové architektonické výkony jsou automaticky „mimo mísu“.
 
-So, because we can't technically do much here, there's no maths with objects in real projects. When it happens, with rare exceptions, it's because of a coding mistake.
+Protože zde toho technicky nemůžeme mnoho udělat, v reálných projektech nebývají žádné matematické operace s objekty. Když se objeví, je to až na vzácné výjimky důsledkem chyby v kódu.
 
-In this chapter we'll cover how an object converts to primitive and how to customize it.
+V této kapitole probereme, jak převést objekt na primitiv a jak si to přizpůsobit.
 
-We have two purposes:
+Má to dva účely:
 
-1. It will allow us to understand what's going on in case of coding mistakes, when such an operation happened accidentally.
-2. There are exceptions, where such operations are possible and look good. E.g. subtracting or comparing dates (`Date` objects). We'll come across them later.
+1. Umožní nám to porozumět, co se děje v případě chyby v kódu, když k takové operaci neúmyslně dojde.
+2. Existují výjimky, kdy jsou takové operace možné a vypadají dobře. Například odečítání nebo porovnávání dat (objekty `Date`). Narazíme na ně později.
 
-## Conversion rules
+## Pravidla konverze
 
-In the chapter <info:type-conversions> we've seen the rules for numeric, string and boolean conversions of primitives. But we left a gap for objects. Now, as we know about methods and symbols it becomes possible to fill it.
+V kapitole <info:type-conversions> jsme viděli pravidla číselných, řetězcových a booleanových konverzí primitivů. Objekty jsme však vynechali. Nyní, když známe metody a symboly, můžeme tuto mezeru zaplnit.
 
-1. There's no conversion to boolean. All objects are `true` in a boolean context, as simple as that. There exist only numeric and string conversions.
-2. The numeric conversion happens when we subtract objects or apply mathematical functions. For instance, `Date` objects (to be covered in the chapter <info:date>) can be subtracted, and the result of `date1 - date2` is the time difference between two dates.
-3. As for the string conversion -- it usually happens when we output an object with `alert(obj)` and in similar contexts.
+1. Neexistuje žádná konverze na boolean. V booleovském kontextu jsou všechny objekty prostě a jednoduše `true`. Existují jen konverze na číslo a na řetězec.
+2. Konverze na číslo se odehrává, když objekty odečítáme nebo na nich provádíme matematické funkce. Například objekty `Date` (vysvětlíme je v kapitole <info:date>) můžeme od sebe odečíst a výsledkem `datum1 - datum2` je časový rozdíl mezi těmito dvěma daty.
+3. Co se týče konverze na řetězec -- ta se zpravidla odehrává, když pošleme objekt na výstup, např. `alert(obj)`, a v podobných kontextech.
 
-We can implement string and numeric conversion by ourselves, using special object methods.
+Konverzi na řetězec a na číslo si můžeme implementovat sami použitím speciálních objektových metod.
 
-Now let's get into technical details, because it's the only way to cover the topic in-depth.
+Podívejme se nyní na technické podrobnosti, protože to je jediný způsob, jak toto téma pokrýt do hloubky.
 
-## Hints
+## Náznaky
 
-How does JavaScript decide which conversion to apply?
+Podle čeho se JavaScript rozhoduje, kterou konverzi použít?
 
-There are three variants of type conversion, that happen in various situations. They're called "hints", as described in the [specification](https://tc39.github.io/ecma262/#sec-toprimitive):
+Existují tři varianty typové konverze, k nimž dochází v různých situacích. Nazývají se „náznaky“ („hinty“) a jsou popsány ve [specifikaci](https://tc39.github.io/ecma262/#sec-toprimitive):
 
 `"string"`
-: For an object-to-string conversion, when we're doing an operation on an object that expects a string, like `alert`:
+: Pro konverzi objektu na řetězec, když nad objektem provádíme operaci, která očekává řetězec, např. `alert`:
 
     ```js
-    // output
+    // výstup
     alert(obj);
 
-    // using object as a property key
-    anotherObj[obj] = 123;
+    // použití objektu jako klíče vlastnosti
+    dalšíObj[obj] = 123;
     ```
 
 `"number"`
-: For an object-to-number conversion, like when we're doing maths:
+: Pro konverzi objektu na číslo, např. když provádíme matematické výpočty:
 
     ```js
-    // explicit conversion
-    let num = Number(obj);
+    // explicitní konverze
+    let číslo = Number(obj);
 
-    // maths (except binary plus)
-    let n = +obj; // unary plus
-    let delta = date1 - date2;
+    // matematika (kromě binárního plus)
+    let n = +obj; // unární plus
+    let delta = datum1 - datum2;
 
-    // less/greater comparison
-    let greater = user1 > user2;
+    // porovnání menší/větší než
+    let větší = uživatel1 > uživatel2;
     ```
-
-    Most built-in mathematical functions also include such conversion.
+    
+    Takovou konverzi obsahuje také většina vestavěných matematických funkcí.
 
 `"default"`
-: Occurs in rare cases when the operator is "not sure" what type to expect.
+: Nastává ve vzácných případech, když si operátor „není jist“, jaký typ má očekávat.
 
-    For instance, binary plus `+` can work both with strings (concatenates them) and numbers (adds them). So if a binary plus gets an object as an argument, it uses the `"default"` hint to convert it.
+    Například binární plus `+` může pracovat jak s řetězci (spojuje je), tak s čísly (sčítá je). Jestliže tedy binární plus obdrží objekt jako argument, použije k jeho konverzi náznak `"default"`.
 
-    Also, if an object is compared using `==` with a string, number or a symbol, it's also unclear which conversion should be done, so the `"default"` hint is used.
+    Rovněž je-li objekt porovnáván s řetězcem, číslem nebo symbolem pomocí `==`, není jisté, která konverze by se měla provést, takže je použit náznak `"default"`.
 
     ```js
-    // binary plus uses the "default" hint
-    let total = obj1 + obj2;
+    // binární plus používá náznak "default"
+    let celkem = obj1 + obj2;
 
-    // obj == number uses the "default" hint
-    if (user == 1) { ... };
+    // obj == číslo používá náznak "default"
+    if (uživatel == 1) { ... };
     ```
 
-    The greater and less comparison operators, such as `<` `>`, can work with both strings and numbers too. Still, they use the `"number"` hint, not `"default"`. That's for historical reasons.
+    Také operátory porovnání větší než a menší než, např. `<` `>`, mohou pracovat s řetězci i s čísly. Ty však používají náznak `"number"`, ne `"default"`. Je tomu tak z historických důvodů.
 
-In practice though, things are a bit simpler.
+V praxi je to však o něco jednodušší.
 
-All built-in objects except for one case (`Date` object, we'll learn it later) implement `"default"` conversion the same way as `"number"`. And we probably should do the same.
+Všechny vestavěné objekty až na jednu výjimku (objekt `Date`, dozvíme se o něm později) implementují konverzi `"default"` stejným způsobem jako `"number"`. A my bychom asi měli dělat totéž.
 
-Still, it's important to know about all 3 hints, soon we'll see why.
+Stále je však důležité znát všechny 3 náznaky. Brzy uvidíme proč.
 
-**To do the conversion, JavaScript tries to find and call three object methods:**
+**Když JavaScript provádí konverzi, snaží se najít a zavolat tři objektové metody:**
 
-1. Call `obj[Symbol.toPrimitive](hint)` - the method with the symbolic key `Symbol.toPrimitive` (system symbol), if such method exists,
-2. Otherwise if hint is `"string"`
-    - try calling `obj.toString()` or `obj.valueOf()`, whatever exists.
-3. Otherwise if hint is `"number"` or `"default"`
-    - try calling `obj.valueOf()` or `obj.toString()`, whatever exists.
+1. Zavolá `obj[Symbol.toPrimitive](náznak)` -- metodu se symbolickým klíčem `Symbol.toPrimitive` (systémový symbol), jestliže taková metoda existuje.
+2. V opačném případě, je-li náznak `"string"`:
+    - pokusí se zavolat `obj.toString()` nebo `obj.valueOf()`, první z nich, která existuje.
+3. V opačném případě, je-li náznak `"number"` nebo `"default"`:
+    - pokusí se zavolat `obj.valueOf()` nebo `obj.toString()`, první z nich, která existuje.
 
 ## Symbol.toPrimitive
 
-Let's start from the first method. There's a built-in symbol named `Symbol.toPrimitive` that should be used to name the conversion method, like this:
+Začněme první metodou. V JavaScriptu je vestavěný symbol jménem `Symbol.toPrimitive`, který by měl být použit k pojmenování konverzní metody, např. takto:
 
 ```js
-obj[Symbol.toPrimitive] = function(hint) {
-  // here goes the code to convert this object to a primitive
-  // it must return a primitive value
-  // hint = one of "string", "number", "default"
+obj[Symbol.toPrimitive] = function(náznak) {
+  // sem přijde kód, který převede tento objekt na primitiv
+  // musí vrátit primitivní hodnotu
+  // náznak = jeden ze "string", "number", "default"
 };
 ```
 
-If the method `Symbol.toPrimitive` exists, it's used for all hints, and no more methods are needed.
+Jestliže metoda `Symbol.toPrimitive` existuje, bude použita pro všechny náznaky a žádné další metody nejsou zapotřebí.
 
-For instance, here `user` object implements it:
+Například zde ji implementuje objekt `uživatel`:
 
 ```js run
-let user = {
-  name: "John",
-  money: 1000,
+let uživatel = {
+  jméno: "Jan",
+  peníze: 1000,
 
-  [Symbol.toPrimitive](hint) {
-    alert(`hint: ${hint}`);
-    return hint == "string" ? `{name: "${this.name}"}` : this.money;
+  [Symbol.toPrimitive](náznak) {
+    alert(`náznak: ${náznak}`);
+    return náznak == "string" ? `{jméno: "${this.jméno}"}` : this.peníze;
   }
 };
 
-// conversions demo:
-alert(user); // hint: string -> {name: "John"}
-alert(+user); // hint: number -> 1000
-alert(user + 500); // hint: default -> 1500
+// demo konverzí:
+alert(uživatel); // náznak: string -> {jméno: "Jan"}
+alert(+uživatel); // náznak: number -> 1000
+alert(uživatel + 500); // náznak: default -> 1500
 ```
 
-As we can see from the code, `user` becomes a self-descriptive string or a money amount, depending on the conversion. The single method `user[Symbol.toPrimitive]` handles all conversion cases.
+Jak vidíme z kódu, `uživatel` se stane sebepopisujícím řetězcem nebo peněžní částkou v závislosti na druhu konverze. Všechny případy konverze obstarává jediná metoda `uživatel[Symbol.toPrimitive]`.
 
 ## toString/valueOf
 
-If there's no `Symbol.toPrimitive` then JavaScript tries to find methods `toString` and `valueOf`:
+Neexistuje-li `Symbol.toPrimitive`, pak se JavaScript pokusí najít metody `toString` a `valueOf`:
 
-- For the `"string"` hint: call `toString` method, and if it doesn't exist or if it returns an object instead of a primitive value, then call `valueOf` (so `toString` has the priority for string conversions).
-- For other hints: call `valueOf`, and if it doesn't exist or if it returns an object instead of a primitive value, then call `toString` (so `valueOf` has the priority for maths).
+- Pro náznak `"string"`: volá se metoda `toString`, a jestliže neexistuje nebo vrátí objekt místo primitivní hodnoty, pak se volá `valueOf` (při konverzi na řetězec má tedy přednost `toString`).
+- Pro jiné náznaky: volá se `valueOf`, a jestliže neexistuje nebo vrátí objekt místo primitivní hodnoty, pak se volá `toString` (při matematických výpočtech má tedy přednost `valueOf`).
 
-Methods `toString` and `valueOf` come from ancient times. They are not symbols (symbols did not exist that long ago), but rather "regular" string-named methods. They provide an alternative "old-style" way to implement the conversion.
+Metody `toString` a `valueOf` pocházejí z dávné minulosti. Nejsou to symboly (symboly tak dávno ještě neexistovaly), ale „obvyklé“ metody s řetězcovým názvem. Poskytují alternativní způsob „ve starém stylu“, jak implementovat konverzi.
 
-These methods must return a primitive value. If `toString` or `valueOf` returns an object, then it's ignored (same as if there were no method).
+Tyto metody musejí vracet primitivní hodnotu. Jestliže `toString` nebo `valueOf` vrátí objekt, jsou ignorovány (stejně, jako by taková metoda neexistovala).
 
-By default, a plain object has following `toString` and `valueOf` methods:
+Výchozí planý objekt obsahuje následující metody `toString` a `valueOf`:
 
-- The `toString` method returns a string `"[object Object]"`.
-- The `valueOf` method returns the object itself.
+- Metoda `toString` vrací řetězec `"[object Object]"`.
+- Metoda `valueOf` vrací objekt samotný.
 
-Here's the demo:
+Zde je příklad:
 
 ```js run
-let user = {name: "John"};
+let uživatel = {jméno: "Jan"};
 
-alert(user); // [object Object]
-alert(user.valueOf() === user); // true
+alert(uživatel); // [object Object]
+alert(uživatel.valueOf() === uživatel); // true
 ```
 
-So if we try to use an object as a string, like in an `alert` or so, then by default we see `[object Object]`.
+Jestliže se tedy pokusíme použít objekt jako řetězec, např. ve volání `alert` nebo podobně, pak standardně uvidíme `[object Object]`.
 
-The default `valueOf` is mentioned here only for the sake of completeness, to avoid any confusion. As you can see, it returns the object itself, and so is ignored. Don't ask me why, that's for historical reasons. So we can assume it doesn't exist.
+Výchozí `valueOf` je zde zmíněna jen pro úplnost, abychom se vyhnuli zmatkům. Jak vidíte, vrací objekt samotný, a proto je ignorována. Neptejte se mě proč, je tomu tak z historických důvodů. Můžeme tedy předpokládat, že ani neexistuje.
 
-Let's implement these methods to customize the conversion.
+Implementujme tyto metody, abychom si konverzi přizpůsobili.
 
-For instance, here `user` does the same as above using a combination of `toString` and `valueOf` instead of `Symbol.toPrimitive`:
+Například zde `uživatel` dělá totéž jako výše pomocí kombinace `toString` a `valueOf` namísto `Symbol.toPrimitive`:
 
 ```js run
-let user = {
-  name: "John",
-  money: 1000,
+let uživatel = {
+  jméno: "Jan",
+  peníze: 1000,
 
-  // for hint="string"
+  // pro náznak="string"
   toString() {
-    return `{name: "${this.name}"}`;
+    return `{jméno: "${this.jméno}"}`;
   },
 
-  // for hint="number" or "default"
+  // pro náznak="number" nebo "default"
   valueOf() {
-    return this.money;
+    return this.peníze;
   }
 
 };
 
-alert(user); // toString -> {name: "John"}
-alert(+user); // valueOf -> 1000
-alert(user + 500); // valueOf -> 1500
+alert(uživatel); // toString -> {jméno: "Jan"}
+alert(+uživatel); // valueOf -> 1000
+alert(uživatel + 500); // valueOf -> 1500
 ```
 
-As we can see, the behavior is the same as the previous example with `Symbol.toPrimitive`.
+Jak vidíme, chování je stejné jako v předchozím příkladu se `Symbol.toPrimitive`.
 
-Often we want a single "catch-all" place to handle all primitive conversions. In this case, we can implement `toString` only, like this:
+Často chceme, aby všechny konverze na primitivy obsloužilo jediné „vše zachytávající“ místo. V tom případě můžeme implementovat jen `toString`, např. takto:
 
 ```js run
-let user = {
-  name: "John",
+let uživatel = {
+  jméno: "Jan",
 
   toString() {
-    return this.name;
+    return this.jméno;
   }
 };
 
-alert(user); // toString -> John
-alert(user + 500); // toString -> John500
+alert(uživatel); // toString -> Jan
+alert(uživatel + 500); // toString -> Jan500
 ```
 
-In the absence of `Symbol.toPrimitive` and `valueOf`, `toString` will handle all primitive conversions.
+Nejsou-li přítomny metody `Symbol.toPrimitive` a `valueOf`, obstará všechny konverze na primitivy metoda `toString`.
 
-### A conversion can return any primitive type
+### Konverze může vrátit jakýkoli primitivní typ
 
-The important thing to know about all primitive-conversion methods is that they do not necessarily return the "hinted" primitive.
+O všech metodách konverze na primitivy je důležité vědět, že nemusejí nutně vracet „naznačený“ primitiv.
 
-There is no control whether `toString` returns exactly a string, or whether `Symbol.toPrimitive` method returns a number for the hint `"number"`.
+Nekontroluje se, zda metoda `toString` opravdu vrátila řetězec nebo zda metoda `Symbol.toPrimitive` pro náznak `"number"` vrátila opravdu číslo.
 
-The only mandatory thing: these methods must return a primitive, not an object.
+Jediné, co je povinné: tyto metody musejí vracet primitiv, ne objekt.
 
-```smart header="Historical notes"
-For historical reasons, if `toString` or `valueOf` returns an object, there's no error, but such value is ignored (like if the method didn't exist). That's because in ancient times there was no good "error" concept in JavaScript.
+```smart header="Historické poznámky"
+Z historických důvodů platí, že jestliže `toString` nebo `valueOf` vrátí objekt, nenastane chyba, ale taková hodnota se ignoruje (jako by tato metoda neexistovala). Je to proto, že v dávné minulosti nebyl v JavaScriptu žádný dobrý „chybový“ koncept.
 
-In contrast, `Symbol.toPrimitive` is stricter, it *must* return a primitive, otherwise there will be an error.
+Naproti tomu `Symbol.toPrimitive` je striktnější a *musí* vrátit primitiv, jinak nastane chyba.
 ```
 
-## Further conversions
+## Další konverze
 
-As we know already, many operators and functions perform type conversions, e.g. multiplication `*` converts operands to numbers.
+Jak již víme, typovou konverzi provádí mnoho operátorů a funkcí, např. násobení `*` převádí operandy na čísla.
 
-If we pass an object as an argument, then there are two stages of calculations:
-1. The object is converted to a primitive (using the rules described above).
-2. If necessary for further calculations, the resulting primitive is also converted.
+Jestliže předáme objekt jako argument, provedou se dva kroky výpočtu:
+1. Objekt se konvertuje na primitiv (podle výše uvedených pravidel).
+2. Je-li to nezbytné pro další výpočty, výsledný primitiv se také konvertuje.
 
-For instance:
+Například:
 
 ```js run
 let obj = {
-  // toString handles all conversions in the absence of other methods
+  // při nepřítomnosti ostatních metod provádí toString všechny konverze
   toString() {
     return "2";
   }
 };
 
-alert(obj * 2); // 4, object converted to primitive "2", then multiplication made it a number
+alert(obj * 2); // 4, objekt se konvertoval na primitiv "2", pak z něj násobení učinilo číslo
 ```
 
-1. The multiplication `obj * 2` first converts the object to primitive (that's a string `"2"`).
-2. Then `"2" * 2` becomes `2 * 2` (the string is converted to number).
+1. Násobení `obj * 2` nejprve převede objekt na primitiv (tedy na řetězec `"2"`).
+2. Pak se ze `"2" * 2` stane `2 * 2` (řetězec se konvertuje na číslo).
 
-Binary plus will concatenate strings in the same situation, as it gladly accepts a string:
+Binární plus ve stejné situaci spojí řetězce, jelikož ochotně přijme řetězec:
 
 ```js run
 let obj = {
@@ -253,28 +253,28 @@ let obj = {
   }
 };
 
-alert(obj + 2); // "22" ("2" + 2), conversion to primitive returned a string => concatenation
+alert(obj + 2); // "22" ("2" + 2), konverze na primitiv vrátila řetězec => zřetězení
 ```
 
-## Summary
+## Shrnutí
 
-The object-to-primitive conversion is called automatically by many built-in functions and operators that expect a primitive as a value.
+Konverze objektu na primitiv je volána automaticky mnoha vestavěnými funkcemi a operátory, které očekávají primitiv jako hodnotu.
 
-There are 3 types (hints) of it:
-- `"string"` (for `alert` and other operations that need a string)
-- `"number"` (for maths)
-- `"default"` (few operators, usually objects implement it the same way as `"number"`)
+Dělí se na 3 druhy (náznaky):
+- `"string"` (pro `alert` a jiné operace, které vyžadují řetězec)
+- `"number"` (pro matematické výpočty)
+- `"default"` (jen málo operátorů, obvykle ji objekty implementují stejným způsobem jako `"number"`)
 
-The specification describes explicitly which operator uses which hint.
+Specifikace výslovně popisuje, který operátor používá který náznak.
 
-The conversion algorithm is:
+Algoritmus konverze je:
 
-1. Call `obj[Symbol.toPrimitive](hint)` if the method exists,
-2. Otherwise if hint is `"string"`
-    - try calling `obj.toString()` or `obj.valueOf()`, whatever exists.
-3. Otherwise if hint is `"number"` or `"default"`
-    - try calling `obj.valueOf()` or `obj.toString()`, whatever exists.
+1. Zavolá `obj[Symbol.toPrimitive](náznak)`, jestliže tato metoda existuje.
+2. V opačném případě, je-li náznak `"string"`:
+    - pokusí se zavolat `obj.toString()` nebo `obj.valueOf()`, první z nich, která existuje.
+3. V opačném případě, je-li náznak `"number"` nebo `"default"`:
+    - pokusí se zavolat `obj.valueOf()` nebo `obj.toString()`, první z nich, která existuje.
+    
+Všechny tyto metody musejí vracet primitiv, aby fungovaly (jsou-li definovány).
 
-All these methods must return a primitive to work (if defined).
-
-In practice, it's often enough to implement only `obj.toString()` as a "catch-all" method for string conversions that should return a "human-readable" representation of an object, for logging or debugging purposes.
+V praxi často postačí implementovat jen `obj.toString()` jako „vše zachytávající“ metodu pro konverzi na řetězec, která by měla vracet „lidsky čitelnou“ reprezentaci objektu, pro účely logování nebo ladění.
