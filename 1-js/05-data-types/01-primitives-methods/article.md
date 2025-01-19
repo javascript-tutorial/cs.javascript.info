@@ -6,7 +6,7 @@ Podíváme se na klíčové rozdíly mezi primitivy a objekty.
 
 Primitiv:
 
-- Je hodnota primitivního typu.
+- Představuje hodnotu primitivního typu.
 - Existuje 7 primitivních typů: `string`, `number`, `bigint`, `boolean`, `symbol`, `null` a `undefined`.
 
 Objekt:
