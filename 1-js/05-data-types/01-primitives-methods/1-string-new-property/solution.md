@@ -2,11 +2,11 @@
 Zkuste si to spustit:
 
 ```js run
-let str = "Ahoj";
+let řetězec = "Ahoj";
 
-str.test = 5; // (*)
+řetězec.test = 5; // (*)
 
-alert(str.test);
+alert(řetězec.test);
 ```
 
 Podle toho, zda máte `use strict` nebo ne, výsledek může být:
@@ -15,9 +15,9 @@ Podle toho, zda máte `use strict` nebo ne, výsledek může být:
 
 Proč? Přehrajme si, co se děje na řádku `(*)`:
 
-1. Když přistoupíme k vlastnosti `str`, vytvoří se „wrapper“.
+1. Když přistoupíme k vlastnosti proměnné `řetězec`, vytvoří se „obal“.
 2. Ve striktním režimu zápis do něj znamená chybu.
-3. Jinak bude operace s touto vlastností provedena, objekt získá vlastnost `test`, ale poté „wrapper“ zmizí, takže na posledním řádku nemá `str` po této vlastnosti ani stopu.
+3. V nestriktním režimu bude operace s touto vlastností provedena, objekt získá vlastnost `test`, ale poté „obal“ zmizí, takže na posledním řádku nemá `řetězec` po této vlastnosti ani stopu.
 
 **Tento příklad jednoznačně dokazuje, že primitivy nejsou objekty.**
 

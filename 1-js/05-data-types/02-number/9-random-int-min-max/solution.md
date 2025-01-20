@@ -4,8 +4,8 @@ Jednoduchým, ale nesprávným řešením by bylo generovat hodnotu od `min` do 
 
 ```js run
 function randomInteger(min, max) {
-  let rand = min + Math.random() * (max - min); 
-  return Math.round(rand);
+  let náhodnéČíslo = min + Math.random() * (max - min); 
+  return Math.round(náhodnéČíslo);
 }
 
 alert( randomInteger(1, 3) );
@@ -13,7 +13,7 @@ alert( randomInteger(1, 3) );
 
 Tato funkce funguje, ale nekorektně. Pravděpodobnost, že získáme krajní hodnoty `min` a `max`, je dvakrát nižší, než u ostatních hodnot.
 
-Jestliže si mnohokrát za sebou spustíte výše uvedený příklad, snadno uvidíte, že `2` se objevuje nejčastěji.
+Jestliže si spustíte výše uvedený příklad mnohokrát po sobě, brzy uvidíte, že nejčastěji se objevuje `2`.
 
 Děje se to proto, že `Math.round()` získává náhodná čísla z intervalu `1..3` a zaokrouhluje je následovně:
 
@@ -27,14 +27,14 @@ Nyní jasně vidíme, že `1` má dvakrát méně hodnot než `2`. Totéž plat�
 
 # Správné řešení
 
-Tato úloha má mnoho správných řešení. Jedno z nich je přizpůsobit hranice intervalu. Abychom zajistili stejné intervaly, můžeme generovat hodnoty od `0.5` do `3.5` a tím přidat požadované pravděpodobnosti krajních hodnot:
+Tato úloha má mnoho správných řešení. Jedno z nich je přizpůsobit hranice intervalu. Abychom zajistili stejné intervaly, můžeme generovat hodnoty od `0.5` do `3.5` a tím zvýšit požadované pravděpodobnosti krajních hodnot:
 
 ```js run
 *!*
 function randomInteger(min, max) {
-  // nyní rand je od (min-0.5) do (max+0.5)
-  let rand = min - 0.5 + Math.random() * (max - min + 1);
-  return Math.round(rand);
+  // nyní náhodnéČíslo je od (min-0.5) do (max+0.5)
+  let náhodnéČíslo = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(náhodnéČíslo);
 }
 */!*
 
@@ -46,9 +46,9 @@ Alternativním způsobem by bylo použít `Math.floor` pro náhodné číslo od 
 ```js run
 *!*
 function randomInteger(min, max) {
-  // zde rand je od min do (max+1)
-  let rand = min + Math.random() * (max + 1 - min);
-  return Math.floor(rand);
+  // zde náhodnéČíslo je od min do (max+1)
+  let náhodnéČíslo = min + Math.random() * (max + 1 - min);
+  return Math.floor(náhodnéČíslo);
 }
 */!*
 

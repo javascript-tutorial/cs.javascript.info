@@ -8,11 +8,11 @@ importance: 5
 Uvažujme následující kód:
 
 ```js
-let str = "Ahoj";
+let řetězec = "Ahoj";
 
-str.test = 5;
+řetězec.test = 5;
 
-alert(str.test);
+alert(řetězec.test);
 ```
 
 Co myslíte, bude to fungovat? Co se zobrazí?

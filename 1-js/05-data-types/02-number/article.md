@@ -1,8 +1,8 @@
 # Čísla
 
-V moderním JavaScriptu jsou dva druhy čísel:
+Moderní JavaScript obsahuje dva druhy čísel:
 
-1. Běžná čísla v JavaScriptu jsou uložena v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754). Jsou známa také jako „čísla s pohyblivou řádovou čárkou s dvojnásobnou přesností“. To jsou čísla, která většinou používáme a v této kapitole o nich budeme hovořit.
+1. Běžná čísla v JavaScriptu jsou uložena v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754). Jsou známa také jako „čísla s pohyblivou řádovou čárkou s dvojnásobnou přesností“. To jsou čísla, která používáme ve většině případů a v této kapitole o nich budeme hovořit.
 
 2. Čísla typu BigInt představují celá čísla libovolné délky. Jsou někdy zapotřebí, neboť běžné celé číslo nemůže bezpečně překročit <code>(2<sup>53</sup>-1)</code> nebo být menší než <code>-(2<sup>53</sup>-1)</code>, jak jsme uvedli již dříve v kapitole <info:types>. Jelikož biginty se používají jen v některých speciálních oblastech, věnujeme jim zvláštní kapitolu <info:bigint>.
 
@@ -64,8 +64,8 @@ Jinými slovy, záporné číslo za `"e"` znamená dělení číslem 1 se zadan�
 // -6 znamená dělení číslem 1 se 6 nulami
 1.23e-6 === 1.23 / 1000000; // 0.00000123
 
-// an example with a bigger number
-1234e-2 === 1234 / 100; // 12.34, decimal point moves 2 times
+// příklad s větším číslem
+1234e-2 === 1234 / 100; // 12.34, desetinná čárka se posune 2krát
 ```
 
 ### Hexadecimální, binární a oktální čísla
@@ -76,7 +76,7 @@ Například:
 
 ```js run
 alert( 0xff ); // 255
-alert( 0xFF ); // 255 (totéž, na velikosti písmen nezáleží)
+alert( 0xFF ); // 255 (totéž, malá a velká písmena se nerozlišují)
 ```
 
 Binární (dvojková) a oktální (osmičková) soustava se používají jen vzácně, ale jsou také podporovány, a to za použití prefixů `0b` a `0o`:
@@ -108,8 +108,8 @@ Hodnota `základ` může být od `2` do `36`. Standardně je to `10`.
 Běžná použití jsou:
 
 - **základ=16** se používá pro hexadecimální barvy, kódování znaků atd., číslice mohou být `0..9` nebo `A..F`.
-- **základ=2** slouží zejména pro kódování bitových operací, číslice mohou být `0` nebo `1`.
-- **základ=36** je maximum, číslice mohou být `0..9` nebo `A..Z`. K reprezentaci čísla se používá celá latinská abeceda. Legrační, ale užitečné využití `36` je tehdy, když potřebujeme změnit dlouhý číselný identifikátor na něco kratšího, například abychom vytvořili kratší URL. Můžeme jej snadno reprezentovat v číselné soustavě o základu `36`:
+- **základ=2** slouží zejména pro ladění bitových operací, číslice mohou být `0` nebo `1`.
+- **základ=36** je maximum, číslice mohou být `0..9` nebo `A..Z`. K reprezentaci čísla se používá celá latinská abeceda. Legrační, ale užitečné využití `36` představuje případ, kdy potřebujeme změnit dlouhý číselný identifikátor na něco kratšího, například abychom vytvořili kratší URL. Můžeme jej snadno reprezentovat v číselné soustavě o základu `36`:
 
     ```js run
     alert( 123456..toString(36) ); // 2n9c
@@ -118,7 +118,7 @@ Běžná použití jsou:
 ```warn header="Volání metody dvěma tečkami"
 Prosíme všimněte si, že dvě tečky v `123456..toString(36)` není překlep. Chceme-li volat metodu přímo na čísle, např. `toString` v uvedeném příkladu, pak za číslo musíme umístit dvě tečky `..`.
 
-Kdybychom umístili jedinou tečku: `123456.toString(36)`, nastala by chyba, protože syntaxe JavaScriptu očekává za první tečkou desetinnou část. Když však uvedeme další tečku, JavaScript pozná, že desetinná část je prázdná a nyní přijde na řadu metoda.
+Kdybychom umístili jedinou tečku: `123456.toString(36)`, nastala by chyba, protože syntaxe JavaScriptu očekává za první tečkou desetinnou část. Když však uvedeme další tečku, JavaScript pozná, že desetinná část je prázdná a nyní přichází metoda.
 
 Můžeme napsat i `(123456).toString(36)`.
 ```
@@ -155,7 +155,7 @@ Rozdíly mezi těmito funkcemi shrnuje následující tabulka:
 
 Tyto funkce pokrývají všechny možné způsoby zacházení s desetinnou částí čísla. Ale co když chceme zaokrouhlit číslo na `n-tou` číslici za desetinnou čárkou?
 
-Máme například `1.2345` a chceme je zaokrouhlit na 2 desetinná místa, abychom dostali jen `1.23`.
+Máme například `1.2345` a chceme toto číslo zaokrouhlit na 2 desetinná místa, abychom dostali jen `1.23`.
 
 Existují dva způsoby, jak to udělat:
 
@@ -169,7 +169,7 @@ Existují dva způsoby, jak to udělat:
     alert( Math.round(číslo * 100) / 100 ); // 1.23456 -> 123.456 -> 123 -> 1.23
     ```
 
-2. Metoda [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) zaokrouhluje číslo na `n` číslic za čárkou a vrací řetězcovou reprezentaci výsledku.
+2. Metoda [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) zaokrouhluje číslo na `n` číslic za desetinnou čárkou a vrací řetězcovou reprezentaci výsledku.
 
     ```js run
     let číslo = 12.34;
@@ -196,10 +196,10 @@ Existují dva způsoby, jak to udělat:
 
 Číslo je vnitřně reprezentováno v 64-bitovém formátu [IEEE-754](https://en.wikipedia.org/wiki/IEEE_754), takže se ukládá přesně do 64 bitů: 52 z nich se používá k uložení číslic, v 11 z nich je uložena pozice desetinné čárky  a 1 bit je pro znaménko.
 
-Je-li číslo opravdu obrovské, může toto 64-bitové úložiště překročit a stát se speciální číselnou hodnotou `Infinity` (nekonečno):
+Je-li číslo opravdu velké, může toto 64-bitové úložiště překročit a stát se speciální číselnou hodnotou `Infinity` (nekonečno):
 
 ```js run
-alert( 1e500 ); // Infinity (nekonečno)
+alert( 1e500 ); // Infinity
 ```
 
 Co může být trochu méně zřejmé, ale stává se poměrně často, je ztráta přesnosti.
@@ -234,7 +234,7 @@ Co je vlastně `0.1`? Je to jedna děleno deseti `1/10`, jedna desetina. V desí
 
 Je tedy zaručeno, že dělení mocninami `10` bude v desítkové soustavě fungovat dobře, ale dělení třemi ne. Ze stejného důvodu je v binární soustavě zaručeno, že bude fungovat dělení mocninami `2`, ale z `1/10` se stane nekonečné binární číslo.
 
-V binární soustavě prostě neexistuje způsob, jak uložit *přesně 0.1* nebo *přesně 0.2*, stejně jako v desítkové soustavě není způsob, jak uložit jako desetinné číslo jednu třetinu.
+V binární soustavě prostě neexistuje způsob, jak uložit *přesně 0,1* nebo *přesně 0,2*, stejně jako v desítkové soustavě není způsob, jak uložit jako desetinné číslo jednu třetinu.
 
 Číselný formát IEEE-754 to řeší zaokrouhlením na nejbližší možné číslo. Tato zaokrouhlovací pravidla nám běžně neumožňují vidět tuto „drobnou ztrátu přesnosti“, ale ta tam je.
 
@@ -260,7 +260,7 @@ let součet = 0.1 + 0.2;
 alert( součet.toFixed(2) ); // "0.30"
 ```
 
-Prosíme všimněte si, že `toFixed` vrací vždy řetězec. Zajišťuje, že za desetinnou čárkou má vždy 2 číslice. To se obzvláště hodí, když máme elektronický obchod a potřebujeme zobrazit `$0.30`. V jiným případech můžeme použít unární plus, abychom jej převedli na číslo:
+Prosíme všimněte si, že `toFixed` vrací vždy řetězec. Zajišťuje, že za desetinnou tečkou má vždy 2 číslice. To se obzvláště hodí, když máme elektronický obchod a potřebujeme zobrazit `$0.30`. V jiných případech můžeme použít unární plus, abychom řetězec převedli na číslo:
 
 ```js run
 let součet = 0.1 + 0.2;
@@ -292,7 +292,7 @@ JavaScript při takových událostech nevyvolá chybu. Udělá, co může, aby s
 ````
 
 ```smart header="Dvě nuly"
-Dalším legračním důsledkem interní reprezentace čísel je existence dvou nul: `0` a `-0`.
+Dalším legračním důsledkem této interní reprezentace čísel je existence dvou nul: `0` a `-0`.
 
 Je to proto, že znaménko je reprezentováno jediným bitem, který může být nastaven na 1 nebo 0 pro jakékoli číslo včetně nuly.
 
@@ -313,7 +313,7 @@ Patří k typu `number`, ale nejsou to „normální“ čísla, takže existuj�
 
     ```js run
     alert( isNaN(NaN) ); // true
-    alert( isNaN("str") ); // true
+    alert( isNaN("řetězec") ); // true
     ```
 
     Ale potřebujeme vůbec tuto funkci? Nemůžeme jednoduše použít porovnání `=== NaN`? Bohužel ne. Hodnota `NaN` je unikátem, který se nerovná ničemu jinému, dokonce ani sám sobě:
@@ -322,15 +322,15 @@ Patří k typu `number`, ale nejsou to „normální“ čísla, takže existuj�
     alert( NaN === NaN ); // false
     ```
 
-- `isFinite(hodnota)` převede svůj argument na číslo a vrátí `true`, jestliže je to běžné číslo a ne `NaN/Infinity/-Infinity`:
+- `isFinite(hodnota)` převede svůj argument na číslo a vrátí `true`, jestliže je to skutečné číslo a ne `NaN/Infinity/-Infinity`:
 
     ```js run
     alert( isFinite("15") ); // true
-    alert( isFinite("str") ); // false, protože je to speciální hodnota: NaN
+    alert( isFinite("řetězec") ); // false, protože je to speciální hodnota: NaN
     alert( isFinite(Infinity) ); // false, protože je to speciální hodnota: Infinity
     ```
 
-Někdy se `isFinite` používá k ověření, zda řetězcová hodnota je běžné číslo:
+Někdy se `isFinite` používá k ověření, zda řetězcová hodnota je skutečné číslo:
 
 
 ```js run
@@ -343,17 +343,17 @@ alert( isFinite(číslo) );
 Prosíme všimněte si, že s prázdným řetězcem nebo s řetězcem složeným pouze z mezer se zachází jako s `0` ve všech číselných funkcích včetně `isFinite`.
 
 ````smart header="`Number.isNaN` a `Number.isFinite`"
-Metody [Number.isNaN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN) a [Number.isFinite](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite) jsou „striktnější“ verze funkcí `isNaN` a `isFinite`. Automaticky nepřevádějí svůj argument na číslo, ale místo toho ověří, zda jejich argument je typu `number`.
+Metody [Number.isNaN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN) a [Number.isFinite](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite) jsou „striktnější“ verze funkcí `isNaN` a `isFinite`. Svůj argument nepřevádějí automaticky na číslo, ale místo toho ověří, zda jejich argument je typu `number`.
 
 - `Number.isNaN(hodnota)` vrací `true`, jestliže argument je typu `number` a je `NaN`. V jakémkoli jiném případě vrací `false`.
 
     ```js run
     alert( Number.isNaN(NaN) ); // true
-    alert( Number.isNaN("str" / 2) ); // true
+    alert( Number.isNaN("řetězec" / 2) ); // true
 
     // Všimněte si rozdílu:
-    alert( Number.isNaN("str") ); // false, protože "str" je typu řetězec, ne typu číslo
-    alert( isNaN("str") ); // true, protože isNan převede řetězec "str" na číslo a jako výsledek této konverze získá NaN
+    alert( Number.isNaN("řetězec") ); // false, protože "řetězec" je typu string, ne typu number
+    alert( isNaN("řetězec") ); // true, protože isNaN převede "řetězec" na číslo a jako výsledek této konverze získá NaN
     ```
 
 - `Number.isFinite(value)` vrací `true`, jestliže argument je typu `number` a není `NaN/Infinity/-Infinity`. V jakémkoli jiném případě vrací `false`.
@@ -364,14 +364,14 @@ Metody [Number.isNaN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Re
     alert( Number.isFinite(2 / 0) ); // false
 
     // Všimněte si rozdílu:
-    alert( Number.isFinite("123") ); // false, protože "123" je typu řetězec, ne typu číslo
+    alert( Number.isFinite("123") ); // false, protože "123" je typu string, ne typu number
     alert( isFinite("123") ); // true, protože isFinite převede řetězec "123" na číslo 123
     ```
 
 Svým způsobem jsou `Number.isNaN` a `Number.isFinite` jednodušší a přímější než funkce `isNaN` a `isFinite`. V praxi se však většinou používají `isNaN` a `isFinite`, jelikož jsou kratší na napsání.
 ````
 
-```smart header="Srovnání s `Object.is`"
+```smart header="Porovnání pomocí `Object.is`"
 Existuje speciální vestavěná metoda `Object.is`, která porovnává hodnoty stejně jako `===`, ale ve dvou krajních případech je spolehlivější:
 
 1. Funguje pro `NaN`: `Object.is(NaN, NaN) === true`, což je dobrá věc.
@@ -379,7 +379,7 @@ Existuje speciální vestavěná metoda `Object.is`, která porovnává hodnoty 
 
 Ve všech ostatních případech je `Object.is(a, b)` totéž jako `a === b`.
 
-Zmínili jsme zde `Object.is`, protože se často používá ve specifikaci JavaScriptu. Když interní algoritmus potřebuje porovnat, zda jsou dvě hodnoty přesně stejné, používá `Object.is` (interně nazvanou [SameValue](https://tc39.github.io/ecma262/#sec-samevalue)).
+Metodu `Object.is` zde zmiňujeme proto, že se často používá ve specifikaci JavaScriptu. Když interní algoritmus potřebuje porovnat, zda jsou dvě hodnoty přesně stejné, používá `Object.is` (interně nazvanou [SameValue](https://tc39.github.io/ecma262/#sec-samevalue)).
 ```
 
 
@@ -393,11 +393,11 @@ alert( +"100px" ); // NaN
 
 Jedinou výjimkou jsou mezery na začátku nebo na konci řetězce, které jsou ignorovány.
 
-V reálném životě však často míváme hodnoty s jednotkami, např. `"100px"` nebo `"12pt"` v CSS. Navíc v mnoha zemích se symbol měny píše až za částku, takže máme `"19€"` a rádi bychom z toho získali číselnou hodnotu.
+V reálném životě však často máme hodnoty s jednotkami, např. `"100px"` nebo `"12pt"` v CSS. Navíc v mnoha zemích se symbol měny píše až za částku, takže máme `"19€"` a rádi bychom z toho získali číselnou hodnotu.
 
 K tomu slouží funkce `parseInt` a `parseFloat`.
 
-„Načítají“ číslo z řetězce tak dlouho, dokud to jde. Až nastane chyba, vrátí nahromaděné číslo. Funkce `parseInt` vrátí celé číslo, zatímco `parseFloat` vrátí číslo s pohyblivou řádovou čárkou:
+„Načítají“ číslo z řetězce tak dlouho, dokud to jde. Jakmile nastane chyba, vrátí nahromaděné číslo. Funkce `parseInt` vrátí celé číslo, zatímco `parseFloat` vrátí číslo s pohyblivou řádovou čárkou:
 
 ```js run
 alert( parseInt('100px') ); // 100
@@ -410,11 +410,11 @@ alert( parseFloat('12.3.4') ); // 12.3, druhá tečka ukončí načítání
 Existují situace, v nichž `parseInt/parseFloat` vrátí `NaN`. To se stane tehdy, když nelze načíst ani jednu číslici:
 
 ```js run
-alert( parseInt('a123') ); // NaN, první symbol tento proces zastaví
+alert( parseInt('a123') ); // NaN, první znak tento proces zastaví
 ```
 
-````smart header="Druhý argument `parseInt(str, soustava)`"
-Funkce `parseInt()` má volitelný druhý parametr. Ten specifikuje základ číselné soustavy, takže `parseInt` může také načítat řetězce hexadecimálních čísel, binárních čísel a podobně:
+````smart header="Druhý argument `parseInt(řetězec, soustava)`"
+Funkce `parseInt()` má nepovinný druhý parametr. Ten specifikuje základ číselné soustavy, takže `parseInt` může také načítat řetězce s hexadecimálními čísly, binárními čísly a podobně:
 
 ```js run
 alert( parseInt('0xff', 16) ); // 255
@@ -454,7 +454,7 @@ Několik příkladů:
     alert( Math.pow(2, 10) ); // 2 na 10 = 1024
     ```
 
-V objektu `Math` jsou i další funkce a konstanty včetně trigonometrických. Můžete je najít v [dokumentaci k objektu Math](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math).
+V objektu `Math` jsou i další konstanty a funkce včetně goniometrických. Můžete je najít v [dokumentaci k objektu Math](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math).
 
 ## Shrnutí
 
@@ -466,10 +466,10 @@ Abychom napsali číslo s mnoha nulami:
 Pro různé číselné soustavy:
 
 - Můžeme zapisovat čísla přímo v hexadecimální (`0x`), oktální (`0o`) a binární (`0b`) soustavě.
-- `parseInt(str, základ)` parsuje řetězec `str` na celé číslo v číselné soustavě o zadaném základu `základ`, `2 ≤ základ ≤ 36`.
+- `parseInt(řetězec, základ)` převede `řetězec` na celé číslo v číselné soustavě o zadaném základu `základ`, `2 ≤ základ ≤ 36`.
 - `číslo.toString(základ)` převede číslo na řetězec v číselné soustavě o zadaném základu `základ`.
 
-Pro běžné testování čísel:
+Pro testování čísel:
 
 - `isNaN(hodnota)` převede svůj argument na číslo a pak testuje, zda je `NaN`
 - `Number.isNaN(hodnota)` ověří, zda je její argument typu `number`, a pokud ano, testuje, zda je `NaN`
