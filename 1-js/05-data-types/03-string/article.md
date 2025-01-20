@@ -1,8 +1,8 @@
 # Řetězce
 
-Textová data se v JavaScriptu ukládají jako řetězce. Neexistuje oddělený typ pro jediný znak.
+Textová data se v JavaScriptu ukládají jako řetězce. Neexistuje zvláštní typ pro jediný znak.
 
-Interní formát řetězce je vždy [UTF-16](https://cs.wikipedia.org/wiki/UTF-16), nezávisí na kódování stránky.
+Interní formát řetězce je vždy [UTF-16](https://cs.wikipedia.org/wiki/UTF-16), nezávisle na kódování stránky.
 
 ## Uvozovky
 
@@ -48,9 +48,9 @@ let seznamHostů = "Hosté: // Error: Unexpected token ILLEGAL
   * Jan";
 ```
 
-Jednoduché a dvojité uvozovky pocházejí ze starých časů vytváření jazyka, kdy potřeba víceřádkových řetězců nebyla brána v úvahu. Zpětné uvozovky se objevily mnohem později, a tak jsou univerzálnější.
+Jednoduché a dvojité uvozovky pocházejí ze starých časů vzniku jazyka, kdy nebyla brána v úvahu potřeba víceřádkových řetězců. Zpětné uvozovky se objevily mnohem později, a tak jsou univerzálnější.
 
-Zpětné uvozovky nám také umožňují specifikovat „šablonovou funkci“ před levou uvozovkou. Syntaxe je: <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. Tato vlastnost se nazývá „značkované šablony“ *(„tagged templates“)*. Je k vidění jen zřídka, ale můžete si o ní přečíst v MDN: [Šablonové literály](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
+Zpětné uvozovky nám také umožňují specifikovat „šablonovou funkci“ před levými uvozovkami. Syntaxe je: <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. Tato vlastnost se nazývá „značkované šablony“ (anglicky „tagged templates“). Je k vidění jen zřídka, ale můžete si o ní přečíst v MDN: [Šablonové literály](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
 
 ## Speciální znaky
 
@@ -62,7 +62,7 @@ let seznamHostů = "Hosté:\n * Jan\n * Petr\n * Marie";
 alert(seznamHostů); // víceřádkový seznam hostů, stejný jako výše
 ```
 
-Jednodušší příklad: tyto dva řádky jsou stejné, jen jinak zapsané:
+Jednodušší příklad: tyto dva řádky mají stejný význam, jen jsou různě zapsané:
 
 ```js run
 let řetězec1 = "Ahoj\nsvěte"; // dva řádky pomocí „symbolu konce řádku“
@@ -83,15 +83,17 @@ Existují i jiné, méně běžné speciální znaky:
 |`\'`,&nbsp;`\"`,&nbsp;<code>\\`</code>|Uvozovky|
 |`\\`|Zpětné lomítko|
 |`\t`|Tabulátor|
-|`\b`, `\f`, `\v`| Backspace, Form Feed, vertikální tabulátor -- uvedeny jen pro úplnost, pocházejí z dřívější doby, v současnosti se nepoužívají (nyní na ně můžete zapomenout). |
+|`\b`, `\f`, `\v`| Backspace, Form Feed, vertikální tabulátor -- uvedeny jen pro úplnost, pocházejí z dřívější doby, v současnosti se nepoužívají (můžete na ně rovnou zapomenout). |
 
 Jak vidíte, všechny speciální znaky začínají zpětným lomítkem `\`, které se také nazývá „únikový znak“.
+
+Protože je tak speciální, musíme je zdvojit, jestliže chceme v řetězci zobrazit skutečné zpětné lomítko `\`:
 
 ```js run
 alert( `Zpětné lomítko: \\` ); // Zpětné lomítko: \
 ```
 
-Tzv. „únikované“ uvozovky `\'`, `\"`, <code>\\`</code> se používají k vložení uvozovek do řetězce, který je ohraničen stejným druhem uvozovek.
+ K vložení uvozovek do řetězce, který je ohraničen stejným druhem uvozovek, se používají tzv. „únikované“ uvozovky `\'`, `\"`, <code>\\`</code>.
 
 Například:
 
@@ -99,7 +101,7 @@ Například:
 alert( 'To*!*\'*/!*s přehnal!' ); // *!*To's*/!* přehnal!
 ```
 
-Jak vidíme, museli jsme před vnitřním apostrofem uvést zpětné lomítko `\'`, jinak by apostrof znamenal konec řetězce.
+Jak vidíme, museli jsme před vnitřními jednoduchými uvozovkami uvést zpětné lomítko `\'`, jinak by tyto uvozovky znamenaly konec řetězce.
 
 Samozřejmě musíme předznamenat únikovým znakem jen stejný druh uvozovek jako ty, které obklopují řetězec. Jako elegantnější řešení bychom tedy mohli použít dvojité nebo zpětné uvozovky:
 
@@ -107,7 +109,7 @@ Samozřejmě musíme předznamenat únikovým znakem jen stejný druh uvozovek j
 alert( `To's přehnal!` ); // To's přehnal!
 ```
 
-Kromě těchto speciálních znaků existuje i speciální zápis pro kódy Unicode `\u…`. Používá se jen málokdy a je vysvětlen v nepovinné kapitole o [Unicode](info:unicode).
+Kromě těchto speciálních znaků existuje i speciální zápis pro kódy Unicode `\u…`. Používá se jen málokdy a je vysvětlen v pokročilejší kapitole o [Unicode](info:unicode).
 
 ## Délka řetězce
 
@@ -120,14 +122,14 @@ alert( `Já\n`.length ); // 3
 Všimněte si, že `\n` je jediný „speciální“ znak, takže délka bude opravdu `3`.
 
 ```warn header="`length` je vlastnost"
-Lidé zvyklí na některé jiné jazyky někdy nesprávně píší volání funkce `str.length()` místo `str.length`. To nefunguje.
+Lidé zvyklí na některé jiné jazyky někdy nesprávně píší volání funkce `řetězec.length()` místo `řetězec.length`. To nefunguje.
 
-Prosíme všimněte si, že `str.length` je číselná vlastnost, ne funkce. Není důvod za ní uvádět závorky. Nepíše se `.length()`, ale `.length`.
+Prosíme všimněte si, že `řetězec.length` je číselná vlastnost, ne funkce. Není důvod za ní uvádět závorky. Nepíše se `.length()`, ale `.length`.
 ```
 
 ## Přístup ke znakům
 
-Abyste získali znak na pozici `poz`, použijte hranaté závorky `[poz]` nebo zavolejte metodu [str.at(pos)](mdn:js/String/at). První znak se nachází na pozici nula:
+Abyste získali znak na pozici `poz`, použijte hranaté závorky `[poz]` nebo zavolejte metodu [řetězec.at(poz)](mdn:js/String/at). První znak se nachází na pozici nula:
 
 ```js run
 let řetězec = `Ahoj`;
@@ -141,17 +143,17 @@ alert( řetězec[řetězec.length - 1] ); // j
 alert( řetězec.at(-1) );
 ```
 
-Jak vidíte, metoda `.at(poz)` má výhodu v tom, že umožňuje zápornou pozici. Je-li `poz` záporná, počítá se od konce řetězce.
+Jak vidíte, metoda `.at(poz)` má výhodu v tom, že umožňuje zadat zápornou pozici. Je-li `poz` záporná, počítá se od konce řetězce.
 
 Takže `.at(-1)` znamená poslední znak, `.at(-2)` je znak před ním atd.
 
-Hranaté závorky pro záporný index vrátí vždy `undefined`, například:
+Hranaté závorky se záporným indexem vrátí vždy `undefined`, například:
 
 ```js run
 let řetězec = `Ahoj`;
 
 alert( řetězec[-2] ); // undefined
-alert( řetězec.at(-2) ); // h
+alert( řetězec.at(-2) ); // o
 ```
 
 Můžeme také procházet jednotlivé znaky pomocí `for..of`:
@@ -175,7 +177,7 @@ let řetězec = 'Ahoj';
 alert( řetězec[0] ); // nefunguje to
 ```
 
-Obvyklý způsob, jak to obejít, je vytvořit úplně nový řetězec a přiřadit jej do `řetězec` namísto starého.
+Obvyklý způsob, jak to obejít, je vytvořit úplně nový řetězec a přiřadit jej do proměnné `řetězec` namísto starého.
 
 Například:
 
@@ -191,14 +193,14 @@ V následujících podkapitolách uvidíme další příklady.
 
 ## Změna písmen na malá nebo velká
 
-Metoda [toLowerCase()](mdn:js/řetězecing/toLowerCase) mění písmena řetězce na malá a metoda [toUpperCase()](mdn:js/řetězecing/toUpperCase) na velká:
+Metoda [toLowerCase()](mdn:js/string/toLowerCase) mění písmena řetězce na malá a metoda [toUpperCase()](mdn:js/string/toUpperCase) na velká:
 
 ```js run
 alert( 'Rozhraní'.toUpperCase() ); // ROZHRANÍ
 alert( 'Rozhraní'.toLowerCase() ); // rozhraní
 ```
 
-Nebo jestliže chceme jediný znak malým písmenem:
+Nebo pokud chceme jediný znak, změněný na malé písmeno:
 
 ```js run
 alert( 'Rozhraní'[0].toLowerCase() ); // 'r'
@@ -210,9 +212,9 @@ Je mnoho způsobů, jak v řetězci najít podřetězec.
 
 ### řetězec.indexOf
 
-První metoda je [řetězec.indexOf(podřetězec, pozice)](mdn:js/řetězecing/indexOf).
+První metoda je [řetězec.indexOf(podřetězec, pozice)](mdn:js/string/indexOf).
 
-Hledá `podřetězec` v `řetězec`, počínajíc zadanou pozicí `pozice`, a vrátí pozici, na níž byla nalezena shoda. Jestliže nebylo nic nalezeno, vrátí `-1`.
+Hledá `podřetězec` v `řetězec`, počínajíc zadanou pozicí `pozice`, a vrátí pozici, na níž byla nalezena shoda. Jestliže podřetězec nebyl nalezen, vrátí `-1`.
 
 Například:
 
@@ -225,7 +227,7 @@ alert( řetězec.indexOf('prorokovo') ); // -1, nenalezeno, hledání rozlišuje
 alert( řetězec.indexOf("oko") ); // 4, "oko" nalezeno na pozici 4 (..okovo oko)
 ```
 
-Nepovinný druhý parametr nám umožňuje začít hledání na zadané pozici.
+Nepovinný druhý parametr nám umožňuje zahájit hledání na zadané pozici.
 
 Například první výskyt `"oko"` je na pozici `4`. Chceme-li hledat další výskyt, začněme hledání od pozice `5`:
 
@@ -235,7 +237,7 @@ let řetězec = 'Prorokovo oko';
 alert( řetězec.indexOf('oko', 5) ) // 10
 ```
 
-Pokud nás zajímají všechny výskyty, můžeme spustit `indexOf` v cyklu. Každé nové volání se bude konat od pozice za předchozím nálezem:
+Pokud nás zajímají všechny výskyty, můžeme spustit `indexOf` v cyklu. Každé nové volání bude začínat na pozici za předchozím nálezem:
 
 ```js run
 let řetězec = 'Kdyby byly v řece ryby, nebylo by třeba rybníka';
@@ -261,7 +263,7 @@ let cíl = "by";
 *!*
 let poz = -1;
 while ((poz = řetězec.indexOf(cíl, poz + 1)) != -1) {
-  alert( `Nalezeno na ${poz}` );
+  alert( poz );
 }
 */!*
 ```
@@ -272,7 +274,7 @@ Existuje i podobná metoda [řetězec.lastIndexOf(podřetězec, pozice)](mdn:js/
 Ta by vypsala výskyty v opačném pořadí.
 ```
 
-Metoda `indexOf` přináší drobnou nepohodlnost do testu v `if`. Nemůžeme ji umístit do `if` takto:
+Metoda `indexOf` vnáší do podmínky v `if` drobnou nepříjemnost. Nemůžeme ji umístit do `if` takto:
 
 ```js run
 let řetězec = "Prorokovo oko";
@@ -282,9 +284,9 @@ if (řetězec.indexOf("Prorokovo")) {
 }
 ```
 
-V uvedeném příkladu se `alert` nezobrazí, protože `řetězec.indexOf("Prorokovo")` vrátila `0` (což znamená, že našla shodu na počáteční pozici). To je správně, ale `if` považuje `0` za `false`.
+V uvedeném příkladu se `alert` nezobrazí, protože metoda `řetězec.indexOf("Prorokovo")` vrátila `0` (což znamená, že našla shodu na počáteční pozici). To je správně, ale `if` považuje `0` za `false`.
 
-Ve skutečnosti bychom tedy měli kontrolovat na `-1`, např. takto:
+Správně bychom tedy měli porovnávat s `-1`, např. takto:
 
 ```js run
 let řetězec = "Prorokovo oko";
@@ -298,9 +300,9 @@ if (řetězec.indexOf("Prorokovo") != -1) {
 
 ### includes, startsWith, endsWith
 
-Modernější metoda [řetězec.includes(podřetězec, poz)](mdn:js/řetězecing/includes) vrátí `true/false` podle toho, zda `řetězec` v sobě obsahuje `podřetězec`.
+Modernější metoda [řetězec.includes(podřetězec, poz)](mdn:js/string/includes) vrátí `true/false` podle toho, zda `řetězec` v sobě obsahuje `podřetězec`.
 
-Je to správná volba, když potřebujeme testovat výskyt, ale nezajímá nás jeho pozice:
+Je to ta pravá možnost, když potřebujeme testovat výskyt, ale nezajímá nás jeho pozice:
 
 ```js run
 alert( "Prorokovo oko".includes("Prorok") ); // true
@@ -315,7 +317,7 @@ alert( "Prorokovo".includes("oko") ); // true
 alert( "Prorokovo".includes("oko", 5) ); // false, od pozice 5 není žádné "oko"
 ```
 
-Metody [řetězec.startsWith](mdn:js/string/startsWith) a [řetězec.endsWith](mdn:js/string/endsWith) dělají přesně to, co je jejich názvem *(„startsWith“ = začíná na, „endsWith“ = končí na, takže `startsWith` vrátí `true`, jestliže řetězec začíná zadaným podřetězcem, a `endsWith` vrátí `true`, jestliže řetězec končí zadaným podřetězcem -- pozn. překl.)*:
+Metody [řetězec.startsWith](mdn:js/string/startsWith) a [řetězec.endsWith](mdn:js/string/endsWith) dělají přesně to, co je jejich názvem *(zjistí, zda řetězec začíná „startsWith“ nebo končí „endsWith“ zadaným podřetězcem -- pozn. překl.)*:
 
 ```js run
 alert( "*!*Pro*/!*rok".startsWith("Pro") ); // true, "Prorok" začíná na "Pro"
@@ -334,10 +336,10 @@ V JavaScriptu jsou 3 metody pro získání podřetězce: `substring`, `substr` a
     ```js run
     let řetězec = "řetězení";
     alert( řetězec.slice(0, 5) ); // 'řetěz', podřetězec od 0 do 5 (mimo 5)
-    alert( řetězec.slice(0, 1) ); // 'ř', od 0 do 1, ale mimo 1, takže jediný znak na 0
+    alert( řetězec.slice(0, 1) ); // 'ř', od 0 do 1, ale mimo 1, takže jediný znak na pozici 0
     ```
 
-    Není-li uveden druhý argument, `slice` jde až na konec řetězce:
+    Není-li uveden druhý argument, `slice` vrátí podřetězec až do konce řetězce:
 
     ```js run
     let řetězec = "ře*!*tězení*/!*";
@@ -356,14 +358,14 @@ V JavaScriptu jsou 3 metody pro získání podřetězce: `substring`, `substr` a
 `řetězec.substring(začátek [, konec])`
 : Vrátí část řetězce *mezi* pozicemi `začátek` a `konec` (nezahrnuje `konec`).
 
-    Je to téměř totéž jako `slice`, ale umožňuje, aby `začátek` byl větší než `konec` (v takovém případě hodnoty `začátek` a `konec` jednoduše prohodí).
+    Je to téměř totéž jako `slice`, ale umožňuje, aby `začátek` byl větší než `konec` (v takovém případě se hodnoty `začátek` a `konec` jednoduše prohodí).
 
     Například:
 
     ```js run
     let řetězec = "ře*!*těze*/!*ní";
 
-    // je to totéž pro substring:
+    // tyto hodnoty jsou totéž pro substring:
     alert( řetězec.substring(2, 6) ); // "těze"
     alert( řetězec.substring(6, 2) ); // "těze"
 
@@ -403,7 +405,7 @@ Abychom předešli zmatkům, všechny tyto metody si zrekapitulujme:
 | `substr(začátek, délka)` | od `začátek` vezme `délka` znaků | umožňuje záporný `začátek` |
 
 ```smart header="Kterou zvolit?"
-Všechny odvedou svou práci. Formálně má `substr` drobnou nevýhodu: není popsána v jádru specifikace JavaScriptu, ale v Příloze B, která pokrývá pouze prohlížečové vlastnosti, existující zejména z historických důvodů. Neprohlížečová prostředí ji tedy nemusejí podporovat. V praxi však funguje všude.
+Potřebnou práci odvedou všechny. Formálně má `substr` drobnou nevýhodu: není popsána v jádru specifikace JavaScriptu, ale v Dodatku B, který pokrývá vlastnosti fungující jen v prohlížečích a existující zejména z historických důvodů. Prostředí mimo prohlížeče ji tedy nemusejí podporovat. V praxi však funguje všude.
 
 Ze zbývajících dvou variant je `slice` trochu flexibilnější, protože umožňuje záporné hodnoty a je kratší na napsání. 
 
@@ -430,12 +432,12 @@ Existují však některé zvláštnosti.
 
     To může vést ke zvláštním výsledkům, budeme-li řadit tyto názvy zemí. Obvykle se očekává, že `Zéland` bude v seznamu až za `Írán`.
 
-Abychom pochopili, co se tady děje, měli bychom vědět, že všechny řetězce jsou zakódovány pomocí [UTF-16](https://cs.wikipedia.org/wiki/UTF-16). To je: každý znak má odpovídající číselný kód. 
+Abychom pochopili, co se tady děje, měli bychom vědět, že všechny řetězce jsou zakódovány pomocí [UTF-16](https://cs.wikipedia.org/wiki/UTF-16). To znamená, že každý znak má odpovídající číselný kód. 
 
 Existují speciální metody, které umožňují získat znak pro zadaný kód a naopak:
 
 `řetězec.codePointAt(poz)`
-: Vrátí desetinné číslo představující kód znaku na pozici `poz`:
+: Vrátí desítkové číslo představující kód znaku na pozici `poz`:
 
     ```js run
     // malá a velká písmena mají různé kódy
@@ -497,7 +499,7 @@ Například:
 alert( 'Česko'.localeCompare('Zéland') ); // -1
 ```
 
-Tato metoda má ve skutečnosti ještě dva další argumenty specifikované v [dokumentaci](mdn:js/string/localeCompare), které umožňují specifikovat jazyk (standardně se vezme z prostředí, na jazyku závisí pořadí písmen) a nastavit další pravidla, např. velikost písmen, nebo zda se `"a"` a `"á"` mají brát jako stejné znaky, atd.
+Tato metoda má ve skutečnosti ještě dva další argumenty specifikované v [dokumentaci](mdn:js/string/localeCompare), které umožňují specifikovat jazyk (standardně se vezme z prostředí, na jazyku závisí pořadí písmen) a nastavit další pravidla, např. rozlišování malých a velkých písmen, nebo zda se `"a"` a `"á"` mají považovat za stejné znaky, atd.
 
 ## Shrnutí
 
@@ -507,7 +509,7 @@ Tato metoda má ve skutečnosti ještě dva další argumenty specifikované v [
 - Chceme-li získat podřetězec, použijeme `slice` nebo `substring`.
 - Chceme-li převést řetězec na malá/velká písmena, použijeme `toLowerCase/toUpperCase`.
 - Chceme-li najít podřetězec, použijeme `indexOf` nebo pro jednoduché kontroly `includes/startsWith/endsWith`.
-- Chceme-li porovnat řetězce podle pravidel jazyka, použijeme `localeCompare`, jinak se budou porovnávat podle kódů znaků.
+- Chceme-li porovnat řetězce podle jazykových pravidel, použijeme `localeCompare`, jinak se budou porovnávat podle kódů znaků.
 
 Pro řetězce existuje i několik dalších užitečných metod:
 
@@ -515,6 +517,6 @@ Pro řetězce existuje i několik dalších užitečných metod:
 - `řetězec.repeat(n)` -- zopakuje řetězec `n`-krát.
 - ...a další lze najít v [manuálu](mdn:js/string).
 
-Řetězce mají také metody pro hledání a nahrazování pomocí regulárních výrazů. To je však rozsáhlé téma, takže je vysvětleno v samostatné části tutoriálu <info:regular-expressions>.
+Řetězce mají také metody pro hledání a nahrazování pomocí regulárních výrazů. To je však rozsáhlé téma, proto je vysvětleno v samostatné části tutoriálu <info:regular-expressions>.
 
-Od nynějška je také důležité vědět, že řetězce jsou založeny na kódování Unicode, a proto jsou zde určité záležitosti s porovnáváním. O Unicode se dozvíte víc v kapitole <info:unicode>.
+Nyní je také důležité vědět, že řetězce jsou založeny na kódování Unicode, a proto jsou zde určité problémy s porovnáváním. O Unicode se dozvíte víc v kapitole <info:unicode>.
