@@ -1,9 +1,9 @@
-describe("ucFirst", function() {
-  it('Uppercases the first symbol', function() {
-    assert.strictEqual(ucFirst("john"), "John");
+describe("velkéPrvníPísmeno", function() {
+  it('První symbol převede na velké písmeno', function() {
+    assert.strictEqual(velkéPrvníPísmeno("jan"), "Jan");
   });
 
-  it("Doesn't die on an empty string", function() {
-    assert.strictEqual(ucFirst(""), "");
+  it("Nespadne na prázdném řetězci", function() {
+    assert.strictEqual(velkéPrvníPísmeno(""), "");
   });
 });

@@ -1,15 +1,15 @@
-describe("truncate", function() {
-  it("truncate the long string to the given length (including the ellipsis)", function() {
+describe("zkrať", function() {
+  it("zkrátí dlouhý řetězec na zadanou délku (včetně výpustky)", function() {
     assert.equal(
-      truncate("What I'd like to tell on this topic is:", 20),
-      "What I'd like to te…"
+      truncate("To, co bych k tomuto tématu rád řekl, je:", 20),
+      "To, co bych k tomut…"
     );
   });
 
-  it("doesn't change short strings", function() {
+  it("nezmění krátké řetězce", function() {
     assert.equal(
-      truncate("Hi everyone!", 20),
-      "Hi everyone!"
+      truncate("Ahoj všichni!", 20),
+      "Ahoj všichni!"
     );
   });
 
