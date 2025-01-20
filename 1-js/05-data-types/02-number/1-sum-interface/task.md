@@ -2,10 +2,10 @@ importance: 5
 
 ---
 
-# Sum numbers from the visitor
+# Sečtěte čísla od návštěvníka
 
-Create a script that prompts the visitor to enter two numbers and then shows their sum.
+Vytvořte skript, který vyzve návštěvníka, aby zadal dvě čísla, a pak zobrazí jejich součet.
 
 [demo]
 
-P.S. There is a gotcha with types.
+P.S. Je tam chyták s typy.
