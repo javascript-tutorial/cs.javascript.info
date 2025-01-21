@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# Array operations.
+# Operace s poli
 
-Let's try 5 array operations.
+Zkusme provést s polem 5 operací.
 
-1. Create an array `styles` with items "Jazz" and "Blues".
-2. Append "Rock-n-Roll" to the end.
-3. Replace the value in the middle with "Classics". Your code for finding the middle value should work for any arrays with odd length.
-4. Strip off the first value of the array and show it.
-5. Prepend `Rap` and `Reggae` to the array.
+1. Vytvořte pole `styly` s prvky „Jazz“ a „Blues“.
+2. Připojte na konec „Rock-n-Roll“.
+3. Nahraďte prostřední hodnotu prvkem „Klasika“. Váš kód pro nalezení prostřední hodnoty by měl fungovat pro všechna pole liché délky.
+4. Vyjměte z pole první hodnotu a zobrazte ji.
+5. Připojte na začátek pole „Rap“ a „Reggae“.
 
-The array in the process:
+Pole během tohoto procesu:
 
 ```js no-beautify
 Jazz, Blues
 Jazz, Blues, Rock-n-Roll
-Jazz, Classics, Rock-n-Roll
-Classics, Rock-n-Roll
-Rap, Reggae, Classics, Rock-n-Roll
+Jazz, Klasika, Rock-n-Roll
+Klasika, Rock-n-Roll
+Rap, Reggae, Klasika, Rock-n-Roll
 ```
 
