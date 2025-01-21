@@ -1,18 +1,18 @@
-describe("multiplyNumeric", function() {
-  it("multiplies all numeric properties by 2", function() {
+describe("vynásobČísla", function() {
+  it("vynásobí všechny číselné vlastnosti dvěma", function() {
     let menu = {
-      width: 200,
-      height: 300,
-      title: "My menu"
+      šířka: 200,
+      výška: 300,
+      titulek: "Moje menu"
     };
-    let result = multiplyNumeric(menu);
-    assert.equal(menu.width, 400);
-    assert.equal(menu.height, 600);
-    assert.equal(menu.title, "My menu");
+    let výsledek = vynásobČísla(menu);
+    assert.equal(menu.šířka, 400);
+    assert.equal(menu.výška, 600);
+    assert.equal(menu.titulek, "Moje menu");
   });
 
-  it("returns nothing", function() {
-    assert.isUndefined( multiplyNumeric({}) );
+  it("nevrátí nic", function() {
+    assert.isUndefined( vynásobČísla({}) );
   });
 
 });

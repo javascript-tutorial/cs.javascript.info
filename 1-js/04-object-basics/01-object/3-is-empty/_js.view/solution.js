@@ -1,6 +1,6 @@
-function isEmpty(obj) {
-  for (let key in obj) {
-    // if the loop has started, there is a property
+function jePrázdný(obj) {
+  for (let klíč in obj) {
+    // pokud cyklus začal, je tam nějaká vlastnost
     return false;
   }
   return true;
