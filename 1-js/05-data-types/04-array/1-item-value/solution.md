@@ -1,17 +1,17 @@
-The result is `4`:
+Výsledek je `4`:
 
 
 ```js run
-let fruits = ["Apples", "Pear", "Orange"];
+let ovoce = ["Jablko", "Hruška", "Pomeranč"];
 
-let shoppingCart = fruits;
+let nákupníKošík = ovoce;
 
-shoppingCart.push("Banana");
+nákupníKošík.push("Banán");
 
 *!*
-alert( fruits.length ); // 4
+alert( ovoce.length ); // 4
 */!*
 ```
 
-That's because arrays are objects. So both `shoppingCart` and `fruits` are the references to the same array.
+Je to tím, že pole jsou objekty. Proto jsou `nákupníKošík` i `ovoce` odkazy na totéž pole.
 

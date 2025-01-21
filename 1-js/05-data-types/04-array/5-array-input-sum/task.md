@@ -2,14 +2,14 @@ importance: 4
 
 ---
 
-# Sum input numbers
+# Sečtěte čísla na vstupu
 
-Write the function `sumInput()` that:
+Napište funkci `sečtiVstup()`, která:
 
-- Asks the user for values using `prompt` and stores the values in the array.
-- Finishes asking when the user enters a non-numeric value, an empty string, or presses "Cancel".
-- Calculates and returns the sum of array items.
+- Bude se uživatele ptát na hodnoty pomocí `prompt` a ukládat tyto hodnoty do pole.
+- Přestane se ptát, když uživatel zadá nečíselnou hodnotu, prázdný řetězec nebo stiskne „Storno“.
+- Vypočítá a vrátí součet prvků pole.
 
-P.S. A zero `0` is a valid number, please don't stop the input on zero.
+P.S. Nula `0` je platné číslo, proto prosíme neukončujte vstup při nule.
 
 [demo]
