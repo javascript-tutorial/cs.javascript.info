@@ -6,7 +6,7 @@ importance: 4
 
 Napište funkci `sečtiVstup()`, která:
 
-- Zeptá se uživatele na hodnoty pomocí `prompt` a uloží tyto hodnoty do pole.
+- Bude se uživatele ptát na hodnoty pomocí `prompt` a ukládat tyto hodnoty do pole.
 - Přestane se ptát, když uživatel zadá nečíselnou hodnotu, prázdný řetězec nebo stiskne „Storno“.
 - Vypočítá a vrátí součet prvků pole.
 

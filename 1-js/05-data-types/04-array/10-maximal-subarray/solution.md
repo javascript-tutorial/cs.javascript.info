@@ -25,18 +25,18 @@ Například pro `[-1, 2, 3, -9, 11]`:
 3 + (-9)
 3 + (-9) + 11
 
-// Začínající -9
+// Začínající -9:
 -9
 -9 + 11
 
-// Začínající 11
+// Začínající 11:
 11
 ```
 
 Kód je ve skutečnosti vnořený cyklus: vnější cyklus prochází prvky pole, vnitřní počítá podsoučty počínaje aktuálním prvkem.
 
 ```js run
-function vraťMaxSoučetPod(pole) {
+function vraťMaxSoučetPodpole(pole) {
   let maxSoučet = 0; // nevezmeme-li žádné prvky, vrátí se nula
 
   for (let i = 0; i < pole.length; i++) {
@@ -50,11 +50,11 @@ function vraťMaxSoučetPod(pole) {
   return maxSoučet;
 }
 
-alert( vraťMaxSoučetPod([-1, 2, 3, -9]) ); // 5
-alert( vraťMaxSoučetPod([-1, 2, 3, -9, 11]) ); // 11
-alert( vraťMaxSoučetPod([-2, -1, 1, 2]) ); // 3
-alert( vraťMaxSoučetPod([1, 2, 3]) ); // 6
-alert( vraťMaxSoučetPod([100, -9, 2, -3, 5]) ); // 100
+alert( vraťMaxSoučetPodpole([-1, 2, 3, -9]) ); // 5
+alert( vraťMaxSoučetPodpole([-1, 2, 3, -9, 11]) ); // 11
+alert( vraťMaxSoučetPodpole([-2, -1, 1, 2]) ); // 3
+alert( vraťMaxSoučetPodpole([1, 2, 3]) ); // 6
+alert( vraťMaxSoučetPodpole([100, -9, 2, -3, 5]) ); // 100
 ```
 
 Toto řešení má časovou složitost [O(n<sup>2</sup>)](https://cs.wikipedia.org/wiki/Landauova_notace). Jinými slovy, když zvětšíme pole dvojnásobně, algoritmus bude pracovat čtyřikrát déle.
@@ -68,7 +68,7 @@ Budeme procházet prvky pole a pamatovat si aktuální částečný součet prvk
 Pokud je popis příliš vágní, prosíme nahlédněte do kódu, je dosti krátký:
 
 ```js run demo
-function vraťMaxSoučetPod(pole) {
+function vraťMaxSoučetPodpole(pole) {
   let maxSoučet = 0;
   let částečnýSoučet = 0;
 
@@ -81,14 +81,14 @@ function vraťMaxSoučetPod(pole) {
   return maxSoučet;
 }
 
-alert( vraťMaxSoučetPod([-1, 2, 3, -9]) ); // 5
-alert( vraťMaxSoučetPod([-1, 2, 3, -9, 11]) ); // 11
-alert( vraťMaxSoučetPod([-2, -1, 1, 2]) ); // 3
-alert( vraťMaxSoučetPod([100, -9, 2, -3, 5]) ); // 100
-alert( vraťMaxSoučetPod([1, 2, 3]) ); // 6
-alert( vraťMaxSoučetPod([-1, -2, -3]) ); // 0
+alert( vraťMaxSoučetPodpole([-1, 2, 3, -9]) ); // 5
+alert( vraťMaxSoučetPodpole([-1, 2, 3, -9, 11]) ); // 11
+alert( vraťMaxSoučetPodpole([-2, -1, 1, 2]) ); // 3
+alert( vraťMaxSoučetPodpole([100, -9, 2, -3, 5]) ); // 100
+alert( vraťMaxSoučetPodpole([1, 2, 3]) ); // 6
+alert( vraťMaxSoučetPodpole([-1, -2, -3]) ); // 0
 ```
 
 Tento algoritmus vyžaduje přesně 1 průchod polem, takže jeho časová složitost je O(n).
 
-Podrobnější informace o algoritmu můžete najít zde: [Maximum subarray problem (Problém maximálního podpole)](http://en.wikipedia.org/wiki/Maximum_subarray_problem). Není-li stále jasné, proč to funguje, potom si prosíme projděte algoritmus na výše uvedených příkladech a podívejte se, jak funguje. Je to lepší než jakákoli slova.
+Podrobnější informace o algoritmu můžete najít zde: [Maximum subarray problem (Problém maximálního podpole)](http://en.wikipedia.org/wiki/Maximum_subarray_problem). Není-li vám stále jasné, proč to funguje, potom si prosíme projděte algoritmus na výše uvedených příkladech a podívejte se, jak funguje. Je to lepší než jakákoli slova.

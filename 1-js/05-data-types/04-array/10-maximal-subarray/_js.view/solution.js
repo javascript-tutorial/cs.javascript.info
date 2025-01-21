@@ -1,4 +1,4 @@
-function vraťMaxSoučetPod(arr) {
+function vraťMaxSoučetPodpole(arr) {
   let maxSoučet = 0;
   let částečnýSoučet = 0;
 
