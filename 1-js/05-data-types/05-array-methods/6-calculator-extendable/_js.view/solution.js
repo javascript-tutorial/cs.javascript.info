@@ -5,9 +5,9 @@ function Kalkulátor() {
     "+": (a, b) => a + b
   };
 
-  this.vypočítej = function(str) {
+  this.vypočítej = function(řetězec) {
 
-    let split = str.split(' '),
+    let split = řetězec.split(' '),
       a = +split[0],
       op = split[1],
       b = +split[2];

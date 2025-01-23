@@ -1,5 +1,5 @@
 
-function filtrujPodleRozsahuNaMístě(arr, a, b) {
+function filtrujPodleRozsahuNaMístě(pole, a, b) {
 
   for (let i = 0; i < pole.length; i++) {
     let hodnota = pole[i];

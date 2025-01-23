@@ -4,7 +4,7 @@ importance: 5
 
 # Změňte border-left-width na borderLeftWidth
 
-Napište funkci `camelizace(str)`, která změní slova oddělená pomlčkou, např. „můj-krátký-řetězec“, na velbloudí notaci „můjKrátkýŘetězec“.
+Napište funkci `camelizace(řetězec)`, která změní slova oddělená pomlčkou, např. „můj-krátký-řetězec“, na velbloudí notaci „můjKrátkýŘetězec“.
 
 To znamená, že odstraní všechny pomlčky a u všech slov za pomlčkami změní první písmeno na velké.
 

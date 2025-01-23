@@ -9,7 +9,7 @@ Vytvořte konstruktor `Kalkulátor`, který bude vytvářet „rozšiřitelné�
 Úloha se skládá ze dvou částí.
 
 
-1. Nejprve implementujte metodu `vypočítej(str)`, která obdrží řetězec, např. `"1 + 2"`, ve formátu „ČÍSLO operátor ČÍSLO“ (oddělené mezerou) a vrátí výsledek. Měla by rozumět plusu `+` a minusu `-`.
+1. Nejprve implementujte metodu `vypočítej(řetězec)`, která obdrží řetězec, např. `"1 + 2"`, ve formátu „ČÍSLO operátor ČÍSLO“ (oddělené mezerou) a vrátí výsledek. Měla by rozumět plusu `+` a minusu `-`.
 
     Příklad použití:
 
@@ -18,7 +18,7 @@ Vytvořte konstruktor `Kalkulátor`, který bude vytvářet „rozšiřitelné�
 
     alert( kalkulátor.vypočítej("3 + 7") ); // 10
     ```
-2. Pak přidejte metodu `přidejMetodu(název, funkce)`, která naučí kalkulátor nové operaci. Obdrží operátor `název` a funkci o dvou argumentech `funkce(a,b)`, která jej implementuje.
+2. Pak přidejte metodu `přidejMetodu(název, funkce)`, která naučí kalkulátor nové operaci. Obdrží operátor `název` a funkci o dvou argumentech `funkce(a, b)`, která jej implementuje.
 
     Například přidáme násobení`*`, dělení `/` a umocňování `**`:
 

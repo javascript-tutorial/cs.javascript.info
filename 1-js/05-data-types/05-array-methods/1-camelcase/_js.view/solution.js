@@ -1,5 +1,5 @@
-function camelizace(str) {
-  return str
+function camelizace(řetězec) {
+  return řetězec
     .split('-') // rozdělí 'mé-dlouhé-slovo' na pole ['mé', 'dlouhé', 'slovo']
     .map(
       // převede první písmena všech prvků pole kromě prvního na velká

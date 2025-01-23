@@ -4,9 +4,9 @@ importance: 5
 
 # Mapování na objekty
 
-Máme pole objektů `uživatel`, každý z nich má `jméno`, `příjmení` a `id`.
+Máme pole objektů `uživatel`, každý z nich má vlastnosti `jméno`, `příjmení` a `id`.
 
-Napište kód, který z něj vytvoří jiné pole, které bude obsahovat objekty s `id` a `celéJméno`, kde `celéJméno` se vygeneruje ze `jméno` a `příjmení`.
+Napište kód, který z něj vytvoří jiné pole, které bude obsahovat objekty s vlastnostmi `id` a `celéJméno`, kde `celéJméno` se vygeneruje ze `jméno` a `příjmení`.
 
 Příklad:
 
@@ -33,4 +33,4 @@ alert( mapovaníUživatelé[0].id ) // 1
 alert( mapovaníUživatelé[0].celéJméno ) // Jan Novák
 ```
 
-Ve skutečnosti tedy potřebujete namapovat jedno pole objektů na druhé. Zkuste zde použít `=>`. Je tady malý chyták.
+Ve skutečnosti tedy potřebujete mapovat jedno pole objektů na druhé. Zkuste zde použít `=>`. Je tady malý chyták.

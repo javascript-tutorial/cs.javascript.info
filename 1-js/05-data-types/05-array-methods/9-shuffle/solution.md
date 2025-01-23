@@ -16,7 +16,7 @@ To jakžtakž funguje, protože `Math.random() - 0.5` je náhodné číslo, kter
 
 Protože však řadicí funkce není určena k takovému použití, nebudou mít všechny permutace stejnou pravděpodobnost.
 
-Například uvažujte níže uvedený kód. Spustí `zamíchej` 1000000krát a spočítá výskyty všech možných výsledků:
+Například uvažujte níže uvedený kód. Spustí `zamíchej` 1 000 000krát a spočítá výskyty všech možných výsledků:
 
 ```js run
 function zamíchej(pole) {
@@ -45,7 +45,7 @@ for (let klíč in počty) {
 }
 ```
 
-Příklad výsledku (závisí na enginu JS):
+Příklad výsledku (závisí na motoru JavaScriptu):
 
 ```js
 123: 250706
@@ -58,9 +58,9 @@ Příklad výsledku (závisí na enginu JS):
 
 Jasně vidíme odchylku: `123` a `213` se objevují mnohem častěji než ostatní.
 
-Výsledek kódu se může u jednotlivých JavaScriptových enginů lišit, ale už vidíme, že tento přístup je nespolehlivý.
+Výsledek kódu se může u různých JavaScriptových motorů lišit, ale už vidíme, že tento přístup je nespolehlivý.
 
-Proč to nefunguje? Zhruba řečeno, `sort` je „černá skříňka“: vhodíme do ní pole a porovnávací funkci a očekáváme, že pole bude seřazeno. Kvůli naprosté náhodnosti řazení se však černá skříňka zblázní. To, jak přesně se zblázní, závisí na konkrétní implementaci, která se mezi jednotlivými enginy liší.
+Proč to nefunguje? Zhruba řečeno, `sort` je „černá skříňka“: vhodíme do ní pole a porovnávací funkci a očekáváme, že pole bude seřazeno. Kvůli naprosté náhodnosti řazení se však černá skříňka zblázní. To, jak přesně se zblázní, závisí na konkrétní implementaci, která se mezi jednotlivými motory liší.
 
 Existují jiné dobré způsoby, jak tuto úlohu vyřešit. Například existuje skvělý algoritmus nazvaný [Fisher-Yatesovo míchání](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle). Myšlenkou je procházet pole v obráceném pořadí a vyměnit každý prvek s jiným prvkem před ním, náhodně vybraným:
 
@@ -70,7 +70,7 @@ function zamíchej(pole) {
     let j = Math.floor(Math.random() * (i + 1)); // náhodný index od 0 do i
 
     // vyměníme prvky pole[i] a pole[j]
-    // k dosažení tohoto použijeme syntaxi „destrukturačního přiřazení“
+    // dosáhneme toho použitím syntaxe „destrukturačního přiřazení“
     // podrobnosti o této syntaxi najdete v dalších kapitolách
     // totéž lze zapsat jako:
     // let t = pole[i]; pole[i] = pole[j]; pole[j] = t

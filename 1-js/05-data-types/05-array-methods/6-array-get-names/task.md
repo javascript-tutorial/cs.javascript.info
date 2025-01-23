@@ -4,7 +4,7 @@ importance: 5
 
 # Mapování na jména
 
-Máte pole objektů `uživatel`, každý z nich má `uživatel.jméno`. Napište kód, který je převede na pole jmen.
+Máte pole objektů `uživatel`, každý z nich má vlastnost `uživatel.jméno`. Napište kód, který je převede na pole jmen.
 
 Příklad:
 

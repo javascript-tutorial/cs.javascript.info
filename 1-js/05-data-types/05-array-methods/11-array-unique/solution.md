@@ -6,9 +6,9 @@ Projděme si prvky pole:
 function unikát(pole) {
   let výsledek = [];
 
-  for (let str of pole) {
-    if (!výsledek.includes(str)) {
-      výsledek.push(str);
+  for (let řetězec of pole) {
+    if (!výsledek.includes(řetězec)) {
+      výsledek.push(řetězec);
     }
   }
 
@@ -24,11 +24,11 @@ alert( unikát(řetězce) ); // Haré, Kršna, :-O
 
 Tento kód funguje, ale má potenciální problém s výkonem.
 
-Metoda `výsledek.includes(str)` interně prochází pole `výsledek` a porovná každý jeho prvek se `str`, aby našla shodu.
+Metoda `výsledek.includes(řetězec)` vnitřně prochází pole `výsledek` a porovná každý jeho prvek s `řetězec`, aby našla shodu.
 
-Jestliže tedy v poli `výsledek` je `100` prvků a žádný se nerovná `str`, pak projde celé pole `výsledek` a provede právě `100` porovnání. A je-li `výsledek` velký, např. `10000`, pak se vykoná `10000` porovnání.
+Jestliže tedy v poli `výsledek` je `100` prvků a žádný se nerovná `řetězec`, pak projde celé pole `výsledek` a provede právě `100` porovnání. A je-li `výsledek` velký, např. `10000`, pak se vykoná `10000` porovnání.
 
-To samo o sobě není problém, jelikož JavaScriptové enginy jsou velmi rychlé, takže projít pole `10000` prvků je otázkou mikrosekund.
+To samo o sobě není problém, jelikož JavaScriptové motory jsou velmi rychlé, takže projít pole `10000` prvků je otázkou mikrosekund.
 
 My však provádíme takový test pro každý prvek `pole` v cyklu `for`.
 

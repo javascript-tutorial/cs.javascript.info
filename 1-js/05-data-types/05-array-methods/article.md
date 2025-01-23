@@ -6,10 +6,10 @@ Pole poskytují mnoho metod. Pro zjednodušení jsme je v této kapitole rozděl
 
 Známe už metody, které přidávají a odebírají prvky na začátku nebo na konci pole:
 
-- `arr.push(...prvky)` -- přidává prvky na konec,
-- `arr.pop()` -- vybírá prvek z konce,
-- `arr.shift()` -- vybírá prvek ze začátku,
-- `arr.unshift(...items)` -- přidává prvky na začátek.
+- `pole.push(...prvky)` -- přidává prvky na konec,
+- `pole.pop()` -- vybírá prvek z konce,
+- `pole.shift()` -- vybírá prvek ze začátku,
+- `pole.unshift(...prvky)` -- přidává prvky na začátek.
 
 Zde uvedeme několik dalších.
 
@@ -90,7 +90,7 @@ Metoda `splice` dokáže také vkládat prvky bez odstraňování. Toho dosáhne
 let pole = ["Já", "studuji", "JavaScript"];
 
 // od indexu 2
-// smažeme 0
+// smažeme 0 prvků
 // pak vložíme "složitý" a "jazyk"
 pole.splice(2, 0, "složitý", "jazyk");
 
@@ -122,7 +122,7 @@ Syntaxe je:
 pole.slice([začátek], [konec])
 ```
 
-Vrátí nové pole, do něhož zkopíruje všechny prvky od indexu `začátek` do indexu `konec` (`konec` není zahrnut). Jak `začátek`, tak `konec` mohou být záporné. V tom případě se předpokládá pozice od konce pole.
+Vrátí nové pole, do něhož zkopíruje všechny prvky od indexu `začátek` do indexu `konec` (`konec` není zahrnut). Jak `začátek`, tak `konec` mohou být záporné. V tom případě se pozice počítá od konce pole.
 
 Podobá se řetězcové metodě `str.slice`, ale místo podřetězců vytváří podpole.
 
@@ -136,7 +136,7 @@ alert( pole.slice(1, 3) ); // e,s (kopíruje od 1 do 3)
 alert( pole.slice(-2) ); // s,t (kopíruje od -2 do konce)
 ```
 
-Můžeme ji volat i bez argumentů: `pole.slice()` vytvoří kopii `pole`. To se často používá k vytvoření kopie pro další transformace, které by neměly ovlivnit původní pole.
+Můžeme ji volat i bez argumentů: `pole.slice()` vytvoří kopii `pole`. To se často používá k vytvoření kopie pole pro další transformace, které nemají ovlivnit původní pole.
 
 ### concat
 
@@ -217,7 +217,7 @@ Například tohle zobrazí každý prvek pole:
 ["Bilbo", "Gandalf", "Nazgúl"].forEach(alert);
 ```
 
-A tento kód vypíše podrobnosti o pozicích prvků v cílovém poli:
+A tento kód podrobně vypíše pozice prvků v cílovém poli:
 
 ```js run
 ["Bilbo", "Gandalf", "Nazgúl"].forEach((prvek, index, pole) => {
@@ -225,7 +225,7 @@ A tento kód vypíše podrobnosti o pozicích prvků v cílovém poli:
 });
 ```
 
-Výsledek funkce (pokud funkce nějaký vrátí) je zahozen a ignorován.
+Pokud funkce vrátí nějaký výsledek, je zahozen a ignorován.
 
 
 ## Hledání v poli
@@ -257,7 +257,7 @@ Prosíme všimněte si, že metoda `indexOf` používá striktní porovnávání
 
 Pokud chceme jen ověřit, zda `prvek` je obsažen v poli, a nepotřebujeme jeho index, dává se přednost metodě `pole.includes`.
 
-Metoda [arr.lastIndexOf](mdn:js/Array/lastIndexOf) je totéž jako `indexOf`, ale hledá zprava doleva.
+Metoda [pole.lastIndexOf](mdn:js/Array/lastIndexOf) je totéž jako `indexOf`, ale hledá zprava doleva.
 
 ```js run
 let ovoce = ['Jablko', 'Pomeranč', 'Jablko']
@@ -267,14 +267,14 @@ alert( ovoce.lastIndexOf('Jablko') ); // 2 (poslední Jablko)
 ```
 
 ````smart header="Metoda `includes` zpracovává správně `NaN`"
-Drobný, ale zaznamenatelný rozdíl metody `includes` je také v tom, že na rozdíl od `indexOf` správně zpracovává `NaN`:
+Drobný, ale pozoruhodný rozdíl metody `includes` je také v tom, že na rozdíl od `indexOf` správně zpracovává `NaN`:
 
 ```js run
 const pole = [NaN];
 alert( pole.indexOf(NaN) ); // -1 (mělo by být 0, ale rovnost === pro NaN nefunguje)
 alert( pole.includes(NaN) ); // true (správně)
 ```
-Je to proto, že metohda `includes` byla do JavaScriptu přidána mnohem později a interně používá aktuálnější algoritmus porovnávání.
+Je to proto, že metoda `includes` byla do JavaScriptu přidána mnohem později a vnitřně používá aktuálnější porovnávací algoritmus.
 ````
 
 ### find a findIndex/findLastIndex
@@ -291,7 +291,7 @@ let výsledek = pole.find(function(prvek, index, pole) {
 });
 ```
 
-Funkce je volána na prvcích pole, na jednom po druhém:
+Funkce je volána na prvcích pole postupně na jednom za druhým:
 
 - `prvek` je prvek.
 - `index` je jeho index.
@@ -342,7 +342,7 @@ alert(uživatelé.findLastIndex(uživatel => uživatel.jméno == 'Jan')); // 3
 
 Metoda `find` najde jediný (první) prvek, který způsobí, že funkce vrátí `true`.
 
-Jestliže jich může být více, můžeme použít metodu [pole.filter(fn)](mdn:js/Array/filter).
+Jestliže takových prvků může být více, můžeme použít metodu [pole.filter(fn)](mdn:js/Array/filter).
 
 Její syntaxe je podobná `find`, ale `filter` vrací pole všech odpovídajících prvků:
 
@@ -374,7 +374,7 @@ Přejděme nyní k metodám, které pole transformují a přeskupují.
 
 ### map
 
-Metoda [pole.map](mdn:js/Array/map) je jedna z nejužitečnějších a používá se často.
+Metoda [pole.map](mdn:js/Array/map) je jedna z nejužitečnějších a nejčastěji používaných.
 
 Volá zadanou funkci pro každý prvek pole a vrací pole výsledků.
 
@@ -416,7 +416,7 @@ Seřazené pole je `1, 15, 2`. To není správně. Ale proč?
 
 **Prvky jsou standardně řazeny jako řetězce.**
 
-Doslova všechny prvky se při porovnávání převádějí na řetězce. Pro řetězce se použije lexikografické řazení a skutečně `"2" > "15"`.
+Všechny prvky bez výjimky se při porovnávání převádějí na řetězce. Pro řetězce se použije lexikografické řazení a skutečně `"2" > "15"`.
 
 Abychom použili naše vlastní řazení, musíme jako argument `pole.sort()` poskytnout funkci.
 
@@ -452,7 +452,7 @@ Nyní to funguje tak, jak jsme zamýšleli.
 
 Udělejme nyní krok stranou a zamysleme se nad tím, co se děje. `pole` může obsahovat cokoli, že? Může obsahovat čísla, řetězce, objekty, zkrátka cokoli. Máme sadu *nějakých prvků*. Abychom ji seřadili, potřebujeme *řadicí funkci*, která umí její prvky porovnat. Standardní řazení je řetězcové.
 
-Metoda `pole.sort(fn)` implementuje generický algoritmus řazení. Nemusíme se zajímat o to, jak vnitřně funguje (většinou je to optimalizovaný [quicksort](https://cs.wikipedia.org/wiki/Rychlé_řazení) nebo [Timsort](https://en.wikipedia.org/wiki/Timsort)). Projde pole, porovná jeho prvky poskytnutou funkcí a seřadí je. Vše, co potřebujeme, je poskytnout funkci `fn`, která provede porovnání.
+Metoda `pole.sort(fn)` implementuje generický algoritmus řazení. Nemusíme se zajímat o to, jak vnitřně funguje (většinou je to optimalizované [rychlé řazení (quicksort)](https://cs.wikipedia.org/wiki/Rychlé_řazení) nebo [Timsort](https://en.wikipedia.org/wiki/Timsort)). Projde pole, porovná jeho prvky poskytnutou funkcí a seřadí je. Vše, co potřebujeme, je poskytnout funkci `fn`, která provede porovnání.
 
 Mimochodem, jestliže chceme vědět, které prvky se porovnávají -- nic nám nebrání je zobrazit:
 
@@ -480,7 +480,7 @@ alert(pole);  // *!*1, 2, 15*/!*
 ````
 
 ````smart header="Nejlepší jsou šipkové funkce"
-Vzpomínáte si na [šipkové funkce](info:arrow-functions-basics)? Můžeme je zde použít pro úhlednější řazení:
+Vzpomínáte si na [šipkové funkce](info:arrow-functions-basics)? Můžeme je zde použít, aby kód řazení byl úhlednější:
 
 ```js
 pole.sort( (a, b) => a - b );
@@ -492,7 +492,7 @@ Funguje to přesně stejně jako výše uvedená delší verze.
 ````smart header="Pro řetězce používejte `localeCompare`"
 Vzpomínáte si na porovnávací algoritmus [pro řetězce](info:string#correct-comparisons)? Standardně porovnává písmena podle jejich kódů.
 
-Pro mnoho abeced je lepší používat metodu `str.localeCompare`, která seřadí správně písmena, např. `Č`.
+Pro mnoho abeced je lepší používat metodu `řetězec.localeCompare`, která seřadí správně písmena, např. `Č`.
 
 Například seřaďme několik států v češtině:
 
@@ -518,15 +518,15 @@ pole.reverse();
 alert( pole ); // 5,4,3,2,1
 ```
 
-I ona vrací `pole` po převrácení.
+I ona vrací převrácené `pole`.
 
 ### split a join
 
 Máme zde situaci z běžného života. Píšeme aplikaci pro posílání zpráv a uživatel zadá seznam příjemců oddělených čárkou: `Jan, Petr, Marie`. Pro nás by však bylo daleko pohodlnější mít pole jmen než jediný řetězec. Jak je získat?
 
-Přesně tohle dělá metoda [str.split(oddělovač)](mdn:js/String/split), která rozdělí řetězec na pole podle zadaného oddělovače `oddělovač`.
+Přesně tohle dělá metoda [řetězec.split(oddělovač)](mdn:js/String/split), která rozdělí řetězec na pole podle zadaného oddělovače `oddělovač`.
 
-V níže uvedeném příkladu jsme oddělovali čárkou, po níž následuje mezera:
+V níže uvedeném příkladu oddělujeme čárkou, po níž následuje mezera:
 
 ```js run
 let jména = 'Bilbo, Gandalf, Nazgúl';
@@ -550,22 +550,22 @@ alert(pole); // Bilbo, Gandalf
 Volání `split(s)` s prázdným `s` rozdělí řetězec na pole písmen:
 
 ```js run
-let str = "test";
+let řetězec = "test";
 
-alert( str.split('') ); // t,e,s,t
+alert( řetězec.split('') ); // t,e,s,t
 ```
 ````
 
-Volání [pole.join(spojka)](mdn:js/Array/join) provádí opak metody `split`. Vytvoří řetězec z prvků `pole`, které budou spojeny řetězcem `spojka` mezi nimi.
+Metoda [pole.join(spojka)](mdn:js/Array/join) provádí opak metody `split`. Vytvoří řetězec z prvků `pole`, které budou mezi sebou spojeny řetězcem `spojka`.
 
 Příklad:
 
 ```js run
 let pole = ['Bilbo', 'Gandalf', 'Nazgúl'];
 
-let str = pole.join(';'); // spojíme pole do řetězce pomocí ;
+let řetězec = pole.join(';'); // spojíme pole do řetězce pomocí ;
 
-alert( str ); // Bilbo;Gandalf;Nazgúl
+alert( řetězec ); // Bilbo;Gandalf;Nazgúl
 ```
 
 ### reduce/reduceRight
@@ -574,7 +574,7 @@ Když potřebujeme procházet prvky pole -- můžeme použít `forEach`, `for` n
 
 Když potřebujeme procházet prvky a pro každý prvek vrátit nějaká data -- můžeme použít `map`.
 
-Do této skupiny patří i metody [pole.reduce](mdn:js/Array/reduce) a [pole.reduceRight](mdn:js/Array/reduceRight), ale ty jsou trochu záludnější. Používají se k výpočtu jediné hodnoty v závislosti na poli.
+Do této skupiny patří i metody [pole.reduce](mdn:js/Array/reduce) a [pole.reduceRight](mdn:js/Array/reduceRight), ale ty jsou trochu záludnější. Používají se k výpočtu jediné hodnoty závisející na poli.
 
 Syntaxe je:
 
@@ -584,7 +584,7 @@ let hodnota = pole.reduce(function(akumulátor, prvek, index, pole) {
 }, [počátečníHodnota]);
 ```
 
-Funkce se volá na všech prvcích pole za sebou a „přenáší“ svůj výsledek do dalšího volání.
+Funkce se volá postupně na všech prvcích pole a svůj výsledek „přenáší“ do dalšího volání.
 
 Argumenty:
 
@@ -616,10 +616,10 @@ Funkce předaná do `reduce` používá jen 2 argumenty, to zpravidla stačí.
 Podívejme se na podrobnosti toho, co se děje.
 
 1. Při prvním průběhu je `součet` roven hodnotě `počátečníHodnota` (poslední argument `reduce`), tedy `0`, a `aktuální` je první prvek pole, tedy `1`. Výsledek funkce je tedy `1`.
-2. Při druhém průběhu `součet = 1`, přičteme k tomu druhý prvek pole (`2`) a vrátíme výsledek.
-3. Při třetím průběhu `součet = 3`, přičteme k tomu další prvek, a tak dále...
+2. Při druhém průběhu `součet = 1`, přičteme k němu druhý prvek pole (`2`) a vrátíme výsledek.
+3. Při třetím průběhu `součet = 3`, přičteme k němu další prvek, a tak dále...
 
-Tok výpočtu:
+Průběh výpočtu:
 
 ![](reduce.svg)
 
@@ -733,7 +733,7 @@ alert(vojáci[1].věk); // 23
 
 Kdybychom v uvedeném příkladu použili `uživatelé.filter(armáda.můžeVstoupit)`, pak by `armáda.můžeVstoupit` byla volána jako samostatná funkce, v níž by bylo `this=undefined`, což by okamžitě vedlo k chybě.
 
-Volání `uživatelé.filter(armáda.můžeVstoupit, armáda)` můžeme nahradit za `uživatelé.filter(uživatel => armáda.můžeVstoupit(uživatel))`, které by udělalo totéž. Tato druhá varianta se používá častěji, jelikož pro většinu lidí je trochu srozumitelnější.
+Volání `uživatelé.filter(armáda.můžeVstoupit, armáda)` můžeme nahradit za `uživatelé.filter(uživatel => armáda.můžeVstoupit(uživatel))`, které by udělalo totéž. Tato varianta se používá častěji, jelikož pro většinu lidí je trochu srozumitelnější.
 
 ## Shrnutí
 
@@ -746,7 +746,7 @@ Přehled metod polí:
   - `unshift(...prvky)` -- přidá prvky na začátek.
   - `splice(pozice, početSmazaných, ...prvky)` -- na indexu `pozice` smaže `početSmazaných` prvků a vloží `prvky`.
   - `slice(začátek, konec)` -- vytvoří nové pole, zkopíruje do něj prvky od indexu `začátek` do indexu `konec` (kromě něj).
-  - `concat(...prvky)` -- vrátí nové pole: zkopíruje všechny prvky z aktuálního pole a přidá do něj `prvky`. Je-li kterýkoli prvek z `prvky` pole, pak se vezmou jeho prvky.
+  - `concat(...prvky)` -- vrátí nové pole: zkopíruje všechny prvky z aktuálního pole a přidá do něj `prvky`. Je-li kterýmkoli prvkem z `prvky` pole, pak se místo něj přidají jeho prvky.
 
 - Pro hledání mezi prvky:
   - `indexOf/lastIndexOf(prvek, pozice)` -- hledá `prvek` počínajíc pozicí `pozice`, vrátí jeho index nebo `-1`, pokud není nalezen.
@@ -775,7 +775,7 @@ Tyto metody jsou nejpoužívanější a v 99% případů dostačují. Existuje v
 
   Na každém prvku pole je volána funkce `fn`, podobně jako u funkce `map`. Jestliže některý výsledek je/všechny výsledky jsou `true`, vrátí `true`, jinak vrátí `false`.
 
-  Tyto metody se chovají trochu jako operátory `||` a `&&`: jestliže `fn` vrátí pravdivou hodnotu, `pole.some()` okamžitě vrátí `true` a zastaví procházení zbývajících prvků; jestliže `fn` vrátí nepravdivou hodnotu, `pole.every()` okamžitě vrátí `false` a rovněž zastaví procházení zbývajících prvků.
+  Tyto metody se chovají obdobně jako operátory `||` a `&&`: jestliže `fn` vrátí pravdivou hodnotu, `pole.some()` okamžitě vrátí `true` a zastaví procházení zbývajících prvků; jestliže `fn` vrátí nepravdivou hodnotu, `pole.every()` okamžitě vrátí `false` a rovněž zastaví procházení zbývajících prvků.
 
   Pomocí `every` můžeme porovnávat pole:
   
@@ -793,7 +793,7 @@ Tyto metody jsou nejpoužívanější a v 99% případů dostačují. Existuje v
 
 - [pole.flat(hloubka)](mdn:js/Array/flat)/[pole.flatMap(fn)](mdn:js/Array/flatMap) vytvoří nové jednorozměrné pole z vícerozměrného.
 
-Pro úplný seznam viz [manuál](mdn:js/Array).
+Pro úplný seznam nahlédněte do [manuálu](mdn:js/Array).
 
 Na první pohled se může zdát, že je tady spousta metod a je těžké si je pamatovat. Ve skutečnosti je to však mnohem snazší.
 

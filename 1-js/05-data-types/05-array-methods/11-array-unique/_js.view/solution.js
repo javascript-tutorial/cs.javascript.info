@@ -1,9 +1,9 @@
 function unikát(pole) {
   let výsledek = [];
 
-  for (let str of pole) {
-    if (!výsledek.includes(str)) {
-      výsledek.push(str);
+  for (let řetězec of pole) {
+    if (!výsledek.includes(řetězec)) {
+      výsledek.push(řetězec);
     }
   }
 
