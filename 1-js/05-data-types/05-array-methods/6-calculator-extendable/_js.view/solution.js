@@ -1,25 +1,25 @@
-function Calculator() {
+function Kalkulátor() {
 
-  this.methods = {
+  this.metody = {
     "-": (a, b) => a - b,
     "+": (a, b) => a + b
   };
 
-  this.calculate = function(str) {
+  this.vypočítej = function(řetězec) {
 
-    let split = str.split(' '),
+    let split = řetězec.split(' '),
       a = +split[0],
       op = split[1],
       b = +split[2];
 
-    if (!this.methods[op] || isNaN(a) || isNaN(b)) {
+    if (!this.metody[op] || isNaN(a) || isNaN(b)) {
       return NaN;
     }
 
-    return this.methods[op](a, b);
+    return this.metody[op](a, b);
   };
 
-  this.addMethod = function(name, func) {
-    this.methods[name] = func;
+  this.přidejMetodu = function(jméno, funkce) {
+    this.metody[jméno] = funkce;
   };
 }

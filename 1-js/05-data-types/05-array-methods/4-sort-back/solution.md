@@ -1,10 +1,10 @@
 
 
 ```js run
-let arr = [5, 2, 1, -10, 8];
+let pole = [5, 2, 1, -10, 8];
 
-arr.sort((a, b) => b - a);
+pole.sort((a, b) => b - a);
 
-alert( arr );
+alert( pole );
 ```
 

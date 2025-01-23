@@ -1,3 +1,3 @@
 
-- Please note how methods are stored. They are simply added to `this.methods` property.
-- All tests and numeric conversions are done in the `calculate` method. In future it may be extended to support more complex expressions.
+- Prosíme všimněte si, jak jsou metody uloženy. Jednoduše se přidávají do vlastnosti `this.metody`.
+- Všechny testy a číselné konverze se provádějí v metodě `vypočítej`. V budoucnu může být rozšířena, aby podporovala složitější výrazy.

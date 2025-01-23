@@ -2,22 +2,22 @@ importance: 4
 
 ---
 
-# Filter unique array members
+# Filtrace unikátních prvků pole
 
-Let `arr` be an array.
+Nechť `pole` je nějaké pole.
 
-Create a function `unique(arr)` that should return an array with unique items of `arr`.
+Vytvořte funkci `unikát(pole)`, která vrátí pole obsahující všechny různé prvky `pole`.
 
-For instance:
+Příklad:
 
 ```js
-function unique(arr) {
-  /* your code */
+function unikát(pole) {
+  /* váš kód */
 }
 
-let strings = ["Hare", "Krishna", "Hare", "Krishna",
-  "Krishna", "Krishna", "Hare", "Hare", ":-O"
+let řetězce = ["Haré", "Kršna", "Haré", "Kršna",
+  "Kršna", "Kršna", "Haré", "Haré", ":-O"
 ];
 
-alert( unique(strings) ); // Hare, Krishna, :-O
+alert( unikát(řetězce) ); // Haré, Kršna, :-O
 ```

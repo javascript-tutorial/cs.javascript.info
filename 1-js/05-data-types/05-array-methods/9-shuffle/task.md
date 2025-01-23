@@ -2,24 +2,24 @@ importance: 3
 
 ---
 
-# Shuffle an array
+# Míchání pole
 
-Write the function `shuffle(array)` that shuffles (randomly reorders) elements of the array.
+Napište funkci `zamíchej(pole)`, která zamíchá (náhodně seřadí) prvky pole.
 
-Multiple runs of `shuffle` may lead to different orders of elements. For instance:
+Vícenásobná volání `zamíchej` mohou vést k různým pořadím prvků. Například:
 
 ```js
-let arr = [1, 2, 3];
+let pole = [1, 2, 3];
 
-shuffle(arr);
-// arr = [3, 2, 1]
+zamíchej(pole);
+// pole = [3, 2, 1]
 
-shuffle(arr);
-// arr = [2, 1, 3]
+zamíchej(pole);
+// pole = [2, 1, 3]
 
-shuffle(arr);
-// arr = [3, 1, 2]
+zamíchej(pole);
+// pole = [3, 1, 2]
 // ...
 ```
 
-All element orders should have an equal probability. For instance, `[1,2,3]` can be reordered as `[1,2,3]` or `[1,3,2]` or `[3,1,2]` etc, with equal probability of each case.
+Všechna pořadí prvků by měla mít stejnou pravděpodobnost. Například `[1,2,3]` lze seřadit jako `[1,2,3]` nebo `[1,3,2]` nebo `[3,1,2]` atd., přičemž všechny možnosti mají mít stejnou pravděpodobnost.
