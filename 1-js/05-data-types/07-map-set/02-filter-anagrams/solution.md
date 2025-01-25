@@ -1,4 +1,4 @@
-Pro nalezení anagramů rozdělíme každé slovo na písmena a ta seřadíme. Po seřazení písmen budou všechny anagramy stejné.
+Pro nalezení anagramů rozdělíme každé slovo na písmena a ta seřadíme podle abecedy. Po seřazení písmen budou všechny anagramy stejné.
 
 Příklad:
 
@@ -9,7 +9,7 @@ reklama, makrela, karamel -> aaeklmr
 ...
 ```
 
-Varianty se seřazenými písmeny použijeme jako klíče mapy, abychom uložili pro každý klíč jen jednu hodnotu:
+Varianty slov se seřazenými písmeny použijeme jako klíče mapy, abychom uložili pro každý klíč jen jednu hodnotu:
 
 ```js run
 function odstraňAnagramy(pole) {
@@ -51,9 +51,9 @@ Další řádek vloží slovo do mapy:
 mapa.set(seřazené, slovo);
 ```
 
-Jestliže příště přijde slovo se stejným seřazením písmen, přepíše v mapě předchozí hodnotu se stejným klíčem. Vždy tedy budeme mít pro každou formu písmen nejvýše jedno slovo.
+Jestliže příště přijde slovo se stejným seřazením písmen, přepíše v mapě předchozí hodnotu se stejným klíčem. Vždy tedy budeme mít pro každou seřazenou skupinu písmen nejvýše jedno slovo.
 
-Nakonec `Array.from(mapa.values())` vezme iterovatelný objekt nad hodnotami mapy (klíče ve výsledku nepotřebujeme), vytvoří z něj pole a vrátí je.
+Nakonec `Array.from(mapa.values())` vezme iterovatelný objekt nad hodnotami mapy (klíče ve výsledku nepotřebujeme), vytvoří z těchto hodnot pole a vrátí je.
 
 Zde bychom mohli místo `Map` použít i planý objekt, neboť klíče jsou řetězce.
 

@@ -4,7 +4,7 @@ importance: 5
 
 # Iterovatelné klíče
 
-Chtěli bychom uložit pole klíčů mapy `mapa.keys()` do proměnné a pak na ně používat metody polí, např. `push`.
+Chtěli bychom uložit pole klíčů mapy `mapa.keys()` do proměnné a pak na ní volat metody specifické pro pole, např. `.push`.
 
 Tohle však nefunguje:
 

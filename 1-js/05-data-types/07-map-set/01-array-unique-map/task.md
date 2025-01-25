@@ -6,7 +6,7 @@ importance: 5
 
 Nechť `pole` je nějaké pole.
 
-Vytvořte funkci `unikát(pole)`, která vrátí pole s unikátními prvky `pole`.
+Vytvořte funkci `unikát(pole)`, která vrátí pole obsahující všechny různé prvky `pole`.
 
 Příklad:
 

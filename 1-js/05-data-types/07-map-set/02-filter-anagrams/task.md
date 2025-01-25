@@ -4,7 +4,7 @@ importance: 4
 
 # Filtrace anagramů
 
-[Anagramy](https://cs.wikipedia.org/wiki/Anagram) neboli přesmyčky jsou slova, která obsahují stejná písmena ve stejných počtech, ale v jiném pořadí.
+[Anagramy](https://cs.wikipedia.org/wiki/Anagram) neboli přesmyčky jsou slova, která obsahují stejné počty stejných písmen, ale v jiném pořadí.
 
 Příklad:
 
