@@ -16,6 +16,6 @@ let zprávy = [
 
 Otázka teď zní: kterou datovou strukturu byste doporučili k uložení informace „kdy byla zpráva přečtena“?
 
-V předchozí úloze jsme potřebovali ukládat jen skutečnost „ano/ne“. Nyní musíme ukládat datum, které by mělo zůstat v paměti jen do doby, než bude zpráva odklizena garbage collectorem.
+V předchozí úloze jsme potřebovali ukládat jen skutečnost „ano/ne“. Nyní musíme ukládat datum, které by mělo zůstat v paměti jen do doby, než bude zpráva odklizena sběračem odpadků.
 
 P.S. Data lze ukládat jako objekty vestavěné třídy `Date`, kterou probereme později.

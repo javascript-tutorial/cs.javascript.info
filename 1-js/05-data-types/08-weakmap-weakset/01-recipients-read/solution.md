@@ -4,7 +4,7 @@ Uložme přečtené zprávy do `WeakSet`:
 let zprávy = [
   {text: "Ahoj", od: "Jan"},
   {text: "Jak se máš?", od: "Jan"},
-  {text: "Brzy se uvidíme", od: "Alice"}
+  {text: "Brzy nashle", od: "Alice"}
 ];
 
 let přečtenéZprávy = new WeakSet();
@@ -27,9 +27,9 @@ zprávy.shift();
 
 `WeakSet` nám umožňuje uložit množinu zpráv a snadno ověřovat, zda v ní zpráva existuje.
 
-Automaticky se vyčistí. Nevýhodou je, že nad ní nemůžeme iterovat, nemůžeme získat „všechny přečtené zprávy“ přímo z ní. Můžeme to však udělat iterací nad všemi zprávami a filtrováním těch, které nejsou v této množině.
+Automaticky se vyčistí. Nevýhodou je, že nad ní nemůžeme iterovat, nemůžeme získat „všechny přečtené zprávy“ přímo z ní. Můžeme to však udělat iterací nad všemi zprávami a filtrováním těch, které jsou v této množině.
 
-Jiným řešením by bylo přidání vlastnosti, např. `zpráva.jePřečtena=true`, do zprávy poté, co bude přečtena. Protože objekty zpráv spravuje jiný kód, obecně se to nedoporučuje, ale můžeme se vyhnout konfliktům použitím symbolické vlastnosti.
+Jiným řešením by bylo přidání vlastnosti, např. `zpráva.jePřečtena=true`, do zprávy poté, co bude přečtena. Pokud objekty zpráv spravuje jiný kód, obecně se to nedoporučuje, ale můžeme se vyhnout konfliktům použitím symbolické vlastnosti.
 
 Třeba takto:
 ```js

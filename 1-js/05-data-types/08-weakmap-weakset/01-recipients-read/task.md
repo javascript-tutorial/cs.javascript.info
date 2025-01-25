@@ -10,7 +10,7 @@ Máme pole zpráv:
 let zprávy = [
   {text: "Ahoj", od: "Jan"},
   {text: "Jak se máš?", od: "Jan"},
-  {text: "Brzy se uvidíme", od: "Alice"}
+  {text: "Brzy nashle", od: "Alice"}
 ];
 ```
 
