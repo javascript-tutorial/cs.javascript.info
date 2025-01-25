@@ -2,27 +2,26 @@ importance: 4
 
 ---
 
-# Filter anagrams
+# Filtrace anagramů
 
-[Anagrams](https://en.wikipedia.org/wiki/Anagram) are words that have the same number of same letters, but in different order.
+[Anagramy](https://cs.wikipedia.org/wiki/Anagram) neboli přesmyčky jsou slova, která obsahují stejné počty stejných písmen, ale v jiném pořadí.
 
-For instance:
+Příklad:
 
 ```
-nap - pan
-ear - are - era
-cheaters - hectares - teachers
+rak - kra
+kostel - stolek
+reklama - makrela - karamel
 ```
 
-Write a function `aclean(arr)` that returns an array cleaned from anagrams.
+Napište funkci `odstraňAnagramy(pole)`, která vrátí pole zbavené anagramů.
 
-For instance:
+Příklad:
 
 ```js
-let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
+let pole = ["rak", "reklama", "makrela", "KRA", "kostel", "stolek", "karamel"];
 
-alert( aclean(arr) ); // "nap,teachers,ear" or "PAN,cheaters,era"
+alert( odstraňAnagramy(pole) ); // "rak,karamel,kostel" nebo "KRA,makrela,stolek"
 ```
 
-From every anagram group should remain only one word, no matter which one.
-
+Z každé skupiny přesmyček by mělo zbýt pouze jedno slovo. Nezáleží na tom, které.
