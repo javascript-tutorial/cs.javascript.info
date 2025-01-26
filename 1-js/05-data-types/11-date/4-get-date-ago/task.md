@@ -6,7 +6,7 @@ importance: 4
 
 Vytvořte funkci `vraťDenPřed(datum, dny)`, která vrátí den v měsíci, který byl `dny` dnů přede dnem `datum`.
 
-Například jestliže dnes je 20., pak `vraťDenPřed(new Date(), 1)` by měla vrátit 19. a `vraťDenPřed(new Date(), 2)` by měla vrátit 18.
+Například jestliže dnes je 20., pak `vraťDenPřed(new Date(), 1)` by měla vrátit 19 a `vraťDenPřed(new Date(), 2)` by měla vrátit 18.
 
 Měla by spolehlivě fungovat i pro `dny=365` nebo více:
 

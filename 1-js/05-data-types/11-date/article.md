@@ -1,8 +1,8 @@
 # Datum a čas
 
-Seznámíme se s novým vestavěným objektem: [Date](mdn:js/Date). Tento objekt ukládá datum a čas a poskytuje metody pro práci s nimi.
+Seznámíme se s novým vestavěným objektem: [Date](mdn:js/Date). Tento objekt v sobě ukládá datum a čas a poskytuje metody pro práci s nimi.
 
-Můžeme jej například použít k uložení doby vytvoření nebo modifikace, k měření času nebo jen k vypsání dnešního data.
+Můžeme jej například použít k uložení času vytvoření nebo modifikace něčeho, k měření času nebo jen k vypsání dnešního data.
 
 ## Vytvoření
 
@@ -21,12 +21,12 @@ Abychom vytvořili objekt `Date`, zavoláme `new Date()` s jedním z následují
 
     ```js run
     // 0 znamená 01.01.1970 UTC+0
-    let Leden01_1970 = new Date(0);
-    alert( Leden01_1970 );
+    let leden01_1970 = new Date(0);
+    alert( leden01_1970 );
 
     // nyní přidáme 24 hodin a získáme 02.01.1970 UTC+0
-    let Leden02_1970 = new Date(24 * 3600 * 1000);
-    alert( Leden02_1970 );
+    let leden02_1970 = new Date(24 * 3600 * 1000);
+    alert( leden02_1970 );
     ```
 
     Celé číslo, které představuje počet milisekund, které uplynuly od začátku roku 1970, se nazývá *časové razítko* nebo *časová značka* (anglicky *timestamp*).
@@ -36,30 +36,30 @@ Abychom vytvořili objekt `Date`, zavoláme `new Date()` s jedním z následují
     Data před 1. lednem 1970 mají záporná časová razítka, např.:
     ```js run
     // 31. prosinec 1969
-    let Pros31_1969 = new Date(-24 * 3600 * 1000);
-    alert( Pros31_1969 );
+    let pros31_1969 = new Date(-24 * 3600 * 1000);
+    alert( pros31_1969 );
     ```
 
 `new Date(datovýŘetězec)`
-: Jestliže je uveden jediný argument a je to řetězec, bude automaticky rozparsován. Algoritmus je stejný, jaký používá `Date.parse`. Probereme ho později.
+: Jestliže je uveden jediný argument a je to řetězec, bude z něj automaticky vytvořeno datum. Algoritmus je stejný, jaký používá `Date.parse`. Probereme ho později.
 
     ```js run
     let datum= new Date("2017-01-26");
     alert(datum);
     // Čas není nastaven, takže se předpokládá půlnoc GMT a
-    // přizpůsobí se časovému pásmu, ve kterém je kód spuštěn
-    // Výsledek tedy může být
+    // přizpůsobí se časovému pásmu, ve kterém je kód spuštěn.
+    // Výsledek tedy může být:
     // Thu Jan 26 2017 11:00:00 GMT+1100 (Australian Eastern Daylight Time)
-    // nebo
+    // nebo:
     // Wed Jan 25 2017 16:00:00 GMT-0800 (Pacific Standard Time)
     // V Česku zřejmě bude:
-    // Thu Jan 26 2017 11:00:00 GMT+1100 (Středoevropský standardní čas) - pozn. překl.
+    // Thu Jan 26 2017 01:00:00 GMT+1100 (Středoevropský standardní čas) - pozn. překl.
     ```
 
 `new Date(rok, měsíc, den, hodiny, minuty, sekundy, ms)`
-: Vytvoří datum ze zadaných součástí v místním časovém pásmu. Povinné jsou jen první dva argumenty.
+: Vytvoří datum ze zadaných složek v místním časovém pásmu. Povinné jsou jen první dva argumenty.
 
-    - Parametr `rok` musí mít 4 číslice. Z důvodu kompatibility se přijímají i 2 číslice a považují se za `19xx`, např. `98` je zde totéž jako `1998`, ale silně se doporučuje používat vždy 4 číslice.
+    - Parametr `rok` by měl mít 4 číslice. Z důvodu kompatibility se přijímají i 2 číslice a považují se za `19xx`, např. `98` je zde totéž jako `1998`, ale důrazně se doporučuje používat vždy 4 číslice.
     - Parametr `měsíc` může být od `0` (leden) do `11` (prosinec).
     - Parametr `den` znamená den v měsíci. Není-li uveden, předpokládá se `1`.
     - Nejsou-li uvedeny parametry `hodiny/minuty/sekundy/ms`, předpokládá se, že jsou `0`.
@@ -80,7 +80,7 @@ Abychom vytvořili objekt `Date`, zavoláme `new Date()` s jedním z následují
 
 ## Přístup ke složkám data
 
-Existují metody, kterými můžeme přistupovat k roku, měsíci a tak dále objektu `Date`:
+Existují metody, kterými můžeme přistupovat k roku, měsíci a dalším složkám objektu `Date`:
 
 [getFullYear()](mdn:js/Date/getFullYear)
 : Vrací rok (4-číslicový).
@@ -92,10 +92,10 @@ Existují metody, kterými můžeme přistupovat k roku, měsíci a tak dále ob
 : Vrací den v měsíci od 1 do 31. Název metody skutečně vypadá trochu podivně.
 
 [getHours()](mdn:js/Date/getHours), [getMinutes()](mdn:js/Date/getMinutes), [getSeconds()](mdn:js/Date/getSeconds), [getMilliseconds()](mdn:js/Date/getMilliseconds)
-: Vracejí odpovídající časové složky (`getHours()` vrací hodiny, `getMinutes()` minuty, `getSeconds()` sekundy, `getMilliseconds()` milisekundy -- pozn. překl.).
+: Vracejí odpovídající časové složky (`getHours()` vrací hodiny, `getMinutes()` minuty, `getSeconds()` sekundy a `getMilliseconds()` milisekundy -- pozn. překl.).
 
 ```warn header="Ne `getYear()`, ale `getFullYear()`"
-Mnoho JavaScriptových enginů implementuje nestandardní metodu `getYear()`. Tato metoda je zastaralá. Někdy vrací 2-číslicový letopočet. Prosíme nepoužívejte ji. Ke zjištění roku je určena metoda `getFullYear()`.
+Mnoho JavaScriptových motorů implementuje nestandardní metodu `getYear()`. Tato metoda je zastaralá. Někdy vrací 2-číslicový letopočet. Prosíme nepoužívejte ji. Ke zjištění roku je určena metoda `getFullYear()`.
 ```
 
 Navíc můžeme získat i den v týdnu:
@@ -107,7 +107,7 @@ Navíc můžeme získat i den v týdnu:
 
 Existují také jejich UTC-protějšky, které vracejí den, měsíc atd. pro časové pásmo UTC+0: [getUTCFullYear()](mdn:js/Date/getUTCFullYear), [getUTCMonth()](mdn:js/Date/getUTCMonth), [getUTCDay()](mdn:js/Date/getUTCDay). Stačí vložit `"UTC"` rovnou za `"get"`.
 
-Jestliže je vaše místní časové pásmo vzhledem k UTC posunuto, pak níže uvedený kód zobrazí různé hodiny:
+Jestliže je vaše místní časové pásmo vzhledem k UTC posunuto, pak následující kód zobrazí různé hodiny:
 
 ```js run
 // nynější datum
@@ -147,7 +147,7 @@ Následující metody umožňují nastavit složky data a času:
 - [`setMinutes(minuty, [sekundy], [ms])`](mdn:js/Date/setMinutes)
 - [`setSeconds(sekundy, [ms])`](mdn:js/Date/setSeconds)
 - [`setMilliseconds(ms)`](mdn:js/Date/setMilliseconds)
-- [`setTime(milisekundy)`](mdn:js/Date/setTime) (nastaví celé datum podle milisekund uplynulých od 1.1.1970 UTC)
+- [`setTime(milisekundy)`](mdn:js/Date/setTime) (nastaví celé datum z milisekund uplynulých od 1. 1. 1970 UTC)
 
 Každá z nich kromě `setTime()` má UTC-variantu, např. `setUTCHours()`.
 
@@ -242,9 +242,9 @@ Jestliže chceme jenom měřit čas, nepotřebujeme objekt `Date`.
 
 Existuje speciální metoda `Date.now()`, která vrací aktuální časové razítko.
 
-Je sémanticky ekvivalentní `new Date().getTime()`, ale nevytváří dočasný objekt `Date`. Je tedy rychlejší a nezatěžuje garbage collector.
+Je sémanticky ekvivalentní `new Date().getTime()`, ale nevytváří dočasný objekt `Date`. Je tedy rychlejší a nezatěžuje sběrač odpadků.
 
-Používá se většinou kvůli pohodlí nebo tehdy, když záleží na výkonu, například v JavaScriptových hrách nebo jiných specializovaných aplikacích.
+Používá se většinou proto, že je pohodlnější, nebo tehdy, když záleží na výkonu, například v JavaScriptových hrách nebo jiných specializovaných aplikacích.
 
 Tohle je tedy pravděpodobně lepší:
 
@@ -265,7 +265,7 @@ let konec = Date.now(); // hotovo
 alert( `Cyklus trval ${konec - začátek} ms` ); // odečítáme čísla, ne data
 ```
 
-## Benchmarking
+## Benchmarky
 
 Jestliže chceme spolehlivý benchmark funkce náročné na CPU, měli bychom být opatrní.
 
@@ -289,7 +289,7 @@ Tyto dvě funkce dělají přesně totéž, ale jedna z nich používá explicit
 
 Která je tedy rychlejší?
 
-První myšlenka může být spustit je mnohokrát za sebou a změřit rozdíl časů. V našem případě jsou tyto funkce velmi jednoduché, takže to musíme udělat alespoň 100000krát.
+Jako první můžeme dostat nápad, že je spustíme mnohokrát za sebou a změříme rozdíl časů. V našem případě jsou tyto funkce velmi jednoduché, takže to musíme udělat alespoň 100 000krát.
 
 Změřme to:
 
@@ -315,17 +315,17 @@ alert( 'Čas funkce rozdílOdečtením: ' + bench(rozdílOdečtením) + ' ms' );
 alert( 'Čas funkce rozdílPomocíGetTime: ' + bench(rozdílPomocíGetTime) + ' ms' );
 ```
 
-Páni! Použití `getTime()` je mnohem rychlejší! Je to proto, že když tam není typová konverze, je pro enginy mnohem snadnější funkci optimalizovat.
+Páni! Použití `getTime()` je mnohem rychlejší! Je to proto, že tam není žádná typová konverze, a proto je pro motory mnohem snadnější funkci optimalizovat.
 
 Dobrá, něco tedy máme. To však ještě není dobrý benchmark.
 
-Představme si, že v době spuštění `bench(rozdílOdečtením)` CPU prováděl paralelně něco jiného a to něco mu ubíralo zdroje. A v době spuštění `bench(rozdílPomocíGetTime)` tahle práce skončila.
+Představme si, že v době spuštění `bench(rozdílOdečtením)` CPU prováděl paralelně něco jiného a to mu ubíralo zdroje. A v době spuštění `bench(rozdílPomocíGetTime)` tahle práce skončila.
 
 V moderních multiprocesních operačních systémech je to dosti reálný scénář.
 
 Výsledkem je, že první benchmark měl méně zdrojů CPU než druhý. To mohlo vést ke špatným výsledkům.
 
-**Pro spolehlivější benchmarking bychom měli celý balíček benchmarků spustit několikrát za sebou.**
+**Pro spolehlivější benchmarkové testování bychom měli celý balíček benchmarků spustit několikrát za sebou.**
 
 Například takto:
 
@@ -362,7 +362,7 @@ alert( 'Celkový čas funkce rozdílOdečtením: ' + čas1 );
 alert( 'Celkový čas funkce rozdílPomocíGetTime: ' + čas2 );
 ```
 
-Moderní JavaScriptové enginy začínají aplikovat pokročilejší optimalizace jen na „horký kód“, který se provádí mnohokrát (není třeba optimalizovat to, co se provádí jen vzácně). Ve výše uvedeném příkladu tedy první spuštění nejsou dobře optimalizovaná. Můžeme chtít přidat zahřívací kolo:
+Moderní JavaScriptové motory začínají aplikovat pokročilé optimalizace jen na „horký kód“, který se provádí mnohokrát (není třeba optimalizovat to, co se provádí jen vzácně). Ve výše uvedeném příkladu tedy první spuštění nejsou dobře optimalizovaná. Můžeme chtít přidat zahřívací kolo:
 
 ```js
 // přidáno pro „zahřátí“ před hlavní smyčkou
@@ -376,15 +376,15 @@ for (let i = 0; i < 10; i++) {
 }
 ```
 
-```warn header="Při mikrobenchmarkingu buďte opatrní"
-Moderní JavaScriptové enginy provádějí množství optimalizací, které mohou vylepšit výsledky „umělých testů“ ve srovnání s „běžným použitím“, zvláště když benchmarkujeme něco velmi malého, např. práci operátoru nebo vestavěnou funkci. Pokud tedy chcete skutečně porozumět výkonu, pak si prosíme prostudujte, jak funguje JavaScriptový engine. A pak už pravděpodobně nebudete mikrobenchmarky vůbec potřebovat.
+```warn header="Při mikrobenchmarkových testech buďte opatrní"
+Moderní JavaScriptové motory provádějí množství optimalizací, které mohou vylepšit výsledky „umělých testů“ ve srovnání s „běžným použitím“, zvláště když provádíme benchmark něčeho velmi malého, např. práce operátoru nebo vestavěné funkce. Pokud tedy chcete skutečně porozumět výkonu, pak si prosíme prostudujte, jak funguje JavaScriptový motor. A pak už pravděpodobně nebudete mikrobenchmarky vůbec potřebovat.
 
 Výborný balík článků o V8 naleznete na <https://mrale.ph>.
 ```
 
-## Parsování data z řetězce
+## Načítání data z řetězce
 
-Metoda [Date.parse(str)](mdn:js/Date/parse) dokáže načíst datum z řetězce.
+Metoda [Date.parse(řetězec)](mdn:js/Date/parse) dokáže načíst datum z řetězce.
 
 Řetězec by měl mít formát `RRRR-MM-DDTHH:mm:ss.sssZ`, kde:
 
@@ -395,7 +395,7 @@ Metoda [Date.parse(str)](mdn:js/Date/parse) dokáže načíst datum z řetězce.
 
 Jsou možné i kratší varianty, např. `RRRR-MM-DD` nebo `RRRR-MM` nebo jen `RRRR`.
 
-Volání `Date.parse(str)` parsuje řetězec v zadaném formátu a vrátí časové razítko (počet milisekund od 1. ledna 1970 UTC+0). Není-li formát správný, vrátí `NaN`.
+Volání `Date.parse(řetězec)` rozebere řetězec v uvedeném formátu a vrátí časové razítko (počet milisekund od 1. ledna 1970 UTC+0). Není-li formát správný, vrátí `NaN`.
 
 Příklad:
 
@@ -415,16 +415,16 @@ alert(datum);
 
 ## Shrnutí
 
-- Datum a čas v JavaScriptu představuje objekt [Date](mdn:js/Date). Nemůžeme vytvořit „jen datum“ nebo „jen čas“: objekty `Date` obsahují vždy obojí.
+- Datum a čas v JavaScriptu představuje objekt [Date](mdn:js/Date). Nemůžeme vytvořit „jenom datum“ nebo „jenom čas“: objekty `Date` obsahují vždy obojí.
 - Měsíce se počítají od nuly (ano, leden je nultý měsíc).
 - Dny v týdnu ve funkci `getDay()` se také počítají od nuly (to je neděle).
-- `Date` se automaticky opravuje, když jsou nastaveny složky mimo rozsah. To je dobré pro přičítání/odečítání dnů/měsíců/hodin.
-- Data od sebe lze odečítat, výsledkem je jejich rozdíl v milisekundách. To je proto, že `Date` se při konverzi na číslo převede na časové razítko.
-- Aktuální časové razítko rychle získáme pomocí `Date.now()`.
+- `Date` se automaticky opravuje, když jsou nastaveny složky mimo správný rozsah. To je dobré pro přičítání/odečítání dnů/měsíců/hodin.
+- Data lze od sebe odečítat, výsledkem je jejich rozdíl v milisekundách. To je proto, že `Date` se při konverzi na číslo převede na časové razítko.
+- Časové razítko času, který je právě teď, rychle získáme pomocí `Date.now()`.
 
 Všimněte si, že na rozdíl od mnoha jiných systémů se časová razítka v JavaScriptu počítají v milisekundách, ne v sekundách.
 
-Někdy potřebujeme přesnější měření času. Samotný JavaScript neobsahuje způsob, jak měřit čas v mikrosekundách (1 milióntina sekundy), ale většina prostředí jej poskytuje. Například prohlížeč má metodu [performance.now()](mdn:api/Performance/now), která vrací počet milisekund od začátku načítání stránky s přesností na mikrosekundy (3 číslice za desetinnou čárkou):
+Někdy potřebujeme přesnější měření času. Samotný JavaScript neobsahuje způsob, jak měřit čas v mikrosekundách (1 milióntina sekundy), ale většina prostředí jej poskytuje. Například prohlížeče mají metodu [performance.now()](mdn:api/Performance/now), která vrací počet milisekund od začátku načítání stránky s přesností na mikrosekundy (3 číslice za desetinnou čárkou):
 
 ```js run
 alert(`Načítání začalo před ${performance.now()}ms`);
@@ -433,4 +433,4 @@ alert(`Načítání začalo před ${performance.now()}ms`);
 // více než 3 číslice za desetinnou čárkou jsou chyba přesnosti, jedině první 3 jsou správné
 ```
 
-Node.js má modul `microtime` a jiné způsoby. Technicky téměř každé zařízení a každé prostředí umožňuje získat lepší přesnost, jenom to není v `Date`.
+Node.js má modul `microtime` a jiné způsoby. Technicky téměř každé zařízení a každé prostředí umožňuje získat lepší přesnost, jenom ne pomocí `Date`.

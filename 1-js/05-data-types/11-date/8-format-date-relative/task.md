@@ -20,6 +20,6 @@ alert( formátujDatum(new Date(new Date - 30 * 1000)) ); // "před 30 s"
 
 alert( formátujDatum(new Date(new Date - 5 * 60 * 1000)) ); // "před 5 min."
 
-// včerejší datum, např. 31.12.16 20:00
+// včerejší datum ve formátu 31.12.16 20:00
 alert( formátujDatum(new Date(new Date - 86400 * 1000)) );
 ```

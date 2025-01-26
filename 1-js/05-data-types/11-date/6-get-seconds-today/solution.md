@@ -16,7 +16,7 @@ function vraťDnešníSekundy() {
 alert( vraťDnešníSekundy() );
 ```
 
-Alternativním řešením by bylo získat hodiny, minuty, sekundy a převést je na sekundy:
+Alternativním řešením by bylo získat hodiny, minuty a sekundy a převést je na sekundy:
 
 ```js run
 function vraťDnešníSekundy() {

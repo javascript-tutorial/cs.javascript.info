@@ -18,7 +18,7 @@ function formátujDatum(datum) {
   }
 
   // naformátujeme datum
-  // před jednočíslicový den/měsíc/hodiny/minuty přidáme nulu
+  // před jednociferný den/měsíc/hodiny/minuty přidáme nulu
   let d = datum;
   d = [
     '0' + d.getDate(),
