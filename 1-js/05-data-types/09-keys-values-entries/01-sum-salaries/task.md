@@ -4,7 +4,7 @@ importance: 5
 
 # Součet vlastností
 
-Máme objekt `prodeje` s určitým počtem prodejů.
+Máme objekt `prodeje` obsahující libovolný počet prodejů.
 
 Napište funkci `sečtiProdeje(prodeje)`, která vrátí součet všech prodejů, přičemž bude využívat `Object.values` a cyklus `for..of`.
 

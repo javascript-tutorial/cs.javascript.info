@@ -9,11 +9,11 @@ Tyto metody jsou generické, existuje společná dohoda ohledně jejich použív
 
 Jsou podporovány v:
 
-- `Map`
-- `Set`
-- `Array`
+- mapách (`Map`)
+- množinách (`Set`)
+- polích (`Array`)
 
-Plané objekty rovněž podporují podobné metody, ale jejich syntaxe je trochu jiná.
+Podobné metody jsou podporovány i v planých objektech, ale jejich syntaxe je trochu jiná.
 
 ## Object.keys, values, entries
 
@@ -28,7 +28,7 @@ Prosíme, všimněte si rozdílů (například ve srovnání s mapou):
 |                | Mapa                | Objekt                                  |
 |----------------|---------------------|-----------------------------------------|
 | Syntaxe volání | `mapa.keys()`       | `Object.keys(obj)`, ale ne `obj.keys()` |
-| Vrací          | iterovatelný objekt | „skutečné“ pole                         |
+| Vrací          | iterovatelný objekt | „opravdové“ pole                         |
 
 Prvním rozdílem je, že musíme volat `Object.keys(obj)`, ne `obj.keys()`.
 
@@ -49,7 +49,7 @@ let uživatel = {
 - `Object.values(uživatel) = ["Jan", 30]`
 - `Object.entries(uživatel) = [ ["jméno","Jan"], ["věk",30] ]`
 
-Zde je příklad použití `Object.values` k procházení hodnot vlastností:
+Zde je příklad použití `Object.values` k vytvoření cyklu nad hodnotami vlastností:
 
 ```js run
 let uživatel = {
@@ -84,8 +84,8 @@ Například máme objekt s cenami a rádi bychom je zdvojnásobili:
 
 ```js run
 let ceny = {
-  banány: 1,
-  pomeranče: 2,
+  banán: 1,
+  pomeranč: 2,
   maso: 4,
 };
 
