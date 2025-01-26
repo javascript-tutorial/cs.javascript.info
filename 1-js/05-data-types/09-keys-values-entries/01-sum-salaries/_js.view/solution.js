@@ -1,10 +1,10 @@
-function sumSalaries(salaries) {
+function sečtiProdeje(prodeje) {
 
-  let sum = 0;
-  for (let salary of Object.values(salaries)) {
-    sum += salary;
+  let součet = 0;
+  for (let prodej of Object.values(prodeje)) {
+    součet += prodej;
   }
 
-  return sum;
+  return součet;
 }
 
