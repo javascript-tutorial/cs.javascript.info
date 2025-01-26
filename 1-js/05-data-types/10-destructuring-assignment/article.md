@@ -2,7 +2,7 @@
 
 Dvě nejpoužívanější datové struktury v JavaScriptu jsou objekty a pole.
 
-- Objekty nám umožňují vytvořit jednoduchou entitu, v níž jsou datové prvky uloženy podle klíčů.
+- Objekty nám umožňují vytvořit jednoduchou entitu, v níž jsou datové prvky uloženy pod klíči.
 - Pole nám umožňují shromáždit datové prvky do seřazeného seznamu.
 
 Když je však předáváme nějaké funkci, nemusíme je potřebovat celé. Funkce může požadovat jen určité prvky nebo vlastnosti.
@@ -54,7 +54,7 @@ let příjmení = pole[1];
 ````
 
 ````smart header="Ignorování prvků pomocí čárek"
-Nechtěné prvky pole můžeme zahodit pomocí čárky navíc:
+Nechtěné prvky pole můžeme zahodit přidáním čárky:
 
 ```js run
 *!*
@@ -65,7 +65,7 @@ let [křestníJméno, , titul] = ["Julius", "Caesar", "Konzul", "Římské repub
 alert( titul ); // Konzul
 ```
 
-Ve výše uvedeném kódu byl druhý prvek pole přeskočen, třetí přiřazen do proměnné `titul` a ostatní prvky pole byly také přeskočeny (protože pro ně nejsou uvedeny žádné proměnné).
+V uvedeném kódu byl druhý prvek pole přeskočen, třetí přiřazen do proměnné `titul` a ostatní prvky pole byly také přeskočeny (protože pro ně nejsou uvedeny žádné proměnné).
 ````
 
 ````smart header="Funguje s libovolným iterovatelným objektem na pravé straně"
@@ -76,7 +76,7 @@ Ve výše uvedeném kódu byl druhý prvek pole přeskočen, třetí přiřazen 
 let [a, b, c] = "abc"; // ["a", "b", "c"]
 let [jedna, dvě, tři] = new Set([1, 2, 3]);
 ```
-To funguje, protože interně se destrukturační přiřazení vykonává iterací nad hodnotou vpravo. Je to určitý druh syntaktického cukru pro volání `for..of` nad hodnotou vpravo od `=` a přiřazení hodnot.
+To funguje, protože vnitřně se destrukturační přiřazení vykonává iterací nad hodnotou vpravo. Je to určitý druh syntaktického cukru pro volání `for..of` nad hodnotou vpravo od `=` a přiřazení hodnot.
 ````
 
 
@@ -129,7 +129,7 @@ for (let [klíč, hodnota] of uživatel) {
 ```
 ````
 
-````smart header="Trik s výměnou proměnných"
+````smart header="Trik pro výměnu proměnných"
 Existuje dobře známý trik pro výměnu hodnot dvou proměnných použitím destrukturačního přiřazení:
 
 ```js run
@@ -149,11 +149,11 @@ Zde jsme vytvořili dočasné pole dvou proměnných a okamžitě je destrukturo
 Tímto způsobem můžeme vyměnit i více než dvě proměnné.
 ````
 
-### Zbytek '...'
+### Zbytek „...“
 
 Jestliže je pole delší než seznam nalevo, „přebývající“ prvky jsou obvykle vypuštěny.
 
-Například zde se vezmou jen první dva prvky a ostatní se prostě ignorují:
+Například zde se vezmou jen první dva prvky a ostatní se jednoduše ignorují:
 
 ```js run
 let [jméno1, jméno2] = ["Julius", "Caesar", "Konzul", "Římské republiky"];
@@ -185,7 +185,7 @@ let [jméno1, jméno2, *!*...tituly*/!*] = ["Julius", "Caesar", "Konzul", "Řím
 // nyní tituly = ["Konzul", "Římské republiky"]
 ```
 
-### Defaultní hodnoty
+### Standardní hodnoty
 
 Pokud je pole kratší než seznam proměnných nalevo, nedojde k chybě. Neuvedené hodnoty se považují za nedefinované:
 
@@ -198,21 +198,21 @@ alert(křestníJméno); // undefined
 alert(příjmení); // undefined
 ```
 
-Chceme-li, aby chybějící hodnoty nahradila nějaká „defaultní“ hodnota, můžeme ji uvést pomocí `=`:
+Chceme-li, aby chybějící hodnoty nahradila nějaká „standardní“ hodnota, můžeme ji uvést pomocí `=`:
 
 ```js run
 *!*
-// defaultní hodnoty
+// standardní hodnoty
 let [jméno = "Host", příjmení = "Anonym"] = ["Julius"];
 */!*
 
 alert(jméno);    // Julius (z pole)
-alert(příjmení); // Anonym (použita defaultní hodnota)
+alert(příjmení); // Anonym (použita standardní hodnota)
 ```
 
-Defaultními hodnotami mohou být další složité výrazy nebo dokonce volání funkcí. Vyhodnocují se jen tehdy, není-li hodnota poskytnuta.
+Standardními hodnotami mohou být i složitější výrazy nebo dokonce volání funkcí. Vyhodnocují se jen tehdy, když hodnota není poskytnuta.
 
-Například zde použijeme pro dvě defaultní hodnoty funkci `prompt`:
+Například zde použijeme pro dvě standardní hodnoty funkci `prompt`:
 
 ```js run
 // spustí prompt jen pro příjmení
@@ -254,7 +254,7 @@ alert(šířka);   // 100
 alert(výška);   // 200
 ```
 
-Vlastnosti `možnosti.title`, `možnosti.šířka` a `možnosti.výška` jsou přiřazeny do příslušných proměnných.
+Vlastnosti `možnosti.titulek`, `možnosti.šířka` a `možnosti.výška` jsou přiřazeny do příslušných proměnných.
 
 Na pořadí nezáleží. Tohle bude fungovat také:
 
@@ -288,9 +288,9 @@ alert(š);       // 100
 alert(v);       // 200
 ```
 
-Dvojtečka ukazuje, „co : jde kam“. V uvedeném příkladu vlastnost `šířka` jde do `š`, vlastnost `výška` jde do `v` a `titulek` se přiřadí do proměnné stejného názvu.
+Dvojtečka ukazuje, „co : jde kam“. V uvedeném příkladu vlastnost `šířka` jde do `š`, vlastnost `výška` jde do `v` a `titulek` se přiřadí do proměnné se stejným názvem.
 
-Pro vlastnosti, které mohou chybět, můžeme nastavit defaultní hodnoty pomocí `"="` takto:
+Pro vlastnosti, které mohou chybět, můžeme nastavit standardní hodnoty pomocí `"="` takto:
 
 ```js run
 let možnosti = {
@@ -306,9 +306,9 @@ alert(šířka);    // 100
 alert(výška);    // 200
 ```
 
-Stejně jako u polí nebo parametrů funkcí mohou defaultní hodnoty být libovolné výrazy nebo dokonce volání funkcí. Budou vyhodnoceny, jestliže hodnota nebude poskytnuta.
+Stejně jako u polí nebo parametrů funkcí mohou standardní hodnoty být libovolné výrazy nebo dokonce volání funkcí. Budou vyhodnoceny jen tehdy, když hodnota nebude poskytnuta.
 
-V níže uvedeném kódu se `prompt` zeptá na proměnnou `šířka`, ale ne na `titulek`:
+V následujícím kódu se `prompt` zeptá na proměnnou `šířka`, ale ne na `titulek`:
 
 ```js run
 let možnosti = {
@@ -320,7 +320,7 @@ let {šířka = prompt("šířka?"), titulek = prompt("titulek?")} = možnosti;
 */!*
 
 alert(titulek); // Menu
-alert(šířka);   // (to, co vydal prompt)
+alert(šířka);   // (to, co vrátil prompt)
 ```
 
 Můžeme také zkombinovat dvojtečku a rovnítko:
@@ -358,7 +358,7 @@ alert(titulek); // Menu
 
 Co když má objekt více vlastností, než my máme proměnných? Můžeme některé z nich vzít a „zbytek“ někam přiřadit?
 
-Můžeme použít zbytkový vzor, stejně jako jsme to dělali u polí. Některé starší prohlížeče to nepodporují (IE, jako polyfill použijte Babel), ale v moderních to funguje.
+Můžeme použít zbytkový vzor, stejně jako jsme to udělali u polí. Některé starší prohlížeče to nepodporují (IE, jako polyfill použijte Babel), ale v moderních to funguje.
 
 Vypadá to takto:
 
@@ -391,7 +391,7 @@ let titulek, šířka, výška;
 {titulek, šířka, výška} = {titulek: "Menu", šířka: 200, výška: 100};
 ```
 
-Problém je v tom, že JavaScript zachází s `{...}` v toku hlavního kódu (ne uvnitř jiného výrazu) jako s kódovým blokem. Takové kódové bloky můžeme používat k seskupení příkazů, například:
+Problém je v tom, že JavaScript zachází s `{...}` v hlavním kódu (ne uvnitř jiného výrazu) jako s kódovým blokem. Takové kódové bloky můžeme používat k seskupení příkazů, například:
 
 ```js run
 {
@@ -418,9 +418,9 @@ alert( titulek ); // Menu
 
 ## Vnořená destrukturace
 
-Jestliže objekt nebo pole obsahuje jiné vnořené objekty a pole, můžeme vyjmout hlubší části pomocí složitějších konstrukcí na levé straně.
+Jestliže objekt nebo pole obsahuje jiné vnořené objekty a pole, můžeme vyjmout hlubší části pomocí složitějších vzorů na levé straně.
 
-V níže uvedeném kódu objekt `možnosti` obsahuje jiný objekt ve vlastnosti `velikost` a pole ve vlastnosti `prvky`. Vzor na levé straně přiřazení má stejnou strukturu jako objekt, z něhož vybíráme hodnoty:
+V následujícím kódu objekt `možnosti` obsahuje jiný objekt ve vlastnosti `velikost` a pole ve vlastnosti `prvky`. Vzor na levé straně přiřazení má stejnou strukturu jako objekt, z něhož vybíráme hodnoty:
 
 ```js run
 let možnosti = {
@@ -439,7 +439,7 @@ let {
     výška
   },
   prvky: [prvek1, prvek2], // zde přiřadíme prvky
-  titulek = "Menu" // v objektu není přítomen (použije se defaultní hodnota)
+  titulek = "Menu" // v objektu není přítomen (použije se standardní hodnota)
 } = možnosti;
 
 alert(titulek); // Menu
@@ -453,7 +453,7 @@ Do příslušných proměnných se přiřadí všechny vlastnosti objektu `možn
 
 ![](destructuring-complex.svg)
 
-Nakonec tedy máme `šířka`, `výška`, `prvek1`, `prvek2` a `titulek` z defaultní hodnoty.
+Nakonec tedy máme `šířka`, `výška`, `prvek1`, `prvek2` a `titulek` ze standardní hodnoty.
 
 Všimněte si, že zde nejsou žádné proměnné pro `velikost` a `prvky`, jelikož jsme místo nich vzali jejich obsah.
 
@@ -474,7 +474,7 @@ Problém v reálném životě spočívá v tom, jak si pamatovat pořadí argume
 Takhle?
 
 ```js
-// undefined tam, kde se má použít defaultní hodnota
+// undefined tam, kde se má použít standardní hodnota
 zobrazMenu("Moje menu", undefined, undefined, ["Prvek1", "Prvek2"])
 ```
 
@@ -494,7 +494,7 @@ let možnosti = {
 // ...a ta jej okamžitě rozdělí do proměnných
 function zobrazMenu(*!*{titulek = "Bez názvu", šířka = 200, výška = 100, prvky = []}*/!*) {
   // titulek, prvky – převzaty z objektu možnosti,
-  // šířka, výška – použity defaultní hodnoty
+  // šířka, výška – použity standardní hodnoty
   alert( `${titulek} ${šířka} ${výška}` ); // Moje menu 200 100
   alert( prvky ); // Prvek1,Prvek2
 }
@@ -534,17 +534,17 @@ function({
 })
 ```
 
-Pak budeme mít pro objekt parametrů proměnnou `názevProměnné` obsahující vlastnost `vstupujícíVlastnost`, jejíž standardní hodnota bude `standardníHodnota`.
+Pro objekt parametrů pak budeme mít pro vlastnost `vstupujícíVlastnost` proměnnou `názevProměnné` , jejíž standardní hodnotou bude `standardníHodnota`.
 
 Prosíme všimněte si, že taková destrukturace předpokládá, že `zobrazMenu()` má argument. Chceme-li všechny hodnoty standardní, měli bychom uvést prázdný objekt:
 
 ```js
-zobrazMenu({}); // ok, všechny hodnoty jsou defaultní
+zobrazMenu({}); // ok, všechny hodnoty jsou standardní
 
 zobrazMenu(); // tohle ohlásí chybu
 ```
 
-To můžeme opravit tak, že učiníme `{}` defaultní hodnotou celého objektu parametrů:
+To můžeme opravit tak, že učiníme `{}` standardní hodnotou celého objektu parametrů:
 
 ```js run
 function zobrazMenu({ titulek = "Menu", šířka = 100, výška = 200 }*!* = {}*/!*) {
@@ -554,11 +554,11 @@ function zobrazMenu({ titulek = "Menu", šířka = 100, výška = 200 }*!* = {}*
 zobrazMenu(); // Menu 100 200
 ```
 
-V uvedeném kódu je celý argumentový objekt defaultně `{}`, takže vždy bude co destrukturovat.
+V uvedeném kódu je celý argumentový objekt standardně `{}`, takže vždy bude co destrukturovat.
 
 ## Shrnutí
 
-- Destrukturační přiřazení umožňuje okamžité mapování objektu nebo pole do mnoha proměnných.
+- Destrukturační přiřazení umožňuje rychlé mapování objektu nebo pole do mnoha proměnných.
 - Úplná syntaxe pro objekt:
     ```js
     let {vlastnost : názevProměnné = standardníHodnota, ...zbytek} = objekt
@@ -566,7 +566,7 @@ V uvedeném kódu je celý argumentový objekt defaultně `{}`, takže vždy bud
 
     To znamená, že vlastnost `vlastnost` má přijít do proměnné `názevProměnné`, a pokud taková vlastnost neexistuje, měla by se použít hodnota `standardníHodnota`.
 
-    Objektové vlastnosti, které nejsou mapovány, se zkopírují do objektu `zbytek`.
+    Objektové vlastnosti, pro které není uvedeno mapování, se zkopírují do objektu `zbytek`.
 
 - Úplná syntaxe pro pole:
 

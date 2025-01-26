@@ -17,7 +17,7 @@ Napište destrukturační přiřazení, které načte:
 
 - vlastnost `jméno` do proměnné `jméno`.
 - vlastnost `roky` do proměnné `věk`.
-- vlastnost `jeAdmin` do proměnné `jeAdmin` (false, pokud taková vlastnost není)
+- vlastnost `jeAdmin` do proměnné `jeAdmin` (false, pokud taková vlastnost není).
 
 Zde je příklad hodnot po vašem přiřazení:
 
