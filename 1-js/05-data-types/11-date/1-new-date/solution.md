@@ -1,18 +1,18 @@
-The `new Date` constructor uses the local time zone. So the only important thing to remember is that months start from zero.
+Konstruktor `new Date` používá místní časové pásmo, takže jediná důležitá věc, kterou si musíme pamatovat, je, že měsíce se počítají od nuly.
 
-So February has number 1.
+Únor má tedy číslo 1.
 
-Here's an example with numbers as date components:
+Zde je příklad s čísly jako složkami data:
 
 ```js run
-//new Date(year, month, date, hour, minute, second, millisecond)
+//new Date(rok, měsíc, den, hodiny, minuty, sekundy, milisekundy)
 let d1 = new Date(2012, 1, 20, 3, 12);
 alert( d1 );
 ```
-We could also create a date from a string, like this:
+Můžeme vytvořit datum i z řetězce, např. takto:
 
 ```js run
-//new Date(datastring)
+//new Date(řetězecSDatem)
 let d2 = new Date("2012-02-20T03:12");
 alert( d2 );
 ```

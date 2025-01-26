@@ -1,18 +1,18 @@
-describe("formatDate", function() {
-  it("shows 1ms ago as \"right now\"", function() {
-    assert.equal(formatDate(new Date(new Date - 1)), 'right now');
+describe("formátujDatum", function() {
+  it("zobrazí čas před 1ms jako \"právě teď\"", function() {
+    assert.equal(formátujDatum(new Date(new Date - 1)), 'právě teď');
   });
 
-  it('"30 seconds ago"', function() {
-    assert.equal(formatDate(new Date(new Date - 30 * 1000)), "30 sec. ago");
+  it('"před 30 sekundami"', function() {
+    assert.equal(formátujDatum(new Date(new Date - 30 * 1000)), "před 30 s");
   });
 
-  it('"5 minutes ago"', function() {
-    assert.equal(formatDate(new Date(new Date - 5 * 60 * 1000)), "5 min. ago");
+  it('"před 5 minutami"', function() {
+    assert.equal(formátujDatum(new Date(new Date - 5 * 60 * 1000)), "před 5 min.");
   });
 
-  it("older dates as DD.MM.YY HH:mm", function() {
-    assert.equal(formatDate(new Date(2014, 2, 1, 11, 22, 33)), "01.03.14 11:22");
+  it("starší data jako DD.MM.YY HH:mm", function() {
+    assert.equal(formátujDatum(new Date(2014, 2, 1, 11, 22, 33)), "01.03.14 11:22");
   });
 
 });
