@@ -1,30 +1,30 @@
 
 ```js run
-let room = {
-  number: 23
+let místnost = {
+  číslo: 23
 };
 
-let meetup = {
-  title: "Conference",
-  occupiedBy: [{name: "John"}, {name: "Alice"}],
-  place: room
+let mítink = {
+  titul: "Konference",
+  obsazenoČím: [{jméno: "Jan"}, {jméno: "Alice"}],
+  místo: místnost
 };
 
-room.occupiedBy = meetup;
-meetup.self = meetup;
+místnost.obsazenoČím = mítink;
+mítink.onSám = mítink;
 
-alert( JSON.stringify(meetup, function replacer(key, value) {
-  return (key != "" && value == meetup) ? undefined : value;
+alert( JSON.stringify(mítink, function nahrazení(klíč, hodnota) {
+  return (klíč != "" && hodnota == mítink) ? undefined : hodnota;
 }));
 
 /* 
 {
-  "title":"Conference",
-  "occupiedBy":[{"name":"John"},{"name":"Alice"}],
-  "place":{"number":23}
+  "titul":"Konference",
+  "obsazenoČím":[{"jméno":"Jan"},{"jméno":"Alice"}],
+  "místo":{"číslo":23}
 }
 */
 ```
 
-Here we also need to test `key==""` to exclude the first call where it is normal that `value` is `meetup`.
+Zde musíme testovat i to, zda `klíč==""`, abychom vyloučili první volání, kde je v pořádku, že `hodnota` je `mítink`.
 
