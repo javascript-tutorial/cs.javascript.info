@@ -1,4 +1,4 @@
-# Metody JSON, toJSON
+# Metody pro JSON, toJSON
 
 Dejme tomu, že máme složitý objekt a rádi bychom jej konvertovali na řetězec, abychom jej poslali po síti nebo ho jen vypsali pro účely logování.
 
@@ -21,18 +21,18 @@ let uživatel = {
 alert(uživatel); // {jméno: "Jan", věk: 30}
 ```
 
-...Během procesu vývoje se však přidávají nové vlastnosti, staré se přejmenovávají a odstraňují. Pokaždé měnit takový `toString` by mohlo být bolestivé. Mohli bychom se pokusit vytvořit cyklus nad vlastnostmi, ale co když je objekt složitý a obsahuje ve vlastnostech vnořené objekty? Museli bychom implementovat i jejich konverzi.
+...Během procesu vývoje se však přidávají nové vlastnosti, staré se přejmenovávají a odstraňují. Pokaždé měnit takový `toString` by mohlo být nepříjemné. Mohli bychom se pokusit vytvořit cyklus nad vlastnostmi, ale co když je objekt složitý a obsahuje ve vlastnostech vnořené objekty? Museli bychom implementovat i jejich konverzi.
 
 Naštěstí kód, který by tohle všechno zvládl, není třeba psát. Tento úkol byl již vyřešen.
 
 ## JSON.stringify
 
-[JSON](https://cs.wikipedia.org/wiki/JSON) (JavaScript Object Notation -- JavaScriptová objektová notace) je obecný formát sloužící k reprezentaci hodnot a objektů. Je popsán ve standardu [RFC 4627](https://tools.ietf.org/html/rfc4627). Původně byl vytvořen pro JavaScript, ale knihovny pro práci s ním poskytuje i mnoho jiných jazyků. Je tedy snadné používat JSON pro výměnu dat, když klient používá JavaScript a server je psán v Ruby, PHP, Javě nebo čemkoli jiném.
+[JSON](https://cs.wikipedia.org/wiki/JSON) (JavaScript Object Notation -- JavaScriptová objektová notace) je obecný formát sloužící k reprezentaci hodnot a objektů. Je popsán ve standardu [RFC 4627](https://tools.ietf.org/html/rfc4627). Původně byl vytvořen pro JavaScript, ale knihovny pro práci s ním poskytuje i mnoho jiných jazyků. Je tedy snadné používat JSON pro výměnu dat, když klient používá JavaScript a server je napsán v Ruby, PHP, Javě nebo čemkoli jiném.
 
 JavaScript poskytuje metody:
 
 - `JSON.stringify` pro konverzi objektů na JSON.
-- `JSON.parse` pro konverzi JSON zpět na objekty.
+- `JSON.parse` pro konverzi JSONu zpět na objekty.
 
 Například zde zavoláme `JSON.stringify` na studenta:
 ```js run
@@ -68,10 +68,10 @@ Metoda `JSON.stringify(student)` vezme objekt a konvertuje ho na řetězec.
 
 Výsledný řetězec `json` se nazývá *JSONem zakódovaný*, *serializovaný*, *zřetězený* nebo *marshallovaný* objekt. Jsme připraveni poslat ho po drátě nebo umístit ho do úložiště planých dat.
 
-Prosíme všimněte si, že JSONem zakódovaný objekt má několik důležitých rozdílů oproti objektovému literálu:
+Prosíme všimněte si, že objekt zakódovaný JSONem má několik důležitých rozdílů oproti objektovému literálu:
 
-- Řetězce používají uvozovky. V JSON nejsou apostrofy ani gravisy. Z `'Jan'` se tedy stane `"Jan"`.
-- Názvy vlastností objektů jsou rovněž v uvozovkách. To je povinné. Z `věk:30` se tedy stane `"věk":30`.
+- Řetězce jsou uzavřeny v dvojitých uvozovkách. JSON nezná jednoduché ani zpětné uvozovky. Z `'Jan'` se tedy stane `"Jan"`.
+- Názvy vlastností objektů jsou rovněž v dvojitých uvozovkách. To je povinné. Z `věk:30` se tedy stane `"věk":30`.
 
 `JSON.stringify` lze aplikovat i na primitivy.
 
@@ -99,7 +99,7 @@ alert( JSON.stringify(true) ); // true
 alert( JSON.stringify([1, 2, 3]) ); // [1,2,3]
 ```
 
-JSON je jazykově nezávislá specifikace určená jen pro data, takže některé objektové vlastnosti specifické pro JavaScript `JSON.stringify` přeskakuje.
+JSON je jazykově nezávislá specifikace určená jen pro data, takže některé objektové vlastnosti specifické pro JavaScript `JSON.stringify` vynechává.
 
 Konkrétně:
 
@@ -119,7 +119,7 @@ let uživatel = {
 alert( JSON.stringify(uživatel) ); // {} (prázdný objekt)
 ```
 
-Obvykle je to dobře. Pokud to není to, co chceme, brzy uvidíme, jak si tento proces můžeme přizpůsobit.
+Obvykle je to dobře. Pokud to chceme nějak jinak, brzy uvidíme, jak si tento proces můžeme přizpůsobit.
 
 Skvělé je, že vnořené objekty jsou podporovány a automaticky se konvertují.
 
@@ -172,26 +172,26 @@ Zde konverze selže kvůli kruhovému odkazu: `místnost.obsazenoČím` se odkaz
 ![](json-meetup.svg)
 
 
-## Vyloučení a transformace: replacer
+## Vyloučení a transformace: funkce nahrazení
 
 Úplná syntaxe `JSON.stringify` je:
 
 ```js
-let json = JSON.stringify(hodnota[, replacer, mezery])
+let json = JSON.stringify(hodnota[, nahrazení, mezery])
 ```
 
 hodnota
 : Hodnota k zakódování.
 
-replacer
+nahrazení
 : Pole vlastností, které se mají zakódovat, nebo mapovací funkce `function(klíč, hodnota)`.
 
 mezery
 : Počet mezer, které se použijí při formátování.
 
-Většinou se `JSON.stringify` používá jen s prvním argumentem. Jestliže však potřebujeme proces nahrazení vyladit, například vyfiltrovat kruhové odkazy, můžeme použít druhý argument funkce `JSON.stringify`.
+Většinou se `JSON.stringify` používá jen s prvním argumentem. Jestliže však potřebujeme proces nahrazení vyladit, například odfiltrovat kruhové odkazy, můžeme použít druhý argument funkce `JSON.stringify`.
 
-Předáme-li do něj pole vlastností, budou zakódovány pouze tyto vlastnosti.
+Předáme-li do něj pole vlastností, budou zakódovány pouze vlastnosti uvedené v tomto poli.
 
 Příklad:
 
@@ -212,7 +212,7 @@ alert( JSON.stringify(mítink, *!*['titul', 'účastníci']*/!*) );
 // {"titul":"Konference","účastníci":[{},{}]}
 ```
 
-Tady jsme asi příliš přísní. Seznam vlastností se použije na celou strukturu. Objekty v `účastníci` jsou tedy prázdné, protože `jméno` není na seznamu.
+Tady jsme asi příliš přísní. Seznam vlastností se použije na celou strukturu. Objekty v poli `účastníci` jsou tedy prázdné, protože `jméno` není na seznamu.
 
 Zahrňme na seznam všechny vlastnosti kromě `místnost.obsazenoČím`, která by způsobila kruhový odkaz:
 
@@ -241,11 +241,11 @@ alert( JSON.stringify(mítink, *!*['titul', 'účastníci', 'místo', 'jméno', 
 
 Nyní je serializováno všechno kromě `obsazenoČím`. Seznam vlastností je však poměrně dlouhý.
 
-Naštěstí můžeme jako `replacer` použít funkci místo pole.
+Naštěstí můžeme jako `nahrazení` místo pole použít funkci.
 
 Tato funkce bude volána pro každou dvojici `(klíč, hodnota)` a měla by vracet „nahrazenou“ hodnotu, která bude použita místo původní, nebo `undefined`, jestliže hodnota má být přeskočena.
 
-V našem případě můžeme vracet hodnotu `hodnota` tak, „jak je“, pro všechno kromě `obsazenoČím`. Abychom `obsazenoČím` ignorovali, níže uvedený kód vrátí `undefined`:
+V našem případě můžeme vracet hodnotu `hodnota` tak, „jak je“, pro všechno kromě `obsazenoČím`. Abychom `obsazenoČím` ignorovali, následující kód vrátí `undefined`:
 
 ```js run
 let místnost = {
@@ -260,12 +260,12 @@ let mítink = {
 
 místnost.obsazenoČím = mítink; // místnost se odkazuje na mítink
 
-alert( JSON.stringify(mítink, function replacer(klíč, hodnota) {
+alert( JSON.stringify(mítink, function nahrazení(klíč, hodnota) {
   alert(`${klíč}: ${hodnota}`);
   return (klíč == 'obsazenoČím') ? undefined : hodnota;
 }));
 
-/* dvojice klíč:hodnota, které vstoupily do replaceru:
+/* dvojice klíč:hodnota, které vstoupily do nahrazení:
 :             [object Object]
 titul:        Konference
 účastníci:    [object Object],[object Object]
@@ -279,18 +279,18 @@ obsazenoČím:  [object Object]
 */
 ```
 
-Prosíme všimněte si, že funkce `replacer` obdrží každou dvojici klíč/hodnota včetně vnořených objektů a prvků pole. Aplikuje se rekurzívně. Hodnota `this` uvnitř funkce `replacer` je objekt, který obsahuje aktuální vlastnost.
+Prosíme všimněte si, že funkce `nahrazení` obdrží každou dvojici klíč/hodnota včetně vnořených objektů a prvků pole. Aplikuje se rekurzívně. Hodnota `this` uvnitř funkce `nahrazení` je objekt, který obsahuje aktuální vlastnost.
 
-První volání je speciální. Učiní se pomocí speciálního „wrapperového objektu“: `{"": mítink}`. Jinými slovy, první dvojice `(klíč, hodnota)` má prázdný klíč a hodnotou je celý cílový objekt. To je důvod, proč je první řádek ve výše uvedeném příkladu `":[object Object]"`.
+První volání je speciální. Učiní se pomocí speciálního „obalového objektu“: `{"": mítink}`. Jinými slovy, první dvojice `(klíč, hodnota)` má prázdný klíč a hodnotou je celý cílový objekt. Z tohoto důvodu je první řádek ve výše uvedeném příkladu `":[object Object]"`.
 
-Myšlenkou je poskytnout funkci `replacer` co největší moc: má možnost analyzovat a nahradit či přeskočit i celý objekt, je-li to nutné.
+Stojí za tím úmysl poskytnout funkci `nahrazení` co největší moc: má možnost analyzovat a nahradit či přeskočit i celý objekt, je-li to nutné.
 
 
 ## Formátování: mezery
 
-Třetí argument `JSON.stringify(hodnota, replacer, mezery)` je počet mezer, které se použijí pro pěkné formátování.
+Třetí argument `JSON.stringify(hodnota, nahrazení, mezery)` je počet mezer, které se použijí pro pěkné formátování.
 
-Žádné objekty převedené na řetězce, které jsme doposud uvedli, neměly odsazení a mezery navíc. To je dobře, jestliže chceme poslat objekt po síti. Argument `mezery` se používá výhradně pro pěkný výstup.
+Žádné objekty převedené na řetězce, které jsme doposud uvedli, neměly odsazení a mezery navíc. To je dobře, jestliže chceme poslat objekt po síti. Argument `mezery` se používá výhradně pro zkrášlení výstupu.
 
 Zde `mezery = 2` říká JavaScriptu, aby zobrazil vnořené objekty na více řádcích s odsazením 2 mezery uvnitř objektu:
 
@@ -328,7 +328,7 @@ alert(JSON.stringify(uživatel, null, 2));
 */
 ```
 
-Třetí argument může být i řetězec. V tom případě se pro odsazení místo mezer použije tento řetězec.
+Třetí argument může být i řetězec. V tom případě se pro odsazení místo stanoveného počtu mezer použije tento řetězec.
 
 Parametr `mezery` se používá výhradně pro účely logování a pěkného výstupu.
 
@@ -361,7 +361,7 @@ alert( JSON.stringify(mítink) );
 */
 ```
 
-Zde vidíme, že `datum` `(1)` se stalo řetězcem. Je to tím, že všechna data mají vestavěnou metodu `toJSON`, která vrátí řetězec takovéhoto druhu.
+Zde vidíme, že `datum` `(1)` se stalo řetězcem. Je to tím, že všechna data mají vestavěnou metodu `toJSON`, která vrátí řetězec tohoto druhu.
 
 Nyní přidáme vlastní metodu `toJSON` do našeho objektu `místnost` `(2)`:
 
@@ -400,17 +400,17 @@ Jak vidíme, `toJSON` se používá jak při přímém volání `JSON.stringify(
 
 ## JSON.parse
 
-K dekódování řetězce JSON potřebujeme další metodu, která se nazývá [JSON.parse](mdn:js/JSON/parse).
+K dekódování řetězce v JSONu potřebujeme další metodu, která se nazývá [JSON.parse](mdn:js/JSON/parse).
 
 Syntaxe:
 ```js
-let hodnota = JSON.parse(řetězec[, reviver]);
+let hodnota = JSON.parse(řetězec[, oživení]);
 ```
 
 řetězec
-: Řetězec JSON, který se má dekódovat.
+: Řetězec v JSONu, který se má dekódovat.
 
-reviver
+oživení
 : Nepovinná funkce `function(klíč, hodnota)`, která bude volána pro každou dvojici `(klíč, hodnota)` a může hodnotu transformovat.
 
 Příklad:
@@ -434,27 +434,27 @@ let uživatel = JSON.parse(dataUživatele);
 alert( uživatel.přátelé[1] ); // 1
 ```
 
-JSON může být tak složitý, jak jen potřebujeme, objekty a pole mohou obsahovat jiné objekty a pole. Všechny však musejí dodržovat stejný formát JSON.
+JSON může být tak složitý, jak potřebujeme, objekty a pole mohou obsahovat jiné objekty a pole. Všechny však musejí dodržovat stejný formát JSON.
 
-Toto jsou typické chyby v ručně psaném JSON (někdy jej musíme napsat ručně pro účely ladění):
+Toto jsou typické chyby v ručně psaném JSONu (někdy jej musíme napsat ručně pro účely ladění):
 
 ```js
 let json = `{
   *!*jméno*/!*: "Jan",                          // chyba: název vlastnosti bez uvozovek
-  "příjmení": *!*'Novák'*/!*,                   // chyba: hodnota v apostrofech (musí být v uvozovkách)
-  *!*'jeAdmin'*/!*: false                       // chyba: klíč v apostrofech (musí být v uvozovkách)
+  "příjmení": *!*'Novák'*/!*,                   // chyba: hodnota v jednoduchých uvozovkách (musí být ve dvojitých)
+  *!*'jeAdmin'*/!*: false                       // chyba: klíč v jednoduchých uvozovkách (musí být ve dvojitých)
   "datumNarození": *!*new Date(2000, 2, 3)*/!*, // chyba: není povoleno "new", jen čisté hodnoty
   "přátelé": [0,1,2,3]                   // zde je vše v pořádku
 }`;
 ```
 
-Kromě toho JSON nepodporuje komentáře. Přidání komentáře do JSON jej učiní neplatným.
+Kromě toho JSON nepodporuje komentáře. Přidání komentáře do JSONu jej učiní neplatným.
 
-Existuje i jiný formát jménem [JSON5](https://json5.org/), který umožňuje klíče bez uvozovek, komentáře apod. To je však samostatná knihovna, která není obsažena ve specifikaci jazyka.
+Existuje i jiný formát jménem [JSON5](https://json5.org/), který umožňuje klíče bez uvozovek, komentáře a podobně. To je však samostatná knihovna, která není obsažena ve specifikaci jazyka.
 
-Standardní JSON je tak přísný ne proto, že by jeho vývojáři byli líní, ale proto, aby umožnil snadnou, spolehlivou a velmi rychlou implementaci parsovacího algoritmu.
+Standardní JSON je tak přísný ne proto, že by jeho vývojáři byli líní, ale proto, aby umožnil snadnou, spolehlivou a velmi rychlou implementaci načítacího algoritmu.
 
-## Použití reviveru
+## Použití oživení
 
 Představme si, že jsme ze serveru získali zřetězený objekt `mítink`.
 
@@ -483,13 +483,13 @@ Ouha! Chyba!
 
 Hodnota `mítink.datum` je řetězec, ne objekt `Date`. Jak mohl `JSON.parse` vědět, že má tento řetězec transformovat do objektu `Date`?
 
-Jako druhý argument předáme do `JSON.parse` funkci reviveru, která vrátí všechny hodnoty tak, „jak jsou“, ale `datum` změní na `Date`:
+Jako druhý argument předáme do `JSON.parse` funkci oživení, která vrátí všechny hodnoty tak, „jak jsou“, ale `datum` změní na `Date`:
 
 ```js run
-let str = '{"titul":"Konference","datum":"2017-11-30T12:00:00.000Z"}';
+let řetězec = '{"titul":"Konference","datum":"2017-11-30T12:00:00.000Z"}';
 
 *!*
-let mítink = JSON.parse(str, function(klíč, hodnota) {
+let mítink = JSON.parse(řetězec, function(klíč, hodnota) {
   if (klíč == 'datum') return new Date(hodnota);
   return hodnota;
 });
@@ -524,6 +524,6 @@ alert( rozvrh.seznamMítinků[1].datum.getDate() ); // funguje to!
 
 - JSON je datový formát, který má svůj nezávislý standard a knihovny pro většinu programovacích jazyků.
 - JSON podporuje plané objekty, pole, řetězce, čísla, booleany a `null`.
-- JavaScript poskytuje metody [JSON.stringify](mdn:js/JSON/stringify) pro serializaci do JSON a [JSON.parse](mdn:js/JSON/parse) pro načítání z JSON.
-- Obě metody podporují transformační funkce pro elegantní načítání a zápis.
+- JavaScript poskytuje metody [JSON.stringify](mdn:js/JSON/stringify) pro serializaci do JSONu a [JSON.parse](mdn:js/JSON/parse) pro načítání z JSONu.
+- Obě metody podporují transformační funkce pro vylepšené načítání a zápis.
 - Má-li objekt metodu `toJSON`, pak ji funkce `JSON.stringify` zavolá.

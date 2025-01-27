@@ -11,9 +11,9 @@ let mítink = {
 };
 
 místnost.obsazenoČím = mítink;
-mítink.self = mítink;
+mítink.onSám = mítink;
 
-alert( JSON.stringify(mítink, function replacer(klíč, hodnota) {
+alert( JSON.stringify(mítink, function nahrazení(klíč, hodnota) {
   return (klíč != "" && hodnota == mítink) ? undefined : hodnota;
 }));
 

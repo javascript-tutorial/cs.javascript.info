@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# Převeďte objekt na JSON a zpět
+# Převeďte objekt do JSONu a zpět
 
-Převeďte objekt `uživatel` na JSON a pak jej načtěte zpět do jiné proměnné.
+Převeďte objekt `uživatel` do JSONu a pak jej načtěte zpět do jiné proměnné.
 
 ```js
 let uživatel = {

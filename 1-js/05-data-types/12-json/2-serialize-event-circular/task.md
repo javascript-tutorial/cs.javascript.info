@@ -8,7 +8,7 @@ V jednoduchých případech kruhových odkazů můžeme závadnou vlastnost vyř
 
 Někdy však nemůžeme použít jen název, protože stejný název může být použit jak v kruhových odkazech, tak v normálních vlastnostech. Můžeme tedy zkontrolovat vlastnost podle její hodnoty.
 
-Napište funkci `replacer`, která zřetězí všechno, ale odstraní vlastnosti, které se odkazují na `mítink`:
+Napište funkci `nahrazení`, která zřetězí všechno, ale odstraní vlastnosti, které se odkazují na `mítink`:
 
 ```js run
 let místnost = {
@@ -24,10 +24,10 @@ let mítink = {
 *!*
 // kruhové odkazy
 místnost.obsazenoČím = mítink;
-mítink.self = mítink;
+mítink.onSám = mítink;
 */!*
 
-alert( JSON.stringify(mítink, function replacer(klíč, hodnota) {
+alert( JSON.stringify(mítink, function nahrazení(klíč, hodnota) {
   /* váš kód */
 }));
 
