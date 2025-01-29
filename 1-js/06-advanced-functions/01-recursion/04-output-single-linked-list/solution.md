@@ -18,11 +18,11 @@ let seznam = {
 };
 
 function vypišSeznam(seznam) {
-  let tmp = seznam;
+  let dočasná = seznam;
 
-  while (tmp) {
-    alert(tmp.hodnota);
-    tmp = tmp.další;
+  while (dočasná) {
+    alert(dočasná.hodnota);
+    dočasná = dočasná.další;
   }
 
 }
@@ -30,7 +30,7 @@ function vypišSeznam(seznam) {
 vypišSeznam(seznam);
 ```
 
-Prosíme všimněte si, že k procházení seznamem používáme dočasnou proměnnou `tmp`. Technicky bychom místo ní mohli použít parametr funkce `seznam`:
+Prosíme všimněte si, že k procházení seznamem používáme dočasnou proměnnou `dočasná`. Technicky bychom místo ní mohli použít parametr funkce `seznam`:
 
 ```js
 function vypišSeznam(seznam) {
@@ -47,7 +47,7 @@ function vypišSeznam(seznam) {
 
 Když mluvíme o dobrých názvech proměnných, `seznam` zde je samotný seznam. Jeho první prvek. A tak by to mělo zůstat. Je to čisté a zodpovědné.
 
-Na druhou stranu role `tmp` je výhradně procházení seznamu, podobně jako `i` v cyklu `for`.
+Naproti tomu role proměnné `dočasná` je výhradně procházení seznamu, podobně jako u proměnné `i` v cyklu `for`.
 
 # Rekurzívní řešení
 
@@ -85,4 +85,4 @@ Které řešení je nyní lepší?
 
 Technicky je cyklus efektivnější. Obě varianty dělají totéž, ale cyklus nespotřebovává zdroje pro vnořená volání funkce.
 
-Na druhou stranu je rekurzívní varianta kratší a někdy je snadnější jí porozumět.
+Naproti tomu rekurzívní varianta je kratší a někdy je snadnější jí porozumět.

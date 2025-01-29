@@ -35,7 +35,7 @@ vypišSeznamObráceně(seznam);
 
 Také cyklová varianta je trochu složitější než přímý výpis.
 
-Není žádný způsob, jak získat poslední hodnotu našeho `seznamu`. Nemůžeme se také „vracet“.
+Není žádný způsob, jak získat poslední hodnotu našeho `seznamu`. Nemůžeme se ani „vracet“.
 
 To, co můžeme udělat jako první, je tedy projít všechny prvky v přímém pořadí, zapamatovat si je v poli a pak vypsat to, co jsme si zapamatovali, v obráceném pořadí:
 
@@ -56,11 +56,11 @@ let seznam = {
 
 function vypišSeznamObráceně(seznam) {
   let pole = [];
-  let tmp = seznam;
+  let dočasná = seznam;
 
-  while (tmp) {
-    pole.push(tmp.hodnota);
-    tmp = tmp.další;
+  while (dočasná) {
+    pole.push(dočasná.hodnota);
+    dočasná = dočasná.další;
   }
 
   for (let i = pole.length - 1; i >= 0; i--) {
@@ -71,4 +71,4 @@ function vypišSeznamObráceně(seznam) {
 vypišSeznamObráceně(seznam);
 ```
 
-Prosíme všimněte si, že rekurzívní řešení dělá ve skutečnosti přesně totéž: prochází seznam, pamatuje si prvky v řetězci vnořených volání (v zásobníku prováděcích kontextů) a pak je vypisuje.
+Prosíme všimněte si, že rekurzívní řešení dělá ve skutečnosti přesně totéž: prochází seznam, pamatuje si jeho prvky v řetězci vnořených volání (v zásobníku prováděcích kontextů) a pak je vypisuje.

@@ -39,7 +39,7 @@ Existují dva způsoby, jak ji implementovat.
     alert( mocnina(2, 3) ); // 8
     ```
 
-2. Rekurzívní myšlení: zjednodušit úlohu a volat sebe samu:
+2. Rekurzívní myšlení: zjednodušit úlohu a volat sebe sama:
 
     ```js run
     function mocnina(x, n) {
@@ -65,11 +65,11 @@ mocnina(x, n) =
               else     = x * mocnina(x, n - 1)
 ```
 
-1. Je-li `n == 1`, pak je vše triviální. To se nazývá *základ* rekurze, jelikož okamžitě vydá zřejmý výsledek: `mocnina(x, 1)` se rovná `x`.
-2. Jinak můžeme reprezentovat `mocnina(x, n)` jako `x * mocnina(x, n - 1)`. V matematice můžeme zapsat <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. 
-To se nazývá *rekurzívní krok*: převedeme úlohu na jednodušší akci (násobení číslem `x`) a jednodušší volání stejné úlohy (`mocnina` s nižším `n`). Další kroky ji budou stále zjednodušovat, až nakonec `n` dosáhne `1`.
+1. Je-li `n == 1`, pak je vše triviální. Tento případ se nazývá *základ* rekurze, jelikož okamžitě vydá zřejmý výsledek: `mocnina(x, 1)` se rovná `x`.
+2. V opačném případě můžeme reprezentovat `mocnina(x, n)` jako `x * mocnina(x, n - 1)`. V matematice můžeme zapsat <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. 
+Tento případ se nazývá *rekurzívní krok*: převedeme úlohu na jednodušší akci (násobení číslem `x`) a jednodušší volání stejné úlohy (`mocnina` s nižším `n`). Další kroky ji budou stále zjednodušovat, až nakonec `n` dosáhne `1`.
 
-Můžeme také říci, že `mocnina` *rekurzívně volá sebe sama*, dokud není `n == 1`.
+Můžeme také říci, že funkce `mocnina` *rekurzívně volá sebe sama*, dokud není `n == 1`.
 
 ![rekurzívní diagram funkce mocnina](recursion-pow.svg)
 
@@ -97,7 +97,7 @@ function mocnina(x, n) {
 
 Maximální počet vnořených volání (včetně prvního) se nazývá *hloubka rekurze*. V našem případě to bude přesně `n`.
 
-Maximální možná hloubka rekurze je omezena enginem JavaScriptu. Můžeme se spolehnout, že to bude aspoň 10000, některé enginy umožňují víc, ale 100000 je pravděpodobně nad limit většiny z nich. Existují automatické optimalizace, které nám pomohou se s tím vyrovnat („optimalizace koncového volání“), ale ty zatím nejsou podporovány všude a fungují jen v jednoduchých případech.
+Maximální možná hloubka rekurze je omezena motorem JavaScriptu. Můžeme se spolehnout, že to bude aspoň 10 000, některé motory umožňují víc, ale 100 000 je pravděpodobně nad limit většiny z nich. Existují automatické optimalizace, které nám pomohou se s tím vyrovnat („optimalizace koncového volání“), ale ty zatím nejsou podporovány všude a fungují jen v jednoduchých případech.
 
 Použití rekurze je tím omezené, ale stále zůstává velmi široké. Existuje mnoho úloh, v nichž rekurzívní způsob myšlení dává jednodušší kód, snadnější na údržbu.
 
@@ -107,7 +107,7 @@ Nyní prozkoumejme, jak rekurzívní volání fungují. K tomu se podíváme fun
 
 Informace o procesu spuštění právě běžící funkce je ukládána do jejího *prováděcího (exekučního) kontextu*.
 
-[Prováděcí kontext](https://tc39.github.io/ecma262/#sec-execution-contexts) je interní datová struktura, která obsahuje podrobnosti o výkonu funkce: kde se nachází tok řízení právě teď, aktuální proměnné, hodnotu `this` (zde ji nepoužíváme) a některé další interní detaily.
+[Prováděcí kontext](https://tc39.github.io/ecma262/#sec-execution-contexts) je interní datová struktura, která obsahuje podrobnosti o výkonu funkce: kde se nachází průběh řízení právě teď, aktuální proměnné, hodnotu `this` (tu zde nepoužíváme) a některé další vnitřní detaily.
 
 S každou funkcí je spojen právě jeden prováděcí kontext.
 
@@ -115,14 +115,14 @@ Když funkce vykoná vnořené volání, stane se následující:
 
 - Aktuální funkce je pozastavena.
 - Prováděcí kontext s ní spojený se uloží do speciální datové struktury nazývané *zásobník prováděcích kontextů*.
-- Je spuštěno vnořené volání.
-- Až toto volání skončí, starý prováděcí kontext se vyjme ze zásobníku a vnější funkce se obnoví od místa, kde byla zastavena.
+- Spustí se vnořené volání.
+- Až toto volání skončí, původní prováděcí kontext se vyjme ze zásobníku a vnější funkce se znovu rozběhne od místa, kde se zastavila.
 
 Podívejme se, co se děje během volání `mocnina(2, 3)`.
 
 ### mocnina(2, 3)
 
-Na začátku volání `mocnina(2, 3)` si prováděcí kontext uloží proměnné: `x = 2, n = 3`, tok řízení je na řádku `1` této funkce.
+Na začátku volání `mocnina(2, 3)` si prováděcí kontext uloží proměnné: `x = 2, n = 3`, průběh řízení je na řádku `1` této funkce.
 
 Můžeme si to zapsat jako:
 
@@ -133,7 +133,7 @@ Můžeme si to zapsat jako:
   </li>
 </ul>
 
-Na tomto místě začne výkon funkce. Podmínka `n == 1` není splněna, takže tok pokračuje druhou větví `if`:
+Na tomto místě začne výkon funkce. Podmínka `n == 1` není splněna, takže řízení pokračuje druhou větví `if`:
 
 ```js run
 function mocnina(x, n) {
@@ -171,7 +171,7 @@ Zde voláme stejnou funkci `mocnina`, ale na tom vůbec nezáleží. Proces je p
 2. Pro vnořené volání se vytvoří nový kontext.
 3. Až bude vnořené volání ukončeno, předchozí kontext se vyjme ze zásobníku a jeho vykonávání bude pokračovat.
 
-Zde je zásobník kontextů ve chvíli, kdy jsme vstoupili do vnořeného volání `mocnina(2, 2)`:
+Takto vypadá zásobník kontextů ve chvíli, kdy jsme vstoupili do vnořeného volání `mocnina(2, 2)`:
 
 <ul class="function-execution-context-list">
   <li>
@@ -186,12 +186,12 @@ Zde je zásobník kontextů ve chvíli, kdy jsme vstoupili do vnořeného volán
 
 Nový aktuální prováděcí kontext je na vrcholu (a uveden tučně), předchozí uložené kontexty jsou níže.
 
-Až vnořené volání skončí -- bude snadné obnovit předchozí kontext, jelikož si udržuje obě proměnné i přesné místo kódu, na němž se zastavil.
+Až vnořené volání skončí, bude snadné obnovit předchozí kontext, jelikož ten si pamatuje obě proměnné i přesné místo kódu, na němž se zastavil.
 
 ```smart
 Na tomto obrázku používáme slovo „řádek“, protože v našem příkladu je na řádku jen jediné volání, ale obecně jeden řádek kódu může obsahovat několik volání, například `mocnina(…) + mocnina(…) + něcoJiného(…)`.
 
-Bylo by tedy přesnější říkat, že provádění se obnoví „ihned po vnořeném volání“.
+Bylo by tedy přesnější říkat, že provádění se obnoví „ihned za vnořeným voláním“.
 ```
 
 ### mocnina(2, 1)
@@ -219,7 +219,7 @@ Nyní máme 2 staré kontexty a 1 právě probíhající pro `mocnina(2, 1)`.
 
 ### Konec
 
-Během provádění `mocnina(2, 1)` je na rozdíl od předchozích případů podmínka `n == 1` splněna, takže bude pracovat první větev `if`:
+Během provádění `mocnina(2, 1)` je na rozdíl od předchozích případů podmínka `n == 1` splněna, takže bude provedena první větev `if`:
 
 ```js
 function mocnina(x, n) {
@@ -265,7 +265,7 @@ Hloubka rekurze v tomto případě byla **3**.
 
 Jak vidíme z výše uvedených ilustrací, hloubka rekurze se rovná nejvyššímu počtu kontextů v zásobníku.
 
-Všimněte si paměťových požadavků. Kontexty zabírají paměť. V našem případě umocnění na `n`-tou ve skutečnosti vyžaduje paměť pro `n` kontextů pro všechny nižší hodnoty `n`.
+Všimněte si paměťových požadavků. Kontexty zabírají paměť. V našem případě umocnění na `n`-tou ve skutečnosti vyžaduje paměť pro `n` kontextů, jeden pro každou nižší hodnotu `n`.
 
 Algoritmus založený na cyklu ušetří více paměti:
 
@@ -283,15 +283,15 @@ function mocnina(x, n) {
 
 Iterativní `mocnina` používá jediný kontext, v jehož procesu se mění `i` a `výsledek`. Její paměťové požadavky jsou malé, pevné a nezávisejí na velikosti `n`.
 
-**Každou rekurzi lze přepsat do smyčky. Variantu se smyčkou lze obvykle napsat efektivněji.**
+**Každou rekurzi lze přepsat do cyklu. Variantu s cyklem lze obvykle napsat efektivněji.**
 
 ...Toto přepsání však někdy není triviální, zvláště když funkce používá různá rekurzívní volání v závislosti na podmínkách a spojuje jejich výsledky, nebo když je větvení složitější. A optimalizace může být nepotřebná a nemusí vůbec stát za vynaloženou námahu.
 
-Rekurze mohou vydat kratší kód, jednodušší na porozumění a podporu. Optimalizace nejsou nutné všude, většinou potřebujeme dobrý kód, proto používáme rekurzi.   
+Rekurze mohou vydat kratší kód, jednodušší na porozumění a údržbu. Optimalizace nejsou nutné všude, většinou potřebujeme dobrý kód, proto používáme rekurzi.   
 
-## Rekurzívní traversaly
+## Rekurzívní traverzování
 
-Další skvělé využití rekurze je rekurzívní traversal.
+Další skvělé využití rekurze je rekurzívní traverzování.
 
 Představme si, že máme firmu. Struktura jejího personálu se dá vyjádřit jako objekt:
 
@@ -336,7 +336,7 @@ Iterativní přístup není snadný, protože struktura není jednoduchá. Prvn�
 
 Zkusme rekurzi.
 
-Jak vidíme, když naše funkce obdrží oddělení, které má sečíst, mohou nastat dva případy:
+Jak vidíme, když naše funkce obdrží oddělení, jehož platy má sečíst, mohou nastat dva případy:
 
 1. Buď je to „jednoduché“ oddělení s *polem* zaměstnanců -- pak můžeme sečíst jejich platy v jediném cyklu.
 2. Nebo je to *objekt* s `N` podřízenými odděleními -- pak můžeme učinit `N` rekurzívních volání, abychom získali součet pro každé nižší oddělení, a zkombinovat výsledky.
@@ -375,7 +375,7 @@ function sečtiPlaty(oddělení) {
 alert(sečtiPlaty(firma)); // 7700
 ```
 
-Kód je krátký a snadno srozumitelný (doufejme?). V tom spočívá síla rekurze. Funguje pro jakoukoli úroveň vnoření oddělení.
+Kód je krátký a snadno srozumitelný (doufejme?). V tom spočívá síla rekurze. Navíc funguje pro jakoukoli úroveň vnoření oddělení.
 
 Zde je diagram volání:
 
@@ -383,9 +383,9 @@ Zde je diagram volání:
 
 Snadno vidíme princip: pro objekty `{...}` se učiní volání, zatímco pole `[...]` jsou „listy“ rekurzívního stromu a dávají okamžitý výsledek.
 
-Všimněte si, že kód využívá elegantní vlastnosti, které jsme uvedli již dříve:
+Všimněte si, že kód využívá elegantní prvky, které jsme uvedli již dříve:
 
-- Metodu `arr.reduce` vysvětlenou v kapitole <info:array-methods> k získání součtu pole.
+- Metodu `pole.reduce` vysvětlenou v kapitole <info:array-methods> k získání součtu pole.
 - Cyklus `for(hodnota of Object.values(obj))` k iteraci nad hodnotami objektu: `Object.values` vrací jejich pole.
 
 
@@ -393,11 +393,11 @@ Všimněte si, že kód využívá elegantní vlastnosti, které jsme uvedli ji�
 
 Rekurzívní (rekurzívně definovaná) datová struktura je struktura, která částečně replikuje sama sebe.
 
-Právě jsme ji viděli ve výše uvedeném příkladu struktury firmy.
+Ve výše uvedeném příkladu struktury firmy jsme ji právě viděli.
 
 Firemní *oddělení* je:
-- Buď pole lidí.
-- Nebo objekt s *odděleními*.
+- buď pole lidí,
+- nebo objekt s *odděleními*.
 
 Pro vývojáře webů existují mnohem lépe známé příklady: HTML a XML dokumenty.
 
@@ -420,15 +420,15 @@ Přirozenou volbou by bylo pole:
 let pole = [obj1, obj2, obj3];
 ```
 
-...S poli je však problém. Operace „smazání prvku“ a „vložení prvku“ jsou nákladné. Například operace `pole.unshift(obj)` musí přečíslovat všechny prvky, aby uvolnila místo pro nový objekt `obj`, a je-li pole velké, zabere to čas. Totéž platí pro  `arr.shift()`.
+...S poli je však problém. Operace „smazání prvku“ a „vložení prvku“ jsou nákladné. Například operace `pole.unshift(obj)` musí přečíslovat všechny prvky, aby uvolnila místo pro nový objekt `obj`, a je-li pole velké, zabere to čas. Totéž platí pro  `pole.shift()`.
 
-Jediné strukturální modifikace, které nevyžadují masové přečíslování, jsou ty, které pracují s koncem pole: `pole.push/pop`. Pole tedy může být poměrně pomalé pro velké fronty, když musíme pracovat s jeho začátkem.
+Jediné strukturální modifikace nevyžadující masové přečíslování jsou ty, které pracují s koncem pole: `pole.push/pop`. Pro velké fronty tedy pole může být poměrně pomalé, musíme-li pracovat s jeho začátkem.
 
 Alternativně, jestliže potřebujeme opravdu rychlé vkládání a mazání, si můžeme zvolit jinou datovou strukturu nazvanou [lineární spojový seznam](https://cs.wikipedia.org/wiki/Lineární_seznam).
 
 *Prvek spojového seznamu* je rekurzívně definován jako objekt, který obsahuje:
 - hodnotu `hodnota`.
-- vlastnost `další`, která se odkazuje na další *prvek spojového seznamu* nebo *null*, jestliže tento prvek je poslední.
+- vlastnost `další`, která se odkazuje na další *prvek spojového seznamu* nebo, jestliže tento prvek je poslední, je rovna `null`.
 
 Příklad:
 
@@ -455,11 +455,11 @@ Grafické zobrazení seznamu:
 Alternativní kód pro vytvoření:
 
 ```js no-beautify
-let list = { hodnota: 1 };
-list.další = { hodnota: 2 };
-list.další.další = { hodnota: 3 };
-list.další.další.další = { hodnota: 4 };
-list.další.další.další.další = null;
+let seznam = { hodnota: 1 };
+seznam.další = { hodnota: 2 };
+seznam.další.další = { hodnota: 3 };
+seznam.další.další.další = { hodnota: 4 };
+seznam.další.další.další.další = null;
 ```
 
 Tady můžeme jasně vidět, že zde je více objektů, každý z nich má hodnotu `hodnota` a prvek `další`, který ukazuje na souseda. Proměnná `seznam` je první objekt v řetězci, takže pomocí ukazatelů `další` se z ní můžeme dostat na kterýkoli prvek.
@@ -481,7 +481,7 @@ seznam.další.další = druhýSeznam;
 
 A samozřejmě můžeme na kterémkoli místě vkládat nebo odstraňovat prvky.
 
-Například chceme-li připojit novou hodnotu na začátek seznamu, musíme změnit jeho hlavičku:
+Například chceme-li přidat novou hodnotu na začátek seznamu, musíme změnit jeho hlavičku:
 
 ```js
 let seznam = { hodnota: 1 };
@@ -497,7 +497,7 @@ seznam = { hodnota: "nový prvek", další: seznam };
 
 ![spojový seznam](linked-list-0.svg)
 
-Abychom odstranili prvek zprostředka, změníme `další` u předchozího prvku:
+Abychom odstranili prvek uprostřed, změníme `další` u předchozího prvku:
 
 ```js
 seznam.další = seznam.další.další;
@@ -525,7 +525,7 @@ Seznamy můžeme vylepšit:
 Pojmy:
 - *Rekurze* je programátorský pojem, který znamená volání funkce sebou samotnou. Pomocí rekurzívních funkcí můžeme řešit úlohy elegantním způsobem.
 
-    Když funkce volá sebe sama, nazývá se to *rekurzívní krok*. *Základ* rekurze jsou funkční argumenty, s nimiž je úloha natolik jednoduchá, že funkce už neučiní další volání.
+    Volání funkce sebou samotnou se nazývá *rekurzívní krok*. *Základ* rekurze jsou funkční argumenty, s nimiž je úloha natolik jednoduchá, že funkce už neučiní další volání.
 
 - [Rekurzívně definovaná](https://en.wikipedia.org/wiki/Recursive_data_type) datová struktura je datová struktura, která může být definována pomocí sebe sama.
 
@@ -535,8 +535,8 @@ Pojmy:
     seznam = { hodnota, další -> seznam }
     ```
 
-    Stromy jako strom HTML prvků nebo strom firemních oddělení z této kapitoly jsou rovněž přirozeně rekurzívní: mají větve a každá větev může obsahovat další větve.
+    Stromy jako strom HTML prvků nebo strom firemních oddělení z této kapitoly jsou rovněž přirozeně rekurzívní: obsahují větve a každá větev může obsahovat další větve.
 
-    K procházení skrz ně mohou být použity rekurzívní funkce, jak jsme viděli v příkladu `sečtiPlaty`.
+    K jejich procházení mohou být použity rekurzívní funkce, jak jsme viděli v příkladu `sečtiPlaty`.
 
 Každou rekurzívní funkci můžeme přepsat na iterativní. Někdy je to nutné kvůli optimalizaci. Pro mnoho úloh je však rekurzívní řešení dostatečně rychlé a snadnější na napsání i údržbu.

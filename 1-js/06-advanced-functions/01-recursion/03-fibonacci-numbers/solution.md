@@ -12,7 +12,7 @@ alert( fib(7) ); // 13
 // fib(77); // bude extrémně pomalé!
 ```
 
-...Ale pro velké hodnoty `n` to bude velmi pomalé. Například `fib(77)` může na nějaký čas zablokovat engine, protože spotřebuje všechny zdroje CPU.
+...Ale pro velké hodnoty `n` to bude velmi pomalé. Například `fib(77)` může na nějaký čas zablokovat motor, protože spotřebuje všechny zdroje CPU.
 
 Je to proto, že funkce učiní příliš mnoho vnořených volání. Stejné hodnoty se budou počítat znovu a znovu.
 
@@ -84,7 +84,7 @@ c = a + b; // c = fib(5)
 */
 ```
 
-...A tak dále, dokud nezískáme požadovanou hodnotu. Je to mnohem rychlejší než rekurze a neobsahuje žádné dvojí výpočty.
+...A tak dále, dokud nezískáme požadovanou hodnotu. Je to mnohem rychlejší než rekurze a neobsahuje žádné duplicitní výpočty.
 
 Úplný kód:
 
@@ -105,6 +105,6 @@ alert( fib(7) ); // 13
 alert( fib(77) ); // 5527939700884757
 ```
 
-Cyklus začíná `i=3`, protože první a druhá hodnota posloupnosti jsou napevno zakódovány do proměnných `a=1`, `b=1`.
+Cyklus začíná od `i=3`, protože první a druhá hodnota posloupnosti jsou napevno zakódovány do proměnných `a=1`, `b=1`.
 
 Tento přístup se nazývá [dynamické programování](https://cs.wikipedia.org/wiki/Dynamické_programování).
