@@ -1,6 +1,6 @@
 # Zbytkové parametry a roztažená syntaxe
 
-Mnoho vestavěných funkcí v JavaScriptu podporuje volitelný počet argumentů.
+Mnoho vestavěných funkcí v JavaScriptu umožňuje uvést libovolný počet argumentů.
 
 Například:
 
@@ -8,7 +8,7 @@ Například:
 - `Object.assign(cíl, zdroj1, ..., zdrojN)` -- zkopíruje vlastnosti ze `zdroj1..N` do `cíl`.
 - ...a tak dále.
 
-V této kapitole se naučíme, jak udělat totéž a také jak předávat do takových funkcí pole jako parametry.
+V této kapitole se naučíme, jak udělat totéž, a také, jak předávat do takových funkcí pole jako parametry.
 
 ## Zbytkové parametry `...`
 
@@ -25,7 +25,7 @@ alert( součet(1, 2, 3, 4, 5) );
 
 Kvůli „přebytečným“ argumentům nenastane chyba, ale do výsledku se samozřejmě budou počítat jen první dva, takže výsledek v uvedeném kódu je `3`.
 
-Zbytek parametrů můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi zbytek parametrů do pole“.
+Zbylé parametry můžeme zahrnout do definice funkce pomocí tří teček `...`, za nimiž následuje název pole, které je bude obsahovat. Tečky doslova znamenají „shromáždi zbývající parametry do pole“.
 
 Například abychom shromáždili všechny argumenty do pole `argumenty`:
 
@@ -62,7 +62,7 @@ zobrazJméno("Julius", "Caesar", "Konzul", "Imperátor");
 ```
 
 ````warn header="Zbytkové parametry musejí být na konci"
-Zbytkové parametry shromažďují všechny zbývající argumenty, takže následující zápis nedává smysl a vyvolá chybu:
+Pole zbytkových parametrů shromažďuje všechny zbývající argumenty, takže následující zápis nedává smysl a vyvolá chybu:
 
 ```js
 function f(arg1, ...zbytek, arg2) { // arg2 po ...zbytek ?!
@@ -75,7 +75,7 @@ function f(arg1, ...zbytek, arg2) { // arg2 po ...zbytek ?!
 
 ## Proměnná „arguments“
 
-Existuje také speciální objekt podobný poli nazvaný `arguments`, který obsahuje všechny argumenty podle jejich indexu.
+Existuje také speciální objekt podobný poli nazvaný `arguments`, který obsahuje všechny argumenty uložené podle jejich indexu.
 
 Například:
 
@@ -96,7 +96,7 @@ zobrazJméno("Julius", "Caesar");
 zobrazJméno("Ilja");
 ```
 
-Za starých časů zbytkové parametry v jazyce neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starém kódu.
+V dřívějších dobách zbytkové parametry v jazyce neexistovaly a jediný způsob, jak získat všechny argumenty funkce, bylo použití `arguments`. A to stále funguje, můžeme to nalézt ve starých kódech.
 
 Nevýhodou však je, že ačkoli objekt `arguments` je podobný poli a iterovatelný, není to pole. Nepodporuje metody polí, takže nemůžeme volat například `arguments.map(...)`.
 
@@ -105,7 +105,7 @@ Navíc obsahuje vždy všechny argumenty. Nemůžeme je zachytit jen částečn�
 Když tedy tuto vlastnost potřebujeme, dáváme přednost zbytkovým parametrům.
 
 ````smart header="Šipkové funkce nemají `„arguments“`"
-Jestliže přistoupíme k objektu `arguments` v šipkové funkci, vezme jej z vnější „normální“ funkce.
+Jestliže přistoupíme k objektu `arguments` v šipkové funkci, převezme se z vnější „normální“ funkce.
 
 Příklad:
 
@@ -146,11 +146,11 @@ alert( Math.max(pole) ); // NaN
 */!*
 ```
 
-A samozřejmě nemůžeme ručně vyjmenovat prvky pole v kódu `Math.max(pole[0], pole[1], pole[2])`, protože nevíme jistě, kolik jich tam bude. Když se náš skript spustí, může jich tam být mnoho a nemusí tam být žádný. A bylo by to ošklivé.
+A samozřejmě nemůžeme v kódu ručně vyjmenovat prvky pole `Math.max(pole[0], pole[1], pole[2])`, protože nevíme jistě, kolik jich tam bude. Když se náš skript spustí, může jich tam být mnoho a nemusí tam být žádný. A to by mohlo špatně dopadnout.
 
 Zachrání nás *roztažená (spread) syntaxe*! Podobá se zbytkovým parametrům v tom, že také používá `...`, ale činí to přesně naopak.
 
-Když ve volání funkce použijeme `...pole`, „roztáhne“ iterovatelný objekt `pole` do seznamu argumentů.
+Když ve volání funkce použijeme `...pole`, iterovatelný objekt `pole` se „roztáhne“ do seznamu argumentů.
 
 Pro `Math.max`:
 
@@ -192,7 +192,7 @@ let spojené = [0, ...pole, 2, ...pole2];
 alert(spojené); // 0,3,5,1,2,8,9,15 (0, pak pole, pak 2, pak pole2)
 ```
 
-Ve výše uvedených příkladech jsme k předvedení roztažené syntaxe použili pole, ale funguje to na jakémkoli iterovatelném objektu.
+Ve výše uvedených příkladech jsme při předvádění roztažené syntaxe použili pole, ale funguje to na jakémkoli iterovatelném objektu.
 
 Například zde použijeme roztaženou syntaxi k převedení řetězce na pole znaků:
 
@@ -202,9 +202,9 @@ let řetězec = "Ahoj";
 alert( [...řetězec] ); // A,h,o,j
 ```
 
-Roztažená syntaxe interně využívá iterátory ke shromažďování prvků stejným způsobem, jako cyklus `for..of`.
+Roztažená syntaxe vnitřně využívá iterátory ke shromažďování prvků stejným způsobem, jako cyklus `for..of`.
 
-Takže pro řetězec `for..of` vrátí znaky a `...řetězec` se převede na `"A","h","o","j"`. Seznam znaků se předá do inicializátoru pole `[...řetězec]`.
+Pro řetězec tedy `for..of` vrátí znaky a `...řetězec` se převede na `"A","h","o","j"`. Seznam znaků se předá do inicializátoru pole `[...řetězec]`.
 
 Pro tento konkrétní úkol bychom mohli použít i `Array.from`, protože tato metoda převádí iterovatelný objekt (např. řetězec) na pole:
 
@@ -219,10 +219,10 @@ Výsledek je stejný jako u `[...řetězec]`.
 
 Existuje však drobný rozdíl mezi `Array.from(obj)` a `[...obj]`:
 
-- `Array.from` funguje na poli podobných objektech i na iterovatelných objektech.
+- `Array.from` funguje na objektech podobných poli i na iterovatelných objektech.
 - Roztažená syntaxe funguje jen na iterovatelných objektech.
 
-Pro účel převedení něčeho na pole tedy `Array.from` bývá univerzálnější.
+Pro účel převedení něčeho jiného na pole tedy `Array.from` bývá univerzálnější.
 
 ## Kopírování pole/objektu
 
@@ -286,9 +286,9 @@ Je možné mezi nimi snadno rozlišovat:
 
 Vzory použití:
 
-- Zbytkové parametry se používají k vytváření funkcí, které přijímají volitelný počet argumentů.
+- Zbytkové parametry se používají k vytváření funkcí, které přijímají libovolný počet argumentů.
 - Roztažená syntaxe se používá k předání pole do funkcí, které normálně vyžadují seznam mnoha argumentů.
 
 Společně nám pomáhají snadno přepínat mezi seznamem a polem parametrů.
 
-Všechny argumenty volání funkce jsou rovněž k dispozici v objektu `arguments` ve starém stylu: iterovatelném objektu podobném poli.
+Všechny argumenty volání funkce jsou rovněž k dispozici „ve starém stylu“ v objektu `arguments`: iterovatelném objektu podobném poli.
