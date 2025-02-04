@@ -15,18 +15,18 @@ function funkce() {
 funkce();
 ```
 
-V tomto příkladu můžeme vidět podivný rozdíl mezi „neexistující“ a „neinicializovanou“ proměnnou.
+V tomto příkladu můžeme vidět pozoruhodný rozdíl mezi „neexistující“ a „neinicializovanou“ proměnnou.
 
-Jak jste si mohli přečíst v článku [](info:closure), proměnná začíná v „neinicializovaném“ stavu ve chvíli, kdy výkon vstoupí do kódového bloku (nebo funkce). A zůstane neinicializovaná až do příslušného příkazu `let`.
+Jak jste si mohli přečíst v článku [](info:closure), proměnná začíná v „neinicializovaném“ stavu ve chvíli, kdy běh vstoupí do kódového bloku (nebo do funkce). A zůstane neinicializovaná až do příslušného příkazu `let`.
 
 Jinými slovy, před `let` proměnná technicky existuje, ale nemůže být používána.
 
-Výše uvedený kód to demonstruje.
+Uvedený kód to demonstruje.
 
 ```js
 function funkce() {
 *!*
-  // engine zná lokální proměnnou x od začátku této funkce,
+  // motor zná lokální proměnnou x od začátku této funkce,
   // ale ta je „neinicializovaná“ (nepoužitelná) až do příkazu let („mrtvá zóna“)
   // proto chyba
 */!*

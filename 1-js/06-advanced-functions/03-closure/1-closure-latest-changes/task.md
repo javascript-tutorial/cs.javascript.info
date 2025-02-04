@@ -4,7 +4,7 @@ importance: 5
 
 # Odrážejí se ve funkci poslední změny?
 
-Funkce `řekniAhoj` používá název externí proměnné. Když bude spuštěna, kterou hodnotu použije?
+Funkce `řekniAhoj` využívá název externí proměnné. Když bude spuštěna, kterou hodnotu použije?
 
 ```js
 let jméno = "Jan";

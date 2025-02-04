@@ -4,7 +4,7 @@ importance: 5
 
 # Objekt čítače
 
-Zde je vytvořen objekt čítače s pomocí konstruktoru.
+Zde je vytvořen objekt čítače pomocí konstruktoru.
 
 Bude to fungovat? Co se zobrazí?
 

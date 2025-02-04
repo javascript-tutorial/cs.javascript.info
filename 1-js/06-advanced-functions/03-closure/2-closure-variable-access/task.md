@@ -4,7 +4,7 @@ importance: 5
 
 # Které proměnné jsou dostupné?
 
-Níže uvedená funkce `vytvořPracovníka` vytvoří jinou funkci a vrátí ji. Nová funkce může být volána odjinud.
+Následující funkce `vytvořPracovníka` vytvoří jinou funkci a vrátí ji. Nová funkce může být volána odjinud.
 
 Bude mít přístup k vnějším proměnným z místa svého vzniku, nebo z místa volání, nebo z obojího?
 

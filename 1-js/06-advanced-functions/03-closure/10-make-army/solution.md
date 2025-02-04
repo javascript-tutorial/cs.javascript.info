@@ -31,7 +31,7 @@ Prozkoumejme, co přesně se děje uvnitř funkce `vytvořArmádu`, a řešení 
     
     Proč nyní všechny tyto funkce zobrazí stejnou hodnotu, `10`?
     
-    Je to proto, že uvnitř funkce `střelec` neexistuje žádná lokální proměnná `i`. Když je taková funkce volána, převezme `i` z vnějšího lexikálního prostředí.
+    Je to proto, že uvnitř funkcí `střelec` neexistuje žádná lokální proměnná `i`. Když je taková funkce volána, převezme `i` z vnějšího lexikálního prostředí.
     
     Jaká pak bude hodnota proměnné `i`?
     
@@ -125,4 +125,4 @@ Když jste vložili tolik námahy do přečtení tohoto řešení a konečný re
 
 Inu, kdybyste na tuto otázku dokázali snadno odpovědět, nečetli byste řešení. Snad vám tedy tato úloha pomohla trochu lépe všemu porozumět.
 
-Kromě toho zajisté existují případy, kdy člověk dává přednost `while` před `for`, a jiné scénáře, kde takové problémy opravdu nastanou.
+Kromě toho zajisté existují případy, kdy člověk dává přednost `while` před `for`, i jiné scénáře, v nichž takové problémy opravdu nastanou.
