@@ -1,13 +1,13 @@
-function makeArmy() {
+function vytvořArmádu() {
 
-  let shooters = [];
+  let střelci = [];
 
   for(let i = 0; i < 10; i++) {
-    let shooter = function() { // shooter function
-      alert( i ); // should show its number
+    let střelec = function() { // funkce střelec
+      alert( i );              // by měla zobrazit své číslo
     };
-    shooters.push(shooter);
+    střelci.push(střelec);
   }
 
-  return shooters;
+  return střelci;
 }

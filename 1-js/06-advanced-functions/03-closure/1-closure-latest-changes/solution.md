@@ -1,5 +1,5 @@
-The answer is: **Pete**.
+Odpověď zní: **Petr**.
 
-A function gets outer variables as they are now, it uses the most recent values.
+Funkce načítá vnější proměnné tak, jak vypadají právě v tuto chvíli. Používá poslední hodnoty.
 
-Old variable values are not saved anywhere. When a function wants a variable, it takes the current value from its own Lexical Environment or the outer one.
+Staré hodnoty proměnných se nikam neukládají. Když funkce chce proměnnou, vezme její aktuální hodnotu ze svého vlastního lexikálního prostředí nebo z vnějšího.

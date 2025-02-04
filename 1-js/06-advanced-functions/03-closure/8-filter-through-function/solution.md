@@ -1,26 +1,26 @@
 
-# Filter inBetween
+# Filtr mezi
 
 ```js run
-function inBetween(a, b) {
+function mezi(a, b) {
   return function(x) {
     return x >= a && x <= b;
   };
 }
 
-let arr = [1, 2, 3, 4, 5, 6, 7];
-alert( arr.filter(inBetween(3, 6)) ); // 3,4,5,6
+let pole = [1, 2, 3, 4, 5, 6, 7];
+alert( pole.filter(mezi(3, 6)) ); // 3,4,5,6
 ```
 
-# Filter inArray
+# Filtr vPoli
 
 ```js run demo
-function inArray(arr) {
+function vPoli(pole) {
   return function(x) {
-    return arr.includes(x);
+    return pole.includes(x);
   };
 }
 
-let arr = [1, 2, 3, 4, 5, 6, 7];
-alert( arr.filter(inArray([1, 2, 10])) ); // 1,2
+let pole = [1, 2, 3, 4, 5, 6, 7];
+alert( pole.filter(vPoli([1, 2, 10])) ); // 1,2
 ```

@@ -2,30 +2,30 @@ importance: 5
 
 ---
 
-# Are counters independent?
+# Jsou čítače nezávislé?
 
-Here we make two counters: `counter` and `counter2` using the same `makeCounter` function.
+Zde vytvoříme dva čítače: `čítač` a `čítač2` pomocí téže funkce `vytvořČítač`.
 
-Are they independent? What is the second counter going to show? `0,1` or `2,3` or something else?
+Jsou nezávislé? Co zobrazí druhý čítač? `0,1` nebo `2,3` nebo něco jiného?
 
 ```js
-function makeCounter() {
-  let count = 0;
+function vytvořČítač() {
+  let počet = 0;
 
   return function() {
-    return count++;
+    return počet++;
   };
 }
 
-let counter = makeCounter();
-let counter2 = makeCounter();
+let čítač = vytvořČítač();
+let čítač2 = vytvořČítač();
 
-alert( counter() ); // 0
-alert( counter() ); // 1
+alert( čítač() ); // 0
+alert( čítač() ); // 1
 
 *!*
-alert( counter2() ); // ?
-alert( counter2() ); // ?
+alert( čítač2() ); // ?
+alert( čítač2() ); // ?
 */!*
 ```
 

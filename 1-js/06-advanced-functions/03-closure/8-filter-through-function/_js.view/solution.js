@@ -1,8 +1,8 @@
 
-function inArray(arr) {
-  return x => arr.includes(x);
+function vPoli(pole) {
+  return x => pole.includes(x);
 }
 
-function inBetween(a, b) {
+function mezi(a, b) {
   return x => (x >= a && x <= b);
 }
