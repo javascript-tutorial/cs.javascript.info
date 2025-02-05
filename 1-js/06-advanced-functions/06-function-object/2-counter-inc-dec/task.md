@@ -2,14 +2,14 @@ importance: 5
 
 ---
 
-# Set and decrease for counter
+# Nastavení a snížení čítače
 
-Modify the code of `makeCounter()` so that the counter can also decrease and set the number:
+Upravte kód funkce `vytvořČítač()` tak, aby tento čítač uměl také snížit a nastavit svou hodnotu:
 
-- `counter()` should return the next number (as before).
-- `counter.set(value)` should set the counter to `value`.
-- `counter.decrease()` should decrease the counter by 1.
+- `čítač()` by měl vracet další číslo (jako dříve).
+- `čítač.nastav(hodnota)` by měl nastavit čítač na hodnotu `hodnota`.
+- `čítač.sniž()` by měl snížit čítač o 1.
 
-See the sandbox code for the complete usage example.
+Úplný příklad použití uvidíte na kódu z pískoviště.
 
-P.S. You can use either a closure or the function property to keep the current count. Or write both variants.
+P.S. K uchovávání aktuálního počtu můžete využívat buď uzávěr, nebo vlastnost funkce. Nebo napsat obě varianty.

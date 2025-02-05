@@ -1,13 +1,13 @@
-function makeCounter() {
-  let count = 0;
+function vytvořČítač() {
+  let počet = 0;
 
-  function counter() {
-    return count++;
+  function čítač() {
+    return počet++;
   }
 
-  counter.set = value => count = value;
+  čítač.nastav = hodnota => počet = hodnota;
 
-  counter.decrease = () => count--;
+  čítač.sniž = () => počet--;
 
-  return counter;
+  return čítač;
 }
