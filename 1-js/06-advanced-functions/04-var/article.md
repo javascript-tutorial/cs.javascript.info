@@ -2,7 +2,7 @@
 # Starý příkaz „var“
 
 ```smart header="Tento článek slouží k pochopení starých skriptů"
-Informace v tomto článku je užitečná, abyste porozuměli starým skriptům.
+Informace v tomto článku jsou užitečné k tomu, abyste porozuměli starým skriptům.
 
 Není to způsob, jak psát nový kód.
 ```
@@ -20,11 +20,11 @@ var zpráva = "Ahoj";
 alert(zpráva); // Ahoj
 ```
 
-Interně je však `var` velmi odlišná potvůrka, která pochází z prastarých časů. V moderních skriptech se obvykle nepoužívá, ale ve starých stále číhá.
+Vnitřně je však `var` velmi odlišná potvůrka, která pochází z dřívějších časů. V moderních skriptech se obvykle nepoužívá, ale ve starých stále číhá.
 
 Pokud neplánujete se s takovými skripty setkat, můžete tuto kapitolu přeskočit nebo odložit na později.
 
-Na druhou stranu je důležité porozumět rozdílům, když převádíte staré skripty z `var` na `let`, abyste se vyhnuli podivným chybám.
+Naproti tomu, když převádíte staré skripty z `var` na `let`, je důležité porozumět rozdílům, abyste se vyhnuli podivným chybám.
 
 ## „var“ nemá blokovou platnost
 
@@ -85,7 +85,7 @@ function řekniAhoj() {
 alert(věta); // ReferenceError: věta není definována
 ```
 
-Jak vidíme, `var` se probije skrz `if`, `for` a jiné kódové bloky. Je to proto, že v dávných časech JavaScriptu bloky neměly lexikální prostředí a `var` je toho pozůstatkem.
+Jak vidíme, `var` se probije skrz `if`, `for` a jiné kódové bloky. Je to proto, že před dlouhou dobou bloky v JavaScriptu neměly lexikální prostředí a `var` je toho pozůstatkem.
 
 ## „var“ toleruje opakované deklarace
 
@@ -107,11 +107,11 @@ var uživatel = "Jan"; // tento „var“ neudělá nic (proměnná je již dekl
 alert(uživatel); // Jan
 ```
 
-## Proměnné deklarované „var“ můžeme deklarovat až za jejich použitím
+## Pomocí „var“ můžeme proměnné deklarovat až po jejich použití
 
 Deklarace `var` se zpracovávají, když se funkce spustí (nebo když se spustí skript, jsou-li globální).
 
-Jinými slovy, proměnné `var` jsou definovány od začátku funkce bez ohledu na to, kde se tato definice nachází (předpokládáme, že definice není uvnitř vnořené funkce).
+Jinými slovy, proměnné deklarované pomocí `var` jsou definovány od začátku funkce bez ohledu na to, kde se jejich definice nachází (za předpokladu, že definice není uvnitř vnořené funkce).
 
 Takže tento kód:
 
@@ -160,9 +160,9 @@ function řekniAhoj() {
 řekniAhoj();
 ```
 
-Takovému chování lidé někdy říkají „stoupání“ *(anglicky „hoisting“ nebo „raising“ -- pozn. překl.)*, jelikož každý `var` „vystoupá“ *(„hoist“, „raise“)* až k vrcholu funkce.
+Takovému chování se někdy říká „stoupání“ (anglicky „hoisting“ nebo „raising“), jelikož každý `var` „vystoupá“ („hoist“, „raise“) až k vrcholu funkce.
 
-Ve výše uvedeném příkladu se větev `if (false)` nikdy nespustí, ale na tom nezáleží. Příkaz `var` uvnitř se zpracuje na začátku funkce, takže ve chvíli `(*)` proměnná existuje.
+V uvedeném příkladu se větev `if (false)` nikdy nespustí, ale na tom nezáleží. Příkaz `var` uvnitř se zpracuje na začátku funkce, takže v okamžiku provedení řádku `(*)` proměnná existuje.
 
 **Deklarace stoupají, ale přiřazení ne.**
 
@@ -196,20 +196,20 @@ function řekniAhoj() {
   alert(věta); // undefined
 
 *!*
-  věta = "Ahoj"; // ...přiřazení - když se na ně dostane provádění.
+  věta = "Ahoj"; // ...přiřazení - když se běh dostane k němu.
 */!*
 }
 
 řekniAhoj();
 ```
 
-Protože všechny deklarace `var` se zpracovávají na začátku funkce, můžeme se na ně odkazovat kdekoli. Ale proměnné jsou nedefinované až do přiřazení.
+Protože všechny deklarace `var` se zpracovávají na začátku funkce, můžeme je uvádět kdekoli. Ale proměnné jsou až do přiřazení nedefinované.
 
-V obou příkladech se `alert` spustí bez chyby, protože proměnná `věta` existuje. Ale ještě jí není přiřazena hodnota, takže se zobrazí `undefined`.
+V obou uvedených příkladech se `alert` spustí bez chyby, protože proměnná `věta` existuje. Ale ještě jí není přiřazena hodnota, takže se zobrazí `undefined`.
 
 ## IIFE
 
-V minulosti, kdy bylo jenom `var` a neexistovala viditelnost na úrovni bloku, programátoři vymysleli způsob, jak ji emulovat. To, co vynalezli, nazvali „okamžitě volané funkční výrazy“, zkráceně IIFE *(z anglického „immediately-invoked function expressions“ - pozn. překl.)*.
+V minulosti, kdy bylo jenom `var` a neexistovala viditelnost na úrovni bloku, programátoři vymysleli způsob, jak ji emulovat. To, co vynalezli, bylo nazváno „okamžitě volané funkční výrazy“ („immediately-invoked function expressions“), zkráceně IIFE.
 
 Není to nic, co bychom měli používat v současnosti, ale ve starých skriptech je stále můžete najít.
 
@@ -227,7 +227,7 @@ IIFE vypadá následovně:
 
 Zde se vytvoří a okamžitě zavolá funkční výraz. Kód se tedy okamžitě spustí a má své vlastní soukromé proměnné.
 
-Funkční výraz je uzavřen do závorek `(function {...})`, protože když engine JavaScriptu narazí v hlavním kódu na `„function“`, chápe to jako začátek deklarace funkce. Avšak deklarace funkce musí mít svůj název, takže tento kód vyvolá chybu:
+Funkční výraz je uzavřen do závorek `(function {...})`, protože když motor JavaScriptu narazí v hlavním kódu na `„function“`, chápe to jako začátek deklarace funkce. Avšak deklarace funkce musí obsahovat název, takže tento kód vyvolá chybu:
 
 ```js run
 // Snaží se deklarovat a okamžitě zavolat funkci
@@ -243,7 +243,7 @@ function() { // <-- SyntaxError: Deklarace funkce vyžaduje název funkce
 I kdybychom si řekli: „dobře, tak přidáme název“, nebude to fungovat, protože JavaScript neumožňuje, aby byla deklarace funkce okamžitě volána:
 
 ```js run
-// syntaktická chyba kvůli závorkám níže
+// závorky níže způsobí syntaktickou chybu
 function jdi() {
 
 }(); // <-- deklaraci funkce nemůžeme okamžitě volat
@@ -273,15 +273,15 @@ Kromě závorek existují i jiné způsoby, jak oznámit JavaScriptu, že máme 
 }();
 ```
 
-Ve všech výše uvedených případech deklarujeme funkční výraz a okamžitě jej zavoláme. Znovu opakujeme: v dnešní době není důvod takový kód psát.
+Ve všech uvedených případech deklarujeme funkční výraz a okamžitě jej zavoláme. Znovu opakujeme, že v dnešní době není důvod takový kód psát.
 
 ## Shrnutí
 
-Existují dva hlavní rozdíly `var` ve srovnání s `let/const`:
+Mezi `var` a `let/const` existují dva hlavní rozdíly:
 
-1. Proměnné `var` nemají blokovou platnost a oblast jejich viditelnosti je celá aktuální funkce. Jsou-li deklarovány mimo funkci, jsou globální.
+1. Proměnné deklarované pomocí `var` nemají blokovou platnost a oblast jejich viditelnosti je celá aktuální funkce. Jsou-li deklarovány mimo funkci, jsou globální.
 2. Deklarace `var` se zpracovávají na začátku funkce (globální deklarace na začátku skriptu).
 
 Existuje ještě jeden velmi drobný rozdíl vztahující se ke globálnímu objektu, který probereme v příští kapitole.
 
-Kvůli těmto rozdílům je `var` ve většině případů horší než `let`. Proměnné na úrovni bloku jsou vynikající věc. To je důvod, proč bylo do standardu již před dlouhou dobou zahrnuto `let`, a to je nyní hlavním způsobem (spolu s `const`) deklarace proměnných.
+Kvůli těmto rozdílům je `var` ve většině případů horší než `let`. Proměnné na úrovni bloku jsou vynikající věc. To je důvod, proč bylo do standardu již před dlouhou dobou zavedeno `let` a nyní je hlavním způsobem (spolu s `const`), jak deklarovat proměnné.

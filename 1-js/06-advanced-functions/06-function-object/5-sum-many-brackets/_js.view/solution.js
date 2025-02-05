@@ -1,4 +1,4 @@
-function součet(a) {
+function sečti(a) {
 
   let aktuálníSoučet = a;
 

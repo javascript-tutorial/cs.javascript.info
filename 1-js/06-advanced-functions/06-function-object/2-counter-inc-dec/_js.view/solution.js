@@ -5,7 +5,7 @@ function vytvořČítač() {
     return počet++;
   }
 
-  čítač.set = hodnota => počet = hodnota;
+  čítač.nastav = hodnota => počet = hodnota;
 
   čítač.sniž = () => počet--;
 
