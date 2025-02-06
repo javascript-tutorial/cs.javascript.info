@@ -4,7 +4,7 @@ importance: 5
 
 # Co zobrazí setTimeout?
 
-V níže uvedeném kódu je načasováno volání `setTimeout`, pak proběhne náročný výpočet, jehož dokončení bude trvat více než 100 ms.
+V následujícím kódu je načasováno volání `setTimeout`, pak proběhne náročný výpočet, jehož dokončení bude trvat více než 100 ms.
 
 Kdy se načasovaná funkce spustí?
 

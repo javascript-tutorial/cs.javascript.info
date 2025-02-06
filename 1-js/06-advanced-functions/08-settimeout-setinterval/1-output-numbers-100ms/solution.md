@@ -25,10 +25,10 @@ Pomocí vnořeného `setTimeout`:
 function vypišČísla(začátek, konec) {
   let aktuální = začátek;
 
-  setTimeout(function go() {
+  setTimeout(function spusť() {
     alert(aktuální);
     if (aktuální < konec) {
-      setTimeout(go, 1000);
+      setTimeout(spusť, 1000);
     }
     aktuální++;
   }, 1000);

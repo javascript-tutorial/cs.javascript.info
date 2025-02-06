@@ -36,19 +36,19 @@ Všechny předchozí deklarace po nás programátorech požadovaly, abychom zaps
 Avšak `new Function` umožňuje převést libovolný řetězec na funkci. Například můžeme získat novou funkci ze serveru a pak ji spustit:
 
 ```js
-let str = ... dynamické získání kódu ze serveru ...
+let řetězec = ... dynamické získání kódu ze serveru ...
 
-let funkce = new Function(str);
+let funkce = new Function(řetězec);
 funkce();
 ```
 
-Používá se jen ve velmi specifických případech, například když získáme kód ze serveru nebo k dynamickému kompilování funkce ze šablony ve složitých webových aplikacích.
+Používá se jen ve velmi specifických případech, například když získáme kód ze serveru, nebo když chceme dynamicky kompilovat funkci ze šablony ve složitých webových aplikacích.
 
 ## Uzávěr
 
 Funkce si zpravidla pamatuje, kde se zrodila, ve speciální vlastnosti `[[Environment]]`. Ta se odkazuje na lexikální prostředí, z něhož byla funkce vytvořena (probrali jsme to v kapitole <info:closure>).
 
-Když je však funkce vytvořena pomocí `new Function`, do její vlastnosti `[[Environment]]` se nenastaví odkaz na aktuální lexikální prostředí, ale na globální.
+Když je však funkce vytvořena pomocí `new Function`, její vlastnost `[[Environment]]` se nenastaví na odkaz na aktuální lexikální prostředí, ale na globální.
 
 Taková funkce tedy nemá přístup k vnějším proměnným, jedině ke globálním.
 
@@ -84,15 +84,15 @@ vraťFunkci()(); // *!*"test"*/!*, z lexikálního prostředí funkce vraťFunkc
 
 Tato speciální vlastnost `new Function` vypadá zvláštně, ale v praxi se ukazuje být velmi užitečná.
 
-Představme si, že musíme vytvořit funkci z řetězce. Kód této funkce není znám v době psaní skriptu (to je důvod, proč nepoužijeme obvyklou funkci), ale bude znám v průběhu spuštění. Můžeme jej získat ze serveru nebo z jiného zdroje.
+Představme si, že musíme vytvořit funkci z řetězce. Kód této funkce není znám v době psaní skriptu (to je důvod, proč nepoužijeme obvyklou funkci), ale bude znám při jeho běhu. Můžeme jej získat ze serveru nebo z jiného zdroje.
 
 Naše nová funkce musí interagovat s hlavním skriptem.
 
 Co kdyby mohla přistupovat k vnějším proměnným?
 
-Problém je, že předtím, než je JavaScript zveřejněn k produkci, je zkomprimován použitím *minifikátoru* -- speciálního programu, který zkrátí kód tím, že odstraní komentáře, přebytečné mezery a -- co je důležité, přejmenuje lokální proměnné na kratší.
+Problém je v tom, že předtím, než je JavaScriptový skript zveřejněn k používání, je zkomprimován *minifikátorem* -- speciálním programem, který zkrátí kód tím, že odstraní komentáře, přebytečné mezery a -- co je důležité, přejmenuje názvy lokálních proměnných na kratší.
 
-Například jestliže funkce obsahuje `let uživatelskéJméno`, minifikátor je nahradí za `let a` (nebo jiné písmeno, je-li toto již použito) a učiní tak všude. To je obvykle bezpečné, jelikož proměnná je lokální a nic mimo funkci k ní nemůže přistupovat. A uvnitř funkce minifikátor nahradí každou zmínku o ní. Minifikátory jsou chytré, analyzují strukturu kódu, takže nic nerozbíjejí. Není to jen tupé najdi a nahraď.
+Například jestliže funkce obsahuje `let uživatelskéJméno`, minifikátor je nahradí za `let a` (nebo jiné písmeno, které ještě není použito) a učiní tak všude. To je obvykle bezpečné, jelikož proměnná je lokální a nic mimo funkci k ní nemůže přistupovat. A uvnitř funkce minifikátor nahradí tuto proměnnou všude, kde je uvedena. Minifikátory jsou chytré, analyzují strukturu kódu, takže nic nerozbíjejí. Není to jen tupé najdi a nahraď.
 
 Kdyby tedy `new Function` měla přístup k vnějším proměnným, nedokázala by najít přejmenované `uživatelskéJméno`.
 
@@ -120,4 +120,4 @@ new Function('a,b', 'return a + b'); // oddělené čárkou
 new Function('a , b', 'return a + b'); // oddělené čárkou s mezerami
 ```
 
-Vlastnost `[[Environment]]` funkcí vytvořených pomocí `new Function` se odkazuje na globální lexikální prostředí, ne na vnější. Proto tyto funkce nemohou používat vnější proměnné. To je však ve skutečnosti dobře, protože nás to ochraňuje před chybami. Explicitní předávání parametrů je architektonicky mnohem lepší metoda a nezpůsobuje problémy s minifikátory.
+Vlastnost `[[Environment]]` funkcí vytvořených pomocí `new Function` se odkazuje na globální lexikální prostředí, ne na vnější. Proto tyto funkce nemohou používat vnější proměnné. To je však ve skutečnosti dobře, protože nás to ochraňuje před chybami. Výslovné předávání parametrů je architektonicky mnohem lepší způsob a nezpůsobuje problémy s minifikátory.
