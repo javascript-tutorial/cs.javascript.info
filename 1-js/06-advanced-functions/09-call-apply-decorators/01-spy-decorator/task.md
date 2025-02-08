@@ -4,7 +4,7 @@ importance: 5
 
 # Špiónský dekorátor
 
-Vytvořte dekorátor `špión(funkce)`, který by měl vrátit wrapper, který si bude ukládat všechna volání funkce do své vlastnosti `volání`.
+Vytvořte dekorátor `špión(funkce)`, který by měl vrátit obal, který si bude ukládat všechna volání funkce do své vlastnosti `volání`.
 
 Každé volání bude uloženo jako pole argumentů.
 
@@ -27,4 +27,4 @@ for (let argumenty of práce.volání) {
 }
 ```
 
-P.S. Takový dekorátor je někdy užitečný pro unit-testování. Jeho pokročilá forma je `sinon.spy` v knihovně [Sinon.JS](http://sinonjs.org/).
+P.S. Takový dekorátor je někdy užitečný pro jednotkové testování. Jeho pokročilá forma je `sinon.spy` v knihovně [Sinon.JS](http://sinonjs.org/).

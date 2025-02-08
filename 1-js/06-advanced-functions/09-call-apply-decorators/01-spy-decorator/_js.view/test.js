@@ -21,7 +21,7 @@ describe("špión", function() {
 
     let sečti = sinon.spy((a, b) => a + b);
 
-    let obalenéSečti = spy(sečti);
+    let obalenéSečti = špión(sečti);
 
     assert.equal(obalenéSečti(1, 2), 3);
     assert(sečti.calledWith(1, 2));
@@ -30,15 +30,15 @@ describe("špión", function() {
 
   it("transparentně obaluje metody", function() {
 
-    let kalk = {
+    let vypočítej = {
       sečti: sinon.spy((a, b) => a + b)
     };
 
-    kalk.obalenéSečti = spy(kalk.sečti);
+    vypočítej.obalenéSečti = špión(vypočítej.sečti);
 
-    assert.equal(kalk.obalenéSečti(1, 2), 3);
-    assert(kalk.sečti.calledWith(1, 2));
-    assert(kalk.sečti.calledOn(kalk));
+    assert.equal(vypočítej.obalenéSečti(1, 2), 3);
+    assert(vypočítej.sečti.calledWith(1, 2));
+    assert(vypočítej.sečti.calledOn(vypočítej));
   });
 
 });

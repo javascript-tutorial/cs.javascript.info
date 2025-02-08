@@ -1,11 +1,11 @@
 ```js demo
-function tlumič(funkce, ms) {
+function tlum(funkce, ms) {
 
   let jeTlumena = false,
     uloženéArgumenty,
     uloženéThis;
 
-  function wrapper() {
+  function obal() {
 
     if (jeTlumena) { // (2)
       uloženéArgumenty = arguments;
@@ -19,20 +19,20 @@ function tlumič(funkce, ms) {
     setTimeout(function() {
       jeTlumena = false; // (3)
       if (uloženéArgumenty) {
-        wrapper.apply(uloženéThis, uloženéArgumenty);
+        obal.apply(uloženéThis, uloženéArgumenty);
         uloženéArgumenty = uloženéThis = null;
       }
     }, ms);
   }
 
-  return wrapper;
+  return obal;
 }
 ```
 
-Volání funkce `tlumič(funkce, ms)` vrátí `wrapper`.
+Volání funkce `tlum(funkce, ms)` vrátí `obal`.
 
-1. Během prvního volání `wrapper` jen spustí funkci `funkce` a nastaví stav chladnutí (`jeTlumena = true`).
-2. V tomto stavu se všechna volání budou ukládat do `uloženéArgumenty/uloženéThis`. Prosíme všimněte si, že kontext i argumenty jsou stejně důležité a měly by se ukládat do paměti. K reprodukování volání potřebujeme obojí.
-3. Po uplynutí `ms` milisekund se spustí `setTimeout`. Stav chladnutí se odstraní (`jeTlumena = false`), a pokud jsme ignorovali nějaká volání, `wrapper` se spustí s posledními zapamatovanými argumenty a kontextem.
+1. Během prvního volání `obal` jen spustí funkci `funkce` a nastaví stav chladnutí (`jeTlumena = true`).
+2. V tomto stavu se všechna volání budou ukládat do `uloženéArgumenty/uloženéThis`. Prosíme všimněte si, že kontext i argumenty jsou stejně důležité a obojí by se mělo ukládat do paměti. K reprodukci volání potřebujeme obojí současně.
+3. Po uplynutí `ms` milisekund se spustí `setTimeout`. Stav chladnutí se odstraní (`jeTlumena = false`), a pokud jsme ignorovali nějaká volání, `obal` se spustí s posledními zapamatovanými argumenty a kontextem.
 
-Třetí krok nespouští funkci `funkce`, ale `wrapper`, protože potřebujeme nejenom spustit `funkce`, ale také znovu vstoupit do stavu chladnutí a nastavit timeout, abychom jej vyresetovali.
+Třetí krok nespouští funkci `funkce`, ale `obal`, protože potřebujeme nejenom spustit `funkce`, ale také znovu vstoupit do stavu chladnutí a nastavit časovač, abychom jej obnovili.

@@ -1,4 +1,4 @@
-describe("tlumič(f, 1000)", function() {
+describe("tlum(f, 1000)", function() {
   let f1000;
   let log = "";
 
@@ -7,13 +7,8 @@ describe("tlumič(f, 1000)", function() {
   }
 
   before(function() {
-<<<<<<< Updated upstream
-    f1000 = throttle(f, 1000);
-    this.clock = sinon.useFakeTimers();
-=======
     this.hodiny = sinon.useFakeTimers();
-    f1000 = tlumič(f, 1000);
->>>>>>> Stashed changes
+    f1000 = tlum(f, 1000);
   });
 
   it("první volání se spustí hned", function() {
@@ -51,12 +46,12 @@ describe("tlumič(f, 1000)", function() {
 
 });
 
-describe('tlumič', () => {
+describe('tlum', () => {
 
   it('spustí předané volání jednou', hotovo => {
     let log = '';
-    const f = str => log += str;
-    const f10 = tlumič(f, 10);
+    const f = řetězec => log += řetězec;
+    const f10 = tlum(f, 10);
     f10('jednou');
 
     setTimeout(() => {

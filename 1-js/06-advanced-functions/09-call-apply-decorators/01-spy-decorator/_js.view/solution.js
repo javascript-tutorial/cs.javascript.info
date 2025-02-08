@@ -1,12 +1,13 @@
 function špión(funkce) {
 
-  function wrapper(...argumenty) {
-    // použijeme ...argumenty místo arguments, abychom do wrapper.volání uložili „skutečné“ pole
-    wrapper.volání.push(argumenty);
+  function obal(...argumenty) {
+    // použijeme ...argumenty místo arguments, abychom do obal.volání uložili „skutečné“ pole
+    obal.volání.push(argumenty);
     return funkce.apply(this, argumenty);
   }
 
-  wrapper.volání = [];
+  obal.volání = [];
 
-  return wrapper;
+  return obal;
 }
+

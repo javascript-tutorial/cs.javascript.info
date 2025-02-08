@@ -1,4 +1,4 @@
-describe("čekej", function() {
+describe("zpozdi", function() {
   before(function() {
     this.hodiny = sinon.useFakeTimers();
   });
@@ -15,10 +15,10 @@ describe("čekej", function() {
     }
     f = sinon.spy(f);
 
-    let f1000 = čekej(f, 1000);
+    let f1000 = zpozdi(f, 1000);
     f1000("test");
     this.hodiny.tick(2000);
-    assert(f.calledOnce, 'test calledOnce selhal');
+    assert(f.calledOnce, 'ověření calledOnce selhalo');
   });
 
   it("předává argumenty a this", function() {
@@ -34,13 +34,13 @@ describe("čekej", function() {
 
     uživatel.řekniAhoj = sinon.spy(uživatel.řekniAhoj);
 
-    let spy = uživatel.řekniAhoj;
-    uživatel.řekniAhoj = čekej(uživatel.řekniAhoj, 1500);
+    let špión = uživatel.řekniAhoj;
+    uživatel.řekniAhoj = zpozdi(uživatel.řekniAhoj, 1500);
 
     uživatel.řekniAhoj("Ahoj", "Jan");
 
     this.hodiny.tick(2000);
 
-    assert(spy.calledOnce, 'test calledOnce selhal');
+    assert(špión.calledOnce, 'ověření calledOnce selhalo');
   });
 });

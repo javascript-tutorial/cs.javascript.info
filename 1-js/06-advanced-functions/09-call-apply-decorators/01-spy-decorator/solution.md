@@ -1,1 +1,1 @@
-Wrapper, který vrátí `špión(f)`, by měl uložit všechny argumenty a pak pomocí `f.apply` forwardovat volání.
+Obal, který vrátí `špión(f)`, by si měl uložit všechny argumenty a pak pomocí `f.apply` přesměrovat volání.

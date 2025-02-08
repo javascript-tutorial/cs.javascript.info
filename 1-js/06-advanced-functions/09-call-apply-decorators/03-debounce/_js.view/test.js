@@ -1,4 +1,4 @@
-describe('debounce', function () {
+describe('vyčkej', function () {
   before(function () {
     this.hodiny = sinon.useFakeTimers();
   });
@@ -9,9 +9,9 @@ describe('debounce', function () {
 
   it('pro jedno volání - spustí je po zadané době v ms', function () {
     const f = sinon.spy();
-    const debounced = debounce(f, 1000);
+    const vyčkáváno = vyčkej(f, 1000);
 
-    debounced('test');
+    vyčkáváno('test');
     assert(f.notCalled, 'nevolá se okamžitě');
     this.hodiny.tick(1000);
     assert(f.calledOnceWith('test'), 'voláno po 1000 ms');
@@ -19,11 +19,11 @@ describe('debounce', function () {
 
   it('pro 3 volání - spustí poslední po zadané době v ms', function () {
     const f = sinon.spy();
-    const debounced = debounce(f, 1000);
+    const vyčkáváno = vyčkej(f, 1000);
 
-    debounced('a');
-    setTimeout(() => debounced('b'), 200); // ignorováno (příliš brzy)
-    setTimeout(() => debounced('c'), 500); // spustí se (1000 ms uplynulo)
+    vyčkáváno('a');
+    setTimeout(() => vyčkáváno('b'), 200); // ignorováno (příliš brzy)
+    setTimeout(() => vyčkáváno('c'), 500); // spustí se (1000 ms uplynulo)
     this.hodiny.tick(1000);
 
     assert(f.notCalled, 'nevoláno po 1000 ms');
@@ -40,7 +40,7 @@ describe('debounce', function () {
       },
     };
 
-    obj.f = debounce(obj.f, 1000);
+    obj.f = vyčkej(obj.f, 1000);
     obj.f('test');
     this.hodiny.tick(5000);
   });
