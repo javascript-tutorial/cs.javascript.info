@@ -4,7 +4,7 @@ importance: 5
 
 # Opravte funkci, která ztrácí „this“
 
-Volání `zeptejSeNaHeslo()` v níže uvedeném kódu by mělo zkontrolovat heslo a pak podle odpovědi zavolat `uživatel.přihlášeníOK/přihlášeníSelhalo`.
+Volání `zeptejSeNaHeslo()` v následujícím kódu by mělo zkontrolovat heslo a pak podle toho, jaká je odpověď, zavolat `uživatel.přihlášeníOK/přihlášeníSelhalo`.
 
 Vede však k chybě. Proč?
 

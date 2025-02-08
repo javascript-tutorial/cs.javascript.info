@@ -1,4 +1,4 @@
-1.  Buď použijeme wrapperovou funkci, pro stručnost šipkovou:
+1.  Buď použijeme obalovou funkci, pro stručnost šipkovou:
 
     ```js 
     zeptejSeNaHeslo(() => uživatel.přihlaš(true), () => uživatel.přihlaš(false)); 

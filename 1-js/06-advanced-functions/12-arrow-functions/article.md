@@ -4,15 +4,15 @@ Podívejme se nyní znovu na šipkové funkce.
 
 Šipkové funkce nejsou jen „zkratka“ pro zápis krátkého kódu. Mají určité velmi specifické a užitečné vlastnosti.
 
-JavaScript má spoustu situací, kdy potřebujeme napsat malou funkci, kterou budeme spouštět někde jinde.
+V JavaScriptu nastává spousta situací, kdy potřebujeme napsat malou funkci, která se bude spouštět někde jinde.
 
 Například:
 
 - `pole.forEach(funkce)` -- `funkce` je spouštěna funkcí `forEach` pro každý prvek pole.
 - `setTimeout(funkce)` -- `funkce` je spouštěna zabudovaným plánovačem.
-- ...a jsou i jiné.
+- ...a mnoho dalších.
 
-Je naprosto v duchu JavaScriptu vytvořit funkci a někam ji předat.
+Vytvořit funkci a někam ji předat je zcela v duchu JavaScriptu.
 
 A v takových funkcích obvykle nechceme opustit aktuální kontext. Tehdy šipkové funkce přijdou vhod.
 
@@ -39,7 +39,7 @@ let skupina = {
 skupina.zobrazSeznam();
 ```
 
-Zde je ve `forEach` použita šipková funkce, takže `this.název` je přesně stejný, jako ve vnější metodě `zobrazSeznam`. Tedy: `skupina.název`.
+Zde je ve `forEach` použita šipková funkce, takže `this.název` v ní je přesně stejný jako ve vnější metodě `zobrazSeznam`. Tedy: `skupina.název`.
 
 Kdybychom použili „obyčejnou“ funkci, nastala by chyba:
 
@@ -61,28 +61,28 @@ let skupina = {
 skupina.zobrazSeznam();
 ```
 
-Chyba nastane proto, že `forEach` defaultně spouští funkci s `this=undefined`, takže je učiněn pokus o přístup k `undefined.název`.
+Chyba nastane proto, že `forEach` standardně spouští funkci s `this=undefined`, takže je učiněn pokus o přístup k `undefined.název`.
 
 Na šipkové funkce to vliv nemá, protože ty prostě `this` nemají.
 
 ```warn header="Šipkové funkce nelze spouštět s `new`"
-Neexistence `this` pochopitelně znamená další omezení: šipkové funkce nelze používat jako konstruktory. Nemůžeme je volat pomocí `new`.
+Neexistence `this` pochopitelně znamená další omezení: šipkové funkce nelze používat jako konstruktory. Nemůžeme je volat s `new`.
 ```
 
 ```smart header="Šipkové funkce versus bind"
 Existuje drobný rozdíl mezi šipkovou funkcí `=>` a obyčejnou funkcí volanou pomocí `.bind(this)`:
 
 - `.bind(this)` vytvoří „vázanou verzi“ funkce.
-- Šipka `=>` žádnou vazbu nevytváří. Funkce prostě nemá `this`. Hledání `this` se provádí přesně stejně jako hledání běžné proměnné: ve vnějším lexikálním prostředí.
+- Šipka `=>` žádnou vazbu nevytváří. Funkce prostě nemá `this`. Hledání `this` se provádí přesně stejným způsobem jako hledání běžné proměnné: ve vnějším lexikálním prostředí.
 ```
 
 ## Šipkové funkce nemají „arguments“
 
 Šipkové funkce také nemají proměnnou `arguments`.
 
-To je vynikající pro dekorátory, když potřebujeme předat volání s aktuálním `this` a `arguments`.
+To je vynikající pro dekorátory, když potřebujeme přesměrovat volání s aktuálním `this` a `arguments`.
 
-Například `odlož(f, ms)` přijímá funkci a vrací wrapper kolem ní, který odloží její volání o `ms` milisekund:
+Například `odlož(f, ms)` přijímá funkci a vrací obal kolem ní, který odloží její volání o `ms` milisekund:
 
 ```js run
 function odlož(f, ms) {
@@ -120,7 +120,7 @@ Zde jsme museli vytvořit navíc proměnné `argumenty` a `kontext`, aby je mohl
 
 - Nemají `this`.
 - Nemají `arguments`.
-- Nemohou být volány pomocí `new`.
+- Nemohou být volány s `new`.
 - Nemají také `super`, ale to jsme ještě neprostudovali. Učiníme tak v kapitole <info:class-inheritance>.
 
-Je to proto, že jsou zamýšleny jako krátké části kódu, které nemají svůj vlastní „kontext“, ale místo toho pracují v aktuálním. A v tomto způsobu použití opravdu vynikají.
+Je to proto, že jsou určeny pro krátké části kódu, které nemají svůj vlastní „kontext“, ale místo toho pracují v aktuálním. A v tomto způsobu použití opravdu vynikají.

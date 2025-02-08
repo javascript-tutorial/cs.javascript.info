@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Parciální aplikace pro přihlášení
+# Částečná aplikace pro přihlášení
 
 Tato úloha je trochu složitější variantou úlohy <info:task/question-use-bind>. 
 
 Objekt `uživatel` se změnil. Nyní má místo dvou funkcí `přihlášeníOK/přihlášeníSelhalo` jedinou funkci `uživatel.přihlaš(true/false)`.
 
-Co bychom měli předat funkci `zeptejSeNaHeslo` v níže uvedeném kódu, aby volala `uživatel.přihlaš(true)` jako `ok` a `uživatel.přihlaš(false)` jako `selhal`?
+Co bychom měli předat funkci `zeptejSeNaHeslo` v následujícím kódu, aby volala `uživatel.přihlaš(true)` jako `ok` a `uživatel.přihlaš(false)` jako `selhal`?
 
 ```js
 function zeptejSeNaHeslo(ok, selhal) {
