@@ -1,7 +1,7 @@
 
 # Gettery a settery vlastností
 
-Existují dva druhy vlastností objektů.
+Vlastnosti objektů se dělí do dvou druhů.
 
 První druh jsou *datové vlastnosti*. S nimi už pracovat umíme. Všechny vlastnosti, které jsme až doposud používali, byly datové vlastnosti.
 
@@ -23,7 +23,7 @@ let obj = {
 };
 ```
 
-Getter se spustí, když je vlastnost `obj.názevVlastnosti` načítána, setter -- když je měněna.
+Getter se spustí, když je vlastnost `obj.názevVlastnosti` načítána, setter se spustí, když je měněna.
 
 Například máme objekt `uživatel` s vlastnostmi `jméno` a `příjmení`:
 
@@ -96,16 +96,16 @@ alert(uživatel.příjmení); // Cooper
 
 Výsledkem je, že máme „virtuální“ vlastnost `celéJméno`. Lze ji číst i do ní zapisovat.
 
-## Přístupové deskriptory
+## Deskriptory přístupových vlastností
 
 Deskriptory přístupových vlastností se liší od deskriptorů datových vlastností.
 
-U přístupových vlastností není `value` nebo `writable`, ale místo nich tam jsou funkce `get` a `set`.
+U přístupových vlastností v nich nejsou `value` nebo `writable`, ale místo nich tam jsou funkce `get` a `set`.
 
 To znamená, že přístupový deskriptor může mít:
 
-- **`get`** -- funkci bez argumentů, která se spustí při čtení vlastnosti,
-- **`set`** -- funkci s jedním argumentem, která je volána, když se vlastnost nastavuje,
+- **`get`** -- funkce bez argumentů, která se spustí při čtení vlastnosti,
+- **`set`** -- funkce s jedním argumentem, která je volána, když se vlastnost nastavuje,
 - **`enumerable`** -- totéž jako u datových vlastností,
 - **`configurable`** -- totéž jako u datových vlastností.
 
@@ -136,7 +136,7 @@ for(let klíč in uživatel) alert(klíč); // jméno, příjmení
 
 Prosíme všimněte si, že vlastnost může být buď přístupová (má metody `get/set`), nebo datová (má `value`), ale ne obojí.
 
-Pokusíme-li se poskytnout ve stejném deskriptoru `get` i `value`, nastane chyba:
+Pokud se pokusíme ve stejném deskriptoru poskytnout `get` i `value`, nastane chyba:
 
 ```js run
 *!*
@@ -151,11 +151,11 @@ Object.defineProperty({}, 'vlastnost', {
 });
 ```
 
-## Chytřejší gettery/settery
+## Chytřejší gettery a settery
 
-Gettery/settery můžeme používat jako wrappery nad „skutečnými“ hodnotami vlastností, abychom získali více kontroly nad operacemi s nimi.
+Gettery a settery můžeme používat jako obaly nad „skutečnými“ hodnotami vlastností, abychom nad operacemi s nimi získali větší kontrolu.
 
-Například jestliže chceme zakázat příliš krátká jména v objektu `uživatel`, můžeme mít setter `jméno` a udržovat hodnotu v oddělené vlastnosti `_jméno`:
+Například jestliže chceme v objektu `uživatel` zakázat příliš krátká jména, můžeme mít setter `jméno` a udržovat hodnotu v oddělené vlastnosti `_jméno`:
 
 ```js run
 let uživatel = {
@@ -180,11 +180,11 @@ uživatel.jméno = ""; // Jméno je příliš krátké...
 
 Jméno je tedy uloženo ve vlastnosti `_jméno` a přístup k němu se děje přes getter a setter.
 
-Technicky může externí kód přistupovat přímo ke jménu pomocí `uživatel._jméno`. Je však široce známá konvence, že vlastnosti začínající podtržítkem `"_"` jsou interní a nemělo by se na ně sahat zvnějšku objektu.
+Technicky může externí kód přistupovat přímo ke jménu pomocí `uživatel._jméno`. Podle široce rozšířené konvence však vlastnosti začínající podtržítkem `"_"` jsou interní a nemělo by se na ně sahat zvnějšku objektu.
 
 ## Používání pro kompatibilitu
 
-Jedno z vynikajících využití přístupových vlastností je, že umožňují kdykoli převzít kontrolu nad „obyčejnou“ datovou vlastností tím, že ji nahradíme getterem a setterem a vylepšíme její chování.
+Jedním z vynikajících využití přístupových vlastností je, že umožňují kdykoli převzít kontrolu nad „obyčejnou“ datovou vlastností tím, že ji nahradíme getterem a setterem a vylepšíme její chování.
 
 Představme si, že jsme začali implementovat objekty uživatelů s použitím datových vlastností `jméno` a `věk`:
 

@@ -1,5 +1,5 @@
 
-# Atributy a deskriptory vlastností
+# Přepínače a deskriptory vlastností
 
 Jak víme, do objektů můžeme ukládat vlastnosti.
 
@@ -11,15 +11,15 @@ V této kapitole prostudujeme další možnosti konfigurace a v další se podí
 
 Vlastnosti objektů mají kromě hodnoty **`value`** tři speciální atributy (tzv. „vlajky“ nebo „přepínače“):
 
-- **`writable`** *(zapisovatelná)* -- je-li `true`, může být hodnota vlastnosti změněna, jinak je jen pro čtení.
-- **`enumerable`** *(enumerovatelná)* -- je-li `true`, vlastnost se ukazuje v cyklech, jinak se v nich neukáže.
+- **`writable`** *(zapisovatelná)* -- je-li `true`, hodnota vlastnosti může být změněna, jinak je jen pro čtení.
+- **`enumerable`** *(enumerovatelná)* -- je-li `true`, vlastnost je vyjmenována v cyklech, jinak v nich vyjmenována není.
 - **`configurable`** *(konfigurovatelná)* -- je-li `true`, vlastnost může být smazána a tyto atributy mohou být měněny, jinak ne.
 
 Prozatím jsme je neviděli, protože se obecně neukazují. Když vytvoříme vlastnost „obvyklým způsobem“, všechny jsou `true`. Můžeme je však kdykoli změnit.
 
 Nejprve se podíváme, jak tyto přepínače zjistit.
 
-Metoda [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor) nám umožňuje získat *úplnou* informaci o vlastnosti.
+Získat *úplnou* informaci o vlastnosti nám umožňuje metoda [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor).
 
 Syntaxe je:
 ```js
@@ -32,7 +32,7 @@ let deskriptor = Object.getOwnPropertyDescriptor(obj, názevVlastnosti);
 `názevVlastnosti`
 : Název vlastnosti.
 
-Návratová hodnota je tzv. „deskriptor vlastnosti“: objekt, který obsahuje hodnotu a všechny přepínače.
+Návratovou hodnotou je tzv. „deskriptor vlastnosti“: objekt, který obsahuje hodnotu a všechny přepínače.
 
 Například:
 
@@ -63,10 +63,10 @@ Object.defineProperty(obj, názevVlastnosti, deskriptor)
 ```
 
 `obj`, `názevVlastnosti`
-: Objekt a jeho vlastnost, pro které se použije deskriptor.
+: Objekt a jeho vlastnost, na kterou se aplikuje deskriptor.
 
 `deskriptor`
-: Deskriptor vlastnosti, který se použije.
+: Deskriptor vlastnosti, který se aplikuje.
 
 Jestliže vlastnost existuje, `defineProperty` změní její přepínače. V opačném případě tuto vlastnost vytvoří se zadanou hodnotou a přepínači; není-li v takovém případě některý přepínač uveden, předpokládá se, že je `false`.
 
@@ -96,7 +96,7 @@ alert( JSON.stringify(deskriptor, null, 2 ) );
  */
 ```
 
-Porovnejte si ji s výše uvedenou vlastností `uživatel.jméno` „vytvořenou normálně“: nyní jsou všechny přepínače nepravdivé. Pokud to není to, co chceme, můžeme je v objektu `deskriptor` nastavit na `true`.
+Porovnejte si ji s výše uvedenou vlastností `uživatel.jméno` „vytvořenou normálně“: nyní jsou všechny přepínače nepravdivé. Pokud to chceme jinak, můžeme je v objektu `deskriptor` nastavit na `true`.
 
 Nyní se na efekty přepínačů podívejme na příkladu.
 
@@ -120,7 +120,7 @@ uživatel.jméno = "Petr"; // Chyba: Nelze přiřazovat do vlastnosti 'jméno', 
 */!*
 ```
 
-Nyní nikdo nemůže změnit jméno našeho uživatele, pokud sám nezavolá metodu `defineProperty`, která přebije tu naši.
+Nyní nikdo nemůže změnit jméno našeho uživatele, pokud sám nezavolá metodu `defineProperty`, která přepíše naše nastavení.
 
 ```smart header="Chyby nastávají jen ve striktním režimu"
 V nestriktním režimu nenastane žádná chyba, když se pokusíme zapsat do nezapisovatelné vlastnosti a podobně. Operace se však stále neprovede. Akce porušující nastavení přepínačů se v nestriktním režimu prostě tiše ignorují.
@@ -146,9 +146,9 @@ uživatel.jméno = "Petr"; // Chyba
 
 ## Neenumerovatelná
 
-Přidejme nyní do objektu `uživatel` vlastní `toString`.
+Přidejme nyní do objektu `uživatel` vlastní metodu `toString`.
 
-Normálně je vestavěná metoda `toString` v objektech neenumerovatelná, v cyklu `for..in` se neukazuje. Jestliže však přidáme náš vlastní `toString`, defaultně se ve `for..in` ukáže, například takto:
+Normálně je vestavěná metoda `toString` v objektech neenumerovatelná, v cyklu `for..in` se neukazuje. Jestliže však přidáme náš vlastní `toString`, standardně se ve `for..in` ukáže, například takto:
 
 ```js run
 let uživatel = {
@@ -158,7 +158,7 @@ let uživatel = {
   }
 };
 
-// Defaultně budou zobrazeny obě naše vlastnosti:
+// Standardně budou zobrazeny obě naše vlastnosti:
 for (let klíč in uživatel) alert(klíč); // jméno, toString
 ```
 
@@ -226,9 +226,9 @@ Nemůžeme ani změnit `Math.PI` tak, aby byla znovu `writable` (zapisovatelná)
 Object.defineProperty(Math, "PI", { writable: true });
 ```
 
-Neexistuje naprosto nic, co bychom mohli s `Math.PI` dělat.
+Neexistuje vůbec nic, co bychom mohli s `Math.PI` dělat.
 
-Nastavit vlastnost nekonfigurovatelnou je jednosměrná cesta. Nemůžeme ji pomocí `defineProperty` změnit zpět.
+Nastavení vlastnosti jako nekonfigurovatelné je nevratné. Vlastnost nemůžeme pomocí `defineProperty` změnit zpět.
 
 **Prosíme všimněte si: `configurable: false` brání ve změnách přepínačů vlastnosti a jejím smazání, ale umožňuje měnit její hodnotu.**
 
@@ -274,7 +274,7 @@ U nekonfigurovatelné vlastnosti můžeme změnit `writable: true` na `false`, a
 
 ## Object.defineProperties
 
-Existuje metoda [Object.defineProperties(obj, deskriptory)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties), která nám umožňuje definovat mnoho vlastností najednou.
+Definovat více vlastností najednou nám umožňuje metoda [Object.defineProperties(obj, deskriptory)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties).
 
 Syntaxe je:
 
@@ -296,19 +296,19 @@ Object.defineProperties(uživatel, {
 });
 ```
 
-Můžeme tedy nastavit mnoho vlastností najednou.
+Můžeme tedy nastavit více vlastností najednou.
 
 ## Object.getOwnPropertyDescriptors
 
 Chceme-li získat deskriptory všech vlastností najednou, můžeme použít metodu [Object.getOwnPropertyDescriptors(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptors).
 
-Společně s metodou `Object.defineProperties` ji můžeme použít jako způsob klonování objektu, který zachovává přepínače:
+Společně s metodou `Object.defineProperties` ji můžeme použít jako způsob klonování objektu, kterým zachováme přepínače:
 
 ```js
 let klon = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));
 ```
 
-Když běžně klonujeme objekt, kopírujeme vlastnosti pomocí přiřazení, například takto:
+Když běžně klonujeme objekt, kopírujeme vlastnosti přiřazením, například takto:
 
 ```js
 for (let klíč in uživatel) {
@@ -330,10 +330,10 @@ Existují však i metody, které omezují přístup k *celému* objektu:
 : Zakazuje přidávání nových vlastností do objektu.
 
 [Object.seal(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)
-: Zakazuje přidávání/odstraňování vlastností. Nastaví `configurable: false` pro všechny existující vlastnosti.
+: Zakazuje přidávání a odstraňování vlastností. Nastaví `configurable: false` pro všechny existující vlastnosti.
 
 [Object.freeze(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
-: Zakazuje přidávání/odstraňování/měnění vlastností. Nastaví `configurable: false, writable: false` pro všechny existující vlastnosti.
+: Zakazuje přidávání, odstraňování a měnění vlastností. Nastaví `configurable: false, writable: false` pro všechny existující vlastnosti.
 
 A existují i testy na ně:
 
@@ -341,9 +341,9 @@ A existují i testy na ně:
 : Vrátí `false`, je-li zakázáno přidávání vlastností, jinak vrátí `true`.
 
 [Object.isSealed(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isSealed)
-: Vrátí `true`, je-li zakázáno přidávání/odstraňování vlastností a všechny existující vlastnosti mají `configurable: false`.
+: Vrátí `true`, je-li zakázáno přidávání a odstraňování vlastností a všechny existující vlastnosti mají `configurable: false`.
 
 [Object.isFrozen(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isFrozen)
-: Vrátí `true`, je-li zakázáno přidávání/odstraňování/měnění vlastností a všechny existující vlastnosti mají `configurable: false, writable: false`.
+: Vrátí `true`, je-li zakázáno přidávání, odstraňování a měnění vlastností a všechny existující vlastnosti mají `configurable: false, writable: false`.
 
 V praxi se však tyto metody používají jen zřídka.
