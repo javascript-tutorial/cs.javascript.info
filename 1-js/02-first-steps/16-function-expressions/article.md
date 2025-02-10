@@ -82,7 +82,11 @@ let řekniAhoj = function() { // (1) vytvoření
   alert( "Ahoj" );
 };
 
+<<<<<<< HEAD
 let funkce = řekniAhoj;
+=======
+let func = sayHi;  //(2)
+>>>>>>> 6236eb8c3cdde729dab761a1d0967a88a1a6197e
 // ...
 ```
 
