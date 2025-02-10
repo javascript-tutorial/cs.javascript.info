@@ -27,6 +27,6 @@
     alert( stůl.peníze ); // undefined
     ```
 
-2. V moderních enginech s vylepšeným výkonem není rozdíl mezi tím, zda bereme vlastnost z objektu nebo jeho prototypu. Enginy si pamatují, kde byla vlastnost nalezena, a při dalším požadavku to využijí.
+2. V moderních motorech s vylepšeným výkonem není rozdíl mezi tím, zda bereme vlastnost z objektu nebo jeho prototypu. Motory si pamatují, kde byla vlastnost nalezena, a při dalším požadavku to využijí.
 
-    Například pro `kapsy.brýle` si pamatují, kde našly `brýle` (v objektu `hlava`), a příště budou hledat rovnou tam. Jsou také dostatečně chytré, aby si své interní cache aktualizovaly, když se něco změní, takže tato optimalizace je bezpečná.
+    Například pro `kapsy.brýle` si pamatují, kde našly `brýle` (v objektu `hlava`), a příště budou hledat rovnou tam. Jsou také dostatečně chytré, aby si při nějaké změně své vnitřní mezipaměti aktualizovaly, takže tato optimalizace je bezpečná.

@@ -28,4 +28,4 @@ let kapsy = {
 ```
 
 1. Použijte `__proto__` k přiřazení prototypů takovým způsobem, že každé hledání vlastností bude dodržovat cestu: `kapsy` -> `postel` -> `stůl` -> `hlava`. Například `kapsy.pero` by mělo být `3` (nalezeno ve `stůl`) a `postel.brýle` by mělo být `1` (nalezeno v `hlava`).
-2. Odpovězte na otázku: je rychlejší získat `brýle` jako `kapsy.brýle` nebo `hlava.brýle`? Proveďte benchmark, bude-li zapotřebí.
+2. Odpovězte na otázku: je rychlejší získat `brýle` jako `kapsy.brýle`, nebo jako `hlava.brýle`? Proveďte benchmark, bude-li zapotřebí.

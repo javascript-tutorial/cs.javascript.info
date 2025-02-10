@@ -4,7 +4,7 @@ Podívejme se pozorně na to, co se děje při volání `rychlý.žer("jablko")`
 
 2. Pak `this.žaludek.push()` musí najít vlastnost `žaludek` a zavolat na ní `push`. Hledá `žaludek` v `this` (`=rychlý`), ale nic nenajde.
 
-3. Pak sleduje řetězec prototypů a najde `žaludek` v objektu `křeček`.
+3. Pak následuje řetězec prototypů a najde `žaludek` v objektu `křeček`.
 
 4. Pak na něm volá `push`, čímž přidá potravu do *žaludku prototypu*.
 
@@ -42,7 +42,7 @@ alert( rychlý.žaludek ); // jablko
 alert( líný.žaludek ); // <nic>
 ```
 
-Teď vše funguje správně, protože `this.žaludek=` nehledá `žaludek`. Hodnota se zapíše přímo do objektu `this`.
+Teď vše funguje správně, protože `this.žaludek=` nehledá `žaludek`, ale hodnota se zapíše přímo do objektu `this`.
 
 Problému se můžeme zcela vyhnout i tak, že zajistíme, aby každý křeček měl svůj vlastní žaludek:
 
@@ -77,4 +77,4 @@ alert( rychlý.žaludek ); // jablko
 alert( líný.žaludek ); // <nic>
 ```
 
-Běžné řešení je, že všechny vlastnosti, které popisují stav určitého objektu, jako třeba výše uvedený `žaludek`, by měly být zapisovány přímo do tohoto objektu. Tím předejdeme takovýmto problémům.
+Běžné řešení je, že všechny vlastnosti, které popisují stav určitého objektu, jako třeba uvedený `žaludek`, by měly být zapisovány přímo do tohoto objektu. Tím předejdeme takovýmto problémům.
