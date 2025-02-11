@@ -1,49 +1,49 @@
-We can use such approach if we are sure that `"constructor"` property has the correct value.
+Tento přístup můžeme použít, pokud jsme si jisti, že vlastnost `"constructor"` obsahuje správnou hodnotu.
 
-For instance, if we don't touch the default `"prototype"`, then this code works for sure:
+Například pokud se nedotkneme standardní vlastnosti `"prototype"`, pak bude tento kód zaručeně fungovat:
 
 ```js run
-function User(name) {
-  this.name = name;
+function Uživatel(jméno) {
+  this.jméno = jméno;
 }
 
-let user = new User('John');
-let user2 = new user.constructor('Pete');
+let uživatel = new Uživatel('Jan');
+let uživatel2 = new uživatel.constructor('Petr');
 
-alert( user2.name ); // Pete (worked!)
+alert( uživatel2.jméno ); // Petr (funguje!)
 ```
 
-It worked, because `User.prototype.constructor == User`.
+Funguje to, protože `Uživatel.prototype.constructor == Uživatel`.
 
-..But if someone, so to speak, overwrites `User.prototype` and forgets to recreate `constructor` to reference `User`, then it would fail.
+...Ale pokud někdo dejme tomu přepíše `Uživatel.prototype` a zapomene znovu vytvořit `constructor`, aby odkazoval na `Uživatel`, pak to selže.
 
-For instance:
+Například:
 
 ```js run
-function User(name) {
-  this.name = name;
+function Uživatel(jméno) {
+  this.jméno = jméno;
 }
 *!*
-User.prototype = {}; // (*)
+Uživatel.prototype = {}; // (*)
 */!*
 
-let user = new User('John');
-let user2 = new user.constructor('Pete');
+let uživatel = new Uživatel('Jan');
+let uživatel2 = new uživatel.constructor('Petr');
 
-alert( user2.name ); // undefined
+alert( uživatel2.jméno ); // undefined
 ```
 
-Why `user2.name` is `undefined`?
+Proč je `uživatel2.jméno` `undefined`?
 
-Here's how `new user.constructor('Pete')` works:
+Takto funguje `new uživatel.constructor('Petr')`:
 
-1. First, it looks for `constructor` in `user`. Nothing.
-2. Then it follows the prototype chain. The prototype of `user` is `User.prototype`, and it also has no `constructor` (because we "forgot" to set it right!).
-3. Going further up the chain, `User.prototype` is a plain object, its prototype is the built-in `Object.prototype`. 
-4. Finally, for the built-in `Object.prototype`, there's a built-in `Object.prototype.constructor == Object`. So it is used.
+1. Nejprve hledá `constructor` v objektu `uživatel`. Nic.
+2. Pak postupuje řetězcem prototypů. Prototyp objektu `uživatel` je `Uživatel.prototype` a ani ten nemá žádný `constructor` (protože jsme ho „zapomněli“ správně nastavit!).
+3. Postupuje řetězcem dále nahoru. `Uživatel.prototype` je planý objekt a jeho prototypem je vestavěný `Object.prototype`. 
+4. Nakonec pro vestavěný `Object.prototype` je vestavěný `Object.prototype.constructor == Object`. Ten se tedy použije.
 
-Finally, at the end, we have `let user2 = new Object('Pete')`. 
+Nakonec tedy máme `let uživatel2 = new Object('Petr')`. 
 
-Probably, that's not what we want. We'd like to create `new User`, not `new Object`. That's the outcome of the missing `constructor`.
+To pravděpodobně není to, co chceme. Rádi bychom vytvořili `new Uživatel`, ne `new Object`. To je důsledek chybějící vlastnosti `constructor`.
 
-(Just in case you're curious, the `new Object(...)` call converts its argument to an object. That's a theoretical thing, in practice no one calls `new Object` with a value, and generally we don't use `new Object` to make objects at all).
+(Jen pro případ, že vás to zajímá: volání `new Object(...)` konvertuje svůj argument na objekt. To je teoretická záležitost, v praxi nikdo nevolá `new Object` s hodnotou a obecně vůbec nepoužíváme `new Object` k vytváření objektů.)
