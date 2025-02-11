@@ -2,7 +2,7 @@ importance: 5
 
 ---
 
-# Vytvoření objektu se stejným konstruktorem
+# Vytvoření objektu stejným konstruktorem
 
 Představme si, že máme libovolný objekt `obj`, který je vytvořen konstruktorem -- nevíme jakým, ale rádi bychom pomocí něj vytvořili nový objekt.
 

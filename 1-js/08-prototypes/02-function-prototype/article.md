@@ -2,15 +2,15 @@
 
 Pamatujte, že nové objekty mohou být vytvořeny konstruktorem, například `new F()`.
 
-Je-li `F.prototype` objekt, pak operátor `new` jej použije, aby nastavil pro tento nový objekt `[[Prototype]]`.
+Pokud vlastnost `F.prototype` obsahuje objekt, pak operátor `new` jej nastaví jako `[[Prototype]]` nově vytvořenému objektu.
 
 ```smart
 JavaScript měl prototypovou dědičnost již od začátku. Byl to jeden z klíčových prvků jazyka.
 
-Ve starých časech k ní však nebyl přímý přístup. Jediné, co spolehlivě fungovalo, byla vlastnost konstruktoru `„prototype“`, popsaná v této kapitole. Existuje tedy mnoho skriptů, které ji stále využívají.
+V dřívějších dobách k ní však nebyl přímý přístup. Spolehlivě fungovala jedině vlastnost konstruktoru `"prototype"`, popsaná v této kapitole. Existuje tedy mnoho skriptů, které ji stále využívají.
 ```
 
-Prosíme všimněte si, že `F.prototype` zde znamená regulérní vlastnost jménem `„prototype“` funkce `F`. Zní to trochu podobně pojmu „prototyp“, ale tady máme opravdu na mysli obvyklou vlastnost s tímto názvem.
+Prosíme všimněte si, že `F.prototype` zde znamená regulérní vlastnost jménem `"prototype"` funkce `F`. Trochu se to podobá pojmu „prototyp“, ale tady máme opravdu na mysli obvyklou vlastnost s tímto názvem.
 
 Zde je příklad:
 
@@ -38,26 +38,26 @@ Výsledný obrázek je následující:
 
 ![](proto-constructor-animal-rabbit.svg)
 
-Na obrázku je `„prototype“` vodorovná šipka, která znamená regulérní vlastnost, a `[[Prototype]]` je svislá šipka, která znamená dědění objektu `králík` z objektu `zvíře`.
+Na obrázku je `"prototype"` vodorovná šipka, která znamená regulérní vlastnost, a `[[Prototype]]` je svislá šipka, která znamená dědění objektu `králík` z objektu `zvíře`.
 
-```smart header="`F.prototype` se použije jen při `new F`"
-Vlastnost `F.prototype` se použije, jen když je volán `new F`. Přiřadí `[[Prototype]]` novému objektu.
+```smart header="`F.prototype` bude použita jen při `new F`"
+Vlastnost `F.prototype` bude použita, jen když je volán `new F`. Přiřadí `[[Prototype]]` novému objektu.
 
 Jestliže se po vytvoření objektu vlastnost `F.prototype` změní (`F.prototype = <jiný objekt>`), pak nové objekty vytvořené pomocí `new F` budou mít jako `[[Prototype]]` jiný objekt, ale již existujícím objektům zůstane starý prototyp.
 ```
 
-## Defaultní F.prototype, vlastnost konstruktoru
+## Standardní F.prototype, vlastnost konstruktoru
 
-Vlastnost `„prototype“` má každá funkce, i když ji neuvedeme.
+Vlastnost `"prototype"` má každá funkce, i když ji neuvedeme.
 
-Defaultní `„prototype“` je objekt s jedinou vlastností `constructor`, která ukazuje zpět na samotnou funkci.
+Standardní `"prototype"` je objekt s jedinou vlastností `constructor`, která ukazuje zpět na samotnou funkci.
 
 Například takto:
 
 ```js
 function Králík() {}
 
-/* defaultní prototyp
+/* standardní prototyp
 Králík.prototype = { constructor: Králík };
 */
 ```
@@ -68,17 +68,17 @@ Můžeme si to ověřit:
 
 ```js run
 function Králík() {}
-// defaultně:
+// standardně:
 // Králík.prototype = { constructor: Králík }
 
 alert( Králík.prototype.constructor == Králík ); // true
 ```
 
-Přirozeně, jestliže nic neuděláme, bude vlastnost `constructor` dostupná skrz `[[Prototype]]` všem králíkům:
+Jestliže nic nezměníme, bude vlastnost `constructor` dostupná skrz `[[Prototype]]` všem králíkům:
 
 ```js run
 function Králík() {}
-// defaultně:
+// standardně:
 // Králík.prototype = { constructor: Králík }
 
 let králík = new Králík(); // dědí z {constructor: Králík}
@@ -107,13 +107,13 @@ let králík2 = new králík.constructor("Černý králík");
 
 To se hodí, když máme objekt, nevíme, jaký konstruktor pro něj byl použit (např. protože pochází z knihovny třetí strany), a potřebujeme vytvořit další objekt stejného druhu.
 
-Asi nejdůležitější věcí na `„constructor“` je však to, že...
+Asi nejdůležitější věcí na `"constructor"` je však to, že...
 
-**...samotný JavaScript správnou hodnotu vlastnosti `„constructor“` nezajišťuje.**
+**...samotný JavaScript správnou hodnotu vlastnosti `"constructor"` nezajišťuje.**
 
-Ano, existuje v defaultní vlastnosti funkcí `„prototype“`, ale to je vše. Co se s ním stane později, je zcela na nás.
+Ano, nachází se ve standardní vlastnosti funkcí `"prototype"`, ale to je vše. Co se s ní stane později, je zcela na nás.
 
-Konkrétně, jestliže defaultní prototyp úplně nahradíme něčím jiným, žádný `„constructor“` v něm nebude.
+Konkrétně, jestliže standardní prototyp úplně nahradíme něčím jiným, žádný `"constructor"` v něm nebude.
 
 Například:
 
@@ -129,7 +129,7 @@ alert(králík.constructor === Králík); // false
 */!*
 ```
 
-Abychom tedy udrželi správný `„constructor“`, můžeme se rozhodnout, že budeme vlastnosti přidávat do a odebírat z defaultního `„prototype“`, místo abychom jej úplně měnili:
+Abychom tedy udrželi správný `"constructor"`, můžeme se rozhodnout, že budeme vlastnosti přidávat do a odebírat ze standardního `"prototype"`, místo abychom jej úplně měnili:
 
 ```js
 function Králík() {}
@@ -137,7 +137,7 @@ function Králík() {}
 // Nepřepíšeme Králík.prototype úplně
 // jen do něj něco přidáme
 Králík.prototype.skáče = true
-// defaultní Králík.prototype.constructor se zachová
+// standardní Králík.prototype.constructor se zachová
 ```
 
 Nebo alternativně vlastnost `constructor` vytvoříme znovu ručně:
@@ -162,9 +162,9 @@ Všechno je zcela jednoduché, jen několik poznámek, abychom si to ujasnili:
 
 - Vlastnost `F.prototype` (nepleťte si ji s `[[Prototype]]`) nastaví `[[Prototype]]` nových objektů, když je zavolán `new F()`.
 - Hodnota `F.prototype` by měla být buď objekt, nebo `null`: jiné hodnoty nefungují.
-- Vlastnost `„prototype“` má tento speciální efekt jen tehdy, když je nastavena na konstruktoru a vyvolána pomocí `new`.
+- Vlastnost `"prototype"` má tento speciální efekt jen tehdy, když je nastavena na konstruktoru a ten je zavolán pomocí `new`.
 
-Na běžných objektech není `prototype` nic zvláštního:
+Na běžných objektech `prototype` neznamená nic zvláštního:
 ```js
 let uživatel = {
   jméno: "Jan",
@@ -172,4 +172,4 @@ let uživatel = {
 };
 ```
 
-Standardně mají všechny funkce `F.prototype = { constructor: F }`, takže můžeme získat konstruktor objektu přístupem k jeho vlastnosti `„constructor“`.
+Standardně mají všechny funkce `F.prototype = { constructor: F }`, takže můžeme získat konstruktor objektu přístupem k jeho vlastnosti `"constructor"`.

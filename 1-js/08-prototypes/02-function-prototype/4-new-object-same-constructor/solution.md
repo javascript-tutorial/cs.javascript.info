@@ -1,6 +1,6 @@
-Tento přístup můžeme použít, pokud jsme si jisti, že vlastnost `„constructor“` obsahuje správnou hodnotu.
+Tento přístup můžeme použít, pokud jsme si jisti, že vlastnost `"constructor"` obsahuje správnou hodnotu.
 
-Například pokud se nedotkneme defaultní vlastnosti `„prototype“`, pak bude tento kód zaručeně fungovat:
+Například pokud se nedotkneme standardní vlastnosti `"prototype"`, pak bude tento kód zaručeně fungovat:
 
 ```js run
 function Uživatel(jméno) {
@@ -38,12 +38,12 @@ Proč je `uživatel2.jméno` `undefined`?
 Takto funguje `new uživatel.constructor('Petr')`:
 
 1. Nejprve hledá `constructor` v objektu `uživatel`. Nic.
-2. Pak sleduje řetězec prototypů. Prototyp objektu `uživatel` je `Uživatel.prototype` a ani ten nemá žádný `constructor` (protože jsme ho „zapomněli“ správně nastavit!).
-3. Jde řetězcem dále nahoru. `Uživatel.prototype` je planý objekt a jeho prototypem je vestavěný `Object.prototype`. 
+2. Pak postupuje řetězcem prototypů. Prototyp objektu `uživatel` je `Uživatel.prototype` a ani ten nemá žádný `constructor` (protože jsme ho „zapomněli“ správně nastavit!).
+3. Postupuje řetězcem dále nahoru. `Uživatel.prototype` je planý objekt a jeho prototypem je vestavěný `Object.prototype`. 
 4. Nakonec pro vestavěný `Object.prototype` je vestavěný `Object.prototype.constructor == Object`. Ten se tedy použije.
 
 Nakonec tedy máme `let uživatel2 = new Object('Petr')`. 
 
-To pravděpodobně není to, co chceme. Rádi bychom vytvořili `new Uživatel`, ne `new Object`. To je výsledek chybějící vlastnosti `constructor`.
+To pravděpodobně není to, co chceme. Rádi bychom vytvořili `new Uživatel`, ne `new Object`. To je důsledek chybějící vlastnosti `constructor`.
 
-(Jen pro případ, že vás to zajímá: volání `new Object(...)` převede svůj argument na objekt. To je teoretická záležitost, v praxi nikdo nevolá `new Object` s hodnotou a obecně vůbec nepoužíváme `new Object` k vytváření objektů.)
+(Jen pro případ, že vás to zajímá: volání `new Object(...)` konvertuje svůj argument na objekt. To je teoretická záležitost, v praxi nikdo nevolá `new Object` s hodnotou a obecně vůbec nepoužíváme `new Object` k vytváření objektů.)

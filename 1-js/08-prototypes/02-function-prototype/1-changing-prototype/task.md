@@ -4,7 +4,7 @@ importance: 5
 
 # Změna „prototype“
 
-V níže uvedeném kódu vytvoříme `new Králík` a pak se pokusíme změnit jeho prototyp.
+V následujícím kódu vytvoříme `new Králík` a pak se pokusíme změnit jeho prototyp.
 
 Na začátku máme tento kód:
 

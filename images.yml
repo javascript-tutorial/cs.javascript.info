@@ -188,7 +188,7 @@ array-pop.svg:
     position: "center"
 
 decorator-makecaching-wrapper.svg:
-  wrapper: 'wrapper'
+  wrapper: 'obal'
   around the function: 'kolem funkce'
 
 xhr-another-domain.svg:
@@ -374,12 +374,12 @@ object-prototype-empty.svg:
   'prototype object': 'prototypový objekt'
 
 rabbit-prototype-constructor.svg:
-  'default "prototype"': 'defaultně "prototype"'
+  'default "prototype"': 'standardně "prototype"'
   'Rabbit': 'Králík'
   'rabbit': 'králík'
 
 function-prototype-constructor.svg:
-  'default "prototype"': 'defaultní "prototype"'
+  'default "prototype"': 'standardní "prototype"'
   'Rabbit': 'Králík'
 
 rabbit-animal-independent-animal.svg:
