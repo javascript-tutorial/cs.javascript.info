@@ -1,13 +1,13 @@
 
 
 ```js run
-Function.prototype.defer = function(ms) {
+Function.prototype.odlož = function(ms) {
   setTimeout(this, ms);
 };
 
 function f() {
-  alert("Hello!");
+  alert("Ahoj!");
 }
 
-f.defer(1000); // shows "Hello!" after 1 sec
+f.odlož(1000); // zobrazí "Ahoj!" za 1 sekundu
 ```
