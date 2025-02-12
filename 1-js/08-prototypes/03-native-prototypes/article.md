@@ -1,6 +1,6 @@
 # Nativní prototypy
 
-Vlastnost `„prototype“` je zeširoka využívána samotným jádrem JavaScriptu. Používají ji všechny zabudované konstruktory.
+Vlastnost `"prototype"` je zeširoka využívána samotným jádrem JavaScriptu. Používají ji všechny zabudované konstruktory.
 
 Nejprve se podíváme na detaily a pak na to, jak ji využít k přidání nových schopností vestavěným objektům.
 
@@ -25,7 +25,7 @@ Když je zavolán `new Object()` (nebo je vytvořen literální objekt `{...}`),
 
 ![](object-prototype-1.svg)
 
-Když je tedy volána `obj.toString()`, je tato metoda převzata z `Object.prototype`.
+Když je tedy volána metoda `obj.toString()`, převezme se z `Object.prototype`.
 
 Můžeme si to ověřit následovně:
 
@@ -38,7 +38,7 @@ alert(obj.toString === obj.__proto__.toString); //true
 alert(obj.toString === Object.prototype.toString); //true
 ```
 
-Prosíme všimněte si, že ve výše uvedeném řetězci není nad `Object.prototype` žádný další `[[Prototype]]`:
+Prosíme všimněte si, že v uvedeném řetězci není nad `Object.prototype` žádný další `[[Prototype]]`:
 
 ```js run
 alert(Object.prototype.__proto__); // null
@@ -48,11 +48,11 @@ alert(Object.prototype.__proto__); // null
 
 Metody v prototypech si uchovávají i jiné vestavěné objekty, např. `Array`, `Date`, `Function` a jiné.
 
-Například když vytvoříme pole `[1, 2, 3]`, interně se použije defaultní konstruktor `new Array()`. Takže `Array.prototype` se stane jeho prototypem a poskytne mu metody. To ušetří spoustu paměti.
+Například když vytvoříme pole `[1, 2, 3]`, vnitřně se použije standardní konstruktor `new Array()`. Takže jeho prototypem se stane a metody mu poskytne `Array.prototype`. To značně šetří paměť.
 
-Podle specifikace mají všechny vestavěné prototypy na svém vrcholu `Object.prototype`. Proto také někteří lidé říkají, že „všechno je zděděno z objektů“.
+Podle specifikace mají všechny vestavěné prototypy na svém vrcholu `Object.prototype`. Proto se také někdy říká, že „všechno je zděděno z objektů“.
 
-Zde je obrázek s celkovým přehledem (pro 3 zabudované objekty, které se tam vejdou):
+Zde je celkový přehled na obrázku (pro tři zabudované objekty, které se na něj vejdou):
 
 ![](native-prototypes-classes.svg)
 
@@ -84,11 +84,11 @@ Jak jsme už viděli, `Object.prototype` má rovněž `toString`, ale `Array.pro
 ![](native-prototypes-array-tostring.svg)
 
 
-Dědičnost zobrazují i prohlížečové nástroje, například vývojářská konzole v Chrome (pro vestavěné objekty bude možná zapotřebí `console.dir`):
+Dědičnost zobrazují i prohlížečové nástroje, například vývojářská konzole v Chrome (pro vestavěné objekty bude možná nutné použít `console.dir`):
 
 ![](console_dir_array.png)
 
-Takto fungují i jiné zabudované objekty. Dokonce i funkce -- to jsou objekty z vestavěného konstruktoru `Function` a jejich metody (`call`/`apply` a jiné) se berou z `Function.prototype`. Také funkce mají svůj vlastní `toString`.
+Takto fungují i jiné zabudované objekty, dokonce i funkce -- to jsou objekty z vestavěného konstruktoru `Function` a jejich metody (`call`/`apply` a jiné) se berou z `Function.prototype`. Také funkce mají svůj vlastní `toString`.
 
 ```js run
 function f() {}
@@ -101,17 +101,17 @@ alert(f.__proto__.__proto__ == Object.prototype); // true, zděděna z objektů
 
 Nejzrádnější věc se děje s řetězci, čísly a booleany.
 
-Jak si pamatujeme, nejsou to objekty. Pokud se však pokusíme přistoupit k jejich vlastnostem, vytvoří se dočasné wrappery pomocí vestavěných konstruktorů `String`, `Number` a `Boolean`. Ty poskytnou své metody a zmizí.
+Jak si pamatujeme, nejsou to objekty. Pokud se však pokusíme přistoupit k jejich vlastnostem, vytvoří se pomocí vestavěných konstruktorů `String`, `Number` a `Boolean` dočasné obalové objekty, které poskytnou své metody a zmizí.
 
-Tyto objekty se vytvoří pro nás neviditelně a většina enginů je vyoptimalizuje, ale přesně tímto způsobem to popisuje specifikace. Metody těchto objektů rovněž přebývají v prototypech, které jsou dostupné jako `String.prototype`, `Number.prototype` a `Boolean.prototype`.
+Tyto objekty se vytvoří pro nás neviditelně a většina motorů je vyoptimalizuje, ale přesně tímto způsobem to popisuje specifikace. Metody těchto objektů rovněž přebývají v prototypech, které jsou dostupné jako `String.prototype`, `Number.prototype` a `Boolean.prototype`.
 
-```warn header="Hodnoty `null` a `undefined` nemají objektové wrappery"
-Speciální hodnoty `null` a `undefined` stojí stranou. Ty nemají objektové wrappery, takže metody a vlastnosti pro ně nejsou dostupné. A neexistují ani odpovídající prototypy.
+```warn header="Hodnoty `null` a `undefined` nemají objektové obaly"
+Speciální hodnoty `null` a `undefined` stojí stranou. Nemají objektové obaly, takže metody a vlastnosti pro ně nejsou dostupné. A neexistují ani odpovídající prototypy.
 ```
 
 ## Měnění nativních prototypů [#native-prototype-change]
 
-Nativní prototypy lze modifikovat. Například přidáme-li metodu do `String.prototype`, stane se dostupnou ve všech řetězcích:
+Nativní prototypy lze modifikovat. Například přidáme-li metodu do `String.prototype`, bude dostupná ve všech řetězcích:
 
 ```js run
 String.prototype.zobraz = function() {
@@ -121,17 +121,17 @@ String.prototype.zobraz = function() {
 "BUM!".zobraz(); // BUM!
 ```
 
-Během procesu vývoje nás mohou napadnout nové zabudované metody, které bychom rádi měli, a můžeme mít sklon přidat je do nativních prototypů. To je však obecně špatný nápad.
+Během procesu vývoje nás může napadnout, že bychom chtěli mít i další zabudované metody, a můžeme mít sklon přidat je do nativních prototypů. To je však obecně špatný nápad.
 
 ```warn
-Prototypy jsou globální, takže je snadné získat konflikt. Jestliže dvě knihovny přidají metodu `String.prototype.zobraz`, jedna z nich přepíše metodu druhé.
+Prototypy jsou globální, takže je snadné způsobit konflikt. Jestliže dvě knihovny přidají metodu `String.prototype.zobraz`, jedna z nich přepíše metodu druhé.
 
 Modifikace nativního prototypu je tedy obecně považována za špatný nápad.
 ```
 
 **V moderním programování existuje jen jeden případ, kdy je modifikace nativních prototypů vhodná. Tím je polyfilling.**
 
-Polyfilling je pojem pro nahrazení metody, která existuje ve specifikaci JavaScriptu, ale určitý JavaScriptový engine ji ještě nepodporuje.
+Polyfilling je pojem označující vytvoření náhrady za metodu, která existuje ve specifikaci JavaScriptu, ale některý motor JavaScriptu ji ještě nepodporuje.
 
 Pak ji můžeme implementovat ručně a vsadit ji do zabudovaného prototypu.
 
@@ -181,18 +181,18 @@ obj.join = Array.prototype.join;
 alert( obj.join(',') ); // Ahoj,světe!
 ```
 
-Funguje to, protože interní algoritmus vestavěné metody `join` se zajímá jen o správné indexy a vlastnost `length`. Nekontroluje, zda objekt je skutečně pole. Takto se chová mnoho zabudovaných metod.
+Funguje to, protože vnitřní algoritmus vestavěné metody `join` se zajímá jen o správné indexy a vlastnost `length`. Nekontroluje, zda objekt je skutečně pole. Takto se chová mnoho zabudovaných metod.
 
-Další možností je dědit nastavením `obj.__proto__` na `Array.prototype`, takže v `obj` budou automaticky dostupné všechny metody `Array`.
+Další možností je použít dědičnost tak, že nastavíme `obj.__proto__` na `Array.prototype`, takže v `obj` budou automaticky dostupné všechny metody `Array`.
 
-To je však nemožné, pokud již `obj` dědí z jiného objektu. Pamatujte, že můžeme dědit jen z jednoho objektu najednou.
+To však není možné, pokud již `obj` dědí z jiného objektu. Pamatujte, že můžeme dědit jen z jednoho objektu najednou.
 
 Vypůjčování metod je flexibilní a umožňuje nám smíchat funkcionality z různých objektů, jestliže je potřebujeme.
 
 ## Shrnutí
 
 - Všechny vestavěné objekty se chovají podle stejného vzorce:
-    - Metody jsou uloženy v prototypu (`Array.prototype`, `Object.prototype`, `Date.prototype`, atd.)
-    - Samotný objekt si ukládá pouze data (prvky pole, vlastnosti objektu, datum)
-- Rovněž primitivy mají metody uložené v prototypech wrapperů: `Number.prototype`, `String.prototype` a `Boolean.prototype`. Wrappery nemají pouze `undefined` a `null`.
-- Vestavěné prototypy lze modifikovat nebo do nich vkládat nové metody. Měnit je se však nedoporučuje. Pravděpodobně jediný přijatelný případ je, když přidáváme nový standard, ale JavaScriptový engine ho ještě nepodporuje.
+    - Metody jsou uloženy v prototypu (`Array.prototype`, `Object.prototype`, `Date.prototype`, atd.).
+    - Samotný objekt si ukládá pouze data (prvky pole, vlastnosti objektu, datum).
+- Rovněž primitivy mají metody uložené v prototypech obalů: `Number.prototype`, `String.prototype` a `Boolean.prototype`. Obalové objekty nemají pouze `undefined` a `null`.
+- Vestavěné prototypy lze modifikovat nebo do nich vkládat nové metody, ale měnit je se nedoporučuje. Pravděpodobně jediný přijatelný případ je, když přidáváme nový standard, ale motor JavaScriptu ho ještě nepodporuje.

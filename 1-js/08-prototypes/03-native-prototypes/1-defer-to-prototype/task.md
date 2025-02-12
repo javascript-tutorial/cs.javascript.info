@@ -6,7 +6,7 @@ importance: 5
 
 Přidejte do prototypu všech funkcí metodu `odlož(ms)`, která tuto funkci spustí za `ms` milisekund.
 
-Poté, co to uděláte, by měl fungovat tento kód:
+Až to uděláte, měl by fungovat tento kód:
 
 ```js
 function f() {

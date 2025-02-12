@@ -18,7 +18,7 @@ f.odlož(1000)(1, 2); // zobrazí 3 za 1 sekundu
 
 Prosíme všimněte si: ve `f.apply` používáme `this`, aby naše dekorace fungovala pro objektové metody.
 
-Jestliže je tedy wrapper volán jako objektová metoda, pak se `this` předá původní metodě `f`.
+Jestliže je tedy obalová funkce volána jako objektová metoda, pak se `this` předá původní metodě `f`.
 
 ```js run
 Function.prototype.odlož = function(ms) {

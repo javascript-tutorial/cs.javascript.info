@@ -2,9 +2,9 @@ importance: 4
 
 ---
 
-# Přidejte do funkcí dekorační „defer()“
+# Přidejte do funkcí dekorační „odlož()“
 
-Přidejte do prototypu všech funkcí metodu `odlož(ms)`, která vrátí wrapper, který odloží volání funkce o `ms` milisekund.
+Přidejte do prototypu všech funkcí metodu `odlož(ms)`, která vrátí obal, který odloží volání funkce o `ms` milisekund.
 
 Zde je příklad, jak by to mělo fungovat:
 
