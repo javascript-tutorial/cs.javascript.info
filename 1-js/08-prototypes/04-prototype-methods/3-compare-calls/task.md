@@ -17,7 +17,7 @@ Králík.prototype.řekniAhoj = function() {
 let králík = new Králík("Králík");
 ```
 
-Udělají tato volání jedno a totéž, nebo ne?
+Učiní všechna tato volání totéž, nebo ne?
 
 ```js
 králík.řekniAhoj();

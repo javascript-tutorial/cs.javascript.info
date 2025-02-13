@@ -4,7 +4,7 @@ importance: 5
 
 # Přidejte toString do slovníku
 
-Máme objekt `slovník`, vytvořený použitím `Object.create(null)`, k ukládání libovolných dvojic `klíč/hodnota`.
+Máme objekt `slovník` vytvořený použitím `Object.create(null)`, do něhož ukládáme libovolné dvojice `klíč/hodnota`.
 
 Přidejte do něj metodu `slovník.toString()`, která by měla vracet seznam klíčů oddělených čárkou. Vaše metoda `toString` by se neměla ukazovat v cyklu `for..in` nad objektem.
 
@@ -14,7 +14,7 @@ Takto by to mělo fungovat:
 let slovník = Object.create(null);
 
 *!*
-// váš kód k přidání metody slovník.toString
+// váš kód přidávající metodu slovník.toString
 */!*
 
 // přidáme nějaká data
