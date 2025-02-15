@@ -108,7 +108,7 @@ let králík = {
 */!*
 };
 
-let dlouhouchý = {
+let ušatý = {
   délkaUcha: 10,
 *!*
   __proto__: králík
@@ -116,13 +116,13 @@ let dlouhouchý = {
 };
 
 // jdi se převezme z řetězce prototypů
-dlouhouchý.jdi(); // Zvíře jde
-alert(dlouhouchý.skáče); // true (z králíka)
+ušatý.jdi(); // Zvíře jde
+alert(ušatý.skáče); // true (z králíka)
 ```
 
 ![](proto-animal-rabbit-chain.svg)
 
-Když nyní budeme něco načítat z objektu `dlouhouchý` a nebude to v něm, JavaScript to bude hledat v objektu `králík` a pak v objektu `zvíře`.
+Když nyní budeme něco načítat z objektu `ušatý` a nebude to v něm, JavaScript to bude hledat v objektu `králík` a pak v objektu `zvíře`.
 
 Omezení jsou jen dvě:
 
