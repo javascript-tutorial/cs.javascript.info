@@ -28,15 +28,15 @@ class Zvíře {
 let zvíře = new Zvíře("Moje zvíře");
 ```
 
-Takto můžeme reprezentovat objekt `zvíře` a třídu `Zvíře` graficky:
+Graficky můžeme zobrazit objekt `zvíře` a třídu `Zvíře` takto:
 
 ![](rabbit-animal-independent-animal.svg)
 
 ...A rádi bychom vytvořili další třídu `Králík`.
 
-Protože králíci jsou zvířata, třída `Králík` by měla být založena na třídě `Zvíře` a mít přístup k metodám zvířete, aby králíci mohli dělat to, co dělají „všeobecná“ zvířata.
+Protože králíci jsou zvířata, třída `Králík` by měla být založena na třídě `Zvíře` a mít přístup k metodám zvířete, aby králíci mohli dělat to, co dělají „obecná“ zvířata.
 
-Syntaxe pro rozšíření jiné třídy je: `class Potomek extends Rodič`.
+Syntaxe pro rozšíření jiné třídy je: `class Dítě extends Rodič`.
 
 Vytvořme třídu `Králík`, která bude zděděna z třídy `Zvíře`:
 
@@ -57,16 +57,16 @@ králík.schovejSe(); // Bílý králík se schovává!
 
 Objekt třídy `Králík` má přístup jak k metodám třídy `Králík`, např. `králík.schovejSe()`, tak k metodám třídy `Zvíře`, např. `králík.běž()`.
 
-Interně klíčové slovo `extends` funguje na principu staré dobré mechaniky prototypů. Nastaví `Králík.prototype.[[Prototype]]` na `Zvíře.prototype`. Jestliže tedy metoda není nalezena v `Králík.prototype`, JavaScript ji vezme ze `Zvíře.prototype`.
+Klíčové slovo `extends` vnitřně funguje na principu staré dobré mechaniky prototypů. Nastaví `Králík.prototype.[[Prototype]]` na `Zvíře.prototype`. Jestliže tedy metoda není nalezena v `Králík.prototype`, JavaScript ji vezme ze `Zvíře.prototype`.
 
 ![](animal-rabbit-extends.svg)
 
-Například aby engine nalezl metodu `králík.běž`, prověří (na obrázku zdola nahoru):
+Například aby motor nalezl metodu `králík.běž`, prověří (na obrázku zdola nahoru):
 1. Objekt `králík` (nemá žádné `běž`).
 2. Jeho prototyp, tedy `Králík.prototype` (má `schovejSe`, ale ne `běž`).
-3. Jeho prototyp, což je (díky `extends`) `Zvíře.prototype`, který konečně má metodu `běž`.
+3. Jeho prototyp, což je (důsledkem `extends`) `Zvíře.prototype`, který konečně má metodu `běž`.
 
-Jak si můžeme pamatovat z kapitoly <info:native-prototypes>, samotný JavaScript používá prototypovou dědičnost pro vestavěné objekty. Například `Date.prototype.[[Prototype]]` je `Object.prototype`. To je důvod, proč mají data přístup k obecným objektovým metodám.
+Jak si můžeme pamatovat z kapitoly <info:native-prototypes>, samotný JavaScript používá prototypovou dědičnost pro vestavěné objekty. Například `Date.prototype.[[Prototype]]` je `Object.prototype`. Proto mají data přístup k obecným objektovým metodám.
 
 ````smart header="Za `extends` smí být jakýkoli výraz"
 Syntaxe třídy umožňuje za `extends` specifikovat nejenom třídu, ale jakýkoli výraz.
@@ -93,7 +93,7 @@ To může být užitečné pro pokročilé programovací vzory, když používá
 
 ## Přepisování metod
 
-Nyní se posuňme dál a přepišme metodu. Standardně se všechny metody, které nejsou uvedeny v `class Králík`, berou z `class Zvíře` rovnou tak, „jak jsou“.
+Nyní pojďme dál a přepišme metodu. Standardně se všechny metody, které nejsou uvedeny v `class Králík`, berou z `class Zvíře` rovnou beze změn.
 
 Jestliže však specifikujeme ve třídě `Králík` svou vlastní metodu, např. `stůj()`, bude místo toho použita ona:
 
@@ -108,7 +108,7 @@ class Králík extends Zvíře {
 
 Obvykle však nechceme rodičovskou metodu úplně nahradit, ale spíše na ní stavět, abychom její funkcionalitu vylepšili nebo rozšířili. Uděláme něco v naší metodě, ale v tomto procesu, před ním nebo po něm voláme rodičovskou metodu.
 
-Třídy pro tento účel poskytují klíčové slovo `„super“`.
+K tomuto účelu třídy poskytují klíčové slovo `„super“`.
 
 - `super.metoda(...)` volá rodičovskou metodu.
 - `super(...)` volá rodičovský konstruktor (pouze uvnitř našeho konstruktoru).
@@ -154,7 +154,7 @@ králík.běž(5); // Bílý králík běží rychlostí 5.
 králík.stůj(); // Bílý králík klidně stojí. Bílý králík se schovává!
 ```
 
-Nyní má `Králík` metodu `stůj`, která při provedení volá rodičovskou metodu `super.stůj()`.
+Nyní má `Králík` metodu `stůj`, která při provádění volá rodičovskou metodu `super.stůj()`.
 
 ````smart header="Šipkové funkce nemají `super`"
 Jak jsme zmínili v kapitole <info:arrow-functions>, šipkové funkce nemají `super`.
@@ -183,7 +183,7 @@ S konstruktory se to začíná trochu zamotávat.
 
 Až dosud `Králík` neměl svůj vlastní `constructor`.
 
-Podle [specifikace](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation), jestliže třída rozšiřuje jinou třídu a nemá `constructor`, vygeneruje se následující „prázdný“ `constructor`:
+Jestliže třída rozšiřuje jinou třídu a nemá `constructor`, podle [specifikace](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation) se vygeneruje následující „prázdný“ `constructor`:
 
 ```js
 class Králík extends Zvíře {
@@ -236,16 +236,16 @@ Stručná odpověď zní:
 
 ...Ale proč? Co se tady děje? Tento požadavek zajisté vypadá podivně.
 
-Samozřejmě vysvětlení existuje. Pojďme do detailů, abychom doopravdy pochopili, co se tady odehrává.
+Samozřejmě vysvětlení existuje. Pojďme do detailů, abyste doopravdy pochopili, co se tady odehrává.
 
-V JavaScriptu je rozdíl mezi konstruktorem zděděné třídy (tzv. „odvozeným konstruktorem“) a jinými funkcemi. Odvozený konstruktor má speciální interní vlastnost `[[ConstructorKind]]:"derived"`. To je speciální interní štítek.
+V JavaScriptu je rozdíl mezi konstruktorem zděděné třídy (tzv. „odvozeným konstruktorem“) a jinými funkcemi. Odvozený konstruktor má speciální interní vlastnost `[[ConstructorKind]]:"derived"`. To je speciální vnitřní štítek.
 
 Tato vlastnost ovlivňuje jeho chování s `new`.
 
 - Když je pomocí `new` volána obvyklá funkce, vytvoří prázdný objekt a přiřadí jej do `this`.
 - Ale když se spustí odvozený konstruktor, neudělá to. Očekává, že tuto práci odvede rodičovský konstruktor.
 
-Odvozený konstruktor tedy musí volat `super`, aby spustil svůj rodičovský (základní) konstruktor, jinak objekt pro `this` nebude vytvořen. A my dostaneme chybu.
+Odvozený konstruktor tedy musí volat `super`, aby spustil svůj rodičovský (základní, bázový) konstruktor, jinak objekt pro `this` nebude vytvořen a my dostaneme chybu.
 
 Aby konstruktor `Králík` fungoval, musí volat `super()` ještě před použitím `this`, například:
 
@@ -287,12 +287,12 @@ Tato poznámka předpokládá, že již máte s třídami určité zkušenosti, 
 
 Poskytuje lepší náhled do jazyka a rovněž vysvětluje chování, které může být zdrojem chyb (ale ne příliš často).
 
-Pokud shledáte obtížným jí porozumět, prostě ji přeskočte a pokračujte ve čtení. Pak se k ní vraťte někdy později.
+Pokud se vám bude zdát obtížné jí porozumět, prostě ji přeskočte a pokračujte ve čtení. Pak se k ní vraťte někdy později.
 ```
 
 Přepisovat můžeme nejen metody, ale i třídní pole.
 
-Nicméně když přistoupíme k přepsanému poli v rodičovském konstruktoru, je tady ošidné chování, poněkud odlišné od většiny ostatních programovacích jazyků.
+Nicméně když přistoupíme k přepsanému poli v rodičovském konstruktoru, nastane ošidné chování, poněkud odlišné od většiny ostatních programovacích jazyků.
 
 Uvažujme tento příklad:
 
@@ -361,40 +361,40 @@ A to je to, co přirozeně očekáváme. Když je v odvozené třídě volán ro
 Proč je zde tento rozdíl?
 
 Důvod spočívá v pořadí inicializace polí. Třídní pole je inicializováno:
-- Před konstruktorem rodičovské třídy (který nic nerozšiřuje),
-- ihned po `super()` pro odvozenou třídu.
+- v bázové třídě (která žádnou třídu nerozšiřuje) před konstruktorem,
+- v odvozené třídě ihned po `super()`.
 
 V našem případě je `Králík` odvozená třída. Není v ní žádný `constructor()`. Jak bylo dříve uvedeno, je to totéž, jako by tam byl prázdný konstruktor obsahující pouze `super(...argumenty)`.
 
-Takže `new Králík()` volá `super()`, tím spustí rodičovský konstruktor, a (podle pravidla pro odvozené třídy) jsou až poté inicializována jeho třídní pole. Ve chvíli spuštění rodičovského konstruktoru ještě neexistují žádná pole třídy `Králík`, takže se použijí pole třídy `Zvíře`.
+Takže `new Králík()` volá `super()`, tím spustí rodičovský konstruktor, a (podle pravidla pro odvozené třídy) jsou teprve poté inicializována jeho třídní pole. Ve chvíli spuštění rodičovského konstruktoru ještě neexistují žádná pole třídy `Králík`, takže se použijí pole třídy `Zvíře`.
 
-Tento jemný rozdíl mezi poli a metodami je specifický pro JavaScript.
+Tento drobný rozdíl mezi poli a metodami je specifický pro JavaScript.
 
 Naštěstí se toto chování projevuje jen tehdy, když je přepsané pole použito v rodičovském konstruktoru. Pak může být obtížné pochopit, co se děje, proto to tady vysvětlujeme.
 
 Kdyby to byl problém, můžeme ho opravit použitím metod nebo getterů/setterů namísto polí.
 
-## Super: interní mechanismy, [[HomeObject]]
+## Super: vnitřní mechanismy, [[HomeObject]]
 
 ```warn header="Pokročilá informace"
 Jestliže tento tutoriál čtete poprvé, můžete tuto část přeskočit.
 
-Hovoří o interních mechanismech v pozadí dědičnosti a `super`.
+Pojednává o vnitřních mechanismech v pozadí dědičnosti a `super`.
 ```
 
-Pronikněme trochu hlouběji pod kapuci `super`. Uvidíme tam zajímavé věci.
+Pronikněme trochu hlouběji pod povrch `super`. Uvidíme tam zajímavé věci.
 
 Nejprve je třeba říci, že podle všeho, čemu jsme se dosud naučili, je nemožné, aby `super` vůbec fungovalo!
 
-Ano, zajisté, zeptejme se sami sebe, jak by to mělo technicky fungovat? Když se spustí objektová metoda, dostane jako `this` aktuální objekt. Pokud pak zavoláme `super.metoda()`, engine musí získat metodu `metoda` z prototypu aktuálního objektu. Ale jak?
+Ano, zajisté, zeptejme se sami sebe, jak by to mělo technicky fungovat? Když se spustí objektová metoda, dostane jako `this` aktuální objekt. Pokud pak zavoláme `super.metoda()`, motor musí získat metodu `metoda` z prototypu aktuálního objektu. Ale jak?
 
-Tento úkol se může zdát jednoduchý, ale není. Engine zná aktuální objekt `this`, takže může získat rodičovskou metodu `metoda` jako `this.__proto__.metoda`. Naneštěstí takové „naivní“ řešení nebude fungovat.
+Tento úkol se může zdát jednoduchý, ale není. Motor zná aktuální objekt `this`, takže může získat rodičovskou metodu `metoda` jako `this.__proto__.metoda`. Naneštěstí takové „naivní“ řešení nebude fungovat.
 
 Demonstrujme si problém. Pro zjednodušení bez tříd, jen s použitím planých objektů.
 
-Pokud nechcete znát detaily, můžete tuto část přeskočit a pokračovat k podkapitole `[[HomeObject]]`. Neuškodí vám to. Nebo si ji přečtěte, pokud chcete porozumět věcem do hloubky.
+Pokud nechcete znát detaily, můžete tuto část přeskočit a pokračovat k podkapitole `[[HomeObject]]`. Neuškodí vám to. Pokud chcete porozumět věcem do hloubky, pokračujte ve čtení.
 
-V níže uvedeném příkladu `králík.__proto__ = zvíře`. Nyní to zkusme: v `králík.žer()` zavolejme `zvíře.žer()` pomocí `this.__proto__`:
+V následujícím příkladu `králík.__proto__ = zvíře`. Nyní to zkusme: v `králík.žer()` zavolejme `zvíře.žer()` pomocí `this.__proto__`:
 
 ```js run
 let zvíře = {
@@ -440,7 +440,7 @@ let králík = {
   }
 };
 
-let dlouhouchý = {
+let ušatý = {
   __proto__: králík,
   žer() {
     // ...uděláme něco s dlouhýma ušima a zavoláme metodu rodiče (králík)
@@ -449,36 +449,36 @@ let dlouhouchý = {
 };
 
 *!*
-dlouhouchý.žer(); // Chyba: Překročena maximální velikost zásobníku
+ušatý.žer(); // Chyba: Překročena maximální velikost zásobníku
 */!*
 ```
 
-Kód už nefunguje! Když se pokusíme zavolat `dlouhouchý.žer()`, uvidíme chybu.
+Kód už nefunguje! Když se pokusíme zavolat `ušatý.žer()`, uvidíme chybu.
 
-Nemusí to být tak zřejmé, ale když si projdeme volání `dlouhouchý.žer()`, uvidíme proč. Na obou řádcích `(*)` i `(**)` je hodnota `this` aktuální objekt (`dlouhouchý`). To je podstatné: všechny objektové metody dostanou jako `this` aktuální objekt, ne prototyp nebo něco jiného.
+Nemusí to být zcela zřejmé, ale když si projdeme volání `ušatý.žer()`, uvidíme proč. Na obou řádcích `(*)` i `(**)` je hodnota `this` aktuální objekt (`ušatý`). To je podstatné: všechny objektové metody dostanou jako `this` aktuální objekt, ne prototyp nebo něco jiného.
 
 Na obou řádcích `(*)` a `(**)` je tedy hodnota `this.__proto__` naprosto stejná: `králík`. Oba volají `králík.žer` v nekonečné smyčce, aniž by v řetězci postoupily výš.
 
-Zde je obrázek toho, co se stane:
+Na obrázku je vidět, co se stane:
 
 ![](this-super-loop.svg)
 
-1. Uvnitř `dlouhouchý.žer()` řádek `(**)` volá `králík.žer` a poskytne mu `this=dlouhouchý`.
+1. Uvnitř `ušatý.žer()` řádek `(**)` volá `králík.žer` a poskytne mu `this=ušatý`.
     ```js
-    // uvnitř dlouhouchý.žer() máme this = dlouhouchý
+    // uvnitř ušatý.žer() máme this = ušatý
     this.__proto__.žer.call(this) // (**)
     // se promění na
-    dlouhouchý.__proto__.žer.call(this)
+    ušatý.__proto__.žer.call(this)
     // to je
     králík.žer.call(this);
     ```
-2. Pak na řádku `(*)` metody `králík.žer` bychom rádi předali volání v řetězci ještě výš, ale `this=dlouhouchý`, takže `this.__proto__.žer` je opět `králík.žer`!
+2. Pak na řádku `(*)` metody `králík.žer` bychom rádi předali volání v řetězci ještě výš, ale `this=ušatý`, takže `this.__proto__.žer` je opět `králík.žer`!
 
     ```js
-    // uvnitř králík.žer() máme rovněž this = dlouhouchý
+    // uvnitř králík.žer() máme rovněž this = ušatý
     this.__proto__.žer.call(this) // (*)
     // se promění na
-    dlouhouchý.__proto__.žer.call(this)
+    ušatý.__proto__.žer.call(this)
     // neboli (opět)
     králík.žer.call(this);
     ```
@@ -489,7 +489,7 @@ Tento problém nelze vyřešit pouze pomocí `this`.
 
 ### `[[HomeObject]]`
 
-Aby JavaScript poskytl řešení, přidává navíc jednu speciální vlastnost pro funkce: `[[HomeObject]]`.
+Aby JavaScript poskytl řešení, přidává navíc jednu speciální interní vlastnost funkcí: `[[HomeObject]]`.
 
 Když je funkce specifikována jako metoda třídy nebo objektu, tento objekt se stane hodnotou její vlastnosti `[[HomeObject]]`.
 
@@ -513,31 +513,31 @@ let králík = {
   }
 };
 
-let dlouhouchý = {
+let ušatý = {
   __proto__: králík,
-  jméno: "Dlouhé ucho",
-  žer() {         // dlouhouchý.žer.[[HomeObject]] == dlouhouchý
+  jméno: "Ušoun",
+  žer() {         // ušatý.žer.[[HomeObject]] == ušatý
     super.žer();
   }
 };
 
 *!*
 // funguje správně
-dlouhouchý.žer();  // Dlouhé ucho žere.
+ušatý.žer();  // Ušoun žere.
 */!*
 ```
 
-Díky mechanice `[[HomeObject]]` to funguje tak, jak jsme zamýšleli. Metoda, např. `dlouhouchý.žer`, zná svůj `[[HomeObject]]` a převezme rodičovskou metodu z jeho prototypu. Bez jakéhokoli použití `this`.
+Díky mechanice `[[HomeObject]]` to funguje tak, jak jsme zamýšleli. Metoda, např. `ušatý.žer`, zná svůj `[[HomeObject]]` a převezme rodičovskou metodu z jeho prototypu. Bez jakéhokoli použití `this`.
 
 ### Metody nejsou „volné“
 
 Jak již víme, funkce jsou v JavaScriptu obecně „volné“, nevázané k objektům. Mohou tedy být kopírovány mezi objekty a volány s jiným `this`.
 
-Pouhá existence `[[HomeObject]]` však tento princip porušuje, jelikož metody si pamatují své objekty. `[[HomeObject]]` nemůže být změněn, takže tato vazba je trvalá.
+Samotná existence `[[HomeObject]]` však tento princip porušuje, jelikož metody si pamatují své objekty. `[[HomeObject]]` nemůže být změněn, takže tato vazba je trvalá.
 
-Jediné místo v jazyce, kde je `[[HomeObject]]` používán, je `super`. Jestliže tedy metoda nepoužívá `super`, můžeme ji stále považovat za volnou a kopírovat ji mezi objekty. Avšak se `super` se věci mohou pokazit.
+Jediné místo v jazyce, kde je `[[HomeObject]]` používán, je `super`. Jestliže tedy metoda nepoužívá `super`, můžeme ji stále považovat za volnou a kopírovat ji mezi objekty. Ale se `super` se to může pokazit.
 
-Zde je příklad špatného výsledku `super` po kopírování:
+Následuje příklad špatného výsledku `super` po kopírování:
 
 ```js run
 let zvíře = {
@@ -573,14 +573,14 @@ strom.řekniAhoj();  // Jsem zvíře (?!?)
 */!*
 ```
 
-Volání `strom.řekniAhoj()` zobrazí „Jsem zvíře“. Rozhodně špatně.
+Volání `strom.řekniAhoj()` zobrazí „Jsem zvíře“. To je rozhodně špatně.
 
 Důvod je prostý:
 - Na řádku `(*)` je metoda `strom.řekniAhoj` zkopírována z objektu `králík`. Možná jsme se chtěli zdržet zdvojení kódu?
 - Její `[[HomeObject]]` je `králík`, protože byla vytvořena v objektu `králík`. Není žádný způsob, jak `[[HomeObject]]` změnit.
-- Kód metody `strom.řekniAhoj()` má uvnitř `super.řekniAhoj()`. Ten jde nahoru od objektu `králík` a přebírá tuto metodu z objektu `zvíře`.
+- Uvnitř kódu metody `strom.řekniAhoj()` je obsaženo `super.řekniAhoj()`. Toto volání postupuje nahoru od objektu `králík` a přebere tuto metodu z objektu `zvíře`.
 
-Zde je diagram toho, co se stane:
+Na diagramu je vidět, co se stane:
 
 ![](super-homeobject-wrong.svg)
 
@@ -590,11 +590,11 @@ Zde je diagram toho, co se stane:
 
 Rozdíl pro nás nemusí být důležitý, ale pro JavaScript je podstatný.
 
-V níže uvedeném příkladu se pro porovnání používá syntaxe bez metod. Vlastnost `[[HomeObject]]` se nenastaví a dědičnost nefunguje:
+Pro srovnání v následujícím příkladu použijeme syntaxi bez metod. Vlastnost `[[HomeObject]]` se nenastaví a dědičnost nefunguje:
 
 ```js run
 let zvíře = {
-  žer: function() { // úmyslně píšeme toto namísto žer() {...
+  žer: function() { // toto píšeme úmyslně namísto žer() {...
     // ...
   }
 };
@@ -613,14 +613,14 @@ králík.žer();  // Chyba při volání super (protože není žádný [[HomeOb
 
 ## Shrnutí
 
-1. Pro rozšíření třídy: `class Potomek extends Rodič`:
-    - To znamená, že `Potomek.prototype.__proto__` bude `Rodič.prototype`, takže metody budou zděděny.
+1. Pro rozšíření třídy: `class Dítě extends Rodič`:
+    - To znamená, že `Dítě.prototype.__proto__` bude `Rodič.prototype`, takže metody budou zděděny.
 2. Když přepisujeme konstruktor:
-    - V konstruktoru třídy `Potomek` musíme před použitím `this` zavolat rodičovský konstruktor pomocí `super()`.
+    - V konstruktoru třídy `Dítě` musíme před použitím `this` zavolat rodičovský konstruktor pomocí `super()`.
 3. Když přepisujeme jinou metodu:
-    - V metodě třídy `Potomek` můžeme pomocí `super.metoda()` volat metodu třídy `Rodič`.
-4. Interní záležitosti:
-    - Metody si pamatují svou třídu/objekt v interní vlastnosti `[[HomeObject]]`. Tímto způsobem `super` vyhodnocuje rodičovské metody.
+    - V metodě třídy `Dítě` můžeme pomocí `super.metoda()` volat metodu třídy `Rodič`.
+4. Vnitřní záležitosti:
+    - Metody si pamatují svou třídu nebo objekt v interní vlastnosti `[[HomeObject]]`. Tímto způsobem `super` vyhodnocuje rodičovské metody.
     - Není tedy bezpečné kopírovat metodu obsahující `super` z jednoho objektu do jiného.
 
 Navíc:

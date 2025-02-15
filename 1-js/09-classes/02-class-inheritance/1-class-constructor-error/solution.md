@@ -1,4 +1,4 @@
-Je to proto, že konstruktor potomka musí volat `super()`.
+Je to proto, že konstruktor dítěte musí volat `super()`.
 
 Zde je opravený kód:
 

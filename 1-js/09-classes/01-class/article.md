@@ -2,12 +2,12 @@
 # Základní syntaxe tříd
 
 ```quote author="Wikipedie (anglická verze)"
-V objektově orientovaném programování je *třída* rozšiřitelná šablona v programovém kódu pro vytváření objektů, která poskytuje počáteční hodnoty stavu (členské proměnné) a implementaci chování (členské funkce nebo metody).
+V objektově orientovaném programování je *třída* rozšiřitelná šablona v programovém kódu pro vytváření objektů, která poskytuje počáteční hodnoty svého stavu (členské proměnné) a implementaci chování (členské funkce nebo metody).
 ```
 
 V praxi často potřebujeme vytvořit více objektů stejného druhu, např. uživatele, zboží nebo cokoli jiného.
 
-Jak již víme z kapitoly <info:constructor-new>, může nám v tom pomocí `new function`.
+Jak již víme z kapitoly <info:constructor-new>, může nám v tom pomoci `new function`.
 
 V moderním JavaScriptu však existuje pokročilejší konstrukce nazvaná „třída“, která zavádí vynikající nové prvky, užitečné pro objektově orientované programování.
 
@@ -25,9 +25,9 @@ class MojeTřída {
 }
 ```
 
-Pak použitím `new MojeTřída()` vytvoříte nový objekt se všemi uvedenými metodami.
+Pak použitím `new MojeTřída()` vytvoříme nový objekt se všemi uvedenými metodami.
 
-Metoda `constructor()` je při `new` volána automaticky, takže v ní můžeme objekt inicializovat.
+Při `new` je automaticky volána metoda `constructor()`, takže v ní můžeme objekt inicializovat.
 
 Například:
 
@@ -84,7 +84,7 @@ alert(typeof Uživatel); // function
 */!*
 ```
 
-To, co ve skutečnosti provede konstrukce `class Uživatel {...}`, je:
+Konstrukt `class Uživatel {...}` ve skutečnosti provede následující:
 
 1. Vytvoří funkci jménem `Uživatel`, která se stane výslednou hodnotou deklarace třídy. Kód této funkce se převezme z metody `constructor` (pokud takovou metodu nenapíšeme, předpokládá se, že je prázdný).
 2. Uloží do `Uživatel.prototype` třídní metody, např. `řekniAhoj`.
@@ -95,7 +95,7 @@ Výsledek deklarace `class Uživatel` můžeme ilustrovat jako:
 
 ![](class-user.svg)
 
-Zde je kód, na kterém to můžeme vidět:
+Můžeme to vidět na tomto kódu:
 
 ```js run
 class Uživatel {
@@ -118,7 +118,7 @@ alert(Object.getOwnPropertyNames(Uživatel.prototype)); // constructor, řekniAh
 
 ## Není to jen syntaktický cukr
 
-Někdy lidé říkají, že `class` je „syntaktický cukr“ (syntaxe, která je navržena k tomu, aby byl kód snáze čitelný, ale nezavádí nic nového), protože ve skutečnosti můžeme totéž deklarovat i bez klíčového slova `class`:
+Někdy se říká, že `class` je „syntaktický cukr“ (syntaxe, která je navržena k tomu, aby byl kód snáze čitelný, ale nezavádí nic nového), protože ve skutečnosti můžeme totéž deklarovat i bez klíčového slova `class`:
 
 ```js run
 // přepíšeme třídu Uživatel do čistých funkcí
@@ -146,7 +146,7 @@ Jsou zde však důležité rozdíly.
 
 1. Za prvé, funkce vytvořená pomocí `class` obsahuje speciální vnitřní vlastnost `[[IsClassConstructor]]: true`. Není tedy přesně stejná, jako kdyby byla vytvořena ručně.
 
-    Jazyk si tuto vlastnost ověřuje na různých místech. Například na rozdíl od běžné funkce musí být volána pomocí `new`:
+    Jazyk si tuto vlastnost ověřuje na různých místech. Například třída, na rozdíl od běžné funkce, musí být volána pomocí `new`:
 
     ```js run
     class Uživatel {
@@ -157,7 +157,7 @@ Jsou zde však důležité rozdíly.
     Uživatel(); // Chyba: Konstruktor třídy Uživatel nesmí být volán bez 'new'
     ```
 
-    Kromě toho řetězcová reprezentace třídního konstruktoru ve většině enginů JavaScriptu začíná „class...“
+    Kromě toho řetězcová reprezentace třídního konstruktoru ve většině motorů JavaScriptu začíná „class...“
 
     ```js run
     class Uživatel {
@@ -174,13 +174,13 @@ Jsou zde však důležité rozdíly.
     To je dobře, protože když provádíme `for..in` nad objektem, nechceme zpravidla jeho třídní metody.
 
 3. Třídy vždy mají `use strict`.
-    Veškerý kód uvnitř konstrukce třídy je automaticky ve striktním režimu.
+    Veškerý kód uvnitř konstruktu třídy je automaticky ve striktním režimu.
 
 Kromě toho syntaxe `class` přináší mnoho dalších prvků, které probereme později.
 
 ## Třídní výraz
 
-Stejně jako funkce mohou i třídy být definovány uvnitř jiného výrazu, předávány, vraceny, přiřazovány atd.
+Stejně jako funkce mohou i třídy být definovány uvnitř jiného výrazu, předávány, vraceny, přiřazovány a podobně.
 
 Zde je příklad třídního výrazu:
 
@@ -229,9 +229,9 @@ new Uživatel().řekniAhoj(); // Ahoj
 ```
 
 
-## Gettery/settery
+## Gettery a settery
 
-Stejně jako literální objekty mohou třídy obsahovat gettery/settery, vypočítávané vlastnosti a podobně.
+Stejně jako literální objekty mohou třídy obsahovat gettery a settery, vypočítávané vlastnosti a podobně.
 
 Zde je příklad vlastnosti `uživatel.jméno` implementované pomocí `get/set`:
 
@@ -252,7 +252,7 @@ class Uživatel {
 *!*
   set jméno(hodnota) {
 */!*
-    if (hodnota.length < 3) {
+    if (hodnota.length < 4) {
       alert("Jméno je příliš krátké.");
       return;
     }
@@ -261,8 +261,8 @@ class Uživatel {
 
 }
 
-let uživatel = new Uživatel("Jan");
-alert(uživatel.jméno); // Jan
+let uživatel = new Uživatel("Petr");
+alert(uživatel.jméno); // Petr
 
 uživatel = new Uživatel(""); // Jméno je příliš krátké.
 ```
@@ -287,19 +287,19 @@ class Uživatel {
 new Uživatel().řekniAhoj();
 ```
 
-Takové vlastnosti se snadno pamatují, neboť připomínají vlastnosti literálních objektů.
+Takové prvky tříd si snadno zapamatujeme, neboť připomínají prvky literálních objektů.
 
 ## Třídní pole
 
-```warn header="Staré prohlížeče mohou potřebovat polyfill"
+```warn header="Staré prohlížeče možná budou potřebovat polyfill"
 Třídní pole byla do jazyka přidána teprve nedávno.
 ```
 
 Dosud naše třídy obsahovaly pouze metody.
 
-„Třídní pole“ je syntaxe, která umožňuje přidávat libovolné vlastnosti.
+Syntaxe, která umožňuje přidávat libovolné vlastnosti, se nazývá „třídní pole“.
 
-Například přidáme vlastnost `jméno` do třídy `class Uživatel`:
+Například přidáme vlastnost `jméno` do třídy `Uživatel`:
 
 ```js run
 class Uživatel {
@@ -317,7 +317,7 @@ new Uživatel().řekniAhoj(); // Ahoj, Jan!
 
 Zapíšeme do deklarace jednoduše `<název vlastnosti> = <hodnota>` a to je vše.
 
-Důležitý rozdíl třídních polí spočívá v tom, že se nastavují na jednotlivých objektech, ne na `Uživatel.prototype`:
+Důležitý rozdíl třídních polí oproti metodám spočívá v tom, že se nastavují na jednotlivých objektech, ne na `Uživatel.prototype`:
 
 ```js run
 class Uživatel {
@@ -373,12 +373,12 @@ setTimeout(tlačítko.stiskni, 1000); // undefined
 
 Tento problém se nazývá „ztráta `this`“.
 
-Jak jsme probrali v kapitole <info:bind>, existují dva přístupy, jak jej opravit:
+Jak jsme probrali v kapitole <info:bind>, existují dva způsoby, jak jej opravit:
 
-1. Předat wrapperovou funkci, například `setTimeout(() => tlačítko.stiskni(), 1000)`.
+1. Předat obalovou funkci, například `setTimeout(() => tlačítko.stiskni(), 1000)`.
 2. Navázat metodu na objekt, např. v konstruktoru.
 
-Třídní pole poskytují další, docela elegantní syntaxi:
+Třídní pole poskytují další, vcelku elegantní syntaxi:
 
 ```js run
 class Tlačítko {
@@ -397,9 +397,9 @@ let tlačítko = new Tlačítko("ahoj");
 setTimeout(tlačítko.stiskni, 1000); // ahoj
 ```
 
-Třídní pole `stiskni = () => {...}` se vytvoří pro každý objekt zvlášť, je v něm samostatná funkce pro každý objekt `Tlačítko` a `this` uvnitř ní se odkazuje na tento objekt. Můžeme předávat `tlačítko.stiskni` kamkoli a hodnota `this` bude vždy správná.
+Třídní pole `stiskni = () => {...}` se vytvoří pro každý objekt zvlášť, pro každý objekt `Tlačítko` v něm je samostatná funkce a `this` uvnitř ní se odkazuje na tento objekt. Můžeme předávat `tlačítko.stiskni` kamkoli a hodnota `this` bude vždy správná.
 
-Obzvláště užitečné je to v prohlížečových prostředích u listenerů událostí.
+Obzvláště užitečné je to v prohlížečových prostředích u posluchačů událostí.
 
 ## Shrnutí
 
@@ -425,4 +425,4 @@ class MojeTřída {
 
 Technicky je `MojeTřída` funkce (ta, kterou poskytneme jako `constructor`), zatímco metody, gettery a settery se zapisují do prototypu `MojeTřída.prototype`.
 
-V dalších kapitolách se o třídách naučíme víc, včetně dědičnosti a jiných prvků.
+V dalších kapitolách se o třídách naučíme další věci, včetně dědičnosti a jiných prvků.

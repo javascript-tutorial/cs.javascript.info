@@ -467,7 +467,7 @@ proto-animal-rabbit-chain.svg:
   'walk: function': 'jdi: function'
   'rabbit': 'králík'
   'jumps: true': 'skáče: true'
-  'longEar': 'dlouhouchý'
+  'longEar': 'ušatý'
   'earLength': 'délkaUcha'
   
 proto-animal-rabbit-walk-2.svg:
@@ -495,7 +495,7 @@ this-super-loop.svg:
   'rabbit': 'králík'
   'animal': 'zvíře'
   'eat': 'žer'
-  'longEar': 'dlouhouchý'
+  'longEar': 'ušatý'
   'let rabbit = {': 'let králík = {'
   '  __proto__: animal': '  __proto__: zvíře'
   '  __proto__: rabbit': '  __proto__: králík'
