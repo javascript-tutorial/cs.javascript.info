@@ -4,7 +4,7 @@ importance: 3
 
 # Třída rozšiřuje Object?
 
-Jak víme, všechny objekty běžně dědí z `Object.prototype` a získávají přístup ke „generickým“ objektovým metodám jako `hasOwnProperty` atd.
+Jak víme, všechny objekty běžně dědí z `Object.prototype` a získávají přístup k „obecným“ objektovým metodám jako `hasOwnProperty` a podobně.
 
 Například:
 

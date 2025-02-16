@@ -17,7 +17,7 @@ class Uživatel {
 Uživatel.statickáMetoda(); // true
 ```
 
-To ve skutečnosti udělá totéž, jako kdybychom ji přímo přiřadili jako vlastnost:
+To ve skutečnosti udělá totéž, jako kdybychom tuto metodu přímo přiřadili jako vlastnost:
 
 ```js run
 class Uživatel { }
@@ -101,7 +101,7 @@ alert( článek.titulek ); // Dnešní přehled
 
 Nyní pokaždé, když budeme potřebovat vytvořit dnešní přehled, můžeme volat `Článek.vytvořDnešní()`. Opět to není metoda článku, ale metoda celé třídy.
 
-Statické metody se také používají ve třídách vztažených k databázím pro hledání/ukládání/odstraňování záznamů z databáze, například:
+Statické metody se také používají ve třídách vztahujících se k databázím pro hledání, ukládání a odstraňování záznamů z databáze, například:
 
 ```js
 // předpokládejme, že Článek je speciální třída pro práci s články
@@ -112,7 +112,7 @@ Statické metody se také používají ve třídách vztažených k databázím 
 ````warn header="Statické metody nejsou dostupné pro jednotlivé objekty"
 Statické metody lze volat na třídách, ale ne na jednotlivých objektech.
 
-Například tento kód nebude fungovat:
+Nebude fungovat například tento kód:
 
 ```js
 // ...
@@ -124,7 +124,7 @@ Například tento kód nebude fungovat:
 
 [recent browser=Chrome]
 
-Statické vlastnosti jsou rovněž možné. Vypadají jako regulérní třídní vlastnosti, ale jsou předznamenány `static`:
+Můžeme vytvářet i statické vlastnosti. Vypadají jako regulérní třídní vlastnosti, ale jsou předznamenány `static`:
 
 ```js run
 class Článek {
@@ -144,7 +144,7 @@ To je totéž jako přímé přiřazení do třídy `Článek`:
 
 Statické vlastnosti a metody se dědí.
 
-Například `Zvíře.porovnej` a `Zvíře.planeta` v níže uvedeném kódu se dědí a jsou dostupné jako `Králík.porovnej` a `Králík.planeta`:
+Například `Zvíře.porovnej` a `Zvíře.planeta` v následujícím kódu budou zděděny a budou dostupné jako `Králík.porovnej` a `Králík.planeta`:
 
 ```js run
 class Zvíře {
@@ -191,11 +191,11 @@ alert(Králík.planeta); // Země
 
 Když nyní zavoláme `Králík.porovnej`, bude volána zděděná metoda `Zvíře.porovnej`.
 
-Jak to funguje? Opět pomocí prototypů. Jak jste už možná uhádli, `extends` dává třídě `Králík` do `[[Prototype]]` odkaz na `Zvíře`.
+Jak to funguje? Opět pomocí prototypů. Jak jste už možná uhádli, `extends` vloží třídě `Králík` do `[[Prototype]]` odkaz na třídu `Zvíře`.
 
 ![](animal-rabbit-static.svg)
 
-Takže `Králík extends Zvíře` vytvoří dva odkazy `[[Prototype]]`:
+`Králík extends Zvíře` tedy vytvoří dva odkazy `[[Prototype]]`:
 
 1. Funkce `Králík` je prototypově zděděna z funkce `Zvíře`.
 2. `Králík.prototype` je prototypově zděděn ze `Zvíře.prototype`.
@@ -223,7 +223,7 @@ Například metoda pro porovnání `Článek.porovnej(článek1, článek2)` neb
 
 V deklaraci třídy jsou označeny klíčovým slovem `static`.
 
-Statické vlastnosti používáme tehdy, když chceme uložit data na úrovni třídy, rovněž nesvázané s instancí.
+Statické vlastnosti používáme tehdy, když chceme uložit data na úrovni třídy, rovněž nespojená s žádnou instancí.
 
 Syntaxe je:
 
@@ -246,4 +246,4 @@ MojeTřída.metoda = ...
 
 Statické vlastnosti a metody se dědí.
 
-Pro `class B extends A` prototyp samotné třídy `B` ukazuje na `A`: `B.[[Prototype]] = A`. Jestliže se tedy pole nenajde v `B`, hledání bude pokračovat v `A`.
+Pro `class B extends A` prototyp samotné třídy `B` ukazuje na třídu `A`: `B.[[Prototype]] = A`. Jestliže se tedy pole nenajde v `B`, hledání bude pokračovat v `A`.

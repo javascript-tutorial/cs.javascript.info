@@ -1,6 +1,6 @@
 Nejprve se podívejme, proč poslední uvedený kód nefunguje.
 
-Důvod bude zřejmý, když se ho pokusíme spustit. Konstruktor zděděné třídy musí volat `super()`, jinak `„this“` nebude „definováno“.
+Důvod bude zřejmý, když se ho pokusíme spustit. Konstruktor zděděné třídy musí volat `super()`, jinak nebude „definováno“ `„this“`.
 
 Zde je tedy oprava:
 
@@ -25,7 +25,7 @@ I po této opravě bude stále existovat důležitý rozdíl mezi `„class Krá
 
 Jak víme, syntaxe „extends“ nastavuje dva prototypy:
 
-1. Mezi `„prototype“` konstruktorů (pro metody).
+1. Mezi `"prototype"` konstruktorů (pro metody).
 2. Mezi samotnými konstruktory (pro statické metody).
 
 V případě `class Králík extends Object` to znamená:
@@ -50,14 +50,14 @@ alert ( Králík.getOwnPropertyNames({a: 1, b: 2})); // a,b
 
 Jestliže však nemáme `extends Object`, pak se `Králík.__proto__` nenastaví na `Object`.
 
-Zde je demo:
+Zde je ukázka:
 
 ```js run
 class Králík {}
 
 alert( Králík.prototype.__proto__ === Object.prototype ); // (1) true
 alert( Králík.__proto__ === Object ); // (2) false (!)
-alert( Králík.__proto__ === Function.prototype ); // jako defaultně kterákoli funkce
+alert( Králík.__proto__ === Function.prototype ); // jako standardně kterákoli funkce
 
 *!*
 // chyba, ve třídě Králík taková funkce není
