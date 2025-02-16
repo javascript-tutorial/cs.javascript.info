@@ -2,41 +2,41 @@ importance: 3
 
 ---
 
-# Class extends Object?
+# Třída rozšiřuje Object?
 
-As we know, all objects normally inherit from `Object.prototype` and get access to "generic" object methods like `hasOwnProperty` etc.
+Jak víme, všechny objekty běžně dědí z `Object.prototype` a získávají přístup k „obecným“ objektovým metodám jako `hasOwnProperty` a podobně.
 
-For instance:
+Například:
 
 ```js run
-class Rabbit {
-  constructor(name) {
-    this.name = name;
+class Králík {
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 
-let rabbit = new Rabbit("Rab");
+let králík = new Králík("Bobek");
 
 *!*
-// hasOwnProperty method is from Object.prototype
-alert( rabbit.hasOwnProperty('name') ); // true
+// metoda hasOwnProperty je z Object.prototype
+alert( králík.hasOwnProperty('jméno') ); // true
 */!*
 ```
 
-But if we spell it out explicitly like `"class Rabbit extends Object"`, then the result would be different from a simple `"class Rabbit"`?
+Pokud však výslovně uvedeme `„class Králík extends Object“`, bude se výsledek lišit od prostého `„class Králík“`?
 
-What's the difference?
+Jaký je rozdíl?
 
-Here's an example of such code (it doesn't work -- why? fix it?):
+Zde je příklad takového kódu (nefunguje -- proč? opravte ho):
 
 ```js
-class Rabbit extends Object {
-  constructor(name) {
-    this.name = name;
+class Králík extends Object {
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 
-let rabbit = new Rabbit("Rab");
+let králík = new Králík("Bobek");
 
-alert( rabbit.hasOwnProperty('name') ); // Error
+alert( králík.hasOwnProperty('jméno') ); // Chyba
 ```

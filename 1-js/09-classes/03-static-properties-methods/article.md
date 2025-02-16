@@ -1,249 +1,249 @@
 
-# Static properties and methods
+# Statické vlastnosti a metody
 
-We can also assign a method to the class as a whole. Such methods are called *static*.
+Metodu můžeme také přiřadit samotné třídě jako celku. Takové metody se nazývají *statické*.
 
-In a class declaration, they are prepended by `static` keyword, like this:
+V deklaraci třídy jsou předznamenány klíčovým slovem `static`, například:
 
 ```js run
-class User {
+class Uživatel {
 *!*
-  static staticMethod() {
+  static statickáMetoda() {
 */!*
-    alert(this === User);
+    alert(this === Uživatel);
   }
 }
 
-User.staticMethod(); // true
+Uživatel.statickáMetoda(); // true
 ```
 
-That actually does the same as assigning it as a property directly:
+To ve skutečnosti udělá totéž, jako kdybychom tuto metodu přímo přiřadili jako vlastnost:
 
 ```js run
-class User { }
+class Uživatel { }
 
-User.staticMethod = function() {
-  alert(this === User);
+Uživatel.statickáMetoda = function() {
+  alert(this === Uživatel);
 };
 
-User.staticMethod(); // true
+Uživatel.statickáMetoda(); // true
 ```
 
-The value of `this` in `User.staticMethod()` call is the class constructor `User` itself (the "object before dot" rule).
+Hodnota `this` ve volání `Uživatel.statickáMetoda()` je samotný třídní konstruktor `Uživatel` (podle pravidla „objekt před tečkou“).
 
-Usually, static methods are used to implement functions that belong to the class as a whole, but not to any particular object of it.
+Statické metody se obvykle používají k implementaci funkcí, které patří třídě jako celku, ale nepatří žádnému jejímu konkrétnímu objektu.
 
-For instance, we have `Article` objects and need a function to compare them.
+Například máme objekty třídy `Článek` a potřebujeme funkci, která je bude porovnávat.
 
-A natural solution would be to add `Article.compare` static method:
+Přirozené řešení by bylo přidat statickou metodu `Článek.porovnej`:
 
 ```js run
-class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
+class Článek {
+  constructor(titulek, datum) {
+    this.titulek = titulek;
+    this.datum = datum;
   }
 
 *!*
-  static compare(articleA, articleB) {
-    return articleA.date - articleB.date;
+  static porovnej(článekA, článekB) {
+    return článekA.datum - článekB.datum;
   }
 */!*
 }
 
-// usage
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JavaScript", new Date(2019, 11, 1))
+// použití
+let články = [
+  new Článek("HTML", new Date(2019, 1, 1)),
+  new Článek("CSS", new Date(2019, 0, 1)),
+  new Článek("JavaScript", new Date(2019, 11, 1))
 ];
 
 *!*
-articles.sort(Article.compare);
+články.sort(Článek.porovnej);
 */!*
 
-alert( articles[0].title ); // CSS
+alert( články[0].titulek ); // CSS
 ```
 
-Here `Article.compare` method stands "above" articles, as a means to compare them. It's not a method of an article, but rather of the whole class.
+Zde metoda `Článek.porovnej` stojí „nad“ články jako způsob jejich porovnávání. Není to metoda článku, ale metoda celé třídy.
 
-Another example would be a so-called "factory" method.
+Jiným příkladem může být tzv. „tovární“ metoda.
 
-Let's say, we need multiple ways to create an article:
+Dejme tomu, že potřebujeme více způsobů, jak vytvořit článek:
 
-1. Create by given parameters (`title`, `date` etc).
-2. Create an empty article with today's date.
-3. ...or else somehow.
+1. Vytvořit jej ze zadaných parametrů (`titulek`, `datum` atd.).
+2. Vytvořit prázdný článek s dnešním datem.
+3. ...nebo nějak jinak.
 
-The first way can be implemented by the constructor. And for the second one we can make a static method of the class.
+První způsob můžeme implementovat konstruktorem. A pro druhý můžeme vytvořit statickou metodu třídy.
 
-Such as `Article.createTodays()` here:
+Například `Článek.vytvořDnešní()` zde:
 
 ```js run
-class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
+class Článek {
+  constructor(titulek, datum) {
+    this.titulek = titulek;
+    this.datum = datum;
   }
 
 *!*
-  static createTodays() {
-    // remember, this = Article
-    return new this("Today's digest", new Date());
+  static vytvořDnešní() {
+    // pamatujte, že this = Článek
+    return new this("Dnešní přehled", new Date());
   }
 */!*
 }
 
-let article = Article.createTodays();
+let článek = Článek.vytvořDnešní();
 
-alert( article.title ); // Today's digest
+alert( článek.titulek ); // Dnešní přehled
 ```
 
-Now every time we need to create a today's digest, we can call `Article.createTodays()`. Once again, that's not a method of an article, but a method of the whole class.
+Nyní pokaždé, když budeme potřebovat vytvořit dnešní přehled, můžeme volat `Článek.vytvořDnešní()`. Opět to není metoda článku, ale metoda celé třídy.
 
-Static methods are also used in database-related classes to search/save/remove entries from the database, like this:
+Statické metody se také používají ve třídách vztahujících se k databázím pro hledání, ukládání a odstraňování záznamů z databáze, například:
 
 ```js
-// assuming Article is a special class for managing articles
-// static method to remove the article by id:
-Article.remove({id: 12345});
+// předpokládejme, že Článek je speciální třída pro práci s články
+// statická metoda pro odstranění článku podle jeho id:
+Článek.odstraň({id: 12345});
 ```
 
-````warn header="Static methods aren't available for individual objects"
-Static methods are callable on classes, not on individual objects.
+````warn header="Statické metody nejsou dostupné pro jednotlivé objekty"
+Statické metody lze volat na třídách, ale ne na jednotlivých objektech.
 
-E.g. such code won't work:
+Nebude fungovat například tento kód:
 
 ```js
 // ...
-article.createTodays(); /// Error: article.createTodays is not a function
+článek.vytvořDnešní(); /// Chyba: článek.vytvořDnešní není funkce
 ```
 ````
 
-## Static properties
+## Statické vlastnosti
 
 [recent browser=Chrome]
 
-Static properties are also possible, they look like regular class properties, but prepended by `static`:
+Můžeme vytvářet i statické vlastnosti. Vypadají jako regulérní třídní vlastnosti, ale jsou předznamenány `static`:
 
 ```js run
-class Article {
-  static publisher = "Ilya Kantor";
+class Článek {
+  static vydavatel = "Ilja Kantor";
 }
 
-alert( Article.publisher ); // Ilya Kantor
+alert( Článek.vydavatel ); // Ilja Kantor
 ```
 
-That is the same as a direct assignment to `Article`:
+To je totéž jako přímé přiřazení do třídy `Článek`:
 
 ```js
-Article.publisher = "Ilya Kantor";
+Článek.vydavatel = "Ilja Kantor";
 ```
 
-## Inheritance of static properties and methods [#statics-and-inheritance]
+## Dědičnost statických vlastností a metod [#statics-and-inheritance]
 
-Static properties and methods are inherited.
+Statické vlastnosti a metody se dědí.
 
-For instance, `Animal.compare` and `Animal.planet` in the code below are inherited and accessible as `Rabbit.compare` and `Rabbit.planet`:
+Například `Zvíře.porovnej` a `Zvíře.planeta` v následujícím kódu budou zděděny a budou dostupné jako `Králík.porovnej` a `Králík.planeta`:
 
 ```js run
-class Animal {
-  static planet = "Earth";
+class Zvíře {
+  static planeta = "Země";
 
-  constructor(name, speed) {
-    this.speed = speed;
-    this.name = name;
+  constructor(jméno, rychlost) {
+    this.rychlost = rychlost;
+    this.jméno = jméno;
   }
 
-  run(speed = 0) {
-    this.speed += speed;
-    alert(`${this.name} runs with speed ${this.speed}.`);
+  běž(rychlost = 0) {
+    this.rychlost += rychlost;
+    alert(`${this.jméno} běží rychlostí ${this.rychlost}.`);
   }
 
 *!*
-  static compare(animalA, animalB) {
-    return animalA.speed - animalB.speed;
+  static porovnej(zvířeA, zvířeB) {
+    return zvířeA.rychlost - zvířeB.rychlost;
   }
 */!*
 
 }
 
-// Inherit from Animal
-class Rabbit extends Animal {
-  hide() {
-    alert(`${this.name} hides!`);
+// Zděděn ze Zvíře
+class Králík extends Zvíře {
+  schovejSe() {
+    alert(`${this.jméno} se schovává!`);
   }
 }
 
-let rabbits = [
-  new Rabbit("White Rabbit", 10),
-  new Rabbit("Black Rabbit", 5)
+let králíci = [
+  new Králík("Bílý králík", 10),
+  new Králík("Černý králík", 5)
 ];
 
 *!*
-rabbits.sort(Rabbit.compare);
+králíci.sort(Králík.porovnej);
 */!*
 
-rabbits[0].run(); // Black Rabbit runs with speed 5.
+králíci[0].běž(); // Černý králík běží rychlostí 5.
 
-alert(Rabbit.planet); // Earth
+alert(Králík.planeta); // Země
 ```
 
-Now when we call `Rabbit.compare`, the inherited `Animal.compare` will be called.
+Když nyní zavoláme `Králík.porovnej`, bude volána zděděná metoda `Zvíře.porovnej`.
 
-How does it work? Again, using prototypes. As you might have already guessed, `extends` gives `Rabbit` the `[[Prototype]]` reference to `Animal`.
+Jak to funguje? Opět pomocí prototypů. Jak jste už možná uhádli, `extends` vloží třídě `Králík` do `[[Prototype]]` odkaz na třídu `Zvíře`.
 
 ![](animal-rabbit-static.svg)
 
-So, `Rabbit extends Animal` creates two `[[Prototype]]` references:
+`Králík extends Zvíře` tedy vytvoří dva odkazy `[[Prototype]]`:
 
-1. `Rabbit` function prototypally inherits from `Animal` function.
-2. `Rabbit.prototype` prototypally inherits from `Animal.prototype`.
+1. Funkce `Králík` je prototypově zděděna z funkce `Zvíře`.
+2. `Králík.prototype` je prototypově zděděn ze `Zvíře.prototype`.
 
-As a result, inheritance works both for regular and static methods.
+Výsledkem je, že dědičnost funguje pro regulérní i pro statické metody.
 
-Here, let's check that by code:
+Ověřme si to kódem:
 
 ```js run
-class Animal {}
-class Rabbit extends Animal {}
+class Zvíře {}
+class Králík extends Zvíře {}
 
-// for statics
-alert(Rabbit.__proto__ === Animal); // true
+// pro statické metody
+alert(Králík.__proto__ === Zvíře); // true
 
-// for regular methods
-alert(Rabbit.prototype.__proto__ === Animal.prototype); // true
+// pro regulérní metody
+alert(Králík.prototype.__proto__ === Zvíře.prototype); // true
 ```
 
-## Summary
+## Shrnutí
 
-Static methods are used for the functionality that belongs to the class "as a whole". It doesn't relate to a concrete class instance.
+Statické metody se používají pro funkcionalitu, která patří třídě „jako celku“ a nevztahuje se ke konkrétní instanci třídy.
 
-For example, a method for comparison `Article.compare(article1, article2)` or a factory method `Article.createTodays()`.
+Například metoda pro porovnání `Článek.porovnej(článek1, článek2)` nebo tovární metoda `Článek.vytvořDnešní()`.
 
-They are labeled by the word `static` in class declaration.
+V deklaraci třídy jsou označeny klíčovým slovem `static`.
 
-Static properties are used when we'd like to store class-level data, also not bound to an instance.
+Statické vlastnosti používáme tehdy, když chceme uložit data na úrovni třídy, rovněž nespojená s žádnou instancí.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-class MyClass {
-  static property = ...;
+class MojeTřída {
+  static vlastnost = ...;
 
-  static method() {
+  static metoda() {
     ...
   }
 }
 ```
 
-Technically, static declaration is the same as assigning to the class itself:
+Technicky je statická deklarace totéž jako přiřazení samotné třídě:
 
 ```js
-MyClass.property = ...
-MyClass.method = ...
+MojeTřída.vlastnost = ...
+MojeTřída.metoda = ...
 ```
 
-Static properties and methods are inherited.
+Statické vlastnosti a metody se dědí.
 
-For `class B extends A` the prototype of the class `B` itself points to `A`: `B.[[Prototype]] = A`. So if a field is not found in `B`, the search continues in `A`.
+Pro `class B extends A` prototyp samotné třídy `B` ukazuje na třídu `A`: `B.[[Prototype]] = A`. Jestliže se tedy pole nenajde v `B`, hledání bude pokračovat v `A`.
