@@ -3,7 +3,7 @@
 
 Jeden z nejdůležitějších principů objektově orientovaného programování je oddělení interního rozhraní od externího.
 
-Je to „nezbytná“ praxe při vývoji čehokoli složitějšího než aplikace „ahoj světe“.
+Je to „nezbytná“ praxe při vývoji čehokoli složitějšího než aplikace vypisující „ahoj světe“.
 
 Abychom to pochopili, odtrhněme se od programování a upřeme oči na skutečný svět.
 
@@ -11,7 +11,7 @@ Zařízení, která používáme, jsou obvykle docela složitá. Ale oddělení 
 
 ## Příklad z reálného života
 
-Například kávovar. Zvenčí vypadá jednoduše: tlačítko, displej, několik otvorů... A samozřejmě -- výsledkem je výtečná káva! :)
+Například kávovar. Zvenčí vypadá jednoduše: tlačítko, displej, několik otvorů... A samozřejmě výsledek -- výtečná káva! :)
 
 ![](coffee.jpg)
 
@@ -27,7 +27,7 @@ Tajemství spolehlivosti a jednoduchosti kávovaru -- veškeré detaily jsou dob
 
 Jestliže z kávovaru odstraníme ochranný kryt, bude jeho používání mnohem složitější (kde to máme zmáčknout?) a nebezpečnější (může nás zasáhnout elektřina).
 
-Jak uvidíme, objekty jsou v programování jako kávovary.
+Jak uvidíme, objekty v programování se podobají kávovarům.
 
 Abychom však ukryli vnitřní detaily, nebudeme používat ochranný kryt, ale speciální syntaxi jazyka a konvence.
 
@@ -38,9 +38,9 @@ V objektově orientovaném programování jsou vlastnosti a metody rozděleny do
 - *Interní rozhraní* -- metody a vlastnosti dostupné z jiných metod stejné třídy, ale ne zvnějšku.
 - *Externí rozhraní* -- metody a vlastnosti dostupné i zvnějšku třídy.
 
-Budeme-li pokračovat v analogii s kávovarem -- co je skryto uvnitř: nádoba na vodu, ohřívací těleso a tak dále -- to je jeho interní rozhraní.
+Budeme-li pokračovat v analogii s kávovarem -- co je skryto uvnitř: ohřívací trubice, topné těleso a tak dále -- to je jeho interní rozhraní.
 
-Interní rozhraní se používá k tomu, aby objekt fungoval, a jeho detaily se používají navzájem mezi sebou. Například nádoba na vodu je připojena k ohřívacímu tělesu.
+Interní rozhraní se používá k tomu, aby objekt fungoval, a jeho detaily se používají navzájem mezi sebou. Například ohřívací trubice je připojena k topnému tělesu.
 
 Zvenčí je však kávovar uzavřen ochranným krytem, takže na ně nikdo nemůže sahat. Detaily jsou skryté a nepřístupné. Můžeme používat jejich vlastnosti pomocí externího rozhraní.
 
@@ -53,11 +53,11 @@ V JavaScriptu existují dva druhy objektových polí (vlastností a metod):
 - Veřejná: dostupná odkudkoli. Ta utvářejí externí rozhraní. Doposud jsme používali výhradně veřejné vlastnosti a metody.
 - Soukromá: dostupná jedině zevnitř třídy. Ta jsou určena pro interní rozhraní.
 
-V mnoha jiných jazycích existují také „chráněná“ pole: dostupná jedině zevnitř třídy a tříd, které ji rozšiřují (obdobně jako soukromá, ale navíc s přístupem ze zděděných tříd). I ta jsou užitečná pro interní rozhraní. V určitém smyslu jsou širší než soukromá, protože obvykle chceme, aby k nim měly přístup zděděné třídy.
+V mnoha jiných jazycích existují také „chráněná“ pole: dostupná jedině zevnitř třídy a tříd, které ji rozšiřují (obdobně jako soukromá, ale navíc s přístupem ze zděděných tříd). I ta jsou užitečná pro interní rozhraní. V určitém smyslu mají širší využití než soukromá, protože obvykle chceme, aby zděděné třídy měly k polím přístup.
 
-V JavaScriptu nejsou chráněná pole implementována na úrovni jazyka, ale v praxi jsou velice užitečná, takže se emulují.
+V JavaScriptu nejsou chráněná pole implementována na úrovni jazyka, ale v praxi jsou velice užitečná, takže bývají emulována.
 
-Nyní vytvořme kávovar v JavaScriptu se všemi těmito druhy vlastností. Kávovar má spoustu detailů, které pro jednoduchost nebudeme modelovat (ačkoli bychom mohli).
+Nyní vytvořme v JavaScriptu kávovar se všemi těmito druhy vlastností. Kávovar má spoustu detailů, které pro jednoduchost nebudeme modelovat (ačkoli bychom mohli).
 
 ## Ochrana „množstvíVody“
 
@@ -83,7 +83,7 @@ kávovar.množstvíVody = 200;
 
 Nyní jsou vlastnosti `množstvíVody` a `výkon` veřejné. Snadno je můžeme zvenčí číst a nastavit do nich jakoukoli hodnotu.
 
-Změňme vlastnost `množstvíVody` na chráněnou, abychom nad ní měli větší kontrolu. Například nechceme, aby ji někdo nastavil na menší než 0.
+Změňme vlastnost `množstvíVody` na chráněnou, abychom nad ní měli větší kontrolu. Například nechceme, aby ji někdo nastavil na menší hodnotu než 0.
 
 **Názvy chráněných vlastností obvykle začínají podtržítkem `_`.**
 
@@ -151,10 +151,10 @@ alert(`Výkon je: ${kávovar.výkon} W`); // Výkon je: 100 W
 kávovar.výkon = 25; // Chyba (není setter)
 ```
 
-````smart header="Funkce getterů/setterů"
-Zde jsme použili syntaxi getterů/setterů.
+````smart header="Gettery a settery"
+Zde jsme použili gettery a settery.
 
-Většinou se však dává přednost funkcím `vrať.../nastav...` *(v angličtině `get.../set...` -- pozn. překl.)*, např. takto:
+Většinou se však dává přednost funkcím `vrať.../nastav...` (v angličtině `get.../set...`), např. takto:
 
 ```js
 class Kávovar {
@@ -175,13 +175,13 @@ new Kávovar().nastavMnožstvíVody(100);
 
 Vypadá to trochu delší, ale funkce jsou flexibilnější. Mohou přijímat více argumentů (i když je zrovna teď nepotřebujeme).
 
-Na druhou stranu syntaxe get/set je kratší, takže žádné pevné pravidlo neexistuje, rozhodnutí je na vás.
+Naproti tomu syntaxe get/set je kratší. Žádné pevné pravidlo tedy neexistuje, rozhodnutí je na vás.
 ````
 
 ```smart header="Chráněná pole se dědí"
 Jestliže zdědíme `class Megastroj extends Kávovar`, pak nám nic nebrání přistupovat k `this._množstvíVody` nebo `this._výkon` z metod nové třídy.
 
-Chráněná pole jsou tedy přirozeně dědičná. Na rozdíl od soukromých, jak uvidíme níže.
+Chráněná pole jsou tedy přirozeně dědičná. Na rozdíl od soukromých, jak uvidíme dále.
 ```
 
 ## Soukromý „#limitVody“
@@ -226,7 +226,7 @@ Na úrovni jazyka je `#` speciální znak, který znamená, že pole je soukrom�
 
 Soukromá pole nejsou v konfliktu s veřejnými. Můžeme mít současně soukromé pole `#množstvíVody` a veřejné `množstvíVody`.
 
-Například učiňme z `množstvíVody` přístupovou vlastnost pro `#množstvíVody`:
+Vytvořme například přístupovou vlastnost `množstvíVody` pro `#množstvíVody`:
 
 ```js run
 class Kávovar {
@@ -251,7 +251,7 @@ alert(stroj.#množstvíVody); // Chyba
 
 Na rozdíl od chráněných polí jsou soukromá pole vynucována samotným jazykem. To je dobrá věc.
 
-Pokud však zdědíme třídu z `Kávovar`, nebudeme mít k `#množstvíVody` přímý přístup. Budeme se muset spolehnout na getter/setter `množstvíVody`:
+Pokud však zdědíme z třídy `Kávovar` jinou třídu, nebudeme v ní mít k `#množstvíVody` přímý přístup. Budeme se muset spolehnout na getter/setter `množstvíVody`:
 
 ```js
 class MegaKávovar extends Kávovar {
@@ -274,7 +274,7 @@ Jak víme, obvykle můžeme přistupovat k polím pomocí `this[název]`:
 class Uživatel {
   ...
   řekniAhoj() {
-    let názevPole = "název";
+    let názevPole = "jméno";
     alert(`Ahoj, ${*!*this[názevPole]*/!*}`);
   }
 }
@@ -285,38 +285,38 @@ U soukromých polí to není možné: `this['#název']` nefunguje. To je syntakt
 
 ## Shrnutí
 
-V pojmech OOP se oddělení interního rozhraní od externího nazývá [zapouzdření](https://cs.wikipedia.org/wiki/Zapouzdření_(programování)).
+V terminologii OOP se oddělení interního rozhraní od externího nazývá [zapouzdření](https://cs.wikipedia.org/wiki/Zapouzdření_(programování)).
 
 Poskytuje nám následující výhody:
 
-Ochranu pro uživatele, aby se nemohli střelit do nohy
+Ochranu uživatelů, aby se nemohli postřelit
 : Představme si tým vývojářů, který používá kávovar. Vyrobila jej firma „Nejlepší kávovary s.r.o.“ a funguje dobře, ale někdo odstranil ochranný kryt. Interní rozhraní je tedy odhaleno.
 
-    Všichni vývojáři jsou civilizovaní -- používají kávovar tak, jak se má. Ale jeden z nich, Jan, se rozhodl, že je ten nejchytřejší, a udělal ve vnitřnostech kávovaru nějaká vylepšení. O dva dny později se kávovar kvůli tomu pokazil.
+    Všichni vývojáři jsou civilizovaní -- používají kávovar tak, jak mají. Ale jeden z nich, Jan, se rozhodl, že je ten nejchytřejší, a udělal ve vnitřnostech kávovaru nějaká vylepšení. O dva dny později se kávovar kvůli tomu pokazil.
 
     Není to určitě vina Jana, ale spíše člověka, který odstranil ochranný kryt a umožnil Janovi s kávovarem manipulovat.
 
-    V programování platí totéž. Jestliže uživatel třídy změní věci, které neměly být měněny zvenčí -- důsledky jsou nepředvídatelné.
+    V programování platí totéž. Jestliže uživatel třídy změní věci, které neměly být měněny zvenčí, důsledky jsou nepředvídatelné.
 
 Podporovatelnost
-: Situace v programování je složitější než kávovar z reálného života, protože kávovar jen koupíme a konec. Zato kód je neustále vyvíjen a vylepšován.
+: Situace v programování je složitější než kávovar ve skutečném životě, protože kávovar jen koupíme a konec. Zato kód je neustále vyvíjen a vylepšován.
 
     **Jestliže striktně oddělíme interní rozhraní, pak vývojář třídy bude moci svobodně měnit její interní vlastnosti a metody, dokonce aniž by informoval uživatele.**
 
     Jste-li vývojářem takové třídy, je pro vás skvělé vědět, že soukromé metody mohou být bezpečně přejmenovány, jejich parametry mohou být měněny a dokonce odstraňovány, protože na nich nezávisí žádný externí kód.
 
-    Pro uživatele, když vyjde nová verze, může být uvnitř totálně přepracována, ale upgrade bude stále jednoduchý, jestliže bude externí rozhraní stejné.
+    Když vyjde nová verze, může být uvnitř totálně přepracována, ale jestliže externí rozhraní bude stejné, aktualizace bude pro uživatele stále jednoduchá.
 
 Ukrytí složitosti
-: Lidé rádi používají věci, které jsou jednoduché. Aspoň zvnějšku. Co je uvnitř, to je druhá věc.
+: Lidé rádi používají věci, které jsou jednoduché. Aspoň zvenčí. Co je uvnitř, to je druhá věc.
 
     Programátoři nejsou výjimkou.
 
-    **Vždy se hodí, když jsou implementační detaily skryté a k dispozici je jednoduché, dobře zdokumentované externí rozhraní.**
+    **Vždy se hodí, když jsou implementační detaily skryté a k dispozici je jednoduché, dobře dokumentované externí rozhraní.**
 
 Pro skrytí interního rozhraní používáme chráněné nebo soukromé vlastnosti:
 
 - Názvy chráněných polí začínají na `_`. To je dobře známá konvence, nevyžadovaná na úrovni jazyka. Programátoři by měli k polím, jejichž název začíná na `_`, přistupovat jen z jejich třídy a tříd, které jsou z ní zděděny.
 - Názvy soukromých polí začínají na `#`. JavaScript zajišťuje, že k nim můžeme přistupovat jedině zevnitř třídy.
 
-Soukromá pole nejsou ještě v současnosti mezi prohlížeči dobře podporována, ale to může být opraveno polyfillem.
+V současnosti ještě nejsou soukromá pole v prohlížečích široce podporována, ale to může být opraveno polyfillem.
