@@ -1,322 +1,322 @@
 
-# Private and protected properties and methods
+# Soukromé a chráněné vlastnosti a metody
 
-One of the most important principles of object oriented programming -- delimiting internal interface from the external one.
+Jeden z nejdůležitějších principů objektově orientovaného programování je oddělení interního rozhraní od externího.
 
-That is "a must" practice in developing anything more complex than a "hello world" app.
+Je to „nezbytná“ praxe při vývoji čehokoli složitějšího než aplikace vypisující „ahoj světe“.
 
-To understand this, let's break away from development and turn our eyes into the real world.
+Abychom to pochopili, odtrhněme se od programování a upřeme oči na skutečný svět.
 
-Usually, devices that we're using are quite complex. But delimiting the internal interface from the external one allows to use them without problems.
+Zařízení, která používáme, jsou obvykle docela složitá. Ale oddělení interního rozhraní od externího nám umožňuje používat je bez problémů.
 
-## A real-life example
+## Příklad z reálného života
 
-For instance, a coffee machine. Simple from outside: a button, a display, a few holes...And, surely, the result -- great coffee! :)
+Například kávovar. Zvenčí vypadá jednoduše: tlačítko, displej, několik otvorů... A samozřejmě výsledek -- výtečná káva! :)
 
 ![](coffee.jpg)
 
-But inside... (a picture from the repair manual)
+Ale zevnitř... (obrázek z manuálu pro opraváře)
 
 ![](coffee-inside.jpg)
 
-A lot of details. But we can use it without knowing anything.
+Spousta detailů. My ho však můžeme používat, aniž bychom cokoli z nich znali.
 
-Coffee machines are quite reliable, aren't they? We can use one for years, and only if something goes wrong -- bring it for repairs.
+Kávovary jsou docela spolehlivé, ne? Můžeme je používat léta, a teprve až se něco pokazí, zaneseme je do opravy.
 
-The secret of reliability and simplicity of a coffee machine -- all details are well-tuned and *hidden* inside.
+Tajemství spolehlivosti a jednoduchosti kávovaru -- veškeré detaily jsou dobře vyladěny a *ukryty* uvnitř.
 
-If we remove the protective cover from the coffee machine, then using it will be much more complex (where to press?), and dangerous (it can electrocute).
+Jestliže z kávovaru odstraníme ochranný kryt, bude jeho používání mnohem složitější (kde to máme zmáčknout?) a nebezpečnější (může nás zasáhnout elektřina).
 
-As we'll see, in programming objects are like coffee machines.
+Jak uvidíme, objekty v programování se podobají kávovarům.
 
-But in order to hide inner details, we'll use not a protective cover, but rather special syntax of the language and conventions.
+Abychom však ukryli vnitřní detaily, nebudeme používat ochranný kryt, ale speciální syntaxi jazyka a konvence.
 
-## Internal and external interface
+## Interní a externí rozhraní
 
-In object-oriented programming, properties and methods are split into two groups:
+V objektově orientovaném programování jsou vlastnosti a metody rozděleny do dvou skupin:
 
-- *Internal interface* -- methods and properties, accessible from other methods of the class, but not from the outside.
-- *External interface* -- methods and properties, accessible also from outside the class.
+- *Interní rozhraní* -- metody a vlastnosti dostupné z jiných metod stejné třídy, ale ne zvnějšku.
+- *Externí rozhraní* -- metody a vlastnosti dostupné i zvnějšku třídy.
 
-If we continue the analogy with the coffee machine -- what's hidden inside: a boiler tube, heating element, and so on -- is its internal interface.
+Budeme-li pokračovat v analogii s kávovarem -- co je skryto uvnitř: ohřívací trubice, topné těleso a tak dále -- to je jeho interní rozhraní.
 
-An internal interface is used for the object to work, its details use each other. For instance, a boiler tube is attached to the heating element.
+Interní rozhraní se používá k tomu, aby objekt fungoval, a jeho detaily se používají navzájem mezi sebou. Například ohřívací trubice je připojena k topnému tělesu.
 
-But from the outside a coffee machine is closed by the protective cover, so that no one can reach those. Details are hidden and inaccessible. We can use its features via the external interface.
+Zvenčí je však kávovar uzavřen ochranným krytem, takže na ně nikdo nemůže sahat. Detaily jsou skryté a nepřístupné. Můžeme používat jejich vlastnosti pomocí externího rozhraní.
 
-So, all we need to use an object is to know its external interface. We may be completely unaware how it works inside, and that's great.
+Vše, co potřebujeme znát, abychom mohli objekt používat, je tedy jeho externí rozhraní. Vůbec nás nemusí zajímat, jak to funguje uvnitř, a to je skvělé.
 
-That was a general introduction.
+To byl obecný úvod.
 
-In JavaScript, there are two types of object fields (properties and methods):
+V JavaScriptu existují dva druhy objektových polí (vlastností a metod):
 
-- Public: accessible from anywhere. They comprise the external interface. Until now we were only using public properties and methods.
-- Private: accessible only from inside the class. These are for the internal interface.
+- Veřejná: dostupná odkudkoli. Ta utvářejí externí rozhraní. Doposud jsme používali výhradně veřejné vlastnosti a metody.
+- Soukromá: dostupná jedině zevnitř třídy. Ta jsou určena pro interní rozhraní.
 
-In many other languages there also exist "protected" fields: accessible only from inside the class and those extending it (like private, but plus access from inheriting classes). They are also useful for the internal interface. They are in a sense more widespread than private ones, because we usually want inheriting classes to gain access to them.
+V mnoha jiných jazycích existují také „chráněná“ pole: dostupná jedině zevnitř třídy a tříd, které ji rozšiřují (obdobně jako soukromá, ale navíc s přístupem ze zděděných tříd). I ta jsou užitečná pro interní rozhraní. V určitém smyslu mají širší využití než soukromá, protože obvykle chceme, aby zděděné třídy měly k polím přístup.
 
-Protected fields are not implemented in JavaScript on the language level, but in practice they are very convenient, so they are emulated.
+V JavaScriptu nejsou chráněná pole implementována na úrovni jazyka, ale v praxi jsou velice užitečná, takže bývají emulována.
 
-Now we'll make a coffee machine in JavaScript with all these types of properties. A coffee machine has a lot of details, we won't model them to stay simple (though we could).
+Nyní vytvořme v JavaScriptu kávovar se všemi těmito druhy vlastností. Kávovar má spoustu detailů, které pro jednoduchost nebudeme modelovat (ačkoli bychom mohli).
 
-## Protecting "waterAmount"
+## Ochrana „množstvíVody“
 
-Let's make a simple coffee machine class first:
+Nejprve si vytvořme jednoduchou třídu pro kávovar:
 
 ```js run
-class CoffeeMachine {
-  waterAmount = 0; // the amount of water inside
+class Kávovar {
+  množstvíVody = 0; // množství vody uvnitř
 
-  constructor(power) {
-    this.power = power;
-    alert( `Created a coffee-machine, power: ${power}` );
+  constructor(výkon) {
+    this.výkon = výkon;
+    alert( `Kávovar vytvořen, výkon: ${výkon}` );
   }
 
 }
 
-// create the coffee machine
-let coffeeMachine = new CoffeeMachine(100);
+// vytvoříme kávovar
+let kávovar = new Kávovar(100);
 
-// add water
-coffeeMachine.waterAmount = 200;
+// přidáme vodu
+kávovar.množstvíVody = 200;
 ```
 
-Right now the properties `waterAmount` and `power` are public. We can easily get/set them from the outside to any value.
+Nyní jsou vlastnosti `množstvíVody` a `výkon` veřejné. Snadno je můžeme zvenčí číst a nastavit do nich jakoukoli hodnotu.
 
-Let's change `waterAmount` property to protected to have more control over it. For instance, we don't want anyone to set it below zero.
+Změňme vlastnost `množstvíVody` na chráněnou, abychom nad ní měli větší kontrolu. Například nechceme, aby ji někdo nastavil na menší hodnotu než 0.
 
-**Protected properties are usually prefixed with an underscore `_`.**
+**Názvy chráněných vlastností obvykle začínají podtržítkem `_`.**
 
-That is not enforced on the language level, but there's a well-known convention between programmers that such properties and methods should not be accessed from the outside.
+To není vyžadováno na úrovni jazyka, ale mezi programátory existuje dobře známá konvence, že k takovým vlastnostem a metodám by se nemělo přistupovat zvenčí.
 
-So our property will be called `_waterAmount`:
+Naše vlastnost se tedy bude nazývat `_množstvíVody`:
 
 ```js run
-class CoffeeMachine {
-  _waterAmount = 0;
+class Kávovar {
+  _množstvíVody = 0;
 
-  set waterAmount(value) {
-    if (value < 0) {
-      value = 0;
+  set množstvíVody(hodnota) {
+    if (hodnota < 0) {
+      hodnota = 0;
     }
-    this._waterAmount = value;
+    this._množstvíVody = hodnota;
   }
 
-  get waterAmount() {
-    return this._waterAmount;
+  get množstvíVody() {
+    return this._množstvíVody;
   }
 
-  constructor(power) {
-    this._power = power;
+  constructor(výkon) {
+    this._výkon = výkon;
   }
 
 }
 
-// create the coffee machine
-let coffeeMachine = new CoffeeMachine(100);
+// vytvoříme kávovar
+let kávovar = new Kávovar(100);
 
-// add water
-coffeeMachine.waterAmount = -10; // _waterAmount will become 0, not -10
+// přidáme vodu
+kávovar.množstvíVody = -10; // _množstvíVody bude 0, ne -10
 ```
 
-Now the access is under control, so setting the water amount below zero becomes impossible.
+Nyní máme přístup pod kontrolou, takže nebude možné nastavit množství vody nižší než 0.
 
-## Read-only "power"
+## „výkon“ pouze pro čtení
 
-For `power` property, let's make it read-only. It sometimes happens that a property must be set at creation time only, and then never modified.
+Co se týče vlastnosti `výkon`, učiňme ji dostupnou pouze pro čtení. Někdy se stává, že vlastnost musí být nastavena pouze v okamžiku vytvoření objektu a pak už nikdy nesmí být změněna.
 
-That's exactly the case for a coffee machine: power never changes.
+To je přesně případ kávovaru: výkon se nikdy nemění.
 
-To do so, we only need to make getter, but not the setter:
+Abychom toho dosáhli, musíme vytvořit pouze getter, ale ne setter:
 
 ```js run
-class CoffeeMachine {
+class Kávovar {
   // ...
 
-  constructor(power) {
-    this._power = power;
+  constructor(výkon) {
+    this._výkon = výkon;
   }
 
-  get power() {
-    return this._power;
+  get výkon() {
+    return this._výkon;
   }
 
 }
 
-// create the coffee machine
-let coffeeMachine = new CoffeeMachine(100);
+// vytvoříme kávovar
+let kávovar = new Kávovar(100);
 
-alert(`Power is: ${coffeeMachine.power}W`); // Power is: 100W
+alert(`Výkon je: ${kávovar.výkon} W`); // Výkon je: 100 W
 
-coffeeMachine.power = 25; // Error (no setter)
+kávovar.výkon = 25; // Chyba (není setter)
 ```
 
-````smart header="Getter/setter functions"
-Here we used getter/setter syntax.
+````smart header="Gettery a settery"
+Zde jsme použili gettery a settery.
 
-But most of the time `get.../set...` functions are preferred, like this:
+Většinou se však dává přednost funkcím `vrať.../nastav...` (v angličtině `get.../set...`), např. takto:
 
 ```js
-class CoffeeMachine {
-  _waterAmount = 0;
+class Kávovar {
+  _množstvíVody = 0;
 
-  *!*setWaterAmount(value)*/!* {
-    if (value < 0) value = 0;
-    this._waterAmount = value;
+  *!*nastavMnožstvíVody(hodnota)*/!* {
+    if (hodnota < 0) hodnota = 0;
+    this._množstvíVody = hodnota;
   }
 
-  *!*getWaterAmount()*/!* {
-    return this._waterAmount;
+  *!*vraťMnožstvíVody()*/!* {
+    return this._množstvíVody;
   }
 }
 
-new CoffeeMachine().setWaterAmount(100);
+new Kávovar().nastavMnožstvíVody(100);
 ```
 
-That looks a bit longer, but functions are more flexible. They can accept multiple arguments (even if we don't need them right now).
+Vypadá to trochu delší, ale funkce jsou flexibilnější. Mohou přijímat více argumentů (i když je zrovna teď nepotřebujeme).
 
-On the other hand, get/set syntax is shorter, so ultimately there's no strict rule, it's up to you to decide.
+Naproti tomu syntaxe get/set je kratší. Žádné pevné pravidlo tedy neexistuje, rozhodnutí je na vás.
 ````
 
-```smart header="Protected fields are inherited"
-If we inherit `class MegaMachine extends CoffeeMachine`, then nothing prevents us from accessing `this._waterAmount` or `this._power` from the methods of the new class.
+```smart header="Chráněná pole se dědí"
+Jestliže zdědíme `class Megastroj extends Kávovar`, pak nám nic nebrání přistupovat k `this._množstvíVody` nebo `this._výkon` z metod nové třídy.
 
-So protected fields are naturally inheritable. Unlike private ones that we'll see below.
+Chráněná pole jsou tedy přirozeně dědičná. Na rozdíl od soukromých, jak uvidíme dále.
 ```
 
-## Private "#waterLimit"
+## Soukromý „#limitVody“
 
 [recent browser=none]
 
-There's a finished JavaScript proposal, almost in the standard, that provides language-level support for private properties and methods.
+V JavaScriptu existuje dokončený návrh, je již téměř ve standardu, který poskytuje podporu soukromých vlastností a metod na úrovni jazyka.
 
-Privates should start with `#`. They are only accessible from inside the class.
+Názvy soukromých vlastností a metod by měly začínat na `#`. Pak budou dostupné jen zevnitř třídy.
 
-For instance, here's a private `#waterLimit` property and the water-checking private method `#fixWaterAmount`:
-
-```js run
-class CoffeeMachine {
-*!*
-  #waterLimit = 200;
-*/!*
-
-*!*
-  #fixWaterAmount(value) {
-    if (value < 0) return 0;
-    if (value > this.#waterLimit) return this.#waterLimit;
-  }
-*/!*
-
-  setWaterAmount(value) {
-    this.#waterLimit = this.#fixWaterAmount(value);
-  }
-
-}
-
-let coffeeMachine = new CoffeeMachine();
-
-*!*
-// can't access privates from outside of the class
-coffeeMachine.#fixWaterAmount(123); // Error
-coffeeMachine.#waterLimit = 1000; // Error
-*/!*
-```
-
-On the language level, `#` is a special sign that the field is private. We can't access it from outside or from inheriting classes.
-
-Private fields do not conflict with public ones. We can have both private `#waterAmount` and public `waterAmount` fields at the same time.
-
-For instance, let's make `waterAmount` an accessor for `#waterAmount`:
+Například zde je soukromá vlastnost `#maximumVody` a soukromá metoda `#opravMnožstvíVody`, která zkontroluje množství vody:
 
 ```js run
-class CoffeeMachine {
+class Kávovar {
+*!*
+  #maximumVody = 200;
+*/!*
 
-  #waterAmount = 0;
+*!*
+  #opravMnožstvíVody(hodnota) {
+    if (hodnota < 0) return 0;
+    if (hodnota > this.#maximumVody) return this.#maximumVody;
+  }
+*/!*
 
-  get waterAmount() {
-    return this.#waterAmount;
+  nastavMnožstvíVody(hodnota) {
+    this.#maximumVody = this.#opravMnožstvíVody(hodnota);
   }
 
-  set waterAmount(value) {
-    if (value < 0) value = 0;
-    this.#waterAmount = value;
+}
+
+let kávovar = new Kávovar();
+
+*!*
+// nelze přistupovat k soukromým polím zvnějšku třídy
+kávovar.#opravMnožstvíVody(123); // Chyba
+kávovar.#maximumVody = 1000; // Chyba
+*/!*
+```
+
+Na úrovni jazyka je `#` speciální znak, který znamená, že pole je soukromé. Nemůžeme k němu přistupovat zvenčí ani ze zděděných tříd.
+
+Soukromá pole nejsou v konfliktu s veřejnými. Můžeme mít současně soukromé pole `#množstvíVody` a veřejné `množstvíVody`.
+
+Vytvořme například přístupovou vlastnost `množstvíVody` pro `#množstvíVody`:
+
+```js run
+class Kávovar {
+
+  #množstvíVody = 0;
+
+  get množstvíVody() {
+    return this.#množstvíVody;
+  }
+
+  set množstvíVody(hodnota) {
+    if (hodnota < 0) hodnota = 0;
+    this.#množstvíVody = hodnota;
   }
 }
 
-let machine = new CoffeeMachine();
+let stroj = new Kávovar();
 
-machine.waterAmount = 100;
-alert(machine.#waterAmount); // Error
+stroj.množstvíVody = 100;
+alert(stroj.#množstvíVody); // Chyba
 ```
 
-Unlike protected ones, private fields are enforced by the language itself. That's a good thing.
+Na rozdíl od chráněných polí jsou soukromá pole vynucována samotným jazykem. To je dobrá věc.
 
-But if we inherit from `CoffeeMachine`, then we'll have no direct access to `#waterAmount`. We'll need to rely on `waterAmount` getter/setter:
+Pokud však zdědíme z třídy `Kávovar` jinou třídu, nebudeme v ní mít k `#množstvíVody` přímý přístup. Budeme se muset spolehnout na getter/setter `množstvíVody`:
 
 ```js
-class MegaCoffeeMachine extends CoffeeMachine {
-  method() {
+class MegaKávovar extends Kávovar {
+  metoda() {
 *!*
-    alert( this.#waterAmount ); // Error: can only access from CoffeeMachine
+    alert( this.#množstvíVody ); // Chyba: přístup může být jen ze třídy Kávovar
 */!*
   }
 }
 ```
 
-In many scenarios such limitation is too severe. If we extend a `CoffeeMachine`, we may have legitimate reasons to access its internals. That's why protected fields are used more often, even though they are not supported by the language syntax.
+V mnoha scénářích je takové omezení příliš přísné. Jestliže rozšíříme `Kávovar`, můžeme mít legitimní důvody pro přístup k jeho interním polím. Proto se častěji používají chráněná pole, i když je syntaxe jazyka nepodporuje.
 
-````warn header="Private fields are not available as this[name]"
-Private fields are special.
+````warn header="Soukromá pole nejsou dostupná jako this[název]"
+Soukromá pole jsou speciální.
 
-As we know, usually we can access fields using `this[name]`:
+Jak víme, obvykle můžeme přistupovat k polím pomocí `this[název]`:
 
 ```js
-class User {
+class Uživatel {
   ...
-  sayHi() {
-    let fieldName = "name";
-    alert(`Hello, ${*!*this[fieldName]*/!*}`);
+  řekniAhoj() {
+    let názevPole = "jméno";
+    alert(`Ahoj, ${*!*this[názevPole]*/!*}`);
   }
 }
 ```
 
-With private fields that's impossible: `this['#name']` doesn't work. That's a syntax limitation to ensure privacy.
+U soukromých polí to není možné: `this['#název']` nefunguje. To je syntaktické omezení, jehož účelem je zajistit soukromí.
 ````
 
-## Summary
+## Shrnutí
 
-In terms of OOP, delimiting of the internal interface from the external one is called [encapsulation](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)).
+V terminologii OOP se oddělení interního rozhraní od externího nazývá [zapouzdření](https://cs.wikipedia.org/wiki/Zapouzdření_(programování)).
 
-It gives the following benefits:
+Poskytuje nám následující výhody:
 
-Protection for users, so that they don't shoot themselves in the foot
-: Imagine, there's a team of developers using a coffee machine. It was made by the "Best CoffeeMachine" company, and works fine, but a protective cover was removed. So the internal interface is exposed.
+Ochranu uživatelů, aby se nemohli postřelit
+: Představme si tým vývojářů, který používá kávovar. Vyrobila jej firma „Nejlepší kávovary s.r.o.“ a funguje dobře, ale někdo odstranil ochranný kryt. Interní rozhraní je tedy odhaleno.
 
-    All developers are civilized -- they use the coffee machine as intended. But one of them, John, decided that he's the smartest one, and made some tweaks in the coffee machine internals. So the coffee machine failed two days later.
+    Všichni vývojáři jsou civilizovaní -- používají kávovar tak, jak mají. Ale jeden z nich, Jan, se rozhodl, že je ten nejchytřejší, a udělal ve vnitřnostech kávovaru nějaká vylepšení. O dva dny později se kávovar kvůli tomu pokazil.
 
-    That's surely not John's fault, but rather the person who removed the protective cover and let John do his manipulations.
+    Není to určitě vina Jana, ale spíše člověka, který odstranil ochranný kryt a umožnil Janovi s kávovarem manipulovat.
 
-    The same in programming. If a user of a class will change things not intended to be changed from the outside -- the consequences are unpredictable.
+    V programování platí totéž. Jestliže uživatel třídy změní věci, které neměly být měněny zvenčí, důsledky jsou nepředvídatelné.
 
-Supportable
-: The situation in programming is more complex than with a real-life coffee machine, because we don't just buy it once. The code constantly undergoes development and improvement.
+Podporovatelnost
+: Situace v programování je složitější než kávovar ve skutečném životě, protože kávovar jen koupíme a konec. Zato kód je neustále vyvíjen a vylepšován.
 
-    **If we strictly delimit the internal interface, then the developer of the class can freely change its internal properties and methods, even without informing the users.**
+    **Jestliže striktně oddělíme interní rozhraní, pak vývojář třídy bude moci svobodně měnit její interní vlastnosti a metody, dokonce aniž by informoval uživatele.**
 
-    If you're a developer of such class, it's great to know that private methods can be safely renamed, their parameters can be changed, and even removed, because no external code depends on them.
+    Jste-li vývojářem takové třídy, je pro vás skvělé vědět, že soukromé metody mohou být bezpečně přejmenovány, jejich parametry mohou být měněny a dokonce odstraňovány, protože na nich nezávisí žádný externí kód.
 
-    For users, when a new version comes out, it may be a total overhaul internally, but still simple to upgrade if the external interface is the same.
+    Když vyjde nová verze, může být uvnitř totálně přepracována, ale jestliže externí rozhraní bude stejné, aktualizace bude pro uživatele stále jednoduchá.
 
-Hiding complexity
-: People adore using things that are simple. At least from outside. What's inside is a different thing.
+Ukrytí složitosti
+: Lidé rádi používají věci, které jsou jednoduché. Aspoň zvenčí. Co je uvnitř, to je druhá věc.
 
-    Programmers are not an exception.
+    Programátoři nejsou výjimkou.
 
-    **It's always convenient when implementation details are hidden, and a simple, well-documented external interface is available.**
+    **Vždy se hodí, když jsou implementační detaily skryté a k dispozici je jednoduché, dobře dokumentované externí rozhraní.**
 
-To hide an internal interface we use either protected or private properties:
+Pro skrytí interního rozhraní používáme chráněné nebo soukromé vlastnosti:
 
-- Protected fields start with `_`. That's a well-known convention, not enforced at the language level. Programmers should only access a field starting with `_` from its class and classes inheriting from it.
-- Private fields start with `#`. JavaScript makes sure we can only access those from inside the class.
+- Názvy chráněných polí začínají na `_`. To je dobře známá konvence, nevyžadovaná na úrovni jazyka. Programátoři by měli k polím, jejichž název začíná na `_`, přistupovat jen z jejich třídy a tříd, které jsou z ní zděděny.
+- Názvy soukromých polí začínají na `#`. JavaScript zajišťuje, že k nim můžeme přistupovat jedině zevnitř třídy.
 
-Right now, private fields are not well-supported among browsers, but can be polyfilled.
+V současnosti ještě nejsou soukromá pole v prohlížečích široce podporována, ale to může být opraveno polyfillem.
