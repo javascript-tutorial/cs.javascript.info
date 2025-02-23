@@ -1,208 +1,208 @@
-# Mixins
+# Mixiny
 
-In JavaScript we can only inherit from a single object. There can be only one `[[Prototype]]` for an object. And a class may extend only one other class.
+V JavaScriptu můžeme dědit jen z jednoho objektu. Objekt může mít jen jeden `[[Prototype]]` a třída může rozšiřovat pouze jednu jinou třídu.
 
-But sometimes that feels limiting. For instance, we have a class `StreetSweeper` and a class `Bicycle`, and want to make their mix: a `StreetSweepingBicycle`.
+To se však někdy může zdát omezující. Máme například třídu `ZametačUlic` a třídu `Bicykl` a chtěli bychom vytvořit jejich směs: `ZametacíBicykl`.
 
-Or we have a class `User` and a class `EventEmitter` that implements event generation, and we'd like to add the functionality of `EventEmitter` to `User`, so that our users can emit events.
+Nebo máme třídu `Uživatel` a třídu `GenerátorUdálostí`, která implementuje generování událostí, a rádi bychom přidali funkcionalitu třídy `GenerátorUdálostí` do třídy `Uživatel`, aby naši uživatelé mohli generovat události.
 
-There's a concept that can help here, called "mixins".
+Koncept, který nám s tím pomůže, existuje a nazývá se „mixiny“.
 
-As defined in Wikipedia, a [mixin](https://en.wikipedia.org/wiki/Mixin) is a class containing methods that can be used by other classes without a need to inherit from it.
+Jak je definováno ve Wikipedii, [mixin](https://cs.wikipedia.org/wiki/Mixin) je třída obsahující metody, které mohou být používány v jiných třídách, aniž by z ní tyto třídy musely být zděděny.
 
-In other words, a *mixin* provides methods that implement a certain behavior, but we do not use it alone, we use it to add the behavior to other classes.
+Jinými slovy, *mixin* poskytuje metody, které implementují určité chování, ale nepoužíváme ho samostatně, nýbrž přidáváme jeho chování do jiných tříd.
 
-## A mixin example
+## Příklad mixinu
 
-The simplest way to implement a mixin in JavaScript is to make an object with useful methods, so that we can easily merge them into a prototype of any class.
+Nejjednodušší způsob, jak implementovat mixin v JavaScriptu, je vytvořit objekt s užitečnými metodami, abychom je mohli snadno připojit do prototypu libovolné třídy.
 
-For instance here the mixin `sayHiMixin` is used to add some "speech" for `User`:
+Například zde je použit mixin `mixinŘekniAhoj`, aby do třídy `Uživatel` přidal nějaké „mluvení“:
 
 ```js run
 *!*
 // mixin
 */!*
-let sayHiMixin = {
-  sayHi() {
-    alert(`Hello ${this.name}`);
+let mixinŘekniAhoj = {
+  řekniAhoj() {
+    alert(`Ahoj ${this.jméno}`);
   },
-  sayBye() {
-    alert(`Bye ${this.name}`);
+  řekniNashle() {
+    alert(`Nashle ${this.jméno}`);
   }
 };
 
 *!*
-// usage:
+// použití:
 */!*
-class User {
-  constructor(name) {
-    this.name = name;
+class Uživatel {
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 
-// copy the methods
-Object.assign(User.prototype, sayHiMixin);
+// zkopírujeme metody
+Object.assign(Uživatel.prototype, mixinŘekniAhoj);
 
-// now User can say hi
-new User("Dude").sayHi(); // Hello Dude!
+// nyní Uživatel může říci ahoj
+new Uživatel("Jan").řekniAhoj(); // Ahoj Jan
 ```
 
-There's no inheritance, but a simple method copying. So `User` may inherit from another class and also include the mixin to "mix-in" the additional methods, like this:
+Není tady žádná dědičnost, ale jen prosté kopírování metod. `Uživatel` tedy může dědit z jiné třídy a současně zahrnout mixin, aby „přimíchal“ („mix-in“) další metody, například:
 
 ```js
-class User extends Person {
+class Uživatel extends Osoba {
   // ...
 }
 
-Object.assign(User.prototype, sayHiMixin);
+Object.assign(Uživatel.prototype, mixinŘekniAhoj);
 ```
 
-Mixins can make use of inheritance inside themselves.
+Mixiny mohou využívat dědičnost mezi sebou.
 
-For instance, here `sayHiMixin` inherits from `sayMixin`:
+Například zde `mixinŘekniAhoj` dědí z `mixinŘekni`:
 
 ```js run
-let sayMixin = {
-  say(phrase) {
-    alert(phrase);
+let mixinŘekni = {
+  řekni(věta) {
+    alert(věta);
   }
 };
 
-let sayHiMixin = {
-  __proto__: sayMixin, // (or we could use Object.setPrototypeOf to set the prototype here)
+let mixinŘekniAhoj = {
+  __proto__: mixinŘekni, // (nebo můžeme k nastavení prototypu použít Object.setPrototypeOf)
 
-  sayHi() {
+  řekniAhoj() {
     *!*
-    // call parent method
+    // volání rodičovské metody
     */!*
-    super.say(`Hello ${this.name}`); // (*)
+    super.řekni(`Ahoj ${this.jméno}`); // (*)
   },
-  sayBye() {
-    super.say(`Bye ${this.name}`); // (*)
+  řekniNashle() {
+    super.řekni(`Nashle ${this.jméno}`); // (*)
   }
 };
 
-class User {
-  constructor(name) {
-    this.name = name;
+class Uživatel {
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 
-// copy the methods
-Object.assign(User.prototype, sayHiMixin);
+// zkopírujeme metody
+Object.assign(Uživatel.prototype, mixinŘekniAhoj);
 
-// now User can say hi
-new User("Dude").sayHi(); // Hello Dude!
+// nyní Uživatel může říci ahoj
+new Uživatel("Jan").řekniAhoj(); // Ahoj Jan
 ```
 
-Please note that the call to the parent method `super.say()` from `sayHiMixin` (at lines labelled with `(*)`) looks for the method in the prototype of that mixin, not the class.
+Prosíme všimněte si, že volání rodičovské metody `super.řekni()` z `mixinŘekniAhoj` (na řádcích označených `(*)`) hledá metodu v prototypu onoho mixinu, ne této třídy.
 
-Here's the diagram (see the right part):
+Zde je diagram (viz pravou část):
 
 ![](mixin-inheritance.svg)
 
-That's because methods `sayHi` and `sayBye` were initially created in `sayHiMixin`. So even though they got copied, their `[[HomeObject]]` internal property references `sayHiMixin`, as shown in the picture above.
+Je to proto, že metody `řekniAhoj` a `řekniNashle` byly původně vytvořeny v `mixinŘekniAhoj`. I když jsou tedy zkopírovány, jejich interní vlastnost `[[HomeObject]]` se odkazuje na `mixinŘekniAhoj`, jak je vidět na uvedeném obrázku.
 
-As `super` looks for parent methods in `[[HomeObject]].[[Prototype]]`, that means it searches `sayHiMixin.[[Prototype]]`.
+Když `super` hledá rodičovské metody v `[[HomeObject]].[[Prototype]]`, znamená to, že prohledává `mixinŘekniAhoj.[[Prototype]]`.
 
-## EventMixin
+## MixinUdálosti
 
-Now let's make a mixin for real life.
+Vytvořme nyní mixin pro skutečný život.
 
-An important feature of many browser objects (for instance) is that they can generate events. Events are a great way to "broadcast information" to anyone who wants it. So let's make a mixin that allows us to easily add event-related functions to any class/object.
+Důležitou vlastností mnoha objektů prohlížeče (například) je, že mohou generovat události. Události jsou skvělý způsob, jak „vysílat informaci“ každému, kdo ji chce. Vytvořme tedy mixin, který nám umožní snadno přidat funkce vztažené k události do jakékoli třídy nebo objektu.
 
-- The mixin will provide a method `.trigger(name, [...data])` to "generate an event" when something important happens to it. The `name` argument is a name of the event, optionally followed by additional arguments with event data.
-- Also the method `.on(name, handler)` that adds `handler` function as the listener to events with the given name. It will be called when an event with the given `name` triggers, and get the arguments from the `.trigger` call.
-- ...And the method `.off(name, handler)` that removes the `handler` listener.
+- Mixin bude poskytovat metodu `.spusť(název, [...data])`, která bude „generovat událost“, když se stane něco důležitého. Argument `název` je název události, za nímž mohou následovat další argumenty s daty události.
+- Dále metodu `.zapni(název, handler)`, která přidá funkci `handler` jako posluchače událostí se zadaným názvem. Funkce `handler` bude volána, když se spustí událost se zadaným názvem `název`, a převezme argumenty z volání `.spusť`.
+- ...A metodu `.vypni(název, handler)`, která odstraní posluchače `handler`.
 
-After adding the mixin, an object `user` will be able to generate an event `"login"` when the visitor logs in. And another object, say, `calendar` may want to listen for such events to load the calendar for the logged-in person.
+Po přidání mixinu bude objekt `uživatel` moci generovat událost `"přihlášen"`, když se uživatel přihlásí. A jiný objekt, třeba `kalendář`, bude moci takovým událostem naslouchat, aby pak načetl kalendář pro přihlášenou osobu.
 
-Or, a `menu` can generate the event `"select"` when a menu item is selected, and other objects may assign handlers to react on that event. And so on.
+Nebo `menu` může generovat událost `"vybrán"`, když je vybrán jeho prvek, a jiné objekty mohou přiřazovat handlery, které budou na tuto událost reagovat. A tak dále.
 
-Here's the code:
+Zde je kód:
 
 ```js run
-let eventMixin = {
+let mixinUdálosti = {
   /**
-   * Subscribe to event, usage:
-   *  menu.on('select', function(item) { ... }
+   * Přihlášení k naslouchání události, použití:
+   *  menu.zapni('vybrán', function(prvek) { ... })
   */
-  on(eventName, handler) {
-    if (!this._eventHandlers) this._eventHandlers = {};
-    if (!this._eventHandlers[eventName]) {
-      this._eventHandlers[eventName] = [];
+  zapni(názevUdálosti, handler) {
+    if (!this._handleryUdálostí) this._handleryUdálostí = {};
+    if (!this._handleryUdálostí[názevUdálosti]) {
+      this._handleryUdálostí[názevUdálosti] = [];
     }
-    this._eventHandlers[eventName].push(handler);
+    this._handleryUdálostí[názevUdálosti].push(handler);
   },
 
   /**
-   * Cancel the subscription, usage:
-   *  menu.off('select', handler)
+   * Odhlášení z naslouchání události, použití:
+   *  menu.vypni('vybrán', handler)
    */
-  off(eventName, handler) {
-    let handlers = this._eventHandlers?.[eventName];
-    if (!handlers) return;
-    for (let i = 0; i < handlers.length; i++) {
-      if (handlers[i] === handler) {
-        handlers.splice(i--, 1);
+  vypni(názevUdálosti, handler) {
+    let handlery = this._handleryUdálostí?.[názevUdálosti];
+    if (!handlery) return;
+    for (let i = 0; i < handlery.length; i++) {
+      if (handlery[i] === handler) {
+        handlery.splice(i--, 1);
       }
     }
   },
 
   /**
-   * Generate an event with the given name and data
-   *  this.trigger('select', data1, data2);
+   * Generování události se zadaným názvem a daty
+   *  this.spusť('vybrán', data1, data2);
    */
-  trigger(eventName, ...args) {
-    if (!this._eventHandlers?.[eventName]) {
-      return; // no handlers for that event name
+  spusť(názevUdálosti, ...argumenty) {
+    if (!this._handleryUdálostí?.[názevUdálosti]) {
+      return; // pro událost s tímto názvem nejsou žádné handlery
     }
 
-    // call the handlers
-    this._eventHandlers[eventName].forEach(handler => handler.apply(this, args));
+    // volání handlerů
+    this._handleryUdálostí[názevUdálosti].forEach(handler => handler.apply(this, argumenty));
   }
 };
 ```
 
 
-- `.on(eventName, handler)` -- assigns function `handler` to run when the event with that name occurs. Technically, there's an `_eventHandlers` property that stores an array of handlers for each event name, and it just adds it to the list.
-- `.off(eventName, handler)` -- removes the function from the handlers list.
-- `.trigger(eventName, ...args)` -- generates the event: all handlers from `_eventHandlers[eventName]` are called, with a list of arguments `...args`.
+- `.zapni(názevUdálosti, handler)` -- přiřadí funkci `handler`, která se má spustit vždy, když nastane událost s uvedeným názvem. Technicky je zde vlastnost `_handleryUdálostí`, do níž se ukládá pole handlerů pro každý název události, a funkce je prostě přidána do tohoto seznamu.
+- `.vypni(názevUdálosti, handler)` -- odstraní funkci ze seznamu handlerů.
+- `.spusť(názevUdálosti, ...argumenty)` -- generuje událost: všechny handlery z `_handleryUdálostí[názevUdálosti]` jsou volány se seznamem argumentů `...argumenty`.
 
-Usage:
+Použití:
 
 ```js run
-// Make a class
+// Vytvoříme třídu
 class Menu {
-  choose(value) {
-    this.trigger("select", value);
+  vyber(hodnota) {
+    this.spusť("vybrán", hodnota);
   }
 }
-// Add the mixin with event-related methods
-Object.assign(Menu.prototype, eventMixin);
+// Přidáme mixin s metodami vztahujícími se k událostem
+Object.assign(Menu.prototype, mixinUdálosti);
 
 let menu = new Menu();
 
-// add a handler, to be called on selection:
+// přidáme handler, který bude volán při výběru:
 *!*
-menu.on("select", value => alert(`Value selected: ${value}`));
+menu.zapni("vybrán", hodnota => alert(`Vybrána hodnota: ${hodnota}`));
 */!*
 
-// triggers the event => the handler above runs and shows:
-// Value selected: 123
-menu.choose("123");
+// spustí událost => výše uvedený handler se spustí a zobrazí:
+// Vybrána hodnota: 123
+menu.vyber("123");
 ```
 
-Now, if we'd like any code to react to a menu selection, we can listen for it with `menu.on(...)`.
+Kdybychom nyní chtěli přidat jakýkoli kód, který bude reagovat na výběr z menu, můžeme mu naslouchat pomocí `menu.zapni(...)`.
 
-And `eventMixin` mixin makes it easy to add such behavior to as many classes as we'd like, without interfering with the inheritance chain.
+A mixin `mixinUdálosti` usnadňuje přidání takového chování do tolika tříd, do kolika bychom chtěli, aniž bychom narušovali řetězec dědičnosti.
 
-## Summary
+## Shrnutí
 
-*Mixin* -- is a generic object-oriented programming term: a class that contains methods for other classes.
+*Mixin* -- je generický pojem objektově orientovaného programování: třída, která obsahuje metody pro jiné třídy.
 
-Some other languages allow multiple inheritance. JavaScript does not support multiple inheritance, but mixins can be implemented by copying methods into prototype.
+Některé jiné jazyky umožňují vícenásobnou dědičnost. JavaScript ji nepodporuje, ale mixiny mohou být implementovány zkopírováním metod do prototypu.
 
-We can use mixins as a way to augment a class by adding multiple behaviors, like event-handling as we have seen above.
+Mixiny můžeme používat jako způsob rozšiřování třídy přidáváním dalšího chování, například ošetřování událostí, jak jsme viděli výše.
 
-Mixins may become a point of conflict if they accidentally overwrite existing class methods. So generally one should think well about the naming methods of a mixin, to minimize the probability of that happening.
+Mixiny se mohou stát příčinou konfliktu, jestliže náhodou přepíší již existující metody třídy. Obecně bychom si tedy měli dobře rozmyslet názvy metod v mixinu, abychom minimalizovali pravděpodobnost, že se tak stane.
