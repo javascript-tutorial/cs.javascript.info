@@ -2,9 +2,9 @@
 let mixinUdálosti = {
   /**
    * Přihlášení k naslouchání události, použití:
-   *  menu.on('vybrán', function(prvek) { ... })
+   *  menu.zapni('vybrán', function(prvek) { ... })
   */
-  on(názevUdálosti, handler) {
+  zapni(názevUdálosti, handler) {
     if (!this._handleryUdálostí) this._handleryUdálostí = {};
     if (!this._handleryUdálostí[názevUdálosti]) {
       this._handleryUdálostí[názevUdálosti] = [];
@@ -14,9 +14,9 @@ let mixinUdálosti = {
 
   /**
    * Odhlášení z naslouchání události, použití:
-   *  menu.off('vybrán', handler)
+   *  menu.vypni('vybrán', handler)
    */
-  off(názevUdálosti, handler) {
+  vypni(názevUdálosti, handler) {
     let handlery = this._handleryUdálostí?.[názevUdálosti];
     if (!handlery) return;
     for (let i = 0; i < handlery.length; i++) {
@@ -30,13 +30,13 @@ let mixinUdálosti = {
    * Generování události se zadaným názvem a daty
    *  this.spusť('vybrán', data1, data2);
    */
-  spusť(názevUdálosti, ...args) {
+  spusť(názevUdálosti, ...argumenty) {
     if (!this._handleryUdálostí?.[názevUdálosti]) {
       return; // pro událost s tímto názvem nejsou žádné handlery
     }
 
     // volání handlerů
-    this._handleryUdálostí[názevUdálosti].forEach(handler => handler.apply(this, args));
+    this._handleryUdálostí[názevUdálosti].forEach(handler => handler.apply(this, argumenty));
   }
 };
 </script>
