@@ -2,37 +2,37 @@ importance: 5
 
 ---
 
-# Finally or just the code?
+# Klauzule finally nebo jen kód?
 
-Compare the two code fragments.
+Porovnejte si tyto dva fragmenty kódu.
 
-1. The first one uses `finally` to execute the code after `try...catch`:
+1. První používá `finally` ke spuštění kódu po `try...catch`:
 
     ```js
     try {
-      work work
-    } catch (err) {
-      handle errors
+      pracuj pracuj
+    } catch (chyba) {
+      ošetření chyb
     } finally {
     *!*
-      cleanup the working space
+      úklid pracovního prostoru
     */!*
     }
     ```
-2. The second fragment puts the cleaning right after `try...catch`:
+2. Druhý fragment umisťuje úklid hned za `try...catch`:
 
     ```js
     try {
-      work work
-    } catch (err) {
-      handle errors
+      pracuj pracuj
+    } catch (chyba) {
+      ošetření chyb
     }
 
     *!*
-    cleanup the working space
+    úklid pracovního prostoru
     */!*
     ```
 
-We definitely need the cleanup after the work, doesn't matter if there was an error or not.
+Úklid po práci potřebujeme provést v každém případě, ať už nastala chyba nebo ne.
 
-Is there an advantage here in using `finally` or both code fragments are equal? If there is such an advantage, then give an example when it matters.
+Je zde nějaká výhoda v použití `finally`, nebo jsou oba fragmenty kódu rovnocenné? Pokud je nějaká výhoda, vymyslete příklad, v němž se projeví.
