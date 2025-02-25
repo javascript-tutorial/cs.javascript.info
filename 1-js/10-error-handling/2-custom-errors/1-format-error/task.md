@@ -2,21 +2,21 @@ importance: 5
 
 ---
 
-# Inherit from SyntaxError
+# Dědění ze třídy SyntaxError
 
-Create a class `FormatError` that inherits from the built-in `SyntaxError` class.
+Vytvořte třídu `ChybaFormátu`, která je zděděna ze zabudované třídy `SyntaxError`.
 
-It should support `message`, `name` and `stack` properties.
+Měla by podporovat vlastnosti `message`, `name` a `stack`.
 
-Usage example:
+Příklad použití:
 
 ```js
-let err = new FormatError("formatting error");
+let chyba = new ChybaFormátu("chyba formátování");
 
-alert( err.message ); // formatting error
-alert( err.name ); // FormatError
-alert( err.stack ); // stack
+alert( chyba.message ); // chyba formátování
+alert( chyba.name ); // ChybaFormátu
+alert( chyba.stack ); // zásobník
 
-alert( err instanceof FormatError ); // true
-alert( err instanceof SyntaxError ); // true (because inherits from SyntaxError)
+alert( chyba instanceof ChybaFormátu ); // true
+alert( chyba instanceof SyntaxError ); // true (protože je zděděna ze SyntaxError)
 ```
