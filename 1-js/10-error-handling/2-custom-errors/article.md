@@ -1,12 +1,12 @@
 # Vlastní chyby, rozšíření třídy Error
 
-Když něco vyvíjíme, často potřebujeme, aby naše vlastní chybové třídy odrážely specifické věci, které se v našich úlohách mohou pokazit. Pro chyby v síťových operacích můžeme potřebovat třídu `ChybaHttp`, pro databázové operace `ChybaDb`, pro operace hledání `ChybaNenalezeno` a tak dále.
+Když něco vyvíjíme, často potřebujeme, aby naše vlastní chybové třídy odrážely specifické záležitosti, které se v našich úlohách mohou pokazit. Pro chyby v síťových operacích můžeme potřebovat třídu `ChybaHttp`, pro databázové operace `ChybaDb`, pro operace hledání `ChybaNenalezeno` a tak dále.
 
 Naše chyby by měly podporovat základní vlastnosti chyb jako `message`, `name` a pokud možno `stack`. Mohou však mít i jiné, své vlastní vlastnosti, např. objekty třídy `ChybaHttp` mohou mít vlastnost `stavovýKód` s hodnotami jako `404` nebo `403` nebo `500`.
 
 JavaScript nám umožňuje používat `throw` s libovolným argumentem, takže technicky naše vlastní chybové třídy nemusejí dědit ze třídy `Error`. Pokud z ní však dědíme, bude možné k identifikaci chybových objektů používat `obj instanceof Error`. Je tedy lepší z ní dědit.
 
-Když aplikace poroste, naše vlastní chyby budou přirozeně tvořit hierarchii. Například `ChybaHttpTimeout` může dědit z `ChybaHttp` a tak dále.
+Když aplikace poroste, naše vlastní chyby budou tvořit přirozenou hierarchii. Například `ChybaHttpTimeout` může dědit z `ChybaHttp` a tak dále.
 
 ## Rozšiřování třídy Error
 
@@ -17,13 +17,13 @@ Zde je příklad, jak může vypadat platný `json`:
 let json = `{ "jméno": "Jan", "věk": 30 }`;
 ```
 
-Interně použijeme `JSON.parse`. Jestliže obdrží poškozený `json`, vyvolá `SyntaxError`. Ale i když je `json` syntakticky správně, neznamená to, že obsahuje platného uživatele, že? Mohou v něm chybět nezbytná data. Například nemusí obsahovat vlastnosti `jméno` a `věk`, které jsou pro naše uživatele nezbytné.
+Uvnitř použijeme `JSON.parse`. Jestliže obdrží poškozený `json`, vyvolá `SyntaxError`. Ale i když je `json` syntakticky správně, neznamená to, že obsahuje platného uživatele, že? Mohou v něm chybět nezbytná data. Například nemusí obsahovat vlastnosti `jméno` a `věk`, které jsou pro naše uživatele nezbytné.
 
 Naše funkce `načtiUživatele(json)` tedy nebude jenom načítat JSON, ale také ověřovat („validovat“) data. Pokud v nich nebudou požadovaná pole nebo formát nebude správný, nastane chyba. A nebude to `SyntaxError`, protože data jsou syntakticky správně, ale chyba jiného druhu. Nazveme ji `ChybaValidace` a vytvoříme pro ni třídu. Chyba tohoto druhu by měla obsahovat také informaci o vadném poli.
 
 Naše třída `ChybaValidace` by měla být zděděna ze třídy `Error`.
 
-Třída `Error` je vestavěná, ale zde je její přibližný kód, abychom porozuměli tomu, co rozšiřujeme:
+Třída `Error` je vestavěná, ale uvedeme její přibližný kód, abychom porozuměli tomu, co rozšiřujeme:
 
 ```js
 // „Pseudokód“ pro vestavěnou třídu Error definovanou samotným JavaScriptem
@@ -61,7 +61,7 @@ try {
 }
 ```
 
-Prosíme všimněte si: na řádku `(1)` zavoláme rodičovský konstruktor. JavaScript vyžaduje, abychom v konstruktoru potomka volali `super`, takže to je povinné. Rodičovský konstruktor nastaví vlastnost `message`.
+Prosíme všimněte si: na řádku `(1)` zavoláme rodičovský konstruktor. JavaScript vyžaduje, abychom v konstruktoru dítěte volali `super`, takže to je povinné. Rodičovský konstruktor nastaví vlastnost `message`.
 
 Rodičovský konstruktor také nastaví vlastnost `name` na `"Error"`, takže ji na řádku `(2)` přenastavíme na správnou hodnotu.
 
@@ -106,7 +106,7 @@ try {
 }
 ```
 
-Ve výše uvedeném kódu blok `try..catch` ošetřuje jak naši chybu `ChybaValidace`, tak vestavěnou chybu `SyntaxError` z `JSON.parse`.
+V uvedeném kódu blok `try..catch` ošetřuje jak naši chybu `ChybaValidace`, tak vestavěnou chybu `SyntaxError` z `JSON.parse`.
 
 Prosíme podívejte se, jak na řádku `(*)` používáme `instanceof` k ověřování specifického typu chyby.
 
@@ -114,18 +114,18 @@ Můžeme se podívat i do `chyba.name`, například:
 
 ```js
 // ...
-// místo (chyba instanceof SyntaxError)
+// namísto (chyba instanceof SyntaxError)
 } else if (chyba.name == "SyntaxError") { // (*)
 // ...
 ```
 
-Verze s `instanceof` je mnohem lepší, protože v budoucnu se chystáme třídu `ChybaValidace` rozšiřovat, vytvářet její podtypy, např. `ChybaPožadovanéVlastnosti`. A ověření pomocí `instanceof` bude fungovat i pro nově zděděné třídy. Je tedy dopředně kompatibilní.
+Verze s `instanceof` je však mnohem lepší, protože v budoucnu se chystáme třídu `ChybaValidace` rozšiřovat, vytvářet její podtypy, např. `ChybaPožadovanéVlastnosti`. A ověření pomocí `instanceof` bude fungovat i pro nově zděděné třídy. Je tedy dopředně kompatibilní.
 
-Je také důležité, že pokud `catch` zachytí neznámou chybu, na řádku `(**)` ji opětovně vyvolá. Blok `catch` umí ošetřit jen validační a syntaktické chyby, ostatní druhy chyb (způsobené překlepem v kódu nebo jinými neznámými příčinami) by měly vypadnout dál.
+Je také důležité, že pokud `catch` zachytí neznámou chybu, na řádku `(**)` ji opětovně vyvolá. Blok `catch` umí ošetřit jen validační a syntaktické chyby, ostatní druhy chyb (způsobené překlepem v kódu nebo jinými neznámými příčinami) by měly vypadnout výš.
 
 ## Budoucí dědičnost
 
-Třída `ChybaValidace` je velmi obecná. Pokazit se může spousta věcí. Vlastnost může chybět nebo může být v nesprávném formátu (například řetězcová hodnota místo čísla u vlastnosti `věk`). Vytvořme tedy konkrétnější třídu `ChybaPožadovanéVlastnosti` sloužící výhradně pro případy absence vlastnosti. Bude obsahovat další informace o vlastnosti, která schází.
+Třída `ChybaValidace` je velmi obecná. Pokazit se může spousta věcí. Vlastnost může chybět nebo může být v nesprávném formátu (například řetězcová hodnota místo čísla u vlastnosti `věk`). Vytvořme tedy konkrétnější třídu `ChybaPožadovanéVlastnosti`, která bude sloužit výhradně pro případy chybějících vlastností. Bude obsahovat další informace o vlastnosti, která chybí.
 
 ```js run
 class ChybaValidace extends Error {
@@ -211,9 +211,9 @@ alert( new ChybaPožadovanéVlastnosti("pole").name ); // ChybaPožadovanéVlast
 
 Nyní jsou naše chyby, konkrétně `ChybaValidace`, mnohem kratší, jelikož jsme se zbavili řádku `"this.name = ..."` v konstruktoru.
 
-## Wrapování výjimek
+## Obalování výjimek
 
-Účelem funkce `načtiUživatele` ve výše uvedeném kódu je „načíst uživatelská data“. V procesu mohou nastat chyby různých druhů. Momentálně máme `SyntaxError` a `ChybaValidace`, ale v budoucnu se funkce `načtiUživatele` může rozrůst a pravděpodobně bude generovat chyby dalších druhů.
+Účelem funkce `načtiUživatele` v uvedeném kódu je „načíst uživatelská data“. Při tomto procesu mohou nastat chyby různých druhů. Momentálně máme `SyntaxError` a `ChybaValidace`, ale v budoucnu se funkce `načtiUživatele` může rozrůst a pravděpodobně bude generovat chyby dalších druhů.
 
 Tyto chyby by měl ošetřovat kód, který funkci `načtiUživatele` volá. Momentálně používá v bloku `catch` několik příkazů `if`, které prozkoumají třídu, ošetří známé chyby a opětovně vyvolají neznámé.
 
@@ -235,13 +235,13 @@ try {
 }
 ```
 
-Ve výše uvedeném kódu vidíme dva typy chyb, ale může jich tam být víc.
+V uvedeném kódu vidíme dva typy chyb, ale může jich tam být víc.
 
 Jestliže funkce `načtiUživatele` generuje chyby několika druhů, měli bychom se zeptat sami sebe: opravdu chceme pokaždé ověřovat všechny typy chyb jeden po druhém?
 
-Často zní odpověď „ne“: chtěli bychom být „o úroveň výš nad tím vším“. Chceme vědět jen to, zda to byla „chyba načítání dat“ -- proč přesně se stala, je často nepodstatné (popisuje to chybová zpráva). Nebo, ještě lépe, bychom rádi měli způsob, jak získat podrobnosti o chybě, ale jen když je budeme potřebovat.
+Odpověď často zní „ne“: chtěli bychom být „o úroveň výš nad tím vším“. Chceme vědět jen to, zda to byla „chyba načítání dat“ -- proč přesně se stala, je často nepodstatné (popisuje to chybová zpráva). Nebo ještě lepší by bylo, kdybychom měli způsob, jak získat podrobnosti o chybě, ale jen když je budeme potřebovat.
 
-Technika, kterou tady popisujeme, se nazývá „wrapování výjimek“.
+Technika, kterou tady popisujeme, se nazývá „obalování (wrapping) výjimek“.
 
 1. Vytvoříme novou třídu `ChybaČtení`, která bude představovat obecnou chybu „čtení dat“.
 2. Funkce `načtiUživatele` bude zachytávat chyby načítání dat, které nastanou uvnitř ní, např. `ChybaValidace` a `SyntaxError`, a místo nich generovat chybu `ChybaČtení`.
@@ -317,14 +317,14 @@ try {
 }
 ```
 
-Ve výše uvedeném kódu `načtiUživatele` funguje přesně tak, jak je popsáno -- zachytává syntaktické a validační chyby a místo nich vyvolává chyby `ChybaČtení` (neznámé chyby se vyvolávají znovu jako obvykle).
+V uvedeném kódu `načtiUživatele` funguje přesně tak, jak jsme popsali -- zachytává syntaktické a validační chyby a místo nich vyvolává chyby `ChybaČtení` (neznámé chyby se vyvolávají znovu jako obvykle).
 
 Vnější kód si tedy ověří `instanceof ChybaČtení` a to je vše. Není třeba vyjmenovávat všechny možné typy chyb.
 
-Tento přístup se nazývá „wrapování (obalování) výjimek“, protože přejímáme výjimky „nižší úrovně“ a obalujeme *(anglicky „wrap“)* je do výjimky `ChybaČtení`, která je abstraktnější. V objektově orientovaném programování se zeširoka používá.
+Tento přístup se nazývá „obalování (wrapping) výjimek“, protože přejímáme výjimky „nižší úrovně“ a „obalujeme“ (anglicky „wrap“) je do výjimky `ChybaČtení`, která je abstraktnější. V objektově orientovaném programování se zeširoka používá.
 
 ## Shrnutí
 
-- Ze třídy `Error` a jiných vestavěných tříd můžeme běžně dědit. Jen se musíme postarat o vlastnost `name` a nesmíme zapomenout volat `super`.
+- Ze třídy `Error` a jiných vestavěných tříd můžeme dědit běžným způsobem. Jen se musíme postarat o vlastnost `name` a nesmíme zapomenout volat `super`.
 - K ověření chyb určitého druhu můžeme použít `instanceof`. Ten funguje i s dědičností. Někdy však máme chybový objekt pocházející z knihovny třetí strany a neexistuje žádný snadný způsob, jak získat jeho třídu. Pak můžeme pro taková ověření použít vlastnost `name`.
-- Široce používaná technika je wrapování výjimek: funkce ošetří výjimky nižší úrovně a namísto různých chyb nižší úrovně vyvolá chybu vyšší úrovně. Jejími vlastnostmi se někdy stávají výjimky nižší úrovně, například `chyba.příčina` ve výše uvedených příkladech, ale to není striktně vyžadováno.
+- Široce používaná technika je obalování výjimek: funkce ošetří výjimky nižší úrovně a namísto různých chyb nižší úrovně vyvolá chybu vyšší úrovně. Výjimky nižší úrovně se někdy stávají jejími vlastnostmi, například `chyba.příčina` v uvedených příkladech, ale to není striktně vyžadováno.

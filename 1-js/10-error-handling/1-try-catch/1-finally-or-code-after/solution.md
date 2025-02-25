@@ -44,4 +44,4 @@ function f() {
 f(); // úklid!
 ```
 
-Je to právě `finally`, co nám zde úklid zajistí. Kdybychom umístili kód na konec funkce `f`, v těchto situacích by se nespustil.
+Úklid nám zde zajistí právě `finally`. Kdybychom umístili kód na konec funkce `f`, v těchto situacích by se nespustil.

@@ -35,4 +35,4 @@ Porovnejte si tyto dva fragmenty kódu.
 
 Úklid po práci potřebujeme provést v každém případě, ať už nastala chyba nebo ne.
 
-Je zde nějaká výhoda v použití `finally`, nebo jsou oba fragmenty kódu rovnocenné? Pokud je nějaká výhoda, vymyslete příklad, v němž na ní záleží.
+Je zde nějaká výhoda v použití `finally`, nebo jsou oba fragmenty kódu rovnocenné? Pokud je nějaká výhoda, vymyslete příklad, v němž se projeví.

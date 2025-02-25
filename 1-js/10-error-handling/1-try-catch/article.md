@@ -8,7 +8,7 @@ Existuje však syntaktická konstrukce `try...catch`, která nám umožňuje „
 
 ## Syntaxe „try...catch“
 
-Konstrukce `try...catch` má dva hlavní bloky: `try` a za ním `catch`:
+Konstrukt `try...catch` má dva hlavní bloky: `try` a za ním `catch`:
 
 ```js
 try {
@@ -25,8 +25,8 @@ try {
 Funguje následovně:
 
 1. Nejprve se spustí kód v bloku `try {...}`.
-2. Pokud v něm nejsou chyby, blok `catch (chyba)` je ignorován: řízení dosáhne konce `try`, přeskočí blok `catch` a pokračuje dál.
-3. Pokud nastane chyba, výkon bloku `try` se ukončí a řízení pokračuje začátkem bloku `catch (chyba)`. Proměnná `chyba` (můžeme ji pojmenovat jakkoli) bude obsahovat chybový objekt s podrobnostmi o tom, co se stalo.
+2. Pokud v něm nejsou chyby, blok `catch (chyba)` je ignorován: běh dosáhne konce `try`, přeskočí blok `catch` a pokračuje dál.
+3. Pokud nastane chyba, výkon bloku `try` se ukončí a běh pokračuje začátkem bloku `catch (chyba)`. Proměnná `chyba` (můžeme ji pojmenovat jakkoli) bude obsahovat chybový objekt s podrobnostmi o tom, co se stalo.
 
 ![](try-catch-flow.svg)
 
@@ -81,11 +81,11 @@ Nebude fungovat, když bude kód syntakticky nesprávný, například bude obsah
 try {
   {{{{{{{{{{{{
 } catch (chyba) {
-  alert("Engine tomuto kódu nerozumí, kód je nesprávný");
+  alert("Motor tomuto kódu nerozumí, kód je nesprávný");
 }
 ```
 
-JavaScriptový engine nejdříve načte kód a pak jej spustí. Chyby, které nastanou při fázi načítání, se nazývají „překladové“ (parse-time) chyby a nelze se z nich zotavit (zevnitř kódu). Je to proto, že engine tomuto kódu nedokáže porozumět.
+JavaScriptový motor nejdříve načte kód a pak jej spustí. Chyby, které nastanou při fázi načítání, se nazývají „překladové“ (parse-time) chyby a nelze se z nich zotavit (zevnitř kódu). Je to proto, že motor takovému kódu nedokáže porozumět.
 
 Blok `try...catch` tedy umí ošetřit jen chyby, které se vyskytnou v platném kódu. Takové chyby se nazývají „běhové (runtime) chyby“ nebo někdy „výjimky“.
 ````
@@ -104,13 +104,13 @@ try {
 }
 ```
 
-Je to proto, že samotná funkce se spustí později, když engine již opustil konstrukci `try...catch`.
+Je to proto, že samotná funkce se spustí později, když motor již opustil konstrukt `try...catch`.
 
 Abychom zachytili výjimku uvnitř naplánované funkce, `try...catch` musí být uvnitř této funkce:
 ```js run
 setTimeout(function() {
   try {    
-    neexistujícíProměnná; // try...catch tuto chybu zpracuje
+    neexistujícíProměnná; // try...catch tuto chybu zpracuje!
   } catch {
     alert( "zde je odchycena chyba!" );
   }
@@ -161,7 +161,7 @@ try {
 }
 ```
 
-## Vazba „catch“ je nepovinná
+## Objekt chyby v „catch“ je nepovinný
 
 [recent browser=new]
 
@@ -179,7 +179,7 @@ try {
 
 Prozkoumejme případ použití `try...catch` z reálného života.
 
-Jak už víme, JavaScript podporuje metodu [JSON.parse(str)](mdn:js/JSON/parse) k načtení hodnot zakódovaných do JSON.
+Jak už víme, JavaScript podporuje metodu [JSON.parse(str)](mdn:js/JSON/parse) k načtení hodnot zakódovaných do JSONu.
 
 Obvykle se používá k dekódování dat získaných po síti, ze serveru nebo z jiného zdroje.
 
@@ -203,7 +203,7 @@ Podrobnější informace o JSON naleznete v kapitole <info:json>.
 
 Měli bychom se s tím spokojit? Ovšemže ne!
 
-Tímto způsobem, je-li s daty něco špatně, návštěvník se o tom nikdy nedozví (pokud si neotevře vývojářskou konzoli). A lidé opravdu nemají rádi, když něco „jen tak spadne“ bez jakéhokoli chybového hlášení.
+Pokud je v datech něco špatně, tímto způsobem se o tom návštěvník nikdy nedozví (pokud si neotevře vývojářskou konzoli). A lidé opravdu nemají rádi, když něco „jen tak spadne“ bez jakéhokoli chybového hlášení.
 
 Použijme tedy k ošetření chyby `try...catch`:
 
@@ -328,13 +328,13 @@ try {
 }
 ```
 
-Na řádku `(*)` operátor `throw` generuje chybu `SyntaxError` se zadanou zprávou `message`, stejným způsobem, jakým by ji vygeneroval samotný JavaScript. Výkon bloku `try` okamžitě skončí a tok řízení skočí do bloku `catch`.
+Na řádku `(*)` operátor `throw` generuje chybu `SyntaxError` se zadanou zprávou `message`, stejným způsobem, jakým by ji vygeneroval samotný JavaScript. Výkon bloku `try` okamžitě skončí a běh skočí do bloku `catch`.
 
 Nyní se `catch` stalo jediným místem pro ošetření všech chyb: jak pro `JSON.parse`, tak pro jiné případy.
 
 ## Opětovné vyvolání
 
-Ve výše uvedeném příkladu jsme použili `try...catch` ke zpracování nekorektních dat. Je však možné, že uprostřed bloku `try {...}` nastane i *jiná neočekávaná chyba*? Například programátorská chyba (proměnná není definována) nebo něco jiného, nejenom tahle věc s „nekorektními daty“.
+V uvedeném příkladu jsme použili `try...catch` ke zpracování nekorektních dat. Je však možné, že uprostřed bloku `try {...}` nastane i *jiná neočekávaná chyba*? Například programátorská chyba (proměnná není definována) nebo něco jiného, nejenom tahle věc s „nekorektními daty“.
 
 Například:
 
@@ -351,7 +351,7 @@ try {
 }
 ```
 
-Samozřejmě, všechno je možné! Programátoři dělají chyby. I v open-source utilitách (se zveřejněným zdrojovým kódem), které používají milióny lidí desítky let, může být náhle odhalena chyba, která vede ke strašlivým útokům hackerů.
+Samozřejmě, všechno je možné! Programátoři dělají chyby. I v utilitách se zveřejněným zdrojovým kódem, které používají milióny lidí desítky let, může být náhle odhalena chyba, která vede ke strašlivým útokům hackerů.
 
 V našem případě je `try...catch` použit k tomu, aby zachytil chyby „nekorektních dat“. Ze své povahy však `catch` zachytí *všechny* chyby zevnitř `try`. Tady obdrží nečekanou chybu, ale stále zobrazí stejnou zprávu `"Chyba JSONu"`. To je špatně a ztěžuje to ladění kódu.
 
@@ -363,7 +363,7 @@ Techniku „opětovného vyvolání“ můžeme podrobněji vysvětlit takto:
 
 1. Blok catch zachytí všechny chyby.
 2. V bloku `catch (chyba) {...}` analyzujeme chybový objekt `chyba`.
-3. Nevíme-li, jak jej zpracovat, vyvoláme `throw chyba`.
+3. Pokud jej neumíme zpracovat, vyvoláme `throw chyba`.
 
 Obvykle můžeme ověřit typ chyby operátorem `instanceof`:
 
@@ -381,7 +381,7 @@ try {
 
 Můžeme také získat název třídy chyby z vlastnosti `chyba.name`. Tu mají všechny nativní chyby. Další možností je načíst `chyba.constructor.name`.
 
-V níže uvedeném kódu můžeme využít opětovné vyvolání tak, že `catch` bude zpracovávat pouze `SyntaxError`:
+V následujícím kódu můžeme využít opětovné vyvolání tak, že `catch` bude zpracovávat pouze `SyntaxError`:
 
 ```js run
 let json = '{ "věk": 30 }'; // neúplná data
@@ -412,11 +412,11 @@ try {
 }
 ```
 
-Chyba vyvolaná na řádku `(*)` zevnitř bloku `catch` „vypadne“ z bloku `try...catch` a buď může být zachycena vnější konstrukcí `try...catch` (pokud existuje), nebo shodí skript.
+Chyba vyvolaná na řádku `(*)` zevnitř bloku `catch` „vypadne“ z bloku `try...catch` a buď může být zachycena vnějším konstruktem `try...catch` (pokud existuje), nebo shodí skript.
 
 Blok `catch` tedy ve skutečnosti ošetří jen chyby, s nimiž si umí poradit, a všechny ostatní „přeskočí“.
 
-Níže uvedený příklad předvádí, jak lze takové chyby zachytit další úrovní `try...catch`:
+Následující příklad předvádí, jak lze takové chyby zachytit další úrovní `try...catch`:
 
 ```js run
 function načtiData() {
@@ -441,18 +441,18 @@ try {
   načtiData();
 } catch (chyba) {
 *!*
-  alert( "Externí catch zachytil chybu: " + chyba ); // chytili jsme ji!
+  alert( "Vnější catch zachytil chybu: " + chyba ); // chytili jsme ji!
 */!*
 }
 ```
 
-Zde `načtiData` umí ošetřit jedině `SyntaxError`, zatímco vnější `try...catch` umí ošetřit všechno.
+Zde funkce `načtiData` umí ošetřit jedině `SyntaxError`, zatímco vnější `try...catch` umí ošetřit všechno.
 
 ## try...catch...finally
 
 Počkat, to ještě není všechno.
 
-Konstrukce `try...catch` může mít ještě jednu kódovou klauzuli: `finally`.
+Konstrukt `try...catch` může mít ještě jednu kódovou klauzuli: `finally`.
 
 Pokud existuje, spustí se ve všech případech:
 
@@ -476,7 +476,7 @@ Zkuste si spustit tento kód:
 ```js run
 try {
   alert( 'try' );
-  if (confirm('Vyvolat chybu?')) ŠPATNÝ_KÓD();
+  if (confirm('Vyvolat chybu?')) CHYBNÝ_KÓD();
 } catch (chyba) {
   alert( 'catch' );
 } finally {
@@ -484,16 +484,16 @@ try {
 }
 ```
 
-Tento kód má dvě možné cesty průběhu:
+Tento kód může běžet dvěma možnými cestami:
 
 1. Pokud odpovíte „Ano“ na „Vyvolat chybu?“, pak `try -> catch -> finally`.
 2. Pokud odpovíte „Ne“, pak `try -> finally`.
 
-Klauzule `finally` se často používá, když začnete něco dělat a chcete to ukončit, ať je výsledek jakýkoli.
+Klauzule `finally` se často používá, když začneme něco dělat a chceme to ukončit, ať je výsledek jakýkoli.
 
-Například chceme změřit čas, jaký spotřebuje funkce `fib(n)` pro výpočet Fibonacciho čísel. Přirozeně můžeme zahájit měření předtím, než se spustí, a ukončit je posléze. Co když však během volání funkce nastane chyba? Konkrétně implementace `fib(n)` v níže uvedeném kódu vrátí chybu pro záporná nebo necelá čísla.
+Například chceme změřit čas, jaký spotřebuje funkce `fib(n)` pro výpočet Fibonacciho čísel. Přirozeně můžeme zahájit měření předtím, než se spustí, a ukončit je posléze. Co když však během volání funkce nastane chyba? Konkrétně implementace `fib(n)` v následujícím kódu vrátí chybu pro záporná nebo necelá čísla.
 
-Klauzule `finally` je skvělé místo, v němž můžeme ukončit měření, ať funkce dopadne jakkoli.
+Klauzule `finally` je vhodné místo, v němž můžeme ukončit měření, ať funkce dopadne jakkoli.
 
 Zde `finally` zaručuje, že čas bude správně změřen v obou situacích -- v případě úspěšného spuštění `fib` i v případě, že během něj nastane chyba:
 
@@ -531,7 +531,7 @@ Můžete si to ověřit, když spustíte kód a do `prompt` zadáte `35` -- spus
 Jinými slovy, funkce může skončit pomocí `return` nebo `throw`, na tom nezáleží. Klauzule `finally` se spustí v obou případech.
 
 ```smart header="Proměnné uvnitř `try...catch...finally` jsou lokální"
-Prosíme všimněte si, že proměnné `výsledek` a `rozdíl` ve výše uvedeném kódu jsou deklarovány *před* `try...catch`.
+Prosíme všimněte si, že proměnné `výsledek` a `rozdíl` v uvedeném kódu jsou deklarovány *před* `try...catch`.
 
 Jinak kdybychom deklarovali `let` v bloku `try`, proměnné by byly viditelné jen uvnitř bloku.
 ```
@@ -539,7 +539,7 @@ Jinak kdybychom deklarovali `let` v bloku `try`, proměnné by byly viditelné j
 ````smart header="`finally` a `return`"
 Klauzule `finally` funguje při *jakémkoli* opuštění bloku `try...catch`. To platí i pro výslovně uvedený `return`.
 
-V níže uvedeném příkladu je `return` uvnitř `try`. V tom případě se `finally` spustí právě předtím, než se řízení vrátí do vnějšího kódu.
+V následujícím příkladu je `return` uvnitř `try`. V tom případě se `finally` spustí právě předtím, než se běh vrátí do vnějšího kódu.
 
 ```js run
 function funkce() {
@@ -564,7 +564,7 @@ alert( funkce() ); // nejprve se spustí alert z finally a pak tento
 
 ````smart header="`try...finally`"
 
-Užitečná je i konstrukce `try...finally` bez klauzule `catch`. Používáme ji, když zde nechceme ošetřovat chyby (necháme je vypadnout ven), ale chceme mít jistotu, že procesy, které jsme zahájili, budou dokončeny.
+Konstrukt `try...finally` je užitečný i bez klauzule `catch`. Používáme jej, když zde nechceme ošetřovat chyby (necháme je vypadnout ven), ale chceme mít jistotu, že procesy, které jsme zahájili, budou dokončeny.
 
 ```js
 function funkce() {
@@ -576,7 +576,7 @@ function funkce() {
   }
 }
 ```
-Ve výše uvedeném kódu chyba vzniklá uvnitř `try` vždy vypadne, protože zde není `catch`. Ale `finally` zafunguje ještě předtím, než tok řízení opustí funkci.
+V uvedeném kódu chyba vzniklá uvnitř `try` vždy vypadne, protože zde není `catch`. Ale `finally` se vykoná ještě předtím, než běh opustí funkci.
 ````
 
 ## Globální zachycení
@@ -606,7 +606,7 @@ window.onerror = function(zpráva, url, řádek, sloupec, chyba) {
 : URL skriptu, v němž došlo k chybě.
 
 `řádek`, `sloupec`
-: Číslo řádku a sloupce, v nichž chyba nastala.
+: Číslo řádku a číslo sloupce, v nichž chyba nastala.
 
 `chyba`
 : Chybový objekt.
@@ -617,7 +617,7 @@ Například:
 <script>
 *!*
   window.onerror = function(zpráva, url, řádek, sloupec, chyba) {
-    alert(`${zpráva}\n Na ${line}:${col} adresy ${url}`);
+    alert(`${zpráva}\n Na ${řádek}:${sloupec} adresy ${url}`);
   };
 */!*
 
@@ -629,20 +629,20 @@ Například:
 </script>
 ```
 
-Úkolem globálního handleru `window.onerror` obvykle nebývá obnovit výkon skriptu -- to je v případě programátorských chyb už zřejmě nemožné, ale poslat vývojářům chybovou zprávu.
+Úkolem globálního handleru `window.onerror` obvykle není obnovit běh skriptu -- to je v případě programátorských chyb už zřejmě nemožné, ale poslat vývojářům chybovou zprávu.
 
-Existují i webové služby, které poskytují logování chyb pro tyto případy, například <https://errorception.com> nebo <https://www.muscula.com>.
+Existují i webové služby, které poskytují logování chyb pro tyto případy, například <https://www.muscula.com>.
 
 Fungují následovně:
 
-1. Zaregistrujete se na službě a dostanete od ní kousek kódu v JS (nebo URL skriptu), který si vložíte na stránku.
+1. Zaregistrujeme se na službě a dostaneme od ní kousek kódu v JS (nebo URL skriptu), který si vložíme na stránku.
 2. Skript v JS nastaví uživatelskou funkci `window.onerror`.
 3. Když nastane chyba, skript pošle službě síťový požadavek s informací o chybě.
 4. Pak se můžeme přihlásit na webové rozhraní služby a chyby si prohlédnout.
 
 ## Shrnutí
 
-Konstrukce `try...catch` nám umožňuje ošetřovat běhové chyby. Doslova nám umožňuje „pokusit se“ *(anglicky „try“)* spustit kód a „zachytit“ *(anglicky „catch“)* chyby, které v něm mohou nastat.
+Konstrukt `try...catch` nám umožňuje ošetřovat běhové chyby. Doslova nám umožňuje „pokusit se“ (anglicky „try“) spustit kód a „zachytit“ (anglicky „catch“) chyby, které v něm mohou nastat.
 
 Syntaxe je:
 
@@ -657,7 +657,7 @@ try {
 }
 ```
 
-Sekce `catch` nebo `finally` tam nemusí být, takže fungují i kratší konstrukce `try...catch` a `try...finally`.
+Sekce `catch` nebo `finally` tam nemusí být, takže fungují i kratší konstrukty `try...catch` a `try...finally`.
 
 Chybové objekty mají následující vlastnosti:
 
@@ -665,10 +665,10 @@ Chybové objekty mají následující vlastnosti:
 - `name` -- řetězec s názvem chyby (název konstruktoru chyby).
 - `stack` (nestandardní, ale široce podporovaná) -- zásobník v okamžiku vzniku chyby.
 
-Pokud chybový objekt nepotřebujeme, můžeme jej vynechat použitím `catch {` namísto `catch (chyba) {`.
+Pokud chybový objekt nepotřebujeme, můžeme jej vynechat a použít jen `catch {` namísto `catch (chyba) {`.
 
-Můžeme také generovat své vlastní chyby pomocí operátoru `throw`. Technicky může být argumentem `throw` cokoli, ale obvykle to bývá chybový objekt zděděný z vestavěné třídy `Error`. O rozšiřování chyb se dozvíme více v příští kapitole.
+Můžeme také generovat své vlastní chyby pomocí operátoru `throw`. Technicky může být argumentem `throw` cokoli, ale obvykle to je chybový objekt zděděný z vestavěné třídy `Error`. O rozšiřování chyb se dozvíme více v příští kapitole.
 
-Velmi důležitým vzorcem ošetřování chyb je *opětovné vyvolání*: blok `catch` obvykle očekává a umí ošetřit jen chybu určitého typu, takže chyby, které nezná, by měl opětovně vyvolat.
+Velmi důležitým vzorcem ošetřování chyb je *opětovné vyvolání*: blok `catch` obvykle očekává a umí ošetřit jen chyby určitého typu, takže chyby, které nezná, by měl opětovně vyvolat.
 
 I když nemáme `try...catch`, většina prostředí nám umožňuje nastavit „globální“ chybový handler, který bude zachytávat chyby, které „vypadnou“. V prohlížeči je to `window.onerror`.
