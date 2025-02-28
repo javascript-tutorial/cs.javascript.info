@@ -1,3 +1,3 @@
 Výstup je: `1`.
 
-Druhé volání `resolve` se ignoruje, protože v úvahu se bere vždy jen první volání `reject/resolve`. Další volání jsou ignorována.
+Druhé volání `splň` se ignoruje, protože v úvahu se bere vždy jen první volání `splň/zamítni`. Další volání jsou ignorována.

@@ -2,9 +2,9 @@
 
 Představte si, že jste špičkový zpěvák a vaši fanoušci se dnem i nocí dožadují vaší nejnovější písně.
 
-Abyste získali trochu klidu, slíbíte jim, že jim píseň pošlete, až bude vydána. Dáte svým fanouškům seznam. Mohou do něj vyplnit svou emailovou adresu, takže až bude píseň k dispozici, všichni podepsaní ji okamžitě dostanou. A i kdyby se něco ošklivě pokazilo, například kdyby vyhořelo nahrávací studio a vy byste nemohli svou píseň vydat, stále byste jim to mohli oznámit.
+Abyste získali trochu klidu, slíbíte jim, že jim píseň pošlete, až bude vydána. Dáte svým fanouškům seznam, do kterého mohou zadat svou emailovou adresu, takže až bude píseň k dispozici, všichni podepsaní ji okamžitě dostanou. A i kdyby se něco ošklivě pokazilo, například kdyby vyhořelo nahrávací studio a vy byste nemohli svou píseň vydat, stále jim to budete moci oznámit.
 
-Všichni jsou šťastní: vy, protože vás lidé už neobléhají, a fanoušci, protože o píseň nepřijdou.
+Všichni jsou šťastní: vy, protože vás lidé už neobléhají, a fanoušci, protože jim píseň neunikne.
 
 To je analogie ze skutečného života s tím, co často máme v programování:
 
@@ -17,26 +17,26 @@ Tato analogie není zcela přesná, protože JavaScriptové přísliby jsou slo�
 Syntaxe konstruktoru objektu příslibu je:
 
 ```js
-let příslib = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(splň, zamítni) {
   // exekutor (produkující kód, „zpěvák“)
 });
 ```
 
 Funkce předaná do konstruktoru `new Promise` se nazývá *exekutor*. Když je vytvořen `new Promise`, exekutor se automaticky spustí. Obsahuje produkující kód, který by měl nakonec vyprodukovat výsledek. V pojmech výše uvedené analogie: exekutor je „zpěvák“.
 
-Jeho argumenty `resolve` a `reject` jsou callbacky, které poskytuje samotný JavaScript. Náš kód je obsažen pouze v exekutoru.
+Jeho argumenty `splň` a `zamítni` jsou callbacky, které poskytuje samotný JavaScript. Náš kód je obsažen pouze v exekutoru.
 
-Když exekutor získá výsledek, ať je to dříve či později, na tom nezáleží, měl by volat jeden z těchto callbacků:
+Když exekutor získá výsledek, nezáleží na tom, zda je to dříve či později, měl by volat jeden z těchto callbacků:
 
-- `resolve(hodnota)` — pokud práce skončila úspěšně, s výsledkem `hodnota`.
-- `reject(chyba)` — pokud došlo k chybě, `chyba` je chybový objekt.
+- `splň(hodnota)` — pokud práce skončila úspěšně, s výsledkem `hodnota`.
+- `zamítni(chyba)` — pokud došlo k chybě, `chyba` je chybový objekt.
 
-Když to tedy shrneme: exekutor se automaticky spustí a pokusí se provést svou práci. Když je s tímto pokusem hotov, volá buď `resolve`, jestliže byl úspěšný, nebo `reject`, pokud nastala chyba.
+Když to tedy shrneme: exekutor se automaticky spustí a pokusí se provést svou práci. Když je s tímto pokusem hotov, volá buď `splň`, jestliže byl úspěšný, nebo `zamítni`, pokud nastala chyba.
 
 Objekt `příslib` vracený konstruktorem `new Promise` obsahuje tyto interní vlastnosti:
 
-- `state` — na začátku `"pending"` *(„čekající na vyřízení“)*, pak se změní buď na `"fulfilled"` *(„splněný“)*, když je voláno `resolve`, nebo na `"rejected"` *(„zamítnutý“)*, když je voláno `reject`.
-- `result` — na začátku `undefined`, pak se změní buď na `hodnota`, když je voláno `resolve(hodnota)`, nebo na `chyba`, když je voláno `reject(chyba)`.
+- `state` (stav) — na začátku `"pending"` („čekající na vyřízení“), pak se změní buď na `"fulfilled"` („splněný“), když je voláno `splň`, nebo na `"rejected"` („zamítnutý“), když je voláno `zamítni`.
+- `result` (výsledek) — na začátku `undefined`, pak se změní buď na `hodnota`, když je voláno `splň(hodnota)`, nebo na `chyba`, když je voláno `zamítni(chyba)`.
 
 Exekutor tedy nakonec uvede objekt `příslib` do jednoho z těchto stavů:
 
@@ -44,23 +44,23 @@ Exekutor tedy nakonec uvede objekt `příslib` do jednoho z těchto stavů:
 
 Později uvidíme, jak se na tyto změny mohou zapsat „fanoušci“.
 
-Zde je příklad konstruktoru příslibu a jednoduchý exekutor s „produkujícím kódem“, který zabere nějaký čas (pomocí `setTimeout`):
+Uveďme příklad konstruktoru příslibu a jednoduchého exekutoru s „produkujícím kódem“, který zabere nějaký čas (pomocí `setTimeout`):
 
 ```js
-let příslib = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(splň, zamítni) {
   // tato funkce se spustí automaticky, když se vytvoří příslib
 
-  // po 1 sekundě signalizuje, že práce je hotová s výsledkem „hotovo“
-  setTimeout(() => *!*resolve("hotovo")*/!*, 1000);
+  // po 1 sekundě signalizuje, že práce je hotová s výsledkem "hotovo"
+  setTimeout(() => *!*splň("hotovo")*/!*, 1000);
 });
 ```
 
 Při spuštění uvedeného kódu uvidíme dvě věci:
 
 1. Exekutor je volán automaticky a okamžitě (pomocí `new Promise`).
-2. Exekutor obdrží dva argumenty: `resolve` a `reject`. Tyto funkce jsou předdefinovány enginem JavaScriptu, takže je nemusíme vytvářet. Měli bychom jen volat jednu z nich, až budeme připraveni.
+2. Exekutor obdrží dva argumenty: `splň` a `zamítni`. Tyto funkce jsou předdefinovány motorem JavaScriptu, takže je nemusíme vytvářet. Měli bychom jen volat jednu z nich, až budeme připraveni.
 
-    Po jedné sekundě „zpracovávání“ exekutor zavolá `resolve("hotovo")`, aby vytvořil výsledek. Tím se změní stav objektu `příslib`:
+    Po jedné sekundě „zpracovávání“ exekutor zavolá `splň("hotovo")`, aby vytvořil výsledek. Tím se změní stav objektu `příslib`:
 
 ![](promise-resolve-1.svg)
 
@@ -69,62 +69,62 @@ To byl příklad úspěšného dokončení práce, „splněný příslib“.
 A nyní uvedeme příklad exekutoru, který zamítne příslib s chybou:
 
 ```js
-let příslib = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(splň, zamítni) {
   // po 1 sekundě signalizuje, že práce je hotová s chybou
-  setTimeout(() => *!*reject(new Error("Ouha!"))*/!*, 1000);
+  setTimeout(() => *!*zamítni(new Error("Ouha!"))*/!*, 1000);
 });
 ```
 
-Volání `reject(...)` uvede objekt příslibu do stavu `"rejected"`:
+Volání `zamítni(...)` uvede objekt příslibu do stavu `"rejected"`:
 
 ![](promise-reject-1.svg)
 
-Když to tedy shrneme, exekutor by měl provést nějakou práci (zpravidla něco, co zabere nějaký čas) a pak volat buď `resolve`, nebo `reject`, aby změnil stav odpovídajícího objektu příslibu.
+Když to tedy shrneme, exekutor by měl provést nějakou práci (zpravidla něco, co zabere nějaký čas) a pak volat buď `splň`, nebo `zamítni`, aby změnil stav odpovídajícího objektu příslibu.
 
-Příslib, který je buď vyřešený, nebo zamítnutý, se nazývá „usazený“ *(„settled“)*, oproti původně „čekajícímu“ *(„pending“)* příslibu.
+Příslib, který je buď splněný, nebo zamítnutý, se nazývá „usazený“ („settled“), oproti původně „čekajícímu“ („pending“) příslibu.
 
 ````smart header="Výsledek nebo chyba může být pouze jeden"
-Exekutor by měl volat pouze jednou `resolve` nebo jednou `reject`. Jakákoli změna stavu je konečná.
+Exekutor by měl volat pouze jednou `splň` nebo jednou `zamítni`. Jakákoli změna stavu je konečná.
 
-Veškerá další volání `resolve` a `reject` jsou ignorována:
+Veškerá další volání `splň` a `zamítni` se ignorují:
 
 ```js
-let příslib = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(splň, zamítni) {
 *!*
-  resolve("hotovo");
+  splň("hotovo");
 */!*
 
-  reject(new Error("…")); // ignorováno
-  setTimeout(() => resolve("…")); // ignorováno
+  zamítni(new Error("…")); // ignorováno
+  setTimeout(() => splň("…")); // ignorováno
 });
 ```
 
 Myšlenkou je, že práce prováděná exekutorem může mít pouze jeden výsledek nebo chybu.
 
-Navíc `resolve`/`reject` očekává pouze jediný argument (nebo žádný) a všechny další argumenty bude ignorovat.
+Navíc `splň`/`zamítni` očekává pouze jediný argument (nebo žádný) a všechny další argumenty bude ignorovat.
 ````
 
 ```smart header="Zamítnutí s objekty třídy `Error`"
-V případě, že se něco pokazí, by exekutor měl volat `reject`. To je možné volat s argumentem libovolného typu (stejně jako `resolve`). Doporučuje se však používat objekty třídy `Error` (nebo objekty zděděné z třídy `Error`). Důvod bude brzy zřejmý.
+V případě, že se něco pokazí, by exekutor měl volat `zamítni`. To je možné volat s argumentem libovolného typu (stejně jako `splň`). Doporučuje se však používat objekty třídy `Error` (nebo objekty zděděné z třídy `Error`). Důvod bude brzy objasněn.
 ```
 
-````smart header="Okamžité volání `resolve`/`reject`"
-V praxi exekutor obvykle provádí něco asynchronně a volá `resolve`/`reject` až za nějakou dobu, ale to nemusí. Můžeme volat `resolve` nebo `reject` i okamžitě, například:
+````smart header="Okamžité volání `splň`/`zamítni`"
+V praxi exekutor obvykle provádí něco asynchronně a volá `splň`/`zamítni` až za nějakou dobu, ale nemusí to tak být. Můžeme volat `splň` nebo `zamítni` i okamžitě, například:
 
 ```js
-let příslib = new Promise(function(resolve, reject) {
+let příslib = new Promise(function(splň, zamítni) {
   // odvést tuto práci nám nezabere žádný čas
-  resolve(123); // okamžitě vydáme výsledek: 123
+  splň(123); // okamžitě vydáme výsledek: 123
 });
 ```
 
-Může se to stát například tehdy, když začneme dělat nějakou práci, ale pak uvidíme, že všechno už bylo dokončeno a uloženo do cache.
+Může se to stát například tehdy, když začneme dělat nějakou práci, ale pak uvidíme, že všechno už bylo dokončeno a uloženo do mezipaměti.
 
-To je pěkné. Hned máme příslib splněný.
+To je dobře. Hned máme příslib splněný.
 ````
 
 ```smart header="Vlastnosti `state` a `result` jsou interní"
-Vlastnosti `state` a `result` objektu Promise jsou interní. Nemůžeme k nim přistupovat přímo. Můžeme k tomu použít metody `.then`/`.catch`/`.finally`, které jsou popsány níže.
+Vlastnosti `state` a `result` objektu Promise jsou interní. Nemůžeme k nim přistupovat přímo. Můžeme k tomu použít metody `.then`/`.catch`/`.finally`, které budou dále vysvětleny.
 ```
 
 ## Konzumenti: then, catch
@@ -151,14 +151,14 @@ Druhým argumentem `.then` je funkce, která se spustí, když je příslib zam�
 Například zde je reakce na úspěšně provedený příslib:
 
 ```js run
-let příslib = new Promise(function(resolve, reject) {
-  setTimeout(() => resolve("hotovo!"), 1000);
+let příslib = new Promise(function(splň, zamítni) {
+  setTimeout(() => splň("hotovo!"), 1000);
 });
 
-// resolve spustí první funkci v .then
+// splň spustí první funkci v .then
 příslib.then(
 *!*
-  výsledek => alert(výsledek), // zobrazí „hotovo!“ za 1 sekundu
+  výsledek => alert(výsledek), // zobrazí "hotovo!" za 1 sekundu
 */!*
   chyba => alert(chyba) // nespustí se
 );
@@ -169,15 +169,15 @@ Byla spuštěna první funkce.
 A v případě zamítnutí se spustí druhá:
 
 ```js run
-let příslib = new Promise(function(resolve, reject) {
-  setTimeout(() => reject(new Error("Ouha!")), 1000);
+let příslib = new Promise(function(splň, zamítni) {
+  setTimeout(() => zamítni(new Error("Ouha!")), 1000);
 });
 
-// reject spustí druhou funkci v .then
+// zamítni spustí druhou funkci v .then
 příslib.then(
   result => alert(result), // nespustí se
 *!*
-  chyba => alert(chyba) // zobrazí „Error: Ouha!“ za 1 sekundu
+  chyba => alert(chyba) // zobrazí "Error: Ouha!" za 1 sekundu
 */!*
 );
 ```
@@ -185,12 +185,12 @@ příslib.then(
 Jestliže nás zajímají pouze úspěšná dokončení, můžeme funkci `.then` poskytnout pouze jeden argument:
 
 ```js run
-let příslib = new Promise(resolve => {
-  setTimeout(() => resolve("hotovo!"), 1000);
+let příslib = new Promise(splň => {
+  setTimeout(() => splň("hotovo!"), 1000);
 });
 
 *!*
-příslib.then(alert); // zobrazí „hotovo!“ za 1 sekundu
+příslib.then(alert); // zobrazí "hotovo!" za 1 sekundu
 */!*
 ```
 
@@ -200,13 +200,13 @@ Pokud nás zajímají pouze chyby, můžeme jako první argument použít `null`
 
 
 ```js run
-let příslib = new Promise((resolve, reject) => {
-  setTimeout(() => reject(new Error("Ouha!")), 1000);
+let příslib = new Promise((splň, zamítni) => {
+  setTimeout(() => zamítni(new Error("Ouha!")), 1000);
 });
 
 *!*
 // .catch(f) je totéž jako příslib.then(null, f)
-příslib.catch(alert); // zobrazí „Error: Ouha!“ za 1 sekundu
+příslib.catch(alert); // zobrazí "Error: Ouha!" za 1 sekundu
 */!*
 ```
 
@@ -218,39 +218,39 @@ Stejně jako existuje klauzule `finally` v běžném bloku `try {...} catch {...
 
 Volání `.finally(f)` se podobá `.then(f, f)` v tom smyslu, že `f` se spustí vždy, když se příslib usadí: ať už je splněn nebo zamítnut.
 
-Myšlenkou `finally` je nastavit handler pro provádění úklidu/finalizace po dokončení předchozí operace.
+Myšlenkou `finally` je nastavit handler pro provádění úklidu nebo finalizace po dokončení předchozí operace.
 
-Například zastavení indikátorů nahrávání, uzavření již nepotřebných připojení a podobně.
+Například zastavení ukazatelů nahrávání, uzavření již nepotřebných připojení a podobně.
 
-Uvažujte o něm jako o uklízeči po večírku. Ať se večírek povedl nebo ne, ať na něm byl jakýkoli počet přátel, pokaždé po něm musíme (nebo bychom aspoň měli) uklidit.
+Představte si ho jako uklízečku po večírku. Ať se večírek povedl nebo ne, ať na něm byl jakýkoli počet přátel, pokaždé po něm musíme (nebo bychom aspoň měli) uklidit.
 
 Kód může vypadat třeba následovně:
 
 ```js
-new Promise((resolve, reject) => {
-  /* udělá něco, co trvá nějaký čas, a pak volá resolve nebo možná reject */
+new Promise((splň, zamítni) => {
+  /* udělá něco, co trvá nějaký čas, a pak volá splň nebo možná zamítni */
 })
 *!*
-  // spustí se vždy, když se příslib usadí, nezáleží na tom, zda úspěšně nebo ne
-  .finally(() => zastav indikátor nahrávání)
-  // indikátor nahrávání se tedy vždy zastaví dříve, než budeme pokračovat
+  // spustí se vždy, když se příslib usadí, nezávisle na tom, zda úspěšně nebo ne
+  .finally(() => zastav ukazatel nahrávání)
+  // ukazatel nahrávání se tedy vždy zastaví dříve, než budeme pokračovat
 */!*
   .then(výsledek => zobraz výsledek, chyba => zobraz chybu)
 ```
 
-Všimněte si však, že `finally(f)` není přesně totéž jako `then(f, f)`.
+Prosíme, všimněte si však, že `finally(f)` není přesně totéž jako `then(f, f)`.
 
 Je mezi nimi několik důležitých rozdílů:
 
-1. Handler `finally` nemá žádné argumenty. Ve `finally` nevíme, zda byl příslib úspěšný nebo ne. To je v pořádku, jelikož naším úkolem obvykle bývá provést „obecné“ finalizační procedury.
+1. Handler `finally` nemá žádné argumenty. Ve `finally` nevíme, zda byl příslib úspěšný nebo ne. To je v pořádku, jelikož naším úkolem je obvykle provést „obecné“ finalizační procedury.
     
-    Prosíme podívejte se na výše uvedený příklad: jak vidíte, handler `finally` nemá žádné argumenty a výsledek příslibu je zpracován v dalším handleru.
+    Prosíme, podívejte se na uvedený příklad: jak vidíte, handler `finally` nemá žádné argumenty a výsledek příslibu je zpracován v dalším handleru.
 2. Handler `finally` „předává“ výsledek nebo chybu dalšímu vhodnému handleru.
 
     Například zde je výsledek předán skrz `finally` do `then`:
     ```js run
-    new Promise((resolve, reject) => {
-      setTimeout(() => resolve("hodnota"), 2000)
+    new Promise((splň, zamítni) => {
+      setTimeout(() => splň("hodnota"), 2000)
     })
       .finally(() => alert("Příslib připraven")) // spustí se jako první
       .then(výsledek => alert(výsledek)); // <-- .then zobrazí "hodnota"
@@ -258,21 +258,21 @@ Je mezi nimi několik důležitých rozdílů:
     
     Jak vidíte, `hodnota` vrácená prvním příslibem se předá skrz `finally` do dalšího `then`.
     
-    To je velmi užitečné, protože `finally` není určeno k tomu, aby zpracovalo výsledek příslibu. Jak bylo řečeno, jeho účelem je provést obecný úklid, nezávisle na tom, jaký byl výstup.
+    To je velmi vhodné, protože `finally` není určeno k tomu, aby zpracovalo výsledek příslibu. Jak bylo řečeno, jeho účelem je provést obecný úklid, nezávisle na tom, jaký byl výstup.
 
     A zde je v příslibu chyba, abychom viděli, jak se předá skrz `finally` do `catch`:
 
     ```js run
-    new Promise((resolve, reject) => {
+    new Promise((splň, zamítni) => {
       throw new Error("chyba");
     })
       .finally(() => alert("Příslib připraven")) // spustí se jako první
       .catch(chyba => alert(chyba));  // <-- .catch zobrazí chybu
     ```
     
-3. Handler `finally` by také neměl nic vracet. Pokud tak učiní, vrácená hodnota se tiše ignoruje.
+3. Handler `finally` by také neměl nic vracet. Pokud tak učiní, návratová hodnota se tiše ignoruje.
     
-    Jedinou výjimkou z tohoto pravidla je situace, kdy handler `finally` vygeneruje chybu. Pak se tato chyba předá do dalšího handleru místo předchozího výstupu.
+    Jedinou výjimkou z tohoto pravidla je situace, kdy handler `finally` vygeneruje chybu. Pak se do dalšího handleru místo předchozího výstupu předá tato chyba.
     
 Shrňme to:
 
@@ -280,23 +280,23 @@ Shrňme to:
 - Pokud handler `finally` vrátí nějakou hodnotu, je ignorována.
 - Když `finally` vygeneruje chybu, běh pokračuje do nejbližšího chybového handleru.
 
-Tyto vlastnosti jsou užitečné a zajistí, že vše bude fungovat správně, pokud použijeme `finally` tak, jak bylo zamýšleno: pro obecné úklidové procedury.
+Tyto vlastnosti jsou užitečné a zajistí, že vše bude fungovat správně, pokud použijeme `finally` k tomu, k čemu je určeno: pro obecné úklidové procedury.
 
 ````smart header="Můžeme připojit handlery k již usazeným příslibům"
 Pokud příslib čeká na vyřízení, handlery `.then/catch/finally` počkají na jeho výstup.
 
-Někdy se může stát, že ve chvíli, kdy k příslibu přidáme handler, příslib je již usazen.
+Někdy se může stát, že ve chvíli, kdy k příslibu přidáme handler, je příslib již usazen.
 
 V takovém případě se tyto handlery prostě okamžitě spustí:
 
 ```js run
 // příslib bude splněn ihned po vytvoření
-let příslib = new Promise(resolve => resolve("hotovo!"));
+let příslib = new Promise(splň => splň("hotovo!"));
 
 příslib.then(alert); // hotovo! (zobrazí se hned teď)
 ```
 
-Všimněte si, že to činí přísliby silnějšími než „podpisový seznam“ z reálného života. Jestliže už zpěvák svou píseň vydal a nějaká osoba se podepíše na podpisový seznam až pak, píseň už pravděpodobně nedostane. Podpisy v reálném životě musejí být učiněny ještě před událostí.
+Všimněte si, že to činí přísliby silnějšími než „podpisový seznam“ z reálného života. Jestliže už zpěvák svou píseň vydal a nějaká osoba se zapíše na podpisový seznam až pak, píseň už pravděpodobně nedostane. Podpisy v reálném životě musejí být učiněny ještě před událostí.
 
 Přísliby jsou flexibilnější. Můžeme přidávat handlery kdykoli: pokud je výsledek už hotov, handler se jednoduše spustí.
 ````
@@ -310,13 +310,13 @@ Uvažujme funkci `načtiSkript` pro načtení skriptu z předchozí kapitoly.
 Zde je varianta založená na callbacku, jen pro připomenutí:
 
 ```js
-function načtiSkript(src, callback) {
+function načtiSkript(zdroj, callback) {
   let skript = document.createElement('script');
-  skript.src = src;
+  skript.src = zdroj;
 
 *!*
   skript.onload = () => callback(null, skript);
-  skript.onerror = () => callback(new Error(`Chyba načítání skriptu pro ${src}`));
+  skript.onerror = () => callback(new Error(`Chyba načítání skriptu pro ${zdroj}`));
 */!*
 
   document.head.append(skript);
@@ -325,16 +325,16 @@ function načtiSkript(src, callback) {
 
 Přepišme ji s použitím příslibů.
 
-Nová funkce `načtiSkript` nebude vyžadovat callback. Místo toho vytvoří a vrátí objekt Promise, který se splní, až bude načítání hotovo. Vnější kód do něj může přidávat handlery (podepisující funkce) prostřednictvím `.then`:
+Nová funkce `načtiSkript` nebude vyžadovat callback. Místo něj vytvoří a vrátí objekt příslibu, který se splní, až bude načítání hotovo. Vnější kód do něj může přidávat handlery (podepisující funkce) prostřednictvím `.then`:
 
 ```js run
-function načtiSkript(src) {
-  return new Promise(function(resolve, reject) {
+function načtiSkript(zdroj) {
+  return new Promise(function(splň, zamítni) {
     let skript = document.createElement('script');
-    skript.src = src;
+    skript.src = zdroj;
 
-    skript.onload = () => resolve(skript);
-    skript.onerror = () => reject(new Error(`Chyba načítání skriptu pro ${src}`));
+    skript.onload = () => splň(skript);
+    skript.onerror = () => zamítni(new Error(`Chyba načítání skriptu pro ${zdroj}`));
 
     document.head.append(skript);
   });
@@ -359,7 +359,7 @@ Hned vidíme několik výhod oproti vzoru založenému na callbacku:
 
 | Přísliby | Callbacky |
 |----------|-----------|
-| Přísliby nám umožňují dělat věci v přirozeném pořadí. Nejprve spustíme `načtiSkript(skript)` a pak do `.then` napíšeme, co máme dělat s výsledkem. | Musíme mít funkci `callback` k dispozici, už když voláme `načtiSkript(script, callback)`. Jinými slovy, ještě *před* voláním `načtiSkript` musíme vědět, co dělat s výsledkem. |
+| Přísliby nám umožňují dělat věci v přirozeném pořadí. Nejprve spustíme `načtiSkript(skript)` a pak do `.then` napíšeme, co máme dělat s výsledkem. | Musíme mít funkci `callback` k dispozici, už když voláme `načtiSkript(skript, callback)`. Jinými slovy, ještě *před* voláním `načtiSkript` musíme vědět, co dělat s výsledkem. |
 | Můžeme volat `.then` na příslibu tolikrát, kolikrát chceme. Pokaždé přidáme na „podpisový seznam“ nového „fanouška“, novou podepsanou funkci. Více o tom v další kapitole: [](info:promise-chaining). | Callback může být pouze jeden. |
 
-Přísliby nám tedy poskytují lepší tok kódu a flexibilitu. Je toho však ještě víc. Uvidíme to v dalších kapitolách.
+Přísliby nám tedy poskytují lepší běh kódu a flexibilitu. Je toho však ještě víc. Uvidíme to v dalších kapitolách.
