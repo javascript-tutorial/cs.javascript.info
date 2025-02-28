@@ -1,14 +1,14 @@
 
-# Delay with a promise
+# Čekání s příslibem
 
-The built-in function `setTimeout` uses callbacks. Create a promise-based alternative.
+Vestavěná funkce `setTimeout` používá callbacky. Vytvořte alternativu založenou na příslibech.
 
-The function `delay(ms)` should return a promise. That promise should resolve after `ms` milliseconds, so that we can add `.then` to it, like this:
+Funkce `čekej(ms)` by měla vrátit příslib. Tento příslib by se měl splnit za `ms` milisekund, takže do něj můžeme přidat `.then`, například:
 
 ```js
-function delay(ms) {
-  // your code
+function čekej(ms) {
+  // váš kód
 }
 
-delay(3000).then(() => alert('runs after 3 seconds'));
+čekej(3000).then(() => alert('spustí se za 3 sekundy'));
 ```
