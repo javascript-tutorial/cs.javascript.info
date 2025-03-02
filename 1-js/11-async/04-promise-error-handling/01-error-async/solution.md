@@ -1,7 +1,7 @@
 Odpověď zní: **ne, nespustí**:
 
 ```js run
-new Promise(function(resolve, reject) {
+new Promise(function(splň, zamítni) {
   setTimeout(() => {
     throw new Error("Ouha!");
   }, 1000);

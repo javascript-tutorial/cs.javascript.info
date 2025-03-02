@@ -12,9 +12,9 @@ async function f() {
 }
 ```
 
-Slovo „async“ před funkcí znamená jednoduchou věc: funkce vždy vrátí příslib. Jiné hodnoty budou automaticky zabaleny do vyhodnoceného příslibu.
+Slovo „async“ před funkcí znamená jedno jediné: funkce vždy vrátí příslib. Jiné hodnoty budou automaticky zabaleny do splněného příslibu.
 
-Například tato funkce vrátí vyhodnocený příslib s výsledkem `1`; otestujme to:
+Například tato funkce vrátí splněný příslib s výsledkem `1`; otestujme to:
 
 ```js run
 async function f() {
@@ -47,16 +47,16 @@ let hodnota = await příslib;
 
 Klíčové slovo `await` přiměje JavaScript počkat, než se příslib usadí, a vrátí jeho výsledek.
 
-Následuje příklad s příslibem, který se vyhodnotí za 1 sekundu:
+Následuje příklad s příslibem, který se splní za 1 sekundu:
 ```js run
 async function f() {
 
-  let příslib = new Promise((resolve, reject) => {
-    setTimeout(() => resolve("hotovo!"), 1000)
+  let příslib = new Promise((splň, zamítni) => {
+    setTimeout(() => splň("hotovo!"), 1000)
   });
 
 *!*
-  let výsledek = await příslib; // čeká, než se příslib vyhodnotí (*)
+  let výsledek = await příslib; // čeká, než se příslib splní (*)
 */!*
 
   alert(výsledek); // "hotovo!"
@@ -65,9 +65,9 @@ async function f() {
 f();
 ```
 
-Výkon funkce se na řádku `(*)` „přeruší“ a obnoví se až tehdy, když se příslib usadí. Do proměnné `výsledek` se uloží jeho výsledek. Proto uvedený kód zobrazí za jednu sekundu „hotovo!“.
+Výkon funkce se na řádku `(*)` „pozastaví“ a obnoví se až tehdy, když se příslib usadí. Jeho výsledek se uloží do proměnné `výsledek`. Proto uvedený kód zobrazí za jednu sekundu „hotovo!“.
 
-Zdůrazněme to: `await` doslova přeruší výkon funkce, dokud se příslib neusadí, a pak jej obnoví s výsledkem příslibu. To nestojí žádné zdroje CPU, protože JavaScriptový engine mezitím může vykonávat jinou práci: spouštět další skripty, ošetřovat události a podobně.
+Zdůrazněme to: `await` doslova přeruší výkon funkce, dokud se příslib neusadí, a pak jej obnoví s výsledkem příslibu. To nestojí žádné zdroje CPU, protože motor JavaScriptu mezitím může vykonávat jinou práci: spouštět další skripty, ošetřovat události a podobně.
 
 Je to jen elegantnější syntaxe získání výsledku příslibu než `příslib.then`. A snadněji se čte a píše.
 
@@ -103,15 +103,15 @@ async function zobrazAvatara() {
   let uživatelGitHubu = await odpověďGitHubu.json();
 
   // zobrazíme avatara
-  let img = document.createElement('img');
-  img.src = uživatelGitHubu.avatar_url;
-  img.className = "promise-avatar-example";
-  document.body.append(img);
+  let obrázek = document.createElement('img');
+  obrázek.src = uživatelGitHubu.avatar_url;
+  obrázek.className = "promise-avatar-example";
+  document.body.append(obrázek);
 
   // počkáme 3 sekundy
-  await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+  await new Promise((splň, zamítni) => setTimeout(splň, 3000));
 
-  img.remove();
+  obrázek.remove();
 
   return uživatelGitHubu;
 }
@@ -134,7 +134,7 @@ let uživatel = await odpověď.json();
 console.log(uživatel);
 ```
 
-Jestliže nepoužíváme moduly nebo musíme podporovat i [starší prohlížeče](https://caniuse.com/mdn-javascript_operators_await_top_level), pak existuje univerzální recept: zabalení do anonymní asynchronní funkce.
+Jestliže nepoužíváme moduly nebo musíme podporovat i [starší prohlížeče](https://caniuse.com/mdn-javascript_operators_await_top_level), pak existuje univerzální návod: zabalení do anonymní asynchronní funkce.
 
 Například:
 
@@ -149,19 +149,19 @@ Například:
 ````
 
 ````smart header="`await` přijímá „thenable“ objekty"
-Stejně jako `příslib.then`, i `await` nám umožňuje používat thenable objekty (ty, které obsahují volatelnou metodu `then`). Myšlenkou je, že objekt třetí strany nemusí být příslib, ale objekt kompatibilní s příslibem: podporuje-li `then`, stačí to k tomu, abychom jej použili s `await`.
+Stejně jako `příslib.then`, i `await` nám umožňuje používat thenable objekty (ty, které obsahují volatelnou metodu `then`). Myšlenkou je, že objekt třetí strany nemusí být příslib, ale objekt kompatibilní s příslibem: k tomu, abychom jej použili s `await`, stačí, aby podporoval `then`.  
 
-Zde je příklad třídy `Thenable`; níže uvedený `await` přijímá její instance:
+Následuje příklad třídy `Thenable`; `await` pod ní přijímá její instance:
 
 ```js run
 class Thenable {
   constructor(číslo) {
     this.číslo = číslo;
   }
-  then(resolve, reject) {
-    alert(resolve);
+  then(splň, zamítni) {
+    alert(splň);
     // splnění s hodnotou this.číslo*2 za 1000 ms
-    setTimeout(() => resolve(this.číslo * 2), 1000); // (*)
+    setTimeout(() => splň(this.číslo * 2), 1000); // (*)
   }
 }
 
@@ -174,7 +174,7 @@ async function f() {
 f();
 ```
 
-Jestliže `await` obdrží nepříslibový objekt obsahující `.then`, zavolá tuto metodu a jako argumenty jí poskytne zabudované funkce `resolve` a `reject` (tak, jako to učiní pro obvyklý exekutor `Promise`). Pak `await` počká, dokud nebude zavolána jedna z nich (v uvedeném příkladu se to stane na řádku `(*)`) a poté bude pokračovat s výsledkem.
+Jestliže `await` obdrží nepříslibový objekt obsahující `.then`, pak tuto metodu zavolá a jako argumenty `splň` a `zamítni` jí poskytne zabudované funkce (tak, jak to učiní pro obvyklý exekutor `Promise`). Pak `await` počká, dokud nebude zavolána jedna z nich (v uvedeném příkladu se to stane na řádku `(*)`), a poté bude pokračovat s výsledkem.
 ````
 
 ````smart header="Asynchronní třídní metody"
@@ -198,7 +198,7 @@ Význam je stejný: zajišťuje, že vrácená hodnota je příslib, a umožňuj
 ````
 ## Ošetřování chyb
 
-Jestliže je příslib normálně vyhodnocen, pak `await příslib` vrátí výsledek. V případě zamítnutí však vyvolá výjimku, tak, jako by na tomto řádku byl uveden příkaz `throw`.
+Jestliže je příslib normálně splněn, pak `await příslib` vrátí výsledek. V případě zamítnutí však vyvolá chybu, tak, jako by na tomto řádku byl uveden příkaz `throw`.
 
 Tento kód:
 
@@ -220,7 +220,7 @@ async function f() {
 }
 ```
 
-V reálných situacích může nějakou dobu trvat, než bude příslib zamítnut. V tom případě nastane prodleva předtím, než `await` vyvolá chybu.
+V reálných situacích může nějakou dobu trvat, než bude příslib zamítnut. V tom případě předtím, než `await` vyvolá chybu, nastane prodleva.
 
 Tuto chybu můžeme zachytit pomocí `try..catch`, stejným způsobem, jako obvyklé `throw`:
 
@@ -308,4 +308,4 @@ Klíčové slovo `await` před příslibem přiměje JavaScript čekat, než se 
 
 Společně poskytují vynikající rámec pro psaní asynchronního kódu, který je snadné číst i psát.
 
-S `async/await` potřebujeme jen zřídka psát `příslib.then/catch`, ale stále bychom neměli zapomínat, že jsou založeny na příslibech, protože někdy (např. na nejvyšší úrovni kódu) tyto metody musíme použít. Rovněž `Promise.all` se hodí, když čekáme na mnoho úkolů současně.
+S `async/await` potřebujeme psát `příslib.then/catch` jen zřídka, ale stále bychom neměli zapomínat, že tyto metody jsou založeny na příslibech, protože někdy (např. na nejvyšší úrovni kódu) je musíme použít. Když čekáme na mnoho úkolů současně, hodí se i `Promise.all`.

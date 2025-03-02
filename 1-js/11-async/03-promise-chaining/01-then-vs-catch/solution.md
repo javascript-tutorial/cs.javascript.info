@@ -15,6 +15,6 @@ příslib
   .then(f1, f2);
 ```
 
-Je to proto, že chyba je předána skrz řetěz, ale ve druhém uvedeném kódu není za `f1` žádný řetěz.
+Je to proto, že chyba je předána řetězem, ale ve druhém uvedeném kódu za `f1` žádný řetěz není.
 
-Jinými slovy, `.then` předá výsledky/chyby dalšímu `.then/catch`. V prvním příkladu je tedy níže `catch`, ale ve druhém není, takže chyba zůstane neošetřena.
+Jinými slovy, `.then` předá výsledky nebo chyby dalšímu `.then/catch`. V prvním příkladu je za ním `catch`, ale ve druhém není, takže chyba zůstane neošetřena.

@@ -3,16 +3,16 @@
 
 Vraťme se k problému zmíněnému v kapitole <info:callbacks>: máme posloupnost asynchronních úloh, které mají být provedeny jedna po druhé -- například načítání skriptů. Jak ji můžeme správně zapsat do kódu?
 
-Přísliby nám k tomu poskytují spoustu receptů.
+Přísliby nám k tomu poskytují spoustu návodů.
 
 V této kapitole vysvětlíme zřetězení příslibů.
 
 Vypadá takto:
 
 ```js run
-new Promise(function(resolve, reject) {
+new Promise(function(splň, zamítni) {
 
-  setTimeout(() => resolve(1), 1000); // (*)
+  setTimeout(() => splň(1), 1000); // (*)
 
 }).then(function(výsledek) { // (**)
 
@@ -34,7 +34,7 @@ new Promise(function(resolve, reject) {
 
 Myšlenkou je, že výsledek se předává skrz řetěz handlerů `.then`.
 
-Tok zde vypadá takto:
+Průběh je následující:
 1. Úvodní příslib se vyhodnotí za 1 sekundu `(*)`.
 2. Pak se volá handler `.then` `(**)`, který následně vytvoří nový příslib (splněn s hodnotou `2`).
 3. Další `then` `(***)` získá výsledek předchozího, zpracuje jej (vynásobí dvěma) a předá jej dalšímu handleru.
@@ -48,12 +48,12 @@ Celé to funguje proto, že každé volání `.then` vrátí nový příslib, ta
 
 Když handler vrátí nějakou hodnotu, tato hodnota se stane výsledkem onoho příslibu, takže další `.then` se volá s ní.
 
-**Klasická začátečnická chyba: technicky můžeme také přidat mnoho handlerů `.then` k jedinému příslibu. To není zřetězení.**
+**Klasická začátečnická chyba: technicky můžeme také přidat mnoho handlerů `.then` k jednomu příslibu. To není zřetězení.**
 
 Například:
 ```js run
-let příslib = new Promise(function(resolve, reject) {
-  setTimeout(() => resolve(1), 1000);
+let příslib = new Promise(function(splň, zamítni) {
+  setTimeout(() => splň(1), 1000);
 });
 
 příslib.then(function(výsledek) {
@@ -86,22 +86,22 @@ V praxi jen zřídka potřebujeme více handlerů pro jeden příslib. Zřetěze
 
 Handler, použitý v `.then(handler)`, může vytvořit a vrátit příslib.
 
-V tom případě budoucí handlery počkají, než se usadí, a pak obdrží jeho výsledek.
+V tom případě následující handlery počkají, než se usadí, a pak obdrží jeho výsledek.
 
 Například:
 
 ```js run
-new Promise(function(resolve, reject) {
+new Promise(function(splň, zamítni) {
 
-  setTimeout(() => resolve(1), 1000);
+  setTimeout(() => splň(1), 1000);
 
 }).then(function(výsledek) {
 
   alert(výsledek); // 1
 
 *!*
-  return new Promise((resolve, reject) => { // (*)
-    setTimeout(() => resolve(výsledek * 2), 1000);
+  return new Promise((splň, zamítni) => { // (*)
+    setTimeout(() => splň(výsledek * 2), 1000);
   });
 */!*
 
@@ -109,8 +109,8 @@ new Promise(function(resolve, reject) {
 
   alert(výsledek); // 2
 
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(výsledek * 2), 1000);
+  return new Promise((splň, zamítni) => {
+    setTimeout(() => splň(výsledek * 2), 1000);
   });
 
 }).then(function(výsledek) {
@@ -120,7 +120,7 @@ new Promise(function(resolve, reject) {
 });
 ```
 
-Zde první `.then` zobrazí `1` a vrátí `new Promise(…)` na řádku `(*)`. Tento příslib se po jedné sekundě vyhodnotí a výsledek (argument funkce `resolve`, zde je to `výsledek * 2`) se předá handleru druhé funkce `.then`. Tento handler je na řádku `(**)`. Zobrazí `2` a provede totéž.
+Zde první `.then` zobrazí `1` a vrátí `new Promise(…)` na řádku `(*)`. Tento příslib se po jedné sekundě splní a výsledek (argument funkce `splň`, zde je to `výsledek * 2`) se předá handleru druhé funkce `.then`. Tento handler je na řádku `(**)`. Zobrazí `2` a provede totéž.
 
 Výsledek je tedy stejný jako v předchozím příkladu: 1 -> 2 -> 4, ale nyní s jednosekundovou prodlevou mezi jednotlivými voláními `alert`.
 
@@ -128,7 +128,7 @@ Vracení příslibů nám umožňuje vystavět řetězy asynchronních akcí.
 
 ## Příklad: načtiSkript
 
-Použijme tuto možnost s „promisifikovanou“ funkcí `načtiSkript`, definovanou v [předchozí kapitole](info:promise-basics#loadscript), k načtení skriptů po jednom za sebou:
+Využijme tuto možnost s „promisifikovanou“ funkcí `načtiSkript`, definovanou v [předchozí kapitole](info:promise-basics#loadscript), k načtení skriptů po jednom za sebou:
 
 ```js run
 načtiSkript("/article/promise-chaining/one.js")
@@ -162,7 +162,7 @@ načtiSkript("/article/promise-chaining/one.js")
 ```
 
 
-Zde každé volání metody `načtiSkript` vrátí příslib a další `.then` se spustí, když se tento příslib vyhodnotí. Pak iniciuje načtení dalšího skriptu. Skripty se tedy načtou jeden po druhém.
+Zde každé volání metody `načtiSkript` vrátí příslib a další `.then` se spustí, když se tento příslib splní. Pak iniciuje načtení dalšího skriptu. Skripty se tedy načtou jeden po druhém.
 
 Můžeme do řetězu přidat další asynchronní akce. Prosíme všimněte si, že kód je stále „plochý“ -- narůstá směrem dolů, ne doprava. Není zde ani stopa po „pyramidě zkázy“.
 
@@ -185,11 +185,11 @@ Tento kód dělá totéž: načte 3 skripty za sebou. Avšak „narůstá směre
 
 Začátečníci v používání příslibů někdy zřetězení neznají, takže píší tímto způsobem. Obecně se dává přednost zřetězení.
 
-Někdy se hodí napsat přímo `.then`, protože vnořená funkce má přístup k vnějšímu prostoru proměnných. Ve výše uvedeném příkladu má nejvnořenější callback přístup ke všem proměnným `skript1`, `skript2`, `skript3`. To je však spíše výjimka než pravidlo.
+Někdy se hodí napsat přímo `.then`, protože vnořená funkce má přístup k vnějšímu prostoru proměnných. V uvedeném příkladu má nejvnitřněji vnořený callback přístup ke všem proměnným `skript1`, `skript2`, `skript3`. To je však spíše výjimka než pravidlo.
 
 
 ````smart header="Thenable objekty"
-Abychom byli přesní, handler může vrátit ne přímo příslib, ale tzv. „thenable“ objekt *(česky lze přeložit jako „schopný metody then“ -- pozn. překl.)* -- libovolný objekt, který obsahuje metodu `.then`. S ním se bude zacházet stejně jako s příslibem.
+Abychom byli přesní, handler může vrátit ne přímo příslib, ale tzv. „thenable“ objekt -- libovolný objekt, který obsahuje metodu `.then`. S ním se bude zacházet stejně jako s příslibem.
 
 Myšlenkou je, že knihovny třetích stran mohou implementovat objekty „kompatibilní s příslibem“ na vlastní pěst. Tyto objekty mohou mít rozšířenou množinu metod, ale současně být kompatibilní s nativními přísliby, protože implementují `.then`.
 
@@ -200,14 +200,14 @@ class Thenable {
   constructor(číslo) {
     this.číslo = číslo;
   }
-  then(resolve, reject) {
-    alert(resolve); // function() { native code }
+  then(splň, zamítni) {
+    alert(splň); // function() { native code }
     // splní se s this.číslo*2 za 1 sekundu
-    setTimeout(() => resolve(this.číslo * 2), 1000); // (**)
+    setTimeout(() => splň(this.číslo * 2), 1000); // (**)
   }
 }
 
-new Promise(resolve => resolve(1))
+new Promise(splň => splň(1))
   .then(výsledek => {
 *!*
     return new Thenable(výsledek); // (*)
@@ -216,7 +216,7 @@ new Promise(resolve => resolve(1))
   .then(alert); // za 1000 ms zobrazí 2
 ```
 
-JavaScript prověří objekt vrácený handlerem `.then` na řádku `(*)`: jestliže obsahuje volatelnou metodu jménem `then`, pak tuto metodu zavolá, přičemž jako argumenty jí poskytne nativní funkce `resolve`, `reject` (podobně jako exekutor) a počká, dokud není jedna z nich zavolána. V uvedeném příkladu se za 1 sekundu volá `resolve(2)` `(**)`. Pak se výsledek předá řetězem dál.
+JavaScript prověří objekt vrácený handlerem `.then` na řádku `(*)`: jestliže obsahuje volatelnou metodu s názvem `then`, pak tuto metodu zavolá, přičemž jako argumenty jí poskytne nativní funkce `splň`, `zamítni` (podobně jako exekutor) a počká, dokud není jedna z nich zavolána. V uvedeném příkladu se za 1 sekundu volá `splň(2)` `(**)`. Pak se výsledek předá řetězem dál.
 
 Tato vlastnost nám umožňuje integrovat do zřetězení příslibů naše vlastní objekty, aniž bychom museli dědit z `Promise`.
 ````
@@ -226,21 +226,21 @@ Tato vlastnost nám umožňuje integrovat do zřetězení příslibů naše vlas
 
 Ve front-end programování se přísliby často používají pro síťové požadavky. Podívejme se tedy na rozšířený příklad.
 
-Použijme metodu [fetch](info:fetch) k načtení informací o uživateli ze vzdáleného serveru. Tato metoda má mnoho volitelných parametrů, které jsou popsány v [samostatných kapitolách](info:fetch), ale základní syntaxe je poměrně jednoduchá:
+Použijme metodu [fetch](info:fetch) k načtení informací o uživateli ze vzdáleného serveru. Tato metoda má mnoho nepovinných parametrů, které jsou popsány v [samostatných kapitolách](info:fetch), ale základní syntaxe je poměrně jednoduchá:
 
 ```js
 let příslib = fetch(url);
 ```
 
-To vytvoří síťový požadavek na `url` a vrátí příslib. Tento příslib se splní s objektem `odpověď`, když vzdálený server vrátí headery (hlavičky) odpovědi, ale *dříve, než je načtena celá odpověď*.
+To vytvoří síťový požadavek na `url` a vrátí příslib. Tento příslib se splní s objektem `odpověď`, když vzdálený server vrátí hlavičky odpovědi, ale *dříve, než je načtena celá odpověď*.
 
 Abychom načetli celou odpověď, měli bychom volat metodu `odpověď.text()`: vrátí příslib, který se splní, až bude ze vzdáleného serveru stažen celý text, a tento text bude výsledkem.
 
-Níže uvedený kód vytvoří požadavek na `user.json` a načte jeho text ze serveru:
+Následující kód vytvoří požadavek na `user.json` a načte jeho text ze serveru:
 
 ```js run
 fetch('/article/promise-chaining/user.json')
-  // níže uvedené .then se spustí, až vzdálený server odpoví
+  // následující .then se spustí, až vzdálený server odpoví
   .then(function(odpověď) {
     // odpověď.text() vrátí nový příslib, který se splní s celým textem odpovědi,
     // až se odpověď načte
@@ -252,12 +252,12 @@ fetch('/article/promise-chaining/user.json')
   });
 ```
 
-Objekt `odpověď` vrácený metodou `fetch` obsahuje také metodu `odpověď.json()`, která načte vzdálená data a rozparsuje je jako JSON. V našem případě je to ještě vhodnější, takže k tomu přejděme.
+Objekt `odpověď` vrácený metodou `fetch` obsahuje také metodu `odpověď.json()`, která načte vzdálená data a rozparsuje je z JSONu. To je v našem případě ještě vhodnější, takže k tomu přejděme.
 
 Pro stručnost budeme používat šipkové funkce:
 
 ```js run
-// totéž jako výše, ale odpověď.json() parsuje vzdálený obsah jako JSON
+// totéž jako výše, ale odpověď.json() rozparsuje vzdálený obsah z JSONu
 fetch('/article/promise-chaining/user.json')
   .then(odpověď => odpověď.json())
   .then(uživatel => alert(uživatel.name)); // iliakan, získali jsme jméno uživatele
@@ -265,7 +265,7 @@ fetch('/article/promise-chaining/user.json')
 
 Nyní s načteným uživatelem něco udělejme.
 
-Například můžeme vytvořit další požadavek na GitHub, načíst uživatelský profil a zobrazit avatar:
+Můžeme například vytvořit další požadavek na GitHub, načíst uživatelský profil a zobrazit avatar:
 
 ```js run
 // Vytvoříme požadavek na user.json
@@ -276,7 +276,7 @@ fetch('/article/promise-chaining/user.json')
   .then(uživatel => fetch(`https://api.github.com/users/${uživatel.name}`))
   // Načteme odpověď jako json
   .then(odpověď => odpověď.json())
-  // Zobrazíme obrázek avatara (uživatelGitHubu.avatar_url) na 3 sekundy (může jej rozanimovat)
+  // Zobrazíme obrázek avatara (uživatelGitHubu.avatar_url) na 3 sekundy (můžeme jej animovat)
   .then(uživatelGitHubu => {
     let obrázek = document.createElement('img');
     obrázek.src = uživatelGitHubu.avatar_url;
@@ -287,9 +287,9 @@ fetch('/article/promise-chaining/user.json')
   });
 ```
 
-Kód funguje; podrobnosti viz komentáře. Je zde však potenciální problém, typická chyba začátečníků v používání příslibů.
+Kód funguje; podrobnosti jsou uvedeny v komentářích. Je zde však potenciální problém, typická chyba začátečníků v používání příslibů.
 
-Podívejme se na řádek `(*)`: jak můžeme něco udělat *poté*, co se avatar přestal zobrazovat a byl odstraněn? Například bychom chtěli zobrazit formulář pro editaci tohoto uživatele nebo něco jiného. Zatím pro to žádný způsob není.
+Podívejme se na řádek `(*)`: jak můžeme něco udělat *poté*, co se avatar přestal zobrazovat a byl odstraněn? Chtěli bychom například zobrazit formulář pro editaci tohoto uživatele nebo něco jiného. Zatím k tomu žádný způsob nemáme.
 
 Abychom tento řetěz učinili rozšiřitelným, musíme vrátit příslib, který se splní, až se avatar přestane zobrazovat.
 
@@ -301,7 +301,7 @@ fetch('/article/promise-chaining/user.json')
   .then(uživatel => fetch(`https://api.github.com/users/${uživatel.name}`))
   .then(odpověď => odpověď.json())
 *!*
-  .then(uživatelGitHubu => new Promise(function(resolve, reject) { // (*)
+  .then(uživatelGitHubu => new Promise(function(splň, zamítni) { // (*)
 */!*
     let obrázek = document.createElement('img');
     obrázek.src = uživatelGitHubu.avatar_url;
@@ -311,7 +311,7 @@ fetch('/article/promise-chaining/user.json')
     setTimeout(() => {
       obrázek.remove();
 *!*
-      resolve(uživatelGitHubu); // (**)
+      splň(uživatelGitHubu); // (**)
 */!*
     }, 3000);
   }))
@@ -319,9 +319,9 @@ fetch('/article/promise-chaining/user.json')
   .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.name}`));
 ```
 
-Funguje to tak, že handler `.then` na řádku `(*)` nyní vrátí `new Promise`, který se usadí až po volání `resolve(uživatelGitHubu)` ve funkci `setTimeout` `(**)`. Další `.then` v řetězu na to bude čekat.
+Funguje to tak, že handler `.then` na řádku `(*)` nyní vrátí `new Promise`, který se usadí až po volání `splň(uživatelGitHubu)` ve funkci `setTimeout` `(**)`. Další `.then` v řetězu na to bude čekat.
 
-Je dobrým zvykem, že asynchronní akce by měla vždy vrátit příslib. Důsledkem toho je možné plánovat akce po ní; i když neplánujeme rozšířit řetěz hned, můžeme to potřebovat později.
+Je dobrým zvykem, že asynchronní akce by měla vždy vrátit příslib. Důsledkem bude, že můžeme plánovat akce po ní; i když neplánujeme rozšířit řetěz hned, můžeme to potřebovat později.
 
 Nakonec rozdělíme kód na opakovaně použitelné funkce:
 
@@ -336,7 +336,7 @@ function načtiUživateleGitHubu(jméno) {
 }
 
 function zobrazAvatar(uživatelGitHubu) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(splň, zamítni) {
     let obrázek = document.createElement('img');
     obrázek.src = uživatelGitHubu.avatar_url;
     obrázek.className = "promise-avatar-example";
@@ -344,7 +344,7 @@ function zobrazAvatar(uživatelGitHubu) {
 
     setTimeout(() => {
       obrázek.remove();
-      resolve(uživatelGitHubu);
+      splň(uživatelGitHubu);
     }, 3000);
   });
 }

@@ -1,12 +1,12 @@
 # Příslibové API
 
-Třída `Promise` obsahuje 6 statických metod. Zde rychle probereme jejich případy použití.
+Třída `Promise` obsahuje šest statických metod. V této kapitole stručně probereme jejich případy použití.
 
 ## Promise.all
 
 Řekněme, že chceme spustit mnoho příslibů paralelně a počkat, než budou všechny připraveny.
 
-Například stáhnout současně několik URL a zpracovat jejich obsah až tehdy, když budou všechny staženy.
+Například stáhnout současně obsahy několika URL, a až budou všechny staženy, zpracovat je.
 
 Právě k tomu slouží `Promise.all`.
 
@@ -18,19 +18,19 @@ let příslib = Promise.all(iterovatelnýObjekt);
 
 `Promise.all` vezme iterovatelný objekt (obvykle pole příslibů) a vrátí nový příslib.
 
-Nový příslib se splní, až budou splněny všechny vyjmenované přísliby, a jeho výsledkem se stane pole jejich výsledků.
+Nový příslib se splní, až budou splněny všechny přísliby v seznamu, a jeho výsledkem se stane pole jejich výsledků.
 
-Například níže uvedené `Promise.all` se usadí za 3 sekundy a jeho výsledkem bude pole `[1, 2, 3]`:
+Například následující `Promise.all` se usadí za 3 sekundy a jeho výsledkem bude pole `[1, 2, 3]`:
 
 ```js run
 Promise.all([
-  new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
-  new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
-  new Promise(resolve => setTimeout(() => resolve(3), 1000))  // 3
+  new Promise(splň => setTimeout(() => splň(1), 3000)), // 1
+  new Promise(splň => setTimeout(() => splň(2), 2000)), // 2
+  new Promise(splň => setTimeout(() => splň(3), 1000))  // 3
 ]).then(alert); // 1,2,3, až budou přísliby připraveny: každý příslib přispěje jedním prvkem pole
 ```
 
-Prosíme všimněte si, že pořadí výsledných prvků pole je stejné jako pořadí zdrojových příslibů. I když prvnímu příslibu trvalo vyhodnocení déle, bude v poli výsledků stále první.
+Prosíme všimněte si, že pořadí prvků výsledného pole je stejné jako pořadí zdrojových příslibů. I když prvnímu příslibu trvalo splnění nejdéle, bude v poli výsledků stále první.
 
 Běžným trikem je namapovat pole pracovních dat do pole příslibů a to pak zabalit do `Promise.all`.
 
@@ -46,14 +46,14 @@ let poleURL = [
 // zmapujeme každý URL na příslib metody fetch
 let požadavky = poleURL.map(url => fetch(url));
 
-// Promise.all počká, dokud nebudou všechny úkoly splněny
+// Promise.all počká, dokud nebudou všechny úkoly vykonány
 Promise.all(požadavky)
   .then(odpovědi => odpovědi.forEach(
     odpověď => alert(`${odpověď.url}: ${odpověď.status}`)
   ));
 ```
 
-Větší příklad s načítáním informací o uživatelích pro pole uživatelů GitHubu podle jejich jmen (zrovna tak můžeme stáhnout pole zboží podle jejich identifikačních čísel, logika je stejná):
+Ve větším příkladu načítáme informace o uživatelích pro pole uživatelů GitHubu podle jejich jmen (zrovna tak můžeme stáhnout pole zboží podle jejich identifikačních čísel, logika je stejná):
 
 ```js run
 let jména = ['iliakan', 'remy', 'jeresig'];
@@ -69,7 +69,7 @@ Promise.all(požadavky)
 
     return odpovědi;
   })
-  // namapuje pole odpovědí do pole odpověď.json(), aby načetl jejich obsah
+  // namapuje pole odpovědí do pole výsledků funkcí odpověď.json(), aby načetl jejich obsah
   .then(odpovědi => Promise.all(odpovědi.map(r => r.json())))
   // všechny odpovědi JSON jsou parsovány: „uživatelé“ je jejich pole
   .then(uživatelé => uživatelé.forEach(uživatel => alert(uživatel.name)));
@@ -81,33 +81,33 @@ Například:
 
 ```js run
 Promise.all([
-  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(1), 1000)),
 *!*
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ouha!")), 2000)),
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Ouha!")), 2000)),
 */!*
-  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+  new Promise((splň, zamítni) => setTimeout(() => splň(3), 3000))
 ]).catch(alert); // Error: Ouha!
 ```
 
-Zde je druhý příslib zamítnut za dvě sekundy. To povede k okamžitému zamítnutí `Promise.all`, takže se spustí `.catch`: chyba zamítnutí se stane výstupem celé metody `Promise.all`.
+Zde je druhý příslib za dvě sekundy zamítnut. To povede k okamžitému zamítnutí `Promise.all`, takže se spustí `.catch`: chyba zamítnutí se stane výstupem celé metody `Promise.all`.
 
 ```warn header="V případě chyby jsou ostatní přísliby ignorovány"
 Jestliže je jeden příslib zamítnut, `Promise.all` je okamžitě zamítnut a ostatní přísliby v seznamu jsou okamžitě zapomenuty. Jejich výsledky jsou ignorovány.
 
-Například jestliže je zde několik volání `fetch`, podobně jako ve výše uvedeném příkladu, a jedno z nich selže, ostatní se budou stále vykonávat dál, ale `Promise.all` je už nebude sledovat. Pravděpodobně se usadí, ale jejich výsledky budou ignorovány.
+Například jestliže je zde několik volání `fetch`, podobně jako v uvedeném příkladu, a jedno z nich selže, ostatní se budou stále vykonávat dál, ale `Promise.all` je už nebude sledovat. Tato volání se pravděpodobně usadí, ale jejich výsledky budou ignorovány.
 
 `Promise.all` neudělá nic, aby je zrušil, protože přísliby nemají žádný koncept „zrušení“. V [jiné kapitole](info:fetch-abort) probereme `AbortController`, který s tím může pomoci, ale ten není součástí příslibového API.
 ```
 
-````smart header="`Promise.all(iterovatelný)` umožňuje v objektu `iterovatelný` nepříslibové „obyčejné“ hodnoty"
-`Promise.all(...)` běžně přijímá iterovatelný objekt (ve většině případů pole) příslibů. Jestliže však kterýkoli z těchto objektů není příslib, je předán do výsledného pole „tak, jak je“.
+````smart header="`Promise.all(iterovatelný)` povoluje v objektu `iterovatelný` i „obyčejné“ nepříslibové hodnoty"
+`Promise.all(...)` běžně přijímá iterovatelný objekt (ve většině případů pole) příslibů. Jestliže však některý z těchto objektů není příslib, je do výsledného pole předán beze změny.
 
 Například zde jsou výsledky `[1, 2, 3]`:
 
 ```js run
 Promise.all([
-  new Promise((resolve, reject) => {
-    setTimeout(() => resolve(1), 1000)
+  new Promise((splň, zamítni) => {
+    setTimeout(() => splň(1), 1000)
   }),
   2,
   3
@@ -177,12 +177,12 @@ Jestliže prohlížeč nepodporuje `Promise.allSettled`, snadno vytvoříme poly
 
 ```js
 if (!Promise.allSettled) {
-  const rejectHandler = reason => ({ status: 'rejected', reason });
+  const handlerZamítnutí = reason => ({ status: 'rejected', reason });
 
-  const resolveHandler = value => ({ status: 'fulfilled', value });
+  const handlerSplnění = value => ({ status: 'fulfilled', value });
 
   Promise.allSettled = function (přísliby) {
-    const převedenéPřísliby = přísliby.map(p => Promise.resolve(p).then(resolveHandler, rejectHandler));
+    const převedenéPřísliby = přísliby.map(p => Promise.resolve(p).then(handlerSplnění, handlerZamítnutí));
     return Promise.all(převedenéPřísliby);
   };
 }
@@ -208,13 +208,13 @@ Například zde bude výsledek `1`:
 
 ```js run
 Promise.race([
-  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ouha!")), 2000)),
-  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+  new Promise((splň, zamítni) => setTimeout(() => splň(1), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Ouha!")), 2000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(3), 3000))
 ]).then(alert); // 1
 ```
 
-Zde byl nejrychlejší první příslib, takže ten se stane výsledkem. Poté, co první usazený příslib „vyhraje závod“ *(„race“ = angl. „závod“ -- pozn. překl.)*, budou všechny ostatní výsledky/chyby ignorovány.
+Zde byl nejrychlejší první příslib, takže výsledkem celé funkce se stane jeho výsledek. Poté, co první usazený příslib „vyhraje závod“ („race“), budou všechny ostatní výsledky a chyby ignorovány.
 
 
 ## Promise.any
@@ -231,28 +231,28 @@ Například zde bude výsledek `1`:
 
 ```js run
 Promise.any([
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ouha!")), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => resolve(1), 2000)),
-  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Ouha!")), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(1), 2000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(3), 3000))
 ]).then(alert); // 1
 ```
 
-Zde byl nejrychlejší první příslib, ale ten byl zamítnut, takže výsledkem se stane druhý příslib.  Poté, co první splněný příslib „vyhraje závod“, budou všechny ostatní výsledky ignorovány.
+Zde byl nejrychlejší první příslib, ale ten byl zamítnut, takže výsledkem funkce se stane výsledek druhého příslibu. Poté, co první splněný příslib „vyhraje závod“, budou všechny ostatní výsledky ignorovány.
 
 Zde je příklad, v němž všechny přísliby selžou:
 
 ```js run
 Promise.any([
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Au!")), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Chyba!")), 2000))
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Au!")), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Chyba!")), 2000))
 ]).catch(chyba => {
   console.log(chyba.constructor.name); // AggregateError
   console.log(chyba.errors[0]); // Error: Au!
-  console.log(chyba.errors[1]); // Error: Chyba
+  console.log(chyba.errors[1]); // Error: Chyba!
 });
 ```
 
-Jak vidíte, chybové objekty pro neúspěšné přísliby jsou k dispozici ve vlastnosti `errors` objektu `AggregateError`.
+Jak vidíte, chybové objekty neúspěšných příslibů jsou k dispozici ve vlastnosti `errors` objektu `AggregateError`.
 
 ## Promise.resolve/reject
 
@@ -267,12 +267,12 @@ Probereme je zde pro úplnost a pro ty, kteří z nějakého důvodu nemohou `as
 Je to totéž jako:
 
 ```js
-let příslib = new Promise(resolve => resolve(hodnota));
+let příslib = new Promise(splň => splň(hodnota));
 ```
 
 Tato metoda se používá kvůli kompatibilitě, když se od nějaké funkce očekává, že vrátí příslib.
 
-Například níže uvedená funkce `načtiUložené` stáhne obsah z URL a zapamatuje si ho (uloží do cache). Při dalších voláních se stejným URL okamžitě načte z cache předchozí obsah, ale pomocí `Promise.resolve` z něj vyrobí příslib, takže návratová hodnota bude vždy příslib:
+Například následující funkce `načtiUložené` stáhne obsah z URL a zapamatuje si ho (uloží do mezipaměti). Při dalších voláních se stejným URL okamžitě načte z mezipaměti předchozí obsah, ale pomocí `Promise.resolve` z něj vyrobí příslib, takže návratová hodnota bude vždy příslib:
 
 ```js
 let cache = new Map();
@@ -293,7 +293,7 @@ function načtiUložené(url) {
 }
 ```
 
-Můžeme zapsat `načtiUložené(url).then(…)`, protože tato funkce zaručeně vrátí příslib. Za `načtiUložené` můžeme vždy použít `.then`. To je smyslem `Promise.resolve` na řádku `(*)`.
+Pak můžeme napsat `načtiUložené(url).then(…)`, protože tato funkce zaručeně vrátí příslib. Za `načtiUložené` tedy můžeme vždy použít `.then`. To je smyslem `Promise.resolve` na řádku `(*)`.
 
 ### Promise.reject
 
@@ -302,20 +302,20 @@ Můžeme zapsat `načtiUložené(url).then(…)`, protože tato funkce zaručen�
 Je to totéž jako:
 
 ```js
-let příslib = new Promise((resolve, reject) => reject(chyba));
+let příslib = new Promise((splň, zamítni) => zamítni(chyba));
 ```
 
 V praxi se tato metoda téměř nikdy nepoužívá.
 
 ## Shrnutí
 
-Třída `Promise` obsahuje 6 statických metod:
+Třída `Promise` obsahuje šest statických metod:
 
 1. `Promise.all(přísliby)` -- počká, až se všechny přísliby splní, a vrátí pole jejich výsledků. Pokud je kterýkoli ze zadaných příslibů zamítnut, jeho chyba se stane chybou `Promise.all` a všechny ostatní výsledky se ignorují.
 2. `Promise.allSettled(přísliby)` (nedávno přidaná metoda) -- počká, až se všechny přísliby usadí, a vrátí jejich výsledky jako pole objektů obsahujících:
-    - `status`: `"fulfilled"` nebo `"rejected"`
+    - `status`: `"fulfilled"` (splněn) nebo `"rejected"` (zamítnut)
     - `value` (je-li splněn) nebo `reason` (je-li zamítnut).
-3. `Promise.race(přísliby)` -- počká na první příslib, který se usadí, a výstupem se stane jeho výsledek/chyba.
+3. `Promise.race(přísliby)` -- počká na první příslib, který se usadí, a výstupem se stane jeho výsledek nebo chyba.
 4. `Promise.any(přísliby)` (nedávno přidaná metoda) -- počká na první příslib, který se splní, a výstupem se stane jeho výsledek. Budou-li všechny zadané přísliby zamítnuty, chybou `Promise.any` se stane [`AggregateError`](mdn:js/AggregateError).
 5. `Promise.resolve(hodnota)` -- vytvoří splněný příslib se zadanou hodnotou.
 6. `Promise.reject(chyba)` -- vytvoří zamítnutý příslib se zadanou chybou.

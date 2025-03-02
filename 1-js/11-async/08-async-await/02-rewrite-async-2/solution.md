@@ -1,5 +1,5 @@
 
-Nejsou tady žádné triky. Stačí uvnitř `demoUživatelGithubu` nahradit `.catch` za `try..catch` a přidat `async/await`, kde jsou zapotřebí:
+Nejsou tady žádné triky. Stačí uvnitř `demoUživatelGitHubu` nahradit `.catch` za `try..catch` a přidat `async/await`, kde jsou zapotřebí:
 
 ```js run
 class ChybaHttp extends Error {
@@ -19,8 +19,8 @@ async function načtiJson(url) {
   }
 }
 
-// Ptáme se na uživatelské jméno, dokud Github nevrátí platného uživatele
-async function demoUživatelGithubu() {
+// Ptáme se na uživatelské jméno, dokud GitHub nevrátí platného uživatele
+async function demoUživatelGitHubu() {
 
   let uživatel;
   while(true) {
@@ -45,5 +45,5 @@ async function demoUživatelGithubu() {
   return uživatel;
 }
 
-demoUživatelGithubu();
+demoUživatelGitHubu();
 ```

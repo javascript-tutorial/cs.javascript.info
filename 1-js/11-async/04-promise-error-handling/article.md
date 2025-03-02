@@ -3,13 +3,13 @@
 
 Řetězy příslibů jsou vynikající při ošetřování chyb. Když je příslib zamítnut, řízení skočí do nejbližšího handleru pro zamítnutí. To je v praxi velice užitečné.
 
-Například v níže uvedeném kódu je URL předané funkci `fetch` vadné (taková stránka neexistuje) a `.catch` ošetří chybu:
+Například v následujícím kódu je URL předané funkci `fetch` vadné (taková stránka neexistuje) a `.catch` ošetří chybu:
 
 ```js run
 *!*
 fetch('https://takovy-server-neni.blabla') // zamítne
 */!*
-  .then(response => response.json())
+  .then(odpověď => odpověď.json())
   .catch(chyba => alert(chyba)) // TypeError: failed to fetch (text se může lišit)
 ```
 
@@ -38,28 +38,28 @@ fetch('/article/promise-chaining/user.json')
 */!*
 ```
 
-Za normálních okolností se takové `.catch` vůbec nespustí. Jestliže však je kterýkoli z výše uvedených příslibů zamítnut (ať už kvůli síťové chybě, vadnému JSONu nebo čemukoli jinému), pak jej zachytí.
+Za normálních okolností se takové `.catch` vůbec nespustí. Jestliže však je kterýkoli z uvedených příslibů zamítnut (ať už kvůli síťové chybě, vadnému JSONu nebo čemukoli jinému), pak to zachytí.
 
 ## Implicitní try..catch
 
-Kód příslibového exekutoru a příslibových handlerů v sobě má „neviditelné `try..catch`“. Jestliže nastane výjimka, bude zachycena a bude s ní zacházeno jako se zamítnutím.
+Kód příslibového exekutoru a příslibových handlerů má kolem sebe „neviditelné `try..catch`“. Jestliže nastane výjimka, bude zachycena a bude s ní zacházeno jako se zamítnutím.
 
 Například tento kód:
 
 ```js run
-new Promise((resolve, reject) => {
+new Promise((splň, zamítni) => {
 *!*
   throw new Error("Ouha!");
 */!*
 }).catch(alert); // Error: Ouha!
 ```
 
-...Funguje stejně jako tento kód:
+...Funguje přesně stejně jako tento kód:
 
 ```js run
-new Promise((resolve, reject) => {
+new Promise((splň, zamítni) => {
 *!*
-  reject(new Error("Ouha!"));
+  zamítni(new Error("Ouha!"));
 */!*
 }).catch(alert); // Error: Ouha!
 ```
@@ -68,11 +68,11 @@ new Promise((resolve, reject) => {
 
 Děje se to nejen ve funkci exekutoru, ale i v jejích handlerech. Jestliže zavoláme `throw` uvnitř handleru `.then`, znamená to zamítnutý příslib, takže řízení skočí do nejbližšího chybového handleru.
 
-Zde je příklad:
+Následuje příklad:
 
 ```js run
-new Promise((resolve, reject) => {
-  resolve("ok");
+new Promise((splň, zamítni) => {
+  splň("ok");
 }).then((výsledek) => {
 *!*
   throw new Error("Ouha!"); // zamítne příslib
@@ -83,8 +83,8 @@ new Promise((resolve, reject) => {
 To se děje pro všechny chyby, nejen pro ty, které vyvolal příkaz `throw`. Například pro programátorskou chybu:
 
 ```js run
-new Promise((resolve, reject) => {
-  resolve("ok");
+new Promise((splň, zamítni) => {
+  splň("ok");
 }).then((výsledek) => {
 *!*
   blabla(); // taková funkce není
@@ -92,7 +92,7 @@ new Promise((resolve, reject) => {
 }).catch(alert); // ReferenceError: blabla není definována
 ```
 
-Poslední `.catch` zachytává nejen explicitní zamítnutí, ale také neúmyslné chyby ve výše uvedených handlerech.
+Poslední `.catch` zachytává nejen výslovné zamítnutí, ale také neúmyslné chyby v uvedených handlerech.
 
 ## Opětovné vyvolání
 
@@ -102,28 +102,28 @@ V běžném `try..catch` můžeme chybu analyzovat a případně ji opětovně v
 
 Jestliže zavoláme `throw` uvnitř `.catch`, pak řízení přejde do nejbližšího dalšího chybového handleru. A jestliže ošetříme chybu a normálně skončíme, pak bude pokračovat do nejbližšího dalšího úspěšného handleru `.then`.
 
-V níže uvedeném příkladu `.catch` úspěšně ošetří chybu:
+V následujícím příkladu `.catch` úspěšně ošetří chybu:
 
 ```js run
 // výkon: catch -> then
-new Promise((resolve, reject) => {
+new Promise((splň, zamítni) => {
 
   throw new Error("Ouha!");
 
 }).catch(function(chyba) {
 
-  alert("Chyba je ošetřena, pokračuje se dál");
+  alert("Chyba je ošetřena, pokračuje se normálně");
 
 }).then(() => alert("Další úspěšný handler se spustil"));
 ```
 
 Zde blok `.catch` normálně skončí. Je tedy vyvolán další úspěšný handler `.then`.
 
-V níže uvedeném příkladu vidíme opačnou situaci s `.catch`. Handler `(*)` zachytí chybu a nemůže ji ošetřit (např. proto, že umí ošetřit jenom `URIError`), takže ji opětovně vyvolá:
+V následujícím příkladu vidíme s `.catch` opačnou situaci. Handler `(*)` zachytí chybu a nemůže ji ošetřit (např. proto, že umí ošetřit jenom `URIError`), takže ji opětovně vyvolá:
 
 ```js run
 // výkon: catch -> catch
-new Promise((resolve, reject) => {
+new Promise((splň, zamítni) => {
 
   throw new Error("Ouha!");
 
@@ -144,12 +144,12 @@ new Promise((resolve, reject) => {
 }).catch(chyba => { // (**)
 
   alert(`Nastala neznámá chyba: ${chyba}`);
-  // nic nevrací => výkon pokračuje běžným způsobem
+  // nic nevrací => běh pokračuje obvyklým způsobem
 
 });
 ```
 
-Výkon skočí z prvního `.catch` `(*)` do dalšího `(**)` podél řetězu.
+Řízení skočí z prvního `.catch` `(*)` do dalšího `(**)` pod ním v řetězu.
 
 ## Neošetřená zamítnutí
 
@@ -170,7 +170,7 @@ V praxi, stejně jako u běžných neošetřených chyb v kódu, to znamená, ž
 
 Co se stane, když nastane běžná chyba a není ošetřena pomocí `try..catch`? Skript spadne se zprávou na konzoli. Něco podobného se stane u neošetřených zamítnutí příslibů.
 
-Engine JavaScriptu tato zamítnutí sleduje a v takovém případě vygeneruje globální chybu. Můžete ji vidět na konzoli, pokud si spustíte výše uvedený příklad.
+Motor JavaScriptu tato zamítnutí sleduje a v takovém případě vygeneruje globální chybu. Můžete ji vidět na konzoli, pokud si spustíte uvedený příklad.
 
 V prohlížeči můžeme takové chyby zachytávat pomocí události `unhandledrejection`:
 
@@ -194,12 +194,12 @@ Jestliže dojde k chybě a není zde žádné `.catch`, spustí se handler `unha
 
 Z takových chyb se obvykle nelze zotavit, takže naše nejlepší cesta ven je informovat uživatele o problému a pravděpodobně hlásit tento incident serveru.
 
-V neprohlížečových prostředích jako Node.js jsou jiné způsoby, jak vystopovat neošetřené chyby.
+V neprohlížečových prostředích, např. Node.js, existují jiné způsoby, jak vystopovat neošetřené chyby.
 
 ## Shrnutí
 
-- `.catch` ošetřuje chyby všech druhů v příslibech: ať je to volání `reject()` nebo chyba vyvolaná v handleru.
-- `.then` také zachytává chyby stejným způsobem, je-li zadán druhý argument (kterým je chybový handler).
-- Měli bychom `.catch` umisťovat přesně na místa, kde chceme ošetřovat chyby a víme, jak je ošetřit. Handler by měl analyzovat chyby (v tom nám pomáhají vlastní chybové třídy) a opětovně vyvolat ty neznámé (možná jde o programátorské chyby).
+- `.catch` ošetřuje chyby všech druhů v příslibech: ať je to volání `zamítni()` nebo chyba vyvolaná v handleru.
+- Stejným způsobem zachytává chyby také `.then`, je-li zadán druhý argument (kterým je chybový handler).
+- Měli bychom `.catch` umisťovat přesně na místa, kde chceme ošetřovat chyby a víme, jak je ošetřit. Handler by měl analyzovat chyby (v tom nám pomáhají vlastní chybové třídy) a opětovně vyvolat ty, které nezná (možná jde o programátorské chyby).
 - Vůbec nepoužít `.catch` je v pořádku, jestliže neexistuje způsob, jak se z chyby zotavit.
-- V každém případě bychom měli mít handler události `unhandledrejection` (pro prohlížeče, v jiných prostředích bývá analogický handler), abychom vystopovali neošetřené chyby a informovali o nich uživatele (a pravděpodobně náš server), aby naše aplikace nikdy „jen tak nespadla“.
+- V každém případě bychom měli mít handler události `unhandledrejection` (pro prohlížeče, analogický handler v jiných prostředích), abychom vystopovali neošetřené chyby a informovali o nich uživatele (a pravděpodobně náš server), aby naše aplikace nikdy „jen tak nespadla“.

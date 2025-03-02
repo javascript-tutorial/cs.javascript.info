@@ -1,9 +1,9 @@
 
 # Přepište „opětovné vyvolání“ za použití async/await
 
-Níže naleznete příklad „opětovného vyvolání“. Přepište jej za použití `async/await` místo `.then/catch`.
+Následuje příklad „opětovného vyvolání“. Přepište jej za použití `async/await` místo `.then/catch`.
 
-A v `demoUživatelGithubu` se zbavte rekurze ve prospěch cyklu: s `async/await` to bude lehké.
+A ve funkci `demoUživatelGitHubu` se zbavte rekurze ve prospěch cyklu: s `async/await` to bude lehké.
 
 ```js run
 class ChybaHttp extends Error {
@@ -25,8 +25,8 @@ function načtiJson(url) {
     });
 }
 
-// Ptáme se na uživatelské jméno, dokud Github nevrátí platného uživatele
-function demoUživatelGithubu() {
+// Ptáme se na uživatelské jméno, dokud GitHub nevrátí platného uživatele
+function demoUživatelGitHubu() {
   let jméno = prompt("Zadejte jméno", "iliakan");
 
   return načtiJson(`https://api.github.com/users/${jméno}`)
@@ -37,12 +37,12 @@ function demoUživatelGithubu() {
     .catch(chyba => {
       if (chyba instanceof ChybaHttp && chyba.odpověď.status == 404) {
         alert("Takový uživatel neexistuje, prosím zadejte znovu.");
-        return demoUživatelGithubu();
+        return demoUživatelGitHubu();
       } else {
         throw chyba;
       }
     });
 }
 
-demoUživatelGithubu();
+demoUživatelGitHubu();
 ```

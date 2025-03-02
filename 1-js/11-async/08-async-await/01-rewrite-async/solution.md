@@ -13,7 +13,7 @@ async function načtiJson(url) { // (1)
   throw new Error(odpověď.status);
 }
 
-načtiJson('https://javascript.info/zadny-takovy-uzivatel.json')
+načtiJson('https://javascript.info/takovy-uzivatel-neni.json')
   .catch(alert); // Chyba: 404 (4)
 ```
 
@@ -21,7 +21,7 @@ Poznámky:
 
 1. Funkce `načtiJson` se stává asynchronní (`async`).
 2. Všechna `.then` uvnitř jsou nahrazena za `await`.
-3. Můžeme vrátit `return odpověď.json()` místo čekání na ni, například:
+3. Můžeme vrátit `return odpověď.json()` místo čekání na tuto funkci, například:
 
     ```js
     if (odpověď.status == 200) {

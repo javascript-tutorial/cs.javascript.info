@@ -3,7 +3,7 @@
 Co myslíte? Spustí se `.catch`? Zdůvodněte svou odpověď.
 
 ```js
-new Promise(function(resolve, reject) {
+new Promise(function(splň, zamítni) {
   setTimeout(() => {
     throw new Error("Ouha!");
   }, 1000);
