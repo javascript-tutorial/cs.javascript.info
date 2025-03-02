@@ -1,3 +1,3 @@
-function three() {
+function tři() {
   alert(3);
 }
