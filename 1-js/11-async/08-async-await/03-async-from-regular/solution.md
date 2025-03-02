@@ -1,18 +1,18 @@
 
-That's the case when knowing how it works inside is helpful.
+Toto je případ, kdy nám pomáhá, že víme, jak to funguje uvnitř.
 
-Just treat `async` call as promise and attach `.then` to it:
+Jednoduše zacházejte s voláním `async` jako s příslibem a připojte k němu `.then`:
 ```js run
-async function wait() {
+async function čekej() {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   return 10;
 }
 
 function f() {
-  // shows 10 after 1 second
+  // za 1 sekundu zobrazí 10
 *!*
-  wait().then(result => alert(result));
+  čekej().then(výsledek => alert(výsledek));
 */!*
 }
 
