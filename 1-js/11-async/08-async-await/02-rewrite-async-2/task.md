@@ -1,48 +1,48 @@
 
-# Rewrite "rethrow" with async/await
+# Přepište „opětovné vyvolání“ za použití async/await
 
-Below you can find the "rethrow" example. Rewrite it using `async/await` instead of `.then/catch`.
+Následuje příklad „opětovného vyvolání“. Přepište jej za použití `async/await` místo `.then/catch`.
 
-And get rid of the recursion in favour of a loop in `demoGithubUser`: with `async/await` that becomes easy to do.
+A ve funkci `demoUživatelGitHubu` se zbavte rekurze ve prospěch cyklu: s `async/await` to bude lehké.
 
 ```js run
-class HttpError extends Error {
-  constructor(response) {
-    super(`${response.status} for ${response.url}`);
-    this.name = 'HttpError';
-    this.response = response;
+class ChybaHttp extends Error {
+  constructor(odpověď) {
+    super(`${odpověď.status} pro ${odpověď.url}`);
+    this.name = 'ChybaHttp';
+    this.odpověď = odpověď;
   }
 }
 
-function loadJson(url) {
+function načtiJson(url) {
   return fetch(url)
-    .then(response => {
-      if (response.status == 200) {
-        return response.json();
+    .then(odpověď => {
+      if (odpověď.status == 200) {
+        return odpověď.json();
       } else {
-        throw new HttpError(response);
+        throw new ChybaHttp(odpověď);
       }
     });
 }
 
-// Ask for a user name until github returns a valid user
-function demoGithubUser() {
-  let name = prompt("Enter a name?", "iliakan");
+// Ptáme se na uživatelské jméno, dokud GitHub nevrátí platného uživatele
+function demoUživatelGitHubu() {
+  let jméno = prompt("Zadejte jméno", "iliakan");
 
-  return loadJson(`https://api.github.com/users/${name}`)
-    .then(user => {
-      alert(`Full name: ${user.name}.`);
-      return user;
+  return načtiJson(`https://api.github.com/users/${jméno}`)
+    .then(uživatel => {
+      alert(`Celé jméno: ${uživatel.name}.`);
+      return uživatel;
     })
-    .catch(err => {
-      if (err instanceof HttpError && err.response.status == 404) {
-        alert("No such user, please reenter.");
-        return demoGithubUser();
+    .catch(chyba => {
+      if (chyba instanceof ChybaHttp && chyba.odpověď.status == 404) {
+        alert("Takový uživatel neexistuje, prosím zadejte znovu.");
+        return demoUživatelGitHubu();
       } else {
-        throw err;
+        throw chyba;
       }
     });
 }
 
-demoGithubUser();
+demoUživatelGitHubu();
 ```
