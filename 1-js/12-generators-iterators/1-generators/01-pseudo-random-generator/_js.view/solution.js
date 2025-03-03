@@ -1,4 +1,4 @@
-function* pseudoNáhodné(semínko) {
+function* pseudonáhodné(semínko) {
   let hodnota = semínko;
 
   while(true) {

@@ -1,5 +1,5 @@
 ```js run demo
-function* pseudoNáhodné(semínko) {
+function* pseudonáhodné(semínko) {
   let hodnota = semínko;
 
   while(true) {
@@ -9,7 +9,7 @@ function* pseudoNáhodné(semínko) {
 
 };
 
-let generátor = pseudoNáhodné(1);
+let generátor = pseudonáhodné(1);
 
 alert(generátor.next().value); // 16807
 alert(generátor.next().value); // 282475249
@@ -19,7 +19,7 @@ alert(generátor.next().value); // 1622650073
 Prosíme všimněte si, že totéž se dá provést i s obyčejnou funkcí, například:
 
 ```js run
-function pseudoNáhodné(semínko) {
+function pseudonáhodné(semínko) {
   let hodnota = semínko;
 
   return function() {
@@ -28,7 +28,7 @@ function pseudoNáhodné(semínko) {
   }
 }
 
-let generátor = pseudoNáhodné(1);
+let generátor = pseudonáhodné(1);
 
 alert(generátor()); // 16807
 alert(generátor()); // 282475249

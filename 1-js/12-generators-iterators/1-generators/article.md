@@ -2,11 +2,11 @@
 
 Běžné funkce vracejí jen jednu jedinou hodnotu (nebo žádnou).
 
-Generátory mohou na požádání vrátit (vydat, anglicky *„yield“*) více hodnot, jednu po druhé. Výborně spolupracují s [iterovatelnými objekty](info:iterable) a umožňují nám snadno vytvářet datové proudy.
+Generátory mohou na požádání vrátit (vydat, anglicky „yield“) více hodnot, jednu po druhé. Výborně spolupracují s [iterovatelnými objekty](info:iterable) a umožňují nám snadno vytvářet datové proudy.
 
 ## Generátorové funkce
 
-K vytvoření generátoru potřebujeme speciální syntaktickou konstrukci: `function*`, tzv. „generátorovou funkci“.
+K vytvoření generátoru potřebujeme speciální syntaktický konstrukt: `function*`, tzv. „generátorovou funkci“.
 
 Vypadá takto:
 
@@ -18,7 +18,7 @@ function* generujPosloupnost() {
 }
 ```
 
-Generátorové funkce se chovají jinak než obyčejné. Když je taková funkce volána, nespustí se její kód. Místo toho vrátí speciální objekt, zvaný „generátorový objekt“, aby její výkon řídil.
+Generátorové funkce se chovají jinak než obyčejné. Když je taková funkce volána, nespustí se její kód. Místo toho vrátí speciální objekt, zvaný „generátorový objekt“, aby její běh řídil.
 
 Podívejme se:
 
@@ -36,11 +36,11 @@ alert(generátor); // [object Generator]
 */!*
 ```
 
-Výkon kódu funkce ještě nezačal:
+Běh kódu funkce ještě nezačal:
 
 ![](generateSequence-1.svg)
 
-Hlavní metoda generátoru je `next()`. Když je volána, spustí výkon funkce až do nejbližšího příkazu `yield <hodnota>` (`hodnota` nemusí být uvedena, pak je `undefined`). Pak se výkon funkce přeruší a vydaná `hodnota` je vrácena vnějšímu kódu.
+Hlavní metoda generátoru je `next()`. Když je volána, spustí běh funkce až do nejbližšího příkazu `yield <hodnota>` (`hodnota` nemusí být uvedena, pak je `undefined`). Pak se běh funkce přeruší a vydaná `hodnota` je vrácena vnějšímu kódu.
 
 Výsledkem funkce `next()` je vždy objekt se dvěma vlastnostmi:
 - `value`: vydaná hodnota.
@@ -64,11 +64,11 @@ let jedna = generátor.next();
 alert(JSON.stringify(jedna)); // {value: 1, done: false}
 ```
 
-Prozatím jsme získali jenom první hodnotu a výkon funkce je na druhém řádku:
+Prozatím jsme získali jenom první hodnotu a běh funkce je na druhém řádku:
 
 ![](generateSequence-2.svg)
 
-Volejme znovu `generátor.next()`. Metoda obnoví výkon kódu a vrátí další `yield`:
+Volejme znovu `generátor.next()`. Metoda obnoví běh kódu a vrátí další `yield`:
 
 ```js
 let dvě = generátor.next();
@@ -78,7 +78,7 @@ alert(JSON.stringify(dvě)); // {value: 2, done: false}
 
 ![](generateSequence-3.svg)
 
-A když ji zavoláme potřetí, výkon dosáhne příkazu `return`, který funkci ukončí:
+A když ji zavoláme potřetí, běh dosáhne příkazu `return`, který funkci ukončí:
 
 ```js
 let tři = generátor.next();
@@ -88,14 +88,14 @@ alert(JSON.stringify(tři)); // {value: 3, *!*done: true*/!*}
 
 ![](generateSequence-4.svg)
 
-Nyní generátor skončil. Měli bychom to poznat z `done:true` a zpracovat `value:3` jako poslední výsledek.
+Nyní generátor skončil. Měli bychom to poznat z `done:true` a jako poslední výsledek zpracovat `value:3`.
 
-Další volání `generátor.next()` už nebudou dávat smysl. Pokud je učiníme, vrátí stejný objekt: `{done: true}`.
+Další volání `generátor.next()` už nebudou mít smysl. Pokud je učiníme, vrátí stejný objekt: `{done: true}`.
 
 ```smart header="`function* f(…)` nebo `function *f(…)`?"
 Obě syntaxe jsou správné.
 
-Obvykle se však dává přednost první syntaxi, jelikož hvězdička `*` označuje, že jde o generátorovou funkci. Popisuje druh funkce, ne její název, takže by měla být připojena ke klíčovému slovu `function`.
+Obvykle se však dává přednost první syntaxi, jelikož hvězdička `*` označuje, že jde o generátorovou funkci. Popisuje druh funkce a ne její název, takže by měla být připojena ke klíčovému slovu `function`.
 ```
 
 ## Generátory jsou iterovatelné
@@ -238,11 +238,11 @@ function* generujPosloupnost(začátek, konec) {
 ```
 
 Nyní bychom ji rádi znovu použili, aby generovala složitější posloupnost:
-- nejprve číslice `0..9` (s kódy znaků 48..57),
-- po nich písmena velké abecedy `A..Z` (s kódy znaků 65..90),
-- po nich písmena malé abecedy `a..z` (s kódy znaků 97..122).
+- nejprve číslice `0..9` (s kódy znaků 48 až 57),
+- po nich písmena velké abecedy `A..Z` (s kódy znaků 65 až 90),
+- po nich písmena malé abecedy `a..z` (s kódy znaků 97 až 122).
 
-Tuto posloupnost můžeme použít např. k vytváření hesel tím, že z ní budeme vybírat znaky (můžeme přidat i syntaktické znaky), ale napřed ji vygenerujme.
+Tuto posloupnost můžeme použít například k vytváření hesel tím, že z ní budeme vybírat znaky (můžeme přidat i syntaktické znaky), ale napřed ji vygenerujme.
 
 Když chceme v obyčejné funkci zkombinovat výsledky z několika jiných funkcí, zavoláme je, uložíme si jejich výsledky a nakonec je spojíme.
 
@@ -279,7 +279,7 @@ for(let kód of generujKódyHesel()) {
 alert(řetězec); // 0..9A..Za..z
 ```
 
-Direktiva `yield*` *deleguje* výkon na jiný generátor. Tento pojem znamená, že `yield* gen` iteruje nad generátorem `gen` a průhledně předává jeho výstupy ven, jako by tyto hodnoty byly vydány vnějším generátorem.
+Direktiva `yield*` *deleguje* výkon na jiný generátor. Tento pojem znamená, že `yield* gen` iteruje nad generátorem `gen` a průhledně předává jeho výstupy ven, jako by byly vydány vnějším generátorem.
 
 Výsledek je stejný, jako kdybychom vložili kód z vnořených generátorů:
 
@@ -312,13 +312,13 @@ for(let kód of generujAlfanumerickou()) {
 alert(řetězec); // 0..9A..Za..z
 ```
 
-Skládání generátorů je přirozený způsob, jak vložit tok jednoho generátoru do druhého. Nepoužívá další paměť, do níž by se ukládaly průběžné výsledky.
+Skládání generátorů je přirozený způsob, jak vložit běh jednoho generátoru do druhého. Nepoužívá další paměť, do níž by se ukládaly průběžné výsledky.
 
-## „yield“ je obousměrná ulička
+## „yield“ je obousměrná ulice
 
 Až dosud se generátory podobaly iterovatelným objektům se speciální syntaxí pro generování hodnot. Ve skutečnosti však jsou mnohem silnější a flexibilnější.
 
-Je to proto, že `yield` je obousměrná ulička: nejenom že vrací výsledek ven, ale také umí předat hodnotu dovnitř generátoru.
+Je to proto, že `yield` je obousměrná ulice: nejenom vrací výsledek ven, ale také umí předat hodnotu dovnitř generátoru.
 
 Abychom tak učinili, měli bychom volat `generátor.next(arg)` s argumentem. Tento argument se stane výsledkem `yield`.
 
@@ -343,8 +343,8 @@ generátor.next(4); // --> předá výsledek do generátoru
 
 ![](genYield2.svg)
 
-1. První volání `generátor.next()` by mělo být vždy učiněno bez argumentu (je-li argument předán, je ignorován). Zahájí výkon a vrátí výsledek prvního `yield "2+2=?"`. V tuto chvíli generátor pozastaví svůj výkon a zůstane na řádku `(*)`.
-2. Pak, jak je znázorněno na obrázku výše, se výsledek `yield` stane hodnotou proměnné `otázka` ve volajícím kódu.
+1. První volání `generátor.next()` by mělo být vždy učiněno bez argumentu (je-li argument předán, je ignorován). Zahájí běh a vrátí výsledek prvního `yield "2+2=?"`. V tuto chvíli generátor pozastaví svůj běh a zůstane na řádku `(*)`.
+2. Pak, jak je znázorněno na obrázku, se výsledek `yield` stane hodnotou proměnné `otázka` ve volajícím kódu.
 3. Na `generátor.next(4)` se generátor obnoví a jako výsledek získá `4`: `let výsledek = 4`.
 
 Prosíme všimněte si, že vnější kód nemusí volat `next(4)` okamžitě. Může to nějakou dobu trvat. To není problém: generátor počká.
@@ -380,21 +380,21 @@ alert( generátor.next(4).value ); // "3 * 3 = ?"
 alert( generátor.next(9).done ); // true
 ```
 
-Obrázek výkonu:
+Běh kódu vidíme na obrázku:
 
 ![](genYield2-2.svg)
 
-1. První `.next()` zahájí výkon... Dosáhne prvního `yield`.
+1. První `.next()` zahájí běh... Dosáhne prvního `yield`.
 2. Výsledek je vrácen vnějšímu kódu.
-3. Druhé `.next(4)` předá `4` zpět generátoru jako výsledek prvního `yield` a obnoví výkon.
-4. ...Dosáhne druhého `yield`, které se stane výsledkem volání generátoru.
-5. Třetí `.next(9)` předá do generátoru `9` jako výsledek druhého `yield` a obnoví výkon, který dosáhne konce funkce, takže `done: true`.
+3. Druhé `.next(4)` předá `4` zpět generátoru jako výsledek prvního `yield` a obnoví jeho běh.
+4. ...Běh dosáhne druhého `yield`, které se stane výsledkem volání generátoru.
+5. Třetí `.next(9)` předá do generátoru `9` jako výsledek druhého `yield` a obnoví jeho běh, který dosáhne konce funkce, takže `done: true`.
 
-Je to jako ping-pong. Každé `next(value)` (s výjimkou prvního) předá do generátoru hodnotu, která se stane výsledkem aktuálního `yield`, a pak získá zpět výsledek dalšího `yield`.
+Je to jako pingpong. Každé `next(hodnota)` (s výjimkou prvního) předá do generátoru hodnotu, která se stane výsledkem aktuálního `yield`, a pak získá zpět výsledek dalšího `yield`.
 
 ## generátor.throw
 
-Jak jsme viděli ve výše uvedených příkladech, vnější kód může předat generátoru hodnotu jako výsledek `yield`.
+Jak jsme viděli v uvedených příkladech, vnější kód může předat generátoru hodnotu jako výsledek `yield`.
 
 ...Může v něm však také vyvolat chybu. To je přirozené, neboť chyba je druh výsledku.
 
@@ -407,7 +407,7 @@ function* gen() {
   try {
     let výsledek = yield "2 + 2 = ?"; // (1)
 
-    alert("Výkon se sem nedostane, protože výše bude vyvolána výjimka");
+    alert("Běh se sem nedostane, protože výše bude vyvolána výjimka");
   } catch(e) {
     alert(e); // zobrazí chybu
   }
@@ -426,7 +426,7 @@ Chyba, vhozená do generátoru na řádku `(2)`, povede k výjimce na řádku `(
 
 Pokud ji nezachytíme, pak stejně jako každá výjimka „vypadne“ z generátoru do volajícího kódu.
 
-Aktuální řádek volajícího kódu je řádek s `generátor.throw`, označený `(2)`. Můžeme ji tedy zachytit tam, například takto:
+Aktuální řádek volajícího kódu je řádek s `generátor.throw`, označený `(2)`. Tam ji tedy můžeme zachytit, například takto:
 
 ```js run
 function* generuj() {
@@ -446,11 +446,11 @@ try {
 */!*
 ```
 
-Pokud tuto chybu nezachytíme zde, pak jako obvykle propadne do vnějšího volajícího kódu (je-li nějaký), a není-li zachycena, shodí skript.
+Pokud zde tuto chybu nezachytíme, pak jako obvykle propadne do vnějšího volajícího kódu (je-li nějaký), a není-li zachycena, shodí skript.
 
 ## generátor.return
 
-`generátor.return(hodnota)` ukončí výkon generátoru a vrátí zadanou hodnotu `hodnota`.
+`generátor.return(hodnota)` ukončí běh generátoru a vrátí zadanou hodnotu `hodnota`.
 
 ```js
 function* gen() {
@@ -462,13 +462,13 @@ function* gen() {
 const g = gen();
 
 g.next();        // { value: 1, done: false }
-g.return('foo'); // { value: "foo", done: true }
+g.return('nic'); // { value: "nic", done: true }
 g.next();        // { value: undefined, done: true }
 ```
 
 Jestliže na dokončeném generátoru znovu použijeme `generátor.return()`, vrátí tuto hodnotu znovu ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator/return)).
 
-Tuto metodu nepoužíváme často, protože většinou chceme získat všechny vracené hodnoty, ale může být užitečná, když chceme za specifických podmínek generátor zastavit.
+Tuto metodu nepoužíváme často, protože většinou chceme získat všechny vracené hodnoty, ale může být užitečná, když chceme generátor zastavit za specifických podmínek.
 
 ## Shrnutí
 
@@ -476,8 +476,8 @@ Tuto metodu nepoužíváme často, protože většinou chceme získat všechny v
 - Uvnitř generátorů (pouze tam) existuje operátor `yield`.
 - Vnější kód a generátor si mohou vyměňovat výsledky pomocí volání `next/yield`.
 
-V moderním JavaScriptu se generátory používají jen zřídka, ale někdy se mohou hodit, protože schopnost funkce vyměňovat si data s volajícím kódem během jejího výkonu je poměrně unikátní. A samozřejmě jsou vynikající pro vytváření iterovatelných objektů.
+V moderním JavaScriptu se generátory používají jen zřídka, ale někdy se mohou hodit, protože schopnost funkce vyměňovat si data s volajícím kódem při jejím běhu je poměrně unikátní. A samozřejmě jsou vynikající pro vytváření iterovatelných objektů.
 
-V další kapitole se navíc dozvíme o asynchronních generátorech, které se používají k načítání proudů asynchronně generovaných dat (např. stránkovaných při stahování ze sítě) v cyklech `for await ... of`.
+V další kapitole se navíc dozvíme o asynchronních generátorech, které se používají k načítání proudů asynchronně generovaných dat (např. stránkovaných dat při stahování ze sítě) v cyklech `for await ... of`.
 
 Při programování webů pracujeme s datovými proudy často, takže to je další velmi důležitý případ použití.
