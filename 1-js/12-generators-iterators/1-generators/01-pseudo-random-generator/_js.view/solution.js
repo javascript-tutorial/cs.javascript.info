@@ -1,9 +1,9 @@
-function* pseudoRandom(seed) {
-  let value = seed;
+function* pseudonáhodné(semínko) {
+  let hodnota = semínko;
 
   while(true) {
-    value = value * 16807 % 2147483647
-    yield value;
+    hodnota = hodnota * 16807 % 2147483647
+    yield hodnota;
   }
 
 };
