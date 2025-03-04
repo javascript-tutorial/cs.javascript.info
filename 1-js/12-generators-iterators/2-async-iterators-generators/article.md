@@ -1,51 +1,51 @@
 
-# Async iteration and generators
+# Asynchronní iterace a generátory
 
-Asynchronous iteration allow us to iterate over data that comes asynchronously, on-demand. Like, for instance, when we download something chunk-by-chunk over a network. And asynchronous generators make it even more convenient.
+Asynchronní iterace nám umožňuje iterovat nad daty, která přicházejí asynchronně, na požádání. Například když něco stahujeme po částech ze sítě. A asynchronní generátory nám to ještě usnadňují.
 
-Let's see a simple example first, to grasp the syntax, and then review a real-life use case.
+Nejprve se podíváme na jednoduchý příklad, abychom pochopili syntaxi, a pak si prohlédneme případ použití z reálného života.
 
-## Recall iterables
+## Připomínka iterovatelných objektů
 
-Let's recall the topic about iterables. 
+Připomeňme si téma iterovatelných objektů.
 
-The idea is that we have an object, such as `range` here:
+Myšlenkou je, že máme objekt, například `rozsah` zde:
 ```js
-let range = {
-  from: 1,
-  to: 5
+let rozsah = {
+  začátek: 1,
+  konec: 5
 };
 ```
 
-...And we'd like to use `for..of` loop on it, such as `for(value of range)`, to get values from `1` to `5`.
+...A rádi bychom nad ním používali cyklus `for..of`, např. `for(hodnota of rozsah)`, kterým budeme získávat hodnoty od `1` do `5`.
 
-In other words, we want to add an *iteration ability* to the object.
+Jinými slovy, chceme přidat objektu *schopnost iterace*.
 
-That can be implemented using a special method with the name `Symbol.iterator`:
+To můžeme implementovat pomocí speciální metody s názvem `Symbol.iterator`:
 
-- This method is called in by the `for..of` construct when the loop is started, and it should return an object with the `next` method.
-- For each iteration, the `next()` method is invoked for the next value.
-- The `next()` should return a value in the form `{done: true/false, value:<loop value>}`, where `done:true` means the end of the loop.
+- Tato metoda je volána konstruktem `for..of`, když je cyklus zahájen, a měla by vrátit objekt obsahující metodu `next`.
+- Při každé iteraci je metoda `next()` volána pro další hodnotu.
+- Metoda `next()` by měla vrátit hodnotu ve tvaru `{done: true/false, value:<hodnota cyklu>}`, kde `done:true` znamená konec cyklu.
 
-Here's an implementation for the iterable `range`:
+Zde je implementace iterovatelného objektu `rozsah`:
 
 ```js run
-let range = {
-  from: 1,
-  to: 5,
+let rozsah = {
+  začátek: 1,
+  konec: 5,
 
 *!*
-  [Symbol.iterator]() { // called once, in the beginning of for..of
+  [Symbol.iterator]() { // voláno jednou, na začátku for..of
 */!*
     return {
-      current: this.from,
-      last: this.to,
+      aktuální: this.začátek,
+      poslední: this.konec,
 
 *!*
-      next() { // called every iteration, to get the next value
+      next() { // voláno při každé iteraci pro získání další hodnoty
 */!*
-        if (this.current <= this.last) {
-          return { done: false, value: this.current++ };
+        if (this.aktuální <= this.poslední) {
+          return { done: false, value: this.aktuální++ };
         } else {
           return { done: true };
         }
@@ -54,54 +54,54 @@ let range = {
   }
 };
 
-for(let value of range) {
-  alert(value); // 1 then 2, then 3, then 4, then 5
+for(let hodnota of rozsah) {
+  alert(hodnota); // 1, pak 2, pak 3, pak 4, pak 5
 }
 ```
 
-If anything is unclear, please visit the chapter [](info:iterable), it gives all the details about regular iterables.
+Pokud vám něco není jasné, prosíme navštivte kapitolu [](info:iterable), která vysvětluje všechny podrobnosti o běžných iterovatelných objektech.
 
-## Async iterables
+## Asynchronní iterovatelné objekty
 
-Asynchronous iteration is needed when values come asynchronously: after `setTimeout` or another kind of delay. 
+Asynchronní iteraci potřebujeme, když hodnoty přicházejí asynchronně: po `setTimeout` nebo prodlevě jiného druhu.
 
-The most common case is that the object needs to make a network request to deliver the next value, we'll see a real-life example of it a bit later.
+Nejběžnějším případem je, že objekt potřebuje k doručení další hodnoty vytvořit síťový požadavek. Příklad z reálného života uvidíme o něco později.
 
-To make an object iterable asynchronously:
+Abychom učinili objekt asynchronně iterovatelným:
 
-1. Use `Symbol.asyncIterator` instead of `Symbol.iterator`.
-2. The `next()` method should return a promise (to be fulfilled with the next value).
-    - The `async` keyword handles it, we can simply make `async next()`.
-3. To iterate over such an object, we should use a `for await (let item of iterable)` loop.
-    - Note the `await` word.
+1. Použijeme `Symbol.asyncIterator` místo `Symbol.iterator`.
+2. Metoda `next()` by měla vrátit příslib (aby byl splněn další hodnotou).
+    - Zajistí to klíčové slovo `async`. Můžeme jednoduše vytvořit `async next()`.
+3. K iteraci nad takovým objektem bychom měli používat cyklus `for await (let prvek of iterovatelnýObjekt)`.
+    - Všimněte si slova `await`.
 
-As a starting example, let's make an iterable `range` object, similar like the one before, but now it will return values asynchronously, one per second.
+Jako počáteční příklad vytvořme iterovatelný objekt `rozsah`. Bude podobný tomu předchozímu, ale nyní bude vracet hodnoty asynchronně, jednu za sekundu.
 
-All we need to do is to perform a few replacements in the code above:
+Vše, co musíme udělat, je provést několik náhrad ve výše uvedeném kódu:
 
 ```js run
-let range = {
-  from: 1,
-  to: 5,
+let rozsah = {
+  začátek: 1,
+  konec: 5,
 
 *!*
   [Symbol.asyncIterator]() { // (1)
 */!*
     return {
-      current: this.from,
-      last: this.to,
+      aktuální: this.začátek,
+      poslední: this.konec,
 
 *!*
       async next() { // (2)
 */!*
 
 *!*
-        // note: we can use "await" inside the async next:
-        await new Promise(resolve => setTimeout(resolve, 1000)); // (3)
+        // poznámka: uvnitř asynchronní funkce next můžeme použít „await“:
+        await new Promise(splň => setTimeout(splň, 1000)); // (3)
 */!*
 
-        if (this.current <= this.last) {
-          return { done: false, value: this.current++ };
+        if (this.aktuální <= this.poslední) {
+          return { done: false, value: this.aktuální++ };
         } else {
           return { done: true };
         }
@@ -113,121 +113,121 @@ let range = {
 (async () => {
 
 *!*
-  for await (let value of range) { // (4)
-    alert(value); // 1,2,3,4,5
+  for await (let hodnota of rozsah) { // (4)
+    alert(hodnota); // 1,2,3,4,5
   }
 */!*
 
 })()
 ```
 
-As we can see, the structure is similar to regular iterators:
+Jak vidíme, tato struktura se podobá obyčejným iterátorům:
 
-1. To make an object asynchronously iterable, it must have a method `Symbol.asyncIterator` `(1)`.
-2. This method must return the object with `next()` method returning a promise `(2)`.
-3. The `next()` method doesn't have to be `async`, it may be a regular method returning a promise, but `async` allows us to use `await`, so that's convenient. Here we just delay for a second `(3)`.
-4. To iterate, we use `for await(let value of range)` `(4)`, namely add "await" after "for". It calls `range[Symbol.asyncIterator]()` once, and then its `next()` for values.
+1. Abychom učinili objekt asynchronně iterovatelným, musí obsahovat metodu `Symbol.asyncIterator` `(1)`.
+2. Tato metoda musí vracet objekt s metodou `next()`, která vrací příslib `(2)`.
+3. Metoda `next()` nemusí být `async`, může to být běžná metoda vracející příslib, ale `async` nám umožňuje použít `await`, takže je vhodné. Zde prostě sekundu počkáme `(3)`.
+4. K iteraci použijeme `for await(let hodnota of rozsah)` `(4)`, jmenovitě přidáme „await“ za „for“. Tento cyklus jedenkrát volá `rozsah[Symbol.asyncIterator]()` a pak pro získávání hodnot volá jeho `next()`.
 
-Here's a small table with the differences:
+Uvedeme malou tabulku s rozdíly:
 
-|       | Iterators | Async iterators |
+|       | Iterátory | Asynchronní iterátory |
 |-------|-----------|-----------------|
-| Object method to provide iterator | `Symbol.iterator` | `Symbol.asyncIterator` |
-| `next()` return value is              | any value         | `Promise`  |
-| to loop, use                          | `for..of`         | `for await..of` |
+Objektová metoda, která poskytne iterátor | `Symbol.iterator` | `Symbol.asyncIterator` |
+| Návratová hodnota `next()` je              | libovolná hodnota         | `Promise`  |
+| K iteraci se používá                          | `for..of`         | `for await..of` |
 
-````warn header="The spread syntax `...` doesn't work asynchronously"
-Features that require regular, synchronous iterators, don't work with asynchronous ones.
+````warn header="Roztažená syntaxe `...` asynchronně nefunguje"
+Prvky jazyka, které vyžadují obvyklé, synchronní iterátory, nefungují s asynchronními.
 
-For instance, a spread syntax won't work:
+Nebude fungovat například roztažená syntaxe:
 ```js
-alert( [...range] ); // Error, no Symbol.iterator
+alert( [...rozsah] ); // Chyba, není Symbol.iterator
 ```
 
-That's natural, as it expects to find `Symbol.iterator`, not `Symbol.asyncIterator`.
+To je přirozené, protože ta očekává `Symbol.iterator`, ne `Symbol.asyncIterator`.
 
-It's also the case for `for..of`: the syntax without `await` needs `Symbol.iterator`.
+To je také případ cyklu `for..of`: syntaxe bez `await` potřebuje `Symbol.iterator`.
 ````
 
-## Recall generators
+## Připomínka generátorů
 
-Now let's recall generators, as they allow to make iteration code much shorter. Most of the time, when we'd like to make an iterable, we'll use generators.
+Nyní si připomeňme generátory, protože ty nám umožňují iterační kód značně zkrátit. Když bychom rádi vytvořili iterovatelný objekt, většinou použijeme generátory.
 
-For sheer simplicity, omitting some important stuff, they are "functions that generate (yield) values". They are explained in detail in the chapter [](info:generators).
+Pro zjednodušení, když vypustíme některé důležité věci, to jsou „funkce, které generují (vydávají) hodnoty“. Jsou podrobně vysvětleny v kapitole [](info:generators).
 
-Generators are labelled with `function*` (note the star) and use `yield` to generate a value, then we can use `for..of` to loop over them.
+Generátory jsou označeny jako `function*` (všimněte si hvězdičky) a ke generování hodnot používají `yield`. Pak nad nimi můžeme procházet cyklem `for..of`.
 
-This example generates a sequence of values from `start` to `end`:
+Tento příklad generuje posloupnost hodnot od `začátek` po `konec`:
 
 ```js run
-function* generateSequence(start, end) {
-  for (let i = start; i <= end; i++) {
+function* generujPosloupnost(začátek, konec) {
+  for (let i = začátek; i <= konec; i++) {
     yield i;
   }
 }
 
-for(let value of generateSequence(1, 5)) {
-  alert(value); // 1, then 2, then 3, then 4, then 5
+for(let hodnota of generujPosloupnost(1, 5)) {
+  alert(hodnota); // 1, pak 2, pak 3, pak 4, pak 5
 }
 ```
 
-As we already know, to make an object iterable, we should add `Symbol.iterator` to it.
+Jak už víme, abychom učinili objekt iterovatelným, měli bychom do něj přidat `Symbol.iterator`.
 
 ```js
-let range = {
-  from: 1,
-  to: 5,
+let rozsah = {
+  začátek: 1,
+  konec: 5,
 *!*
   [Symbol.iterator]() {
-    return <object with next to make range iterable>
+    return <objekt s metodou next, aby rozsah byl iterovatelný>
   }
 */!*
 }
 ```
 
-A common practice for `Symbol.iterator` is to return a generator, it makes the code shorter, as you can see:
+Běžnou praxí pro `Symbol.iterator` je vrátit generátor, tím se kód zkrátí, jak vidíte:
 
 ```js run
-let range = {
-  from: 1,
-  to: 5,
+let rozsah = {
+  začátek: 1,
+  konec: 5,
 
-  *[Symbol.iterator]() { // a shorthand for [Symbol.iterator]: function*()
-    for(let value = this.from; value <= this.to; value++) {
-      yield value;
+  *[Symbol.iterator]() { // zkratka pro [Symbol.iterator]: function*()
+    for(let hodnota = this.začátek; hodnota <= this.konec; hodnota++) {
+      yield hodnota;
     }
   }
 };
 
-for(let value of range) {
-  alert(value); // 1, then 2, then 3, then 4, then 5
+for(let hodnota of rozsah) {
+  alert(hodnota); // 1, pak 2, pak 3, pak 4, pak 5
 }
 ```
 
-Please see the chapter [](info:generators) if you'd like more details.
+Pokud by vás zajímaly další podrobnosti, přečtěte si prosíme kapitolu [](info:generators).
 
-In regular generators we can't use `await`. All values must come synchronously, as required by the `for..of` construct.
+V obyčejných generátorech nemůžeme používat `await`. Všechny hodnoty musejí přicházet synchronně, jak vyžaduje konstrukt `for..of`.
 
-What if we'd like to generate values asynchronously? From network requests, for instance. 
+Co kdybychom chtěli generovat hodnoty asynchronně, například ze síťových požadavků?
 
-Let's switch to asynchronous generators to make it possible.
+Přejděme k asynchronním generátorům, které nám to umožní.
 
-## Async generators (finally)
+## Asynchronní generátory (konečně)
 
-For most practical applications, when we'd like to make an object that asynchronously generates a sequence of values, we can use an asynchronous generator.
+Když chceme vytvořit objekt, který asynchronně generuje posloupnost hodnot, ve většině praktických aplikací můžeme použít asynchronní generátor.
 
-The syntax is simple: prepend `function*` with `async`. That makes the generator asynchronous.
+Syntaxe je jednoduchá: před `function*` uvedeme `async`. To učiní generátor asynchronním.
 
-And then use `for await (...)` to iterate over it, like this:
+A pak k iteraci nad ním použijeme `for await (...)`, například:
 
 ```js run
-*!*async*/!* function* generateSequence(start, end) {
+*!*async*/!* function* generujPosloupnost(začátek, konec) {
 
-  for (let i = start; i <= end; i++) {
+  for (let i = začátek; i <= konec; i++) {
 
 *!*
-    // Wow, can use await!
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Hurá, můžeme použít await!
+    await new Promise(splň => setTimeout(splň, 1000));
 */!*
 
     yield i;
@@ -237,181 +237,181 @@ And then use `for await (...)` to iterate over it, like this:
 
 (async () => {
 
-  let generator = generateSequence(1, 5);
-  for *!*await*/!* (let value of generator) {
-    alert(value); // 1, then 2, then 3, then 4, then 5 (with delay between)
+  let generátor = generujPosloupnost(1, 5);
+  for *!*await*/!* (let hodnota of generátor) {
+    alert(hodnota); // 1, pak 2, pak 3, pak 4, pak 5 (s prodlevou mezi nimi)
   }
 
 })();
 ```
 
-As the generator is asynchronous, we can use `await` inside it, rely on promises, perform network requests and so on.
+Jelikož je generátor asynchronní, můžeme uvnitř něj používat `await`, spoléhat se na přísliby, provádět síťové požadavky a podobně.
 
-````smart header="Under-the-hood difference"
-Technically, if you're an advanced reader who remembers the details about generators, there's an internal difference.
+````smart header="Rozdíl pod kapotou"
+Jestliže jste pokročilý čtenář a pamatujete si podrobnosti o generátorech, je tady technicky vnitřní rozdíl.
 
-For async generators, the `generator.next()` method is asynchronous, it returns promises.
+U asynchronních generátorů je metoda `generátor.next()` asynchronní, vrací přísliby.
 
-In a regular generator we'd use `result = generator.next()` to get values. In an async generator, we should add `await`, like this:
+V obyčejném generátoru bychom k získávání hodnot použili `výsledek = generator.next()`. V asynchronním generátoru bychom měli přidat `await`, například takto:
 
 ```js
-result = await generator.next(); // result = {value: ..., done: true/false}
+výsledek = await generator.next(); // výsledek = {value: ..., done: true/false}
 ```
-That's why async generators work with `for await...of`.
+Z tohoto důvodu asynchronní generátory fungují s `for await...of`.
 ````
 
-### Async iterable range
+### Asynchronní iterovatelný rozsah
 
-Regular generators can be used as `Symbol.iterator` to make the iteration code shorter.
+Jako `Symbol.iterator` můžeme používat obyčejné generátory, aby byl iterační kód kratší.
 
-Similar to that, async generators can be used as `Symbol.asyncIterator` to implement the asynchronous iteration.
+Obdobně můžeme jako `Symbol.asyncIterator` používat asynchronní generátory, abychom implementovali asynchronní iteraci.
 
-For instance, we can make the `range` object generate values asynchronously, once per second, by replacing synchronous `Symbol.iterator` with asynchronous `Symbol.asyncIterator`:
+Například můžeme přimět objekt `rozsah`, aby generoval hodnoty asynchronně, jednu za sekundu, nahrazením synchronního `Symbol.iterator` za asynchronní `Symbol.asyncIterator`:
 
 ```js run
-let range = {
-  from: 1,
-  to: 5,
+let rozsah = {
+  začátek: 1,
+  konec: 5,
 
-  // this line is same as [Symbol.asyncIterator]: async function*() {
+  // tento řádek je totéž jako [Symbol.asyncIterator]: async function*() {
 *!*
   async *[Symbol.asyncIterator]() {
 */!*
-    for(let value = this.from; value <= this.to; value++) {
+    for(let hodnota = this.začátek; hodnota <= this.konec; hodnota++) {
 
-      // make a pause between values, wait for something  
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // učiňme přestávku mezi hodnotami, na něco čekáme
+      await new Promise(splň => setTimeout(splň, 1000));
 
-      yield value;
+      yield hodnota;
     }
   }
 };
 
 (async () => {
 
-  for *!*await*/!* (let value of range) {
-    alert(value); // 1, then 2, then 3, then 4, then 5
+  for *!*await*/!* (let hodnota of rozsah) {
+    alert(hodnota); // 1, pak 2, pak 3, pak 4, pak 5
   }
 
 })();
 ```
 
-Now values come with a delay of 1 second between them.
+Nyní hodnoty přicházejí s prodlevou 1 sekunda mezi sebou.
 
 ```smart
-Technically, we can add both `Symbol.iterator` and `Symbol.asyncIterator` to the object, so it's both synchronously (`for..of`) and asynchronously (`for await..of`) iterable.
+Technicky můžeme do objektu přidat `Symbol.iterator` i `Symbol.asyncIterator` současně, bude tedy iterovatelný jak synchronně (`for..of`), tak asynchronně (`for await..of`).
 
-In practice though, that would be a weird thing to do.
+V praxi by to však bylo podivné.
 ```
 
-## Real-life example: paginated data
+## Příklad z reálného života: stránkovaná data
 
-So far we've seen basic examples, to gain understanding. Now let's review a real-life use case.
+Dosud jsme viděli základní příklady, abychom tomu porozuměli. Nyní se podívejme na případ použití z reálného života.
 
-There are many online services that deliver paginated data. For instance, when we need a list of users, a request returns a pre-defined count (e.g. 100 users) - "one page", and provides a URL to the next page.
+Existuje mnoho online služeb, které doručují stránkovaná data. Například když potřebujeme seznam uživatelů, požadavek vrátí předdefinovaný počet (např. 100 uživatelů) -- „jednu stránku“ a poskytne URL další stránky.
 
-This pattern is very common. It's not about users, but just about anything. 
+Tento vzorec je zcela běžný. Neplatí to jen pro uživatele, ale v zásadě pro cokoli.
 
-For instance, GitHub allows us to retrieve commits in the same, paginated fashion:
+Například GitHub nám umožňuje získávat commity stejným způsobem, po stránkách:
 
-- We should make a request to `fetch` in the form `https://api.github.com/repos/<repo>/commits`.
-- It responds with a JSON of 30 commits, and also provides a link to the next page in the `Link` header.
-- Then we can use that link for the next request, to get more commits, and so on.
+- Měli bychom vytvořit požadavek do `fetch` ve tvaru `https://api.github.com/repos/<úložiště>/commits`.
+- GitHub odpoví JSONem se 30 commity a také nám v hlavičce `Link` poskytne odkaz na další stránku.
+- Tento odkaz pak můžeme použít pro další požadavek, k získání dalších commitů, a tak dále.
 
-For our code, we'd like to have a simpler way to get commits.
+V našem kódu bychom rádi měli jednodušší způsob, jak získávat commity.
 
-Let's make a function `fetchCommits(repo)` that gets commits for us, making requests whenever needed. And let it care about all pagination stuff. For us it'll be a simple async iteration `for await..of`.
+Vytvořme funkci `stáhniCommity(úložiště)`, která nám bude načítat commity a bude vytvářet požadavky, kdykoli budou zapotřebí. A nechme ji, aby se postarala o všechny záležitosti ohledně stránkování. Pro nás to bude jednoduchá asynchronní iterace `for await..of`.
 
-So the usage will be like this:
+Použití tedy bude následující:
 
 ```js
-for await (let commit of fetchCommits("username/repository")) {
-  // process commit
+for await (let commit of stáhniCommity("uživatel/úložiště")) {
+  // zpracování commitu
 }
 ```
 
-Here's such function, implemented as async generator:
+Zde je taková funkce, implementovaná jako asynchronní generátor:
 
 ```js
-async function* fetchCommits(repo) {
-  let url = `https://api.github.com/repos/${repo}/commits`;
+async function* stáhniCommity(úložiště) {
+  let url = `https://api.github.com/repos/${úložiště}/commits`;
 
   while (url) {
-    const response = await fetch(url, { // (1)
-      headers: {'User-Agent': 'Our script'}, // github needs any user-agent header
+    const odpověď = await fetch(url, { // (1)
+      headers: {'User-Agent': 'Our script'}, // GitHub potřebuje hlavičku s uživatelským agentem
     });
 
-    const body = await response.json(); // (2) response is JSON (array of commits)
+    const tělo = await odpověď.json(); // (2) odpověď v JSONu (pole commitů)
 
-    // (3) the URL of the next page is in the headers, extract it
-    let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/);
-    nextPage = nextPage?.[1];
+    // (3) v hlavičkách je URL další stránky, vydolujeme ho
+    let dalšíStránka = odpověď.headers.get('Link').match(/<(.*?)>; rel="next"/);
+    dalšíStránka = dalšíStránka?.[1];
 
-    url = nextPage;
+    url = dalšíStránka;
 
-    for(let commit of body) { // (4) yield commits one by one, until the page ends
+    for(let commit of tělo) { // (4) vydáme commity jeden po druhém, dokud stránka neskončí
       yield commit;
     }
   }
 }
 ```
 
-More explanations about how it works:
+Podrobnější vysvětlení, jak to funguje:
 
-1. We use the browser [fetch](info:fetch) method to download the commits.
+1. K načtení commitů používáme metodu prohlížeče [fetch](info:fetch).
 
-    - The initial URL is `https://api.github.com/repos/<repo>/commits`, and the next page will be in the `Link` header of the response.
-    - The `fetch` method allows us to supply authorization and other headers if needed -- here GitHub requires `User-Agent`.
-2. The commits are returned in JSON format.
-3. We should get the next page URL from the `Link` header of the response. It has a special format, so we use a regular expression for that (we will learn this feature in [Regular expressions](info:regular-expressions)).
-    - The next page URL may look like `https://api.github.com/repositories/93253246/commits?page=2`. It's generated by GitHub itself.
-4. Then we yield the received commits one by one, and when they finish, the next `while(url)` iteration will trigger, making one more request.
+    - Úvodní URL je `https://api.github.com/repos/<úložiště>/commits` a další stránka bude v hlavičce odpovědi `Link`.
+    - Metoda `fetch` nám umožňuje poskytnout autorizaci a další hlavičky, pokud jsou zapotřebí -- zde GitHub vyžaduje hlavičku `User-Agent`.
+2. Commity jsou vráceny ve formátu JSON.
+3. Z hlavičky `Link` odpovědi bychom měli získat URL další stránky. Hlavička má speciální formát, takže pro ni použijeme regulární výraz (o tomto prvku jazyka se dozvíme v kapitole [Regulární výrazy](info:regular-expressions)).
+    - URL další stránky může vypadat jako `https://api.github.com/repositories/93253246/commits?page=2`. Generuje je samotný GitHub.
+4. Pak budeme vydávat získané commity jeden po druhém, a když dojdou, spustí se další iterace `while(url)`, která vytvoří další požadavek.
 
-An example of use (shows commit authors in console):
+Příklad použití (zobrazí na konzoli autory commitů):
 
 ```js run
 (async () => {
 
-  let count = 0;
+  let počet = 0;
 
-  for await (const commit of fetchCommits('javascript-tutorial/en.javascript.info')) {
+  for await (const commit of stáhniCommity('javascript-tutorial/en.javascript.info')) {
 
     console.log(commit.author.login);
 
-    if (++count == 100) { // let's stop at 100 commits
+    if (++počet == 100) { // zastavíme se po 100 commitech
       break;
     }
   }
 
 })();
 
-// Note: If you are running this in an external sandbox, you'll need to paste here the function fetchCommits described above 
+// Poznámka: Pokud tohle spouštíte v externím pískovišti, musíte sem zkopírovat výše uvedenou funkci stáhniCommity
 ```
 
-That's just what we wanted. 
+To je přesně to, co jsme chtěli.
 
-The internal mechanics of paginated requests is invisible from the outside. For us it's just an async generator that returns commits.
+Vnitřní mechaniky stránkovaných požadavků jsou zvnějšku neviditelné. Pro nás je to prostě jen asynchronní generátor, který vrací commity.
 
-## Summary
+## Shrnutí
 
-Regular iterators and generators work fine with the data that doesn't take time to generate.
+Obyčejné iterátory a generátory fungují dobře s daty, jejichž generování netrvá dlouhou dobu.
 
-When we expect the data to come asynchronously, with delays, their async counterparts can be used, and `for await..of` instead of `for..of`.
+Když očekáváme, že data budou přicházet asynchronně s prodlevami, můžeme použít jejich asynchronní protějšky a `for await..of` místo `for..of`.
 
-Syntax differences between async and regular iterators:
+Syntaktické rozdíly mezi asynchronními a běžnými iterátory:
 
-|       | Iterable | Async Iterable |
+|       | Iterovatelný objekt | Asynchronní iterovatelný objekt |
 |-------|-----------|-----------------|
-| Method to provide iterator | `Symbol.iterator` | `Symbol.asyncIterator` |
-| `next()` return value is          | `{value:…, done: true/false}`         | `Promise` that resolves to `{value:…, done: true/false}`  |
+| Metoda poskytující iterátor | `Symbol.iterator` | `Symbol.asyncIterator` |
+| Návratová hodnota `next()` je          | `{value:…, done: true/false}`         | `Promise`, který se splní s `{value:…, done: true/false}`  |
 
-Syntax differences between async and regular generators:
+Syntaktické rozdíly mezi asynchronními a běžnými generátory:
 
-|       | Generators | Async generators |
+|       | Generátory | Asynchronní generátory |
 |-------|-----------|-----------------|
-| Declaration | `function*` | `async function*` |
-| `next()` return value is          | `{value:…, done: true/false}`         | `Promise` that resolves to `{value:…, done: true/false}`  |
+| Deklarace | `function*` | `async function*` |
+| Návratová hodnota `next()` je          | `{value:…, done: true/false}`         | `Promise`, který se splní s `{value:…, done: true/false}`  |
 
-In web-development we often meet streams of data, when it flows chunk-by-chunk. For instance, downloading or uploading a big file.
+Při vývoji webů se často setkáváme s proudy dat, která přitékají po částech, například při stahování nebo odesílání velkého souboru.
 
-We can use async generators to process such data. It's also noteworthy that in some environments, like in browsers, there's also another API called Streams, that provides special interfaces to work with such streams, to transform the data and to pass it from one stream to another (e.g. download from one place and immediately send elsewhere).
+Ke zpracování takových dat můžeme používat asynchronní generátory. Stojí také za zmínku, že v některých prostředích, např. v prohlížečích, existuje i další API nazvané Streams, které poskytuje speciální rozhraní pro práci s takovými proudy (streamy), pro transformaci dat a jejich předávání z jednoho proudu do druhého (např. při stahování z jednoho místa a okamžitém odesílání jinam).
