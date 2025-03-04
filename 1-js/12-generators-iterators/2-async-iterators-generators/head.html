@@ -1,22 +1,22 @@
 <script>
-  async function* fetchCommits(repo) {
-    let url = `https://api.github.com/repos/${repo}/commits`;
+  async function* stáhniCommity(úložiště) {
+    let url = `https://api.github.com/repos/${úložiště}/commits`;
 
     while (url) {
-      const response = await fetch(url, {
-        headers: {'User-Agent': 'Our script'}, // github requires user-agent header
+      const odpověď = await fetch(url, {
+        headers: {'User-Agent': 'Our script'}, // GitHub potřebuje hlavičku s uživatelským agentem
       });
 
-      const body = await response.json(); // parses response as JSON (array of commits)
+      const tělo = await odpověď.json(); // parsuje odpověď v JSONu (pole commitů)
 
-      // the URL of the next page is in the headers, extract it
-      let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/);
-      nextPage = nextPage?.[1];
+      // v hlavičkách je URL další stránky, vydolujeme ho
+      let dalšíStránka = odpověď.headers.get('Link').match(/<(.*?)>; rel="next"/);
+      dalšíStránka = dalšíStránka?.[1];
 
-      url = nextPage;
+      url = dalšíStránka;
 
-      // yield commits one by one, when they finish - fetch a new page url
-      for(let commit of body) {
+      // vydáme commity jeden po druhém, dokud stránka neskončí - pak stáhneme stránku z dalšího URL
+      for(let commit of tělo) {
         yield commit;
       }
     }
