@@ -1,1 +1,1 @@
-export let user = "John";
+export let uživatel = "Jan";
