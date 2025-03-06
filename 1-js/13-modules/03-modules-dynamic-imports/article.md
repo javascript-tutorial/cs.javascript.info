@@ -22,13 +22,13 @@ if(...) {
 }
 ```
 
-Je to proto, že záměrem příkazů `import`/`export` je poskytnout páteř struktury kódu. To je dobrá věc, protože strukturu kódu můžeme analyzovat, moduly můžeme speciálními nástroji shromažďovat a spojovat do jednoho souboru, nepoužité exporty můžeme odstraňovat („třesení stromem“). To je možné jen proto, že struktura importů/exportů je jednoduchá a pevná.
+Je to proto, že záměrem příkazů `import`/`export` je poskytnout páteř struktury kódu. To je dobrá věc, protože strukturu kódu můžeme analyzovat, moduly můžeme speciálními nástroji shromažďovat a spojovat do jednoho souboru, nepoužité exporty můžeme odstraňovat („třesení stromem“). To je možné jen proto, že struktura importů a exportů je jednoduchá a pevná.
 
 Jak ale můžeme importovat modul dynamicky, na požádání?
 
 ## Výraz import()
 
-Výraz `import(modul)` načte modul a vrátí příslib, který se vyhodnotí do objektu modulu obsahujícího všechny jeho exporty. Může být volán z kteréhokoli místa v kódu.
+Výraz `import(modul)` načte modul a vrátí příslib, který se splní do objektu modulu obsahujícího všechny jeho exporty. Může být volán z kteréhokoli místa v kódu.
 
 Můžeme jej používat dynamicky na kterémkoli místě kódu, například:
 
@@ -37,7 +37,7 @@ let cestaModulu = prompt("Který modul načíst?");
 
 import(cestaModulu)
   .then(obj => <objekt modulu>)
-  .catch(chyba => <chyba při načítání, např. takový modul neexistuje>)
+  .catch(chyba => <chyba při načítání, např. když takový modul neexistuje>)
 ```
 
 Nebo můžeme použít `let modul = await import(cestaModulu)`, jsme-li uvnitř asynchronní funkce.
@@ -64,16 +64,16 @@ ahoj();
 nashle();
 ```
 
-Nebo jestliže `řekni.js` má defaultní export:
+Nebo jestliže `řekni.js` obsahuje výchozí export:
 
 ```js
 // 📁 řekni.js
 export default function() {
-  alert("Modul načten (defaultní export)!");
+  alert("Modul načten (výchozí export)!");
 }
 ```
 
-...Pak, abychom k němu přistoupili, můžeme použít vlastnost `default` objektu modulu:
+...Pak můžeme pro přístup k němu použít vlastnost `default` objektu modulu:
 
 ```js
 let obj = await import('./řekni.js');
@@ -88,7 +88,7 @@ Zde je celý příklad:
 [codetabs src="say" current="index.html"]
 
 ```smart
-Dynamické importy fungují v běžných skriptech, nevyžadují `script type="module"`.
+Dynamické importy fungují i v běžných skriptech, nevyžadují `script type="module"`.
 ```
 
 ```smart

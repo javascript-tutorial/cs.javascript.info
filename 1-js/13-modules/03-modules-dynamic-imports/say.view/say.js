@@ -7,5 +7,5 @@ export function nashle() {
 }
 
 export default function() {
-  alert("Modul načten (defaultní export)!");
+  alert("Modul načten (výchozí export)!");
 }
