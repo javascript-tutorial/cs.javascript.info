@@ -4,9 +4,9 @@ Pokus o načtení neexistující vlastnosti zpravidla vrátí `undefined`.
 
 Vytvořte proxy, která při pokusu o načtení neexistující vlastnosti místo toho vyvolá chybu.
 
-To nám může pomoci brzy detekovat programátorské chyby.
+To nám může pomoci dříve detekovat programátorské chyby.
 
-Napište funkci `wrap(cíl)`, která vezme objekt `cíl` a vrátí proxy, která přidá tento funkcionální aspekt.
+Napište funkci `obal(cíl)`, která vezme objekt `cíl` a vrátí proxy, která přidá tento funkcionální aspekt.
 
 Mělo by to fungovat takto:
 
@@ -15,7 +15,7 @@ let uživatel = {
   jméno: "Jan"
 };
 
-function wrap(cíl) {
+function obal(cíl) {
   return new Proxy(cíl, {
 *!*
       /* váš kód */
@@ -23,7 +23,7 @@ function wrap(cíl) {
   });
 }
 
-uživatel = wrap(uživatel);
+uživatel = obal(uživatel);
 
 alert(uživatel.jméno); // Jan
 *!*

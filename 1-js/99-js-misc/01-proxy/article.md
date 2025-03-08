@@ -1,6 +1,6 @@
-# Proxy a Reflect
+# Třídy Proxy a Reflect
 
-Objekt `Proxy` zapouzdřuje jiný objekt a zachytává operace na něm, například čtení/zápis vlastností a jiné. Volitelně je zpracovává sám o sobě nebo průhledně umožňuje objektu, aby je zpracovával sám.
+Objekt třídy `Proxy` obaluje jiný objekt a zachytává operace na něm, například čtení nebo zápis vlastností a jiné. Volitelně je zpracovává sám o sobě nebo průhledně umožňuje objektu, aby je zpracovával sám.
 
 Proxy jsou používány v mnoha knihovnách a některých frameworcích prohlížečů. V tomto článku uvidíme mnoho praktických aplikací.
 
@@ -12,7 +12,7 @@ Syntaxe:
 let proxy = new Proxy(cíl, handler)
 ```
 
-- `cíl` -- je objekt, který má být zapouzdřen, může to být cokoli včetně funkcí.
+- `cíl` -- je objekt, který má být obalen, může to být cokoli včetně funkcí.
 - `handler` -- konfigurace proxy: objekt s „pastmi“, metodami, které zachytávají operace, např. past `get` pro načítání vlastností objektu `cíl`, past `set` pro zápis vlastnosti do objektu `cíl`, a tak dále.
 
 Jestliže pro operaci prováděnou na `proxy` existuje odpovídající past v objektu `handler`, pak se spustí a proxy dostane šanci operaci zpracovat, v opačném případě je operace provedena na objektu `cíl`.
@@ -41,17 +41,17 @@ Jak vidíme, bez pastí je `proxy` průhledným obalem kolem objektu `cíl`.
 
 ![](proxy.svg)
 
-`Proxy` je speciální „exotický objekt“. Nemá své vlastní vlastnosti. Je-li objekt `handler` prázdný, průhledně předává operace objektu `cíl`.
+`Proxy` je speciální „exotický objekt“, který nemá své vlastní vlastnosti. Je-li objekt `handler` prázdný, průhledně předává operace objektu `cíl`.
 
-Abychom aktivovali další schopnosti, přidejme pasti.
+Abychom aktivovali jeho další schopnosti, přidejme pasti.
 
 Co s nimi můžeme zachytávat?
 
-Pro většinu operací na objektech je ve specifikaci JavaScriptu tzv. „interní metoda“, která popisuje, jak operace funguje na nejnižší úrovni. Například `[[Get]]`, interní metoda k načtení vlastnosti, `[[Set]]`, interní metoda k zápisu vlastnosti, a tak dále. Tyto metody se používají jen ve specifikaci, přímo názvem je volat nemůžeme.
+Pro většinu operací na objektech je ve specifikaci JavaScriptu tzv. „interní metoda“, která popisuje, jak operace funguje na nejnižší úrovni. Například `[[Get]]`, interní metoda k načtení vlastnosti, `[[Set]]`, interní metoda k zápisu vlastnosti, a tak dále. Tyto metody se používají jen ve specifikaci, volat přímo názvem je nemůžeme.
 
-Pasti proxy zachytávají vyvolávání těchto metod. Jsou vyjmenovány ve [specifikaci Proxy](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) a v níže uvedené tabulce.
+Pasti proxy zachytávají vyvolávání těchto metod. Jsou vyjmenovány ve [specifikaci Proxy](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) a v následující tabulce.
 
-Pro každou interní metodu existuje v této tabulce past: název metody, který můžeme přidat do parametru `handler` při volání `new Proxy`, abychom operaci zachytili:
+Pro každou interní metodu je v této tabulce past: název metody, který můžeme přidat do parametru `handler` při volání `new Proxy`, abychom operaci zachytili:
 
 | Interní metoda | Metoda handleru | Spustí se při... |
 |-----------------|----------------|-------------|
@@ -78,7 +78,7 @@ Většina z nich se týká návratových hodnot:
 - ...a tak dále, další uvidíme v příkladech níže.
 
 Existují i některé další invarianty, například:
-- `[[GetPrototypeOf]]` aplikovaná na proxy objekt musí vracet stejnou hodnotu jako `[[GetPrototypeOf]]` aplikovaná na cílový objekt proxy objektu. Jinými slovy, načítání prototypu proxy musí vždy vrátit prototyp cílového objektu.
+- `[[GetPrototypeOf]]` aplikovaná na proxy objekt musí vracet stejnou hodnotu jako `[[GetPrototypeOf]]` aplikovaná na cílový objekt tohoto proxy objektu. Jinými slovy, načítání prototypu proxy musí vždy vrátit prototyp cílového objektu.
 
 Pasti mohou tyto operace zachytávat, ale musejí dodržovat tato pravidla.
 
@@ -87,23 +87,23 @@ Invarianty zajišťují korektní a konzistentní chování prvků jazyka. Úpln
 
 Podívejme se na praktických příkladech, jak to funguje.
 
-## Defaultní hodnota s pastí „get“
+## Výchozí hodnota s pastí „get“
 
-Nejběžnější pasti jsou pro čtení/zápis vlastností.
+Nejběžnější pasti jsou pro čtení a zápis vlastností.
 
 Abychom zachytili čtení, `handler` by měl obsahovat metodu `get(cíl, vlastnost, příjemce)`.
 
-Ta se spustí, když je vlastnost načítána, s následujícími argumenty:
+Když je vlastnost načítána, tato metoda se spustí s následujícími argumenty:
 
 - `cíl` -- je cílový objekt, ten, který byl předán do `new Proxy` jako první argument,
 - `vlastnost` -- název vlastnosti,
-- `příjemce` -- je-li cílová vlastnost getter, pak `příjemce` je objekt, který bude při jeho volání použit jako `this`. Obvykle je to samotný objekt `proxy` (nebo objekt, který je z něj zděděn, dědíme-li z proxy). Prozatím tento argument nepotřebujeme, takže ho podrobněji vysvětlíme později.
+- `příjemce` -- je-li cílová vlastnost getter, pak `příjemce` je objekt, který bude při volání tohoto getteru použit jako `this`. Obvykle je to samotný objekt `proxy` (nebo objekt, který je z něj zděděn, pokud dědíme z proxy). Prozatím tento argument nepotřebujeme, takže ho podrobněji vysvětlíme později.
 
-Použijme `get` k implementaci defaultních hodnot objektu.
+Použijme `get` k implementaci výchozích hodnot objektu.
 
 Vytvořme číselné pole, které bude pro neexistující hodnoty vracet `0`.
 
-Když se pokoušíme načíst neexistující prvek pole, obyčejně získáme `undefined`, ale my zapouzdříme běžné pole do proxy, která bude obsahovat past na načítání a vracet `0`, pokud taková vlastnost neexistuje:
+Když se pokoušíme načíst neexistující prvek pole, obyčejně získáme `undefined`, ale my obalíme běžné pole do proxy, která bude obsahovat past na načítání a vracet `0`, pokud načítaná vlastnost neexistuje:
 
 ```js run
 let čísla = [0, 1, 2];
@@ -113,7 +113,7 @@ let čísla = [0, 1, 2];
     if (vlastnost in cíl) {
       return cíl[vlastnost];
     } else {
-      return 0; // defaultní hodnota
+      return 0; // výchozí hodnota
     }
   }
 });
@@ -124,9 +124,9 @@ alert( čísla[123] ); // 0 (takový prvek není)
 */!*
 ```
 
-Jak vidíme, s pastí `get` je to docela snadné.
+Jak vidíme, s pastí `get` je něco takového docela snadné.
 
-Můžeme použít `Proxy` k implementaci jakékoli logiky pro „defaultní“ hodnoty.
+Můžeme použít `Proxy` k implementaci jakékoli logiky pro „výchozí“ hodnoty.
 
 Představme si, že máme slovník s větami a jejich překlady:
 
@@ -140,9 +140,9 @@ alert( slovník['Ahoj'] ); // Hola
 alert( slovník['Vítejte'] ); // undefined
 ```
 
-Momentálně načtení věty, kterou `slovník` neobsahuje, vrací `undefined`. V praxi je však obvykle lepší nechat větu nepřeloženou než `undefined`. Nechme tedy slovník, aby v takovém případě vrátil místo `undefined` nepřeloženou větu.
+Prozatím načtení věty, kterou `slovník` neobsahuje, vrací `undefined`. V praxi je však obvykle lepší nechat větu nepřeloženou než vrátit `undefined`. Nechme tedy slovník, aby v takovém případě vrátil místo `undefined` nepřeloženou větu.
 
-Abychom toho dosáhli, zapouzdříme `slovník` do proxy, která zachytává operace načítání:
+Abychom toho dosáhli, obalíme `slovník` do proxy, která zachytává operace načítání:
 
 ```js run
 let slovník = {
@@ -178,14 +178,14 @@ Prosíme všimněte si, jak proxy přepisuje proměnnou:
 slovník = new Proxy(slovník, ...);
 ```
 
-Proxy by měl cílový objekt všude zcela nahradit. Nikdo by se nikde neměl odkazovat na cílový objekt poté, co je nahrazen proxy objektem. Jinak snadno naděláme nepořádek.
+Proxovaný objekt by měl cílový objekt všude zcela nahradit. Na cílový objekt by se po jeho nahrazení proxovaným objektem neměl nikdo nikde odkazovat. Jinak snadno naděláme nepořádek.
 ````
 
 ## Ověřování pomocí pasti „set“
 
 Řekněme, že chceme pole výlučně pro čísla. Bude-li přidána hodnota jiného typu, měla by nastat chyba.
 
-Past `set` se spustí, když se zapisuje do vlastnosti.
+Když se zapisuje do vlastnosti, spustí se past `set`.
 
 `set(cíl, vlastnost, hodnota, příjemce)`:
 
@@ -194,7 +194,7 @@ Past `set` se spustí, když se zapisuje do vlastnosti.
 - `hodnota` -- hodnota vlastnosti,
 - `příjemce` -- podobně jako u pasti `get`, má význam jen pro settery.
 
-Past `set` by měla vracet `true`, je-li nastavení úspěšné, a `false` jinak (vyvolá `TypeError`).
+Past `set` by měla vracet `true`, je-li nastavení úspěšné, a jinak `false` (vyvolá `TypeError`).
 
 Použijme ji k ověřování nových hodnot:
 
@@ -225,9 +225,9 @@ alert("Délka pole je: " + čísla.length); // 2
 alert("Na tento řádek se nikdy nedostaneme (chyba na řádku výše)");
 ```
 
-Prosíme všimněte si: zabudovaná funkcionalita polí stále funguje! Hodnoty se přidávají metodou `push`. Vlastnost `length` se automaticky zvyšuje, když jsou hodnoty přidávány. Naše proxy nic nepokazila.
+Prosíme všimněte si, že zabudovaná funkcionalita polí stále funguje! Hodnoty se přidávají metodou `push`. Vlastnost `length` se při přidávání hodnot automaticky zvyšuje. Naše proxy nic nepokazila.
 
-Nemusíme přepisovat metody přidávání hodnot do polí jako `push`, `unshift` a tak dále, abychom tam přidali ověření, protože ty interně používají operaci `[[Set]]`, kterou proxy zachytává.
+Metody přidávání hodnot do polí jako `push`, `unshift` a podobně nemusíme kvůli přidání ověření přepisovat, protože vnitřně používají operaci `[[Set]]`, kterou proxy zachytává.
 
 Kód je tedy čistý a výstižný.
 
@@ -249,9 +249,9 @@ Tyto metody se liší v detailech:
 - `Object.keys/values()` vrací nesymbolické klíče/hodnoty s přepínačem `enumerable` (přepínače vlastností byly vysvětleny v kapitole <info:property-descriptors>).
 - `for..in` cykluje nad nesymbolickými klíči s přepínačem `enumerable` a také nad klíči prototypu.
 
-...Všechny však začínají s tímto seznamem.
+...Všechny však začínají se seznamem vlastností vráceným touto metodou.
 
-V níže uvedeném příkladu použijeme past `ownKeys`, abychom cyklus `for..in` nad objektem `uživatel`, stejně jako metody `Object.keys` a `Object.values`, přiměli přeskakovat vlastnosti začínající podtržítkem `_`:
+V následujícím příkladu použijeme past `ownKeys`, abychom cyklus `for..in` nad objektem `uživatel`, stejně jako metody `Object.keys` a `Object.values`, přiměli přeskakovat vlastnosti začínající podtržítkem `_`:
 
 ```js run
 let uživatel = {
@@ -294,7 +294,7 @@ uživatel = new Proxy(uživatel, {
 alert( Object.keys(uživatel) ); // <prázdný seznam>
 ```
 
-Proč? Důvod je prostý: `Object.keys` vrací jen vlastnosti s přepínačem `enumerable`. Aby si jej ověřila, volá pro každou vlastnost interní metodu `[[GetOwnProperty]]`, aby získala [její deskriptor](info:property-descriptors). A protože zde žádná vlastnost není, její deskriptor je prázdný, neobsahuje přepínač `enumerable`, a tak je přeskočen.
+Proč? Důvod je prostý: metoda `Object.keys` vrací jen vlastnosti s přepínačem `enumerable`. Aby si jej ověřila, volá pro každou vlastnost interní metodu `[[GetOwnProperty]]`, aby získala [její deskriptor](info:property-descriptors). A protože zde žádná vlastnost není, její deskriptor je prázdný a neobsahuje přepínač `enumerable`, a tak je vlastnost přeskočena.
 
 Aby `Object.keys` vracel vlastnost, musí buď tato vlastnost v objektu existovat s přepínačem `enumerable`, nebo můžeme zachytávat volání metody `[[GetOwnProperty]]` (to dělá past `getOwnPropertyDescriptor`) a vracet deskriptor obsahující `enumerable: true`.
 
@@ -338,12 +338,12 @@ let uživatel = {
 alert(uživatel._heslo); // tajné
 ```
 
-Použijme proxy, abychom zabránili jakémukoli přístupu k vlastnostem, které začínají `_`.
+Abychom zabránili jakémukoli přístupu k vlastnostem, které začínají `_`, použijme proxy.
 
 Potřebujeme tyto pasti:
 - `get` k vyvolání chyby při načítání takové vlastnosti,
 - `set` k vyvolání chyby při zapisování do ní,
-- `defineProperty` k vyvolání chyby při jejím mazání,
+- `deleteProperty` k vyvolání chyby při jejím mazání,
 -  `ownKeys` k vyloučení vlastností začínajících `_` z cyklu `for..in` a metod jako `Object.keys`.
 
 Zde je kód:
@@ -438,18 +438,18 @@ uživatel = {
 
 Volání `uživatel.ověřHeslo()` získá jako `this` proxovaný objekt `uživatel` (objekt před tečkou se stane `this`), takže když se pokusí o přístup k `this._heslo`, aktivuje se past `get` (ta se spustí při načítání jakékoli vlastnosti) a vyvolá se chyba.
 
-Proto na řádku `(*)` navážeme kontext objektových metod na původní objekt, `cíl`. Pak jejich budoucí volání budou jako `this` používat `cíl` bez jakýchkoli pastí.
+Proto na řádku `(*)` navážeme kontext objektových metod na původní objekt, `cíl`. Pak jejich následná volání budou jako `this` používat `cíl` bez jakýchkoli pastí.
 
-Toto řešení zpravidla funguje, ale není ideální, protože metoda může předat neproxovaný objekt někam jinam a pak nastane zmatek: kde je původní objekt a kde proxovaný?
+Toto řešení zpravidla funguje, ale není ideální, protože nějaká metoda může předat neproxovaný objekt někam jinam a pak nastane zmatek: kde je původní objekt a kde proxovaný?
 
-Kromě toho objekt může být proxován několikrát (vícenásobné proxy mohou k objektu přidávat různé „úpravy“), a jestliže do metody předáme nezapouzdřený objekt, důsledky mohou být nečekané.
+Kromě toho objekt může být proxován několikrát (vícenásobné proxy mohou k objektu přidávat různé „úpravy“), a jestliže do metody předáme neobalený objekt, důsledky mohou být nečekané.
 
 Taková proxy by tedy neměla být používána všude.
 
 ```smart header="Soukromé vlastnosti třídy"
-Moderní JavaScriptové enginy nativně podporují ve třídách soukromé vlastnosti, začínající znakem `#`. Jsou popsány v článku <info:private-protected-properties-methods>. Žádné proxy nejsou zapotřebí.
+Moderní JavaScriptové motory nativně podporují ve třídách soukromé vlastnosti, začínající znakem `#`. Jsou popsány v článku <info:private-protected-properties-methods>. Žádné proxy nejsou zapotřebí.
 
-Takové vlastnosti však mají své vlastní problémy. Konkrétně nejsou děděny.
+Takové vlastnosti však mají své vlastní problémy. Například nejsou děděny.
 ```
 
 ## „in“ pro rozsah s pastí „has“
@@ -465,7 +465,7 @@ let rozsah = {
 };
 ```
 
-Rádi bychom používali operátor `in` k ověření, zda číslo leží v rozsahu `rozsah`.
+K ověření, zda číslo leží v rozsahu `rozsah`, bychom rádi používali operátor `in`.
 
 Volání `in` zachytává past `has`.
 
@@ -498,9 +498,9 @@ alert(50 in rozsah); // false
 
 Pěkný syntaktický cukr, že? A implementuje se velmi jednoduše.
 
-## Wrapovací funkce: „apply“ [#proxy-apply]
+## Obalování funkcí: „apply“ [#proxy-apply]
 
-Do proxy můžeme zapouzdřit i funkci.
+Do proxy můžeme obalit i funkci.
 
 Past `apply(cíl, thisArg, args)` zpracovává volání proxy jako funkce:
 
@@ -508,15 +508,15 @@ Past `apply(cíl, thisArg, args)` zpracovává volání proxy jako funkce:
 - `thisArg` je hodnota `this`,
 - `args` je seznam argumentů.
 
-Vzpomeňme si například na dekorátor `čekej(f, ms)`, který jsme vytvořili v článku <info:call-apply-decorators>.
+Vzpomeňme si například na dekorátor `zpozdi(f, ms)`, který jsme vytvořili v článku <info:call-apply-decorators>.
 
-V onom článku jsme to udělali bez proxy. Volání `čekej(f, ms)` vrátilo funkci, která funkci `f` předává všechna volání za `ms` milisekund.
+V onom článku jsme to udělali bez proxy. Volání `zpozdi(f, ms)` vrátilo funkci, která funkci `f` předává všechna volání za `ms` milisekund.
 
 Zde je předchozí implementace založená na funkcích:
 
 ```js run
-function čekej(f, ms) {
-  // vrátí wrapper, který po uplynutí času předá volání funkci f
+function zpozdi(f, ms) {
+  // vrátí obal, který po uplynutí zadaného času předá volání funkci f
   return function() { // (*)
     setTimeout(() => f.apply(this, arguments), ms);
   };
@@ -526,18 +526,18 @@ function řekniAhoj(uživatel) {
   alert(`Ahoj, ${uživatel}!`);
 }
 
-// po tomto wrapování budou volání řekniAhoj pozdržena o 3 sekundy
-řekniAhoj = čekej(řekniAhoj, 3000);
+// po tomto obalení budou volání řekniAhoj pozdržena o 3 sekundy
+řekniAhoj = zpozdi(řekniAhoj, 3000);
 
 řekniAhoj("Jan"); // Ahoj, Jan! (po 3 sekundách)
 ```
 
-Jak jsme již viděli, většinou to funguje. Wrapperová funkce `(*)` provede volání po stanoveném čase.
+Jak jsme již viděli, většinou to funguje. Obalová funkce `(*)` provede volání po stanoveném čase.
 
-Avšak wrapperová funkce nepředává dál operace čtení/zápisu do vlastností nebo cokoli jiného. Po wrapování ztratíme přístup k vlastnostem původní funkce, např. `name`, `length` a jiným:
+Avšak obalová funkce nepředává dál operace čtení a zápisu do vlastností nebo cokoli jiného. Po obalení ztratíme přístup k vlastnostem původní funkce, např. `name`, `length` a jiným:
 
 ```js run
-function čekej(f, ms) {
+function zpozdi(f, ms) {
   return function() {
     setTimeout(() => f.apply(this, arguments), ms);
   };
@@ -551,19 +551,19 @@ function řekniAhoj(uživatel) {
 alert(řekniAhoj.length); // 1 (length=délka, délka funkce je počet argumentů v její deklaraci)
 */!*
 
-řekniAhoj = čekej(řekniAhoj, 3000);
+řekniAhoj = zpozdi(řekniAhoj, 3000);
 
 *!*
-alert(řekniAhoj.length); // 0 (v deklaraci wrapperu je 0 argumentů)
+alert(řekniAhoj.length); // 0 (v deklaraci obalu je 0 argumentů)
 */!*
 ```
 
 `Proxy` je mnohem silnější, jelikož cílovému objektu předává všechno.
 
-Použijme `Proxy` místo wrapovací funkce:
+Použijme `Proxy` místo obalové funkce:
 
 ```js run
-function čekej(f, ms) {
+function zpozdi(f, ms) {
   return new Proxy(f, {
     apply(cíl, thisArg, args) {
       setTimeout(() => cíl.apply(thisArg, args), ms);
@@ -575,7 +575,7 @@ function řekniAhoj(uživatel) {
   alert(`Ahoj, ${uživatel}!`);
 }
 
-řekniAhoj = čekej(řekniAhoj, 3000);
+řekniAhoj = zpozdi(řekniAhoj, 3000);
 
 *!*
 alert(řekniAhoj.length); // 1 (*) proxy předá cíli operaci „get length“
@@ -584,11 +584,11 @@ alert(řekniAhoj.length); // 1 (*) proxy předá cíli operaci „get length“
 řekniAhoj("Jan"); // Ahoj, Jan! (po 3 sekundách)
 ```
 
-Výsledek je stejný, ale nyní se původní funkci předávají nejen volání, ale všechny operace na proxy. Po wrapování se tedy `řekniAhoj.length` na řádku `(*)` vrátí správně.
+Výsledek je stejný, ale nyní se původní funkci předávají nejen volání, ale všechny operace na proxy. Po obalení se tedy `řekniAhoj.length` na řádku `(*)` vrátí správně.
 
-Získali jsme „bohatší“ wrapper.
+Získali jsme „bohatší“ obal.
 
-Existují i jiné pasti: jejich úplný seznam je uveden na začátku tohoto článku. Jejich vzor použití je podobný tomu uvedenému výše.
+Existují i jiné pasti: jejich úplný seznam je uveden na začátku tohoto článku. Jejich vzorec použití je podobný uvedenému.
 
 ## Reflect
 
@@ -596,7 +596,7 @@ Existují i jiné pasti: jejich úplný seznam je uveden na začátku tohoto čl
 
 Již jsme uvedli, že interní metody, např. `[[Get]]`, `[[Set]]` a jiné, jsou jen specifikační a nemůžeme je volat přímo.
 
-Objekt `Reflect` to částečně umožňuje. Jeho metody jsou minimální wrappery okolo interních metod.
+Objekt `Reflect` to částečně umožňuje. Jeho metody jsou minimální obaly okolo interních metod.
 
 Zde jsou příklady operací a volání `Reflect`, která udělají totéž:
 
@@ -624,7 +624,7 @@ Konkrétně nám `Reflect` umožňuje volat operátory (`new`, `delete`...) jako
 
 Můžeme tedy používat `Reflect` k předání operace původnímu objektu.
 
-V tomto příkladu obě pasti `get` a `set` průhledně (jako by neexistovaly) předají objektu operace čtení/zápisu a zobrazí zprávu:
+V tomto příkladu obě pasti `get` a `set` průhledně (jako by neexistovaly) předají objektu operace čtení nebo zápisu a zobrazí zprávu:
 
 ```js run
 let uživatel = {
@@ -655,7 +655,7 @@ Zde:
 - `Reflect.get` načte vlastnost objektu.
 - `Reflect.set` zapíše vlastnost objektu a vrátí `true`, je-li úspěšná, jinak `false`.
 
-Přitom je všechno jednoduché: jestliže past chce předat objektu volání, stačí jí volat `Reflect.<metoda>` se stejnými argumenty.
+Všechno je přitom jednoduché: jestliže past chce předat volání objektu, stačí jí volat `Reflect.<metoda>` se stejnými argumenty.
 
 Ve většině případů můžeme udělat totéž i bez `Reflect`, například načítání vlastnosti pomocí `Reflect.get(cíl, vlastnost, příjemce)` můžeme nahradit za `cíl[vlastnost]`. Jsou tady však důležité drobnosti.
 
@@ -733,7 +733,7 @@ Problém je ve skutečnosti v proxy na řádku `(*)`.
 
 Abychom takové situace opravili, potřebujeme `příjemce`, třetí argument pasti `get`. Ten udržuje správné `this`, které bude předáno getteru. V našem případě to je `admin`.
 
-Jak předat kontext getteru? Pro běžnou funkci můžeme použít `call/apply`, ale tohle je getter, ten se „nevolá“, jenom se k němu přistupuje.
+Jak předat kontext getteru? Pro běžnou funkci bychom mohli použít `call/apply`, ale tohle je getter, ten se „nevolá“, jenom se k němu přistupuje.
 
 Může to udělat `Reflect.get`. Pokud ji použijeme, bude všechno fungovat správně.
 
@@ -776,19 +776,19 @@ get(cíl, vlastnost, příjemce) {
 }
 ```
 
-Volání `Reflect` jsou pojmenována přesně stejně jako pasti a přijímají stejné argumenty. Byla tak úmyslně navržena.
+Metody `Reflect` jsou pojmenovány přesně stejně jako pasti a přijímají stejné argumenty. Byly tak úmyslně navrženy.
 
 `return Reflect...` tedy poskytuje bezpečný a srozumitelný způsob, jak předat dál operaci a zajistit, abychom nezapomněli na nic, co se k ní vztahuje.
 
 ## Omezení proxy
 
-Proxy poskytují unikátní způsob, jak změnit nebo upravit chování existujících objektů na nejnižší úrovni. Přesto ovšem nejsou dokonalé. Mají svá omezení.
+Proxy poskytují unikátní způsob, jak změnit nebo upravit chování existujících objektů na nejnižší úrovni. Přesto nejsou dokonalé a mají svá omezení.
 
 ### Zabudované objekty: Interní sloty
 
 Mnoho zabudovaných objektů, např. `Map`, `Set`, `Date`, `Promise` a jiné, využívá tzv. „interní sloty“.
 
-Podobají se vlastnostem, ale jsou rezervovány pro interní, výhradně specifikační účely. Například `Map` si ukládá prvky do interního slotu `[[MapData]]`. Vestavěné metody k nim přistupují přímo, ne interními metodami `[[Get]]/[[Set]]`. `Proxy` je tedy nemůže zachytit.
+Podobají se vlastnostem, ale jsou rezervovány pro vnitřní, výhradně specifikační účely. Například `Map` si ukládá prvky do interního slotu `[[MapData]]`. Vestavěné metody k nim přistupují přímo, ne interními metodami `[[Get]]/[[Set]]`. `Proxy` je tedy nemůže zachytit.
 
 Proč se o to starat? Jsou přece interní!
 
@@ -806,7 +806,7 @@ proxy.set('test', 1); // Chyba
 */!*
 ```
 
-Interně si `Map` ukládá všechna data do svého interního slotu `[[MapData]]`. Proxy takový slot nemá. [Vestavěná metoda `Map.prototype.set`](https://tc39.es/ecma262/#sec-map.prototype.set) se pokusí přistoupit k interní vlastnosti `this.[[MapData]]`, ale protože `this=proxy`, nenajde ji v `proxy` a prostě selže.
+Vnitřně si `Map` ukládá všechna data do svého interního slotu `[[MapData]]`. Proxy takový slot nemá. [Vestavěná metoda `Map.prototype.set`](https://tc39.es/ecma262/#sec-map.prototype.set) se pokusí přistoupit k interní vlastnosti `this.[[MapData]]`, ale protože `this=proxy`, nenajde ji v `proxy` a prostě selže.
 
 Naštěstí existuje způsob, jak to opravit:
 
@@ -828,17 +828,17 @@ alert(proxy.get('test')); // 1 (funguje!)
 
 Teď to funguje dobře, protože past `get` naváže funkční vlastnosti, např. `mapa.set`, na samotný cílový objekt (`mapa`).
 
-Na rozdíl od předchozího příkladu hodnota `this` uvnitř `proxy.set(...)` nebude `proxy`, ale původní `mapa`. Když se tedy interní implementace metody `set` pokusí přistoupit k internímu slotu `this.[[MapData]]`, uspěje.
+Na rozdíl od předchozího příkladu hodnota `this` uvnitř `proxy.set(...)` nebude `proxy`, ale původní `mapa`. Když se tedy vnitřní implementace metody `set` pokusí přistoupit k internímu slotu `this.[[MapData]]`, uspěje.
 
-```smart header="`Array` nemá žádné interní sloty"
-Významná výjimka: vestavěné `Array` nepoužívá interní sloty. Je tomu tak z historických důvodů, jelikož se objevilo již dávno.
+```smart header="`Array` nemá interní sloty"
+Významná výjimka: vestavěné `Array` nepoužívá interní sloty. Je tomu tak z historických důvodů, jelikož se objevilo již před dlouhou dobou.
 
 Při proxování pole tedy takový problém nenastává.
 ```
 
 ### Soukromá pole
 
-Obdobná věc nastává se soukromými třídními poli.
+Obdobný problém nastává se soukromými třídními poli.
 
 Například metoda `vraťJméno()` přistupuje k soukromé vlastnosti `#jméno` a po proxování se rozbije:
 
@@ -891,9 +891,9 @@ Při tom všem však toto řešení má nevýhody, jak bylo vysvětleno dříve:
 
 ### Proxy != cíl
 
-Proxy a původní objekt jsou různé objekty. To je přirozené, ne?
+Proxovaný a původní objekt jsou různé objekty. To je přirozené, ne?
 
-Když tedy použijeme původní objekt jako klíč a pak jej naproxujeme, proxy nebude nalezena:
+Když tedy použijeme původní objekt jako klíč a pak jej naproxujeme, proxovaný objekt nebude nalezen:
 
 ```js run
 let všichniUživatelé = new Set();
@@ -916,7 +916,7 @@ alert(všichniUživatelé.has(uživatel)); // false
 */!*
 ```
 
-Jak vidíme, po naproxování nenajdeme objekt `uživatel` v množině `všichniUživatelé`, jelikož proxy je jiný objekt.
+Jak vidíme, po naproxování nenajdeme objekt `uživatel` v množině `všichniUživatelé`, jelikož proxovaný objekt je jiný.
 
 ```warn header="Proxy nezachycují test striktní rovnosti `===`"
 Proxy mohou zachytit mnoho operátorů, např. `new` (pomocí `construct`), `in` (pomocí `has`), `delete` (pomocí `deleteProperty`) a tak dále.
@@ -930,9 +930,9 @@ Všechny operace a vestavěné třídy, které porovnávají objekty, tedy budou
 
 *Zrušitelná* proxy je proxy, která může být zakázána.
 
-Řekněme, že máme zdroj a chtěli bychom v libovolném okamžiku uzavřít přístup k němu.
+Řekněme, že máme zdroj a chtěli bychom k němu kdykoli uzavřít přístup.
 
-To, co můžeme udělat, je zapouzdřit jej do zrušitelné proxy bez jakýchkoli pastí. Taková proxy pak bude předávat objektu operace a my ji budeme moci kdykoli zakázat.
+Můžeme to udělat tak, že jej obalíme do zrušitelné proxy bez jakýchkoli pastí. Taková proxy pak bude předávat objektu operace a my ji budeme moci kdykoli zakázat.
 
 Syntaxe je:
 
@@ -940,7 +940,7 @@ Syntaxe je:
 let {proxy, revoke} = Proxy.revocable(cíl, handler)
 ```
 
-Toto volání vrátí objekt s `proxy` a funkcí `revoke`, která tuto proxy zakáže.
+Toto volání vrátí objekt s `proxy` a funkci `revoke`, která tuto proxy zakáže.
 
 Zde je příklad:
 
@@ -951,7 +951,7 @@ let objekt = {
 
 let {proxy, revoke} = Proxy.revocable(objekt, {});
 
-// předáme proxy někam místo objektu...
+// předáme někam proxy místo objektu...
 alert(proxy.data); // Cenná data
 
 // později v našem kódu
@@ -989,7 +989,7 @@ revoke();
 alert(proxy.data); // Chyba (zakázáno)
 ```
 
-Zde používáme `WeakMap` místo `Map`, protože neblokuje garbage collection. Pokud se proxy objekt stane „nedosažitelným“ (např. protože na něj už nebude odkazovat žádná proměnná), `WeakMap` umožní, aby byl odstraněn z paměti spolu s jeho metodou `revoke`, která už nadále nebude zapotřebí.
+Zde používáme `WeakMap` místo `Map`, protože neblokuje sběr odpadků. Pokud se proxovaný objekt stane „nedosažitelným“ (např. protože na něj už nebude odkazovat žádná proměnná), `WeakMap` umožní, aby byl odstraněn z paměti spolu s jeho metodou `revoke`, která už nadále nebude zapotřebí.
 
 ## Odkazy
 
@@ -998,9 +998,9 @@ Zde používáme `WeakMap` místo `Map`, protože neblokuje garbage collection. 
 
 ## Shrnutí
 
-`Proxy` je wrapper okolo objektu, který objektu předává operace na něm prováděné a může některé z nich zachytit.
+`Proxy` je obal okolo objektu, který objektu předává operace na něm prováděné a může některé z nich zachytit.
 
-Může zapouzdřovat objekt jakéhokoli druhu včetně tříd a funkcí.
+Může obalit objekt jakéhokoli druhu včetně tříd a funkcí.
 
 Syntaxe je:
 
@@ -1018,15 +1018,15 @@ Můžeme zachytávat:
 - Operátor `new` (past `construct`).
 - Mnoho dalších operací (jejich úplný seznam je na začátku tohoto článku a v [dokumentaci](mdn:/JavaScript/Reference/Global_Objects/Proxy)).
 
-To nám umožňuje vytvářet „virtuální“ vlastnosti a metody, implementovat defaultní vlastnosti, pozorovatelné objekty, dekorátory funkcí a mnoho dalšího.
+To nám umožňuje vytvářet „virtuální“ vlastnosti a metody, implementovat výchozí hodnoty, pozorovatelné objekty, dekorátory funkcí a mnoho dalšího.
 
-Můžeme také zapouzdřit objekt vícekrát do různých proxy a dekorovat jej tak různými aspekty funkcionality.
+Můžeme také obalit objekt vícekrát do různých proxy a dekorovat jej tak různými aspekty funkcionality.
 
-API [Reflect](mdn:/JavaScript/Reference/Global_Objects/Reflect) je navrženo k doplnění [Proxy](mdn:/JavaScript/Reference/Global_Objects/Proxy). Pro každou past `Proxy` existuje odpovídající volání `Reflect` se stejnými argumenty. Měli bychom je používat k předávání volání cílovým objektům.
+API [Reflect](mdn:/JavaScript/Reference/Global_Objects/Reflect) je navrženo k doplnění [Proxy](mdn:/JavaScript/Reference/Global_Objects/Proxy). Pro každou past `Proxy` existuje v `Reflect` odpovídající metoda se stejnými argumenty. K předávání volání cílovým objektům bychom měli používat tyto metody.
 
 Proxy mají určitá omezení:
 
 - Vestavěné objekty mají „interní sloty“ a přístup k nim nemůže být proxován. Viz výše.
-- Totéž platí pro soukromá třídní pole, protože ta jsou interně implementována pomocí slotů. Volání proxovaných metod tedy musí nastavovat cílový objekt jako `this`, aby se k nim dalo přistupovat.
+- Totéž platí pro soukromá třídní pole, protože ta jsou vnitřně implementována pomocí slotů. Volání proxovaných metod tedy musí nastavovat cílový objekt jako `this`, aby se k nim dalo přistupovat.
 - Nelze zachytávat testy rovnosti objektů `===`.
-- Výkon: benchmarky závisejí na enginu, ale obecně přístup k vlastnosti i přes tu nejjednodušší proxy trvá několikrát déle. V praxi na tom však záleží jen u některých objektů v „úzkém hrdle“.
+- Výkon: výsledky benchmarků závisejí na motoru, ale obecně přístup k vlastnosti i přes tu nejjednodušší proxy trvá několikrát déle. V praxi na tom však záleží jen u některých objektů, které tvoří „úzké hrdlo“.

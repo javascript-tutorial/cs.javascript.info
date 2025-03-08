@@ -4,7 +4,7 @@ let uživatel = {
   jméno: "Jan"
 };
 
-function wrap(cíl) {
+function obal(cíl) {
   return new Proxy(cíl, {
     get(cíl, vlastnost, příjemce) {
       if (vlastnost in cíl) {
@@ -16,7 +16,7 @@ function wrap(cíl) {
   });
 }
 
-uživatel = wrap(uživatel);
+uživatel = obal(uživatel);
 
 alert(uživatel.jméno); // Jan
 alert(uživatel.věk); // ReferenceError: Vlastnost neexistuje: "věk"
