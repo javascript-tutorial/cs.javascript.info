@@ -8,7 +8,7 @@ Moderní JavaScript obsahuje dva druhy čísel:
 
 Zde tedy budeme hovořit o běžných číslech. Rozšiřme si své znalosti o nich.
 
-## Více způsobů, jak napsat číslo
+## Další způsoby, jak napsat číslo
 
 Představme si, že musíme napsat 1 miliardu. Obvyklý způsob je:
 
@@ -118,10 +118,7 @@ Běžná použití jsou:
 ```warn header="Volání metody dvěma tečkami"
 Prosíme všimněte si, že dvě tečky v `123456..toString(36)` není překlep. Chceme-li volat metodu přímo na čísle, např. `toString` v uvedeném příkladu, pak za číslo musíme umístit dvě tečky `..`.
 
-Kdybychom umístili jedinou tečku: `123456.toString(36)`, nastala by chyba, protože syntaxe JavaScriptu očekává za první tečkou desetinnou část. Když však uvedeme další tečku, JavaScript pozná, že desetinná část je prázdná a nyní přichází metoda.
-
-Můžeme napsat i `(123456).toString(36)`.
-```
+Kdybychom umístili jedinou tečku: `123456.toString(36)`, nastala by chyba, protože syntaxe JavaScriptu očekává za první tečkou desetinnou část. Když však uvedeme další tečku, JavaScript pozná, že desetinná část je prázdná, a nyní použije metodu.
 
 ## Zaokrouhlování
 
