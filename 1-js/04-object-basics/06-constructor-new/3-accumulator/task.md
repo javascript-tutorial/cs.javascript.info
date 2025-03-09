@@ -2,26 +2,26 @@ importance: 5
 
 ---
 
-# Create new Accumulator
+# Vytvořte nový Akumulátor
 
-Create a constructor function `Accumulator(startingValue)`.
+Vytvořte konstruktor `Akumulátor(počátečníHodnota)`.
 
-Object that it creates should:
+Objekt, který je tímto konstruktorem vytvořen, by měl:
 
-- Store the "current value" in the property `value`. The starting value is set to the argument of the constructor `startingValue`.
-- The `read()` method should use `prompt` to read a new number and add it to `value`.
+- Ukládat „aktuální hodnotu“ do vlastnosti `hodnota`. Počáteční hodnota se nastaví na argument konstruktoru `počátečníHodnota`.
+- Metoda `načti()` by se měla pomocí `prompt` zeptat na nové číslo a přičíst je k vlastnosti `hodnota`.
 
-In other words, the `value` property is the sum of all user-entered values with the initial value  `startingValue`.
+Jinými slovy, vlastnost `hodnota` bude součet všech uživatelem zadaných hodnot a úvodní hodnoty `počátečníHodnota`.
 
-Here's the demo of the code:
+Zde je ukázka kódu:
 
 ```js
-let accumulator = new Accumulator(1); // initial value 1
+let akumulátor = new Akumulátor(1); // počáteční hodnota 1
 
-accumulator.read(); // adds the user-entered value
-accumulator.read(); // adds the user-entered value
+akumulátor.načti(); // přičte uživatelem zadanou hodnotu
+akumulátor.načti(); // přičte uživatelem zadanou hodnotu
 
-alert(accumulator.value); // shows the sum of these values
+alert(akumulátor.hodnota); // zobrazí součet těchto hodnot
 ```
 
 [demo]

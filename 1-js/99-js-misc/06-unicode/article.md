@@ -1,165 +1,166 @@
 
-# Unicode, String internals
+# Unicode, interní reprezentace řetězce
 
-```warn header="Advanced knowledge"
-The section goes deeper into string internals. This knowledge will be useful for you if you plan to deal with emoji, rare mathematical or hieroglyphic characters, or other rare symbols.
+```warn header="Pokročilá znalost"
+Tato kapitola se hlouběji zabývá interní reprezentací řetězců. Tato znalost vám bude užitečná, jestliže plánujete pracovat s emoji, vzácnými matematickými nebo hieroglyfickými znaky nebo jinými vzácnými symboly.
 ```
 
-As we already know, JavaScript strings are based on [Unicode](https://en.wikipedia.org/wiki/Unicode): each character is represented by a byte sequence of 1-4 bytes.
+Jak už víme, řetězce v JavaScriptu jsou založeny na [Unicode](https://cs.wikipedia.org/wiki/Unicode): každý znak představuje posloupnost 1-4 bytů.
 
-JavaScript allows us to insert a character into a string by specifying its hexadecimal Unicode code with one of these three notations:
+JavaScript nám umožňuje vložit znak do řetězce specifikací jeho hexadecimálního kódu v Unicode pomocí jednoho z následujících tří zápisů:
 
 - `\xXX`
 
-    `XX` must be two hexadecimal digits with a value between `00` and `FF`, then `\xXX` is the character whose Unicode code is `XX`.
+    `XX` musí být dvě hexadecimální číslice s hodnotou mezi `00` a `FF`, pak `\xXX` je znak, jehož kód v Unicode je `XX`.
 
-    Because the `\xXX` notation supports only two hexadecimal digits, it can be used only for the first 256 Unicode characters.
+    Protože zápis `\xXX` podporuje jen dvě hexadecimální číslice, může být použit jedině pro prvních 256 znaků Unicode.
 
-    These first 256 characters include the Latin alphabet, most basic syntax characters, and some others. For example, `"\x7A"` is the same as `"z"` (Unicode `U+007A`).
+    Těchto prvních 256 znaků obsahuje latinskou abecedu, většinu základních syntaktických znaků a některé další. Například `"\x7A"` je totéž jako `"z"` (Unicode `U+007A`).
 
     ```js run
     alert( "\x7A" ); // z
-    alert( "\xA9" ); // ©, the copyright symbol
+    alert( "\xA9" ); // ©, symbol copyrightu
     ```
 
 - `\uXXXX`
-    `XXXX` must be exactly 4 hex digits with the value between `0000` and `FFFF`, then `\uXXXX` is the character whose Unicode code is `XXXX`.
 
-    Characters with Unicode values greater than `U+FFFF` can also be represented with this notation, but in this case, we will need to use a so called surrogate pair (we will talk about surrogate pairs later in this chapter).
+    `XXXX` musí být přesně 4 hexadecimální číslice s hodnotou mezi `0000` a `FFFF`, pak `\uXXXX` je znak, jehož kód v Unicode je `XXXX`.
+
+    Tímto zápisem mohou být reprezentovány i znaky, jejichž hodnoty v Unicode jsou větší než `U+FFFF`, ale v takovém případě musíme použít takzvaný náhradní pár (o náhradních párech pohovoříme později v této kapitole).
 
     ```js run
-    alert( "\u00A9" ); // ©, the same as \xA9, using the 4-digit hex notation
-    alert( "\u044F" ); // я, the Cyrillic alphabet letter
-    alert( "\u2191" ); // ↑, the arrow up symbol
+    alert( "\u00A9" ); // ©, totéž jako \xA9 s použitím 4-číslicového hexadecimálního zápisu
+    alert( "\u044F" ); // я, písmeno z kyrilice (azbuky)
+    alert( "\u2191" ); // ↑, symbol šipky nahoru
     ```
 
 - `\u{X…XXXXXX}`
 
-    `X…XXXXXX` must be a hexadecimal value of 1 to 6 bytes between `0` and `10FFFF` (the highest code point defined by Unicode). This notation allows us to easily represent all existing Unicode characters.
+    `X…XXXXXX` musí být hexadecimální hodnota 1 až 6 bytů mezi `0` a `10FFFF` (nejvyšší kódový bod definovaný v Unicode). Tento zápis nám umožňuje snadno reprezentovat všechny existující znaky v Unicode.
 
     ```js run
-    alert( "\u{20331}" ); // 佫, a rare Chinese character (long Unicode)
-    alert( "\u{1F60D}" ); // 😍, a smiling face symbol (another long Unicode)
+    alert( "\u{20331}" ); // 佫, vzácný čínský znak (dlouhý Unicode)
+    alert( "\u{1F60D}" ); // 😍, symbol usmívající se tváře (další dlouhý Unicode)
     ```
 
-## Surrogate pairs
+## Náhradní páry
 
-All frequently used characters have 2-byte codes (4 hex digits). Letters in most European languages, numbers, and the basic unified CJK ideographic sets (CJK -- from Chinese, Japanese, and Korean writing systems), have a 2-byte representation.
+Všechny často používané znaky mají 2-bytové kódy (4 hexadecimální číslice). Písmena ve většině evropských jazyků, číslice a základní sjednocené ideografické sady CJK (CJK -- pro čínské, japonské a korejské písmenné soustavy) mají 2-bytovou reprezentaci.
 
-Initially, JavaScript was based on UTF-16 encoding that only allowed 2 bytes per character. But 2 bytes only allow 65536 combinations and that's not enough for every possible symbol of Unicode.
+JavaScript byl původně založen na kódování UTF-16, které umožňovalo jen 2 byty na znak. Avšak 2 byty umožňují jen 65536 kombinací, a to pro každý možný symbol v Unicode nestačí.
 
-So rare symbols that require more than 2 bytes are encoded with a pair of 2-byte characters called "a surrogate pair".
+Vzácné symboly, které vyžadují více než 2 byty, jsou tedy zakódovány dvojicí 2-bytových znaků nazývanou „náhradní pár“ '(„surrogate pair“).
 
-As a side effect, the length of such symbols is `2`:
+Vedlejším efektem je, že délka takových symbolů je `2`:
 
 ```js run
-alert( '𝒳'.length ); // 2, MATHEMATICAL SCRIPT CAPITAL X
-alert( '😂'.length ); // 2, FACE WITH TEARS OF JOY
-alert( '𩷶'.length ); // 2, a rare Chinese character
+alert( '𝒳'.length ); // 2, VELKÉ X V MATEMATICKÉM PÍSMU
+alert( '😂'.length ); // 2, TVÁŘ SE SLZAMI RADOSTI
+alert( '𩷶'.length ); // 2, vzácný čínský znak
 ```
 
-That's because surrogate pairs did not exist at the time when JavaScript was created, and thus are not correctly processed by the language!
+Je to proto, že v době, kdy byl JavaScript vytvořen, ještě náhradní páry neexistovaly, a proto nejsou jazykem správně zpracovávány!
 
-We actually have a single symbol in each of the strings above, but the `length` property shows a length of `2`.
+Ve skutečnosti máme v každém z výše uvedených řetězců jediný symbol, ale vlastnost `length` ukazuje délku `2`.
 
-Getting a symbol can also be tricky, because most language features treat surrogate pairs as two characters.
+Také načtení symbolu může být matoucí, jelikož většina prvků jazyka zachází s náhradními páry jako se dvěma znaky.
 
-For example, here we can see two odd characters in the output:
+Například zde vidíme na výstupu dva podivné znaky:
 
 ```js run
-alert( '𝒳'[0] ); // shows strange symbols...
-alert( '𝒳'[1] ); // ...pieces of the surrogate pair
+alert( '𝒳'[0] ); // zobrazuje zvláštní symboly...
+alert( '𝒳'[1] ); // ...části náhradního páru
 ```
 
-Pieces of a surrogate pair have no meaning without each other. So the alerts in the example above actually display garbage.
+Části náhradního páru nemají jedna bez druhé žádný význam. V uvedeném příkladu se tedy ve skutečnosti zobrazí nesmysly.
 
-Technically, surrogate pairs are also detectable by their codes: if a character has the code in the interval of `0xd800..0xdbff`, then it is the first part of the surrogate pair. The next character (second part) must have the code in interval `0xdc00..0xdfff`. These intervals are reserved exclusively for surrogate pairs by the standard.
+Technicky lze náhradní páry detekovat podle jejich kódu: jestliže znak má kód v intervalu `0xd800..0xdbff`, pak je to první část náhradního páru. Další znak (druhá část) musí mít kód v intervalu `0xdc00..0xdfff`. Tyto intervaly jsou ve standardu exkluzívně rezervovány pro náhradní páry.
 
-So the methods [String.fromCodePoint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCodePoint) and [str.codePointAt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt) were added in JavaScript to deal with surrogate pairs.
+Proto byly do JavaScriptu přidány metody [String.fromCodePoint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCodePoint) a [str.codePointAt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt), které si dokáží s náhradními páry poradit.
 
-They are essentially the same as [String.fromCharCode](mdn:js/String/fromCharCode) and [str.charCodeAt](mdn:js/String/charCodeAt), but they treat surrogate pairs correctly.
+Jsou v zásadě stejné jako [String.fromCharCode](mdn:js/String/fromCharCode) a [řetězec.charCodeAt](mdn:js/String/charCodeAt), ale s náhradními páry zacházejí správně.
 
-One can see the difference here:
+Zde vidíme rozdíl:
 
 ```js run
-// charCodeAt is not surrogate-pair aware, so it gives codes for the 1st part of 𝒳:
+// charCodeAt nezná náhradní páry, takže vydá kód pro 1. část 𝒳:
 
 alert( '𝒳'.charCodeAt(0).toString(16) ); // d835
 
-// codePointAt is surrogate-pair aware
-alert( '𝒳'.codePointAt(0).toString(16) ); // 1d4b3, reads both parts of the surrogate pair
+// codePointAt zná náhradní páry
+alert( '𝒳'.codePointAt(0).toString(16) ); // 1d4b3, přečte obě části náhradního páru
 ```
 
-That said, if we take from position 1 (and that's rather incorrect here), then they both return only the 2nd part of the pair:
+Při tom všem, načítáme-li od pozice 1 (a to je zde dosti nekorektní), pak obě vrátí jen 2. část páru:
 
 ```js run
 alert( '𝒳'.charCodeAt(1).toString(16) ); // dcb3
 alert( '𝒳'.codePointAt(1).toString(16) ); // dcb3
-// meaningless 2nd half of the pair
+// nesmyslná 2. část páru
 ```
 
-You will find more ways to deal with surrogate pairs later in the chapter <info:iterable>. There are probably special libraries for that too, but nothing famous enough to suggest here.
+Další způsoby, jak si s náhradními páry poradit, naleznete v kapitole <info:iterable>. Pravděpodobně pro to existují i speciální knihovny, ale žádná není dostatečně známá na to, abychom ji tady doporučili.
 
-````warn header="Takeaway: splitting strings at an arbitrary point is dangerous"
-We can't just split a string at an arbitrary position, e.g. take `str.slice(0, 4)` and expect it to be a valid string, e.g.:
+````warn header="Zásadní zjištění: dělení řetězců na libovolném místě je nebezpečné"
+Nemůžeme jen tak rozdělit řetězec na libovolné pozici, např. volat `řetězec.slice(0, 6)` a očekávat, že to bude platný řetězec, např.:
 
 ```js run
-alert( 'hi 😂'.slice(0, 4) ); //  hi [?]
+alert( 'ahoj 😂'.slice(0, 6) ); //  ahoj [?]
 ```
 
-Here we can see a garbage character (first half of the smile surrogate pair) in the output.
+Zde vidíme na výstupu nesmyslný znak (první polovinu náhradního páru úsměvu).
 
-Just be aware of it if you intend to reliably work with surrogate pairs. May not be a big problem, but at least you should understand what happens.
+Mějte to na paměti, jestliže zamýšlíte zodpovědně pracovat s náhradními páry. Nemusí to být velký problém, ale aspoň byste měli chápat, co se děje.
 ````
 
-## Diacritical marks and normalization
+## Diakritická znaménka a normalizace
 
-In many languages, there are symbols that are composed of the base character with a mark above/under it.
+V mnoha jazycích jsou symboly, které se skládají ze základního znaku a znaménka nad/pod ním.
 
-For instance, the letter `a` can be the base character for these characters: `àáâäãåā`.
+Například písmeno `a` může být základním znakem pro tyto znaky: `àáâäãåā`.
 
-Most common "composite" characters have their own code in the Unicode table. But not all of them, because there are too many possible combinations.
+Většina běžných „složených“ znaků má v tabulce Unicode svůj vlastní kód. Ne však všechny, protože možných kombinací je příliš mnoho.
 
-To support arbitrary compositions, the Unicode standard allows us to use several Unicode characters: the base character followed by one or many "mark" characters that "decorate" it.
+Aby standard Unicode podporoval libovolné složeniny, umožňuje nám použít několik znaků Unicode: základní znak následovaný jedním nebo více znaky „znamének“, které jej „ozdobí“.
 
-For instance, if we have `S` followed by the special "dot above" character (code `\u0307`), it is shown as Ṡ.
+Například máme-li `S` následované speciálním znakem „tečka nahoře“ (kód `\u0307`), zobrazí se jako Ṡ.
 
 ```js run
 alert( 'S\u0307' ); // Ṡ
 ```
 
-If we need an additional mark above the letter (or below it) -- no problem, just add the necessary mark character.
+Potřebujeme-li další znaménko nad písmenem (nebo pod ním) -- žádný problém, jednoduše přidáme potřebný znak znaménka.
 
-For instance, if we append a character "dot below" (code `\u0323`), then we'll have "S with dots above and below": `Ṩ`.
+Například připojíme-li znak „tečka dole“ (kód `\u0323`), budeme mít „S s tečkami nahoře a dole“: `Ṩ`.
 
-For example:
+Příklad:
 
 ```js run
 alert( 'S\u0307\u0323' ); // Ṩ
 ```
 
-This provides great flexibility, but also an interesting problem: two characters may visually look the same, but be represented with different Unicode compositions.
+To nám poskytuje velkou flexibilitu, ale také zajímavý problém: dva znaky mohou vizuálně vypadat stejně, ale být reprezentovány různými složeninami z Unicode.
 
-For instance:
+Příklad:
 
 ```js run
-let s1 = 'S\u0307\u0323'; // Ṩ, S + dot above + dot below
-let s2 = 'S\u0323\u0307'; // Ṩ, S + dot below + dot above
+let s1 = 'S\u0307\u0323'; // Ṩ, S + tečka nahoře + tečka dole
+let s2 = 'S\u0323\u0307'; // Ṩ, S + tečka dole + tečka nahoře
 
 alert( `s1: ${s1}, s2: ${s2}` );
 
-alert( s1 == s2 ); // false though the characters look identical (?!)
+alert( s1 == s2 ); // false, třebaže znaky vypadají stejně (?!)
 ```
 
-To solve this, there exists a "Unicode normalization" algorithm that brings each string to the single "normal" form.
+K tomu, abychom to vyřešili, existuje algoritmus „normalizace Unicode“, který převádí každý řetězec do jednoduché „normální“ formy.
 
-It is implemented by [str.normalize()](mdn:js/String/normalize).
+Je implementován metodou [řetězec.normalize()](mdn:js/String/normalize).
 
 ```js run
 alert( "S\u0307\u0323".normalize() == "S\u0323\u0307".normalize() ); // true
 ```
 
-It's funny that in our situation `normalize()` actually brings together a sequence of 3 characters to one: `\u1e68` (S with two dots).
+Je humorné, že v naší situaci `normalize()` ve skutečnosti spojí posloupnost 3 znaků do jednoho: `\u1e68` (S se dvěma tečkami).
 
 ```js run
 alert( "S\u0307\u0323".normalize().length ); // 1
@@ -167,6 +168,6 @@ alert( "S\u0307\u0323".normalize().length ); // 1
 alert( "S\u0307\u0323".normalize() == "\u1e68" ); // true
 ```
 
-In reality, this is not always the case. The reason is that the symbol `Ṩ` is "common enough", so Unicode creators included it in the main table and gave it the code.
+V realitě však tomu tak není vždy. Důvod je, že symbol `Ṩ` je „dostatečně běžný“, takže jej tvůrci Unicode zahrnuli do hlavní tabulky a přiřadili mu kód.
 
-If you want to learn more about normalization rules and variants -- they are described in the appendix of the Unicode standard: [Unicode Normalization Forms](https://www.unicode.org/reports/tr15/), but for most practical purposes the information from this section is enough.
+Pokud se chcete o pravidlech normalizace a variantách dozvědět víc -- jsou popsány v příloze standardu Unicode: [Normalizační formy Unicode](https://www.unicode.org/reports/tr15/), ale pro většinu praktických účelů je informace z tohoto článku dostačující.

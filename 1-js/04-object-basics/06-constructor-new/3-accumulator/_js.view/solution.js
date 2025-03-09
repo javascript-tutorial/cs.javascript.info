@@ -1,8 +1,8 @@
-function Accumulator(startingValue) {
-  this.value = startingValue;
+function Akumulátor(počátečníHodnota) {
+  this.hodnota = počátečníHodnota;
 
-  this.read = function() {
-    this.value += +prompt('How much to add?', 0);
+  this.načti = function() {
+    this.hodnota += +prompt('Kolik přičíst?', 0);
   };
 
 }

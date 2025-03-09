@@ -1,1 +1,1 @@
-alert(user); // no such variable (each module has independent variables)
+alert(uživatel); // taková proměnná neexistuje (každý modul má nezávislé proměnné)

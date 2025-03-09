@@ -1,132 +1,132 @@
-# Promisification
+# Promisifikace
 
-"Promisification" is a long word for a simple transformation. It's the conversion of a function that accepts a callback into a function that returns a promise.
+„Promisifikace“ je dlouhý výraz pro jednoduchou transformaci. Je to převod funkce, která přijímá callback, na funkci, která vrací příslib.
 
-Such transformations are often required in real-life, as many functions and libraries are callback-based. But promises are more convenient, so it makes sense to promisify them.
+Takové transformace jsou ve skutečném životě často požadovány, jelikož mnoho funkcí a knihoven je založeno na callbaccích. Přísliby jsou však vhodnější, takže promisifikace těchto funkcí dává smysl.
 
-For better understanding, let's see an example.
+Pro lepší porozumění se podívejme na příklad.
 
-For instance, we have `loadScript(src, callback)` from the chapter <info:callbacks>.
+Máme například funkci `načtiSkript(zdroj, callback)` z kapitoly <info:callbacks>.
 
 ```js run
-function loadScript(src, callback) {
-  let script = document.createElement('script');
-  script.src = src;
+function načtiSkript(zdroj, callback) {
+  let skript = document.createElement('script');
+  skript.src = zdroj;
 
-  script.onload = () => callback(null, script);
-  script.onerror = () => callback(new Error(`Script load error for ${src}`));
+  skript.onload = () => callback(null, skript);
+  skript.onerror = () => callback(new Error(`Chyba načítání skriptu pro ${zdroj}`));
 
-  document.head.append(script);
+  document.head.append(skript);
 }
 
-// usage:
-// loadScript('path/script.js', (err, script) => {...})
+// použití:
+// načtiSkript('path/script.js', (chyba, skript) => {...})
 ```
 
-The function loads a script with the given `src`, and then calls `callback(err)` in case of an error, or `callback(null, script)` in case of successful loading. That's a widespread agreement for using callbacks, we saw it before.
+Tato funkce načte skript ze zadaného zdroje `zdroj` a pak volá `callback(chyba)` v případě chyby nebo `callback(null, skript)` v případě úspěšného načtení. To je široce rozšířená úmluva pro používání callbacků, kterou jsme již viděli.
 
-Let's promisify it.
+Promisifikujme tuto funkci.
 
-We'll make a new function `loadScriptPromise(src)`, that does the same (loads the script), but returns a promise instead of using callbacks.
+Vytvořme novou funkci `načtiSkriptPříslibem(zdroj)`, která udělá totéž (načte skript), ale místo používání callbacků vrátí příslib.
 
-In other words, we pass it only `src` (no `callback`) and get a promise in return, that resolves with `script` when the load is successful, and rejects with the error otherwise.
+Jinými slovy, předáme do ní jenom `zdroj` (ne `callback`) a jako návratovou hodnotu obdržíme příslib, který se splní s hodnotou `skript`, bude-li načítání úspěšné, a jinak se zamítne s chybou.
 
-Here it is:
+Zde je:
 ```js
-let loadScriptPromise = function(src) {
-  return new Promise((resolve, reject) => {
-    loadScript(src, (err, script) => {
-      if (err) reject(err);
-      else resolve(script);
+let načtiSkriptPříslibem = function(zdroj) {
+  return new Promise((splň, zamítni) => {
+    načtiSkript(zdroj, (chyba, skript) => {
+      if (chyba) zamítni(chyba);
+      else splň(skript);
     });
   });
 };
 
-// usage:
-// loadScriptPromise('path/script.js').then(...)
+// použití:
+// načtiSkriptPříslibem('path/script.js').then(...)
 ```
 
-As we can see, the new function is a wrapper around the original `loadScript` function. It calls it providing its own callback that translates to promise `resolve/reject`.
+Jak vidíme, nová funkce je obalem okolo původní funkce `načtiSkript`. Zavolá ji a poskytne jí svůj vlastní callback, který se převede na příslib `splň/zamítni`.
 
-Now `loadScriptPromise` fits well in promise-based code. If we like promises more than callbacks (and soon we'll see more reasons for that), then we will use it instead.
+Nyní `načtiSkriptPříslibem` dobře zapadne do kódu založeného na příslibech. Máme-li raději přísliby než callbacky (a brzy pro to uvidíme další důvody), použijeme místo původní funkce tuto.
 
-In practice we may need to promisify more than one function, so it makes sense to use a helper.
+V praxi můžeme potřebovat promisifikovat více než jednu funkci, takže dává smysl použít pomocnou funkci.
 
-We'll call it `promisify(f)`: it accepts a to-promisify function `f` and returns a wrapper function.
+Nazveme ji `promisifikuj(f)`: bude přijímat funkci `f`, která má být promisifikována, a vrátí obalovou funkci.
 
 ```js
-function promisify(f) {
-  return function (...args) { // return a wrapper-function (*)
-    return new Promise((resolve, reject) => {
-      function callback(err, result) { // our custom callback for f (**)
-        if (err) {
-          reject(err);
+function promisifikuj(f) {
+  return function (...argumenty) { // vrátí obalovou funkci (*)
+    return new Promise((splň, zamítni) => {
+      function callback(chyba, výsledek) { // náš vlastní callback pro f (**)
+        if (chyba) {
+          zamítni(chyba);
         } else {
-          resolve(result);
+          splň(výsledek);
         }
       }
 
-      args.push(callback); // append our custom callback to the end of f arguments
+      argumenty.push(callback); // připojí náš vlastní callback na konec argumentů funkce f
 
-      f.call(this, ...args); // call the original function
+      f.call(this, ...argumenty); // zavolá původní funkci
     });
   };
 }
 
-// usage:
-let loadScriptPromise = promisify(loadScript);
-loadScriptPromise(...).then(...);
+// použití:
+let načtiSkriptPříslibem = promisifikuj(načtiSkript);
+načtiSkriptPříslibem(...).then(...);
 ```
 
-The code may look a bit complex, but it's essentially the same that we wrote above, while promisifying `loadScript` function.
+Kód může vypadat trochu složitě, ale v zásadě je to totéž, co jsme napsali výše, když jsme promisifikovali funkci `načtiSkript`.
 
-A call to `promisify(f)` returns a wrapper around `f` `(*)`. That wrapper returns a promise and forwards the call to the original `f`, tracking the result in the custom callback `(**)`.
+Volání `promisifikuj(f)` vrátí obal okolo `f` `(*)`. Tento obal vrátí příslib, předá volání původní funkci `f` a výsledek zpracuje ve vlastním callbacku `(**)`.
 
-Here, `promisify` assumes that the original function expects a callback with exactly two arguments `(err, result)`. That's what we encounter most often. Then our custom callback is in exactly the right format, and `promisify` works great for such a case.
+Zde funkce `promisifikuj` předpokládá, že původní funkce očekává callback s právě dvěma argumenty `(chyba, výsledek)`. S tím se setkáváme nejčastěji. Náš vlastní callback je přesně ve správném formátu a funkce `promisifikuj` v takovém případě funguje skvěle.
 
-But what if the original `f` expects a callback with more arguments `callback(err, res1, res2, ...)`?
+Ale co když původní funkce `f` očekává callback s více argumenty `callback(chyba, výsledek1, výsledek2, ...)`?
 
-We can improve our helper. Let's make a more advanced version of `promisify`.
+Můžeme naši pomocnou funkci vylepšit. Vytvořme pokročilejší verzi `promisifikuj`.
 
-- When called as `promisify(f)` it should work similar to the version above.
-- When called as `promisify(f, true)`, it should return the promise that resolves with the array of callback results. That's exactly for callbacks with many arguments.
+- Když bude volána jako `promisifikuj(f)`, měla by fungovat podobně jako uvedená verze.
+- Když bude volána jako `promisifikuj(f, true)`, měla by vrátit příslib, který se splní s polem výsledků callbacku. To je určeno právě pro callbacky s mnoha argumenty.
 
 ```js
-// promisify(f, true) to get array of results
-function promisify(f, manyArgs = false) {
-  return function (...args) {
-    return new Promise((resolve, reject) => {
-      function *!*callback(err, ...results*/!*) { // our custom callback for f
-        if (err) {
-          reject(err);
+// promisifikuj(f, true) pro získání pole výsledků
+function promisifikuj(f, víceArgumentů = false) {
+  return function (...argumenty) {
+    return new Promise((splň, zamítni) => {
+      function *!*callback(chyba, ...výsledky*/!*) { // náš vlastní callback pro f
+        if (chyba) {
+          zamítni(chyba);
         } else {
-          // resolve with all callback results if manyArgs is specified
-          *!*resolve(manyArgs ? results : results[0]);*/!*
+          // je-li uvedeno víceArgumentů, splní se se všemi výsledky callbacku
+          *!*splň(víceArgumentů ? výsledky : výsledky[0]);*/!*
         }
       }
 
-      args.push(callback);
+      argumenty.push(callback);
 
-      f.call(this, ...args);
+      f.call(this, ...argumenty);
     });
   };
 }
 
-// usage:
-f = promisify(f, true);
-f(...).then(arrayOfResults => ..., err => ...);
+// použití:
+f = promisifikuj(f, true);
+f(...).then(poleVýsledků => ..., chyba => ...);
 ```
 
-As you can see it's essentially the same as above, but `resolve` is called with only one or all arguments depending on whether `manyArgs` is truthy.
+Jak vidíte, je to v zásadě totéž jako výše, ale `splň` se volá buď jen s jedním, nebo se všemi argumenty, podle toho, zda je argument `víceArgumentů` pravdivý.
 
-For more exotic callback formats, like those without `err` at all: `callback(result)`, we can promisify such functions manually without using the helper.
+Pro exotičtější formáty callbacků, např. takové, které vůbec neobsahují argument `chyba`: `callback(výsledek)`, můžeme takové funkce promisifikovat ručně bez použití pomocné funkce.
 
-There are also modules with a bit more flexible promisification functions, e.g. [es6-promisify](https://github.com/digitaldesignlabs/es6-promisify). In Node.js, there's a built-in `util.promisify` function for that.
+Existují i moduly s trochu flexibilnějšími promisifikačními funkcemi, např. [es6-promisify](https://github.com/digitaldesignlabs/es6-promisify). V Node.js k tomu slouží zabudovaná funkce `util.promisify`.
 
 ```smart
-Promisification is a great approach, especially when you use `async/await` (covered later in the chapter <info:async-await>), but not a total replacement for callbacks.
+Promisifikace je skvělý přístup, zvláště když používáte `async/await` (bude vysvětleno později v kapitole <info:async-await>), ale není to úplná náhrada za callbacky.
 
-Remember, a promise may have only one result, but a callback may technically be called many times.
+Pamatujte, že příslib může mít jen jediný výsledek, ale callback lze technicky volat mnohokrát.
 
-So promisification is only meant for functions that call the callback once. Further calls will be ignored.
+Promisifikace má tedy smysl jen u funkcí, které volají callback pouze jednou. Další volání budou ignorována.
 ```

@@ -174,10 +174,6 @@ object-user-empty.svg:
     position: "center"
   user: uživatel
 
-garbage-collection-5.svg:
-  unreachables:
-    text: nedosažitelný
-
 array-shift.svg:
   clear:
     text: vymazat
@@ -192,7 +188,7 @@ array-pop.svg:
     position: "center"
 
 decorator-makecaching-wrapper.svg:
-  wrapper: 'wrapper'
+  wrapper: 'obal'
   around the function: 'kolem funkce'
 
 xhr-another-domain.svg:
@@ -280,9 +276,10 @@ promise-handler-variants.svg:
 
 promiseQueue.svg:
   '"code finished"': '"konec kódu"'
-  handler enqueued: 'handler ve frontě'
+  handler enqueued: 'handler vložen do fronty'
   queued handler runs: 'spouští se handler z fronty'
   script execution finished: 'výkon skriptu ukončen'
+  'promise.then(handler)': 'příslib.then(handler)'
 
 eventLoop-full.svg:
   script: 'skript'
@@ -378,12 +375,12 @@ object-prototype-empty.svg:
   'prototype object': 'prototypový objekt'
 
 rabbit-prototype-constructor.svg:
-  'default "prototype"': 'defaultně "prototype"'
+  'default "prototype"': 'standardně "prototype"'
   'Rabbit': 'Králík'
   'rabbit': 'králík'
 
 function-prototype-constructor.svg:
-  'default "prototype"': 'defaultní "prototype"'
+  'default "prototype"': 'standardní "prototype"'
   'Rabbit': 'Králík'
 
 rabbit-animal-independent-animal.svg:
@@ -452,13 +449,6 @@ proto-animal-rabbit.svg:
   'eats: true': 'žere: true'
   'jumps: true': 'skáče: true'
   
-proto-constructor-animal-rabbit.svg:
-  'Rabbit': 'Králík'
-  'animal': 'zvíře'
-  'eats: true': 'žere: true'
-  'rabbit': 'králík'
-  'name: "White Rabbit"': 'jméno: "Bílý králík"'
-  
 native-prototypes-classes.svg:
   'other object methods': 'jiné metody objektů'
   'other array methods': 'jiné metody polí'
@@ -478,7 +468,7 @@ proto-animal-rabbit-chain.svg:
   'walk: function': 'jdi: function'
   'rabbit': 'králík'
   'jumps: true': 'skáče: true'
-  'longEar': 'dlouhouchý'
+  'longEar': 'ušatý'
   'earLength': 'délkaUcha'
   
 proto-animal-rabbit-walk-2.svg:
@@ -506,7 +496,7 @@ this-super-loop.svg:
   'rabbit': 'králík'
   'animal': 'zvíře'
   'eat': 'žer'
-  'longEar': 'dlouhouchý'
+  'longEar': 'ušatý'
   'let rabbit = {': 'let králík = {'
   '  __proto__: animal': '  __proto__: zvíře'
   '  __proto__: rabbit': '  __proto__: králík'
@@ -529,7 +519,21 @@ variable-change.svg:
   '"Hello!"': '"Ahoj!"'
   '"World!"': '"světe!"'
   'message': 'zpráva'
-
+  
+variable-copy-value.svg:
+  '"Hello!"': '"Ahoj!"'
+  'message': 'zpráva'
+  'phrase': 'věta'
+  
+variable-contains-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+   
+variable-copy-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+  'admin': 'správce'
+  
 rabbit-extends-object.svg:
   'class Rabbit': 'class Králík'
   'class Rabbit extends Object': 'class Králík extends Object'
@@ -592,15 +596,97 @@ object-user-isadmin.svg:
   user: uživatel
   name: jméno
   age: věk
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
   
 object-user-delete.svg:
   user: uživatel
   name: jméno
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
 
 object-user-props.svg:
   user: uživatel
   name: jméno
   age: věk
   likes birds: má rád ptáky
+  
+memory-user-john.svg:
+  '<global>': '<globální>'
+  user: uživatel
+  'name: "John"': 'jméno: "Jan"'
+  
+memory-user-john-lost.svg:
+  '<global>': '<globální>'
+  'user: null': 'uživatel: null'
+  'name: "John"': 'jméno: "Jan"'
+  
+memory-user-john-admin.svg:
+  '<global>': '<globální>'
+  user: uživatel
+  admin: správce
+  'name: "John"': 'jméno: "Jan"'
+
+family.svg:
+  '<global variable>': '<globální proměnná>'
+  family: rodina
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+  
+family-delete-refs.svg:
+  '<global variable>': '<globální proměnná>'
+  family: rodina
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-father.svg:
+  '<global>': '<globální>'
+  family: rodina
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-father-2.svg:
+  '<global>': '<globální>'
+  family: rodina
+  mother: matka
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-family.svg:
+  '<global>': '<globální>'
+  'family: null': 'rodina: null'
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+  
+garbage-collection-1.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-2.svg:
+  '<global>': '<globální>'
+    
+garbage-collection-3.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-4.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-5.svg:
+  '<global>': '<globální>'
+  unreachables: nedosažitelné
+
+promise-then-chain.svg:
+  'resolve(1)': 'splň(1)'
+  
+promise-then-many.svg:
+  'resolve(1)': 'splň(1)'

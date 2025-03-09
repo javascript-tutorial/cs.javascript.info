@@ -1,89 +1,89 @@
 
-# Extending built-in classes
+# Rozšiřování vestavěných tříd
 
-Built-in classes like Array, Map and others are extendable also.
+Rozšiřovat lze i vestavěné třídy, například Array, Map a jiné.
 
-For instance, here `PowerArray` inherits from the native `Array`:
+Například zde `SilnéPole` je zděděno z nativního `Array`:
 
 ```js run
-// add one more method to it (can do more)
-class PowerArray extends Array {
-  isEmpty() {
+// přidáme do něj jednu další metodu (můžeme i víc)
+class SilnéPole extends Array {
+  jePrázdné() {
     return this.length === 0;
   }
 }
 
-let arr = new PowerArray(1, 2, 5, 10, 50);
-alert(arr.isEmpty()); // false
+let pole = new SilnéPole(1, 2, 5, 10, 50);
+alert(pole.jePrázdné()); // false
 
-let filteredArr = arr.filter(item => item >= 10);
-alert(filteredArr); // 10, 50
-alert(filteredArr.isEmpty()); // false
+let filtrovanéPole = pole.filter(prvek => prvek >= 10);
+alert(filtrovanéPole); // 10, 50
+alert(filtrovanéPole.jePrázdné()); // false
 ```
 
-Please note a very interesting thing. Built-in methods like `filter`, `map` and others -- return new objects of exactly the inherited type `PowerArray`. Their internal implementation uses the object's `constructor` property for that.
+Všimněte si prosíme velmi zajímavé věci. Vestavěné metody jako `filter`, `map` a jiné vracejí nové objekty přesně zděděného typu `SilnéPole`. Jejich vnitřní implementace k tomu využívá vlastnost `constructor` objektu, na němž je metoda volána.
 
-In the example above,
+V uvedeném příkladu:
 ```js
-arr.constructor === PowerArray
+pole.constructor === SilnéPole
 ```
 
-When `arr.filter()` is called, it internally creates the new array of results using exactly `arr.constructor`, not basic `Array`. That's actually very cool, because we can keep using `PowerArray` methods further on the result.
+Když je voláno `pole.filter()`, vnitřně vytvoří nové pole výsledků voláním přesně `pole.constructor`, ne základního `Array`. To je vskutku vynikající, protože i nadále můžeme na výsledku používat metody třídy `SilnéPole`.
 
-Even more, we can customize that behavior.
+A navíc si můžeme toto chování sami nastavit.
 
-We can add a special static getter `Symbol.species` to the class. If it exists, it should return the constructor that JavaScript will use internally to create new entities in `map`, `filter` and so on.
+Můžeme do třídy přidat speciální statický getter `Symbol.species`. Pokud existuje, měl by vracet konstruktor, který bude JavaScriptem vnitřně používán k vytvoření nových entit ve funkcích `map`, `filter` a podobně.
 
-If we'd like built-in methods like `map` or `filter` to return regular arrays, we can return `Array` in `Symbol.species`, like here:
+Kdybychom chtěli, aby vestavěné metody jako `map` nebo `filter` vracely regulérní pole, můžeme v `Symbol.species` vracet `Array`, například zde:
 
 ```js run
-class PowerArray extends Array {
-  isEmpty() {
+class SilnéPole extends Array {
+  jePrázdné() {
     return this.length === 0;
   }
 
 *!*
-  // built-in methods will use this as the constructor
+  // vestavěné metody budou jako konstruktor používat toto
   static get [Symbol.species]() {
     return Array;
   }
 */!*
 }
 
-let arr = new PowerArray(1, 2, 5, 10, 50);
-alert(arr.isEmpty()); // false
+let pole = new SilnéPole(1, 2, 5, 10, 50);
+alert(pole.jePrázdné()); // false
 
-// filter creates new array using arr.constructor[Symbol.species] as constructor
-let filteredArr = arr.filter(item => item >= 10);
+// filter vytvoří nové pole s použitím pole.constructor[Symbol.species] jako konstruktoru
+let filtrovanéPole = pole.filter(prvek => prvek >= 10);
 
 *!*
-// filteredArr is not PowerArray, but Array
+// filtrovanéPole není SilnéPole, ale Array
 */!*
-alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
+alert(filtrovanéPole.jePrázdné()); // Chyba: filtrovanéPole.jePrázdné není funkce
 ```
 
-As you can see, now `.filter` returns `Array`. So the extended functionality is not passed any further.
+Jak vidíte, nyní `.filter` vrací `Array`. Rozšířená funkcionalita se tedy dál nepředává.
 
-```smart header="Other collections work similarly"
-Other collections, such as `Map` and `Set`, work alike. They also use `Symbol.species`.
+```smart header="Obdobně fungují ostatní kolekce"
+Obdobně fungují i ostatní kolekce, např. `Map` a `Set`. I ty používají `Symbol.species`.
 ```
 
-## No static inheritance in built-ins
+## Zabudované objekty nemají statickou dědičnost
 
-Built-in objects have their own static methods, for instance `Object.keys`, `Array.isArray` etc.
+Zabudované objekty mají své vlastní statické metody, například `Object.keys`, `Array.isArray` atd.
 
-As we already know, native classes extend each other. For instance, `Array` extends `Object`.
+Jak už víme, nativní třídy se navzájem rozšiřují. Například třída `Array` rozšiřuje třídu `Object`.
 
-Normally, when one class extends another, both static and non-static methods are inherited. That was thoroughly explained in the article [](info:static-properties-methods#statics-and-inheritance).
+Když jedna třída rozšiřuje druhou, zpravidla z ní dědí statické i nestatické metody. To bylo podrobně vysvětleno v článku [](info:static-properties-methods#statics-and-inheritance).
 
-But built-in classes are an exception. They don't inherit statics from each other.
+Avšak vestavěné třídy jsou výjimkou. Ty od sebe navzájem nedědí statická pole.
 
-For example, both `Array` and `Date` inherit from `Object`, so their instances have methods from `Object.prototype`. But `Array.[[Prototype]]` does not reference `Object`, so there's no, for instance, `Array.keys()` (or `Date.keys()`) static method.
+Například třídy `Array` i `Date` dědí ze třídy `Object`, takže jejich instance obsahují metody z `Object.prototype`. Ale `Array.[[Prototype]]` se neodkazuje na `Object`, takže neexistuje například statická metoda `Array.keys()` (nebo `Date.keys()`).
 
-Here's the picture structure for `Date` and `Object`:
+Na obrázku vidíme strukturu pro `Date` a `Object`:
 
 ![](object-date-inheritance.svg)
 
-As you can see, there's no link between `Date` and `Object`. They are independent, only `Date.prototype` inherits from `Object.prototype`.
+Jak vidíte, mezi `Date` a `Object` neexistuje žádné spojení. Jsou nezávislé, jedině `Date.prototype` dědí z `Object.prototype`.
 
-That's an important difference of inheritance between built-in objects compared to what we get with `extends`.
+To je důležitý rozdíl v dědičnosti mezi vestavěnými objekty oproti tomu, co získáme použitím `extends`.

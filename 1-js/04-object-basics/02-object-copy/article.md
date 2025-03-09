@@ -1,325 +1,324 @@
-# Object references and copying
+# Odkazy na objekty a kopírování objektů
 
-One of the fundamental differences of objects versus primitives is that objects are stored and copied "by reference", whereas primitive values: strings, numbers, booleans, etc -- are always copied "as a whole value".
+Jeden ze základních rozdílů mezi objekty a primitivními typy je, že objekty se ukládají a kopírují jako „odkazy“, zatímco primitivní hodnoty: řetězce, čísla, booleany atd. -- se kopírují vždy „jako celá hodnota“.
 
-That's easy to understand if we look a bit under the hood of what happens when we copy a value.
+Snadno tomu porozumíme, jestliže se podíváme trochu více pod kapuci toho, co se děje, když kopírujeme hodnotu.
 
-Let's start with a primitive, such as a string.
+Začněme primitivním typem, třeba řetězcem.
 
-Here we put a copy of `message` into `phrase`:
+Do proměnné `věta` zkopírujeme proměnnou `zpráva`:
 
 ```js
-let message = "Hello!";
-let phrase = message;
+let zpráva = "Ahoj!";
+let věta = zpráva;
 ```
 
-As a result we have two independent variables, each one storing the string `"Hello!"`.
+Výsledkem budou dvě nezávislé proměnné, v každé bude uložen řetězec `"Ahoj!"`.
 
 ![](variable-copy-value.svg)
 
-Quite an obvious result, right?
+Vcelku zjevný výsledek, že?
 
-Objects are not like that.
+Objekty se takhle nechovají.
 
-**A variable assigned to an object stores not the object itself, but its "address in memory" -- in other words "a reference" to it.**
+**V proměnné, do níž je přiřazen objekt, není uložen samotný objekt, ale jeho „adresa v paměti“ -- jinými slovy „odkaz“ na objekt.**
 
-Let's look at an example of such a variable:
+Podívejme se na příklad takové proměnné:
 
 ```js
-let user = {
-  name: "John"
+let uživatel = {
+  jméno: "Jan"
 };
 ```
 
-And here's how it's actually stored in memory:
+A takto je ve skutečnosti uložen v paměti:
 
 ![](variable-contains-reference.svg)
 
-The object is stored somewhere in memory (at the right of the picture), while the `user` variable (at the left) has a "reference" to it.
+Objekt je uložen někde v paměti (na obrázku vpravo), zatímco proměnná `uživatel` (vlevo) obsahuje „odkaz“ na něj.
 
-We may think of an object variable, such as `user`, like a sheet of paper with the address of the object on it.
+Můžeme se dívat na objektovou proměnnou, např. `uživatel`, jako na kus papíru, na němž je napsána adresa objektu.
 
-When we perform actions with the object, e.g. take a property `user.name`, the JavaScript engine looks at what's at that address and performs the operation on the actual object.
+Když provádíme akci nad objektem, např. zjišťujeme vlastnost `uživatel.jméno`, motor JavaScriptu se podívá na to, co je na této adrese, a provede operaci nad skutečným objektem.
 
-Now here's why it's important.
+Teď vysvětlíme, proč je to důležité.
 
-**When an object variable is copied, the reference is copied, but the object itself is not duplicated.**
+**Když je kopírována objektová proměnná, zkopíruje se odkaz, ale samotný objekt se nezdvojí.**
 
-For instance:
+Například:
 
 ```js no-beautify
-let user = { name: "John" };
+let uživatel = { jméno: "Jan" };
 
-let admin = user; // copy the reference
+let správce = uživatel; // kopírování odkazu
 ```
 
-Now we have two variables, each storing a reference to the same object:
+Nyní máme dvě proměnné, v obou jsou uloženy odkazy na tentýž objekt:
 
 ![](variable-copy-reference.svg)
 
-As you can see, there's still one object, but now with two variables that reference it.
+Jak vidíte, objekt je stále jen jeden, ale nyní se na něj odkazují dvě proměnné.
 
-We can use either variable to access the object and modify its contents:
+Obě proměnné můžeme používat k přístupu k objektu a modifikaci jeho obsahu:
 
 ```js run
-let user = { name: 'John' };
+let uživatel = { jméno: 'Jan' };
 
-let admin = user;
+let správce = uživatel;
 
 *!*
-admin.name = 'Pete'; // changed by the "admin" reference
+správce.jméno = 'Petr'; // změna pomocí odkazu „správce“
 */!*
 
-alert(*!*user.name*/!*); // 'Pete', changes are seen from the "user" reference
+alert(*!*uživatel.jméno*/!*); // 'Petr', změny jsou vidět i z odkazu „uživatel“
 ```
 
-It's as if we had a cabinet with two keys and used one of them (`admin`) to get into it and make changes. Then, if we later use another key (`user`), we are still opening the same cabinet and can access the changed contents.
+Je to, jako kdybychom měli skříň se dvěma klíči a použili jeden z nich (`správce`) k tomu, abychom se do ní dostali a provedli změny. Když poté použijeme druhý klíč (`uživatel`), budeme stále otevírat stejnou skříň a můžeme přistupovat ke změněnému obsahu.
 
-## Comparison by reference
+## Porovnání pomocí odkazů
 
-Two objects are equal only if they are the same object.
+Dva objekty jsou si rovny, jen když je to jeden a tentýž objekt.
 
-For instance, here `a` and `b` reference the same object, thus they are equal:
+Například zde `a` a `b` jsou odkazy na tentýž objekt, takže jsou si rovny:
 
 ```js run
 let a = {};
-let b = a; // copy the reference
+let b = a; // kopírování odkazu
 
-alert( a == b ); // true, both variables reference the same object
+alert( a == b ); // true, obě proměnné se odkazují na tentýž objekt
 alert( a === b ); // true
 ```
 
-And here two independent objects are not equal, even though they look alike (both are empty):
+A zde si dva nezávislé objekty nejsou rovny, přestože vypadají podobně (oba jsou prázdné):
 
 ```js run
 let a = {};
-let b = {}; // two independent objects
+let b = {}; // dva nezávislé objekty
 
 alert( a == b ); // false
 ```
 
-For comparisons like `obj1 > obj2` or for a comparison against a primitive `obj == 5`, objects are converted to primitives. We'll study how object conversions work very soon, but to tell the truth, such comparisons are needed very rarely -- usually they appear as a result of a programming mistake.
+Při porovnání typu `obj1 > obj2` nebo při porovnání s primitivním typem `obj == 5` se objekty převádějí na primitivy. Jak funguje porovnávání objektů, prostudujeme velmi brzy, ale upřímně řečeno, taková porovnání jsou zapotřebí jen velmi zřídka -- obvykle se objevují v důsledku programátorské chyby.
 
-````smart header="Const objects can be modified"
-An important side effect of storing objects as references is that an object declared as `const` *can* be modified.
+````smart header="Konstantní objekty můžeme modifikovat"
+Důležitým vedlejším efektem ukládání objektů jako odkazů je, že objekt deklarovaný jako `const` *může* být modifikován.
 
-For instance:
+Například:
 
 ```js run
-const user = {
-  name: "John"
+const uživatel = {
+  jméno: "Jan"
 };
 
 *!*
-user.name = "Pete"; // (*)
+uživatel.jméno = "Petr"; // (*)
 */!*
 
-alert(user.name); // Pete
+alert(uživatel.jméno); // Petr
 ```
 
-It might seem that the line `(*)` would cause an error, but it does not. The value of `user` is constant, it must always reference the same object, but properties of that object are free to change.
+Může se zdát, že na řádku `(*)` bude ohlášena chyba, ale nestane se tak. Hodnota objektu `uživatel` je konstantní a musí pořád odkazovat na stejný objekt, ale vlastnosti tohoto objektu lze libovolně měnit.
 
-In other words, the `const user` gives an error only if we try to set `user=...` as a whole.
+Jinými slovy, `const uživatel` vyvolá chybu, jen pokud se pokusíme nastavit `uživatel=...` jako celek.
 
-That said, if we really need to make constant object properties, it's also possible, but using totally different methods. We'll mention that in the chapter <info:property-descriptors>.
+Jestliže ovšem skutečně potřebujeme učinit vlastnosti objektů konstantní, je to rovněž možné, ale úplně jiným způsobem. Zmíníme se o tom v kapitole <info:property-descriptors>.
 ````
 
-## Cloning and merging, Object.assign [#cloning-and-merging-object-assign]
+## Klonování a slučování, Object.assign [#cloning-and-merging-object-assign]
 
-So, copying an object variable creates one more reference to the same object.
+Kopírování objektové proměnné tedy vytvoří další odkaz na tentýž objekt.
 
-But what if we need to duplicate an object?
+Co když však potřebujeme duplikovat objekt?
 
-We can create a new object and replicate the structure of the existing one, by iterating over its properties and copying them on the primitive level.
+Můžeme vytvořit nový objekt a replikovat strukturu existujícího objektu tím, že budeme iterovat nad jeho vlastnostmi a kopírovat je na úrovni primitivů.
 
-Like this:
+Například:
 
 ```js run
-let user = {
-  name: "John",
-  age: 30
+let uživatel = {
+  jméno: "Jan",
+  věk: 30
 };
 
 *!*
-let clone = {}; // the new empty object
+let klon = {}; // nový prázdný objekt
 
-// let's copy all user properties into it
-for (let key in user) {
-  clone[key] = user[key];
+// zkopírujme do něj všechny uživatelské vlastnosti
+for (let klíč in uživatel) {
+  klon[klíč] = uživatel[klíč];
 }
 */!*
 
-// now clone is a fully independent object with the same content
-clone.name = "Pete"; // changed the data in it
+// nyní je klon plně nezávislý objekt se stejným obsahem
+klon.jméno = "Petr"; // změníme data uvnitř
 
-alert( user.name ); // still John in the original object
+alert( uživatel.jméno ); // v původním objektu je stále Jan
 ```
 
-We can also use the method [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
+Můžeme také použít metodu [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
-The syntax is:
+Její syntaxe je:
 
 ```js
-Object.assign(dest, ...sources)
+Object.assign(cíl, ...zdroje])
 ```
 
-- The first argument `dest` is a target object.
-- Further arguments is a list of source objects.
+- První argument `cíl` je cílový objekt.
+- Další argumenty jsou seznam zdrojů.
 
-It copies the properties of all source objects into the target `dest`, and then returns it as the result.
+Metoda zkopíruje vlastnosti všech zdrojových objektů do cíle `cíl` a ten pak vrátí jako svůj výsledek.
 
-For example, we have `user` object, let's add a couple of permissions to it:
+Například máme objekt `uživatel`. Přidejme do něj několik oprávnění:
 
-```js run
-let user = { name: "John" };
+```js
+let uživatel = { jméno: "Jan" };
 
-let permissions1 = { canView: true };
-let permissions2 = { canEdit: true };
+let oprávnění1 = { můžeProhlížet: true };
+let oprávnění2 = { můžeEditovat: true };
 
 *!*
-// copies all properties from permissions1 and permissions2 into user
-Object.assign(user, permissions1, permissions2);
+// zkopíruje všechny vlastnosti z objektů oprávnění1 a oprávnění2 do objektu uživatel
+Object.assign(uživatel, oprávnění1, oprávnění2);
 */!*
 
-// now user = { name: "John", canView: true, canEdit: true }
-alert(user.name); // John
-alert(user.canView); // true
-alert(user.canEdit); // true
+// nyní uživatel = { jméno: "Jan", můžeProhlížet: true, můžeEditovat: true }
+alert(uživatel.jméno); // John
+alert(uživatel.můžeProhlížet); // true
+alert(uživatel.můžeEditovat); // true
 ```
 
-If the copied property name already exists, it gets overwritten:
+Jestliže vlastnost s kopírovaným názvem již existuje, bude přepsána:
 
 ```js run
-let user = { name: "John" };
+let uživatel = { jméno: "Jan" };
 
-Object.assign(user, { name: "Pete" });
+Object.assign(uživatel, { jméno: "Petr" });
 
-alert(user.name); // now user = { name: "Pete" }
+alert(uživatel.jméno); // nyní uživatel = { jméno: "Petr" }
 ```
 
-We also can use `Object.assign` to perform a simple object cloning:
+Můžeme také využít `Object.assign` k provedení jednoduchého klonování objektu:
 
-```js run
-let user = {
-  name: "John",
-  age: 30
+```js
+let uživatel = {
+  jméno: "Jan",
+  věk: 30
 };
 
 *!*
-let clone = Object.assign({}, user);
+let klon = Object.assign({}, uživatel);
 */!*
 
 alert(clone.name); // John
 alert(clone.age); // 30
 ```
 
-Here it copies all properties of `user` into the empty object and returns it.
+Zde metoda zkopíruje všechny vlastnosti objektu `uživatel` do prázdného objektu a ten pak vrátí.
 
-There are also other methods of cloning an object, e.g. using the [spread syntax](info:rest-parameters-spread) `clone = {...user}`, covered later in the tutorial.
+Existují i jiné metody klonování objektu, např. použitím [rozšířené syntaxe](info:rest-parameters-spread) `klon = {...uživatel}`, kterou vysvětlíme později v tomto tutoriálu.
 
-## Nested cloning
+## Vnořené klonování
 
-Until now we assumed that all properties of `user` are primitive. But properties can be references to other objects.
+Až dosud jsme předpokládali, že všechny vlastnosti objektu `uživatel` jsou primitivní. Ale vlastnosti mohou být i odkazy na jiné objekty.
 
-Like this:
+Například:
 ```js run
-let user = {
-  name: "John",
-  sizes: {
-    height: 182,
-    width: 50
+let uživatel = {
+  jméno: "Jan",
+  míry: {
+    výška: 182,
+    šířka: 50
   }
 };
 
-alert( user.sizes.height ); // 182
+alert( uživatel.míry.výška ); // 182
 ```
 
-Now it's not enough to copy `clone.sizes = user.sizes`, because `user.sizes` is an object, and will be copied by reference, so `clone` and `user` will share the same sizes:
+Teď nestačí kopírovat `klon.míry = uživatel.míry`, protože `uživatel.míry` je objekt a bude zkopírován odkazem, takže `klon` a `uživatel` budou sdílet stejné míry:
 
 ```js run
-let user = {
-  name: "John",
-  sizes: {
-    height: 182,
-    width: 50
+let uživatel = {
+  jméno: "Jan",
+  míry: {
+    výška: 182,
+    šířka: 50
   }
 };
 
-let clone = Object.assign({}, user);
+let klon = Object.assign({}, uživatel);
 
-alert( user.sizes === clone.sizes ); // true, same object
+alert( uživatel.míry === klon.míry ); // true, stejný objekt
 
-// user and clone share sizes
-user.sizes.width = 60;    // change a property from one place
-alert(clone.sizes.width); // 60, get the result from the other one
+// uživatel a klon sdílejí tytéž míry
+uživatel.míry.šířka = 60; // změníme vlastnost na jednom místě
+alert(klon.míry.šířka);   // 60, získáme výsledek z jiného místa
 ```
 
-To fix that and make `user` and `clone` truly separate objects, we should use a cloning loop that examines each value of `user[key]` and, if it's an object, then replicate its structure as well. That is called a "deep cloning" or "structured cloning". There's [structuredClone](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone) method that implements deep cloning.
-
+Abychom to opravili a učinili objekty `uživatel` a `klon` skutečně oddělenými, měli bychom použít klonovací cyklus, který prozkoumá každou hodnotu `uživatel[klíč]`, a pokud je to objekt, replikuje i jeho strukturu. Toto klonování se nazývá „hloubkové“ („hluboké“) anebo „strukturované“. Existuje metoda `structuredClone`, která implementuje hloubkové klonování.
 
 ### structuredClone
 
-The call `structuredClone(object)` clones the `object` with all nested properties.
+Volání `structuredClone(objekt)` vytvoří klon objektu `objekt` se všemi vnořenými vlastnostmi.
 
-Here's how we can use it in our example:
+V našem příkladu ji můžeme použít následovně:
 
 ```js run
-let user = {
-  name: "John",
-  sizes: {
-    height: 182,
-    width: 50
+let uživatel = {
+  jméno: "Jan",
+  míry: {
+    výška: 182,
+    šířka: 50
   }
 };
 
 *!*
-let clone = structuredClone(user);
+let klon = structuredClone(uživatel);
 */!*
 
-alert( user.sizes === clone.sizes ); // false, different objects
+alert( uživatel.míry === klon.míry ); // false, různé objekty
 
-// user and clone are totally unrelated now
-user.sizes.width = 60;    // change a property from one place
-alert(clone.sizes.width); // 50, not related
+// uživatel a klon nyní nejsou nijak propojeny
+uživatel.míry.šířka = 60; // změníme vlastnost na jednom místě
+alert(klon.míry.šířka);   // 50, nemělo to vliv
 ```
 
-The `structuredClone` method can clone most data types, such as objects, arrays, primitive values.
+Metoda `structuredClone` může klonovat většinu datových typů, např. objekty, pole, primitivní hodnoty.
 
-It also supports circular references, when an object property references the object itself (directly or via a chain or references).
+Podporuje i kruhové odkazy, kdy vlastnost nějakého objektu odkazuje na tento objekt samotný (přímo nebo skrz řetězec odkazů).
 
-For instance:
+Příklad:
 
 ```js run
-let user = {};
-// let's create a circular reference:
-// user.me references the user itself
-user.me = user;
+let uživatel = {};
+// vytvořme kruhový odkaz:
+// uživatel.já odkazuje na samotného uživatele
+uživatel.já = uživatel;
 
-let clone = structuredClone(user);
-alert(clone.me === clone); // true
+let klon = structuredClone(uživatel);
+alert(klon.já === klon); // true
 ```
 
-As you can see, `clone.me` references the `clone`, not the `user`! So the circular reference was cloned correctly as well.
+Jak vidíte, `klon.já` odkazuje na `klon`, ne na `uživatel`! Kruhový odkaz byl tedy rovněž správně naklonován.
 
-Although, there are cases when `structuredClone` fails.
+Existují však případy, kdy `structuredClone` selhává.
 
-For instance, when an object has a function property:
+Například když objekt má funkční vlastnost:
 
 ```js run
-// error
+// chyba
 structuredClone({
   f: function() {}
 });
 ```
 
-Function properties aren't supported.
+Funkční vlastnosti nejsou podporovány.
 
-To handle such complex cases we may need to use a combination of cloning methods, write custom code or, to not reinvent the wheel, take an existing implementation, for instance [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) from the JavaScript library [lodash](https://lodash.com).
+Abychom zvládli tak složité příklady, možná budeme muset použít kombinaci klonovacích metod, napsat si vlastní kód nebo, abychom znovu nevynalézali kolo, použít existující implementaci, například [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) z JavaScriptové knihovny [lodash](https://lodash.com).
 
-## Summary
+## Shrnutí
 
-Objects are assigned and copied by reference. In other words, a variable stores not the "object value", but a "reference" (address in memory) for the value. So copying such a variable or passing it as a function argument copies that reference, not the object itself.
+Objekty se přiřazují a kopírují odkazem. Jinými slovy, v proměnné není uložena „hodnota objektu“, ale „odkaz“ (adresa v paměti) na tuto hodnotu. Zkopírování této hodnoty nebo její předání do funkce jako argument tedy zkopíruje tento odkaz, ne objekt samotný.
 
-All operations via copied references (like adding/removing properties) are performed on the same single object.
+Všechny operace na zkopírovaných odkazech (např. přidávání nebo odebírání vlastností) jsou prováděny na jednom a tomtéž objektu.
 
-To make a "real copy" (a clone) we can use `Object.assign` for the so-called "shallow copy" (nested objects are copied by reference) or a "deep cloning" function `structuredClone` or use a custom cloning implementation, such as [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep).
+Abychom vytvořili „skutečnou kopii“ (klon), můžeme použít `Object.assign` pro tzv. „mělkou kopii“ (vnořené objekty se kopírují odkazem) nebo funkci `structuredClone` pro „hloubkové klonování“, nebo zákaznickou implementaci klonování, např. [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep).
