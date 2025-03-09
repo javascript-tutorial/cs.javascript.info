@@ -82,11 +82,7 @@ let řekniAhoj = function() { // (1) vytvoření
   alert( "Ahoj" );
 };
 
-<<<<<<< HEAD
-let funkce = řekniAhoj;
-=======
-let func = sayHi;  //(2)
->>>>>>> 1dce5b72b16288dad31b7b3febed4f38b7a5cd8a
+let funkce = řekniAhoj; // (2)
 // ...
 ```
 
