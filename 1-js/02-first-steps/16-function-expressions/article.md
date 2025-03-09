@@ -82,7 +82,7 @@ let řekniAhoj = function() { // (1) vytvoření
   alert( "Ahoj" );
 };
 
-let funkce = řekniAhoj;
+let funkce = řekniAhoj; // (2)
 // ...
 ```
 
@@ -107,7 +107,7 @@ Odpověď je jednoduchá: funkční výraz je zde vytvořen jako `function(…) 
 Středník by zde byl i u jednoduššího přiřazení, například `let řekniAhoj = 5;`, a je zde také u přiřazení funkce.
 ````
 
-## Funkce zpětného volaní (callbackové funkce)
+## Funkce zpětného volání (callbackové funkce)
 
 Podíváme se na další příklady předávání funkcí jako hodnot a používání funkčních výrazů.
 
