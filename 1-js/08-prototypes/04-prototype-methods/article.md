@@ -115,7 +115,7 @@ alert(obj[klíč]); // [object Object], ne "nějaká hodnota"!
 
 Když zde uživatel zadá `__proto__`, přiřazení na řádku 4 je ignorováno!
 
-To může být pro nevývojáře jistě překvapením, ale my bychom tomu měli rozumět. Vlastnost `__proto__` je speciální: musí to být buď objekt, nebo `null`. Řetězec nemůže být prototypem. To je důvod, proč je přiřazení řetězce do `__proto__` ignorováno.
+To může být pro nevývojáře jistě překvapením, ale my bychom tomu měli rozumět. Vlastnost `__proto__` je speciální: musí to být buď objekt, nebo `null`. Řetězec nemůže být prototypem. Z tohoto důvodu je přiřazení řetězce do `__proto__` ignorováno.
 
 Takové chování jsme však *nezamýšleli* implementovat, že? Chceme ukládat dvojice klíč/hodnota a klíč jménem `"__proto__"` nebyl správně uložen. Takže je to chyba!
 
