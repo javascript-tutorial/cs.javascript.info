@@ -52,6 +52,7 @@ Příklad:
 ```js run
 alert( 5 % 2 ); // 1, zbytek po dělení 5 děleno 2
 alert( 8 % 3 ); // 2, zbytek po dělení 8 děleno 3
+alert( 8 % 4 ); // 0, zbytek po dělení 8 děleno 4
 ```
 
 ### Umocňování **
@@ -195,18 +196,18 @@ Následuje výtažek z [tabulky priorit](https://developer.mozilla.org/en-US/doc
 | Priorita | Název | Znak |
 |----------|-------|------|
 | ... | ... | ... |
-| 15 | unární plus | `+` |
-| 15 | unární negace | `-` |
-| 14 | umocňování | `**` |
-| 13 | násobení | `*` |
-| 13 | dělení | `/` |
-| 12 | sčítání | `+` |
-| 12 | odčítání | `-` |
+| 14 | unární plus | `+` |
+| 14 | unární negace | `-` |
+| 13 | umocňování | `**` |
+| 12 | násobení | `*` |
+| 12 | dělení | `/` |
+| 11 | sčítání | `+` |
+| 11 | odčítání | `-` |
 | ... | ... | ... |
 | 2 | přiřazení | `=` |
 | ... | ... | ... |
 
-Jak vidíme, „unární plus“ má prioritu `15`, která je vyšší než priorita `12` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
+Jak vidíme, „unární plus“ má prioritu `14`, která je vyšší než priorita `11` „sčítání“ (binární plus). To je důvod, proč se ve výrazu `"+jablka + +pomeranče"` unární plusy vyhodnotí před sčítáním.
 
 ## Přiřazení
 
@@ -304,9 +305,9 @@ Tyto operátory mají stejnou prioritu jako běžné přiřazení, takže se pro
 ```js run
 let n = 2;
 
-n *= 3 + 5;
+n *= 3 + 5; // napřed se provede část vpravo, totéž jako n *= 8
 
-alert( n ); // 16  (napřed se provede část vpravo, totéž jako n *= 8)
+alert( n ); // 16
 ```
 
 ## Inkrementace a dekrementace

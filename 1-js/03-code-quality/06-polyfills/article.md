@@ -1,4 +1,3 @@
-
 # Polyfilly a transpilátory
 
 Jazyk JavaScript se neustále vyvíjí. Pravidelně se pro tento jazyk objevují nové návrhy, ty jsou analyzovány a jsou-li shledány užitečnými, přidají se na seznam na <https://tc39.github.io/ecma262/> a pak pokračují do [specifikace](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/).
