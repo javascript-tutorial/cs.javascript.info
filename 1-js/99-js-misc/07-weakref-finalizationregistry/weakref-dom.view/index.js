@@ -1,24 +1,24 @@
-const startMessagesBtn = document.querySelector('.start-messages'); // (1)
-const closeWindowBtn = document.querySelector('.window__button'); // (2)
-const windowElementRef = new WeakRef(document.querySelector(".window__body")); // (3)
+const tlačítkoZačítPosílat = document.querySelector('.start-messages'); // (1)
+const tlačítkoZavřítOkno = document.querySelector('.window__button'); // (2)
+const odkazNaElementOkna = new WeakRef(document.querySelector(".window__body")); // (3)
 
-startMessagesBtn.addEventListener('click', () => { // (4)
-    startMessages(windowElementRef);
-    startMessagesBtn.disabled = true;
+tlačítkoZačítPosílat.addEventListener('click', () => { // (4)
+    startMessages(odkazNaElementOkna);
+    tlačítkoZačítPosílat.disabled = true;
 });
 
-closeWindowBtn.addEventListener('click', () =>  document.querySelector(".window__body").remove()); // (5)
+tlačítkoZavřítOkno.addEventListener('click', () =>  document.querySelector(".window__body").remove()); // (5)
 
 
-const startMessages = (element) => {
-    const timerId = setInterval(() => { // (6)
+const začniPosílatZprávy = (element) => {
+    const idČasovače = setInterval(() => { // (6)
         if (element.deref()) { // (7)
-            const payload = document.createElement("p");
-            payload.textContent = `Message: System status OK: ${new Date().toLocaleTimeString()}`;
-            element.deref().append(payload);
+            const zátěž = document.createElement("p");
+            zátěž.textContent = `Zpráva: Stav systému OK: ${new Date().toLocaleTimeString()}`;
+            element.deref().append(zátěž);
         } else { // (8)
-            alert("The element has been deleted."); // (9)
-            clearInterval(timerId);
+            alert("Element byl odstraněn."); // (9)
+            clearInterval(idČasovače);
         }
     }, 1000);
 };
