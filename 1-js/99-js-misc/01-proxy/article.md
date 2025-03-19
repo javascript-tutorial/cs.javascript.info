@@ -690,7 +690,7 @@ Past `get` je zde „průhledná“, vrací původní vlastnost a nic jiného ne
 
 Vypadá to, že je všechno v pořádku. Učiňme však tento příklad trochu složitějším.
 
-Po zdědění jiného objektu `admin` z objektu `uživatel` můžeme pozorovat nesprávné chování:
+Po zdědění jiného objektu `správce` z objektu `uživatel` můžeme pozorovat nesprávné chování:
 
 ```js run
 let uživatel = {
@@ -707,17 +707,17 @@ let uživatelProxy = new Proxy(uživatel, {
 });
 
 *!*
-let admin = {
+let správce = {
   __proto__: uživatelProxy,
-  _jméno: "Admin"
+  _jméno: "Správce"
 };
 
-// Očekáváme: Admin
-alert(admin.jméno); // vypíše: Host (?!?)
+// Očekáváme: Správce
+alert(správce.jméno); // vypíše: Host (?!?)
 */!*
 ```
 
-Načtení `admin.jméno` by mělo vrátit `"Admin"`, ne `"Host"`!
+Načtení `správce.jméno` by mělo vrátit `"Správce"`, ne `"Host"`!
 
 V čem je problém? Udělali jsme snad něco špatně s dědičností?
 
@@ -725,13 +725,13 @@ Pokud však odstraníme proxy, bude všechno fungovat tak, jak očekáváme.
 
 Problém je ve skutečnosti v proxy na řádku `(*)`.
 
-1. Když načítáme `admin.jméno`, objekt `admin` takovou vlastnost nemá, a proto hledání přejde k jeho prototypu.
+1. Když načítáme `správce.jméno`, objekt `správce` takovou vlastnost nemá, a proto hledání přejde k jeho prototypu.
 2. Prototypem je `uživatelProxy`.
 3. Když načítáme vlastnost `jméno` z proxy, spustí se jeho past `get` a na řádku `(*)` ji vrátí z původního objektu jako `cíl[vlastnost]`.
 
     Volání `cíl[vlastnost]`, když `vlastnost` je getter, spustí kód tohoto getteru v kontextu `this=cíl`. Výsledkem je tedy `this._jméno` z původního objektu `cíl`, což je: z objektu `uživatel`.
 
-Abychom takové situace opravili, potřebujeme `příjemce`, třetí argument pasti `get`. Ten udržuje správné `this`, které bude předáno getteru. V našem případě to je `admin`.
+Abychom takové situace opravili, potřebujeme `příjemce`, třetí argument pasti `get`. Ten udržuje správné `this`, které bude předáno getteru. V našem případě to je `správce`.
 
 Jak předat kontext getteru? Pro běžnou funkci bychom mohli použít `call/apply`, ale tohle je getter, ten se „nevolá“, jenom se k němu přistupuje.
 
@@ -748,7 +748,7 @@ let uživatel = {
 };
 
 let uživatelProxy = new Proxy(uživatel, {
-  get(cíl, vlastnost, příjemce) { // příjemce = admin
+  get(cíl, vlastnost, příjemce) { // příjemce = správce
 *!*
     return Reflect.get(cíl, vlastnost, příjemce); // (*)
 */!*
@@ -756,17 +756,17 @@ let uživatelProxy = new Proxy(uživatel, {
 });
 
 
-let admin = {
+let správce = {
   __proto__: uživatelProxy,
-  _jméno: "Admin"
+  _jméno: "Správce"
 };
 
 *!*
-alert(admin.jméno); // Admin
+alert(správce.jméno); // Správce
 */!*
 ```
 
-Nyní je getteru předán `příjemce`, který si udržuje odkaz na správné `this` (což je `admin`), pomocí `Reflect.get` na řádku `(*)`.
+Nyní je getteru předán `příjemce`, který si udržuje odkaz na správné `this` (což je `správce`), pomocí `Reflect.get` na řádku `(*)`.
 
 Tuto past můžeme ještě zkrátit:
 
