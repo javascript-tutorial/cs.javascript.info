@@ -39,7 +39,7 @@ Například zde zavoláme `JSON.stringify` na studenta:
 let student = {
   jméno: 'Jan',
   věk: 30,
-  jeAdmin: false,
+  jeSprávce: false,
   kurzy: ['html', 'css', 'js'],
   choť: null
 };
@@ -56,7 +56,7 @@ alert(json);
 {
   "jméno": "Jan",
   "věk": 30,
-  "jeAdmin": false,
+  "jeSprávce": false,
   "kurzy": ["html", "css", "js"],
   "choť": null
 }
@@ -299,7 +299,7 @@ let uživatel = {
   jméno: "Jan",
   věk: 25,
   role: {
-    jeAdmin: false,
+    jeSprávce: false,
     jeEditor: true
   }
 };
@@ -310,7 +310,7 @@ alert(JSON.stringify(uživatel, null, 2));
   "jméno": "Jan",
   "věk": 25,
   "role": {
-    "jeAdmin": false,
+    "jeSprávce": false,
     "jeEditor": true
   }
 }
@@ -321,7 +321,7 @@ alert(JSON.stringify(uživatel, null, 2));
     "jméno": "Jan",
     "věk": 25,
     "role": {
-        "jeAdmin": false,
+        "jeSprávce": false,
         "jeEditor": true
     }
 }
@@ -427,7 +427,7 @@ alert( čísla[1] ); // 1
 Nebo pro vnořené objekty:
 
 ```js run
-let dataUživatele = '{ "jméno": "Jan", "věk": 35, "jeAdmin": false, "přátelé": [0,1,2,3] }';
+let dataUživatele = '{ "jméno": "Jan", "věk": 35, "jeSprávce": false, "přátelé": [0,1,2,3] }';
 
 let uživatel = JSON.parse(dataUživatele);
 
@@ -442,7 +442,7 @@ Toto jsou typické chyby v ručně psaném JSONu (někdy jej musíme napsat ruč
 let json = `{
   *!*jméno*/!*: "Jan",                          // chyba: název vlastnosti bez uvozovek
   "příjmení": *!*'Novák'*/!*,                   // chyba: hodnota v jednoduchých uvozovkách (musí být ve dvojitých)
-  *!*'jeAdmin'*/!*: false                       // chyba: klíč v jednoduchých uvozovkách (musí být ve dvojitých)
+  *!*'jeSprávce'*/!*: false                       // chyba: klíč v jednoduchých uvozovkách (musí být ve dvojitých)
   "datumNarození": *!*new Date(2000, 2, 3)*/!*, // chyba: není povoleno "new", jen čisté hodnoty
   "přátelé": [0,1,2,3]                   // zde je vše v pořádku
 }`;
