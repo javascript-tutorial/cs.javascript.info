@@ -2,7 +2,7 @@
 
 Při programování často chceme něco vzít a rozšířit.
 
-Například máme objekt `uživatel` s jeho vlastnostmi a metodami a chceme vytvořit objekty `admin` a `host` jako jeho mírně pozměněné varianty. Rádi bychom použili to, co máme v objektu `uživatel`, nekopírovali ani znovu neimplementovali jeho metody, jen postavili nový objekt na jeho základu.
+Například máme objekt `uživatel` s jeho vlastnostmi a metodami a chceme vytvořit objekty `správce` a `host` jako jeho mírně pozměněné varianty. Rádi bychom použili to, co máme v objektu `uživatel`, nekopírovali ani znovu neimplementovali jeho metody, jen postavili nový objekt na jeho základu.
 
 Prvek jazyka, který nám s tím pomůže, je *prototypová dědičnost*.
 
@@ -178,7 +178,7 @@ Od nynějška volání `králík.jdi()` najde metodu rovnou v objektu a spustí 
 
 Výjimkou jsou přístupové vlastnosti, jelikož přiřazení je zpracováváno setterem. Zápis do takové vlastnosti je tedy ve skutečnosti totéž jako volání funkce.
 
-Z tohoto důvodu bude v následujícím kódu korektně fungovat `admin.celéJméno`:
+Z tohoto důvodu bude v následujícím kódu korektně fungovat `správce.celéJméno`:
 
 ```js run
 let uživatel = {
@@ -194,31 +194,31 @@ let uživatel = {
   }
 };
 
-let admin = {
+let správce = {
   __proto__: uživatel,
-  jeAdmin: true
+  jesprávce: true
 };
 
-alert(admin.celéJméno); // Jan Novák (*)
+alert(správce.celéJméno); // Jan Novák (*)
 
 // spustí se setter!
-admin.celéJméno = "Alice Cooper"; // (**)
+správce.celéJméno = "Alice Cooper"; // (**)
 
-alert(admin.celéJméno); // Alice Cooper, stav admina modifikován
+alert(správce.celéJméno); // Alice Cooper, stav správcea modifikován
 alert(uživatel.celéJméno); // Jan Novák, stav uživatele ochráněn
 ```
 
-Zde na řádku `(*)` má vlastnost `admin.celéJméno` getter v prototypu `uživatel`, takže se zavolá tento getter. A na řádku `(**)` má tato vlastnost v tomto prototypu setter, takže se zavolá tento setter.
+Zde na řádku `(*)` má vlastnost `správce.celéJméno` getter v prototypu `uživatel`, takže se zavolá tento getter. A na řádku `(**)` má tato vlastnost v tomto prototypu setter, takže se zavolá tento setter.
 
 ## Hodnota „this“
 
-V uvedeném příkladu se může objevit zajímavá otázka: jaká je hodnota `this` uvnitř `set celéJméno(hodnota)`? Kam se zapíší vlastnosti `this.jméno` a `this.příjmení`: do objektu `uživatel`, nebo `admin`?
+V uvedeném příkladu se může objevit zajímavá otázka: jaká je hodnota `this` uvnitř `set celéJméno(hodnota)`? Kam se zapíší vlastnosti `this.jméno` a `this.příjmení`: do objektu `uživatel`, nebo `správce`?
 
 Odpověď je jednoduchá: `this` není prototypem vůbec ovlivněno.
 
 **Nezáleží na tom, kde je metoda nalezena: zda v objektu nebo v prototypu. Při volání metody je `this` vždy objekt před tečkou.**
 
-Volání setteru `admin.celéJméno=` tedy jako `this` použije objekt `admin`, ne `uživatel`.
+Volání setteru `správce.celéJméno=` tedy jako `this` použije objekt `správce`, ne `uživatel`.
 
 To je ve skutečnosti nesmírně důležitá věc, neboť můžeme mít velký objekt obsahující mnoho metod a objekty, které z něj budou dědit. A když budou dědící objekty spouštět zděděné metody, budou modifikovat jen svůj vlastní stav a ne stav onoho velkého objektu.
 
