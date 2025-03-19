@@ -248,7 +248,7 @@ fetch('/article/promise-chaining/user.json')
   })
   .then(function(text) {
     // ...a zde je obsah vzdáleného souboru
-    alert(text); // {"name": "iliakan", "isAdmin": true}
+    alert(text); // {"jméno": "iliakan", "jeSprávce": true}
   });
 ```
 
@@ -260,7 +260,7 @@ Pro stručnost budeme používat šipkové funkce:
 // totéž jako výše, ale odpověď.json() rozparsuje vzdálený obsah z JSONu
 fetch('/article/promise-chaining/user.json')
   .then(odpověď => odpověď.json())
-  .then(uživatel => alert(uživatel.name)); // iliakan, získali jsme jméno uživatele
+  .then(uživatel => alert(uživatel.jméno)); // iliakan, získali jsme jméno uživatele
 ```
 
 Nyní s načteným uživatelem něco udělejme.
@@ -273,7 +273,7 @@ fetch('/article/promise-chaining/user.json')
   // Načteme ho jako json
   .then(odpověď => odpověď.json())
   // Vytvoříme požadavek na GitHub
-  .then(uživatel => fetch(`https://api.github.com/users/${uživatel.name}`))
+  .then(uživatel => fetch(`https://api.github.com/users/${uživatel.jméno}`))
   // Načteme odpověď jako json
   .then(odpověď => odpověď.json())
   // Zobrazíme obrázek avatara (uživatelGitHubu.avatar_url) na 3 sekundy (můžeme jej animovat)
@@ -298,7 +298,7 @@ Například:
 ```js run
 fetch('/article/promise-chaining/user.json')
   .then(odpověď => odpověď.json())
-  .then(uživatel => fetch(`https://api.github.com/users/${uživatel.name}`))
+  .then(uživatel => fetch(`https://api.github.com/users/${uživatel.jméno}`))
   .then(odpověď => odpověď.json())
 *!*
   .then(uživatelGitHubu => new Promise(function(splň, zamítni) { // (*)
@@ -316,7 +316,7 @@ fetch('/article/promise-chaining/user.json')
     }, 3000);
   }))
   // spustí se za 3 sekundy
-  .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.name}`));
+  .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.jméno}`));
 ```
 
 Funguje to tak, že handler `.then` na řádku `(*)` nyní vrátí `new Promise`, který se usadí až po volání `splň(uživatelGitHubu)` ve funkci `setTimeout` `(**)`. Další `.then` v řetězu na to bude čekat.
@@ -351,9 +351,9 @@ function zobrazAvatar(uživatelGitHubu) {
 
 // Použijeme je:
 načtiJson('/article/promise-chaining/user.json')
-  .then(uživatel => načtiUživateleGitHubu(uživatel.name))
+  .then(uživatel => načtiUživateleGitHubu(uživatel.jméno))
   .then(zobrazAvatar)
-  .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.name}`));
+  .then(uživatelGitHubu => alert(`Ukončeno zobrazení uživatele ${uživatelGitHubu.jméno}`));
   // ...
 ```
 
