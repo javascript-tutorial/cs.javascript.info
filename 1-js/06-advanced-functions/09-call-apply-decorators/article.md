@@ -138,7 +138,7 @@ funkce.call(obj, 1, 2, 3)
 
 Obě volají funkci `funkce` s argumenty `1`, `2` a `3`. Jediný rozdíl je v tom, že `funkce.call` navíc nastaví `this` na `obj`.
 
-Jako příklad v následujícím kódu zavoláme `řekniAhoj` v kontextu různých objektů: `řekniAhoj.call(uživatel)` spustí funkci `řekniAhoj`, které poskytne `this=uživatel`, a další řádek nastaví `this=admin`:
+Jako příklad v následujícím kódu zavoláme `řekniAhoj` v kontextu různých objektů: `řekniAhoj.call(uživatel)` spustí funkci `řekniAhoj`, které poskytne `this=uživatel`, a další řádek nastaví `this=správce`:
 
 ```js run
 function řekniAhoj() {
@@ -146,11 +146,11 @@ function řekniAhoj() {
 }
 
 let uživatel = { jméno: "Jan" };
-let admin = { jméno: "Admin" };
+let správce = { jméno: "Správce" };
 
 // použitím call předáme různé objekty jako „this“
 řekniAhoj.call( uživatel ); // Jan
-řekniAhoj.call( admin ); // Admin
+řekniAhoj.call( správce ); // Správce
 ```
 
 A zde použijeme `call`, abychom zavolali `řekni` se zadaným kontextem a větou:
