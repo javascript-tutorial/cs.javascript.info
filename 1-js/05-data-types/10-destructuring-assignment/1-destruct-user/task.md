@@ -17,7 +17,7 @@ Napište destrukturační přiřazení, které načte:
 
 - vlastnost `jméno` do proměnné `jméno`.
 - vlastnost `roky` do proměnné `věk`.
-- vlastnost `jeAdmin` do proměnné `jeAdmin` (false, pokud taková vlastnost není).
+- vlastnost `jeSprávce` do proměnné `jeSprávce` (false, pokud taková vlastnost není).
 
 Zde je příklad hodnot po vašem přiřazení:
 
@@ -29,5 +29,5 @@ let uživatel = { jméno: "Jan", roky: 30 };
 
 alert( jméno ); // Jan
 alert( věk ); // 30
-alert( jeAdmin ); // false
+alert( jeSprávce ); // false
 ```

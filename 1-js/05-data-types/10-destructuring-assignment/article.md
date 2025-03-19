@@ -134,14 +134,14 @@ Existuje dobře známý trik pro výměnu hodnot dvou proměnných použitím de
 
 ```js run
 let host = "Jana";
-let admin = "Petr";
+let správce = "Petr";
 
-// Vyměníme hodnoty: učiníme host=Petr, admin=Jana
+// Vyměníme hodnoty: učiníme host=Petr, správce=Jana
 *!*
-[host, admin] = [admin, host];
+[host, správce] = [správce, host];
 */!*
 
-alert(`${host} ${admin}`); // Petr Jana (úspěšně vyměněno!)
+alert(`${host} ${správce}`); // Petr Jana (úspěšně vyměněno!)
 ```
 
 Zde jsme vytvořili dočasné pole dvou proměnných a okamžitě je destrukturovali v obráceném pořadí.

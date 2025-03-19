@@ -5,9 +5,9 @@ let uživatel = {
   roky: 30
 };
 
-let {jméno, roky: věk, jeAdmin = false} = uživatel;
+let {jméno, roky: věk, jeSprávce = false} = uživatel;
 
 alert( jméno ); // Jan
 alert( věk ); // 30
-alert( jeAdmin ); // false
+alert( jeSprávce ); // false
 ```
