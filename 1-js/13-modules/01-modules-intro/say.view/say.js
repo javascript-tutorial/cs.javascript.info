@@ -1,3 +1,3 @@
-export function sayHi(user) {
-  return `Hello, ${user}!`;
+export function řekniAhoj(uživatel) {
+  return `Ahoj, ${uživatel}!`;
 }
