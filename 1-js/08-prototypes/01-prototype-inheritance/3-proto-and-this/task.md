@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Where does it write?
+# Kam se to zapíše?
 
-We have `rabbit` inheriting from `animal`.
+Máme objekt `králík` zděděný z objektu `zvíře`.
 
-If we call `rabbit.eat()`, which object receives the `full` property: `animal` or `rabbit`? 
+Jestliže zavoláme `králík.žer()`, který objekt získá vlastnost `sytý`: `zvíře` nebo `králík`? 
 
 ```js
-let animal = {
-  eat() {
-    this.full = true;
+let zvíře = {
+  žer() {
+    this.sytý = true;
   }
 };
 
-let rabbit = {
-  __proto__: animal
+let králík = {
+  __proto__: zvíře
 };
 
-rabbit.eat();
+králík.žer();
 ```
