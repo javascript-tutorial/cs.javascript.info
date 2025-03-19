@@ -156,33 +156,33 @@ Nyní uvažujme hlubší příklad.
 
 ```js
 // 📁 admin.js
-export let admin = {
+export let správce = {
   jméno: "Jan"
 };
 ```
 
-Je-li tento modul importován z více souborů, je vyhodnocen pouze poprvé, vytvoří se objekt `admin` a ten je pak předán všem dalším importérům.
+Je-li tento modul importován z více souborů, je vyhodnocen pouze poprvé, vytvoří se objekt `správce` a ten je pak předán všem dalším importérům.
 
-Všichni importéři dostanou přesně jeden a tentýž objekt `admin`:
+Všichni importéři dostanou přesně jeden a tentýž objekt `správce`:
 
 ```js
 // 📁 1.js
-import {admin} from './admin.js';
-admin.jméno = "Petr";
+import {správce} from './admin.js';
+správce.jméno = "Petr";
 
 // 📁 2.js
-import {admin} from './admin.js';
-alert(admin.jméno); // Petr
+import {správce} from './admin.js';
+alert(správce.jméno); // Petr
 
 *!*
-// Jak 1.js, tak 2.js se odkazují na tentýž objekt admin
+// Jak 1.js, tak 2.js se odkazují na tentýž objekt správce
 // Změny učiněné v 1.js jsou viditelné ve 2.js
 */!*
 ```
 
-Jak vidíte, když `1.js` v importovaném objektu `admin` změní vlastnost `jméno`, pak `2.js` uvidí nové `admin.jméno`.
+Jak vidíte, když `1.js` v importovaném objektu `správce` změní vlastnost `jméno`, pak `2.js` uvidí nové `správce.jméno`.
 
-To je právě proto, že modul je spuštěn pouze jednou. Vygenerují se exporty a ty jsou pak sdíleny mezi importéry, takže jestliže něco změní objekt `admin`, ostatní importéři to uvidí.
+To je právě proto, že modul je spuštěn pouze jednou. Vygenerují se exporty a ty jsou pak sdíleny mezi importéry, takže jestliže něco změní objekt `správce`, ostatní importéři to uvidí.
 
 **Takové chování je ve skutečnosti velmi užitečné, protože nám umožňuje *konfigurovat* moduly.**
 
