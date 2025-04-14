@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Uppercase the first character
+# Změňte první znak na velké písmeno
 
-Write a function `ucFirst(str)` that returns the string `str` with the uppercased first character, for instance:
+Napište funkci `velkéPrvníPísmeno(řetězec)`, která vrátí `řetězec` upravený tak, že první znak bude převeden na velké písmeno, například:
 
 ```js
-ucFirst("john") == "John";
+velkéPrvníPísmeno("jan") == "Jan";
 ```
 

@@ -2,15 +2,15 @@ importance: 4
 
 ---
 
-# Extract the money
+# Vyjmutí částky
 
-We have a cost in the form `"$120"`. That is: the dollar sign goes first, and then the number.
+Máme cenu ve tvaru `"$120"`. Tedy: jako první je znak dolaru, pak číslo.
 
-Create a function `extractCurrencyValue(str)` that would extract the numeric value from such string and return it. 
+Vytvořte funkci `vyjmiČástku(řetězec)`, která z takového řetězce vytáhne číselnou hodnotu a vrátí ji.
 
-The example:
+Příklad:
 
 ```js
-alert( extractCurrencyValue('$120') === 120 ); // true
+alert( vyjmiČástku('$120') === 120 ); // true
 ```
 
