@@ -1,38 +1,38 @@
-class Clock {
-  constructor({ template }) {
-    this.template = template;
+class Hodiny {
+  constructor({ šablona }) {
+    this.šablona = šablona;
   }
 
-  render() {
-    let date = new Date();
+  vypiš() {
+    let datum = new Date();
 
-    let hours = date.getHours();
-    if (hours < 10) hours = '0' + hours;
+    let hodiny = datum.getHours();
+    if (hodiny < 10) hodiny = '0' + hodiny;
 
-    let mins = date.getMinutes();
-    if (mins < 10) mins = '0' + mins;
+    let minuty = datum.getMinutes();
+    if (minuty < 10) minuty = '0' + minuty;
 
-    let secs = date.getSeconds();
-    if (secs < 10) secs = '0' + secs;
+    let sekundy = datum.getSeconds();
+    if (sekundy < 10) sekundy = '0' + sekundy;
 
-    let output = this.template
-      .replace('h', hours)
-      .replace('m', mins)
-      .replace('s', secs);
+    let výstup = this.šablona
+      .replace('h', hodiny)
+      .replace('m', minuty)
+      .replace('s', sekundy);
 
-    console.log(output);
+    console.log(výstup);
   }
 
   stop() {
-    clearInterval(this.timer);
+    clearInterval(this.časovač);
   }
 
   start() {
-    this.render();
-    this.timer = setInterval(() => this.render(), 1000);
+    this.vypiš();
+    this.časovač = setInterval(() => this.vypiš(), 1000);
   }
 }
 
 
-let clock = new Clock({template: 'h:m:s'});
-clock.start();
+let hodiny = new Hodiny({šablona: 'h:m:s'});
+hodiny.start();
