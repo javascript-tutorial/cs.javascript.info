@@ -1,19 +1,19 @@
-describe("camelize", function() {
+describe("camelizace", function() {
 
-  it("leaves an empty line as is", function() {
-    assert.equal(camelize(""), "");
+  it("prázdný řádek nechá tak, jak je", function() {
+    assert.equal(camelizace(""), "");
   });
 
-  it("turns background-color into backgroundColor", function() {
-    assert.equal(camelize("background-color"), "backgroundColor");
+  it("změní background-color na backgroundColor", function() {
+    assert.equal(camelizace("background-color"), "backgroundColor");
   });
 
-  it("turns list-style-image into listStyleImage", function() {
-    assert.equal(camelize("list-style-image"), "listStyleImage");
+  it("změní list-style-image na listStyleImage", function() {
+    assert.equal(camelizace("list-style-image"), "listStyleImage");
   });
 
-  it("turns -webkit-transition into WebkitTransition", function() {
-    assert.equal(camelize("-webkit-transition"), "WebkitTransition");
+  it("změní -webkit-transition na WebkitTransition", function() {
+    assert.equal(camelizace("-webkit-transition"), "WebkitTransition");
   });
 
 });

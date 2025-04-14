@@ -1,13 +1,13 @@
 ```js run
 
-let john = { name: "John", age: 25 };
-let pete = { name: "Pete", age: 30 };
-let mary = { name: "Mary", age: 28 };
+let jan = { jméno: "Jan", věk: 25 };
+let petr = { jméno: "Petr", věk: 30 };
+let marie = { jméno: "Marie", věk: 28 };
 
-let users = [ john, pete, mary ];
+let uživatelé = [ jan, petr, marie ];
 
-let names = users.map(item => item.name);
+let jména = uživatelé.map(prvek => prvek.jméno);
 
-alert( names ); // John, Pete, Mary
+alert( jména ); // Jan, Petr, Marie
 ```
 

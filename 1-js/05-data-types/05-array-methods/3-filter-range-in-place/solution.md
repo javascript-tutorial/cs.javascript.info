@@ -1,21 +1,21 @@
 ```js run demo
-function filterRangeInPlace(arr, a, b) {
+function filtrujPodleRozsahuNaMístě(pole, a, b) {
 
-  for (let i = 0; i < arr.length; i++) {
-    let val = arr[i];
+  for (let i = 0; i < pole.length; i++) {
+    let hodnota = pole[i];
 
-    // remove if outside of the interval
-    if (val < a || val > b) {
-      arr.splice(i, 1);
+    // odstraní hodnotu, jestliže je mimo interval
+    if (hodnota < a || hodnota > b) {
+      pole.splice(i, 1);
       i--;
     }
   }
 
 }
 
-let arr = [5, 3, 8, 1];
+let testovacíPole = [5, 3, 8, 1];
 
-filterRangeInPlace(arr, 1, 4); // removed the numbers except from 1 to 4
+filtrujPodleRozsahuNaMístě(testovacíPole, 1, 4); // odstraní čísla, která nejsou od 1 do 4
 
-alert( arr ); // [3, 1]
+alert( testovacíPole ); // [3, 1]
 ```
