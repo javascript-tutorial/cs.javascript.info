@@ -1,19 +1,19 @@
 
-That's because `map.keys()` returns an iterable, but not an array.
+Je to proto, že `mapa.keys()` vrací iterovatelný objekt, ale ne pole.
 
-We can convert it into an array using `Array.from`:
+Můžeme jej převést na pole pomocí `Array.from`:
 
 
 ```js run
-let map = new Map();
+let mapa = new Map();
 
-map.set("name", "John");
+mapa.set("jméno", "Jan");
 
 *!*
-let keys = Array.from(map.keys());
+let klíče = Array.from(mapa.keys());
 */!*
 
-keys.push("more");
+klíče.push("další");
 
-alert(keys); // name, more
+alert(klíče); // jméno,další
 ```
