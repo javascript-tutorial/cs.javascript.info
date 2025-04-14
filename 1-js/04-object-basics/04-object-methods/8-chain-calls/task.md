@@ -2,40 +2,40 @@ importance: 2
 
 ---
 
-# Chaining
+# Zřetězení
 
-There's a `ladder` object that allows you to go up and down:
+Máme objekt `žebřík`, který nám umožňuje chodit nahoru a dolů:
 
 ```js
-let ladder = {
-  step: 0,
-  up() { 
-    this.step++;
+let žebřík = {
+  stupeň: 0,
+  nahoru() { 
+    this.stupeň++;
   },
-  down() { 
-    this.step--;
+  dolů() { 
+    this.stupeň--;
   },
-  showStep: function() { // shows the current step
-    alert( this.step );
+  zobrazStupeň: function() { // zobrazí aktuální stupeň
+    alert( this.stupeň );
   }
 };
 ```
 
-Now, if we need to make several calls in sequence, we can do it like this:
+Když nyní potřebujeme učinit několik volání po sobě, můžeme to udělat takto:
 
 ```js
-ladder.up();
-ladder.up();
-ladder.down();
-ladder.showStep(); // 1
-ladder.down();
-ladder.showStep(); // 0
+žebřík.nahoru();
+žebřík.nahoru();
+žebřík.dolů();
+žebřík.zobrazStupeň(); // 1
+žebřík.dolů();
+žebřík.zobrazStupeň(); // 0
 ```
 
-Modify the code of `up`, `down`, and `showStep` to make the calls chainable, like this:
+Upravte kód funkcí `nahoru`, `dolů` a `zobrazStupeň` tak, aby bylo možné volání zřetězit takto:
 
 ```js
-ladder.up().up().down().showStep().down().showStep(); // shows 1 then 0
+žebřík.nahoru().nahoru().dolů().zobrazStupeň().dolů().zobrazStupeň(); // zobrazí 1, pak 0
 ```
 
-Such an approach is widely used across JavaScript libraries.
+Takový přístup se zeširoka používá v JavaScriptových knihovnách.

@@ -1,13 +1,13 @@
-let calculator = {
-  sum() {
+let kalkulátor = {
+  součet() {
     return this.a + this.b;
   },
 
-  mul() {
+  součin() {
     return this.a * this.b;
   },
 
-  read() {
+  načti() {
     this.a = +prompt('a?', 0);
     this.b = +prompt('b?', 0);
   }
