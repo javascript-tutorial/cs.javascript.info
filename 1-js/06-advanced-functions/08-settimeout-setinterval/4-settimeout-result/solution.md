@@ -1,14 +1,14 @@
 
-Any `setTimeout` will run only after the current code has finished.
+Každý `setTimeout` se spustí teprve po dokončení aktuálního kódu.
 
-The `i` will be the last one: `100000000`.
+Proměnná `i` bude obsahovat poslední hodnotu: `100000000`.
 
 ```js run
 let i = 0;
 
 setTimeout(() => alert(i), 100); // 100000000
 
-// assume that the time to execute this function is >100ms
+// předpokládáme, že doba běhu této funkce je větší než 100 ms
 for(let j = 0; j < 100000000; j++) {
   i++; 
 }
