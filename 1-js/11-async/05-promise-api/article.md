@@ -1,283 +1,283 @@
-# Promise API
+# Příslibové API
 
-There are 6 static methods in the `Promise` class. We'll quickly cover their use cases here.
+Třída `Promise` obsahuje šest statických metod. V této kapitole stručně probereme jejich případy použití.
 
 ## Promise.all
 
-Let's say we want many promises to execute in parallel and wait until all of them are ready.
+Řekněme, že chceme spustit mnoho příslibů paralelně a počkat, než budou všechny připraveny.
 
-For instance, download several URLs in parallel and process the content once they are all done.
+Například stáhnout současně obsahy několika URL, a až budou všechny staženy, zpracovat je.
 
-That's what `Promise.all` is for.
+Právě k tomu slouží `Promise.all`.
 
-The syntax is:
+Jeho syntaxe je:
 
 ```js
-let promise = Promise.all(iterable);
+let příslib = Promise.all(iterovatelnýObjekt);
 ```
 
-`Promise.all` takes an iterable (usually, an array of promises) and returns a new promise.
+`Promise.all` vezme iterovatelný objekt (obvykle pole příslibů) a vrátí nový příslib.
 
-The new promise resolves when all listed promises are resolved, and the array of their results becomes its result.
+Nový příslib se splní, až budou splněny všechny přísliby v seznamu, a jeho výsledkem se stane pole jejich výsledků.
 
-For instance, the `Promise.all` below settles after 3 seconds, and then its result is an array `[1, 2, 3]`:
+Například následující `Promise.all` se usadí za 3 sekundy a jeho výsledkem bude pole `[1, 2, 3]`:
 
 ```js run
 Promise.all([
-  new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
-  new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
-  new Promise(resolve => setTimeout(() => resolve(3), 1000))  // 3
-]).then(alert); // 1,2,3 when promises are ready: each promise contributes an array member
+  new Promise(splň => setTimeout(() => splň(1), 3000)), // 1
+  new Promise(splň => setTimeout(() => splň(2), 2000)), // 2
+  new Promise(splň => setTimeout(() => splň(3), 1000))  // 3
+]).then(alert); // 1,2,3, až budou přísliby připraveny: každý příslib přispěje jedním prvkem pole
 ```
 
-Please note that the order of the resulting array members is the same as in its source promises. Even though the first promise takes the longest time to resolve, it's still first in the array of results.
+Prosíme všimněte si, že pořadí prvků výsledného pole je stejné jako pořadí zdrojových příslibů. I když prvnímu příslibu trvalo splnění nejdéle, bude v poli výsledků stále první.
 
-A common trick is to map an array of job data into an array of promises, and then wrap that into `Promise.all`.
+Běžným trikem je namapovat pole pracovních dat do pole příslibů a to pak zabalit do `Promise.all`.
 
-For instance, if we have an array of URLs, we can fetch them all like this:
+Například máme-li pole URL, můžeme je všechny stáhnout tímto způsobem:
 
 ```js run
-let urls = [
+let poleURL = [
   'https://api.github.com/users/iliakan',
   'https://api.github.com/users/remy',
   'https://api.github.com/users/jeresig'
 ];
 
-// map every url to the promise of the fetch
-let requests = urls.map(url => fetch(url));
+// zmapujeme každý URL na příslib metody fetch
+let požadavky = poleURL.map(url => fetch(url));
 
-// Promise.all waits until all jobs are resolved
-Promise.all(requests)
-  .then(responses => responses.forEach(
-    response => alert(`${response.url}: ${response.status}`)
+// Promise.all počká, dokud nebudou všechny úkoly vykonány
+Promise.all(požadavky)
+  .then(odpovědi => odpovědi.forEach(
+    odpověď => alert(`${odpověď.url}: ${odpověď.status}`)
   ));
 ```
 
-A bigger example with fetching user information for an array of GitHub users by their names (we could fetch an array of goods by their ids, the logic is identical):
+Ve větším příkladu načítáme informace o uživatelích pro pole uživatelů GitHubu podle jejich jmen (zrovna tak můžeme stáhnout pole zboží podle jejich identifikačních čísel, logika je stejná):
 
 ```js run
-let names = ['iliakan', 'remy', 'jeresig'];
+let jména = ['iliakan', 'remy', 'jeresig'];
 
-let requests = names.map(name => fetch(`https://api.github.com/users/${name}`));
+let požadavky = jména.map(jméno => fetch(`https://api.github.com/users/${jméno}`));
 
-Promise.all(requests)
-  .then(responses => {
-    // all responses are resolved successfully
-    for(let response of responses) {
-      alert(`${response.url}: ${response.status}`); // shows 200 for every url
+Promise.all(požadavky)
+  .then(odpovědi => {
+    // všechny odpovědi se vyhodnotily úspěšně
+    for(let odpověď of odpovědi) {
+      alert(`${odpověď.url}: ${odpověď.status}`); // zobrazí 200 pro každý URL
     }
 
-    return responses;
+    return odpovědi;
   })
-  // map array of responses into an array of response.json() to read their content
-  .then(responses => Promise.all(responses.map(r => r.json())))
-  // all JSON answers are parsed: "users" is the array of them
-  .then(users => users.forEach(user => alert(user.name)));
+  // namapuje pole odpovědí do pole výsledků funkcí odpověď.json(), aby načetl jejich obsah
+  .then(odpovědi => Promise.all(odpovědi.map(r => r.json())))
+  // všechny odpovědi JSON jsou parsovány: „uživatelé“ je jejich pole
+  .then(uživatelé => uživatelé.forEach(uživatel => alert(uživatel.name)));
 ```
 
-**If any of the promises is rejected, the promise returned by `Promise.all` immediately rejects with that error.**
+**Bude-li některý příslib zamítnut, příslib vrácený metodou `Promise.all` se okamžitě zamítne s příslušnou chybou.**
 
-For instance:
+Například:
 
 ```js run
 Promise.all([
-  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(1), 1000)),
 *!*
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Ouha!")), 2000)),
 */!*
-  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
-]).catch(alert); // Error: Whoops!
+  new Promise((splň, zamítni) => setTimeout(() => splň(3), 3000))
+]).catch(alert); // Error: Ouha!
 ```
 
-Here the second promise rejects in two seconds. That leads to an immediate rejection of `Promise.all`, so `.catch` executes: the rejection error becomes the outcome of the entire `Promise.all`.
+Zde je druhý příslib za dvě sekundy zamítnut. To povede k okamžitému zamítnutí `Promise.all`, takže se spustí `.catch`: chyba zamítnutí se stane výstupem celé metody `Promise.all`.
 
-```warn header="In case of an error, other promises are ignored"
-If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list. Their results are ignored.
+```warn header="V případě chyby jsou ostatní přísliby ignorovány"
+Jestliže je jeden příslib zamítnut, `Promise.all` je okamžitě zamítnut a ostatní přísliby v seznamu jsou okamžitě zapomenuty. Jejich výsledky jsou ignorovány.
 
-For example, if there are multiple `fetch` calls, like in the example above, and one fails, the others will still continue to execute, but `Promise.all` won't watch them anymore. They will probably settle, but their results will be ignored.
+Například jestliže je zde několik volání `fetch`, podobně jako v uvedeném příkladu, a jedno z nich selže, ostatní se budou stále vykonávat dál, ale `Promise.all` je už nebude sledovat. Tato volání se pravděpodobně usadí, ale jejich výsledky budou ignorovány.
 
-`Promise.all` does nothing to cancel them, as there's no concept of "cancellation" in promises. In [another chapter](info:fetch-abort) we'll cover `AbortController` that can help with that, but it's not a part of the Promise API.
+`Promise.all` neudělá nic, aby je zrušil, protože přísliby nemají žádný koncept „zrušení“. V [jiné kapitole](info:fetch-abort) probereme `AbortController`, který s tím může pomoci, ale ten není součástí příslibového API.
 ```
 
-````smart header="`Promise.all(iterable)` allows non-promise \"regular\" values in `iterable`"
-Normally, `Promise.all(...)` accepts an iterable (in most cases an array) of promises. But if any of those objects is not a promise, it's passed to the resulting array "as is".
+````smart header="`Promise.all(iterovatelný)` povoluje v objektu `iterovatelný` i „obyčejné“ nepříslibové hodnoty"
+`Promise.all(...)` běžně přijímá iterovatelný objekt (ve většině případů pole) příslibů. Jestliže však některý z těchto objektů není příslib, je do výsledného pole předán beze změny.
 
-For instance, here the results are `[1, 2, 3]`:
+Například zde jsou výsledky `[1, 2, 3]`:
 
 ```js run
 Promise.all([
-  new Promise((resolve, reject) => {
-    setTimeout(() => resolve(1), 1000)
+  new Promise((splň, zamítni) => {
+    setTimeout(() => splň(1), 1000)
   }),
   2,
   3
 ]).then(alert); // 1, 2, 3
 ```
 
-So we are able to pass ready values to `Promise.all` where convenient.
+Můžeme tedy do `Promise.all` předat již připravené hodnoty, když se nám to hodí.
 ````
 
 ## Promise.allSettled
 
 [recent browser="new"]
 
-`Promise.all` rejects as a whole if any promise rejects. That's good for "all or nothing" cases, when we need *all* results successful to proceed:
+Jestliže je některý příslib zamítnut, je zamítnut i `Promise.all` jako celek. To je dobré v případech typu „všechno nebo nic“, kdy potřebujeme mít *všechny* výsledky úspěšné, abychom mohli pokračovat:
 
 ```js
 Promise.all([
   fetch('/template.html'),
   fetch('/style.css'),
   fetch('/data.json')
-]).then(render); // render method needs results of all fetches
+]).then(render); // metoda render potřebuje výsledky všech stahování
 ```
 
-`Promise.allSettled` just waits for all promises to settle, regardless of the result. The resulting array has:
+`Promise.allSettled` jednoduše počká, než se usadí všechny přísliby, bez ohledu na výsledek. Výsledné pole obsahuje:
 
-- `{status:"fulfilled", value:result}` for successful responses,
-- `{status:"rejected", reason:error}` for errors.
+- `{status:"fulfilled", value:výsledek}` pro úspěšné odpovědi,
+- `{status:"rejected", reason:chyba}` pro chyby.
 
-For example, we'd like to fetch the information about multiple users. Even if one request fails, we're still interested in the others.
+Například bychom rádi načetli informace o více uživatelích. I kdyby jeden požadavek neuspěl, ty ostatní nás stále zajímají.
 
-Let's use `Promise.allSettled`:
+Použijme `Promise.allSettled`:
 
 ```js run
-let urls = [
+let poleURL = [
   'https://api.github.com/users/iliakan',
   'https://api.github.com/users/remy',
-  'https://no-such-url'
+  'https://takovy-url-neni'
 ];
 
-Promise.allSettled(urls.map(url => fetch(url)))
-  .then(results => { // (*)
-    results.forEach((result, num) => {
-      if (result.status == "fulfilled") {
-        alert(`${urls[num]}: ${result.value.status}`);
+Promise.allSettled(poleURL.map(url => fetch(url)))
+  .then(výsledky => { // (*)
+    výsledky.forEach((výsledek, číslo) => {
+      if (výsledek.status == "fulfilled") {
+        alert(`${poleURL[číslo]}: ${výsledek.value.status}`);
       }
-      if (result.status == "rejected") {
-        alert(`${urls[num]}: ${result.reason}`);
+      if (výsledek.status == "rejected") {
+        alert(`${poleURL[číslo]}: ${výsledek.reason}`);
       }
     });
   });
 ```
 
-The `results` in the line `(*)` above will be:
+Pole `výsledky` na řádku `(*)` bude následující:
 ```js
 [
-  {status: 'fulfilled', value: ...response...},
-  {status: 'fulfilled', value: ...response...},
-  {status: 'rejected', reason: ...error object...}
+  {status: 'fulfilled', value: ...odpověď...},
+  {status: 'fulfilled', value: ...odpověď...},
+  {status: 'rejected', reason: ...chybový objekt...}
 ]
 ```
 
-So for each promise we get its status and `value/error`.
+Pro každý příslib tedy získáme jeho stav a `value/error`.
 
 ### Polyfill
 
-If the browser doesn't support `Promise.allSettled`, it's easy to polyfill:
+Jestliže prohlížeč nepodporuje `Promise.allSettled`, snadno vytvoříme polyfill:
 
 ```js
 if (!Promise.allSettled) {
-  const rejectHandler = reason => ({ status: 'rejected', reason });
+  const handlerZamítnutí = reason => ({ status: 'rejected', reason });
 
-  const resolveHandler = value => ({ status: 'fulfilled', value });
+  const handlerSplnění = value => ({ status: 'fulfilled', value });
 
-  Promise.allSettled = function (promises) {
-    const convertedPromises = promises.map(p => Promise.resolve(p).then(resolveHandler, rejectHandler));
-    return Promise.all(convertedPromises);
+  Promise.allSettled = function (přísliby) {
+    const převedenéPřísliby = přísliby.map(p => Promise.resolve(p).then(handlerSplnění, handlerZamítnutí));
+    return Promise.all(převedenéPřísliby);
   };
 }
 ```
 
-In this code, `promises.map` takes input values, turns them into promises (just in case a non-promise was passed) with `p => Promise.resolve(p)`, and then adds `.then` handler to every one.
+V tomto kódu metoda `přísliby.map` vezme vstupní hodnoty, přemění je na přísliby (jen v případě, že byla předána jiná hodnota než příslib) pomocí `p => Promise.resolve(p)` a pak ke každému přidá handler `.then`.
 
-That handler turns a successful result `value` into `{status:'fulfilled', value}`, and an error `reason` into `{status:'rejected', reason}`. That's exactly the format of `Promise.allSettled`.
+Handler přemění úspěšný výsledek `value` na `{status:'fulfilled', value}` a chybu `reason` na `{status:'rejected', reason}`. To je přesně formát metody `Promise.allSettled`.
 
-Now we can use `Promise.allSettled` to get the results of *all* given promises, even if some of them reject.
+Nyní můžeme používat `Promise.allSettled` k získání výsledků *všech* zadaných příslibů, i když byly některé z nich zamítnuty.
 
 ## Promise.race
 
-Similar to `Promise.all`, but waits only for the first settled promise and gets its result (or error).
+Podobá se `Promise.all`, ale čeká jen na první příslib, který se usadí, a vezme jeho výsledek (nebo chybu).
 
-The syntax is:
+Syntaxe je:
 
 ```js
-let promise = Promise.race(iterable);
+let příslib = Promise.race(iterovatelnýObjekt);
 ```
 
-For instance, here the result will be `1`:
+Například zde bude výsledek `1`:
 
 ```js run
 Promise.race([
-  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
-  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+  new Promise((splň, zamítni) => setTimeout(() => splň(1), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Ouha!")), 2000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(3), 3000))
 ]).then(alert); // 1
 ```
 
-The first promise here was fastest, so it became the result. After the first settled promise "wins the race", all further results/errors are ignored.
+Zde byl nejrychlejší první příslib, takže výsledkem celé funkce se stane jeho výsledek. Poté, co první usazený příslib „vyhraje závod“ („race“), budou všechny ostatní výsledky a chyby ignorovány.
 
 
 ## Promise.any
 
-Similar to `Promise.race`, but waits only for the first fulfilled promise and gets its result. If all of the given promises are rejected, then the returned promise is rejected with [`AggregateError`](mdn:js/AggregateError) - a special error object that stores all promise errors in its `errors` property.
+Podobá se `Promise.race`, ale čeká jen na první příslib, který bude splněn, a vezme jeho výsledek. Budou-li všechny zadané přísliby zamítnuty, pak bude vrácený příslib zamítnut s chybou [`AggregateError`](mdn:js/AggregateError) -- speciálním chybovým objektem, který uloží chyby všech příslibů do své vlastnosti `errors`.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-let promise = Promise.any(iterable);
+let příslib = Promise.any(iterovatelný);
 ```
 
-For instance, here the result will be `1`:
+Například zde bude výsledek `1`:
 
 ```js run
 Promise.any([
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => resolve(1), 2000)),
-  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Ouha!")), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(1), 2000)),
+  new Promise((splň, zamítni) => setTimeout(() => splň(3), 3000))
 ]).then(alert); // 1
 ```
 
-The first promise here was fastest, but it was rejected, so the second promise became the result. After the first fulfilled promise "wins the race", all further results are ignored.
+Zde byl nejrychlejší první příslib, ale ten byl zamítnut, takže výsledkem funkce se stane výsledek druhého příslibu. Poté, co první splněný příslib „vyhraje závod“, budou všechny ostatní výsledky ignorovány.
 
-Here's an example when all promises fail:
+Zde je příklad, v němž všechny přísliby selžou:
 
 ```js run
 Promise.any([
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ouch!")), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Error!")), 2000))
-]).catch(error => {
-  console.log(error.constructor.name); // AggregateError
-  console.log(error.errors[0]); // Error: Ouch!
-  console.log(error.errors[1]); // Error: Error!
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Au!")), 1000)),
+  new Promise((splň, zamítni) => setTimeout(() => zamítni(new Error("Chyba!")), 2000))
+]).catch(chyba => {
+  console.log(chyba.constructor.name); // AggregateError
+  console.log(chyba.errors[0]); // Error: Au!
+  console.log(chyba.errors[1]); // Error: Chyba!
 });
 ```
 
-As you can see, error objects for failed promises are available in the `errors` property of the `AggregateError` object.
+Jak vidíte, chybové objekty neúspěšných příslibů jsou k dispozici ve vlastnosti `errors` objektu `AggregateError`.
 
 ## Promise.resolve/reject
 
-Methods `Promise.resolve` and `Promise.reject` are rarely needed in modern code, because `async/await` syntax (we'll cover it [a bit later](info:async-await)) makes them somewhat obsolete.
+Metody `Promise.resolve` a `Promise.reject` jsou v moderním kódu zapotřebí jen málokdy, protože syntaxe `async/await` (probereme ji [o něco později](info:async-await)) je činí poněkud zbytečnými.
 
-We cover them here for completeness and for those who can't use `async/await` for some reason.
+Probereme je zde pro úplnost a pro ty, kteří z nějakého důvodu nemohou `async/await` používat.
 
 ### Promise.resolve
 
-`Promise.resolve(value)` creates a resolved promise with the result `value`.
+`Promise.resolve(hodnota)` vytvoří splněný příslib s výsledkem `hodnota`.
 
-Same as:
+Je to totéž jako:
 
 ```js
-let promise = new Promise(resolve => resolve(value));
+let příslib = new Promise(splň => splň(hodnota));
 ```
 
-The method is used for compatibility, when a function is expected to return a promise.
+Tato metoda se používá kvůli kompatibilitě, když se od nějaké funkce očekává, že vrátí příslib.
 
-For example, the `loadCached` function below fetches a URL and remembers (caches) its content. For future calls with the same URL it immediately gets the previous content from cache, but uses `Promise.resolve` to make a promise of it, so the returned value is always a promise:
+Například následující funkce `načtiUložené` stáhne obsah z URL a zapamatuje si ho (uloží do mezipaměti). Při dalších voláních se stejným URL okamžitě načte z mezipaměti předchozí obsah, ale pomocí `Promise.resolve` z něj vyrobí příslib, takže návratová hodnota bude vždy příslib:
 
 ```js
 let cache = new Map();
 
-function loadCached(url) {
+function načtiUložené(url) {
   if (cache.has(url)) {
 *!*
     return Promise.resolve(cache.get(url)); // (*)
@@ -285,7 +285,7 @@ function loadCached(url) {
   }
 
   return fetch(url)
-    .then(response => response.text())
+    .then(odpověď => odpověď.text())
     .then(text => {
       cache.set(url,text);
       return text;
@@ -293,31 +293,31 @@ function loadCached(url) {
 }
 ```
 
-We can write `loadCached(url).then(…)`, because the function is guaranteed to return a promise. We can always use `.then` after `loadCached`. That's the purpose of `Promise.resolve` in the line `(*)`.
+Pak můžeme napsat `načtiUložené(url).then(…)`, protože tato funkce zaručeně vrátí příslib. Za `načtiUložené` tedy můžeme vždy použít `.then`. To je smyslem `Promise.resolve` na řádku `(*)`.
 
 ### Promise.reject
 
-`Promise.reject(error)` creates a rejected promise with `error`.
+`Promise.reject(chyba)` vytvoří zamítnutý příslib s chybou `chyba`.
 
-Same as:
+Je to totéž jako:
 
 ```js
-let promise = new Promise((resolve, reject) => reject(error));
+let příslib = new Promise((splň, zamítni) => zamítni(chyba));
 ```
 
-In practice, this method is almost never used.
+V praxi se tato metoda téměř nikdy nepoužívá.
 
-## Summary
+## Shrnutí
 
-There are 6 static methods of `Promise` class:
+Třída `Promise` obsahuje šest statických metod:
 
-1. `Promise.all(promises)` -- waits for all promises to resolve and returns an array of their results. If any of the given promises rejects, it becomes the error of `Promise.all`, and all other results are ignored.
-2. `Promise.allSettled(promises)` (recently added method) -- waits for all promises to settle and returns their results as an array of objects with:
-    - `status`: `"fulfilled"` or `"rejected"`
-    - `value` (if fulfilled) or `reason` (if rejected).
-3. `Promise.race(promises)` -- waits for the first promise to settle, and its result/error becomes the outcome.
-4. `Promise.any(promises)` (recently added method) -- waits for the first promise to fulfill, and its result becomes the outcome. If all of the given promises are rejected, [`AggregateError`](mdn:js/AggregateError) becomes the error of `Promise.any`.
-5. `Promise.resolve(value)` -- makes a resolved promise with the given value.
-6. `Promise.reject(error)` -- makes a rejected promise with the given error.
+1. `Promise.all(přísliby)` -- počká, až se všechny přísliby splní, a vrátí pole jejich výsledků. Pokud je kterýkoli ze zadaných příslibů zamítnut, jeho chyba se stane chybou `Promise.all` a všechny ostatní výsledky se ignorují.
+2. `Promise.allSettled(přísliby)` (nedávno přidaná metoda) -- počká, až se všechny přísliby usadí, a vrátí jejich výsledky jako pole objektů obsahujících:
+    - `status`: `"fulfilled"` (splněn) nebo `"rejected"` (zamítnut)
+    - `value` (je-li splněn) nebo `reason` (je-li zamítnut).
+3. `Promise.race(přísliby)` -- počká na první příslib, který se usadí, a výstupem se stane jeho výsledek nebo chyba.
+4. `Promise.any(přísliby)` (nedávno přidaná metoda) -- počká na první příslib, který se splní, a výstupem se stane jeho výsledek. Budou-li všechny zadané přísliby zamítnuty, chybou `Promise.any` se stane [`AggregateError`](mdn:js/AggregateError).
+5. `Promise.resolve(hodnota)` -- vytvoří splněný příslib se zadanou hodnotou.
+6. `Promise.reject(chyba)` -- vytvoří zamítnutý příslib se zadanou chybou.
 
-Of all these, `Promise.all` is probably the most common in practice.
+Ze všech těchto metod se v praxi asi nejčastěji používá `Promise.all`.
