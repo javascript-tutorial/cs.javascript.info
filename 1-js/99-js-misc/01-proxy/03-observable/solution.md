@@ -1,40 +1,40 @@
-The solution consists of two parts:
+Řešení se skládá ze dvou částí:
 
-1. Whenever `.observe(handler)` is called, we need to remember the handler somewhere, to be able to call it later. We can store handlers right in the object, using our symbol as the property key.
-2. We need a proxy with `set` trap to call handlers in case of any change.
+1. Kdykoli je zavoláno `.pozoruj(handler)`, musíme si handler někde pamatovat, abychom jej mohli volat později. Handlery si můžeme ukládat rovnou do objektu a jako klíč vlastnosti použít náš symbol.
+2. Potřebujeme proxy s pastí `set`, která v případě jakékoli změny zavolá handlery.
 
 ```js run
-let handlers = Symbol('handlers');
+let handlery = Symbol('handlery');
 
-function makeObservable(target) {
-  // 1. Initialize handlers store
-  target[handlers] = [];
+function učiňPozorovatelným(cíl) {
+  // 1. Inicializace skladu handlerů
+  cíl[handlery] = [];
 
-  // Store the handler function in array for future calls
-  target.observe = function(handler) {
-    this[handlers].push(handler);
+  // Uložíme funkci handleru do pole pro budoucí volání
+  cíl.pozoruj = function(handler) {
+    this[handlery].push(handler);
   };
 
-  // 2. Create a proxy to handle changes
-  return new Proxy(target, {
-    set(target, property, value, receiver) {
-      let success = Reflect.set(...arguments); // forward the operation to object
-      if (success) { // if there were no error while setting the property
-        // call all handlers
-        target[handlers].forEach(handler => handler(property, value));
+  // 2. Vytvoříme proxy pro zpracování změn
+  return new Proxy(cíl, {
+    set(cíl, vlastnost, hodnota, příjemce) {
+      let úspěch = Reflect.set(...arguments); // předáme operaci objektu
+      if (úspěch) { // pokud při nastavování vlastnosti nedošlo k chybě,
+        // zavoláme všechny handlery
+        cíl[handlery].forEach(handler => handler(vlastnost, hodnota));
       }
-      return success;
+      return úspěch;
     }
   });
 }
 
-let user = {};
+let uživatel = {};
 
-user = makeObservable(user);
+uživatel = učiňPozorovatelným(uživatel);
 
-user.observe((key, value) => {
-  alert(`SET ${key}=${value}`);
+uživatel.pozoruj((klíč, hodnota) => {
+  alert(`SET ${klíč}=${hodnota}`);
 });
 
-user.name = "John";
+uživatel.jméno = "Jan";
 ```

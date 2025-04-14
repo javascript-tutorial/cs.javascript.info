@@ -1,66 +1,66 @@
-# Proxy and Reflect
+# Třídy Proxy a Reflect
 
-A `Proxy` object wraps another object and intercepts operations, like reading/writing properties and others, optionally handling them on its own, or transparently allowing the object to handle them.
+Objekt třídy `Proxy` obaluje jiný objekt a zachytává operace na něm, například čtení nebo zápis vlastností a jiné. Volitelně je zpracovává sám o sobě nebo průhledně umožňuje objektu, aby je zpracovával sám.
 
-Proxies are used in many libraries and some browser frameworks. We'll see many practical applications in this article.
+Proxy jsou používány v mnoha knihovnách a některých frameworcích prohlížečů. V tomto článku uvidíme mnoho praktických aplikací.
 
 ## Proxy
 
-The syntax:
+Syntaxe:
 
 ```js
-let proxy = new Proxy(target, handler)
+let proxy = new Proxy(cíl, handler)
 ```
 
-- `target` -- is an object to wrap, can be anything, including functions.
-- `handler` -- proxy configuration: an object with "traps", methods that intercept operations. - e.g. `get` trap for reading a property of `target`, `set` trap for writing a property into `target`, and so on.
+- `cíl` -- je objekt, který má být obalen, může to být cokoli včetně funkcí.
+- `handler` -- konfigurace proxy: objekt s „pastmi“, metodami, které zachytávají operace, např. past `get` pro načítání vlastností objektu `cíl`, past `set` pro zápis vlastnosti do objektu `cíl`, a tak dále.
 
-For operations on `proxy`, if there's a corresponding trap in `handler`, then it runs, and the proxy has a chance to handle it, otherwise the operation is performed on `target`.
+Jestliže pro operaci prováděnou na `proxy` existuje odpovídající past v objektu `handler`, pak se spustí a proxy dostane šanci operaci zpracovat, v opačném případě je operace provedena na objektu `cíl`.
 
-As a starting example, let's create a proxy without any traps:
+Jako počáteční příklad vytvořme proxy bez jakýchkoli pastí:
 
 ```js run
-let target = {};
-let proxy = new Proxy(target, {}); // empty handler
+let cíl = {};
+let proxy = new Proxy(cíl, {}); // prázdný handler
 
-proxy.test = 5; // writing to proxy (1)
-alert(target.test); // 5, the property appeared in target!
+proxy.test = 5; // zápis do proxy (1)
+alert(cíl.test); // 5, vlastnost se objeví v objektu cíl!
 
-alert(proxy.test); // 5, we can read it from proxy too (2)
+alert(proxy.test); // 5, můžeme ji z proxy také načíst (2)
 
-for(let key in proxy) alert(key); // test, iteration works (3)
+for(let klíč in proxy) alert(klíč); // test, iterace funguje (3)
 ```
 
-As there are no traps, all operations on `proxy` are forwarded to `target`.
+Protože zde nejsou žádné pasti, všechny operace na `proxy` jsou předány objektu `cíl`.
 
-1. A writing operation `proxy.test=` sets the value on `target`.
-2. A reading operation `proxy.test` returns the value from `target`.
-3. Iteration over `proxy` returns values from `target`.
+1. Operace zápisu `proxy.test=` nastaví hodnotu v objektu `cíl`.
+2. Operace čtení `proxy.test` vrátí hodnotu z objektu `cíl`.
+3. Iterace nad objektem `proxy` vrací hodnoty z objektu `cíl`.
 
-As we can see, without any traps, `proxy` is a transparent wrapper around `target`.
+Jak vidíme, bez pastí je `proxy` průhledným obalem kolem objektu `cíl`.
 
 ![](proxy.svg)
 
-`Proxy` is a special "exotic object". It doesn't have own properties. With an empty `handler` it transparently forwards operations to `target`.
+`Proxy` je speciální „exotický objekt“, který nemá své vlastní vlastnosti. Je-li objekt `handler` prázdný, průhledně předává operace objektu `cíl`.
 
-To activate more capabilities, let's add traps.
+Abychom aktivovali jeho další schopnosti, přidejme pasti.
 
-What can we intercept with them?
+Co s nimi můžeme zachytávat?
 
-For most operations on objects, there's a so-called "internal method" in the JavaScript specification that describes how it works at the lowest level. For instance `[[Get]]`, the internal method to read a property, `[[Set]]`, the internal method to write a property, and so on. These methods are only used in the specification, we can't call them directly by name.
+Pro většinu operací na objektech je ve specifikaci JavaScriptu tzv. „interní metoda“, která popisuje, jak operace funguje na nejnižší úrovni. Například `[[Get]]`, interní metoda k načtení vlastnosti, `[[Set]]`, interní metoda k zápisu vlastnosti, a tak dále. Tyto metody se používají jen ve specifikaci, volat přímo názvem je nemůžeme.
 
-Proxy traps intercept invocations of these methods. They are listed in the [Proxy specification](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) and in the table below.
+Pasti proxy zachytávají vyvolávání těchto metod. Jsou vyjmenovány ve [specifikaci Proxy](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) a v následující tabulce.
 
-For every internal method, there's a trap in this table: the name of the method that we can add to the `handler` parameter of `new Proxy` to intercept the operation:
+Pro každou interní metodu je v této tabulce past: název metody, který můžeme přidat do parametru `handler` při volání `new Proxy`, abychom operaci zachytili:
 
-| Internal Method | Handler Method | Triggers when... |
+| Interní metoda | Metoda handleru | Spustí se při... |
 |-----------------|----------------|-------------|
-| `[[Get]]` | `get` | reading a property |
-| `[[Set]]` | `set` | writing to a property |
-| `[[HasProperty]]` | `has` | `in` operator |
-| `[[Delete]]` | `deleteProperty` | `delete` operator |
-| `[[Call]]` | `apply` | function call |
-| `[[Construct]]` | `construct` | `new` operator |
+| `[[Get]]` | `get` | načítání vlastnosti |
+| `[[Set]]` | `set` | zápisu do vlastnosti |
+| `[[HasProperty]]` | `has` | operátoru `in` |
+| `[[Delete]]` | `deleteProperty` | operátoru `delete` |
+| `[[Call]]` | `apply` | volání funkce |
+| `[[Construct]]` | `construct` | operátoru `new` |
 | `[[GetPrototypeOf]]` | `getPrototypeOf` | [Object.getPrototypeOf](mdn:/JavaScript/Reference/Global_Objects/Object/getPrototypeOf) |
 | `[[SetPrototypeOf]]` | `setPrototypeOf` | [Object.setPrototypeOf](mdn:/JavaScript/Reference/Global_Objects/Object/setPrototypeOf) |
 | `[[IsExtensible]]` | `isExtensible` | [Object.isExtensible](mdn:/JavaScript/Reference/Global_Objects/Object/isExtensible) |
@@ -69,144 +69,144 @@ For every internal method, there's a trap in this table: the name of the method 
 | `[[GetOwnProperty]]` | `getOwnPropertyDescriptor` | [Object.getOwnPropertyDescriptor](mdn:/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor), `for..in`, `Object.keys/values/entries` |
 | `[[OwnPropertyKeys]]` | `ownKeys` | [Object.getOwnPropertyNames](mdn:/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames), [Object.getOwnPropertySymbols](mdn:/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols), `for..in`, `Object.keys/values/entries` |
 
-```warn header="Invariants"
-JavaScript enforces some invariants -- conditions that must be fulfilled by internal methods and traps.
+```warn header="Invarianty"
+JavaScript vyžaduje některé invarianty -- podmínky, které musejí interní metody a pasti splňovat.
 
-Most of them are for return values:
-- `[[Set]]` must return `true` if the value was written successfully, otherwise `false`.
-- `[[Delete]]` must return `true` if the value was deleted successfully, otherwise `false`.
-- ...and so on, we'll see more in examples below.
+Většina z nich se týká návratových hodnot:
+- `[[Set]]` musí vracet `true`, jestliže byla hodnota úspěšně zapsána, jinak `false`.
+- `[[Delete]]` musí vracet `true`, jestliže byla hodnota úspěšně smazána, jinak `false`.
+- ...a tak dále, další uvidíme v příkladech níže.
 
-There are some other invariants, like:
-- `[[GetPrototypeOf]]`, applied to the proxy object must return the same value as `[[GetPrototypeOf]]` applied to the proxy object's target object. In other words, reading prototype of a proxy must always return the prototype of the target object.
+Existují i některé další invarianty, například:
+- `[[GetPrototypeOf]]` aplikovaná na proxy objekt musí vracet stejnou hodnotu jako `[[GetPrototypeOf]]` aplikovaná na cílový objekt tohoto proxy objektu. Jinými slovy, načítání prototypu proxy musí vždy vrátit prototyp cílového objektu.
 
-Traps can intercept these operations, but they must follow these rules.
+Pasti mohou tyto operace zachytávat, ale musejí dodržovat tato pravidla.
 
-Invariants ensure correct and consistent behavior of language features. The full invariants list is in [the specification](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots). You probably won't violate them if you're not doing something weird.
+Invarianty zajišťují korektní a konzistentní chování prvků jazyka. Úplný seznam invariant je obsažen ve [specifikaci](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots). Pokud nebudete dělat něco podivného, pravděpodobně je neporušíte.
 ```
 
-Let's see how that works in practical examples.
+Podívejme se na praktických příkladech, jak to funguje.
 
-## Default value with "get" trap
+## Výchozí hodnota s pastí „get“
 
-The most common traps are for reading/writing properties.
+Nejběžnější pasti jsou pro čtení a zápis vlastností.
 
-To intercept reading, the `handler` should have a method `get(target, property, receiver)`.
+Abychom zachytili čtení, `handler` by měl obsahovat metodu `get(cíl, vlastnost, příjemce)`.
 
-It triggers when a property is read, with following arguments:
+Když je vlastnost načítána, tato metoda se spustí s následujícími argumenty:
 
-- `target` -- is the target object, the one passed as the first argument to `new Proxy`,
-- `property` -- property name,
-- `receiver` -- if the target property is a getter, then `receiver` is the object that's going to be used as `this` in its call. Usually that's the `proxy` object itself (or an object that inherits from it, if we inherit from proxy). Right now we don't need this argument, so it will be explained in more detail later.
+- `cíl` -- je cílový objekt, ten, který byl předán do `new Proxy` jako první argument,
+- `vlastnost` -- název vlastnosti,
+- `příjemce` -- je-li cílová vlastnost getter, pak `příjemce` je objekt, který bude při volání tohoto getteru použit jako `this`. Obvykle je to samotný objekt `proxy` (nebo objekt, který je z něj zděděn, pokud dědíme z proxy). Prozatím tento argument nepotřebujeme, takže ho podrobněji vysvětlíme později.
 
-Let's use `get` to implement default values for an object.
+Použijme `get` k implementaci výchozích hodnot objektu.
 
-We'll make a numeric array that returns `0` for nonexistent values.
+Vytvořme číselné pole, které bude pro neexistující hodnoty vracet `0`.
 
-Usually when one tries to get a non-existing array item, they get `undefined`, but we'll wrap a regular array into the proxy that traps reading and returns `0` if there's no such property:
+Když se pokoušíme načíst neexistující prvek pole, obyčejně získáme `undefined`, ale my obalíme běžné pole do proxy, která bude obsahovat past na načítání a vracet `0`, pokud načítaná vlastnost neexistuje:
 
 ```js run
-let numbers = [0, 1, 2];
+let čísla = [0, 1, 2];
 
-numbers = new Proxy(numbers, {
-  get(target, prop) {
-    if (prop in target) {
-      return target[prop];
+čísla = new Proxy(čísla, {
+  get(cíl, vlastnost) {
+    if (vlastnost in cíl) {
+      return cíl[vlastnost];
     } else {
-      return 0; // default value
+      return 0; // výchozí hodnota
     }
   }
 });
 
 *!*
-alert( numbers[1] ); // 1
-alert( numbers[123] ); // 0 (no such item)
+alert( čísla[1] ); // 1
+alert( čísla[123] ); // 0 (takový prvek není)
 */!*
 ```
 
-As we can see, it's quite easy to do with a `get` trap.
+Jak vidíme, s pastí `get` je něco takového docela snadné.
 
-We can use `Proxy` to implement any logic for "default" values.
+Můžeme použít `Proxy` k implementaci jakékoli logiky pro „výchozí“ hodnoty.
 
-Imagine we have a dictionary, with phrases and their translations:
+Představme si, že máme slovník s větami a jejich překlady:
 
 ```js run
-let dictionary = {
-  'Hello': 'Hola',
-  'Bye': 'Adiós'
+let slovník = {
+  'Ahoj': 'Hola',
+  'Nashle': 'Adiós'
 };
 
-alert( dictionary['Hello'] ); // Hola
-alert( dictionary['Welcome'] ); // undefined
+alert( slovník['Ahoj'] ); // Hola
+alert( slovník['Vítejte'] ); // undefined
 ```
 
-Right now, if there's no phrase, reading from `dictionary` returns `undefined`. But in practice, leaving a phrase untranslated is usually better than `undefined`. So let's make it return an untranslated phrase in that case instead of `undefined`.
+Prozatím načtení věty, kterou `slovník` neobsahuje, vrací `undefined`. V praxi je však obvykle lepší nechat větu nepřeloženou než vrátit `undefined`. Nechme tedy slovník, aby v takovém případě vrátil místo `undefined` nepřeloženou větu.
 
-To achieve that, we'll wrap `dictionary` in a proxy that intercepts reading operations:
+Abychom toho dosáhli, obalíme `slovník` do proxy, která zachytává operace načítání:
 
 ```js run
-let dictionary = {
-  'Hello': 'Hola',
-  'Bye': 'Adiós'
+let slovník = {
+  'Ahoj': 'Hola',
+  'Nashle': 'Adiós'
 };
 
-dictionary = new Proxy(dictionary, {
+slovník = new Proxy(slovník, {
 *!*
-  get(target, phrase) { // intercept reading a property from dictionary
+  get(cíl, věta) { // zachytíme načítání vlastnosti ze slovníku
 */!*
-    if (phrase in target) { // if we have it in the dictionary
-      return target[phrase]; // return the translation
+    if (věta in cíl) { // máme-li ji ve slovníku,
+      return cíl[věta]; // vrátíme její překlad
     } else {
-      // otherwise, return the non-translated phrase
-      return phrase;
+      // jinak vrátíme nepřeloženou větu
+      return věta;
     }
   }
 });
 
-// Look up arbitrary phrases in the dictionary!
-// At worst, they're not translated.
-alert( dictionary['Hello'] ); // Hola
+// Podívejte se na různé věty ve slovníku!
+// Přinejhorším nebudou přeloženy.
+alert( slovník['Ahoj'] ); // Hola
 *!*
-alert( dictionary['Welcome to Proxy']); // Welcome to Proxy (no translation)
+alert( slovník['Vítejte v Proxy']); // Vítejte v Proxy (bez překladu)
 */!*
 ```
 
 ````smart
-Please note how the proxy overwrites the variable:
+Prosíme všimněte si, jak proxy přepisuje proměnnou:
 
 ```js
-dictionary = new Proxy(dictionary, ...);
+slovník = new Proxy(slovník, ...);
 ```
 
-The proxy should totally replace the target object everywhere. No one should ever reference the target object after it got proxied. Otherwise it's easy to mess up.
+Proxovaný objekt by měl cílový objekt všude zcela nahradit. Na cílový objekt by se po jeho nahrazení proxovaným objektem neměl nikdo nikde odkazovat. Jinak snadno naděláme nepořádek.
 ````
 
-## Validation with "set" trap
+## Ověřování pomocí pasti „set“
 
-Let's say we want an array exclusively for numbers. If a value of another type is added, there should be an error.
+Řekněme, že chceme pole výlučně pro čísla. Bude-li přidána hodnota jiného typu, měla by nastat chyba.
 
-The `set` trap triggers when a property is written.
+Když se zapisuje do vlastnosti, spustí se past `set`.
 
-`set(target, property, value, receiver)`:
+`set(cíl, vlastnost, hodnota, příjemce)`:
 
-- `target` -- is the target object, the one passed as the first argument to `new Proxy`,
-- `property` -- property name,
-- `value` -- property value,
-- `receiver` -- similar to `get` trap, matters only for setter properties.
+- `cíl` -- je cílový objekt, ten, který byl předán do `new Proxy` jako první argument,
+- `vlastnost` -- název vlastnosti,
+- `hodnota` -- hodnota vlastnosti,
+- `příjemce` -- podobně jako u pasti `get`, má význam jen pro settery.
 
-The `set` trap should return `true` if setting is successful, and `false` otherwise (triggers `TypeError`).
+Past `set` by měla vracet `true`, je-li nastavení úspěšné, a jinak `false` (vyvolá `TypeError`).
 
-Let's use it to validate new values:
+Použijme ji k ověřování nových hodnot:
 
 ```js run
-let numbers = [];
+let čísla = [];
 
-numbers = new Proxy(numbers, { // (*)
+čísla = new Proxy(čísla, { // (*)
 *!*
-  set(target, prop, val) { // to intercept property writing
+  set(cíl, vlastnost, hodnota) { // zachytává zápis do vlastností
 */!*
-    if (typeof val == 'number') {
-      target[prop] = val;
+    if (typeof hodnota == 'number') {
+      cíl[vlastnost] = hodnota;
       return true;
     } else {
       return false;
@@ -214,821 +214,819 @@ numbers = new Proxy(numbers, { // (*)
   }
 });
 
-numbers.push(1); // added successfully
-numbers.push(2); // added successfully
-alert("Length is: " + numbers.length); // 2
+čísla.push(1); // úspěšně přidáno
+čísla.push(2); // úspěšně přidáno
+alert("Délka pole je: " + čísla.length); // 2
 
 *!*
-numbers.push("test"); // TypeError ('set' on proxy returned false)
+čísla.push("test"); // TypeError ('set' na proxy vrátila false)
 */!*
 
-alert("This line is never reached (error in the line above)");
+alert("Na tento řádek se nikdy nedostaneme (chyba na řádku výše)");
 ```
 
-Please note: the built-in functionality of arrays is still working! Values are added by `push`. The `length` property auto-increases when values are added. Our proxy doesn't break anything.
+Prosíme všimněte si, že zabudovaná funkcionalita polí stále funguje! Hodnoty se přidávají metodou `push`. Vlastnost `length` se při přidávání hodnot automaticky zvyšuje. Naše proxy nic nepokazila.
 
-We don't have to override value-adding array methods like `push` and `unshift`, and so on, to add checks in there, because internally they use the `[[Set]]` operation that's intercepted by the proxy.
+Metody přidávání hodnot do polí jako `push`, `unshift` a podobně nemusíme kvůli přidání ověření přepisovat, protože vnitřně používají operaci `[[Set]]`, kterou proxy zachytává.
 
-So the code is clean and concise.
+Kód je tedy čistý a výstižný.
 
-```warn header="Don't forget to return `true`"
-As said above, there are invariants to be held.
+```warn header="Nezapomínejte vracet `true`"
+Jak bylo řečeno výše, existují invarianty, které je třeba dodržovat.
 
-For `set`, it must return `true` for a successful write.
+Pro `set` musíme při úspěšném zápisu vracet `true`.
 
-If we forget to do it or return any falsy value, the operation triggers `TypeError`.
+Pokud na to zapomeneme nebo vrátíme jakoukoli nepravdivou hodnotu, operace vyvolá `TypeError`.
 ```
 
-## Iteration with "ownKeys" and "getOwnPropertyDescriptor"
+## Iterace pomocí „ownKeys“ a „getOwnPropertyDescriptor“
 
-`Object.keys`, `for..in` loop and most other methods that iterate over object properties use `[[OwnPropertyKeys]]` internal method (intercepted by `ownKeys` trap) to get a list of properties.
+Metoda `Object.keys`, cyklus `for..in` a většina ostatních metod, které iterují nad vlastnostmi objektu, používají k načtení seznamu vlastností interní metodu `[[OwnPropertyKeys]]` (kterou zachytává past `ownKeys`).
 
-Such methods differ in details:
-- `Object.getOwnPropertyNames(obj)` returns non-symbol keys.
-- `Object.getOwnPropertySymbols(obj)` returns symbol keys.
-- `Object.keys/values()` returns non-symbol keys/values with `enumerable` flag (property flags were explained in the article <info:property-descriptors>).
-- `for..in` loops over non-symbol keys with `enumerable` flag, and also prototype keys.
+Tyto metody se liší v detailech:
+- `Object.getOwnPropertyNames(obj)` vrací nesymbolické klíče.
+- `Object.getOwnPropertySymbols(obj)` vrací symbolické klíče.
+- `Object.keys/values()` vrací nesymbolické klíče/hodnoty s přepínačem `enumerable` (přepínače vlastností byly vysvětleny v kapitole <info:property-descriptors>).
+- `for..in` cykluje nad nesymbolickými klíči s přepínačem `enumerable` a také nad klíči prototypu.
 
-...But all of them start with that list.
+...Všechny však začínají se seznamem vlastností vráceným touto metodou.
 
-In the example below we use `ownKeys` trap to make `for..in` loop over `user`, and also `Object.keys` and `Object.values`, to skip properties starting with an underscore `_`:
+V následujícím příkladu použijeme past `ownKeys`, abychom cyklus `for..in` nad objektem `uživatel`, stejně jako metody `Object.keys` a `Object.values`, přiměli přeskakovat vlastnosti začínající podtržítkem `_`:
 
 ```js run
-let user = {
-  name: "John",
-  age: 30,
-  _password: "***"
+let uživatel = {
+  jméno: "Jan",
+  věk: 30,
+  _heslo: "***"
 };
 
-user = new Proxy(user, {
+uživatel = new Proxy(uživatel, {
 *!*
-  ownKeys(target) {
+  ownKeys(cíl) {
 */!*
-    return Object.keys(target).filter(key => !key.startsWith('_'));
+    return Object.keys(cíl).filter(klíč => !klíč.startsWith('_'));
   }
 });
 
-// "ownKeys" filters out _password
-for(let key in user) alert(key); // name, then: age
+// „ownKeys“ odfiltruje _heslo
+for(let klíč in uživatel) alert(klíč); // jméno, pak: věk
 
-// same effect on these methods:
-alert( Object.keys(user) ); // name,age
-alert( Object.values(user) ); // John,30
+// stejný efekt má na těchto metodách:
+alert( Object.keys(uživatel) ); // jméno,věk
+alert( Object.values(uživatel) ); // Jan,30
 ```
 
-So far, it works.
+Dosud to funguje.
 
-Although, if we return a key that doesn't exist in the object, `Object.keys` won't list it:
+Ale jestliže vrátíme klíč, který v tomto objektu neexistuje, `Object.keys` jej nezpracuje:
 
 ```js run
-let user = { };
+let uživatel = { };
 
-user = new Proxy(user, {
+uživatel = new Proxy(uživatel, {
 *!*
-  ownKeys(target) {
+  ownKeys(cíl) {
 */!*
     return ['a', 'b', 'c'];
   }
 });
 
-alert( Object.keys(user) ); // <empty>
+alert( Object.keys(uživatel) ); // <prázdný seznam>
 ```
 
-Why? The reason is simple: `Object.keys` returns only properties with the `enumerable` flag. To check for it, it calls the internal method `[[GetOwnProperty]]` for every property to get [its descriptor](info:property-descriptors). And here, as there's no property, its descriptor is empty, no `enumerable` flag, so it's skipped.
+Proč? Důvod je prostý: metoda `Object.keys` vrací jen vlastnosti s přepínačem `enumerable`. Aby si jej ověřila, volá pro každou vlastnost interní metodu `[[GetOwnProperty]]`, aby získala [její deskriptor](info:property-descriptors). A protože zde žádná vlastnost není, její deskriptor je prázdný a neobsahuje přepínač `enumerable`, a tak je vlastnost přeskočena.
 
-For `Object.keys` to return a property, we need it to either exist in the object, with the `enumerable` flag, or we can intercept calls to `[[GetOwnProperty]]` (the trap `getOwnPropertyDescriptor` does it), and return a descriptor with `enumerable: true`.
+Aby `Object.keys` vracel vlastnost, musí buď tato vlastnost v objektu existovat s přepínačem `enumerable`, nebo můžeme zachytávat volání metody `[[GetOwnProperty]]` (to dělá past `getOwnPropertyDescriptor`) a vracet deskriptor obsahující `enumerable: true`.
 
-Here's an example of that:
+Zde je příklad:
 
 ```js run
-let user = { };
+let uživatel = { };
 
-user = new Proxy(user, {
-  ownKeys(target) { // called once to get a list of properties
+uživatel = new Proxy(uživatel, {
+  ownKeys(cíl) { // volána jednou pro získání seznamu vlastností
     return ['a', 'b', 'c'];
   },
 
-  getOwnPropertyDescriptor(target, prop) { // called for every property
+  getOwnPropertyDescriptor(cíl, vlastnost) { // volána pro každou vlastnost
     return {
       enumerable: true,
       configurable: true
-      /* ...other flags, probable "value:..." */
+      /* ...další přepínače, pravděpodobně "value:..." */
     };
   }
 
 });
 
-alert( Object.keys(user) ); // a, b, c
+alert( Object.keys(uživatel) ); // a, b, c
 ```
 
-Let's note once again: we only need to intercept `[[GetOwnProperty]]` if the property is absent in the object.
+Poznamenejme to znovu: jestliže vlastnost v objektu chybí, potřebujeme jen zachycovat `[[GetOwnProperty]]`.
 
-## Protected properties with "deleteProperty" and other traps
+## Ochrana vlastností pomocí „deleteProperty“ a jiných pastí
 
-There's a widespread convention that properties and methods prefixed by an underscore `_` are internal. They shouldn't be accessed from outside the object.
+Existuje široce přijímaná konvence, že vlastnosti a metody začínající podtržítkem `_` jsou interní. Nemělo by se k nim přistupovat zvnějšku objektu.
 
-Technically that's possible though:
+Technicky to však možné je:
 
 ```js run
-let user = {
-  name: "John",
-  _password: "secret"
+let uživatel = {
+  jméno: "Jan",
+  _heslo: "tajné"
 };
 
-alert(user._password); // secret
+alert(uživatel._heslo); // tajné
 ```
 
-Let's use proxies to prevent any access to properties starting with `_`.
+Abychom zabránili jakémukoli přístupu k vlastnostem, které začínají `_`, použijme proxy.
 
-We'll need the traps:
-- `get` to throw an error when reading such property,
-- `set` to throw an error when writing,
-- `deleteProperty` to throw an error when deleting,
-- `ownKeys` to exclude properties starting with `_` from `for..in` and methods like `Object.keys`.
+Potřebujeme tyto pasti:
+- `get` k vyvolání chyby při načítání takové vlastnosti,
+- `set` k vyvolání chyby při zapisování do ní,
+- `deleteProperty` k vyvolání chyby při jejím mazání,
+-  `ownKeys` k vyloučení vlastností začínajících `_` z cyklu `for..in` a metod jako `Object.keys`.
 
-Here's the code:
+Zde je kód:
 
 ```js run
-let user = {
-  name: "John",
-  _password: "***"
+let uživatel = {
+  jméno: "Jan",
+  _heslo: "***"
 };
 
-user = new Proxy(user, {
+uživatel = new Proxy(uživatel, {
 *!*
-  get(target, prop) {
+  get(cíl, vlastnost) {
 */!*
-    if (prop.startsWith('_')) {
-      throw new Error("Access denied");
+    if (vlastnost.startsWith('_')) {
+      throw new Error("Přístup zamítnut");
     }
-    let value = target[prop];
-    return (typeof value === 'function') ? value.bind(target) : value; // (*)
+    let hodnota = cíl[vlastnost];
+    return (typeof hodnota === 'function') ? hodnota.bind(cíl) : hodnota; // (*)
   },
 *!*
-  set(target, prop, val) { // to intercept property writing
+  set(cíl, vlastnost, hodnota) { // k zachycení zápisu do vlastnosti
 */!*
-    if (prop.startsWith('_')) {
-      throw new Error("Access denied");
+    if (vlastnost.startsWith('_')) {
+      throw new Error("Přístup zamítnut");
     } else {
-      target[prop] = val;
+      cíl[vlastnost] = hodnota;
       return true;
     }
   },
 *!*
-  deleteProperty(target, prop) { // to intercept property deletion
+  deleteProperty(cíl, vlastnost) { // k zachycení mazání vlastnosti
 */!*
-    if (prop.startsWith('_')) {
-      throw new Error("Access denied");
+    if (vlastnost.startsWith('_')) {
+      throw new Error("Přístup zamítnut");
     } else {
-      delete target[prop];
+      delete cíl[vlastnost];
       return true;
     }
   },
 *!*
-  ownKeys(target) { // to intercept property list
+  ownKeys(cíl) { // k zachycení seznamu vlastností
 */!*
-    return Object.keys(target).filter(key => !key.startsWith('_'));
+    return Object.keys(cíl).filter(klíč => !klíč.startsWith('_'));
   }
 });
 
-// "get" doesn't allow to read _password
+// „get“ neumožňuje načíst _heslo
 try {
-  alert(user._password); // Error: Access denied
+  alert(uživatel._heslo); // Chyba: Přístup zamítnut
 } catch(e) { alert(e.message); }
 
-// "set" doesn't allow to write _password
+// „set“ neumožňuje zapsat do _heslo
 try {
-  user._password = "test"; // Error: Access denied
+  uživatel._heslo = "test"; // Chyba: Přístup zamítnut
 } catch(e) { alert(e.message); }
 
-// "deleteProperty" doesn't allow to delete _password
+// „deleteProperty“ neumožňuje smazat _heslo
 try {
-  delete user._password; // Error: Access denied
+  delete uživatel._heslo; // Chyba: Přístup zamítnut
 } catch(e) { alert(e.message); }
 
-// "ownKeys" filters out _password
-for(let key in user) alert(key); // name
+// „ownKeys“ odfiltruje _heslo
+for(let klíč in uživatel) alert(klíč); // jméno
 ```
 
-Please note the important detail in the `get` trap, in the line `(*)`:
+Prosíme všimněte si důležitého detailu v pasti `get` na řádku `(*)`:
 
 ```js
-get(target, prop) {
+get(cíl, vlastnost) {
   // ...
-  let value = target[prop];
+  let hodnota = cíl[vlastnost];
 *!*
-  return (typeof value === 'function') ? value.bind(target) : value; // (*)
+  return (typeof hodnota === 'function') ? hodnota.bind(cíl) : hodnota; // (*)
 */!*
 }
 ```
 
-Why do we need a function to call `value.bind(target)`?
+Proč potřebujeme, aby funkce volala `hodnota.bind(cíl)`?
 
-The reason is that object methods, such as `user.checkPassword()`, must be able to access `_password`:
+Důvodem je, že objektové metody, např. `uživatel.ověřHeslo()`, musejí být schopny k `_heslo` přistupovat:
 
 ```js
-user = {
+uživatel = {
   // ...
-  checkPassword(value) {
-    // object method must be able to read _password
-    return value === this._password;
+  ověřHeslo(hodnota) {
+    // objektová metoda musí být schopna _heslo číst
+    return hodnota === this._heslo;
   }
 }
 ```
 
+Volání `uživatel.ověřHeslo()` získá jako `this` proxovaný objekt `uživatel` (objekt před tečkou se stane `this`), takže když se pokusí o přístup k `this._heslo`, aktivuje se past `get` (ta se spustí při načítání jakékoli vlastnosti) a vyvolá se chyba.
 
-A call to `user.checkPassword()` gets proxied `user` as `this` (the object before dot becomes `this`), so when it tries to access `this._password`, the `get` trap activates (it triggers on any property read) and throws an error.
+Proto na řádku `(*)` navážeme kontext objektových metod na původní objekt, `cíl`. Pak jejich následná volání budou jako `this` používat `cíl` bez jakýchkoli pastí.
 
-So we bind the context of object methods to the original object, `target`, in the line `(*)`. Then their future calls will use `target` as `this`, without any traps.
+Toto řešení zpravidla funguje, ale není ideální, protože nějaká metoda může předat neproxovaný objekt někam jinam a pak nastane zmatek: kde je původní objekt a kde proxovaný?
 
-That solution usually works, but isn't ideal, as a method may pass the unproxied object somewhere else, and then we'll get messed up: where's the original object, and where's the proxied one?
+Kromě toho objekt může být proxován několikrát (vícenásobné proxy mohou k objektu přidávat různé „úpravy“), a jestliže do metody předáme neobalený objekt, důsledky mohou být nečekané.
 
-Besides, an object may be proxied multiple times (multiple proxies may add different "tweaks" to the object), and if we pass an unwrapped object to a method, there may be unexpected consequences.
+Taková proxy by tedy neměla být používána všude.
 
-So, such a proxy shouldn't be used everywhere.
+```smart header="Soukromé vlastnosti třídy"
+Moderní JavaScriptové motory nativně podporují ve třídách soukromé vlastnosti, začínající znakem `#`. Jsou popsány v článku <info:private-protected-properties-methods>. Žádné proxy nejsou zapotřebí.
 
-```smart header="Private properties of a class"
-Modern JavaScript engines natively support private properties in classes, prefixed with `#`. They are described in the article <info:private-protected-properties-methods>. No proxies required.
-
-Such properties have their own issues though. In particular, they are not inherited.
+Takové vlastnosti však mají své vlastní problémy. Například nejsou děděny.
 ```
 
-## "In range" with "has" trap
+## „in“ pro rozsah s pastí „has“
 
-Let's see more examples.
+Podívejme se na další příklady.
 
-We have a range object:
+Máme objekt rozsahu:
 
 ```js
-let range = {
-  start: 1,
-  end: 10
+let rozsah = {
+  začátek: 1,
+  konec: 10
 };
 ```
 
-We'd like to use the `in` operator to check that a number is in `range`.
+K ověření, zda číslo leží v rozsahu `rozsah`, bychom rádi používali operátor `in`.
 
-The `has` trap intercepts `in` calls.
+Volání `in` zachytává past `has`.
 
-`has(target, property)`
+`has(cíl, vlastnost)`
 
-- `target` -- is the target object, passed as the first argument to `new Proxy`,
-- `property` -- property name
+- `cíl` -- je cílový objekt, předaný jako první argument do `new Proxy`,
+- `vlastnost` -- název vlastnosti.
 
-Here's the demo:
+Zde je demo:
 
 ```js run
-let range = {
-  start: 1,
-  end: 10
+let rozsah = {
+  začátek: 1,
+  konec: 10
 };
 
-range = new Proxy(range, {
+rozsah = new Proxy(rozsah, {
 *!*
-  has(target, prop) {
+  has(cíl, vlastnost) {
 */!*
-    return prop >= target.start && prop <= target.end;
+    return vlastnost >= cíl.začátek && vlastnost <= cíl.konec;
   }
 });
 
 *!*
-alert(5 in range); // true
-alert(50 in range); // false
+alert(5 in rozsah); // true
+alert(50 in rozsah); // false
 */!*
 ```
 
-Nice syntactic sugar, isn't it? And very simple to implement.
+Pěkný syntaktický cukr, že? A implementuje se velmi jednoduše.
 
-## Wrapping functions: "apply" [#proxy-apply]
+## Obalování funkcí: „apply“ [#proxy-apply]
 
-We can wrap a proxy around a function as well.
+Do proxy můžeme obalit i funkci.
 
-The `apply(target, thisArg, args)` trap handles calling a proxy as function:
+Past `apply(cíl, thisArg, args)` zpracovává volání proxy jako funkce:
 
-- `target` is the target object (function is an object in JavaScript),
-- `thisArg` is the value of `this`.
-- `args` is a list of arguments.
+- `cíl` je cílový objekt (funkce je v JavaScriptu objekt),
+- `thisArg` je hodnota `this`,
+- `args` je seznam argumentů.
 
-For example, let's recall `delay(f, ms)` decorator, that we did in the article <info:call-apply-decorators>.
+Vzpomeňme si například na dekorátor `zpozdi(f, ms)`, který jsme vytvořili v článku <info:call-apply-decorators>.
 
-In that article we did it without proxies. A call to `delay(f, ms)` returned a function that forwards all calls to `f` after `ms` milliseconds.
+V onom článku jsme to udělali bez proxy. Volání `zpozdi(f, ms)` vrátilo funkci, která funkci `f` předává všechna volání za `ms` milisekund.
 
-Here's the previous, function-based implementation:
+Zde je předchozí implementace založená na funkcích:
 
 ```js run
-function delay(f, ms) {
-  // return a wrapper that passes the call to f after the timeout
+function zpozdi(f, ms) {
+  // vrátí obal, který po uplynutí zadaného času předá volání funkci f
   return function() { // (*)
     setTimeout(() => f.apply(this, arguments), ms);
   };
 }
 
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
+function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
 }
 
-// after this wrapping, calls to sayHi will be delayed for 3 seconds
-sayHi = delay(sayHi, 3000);
+// po tomto obalení budou volání řekniAhoj pozdržena o 3 sekundy
+řekniAhoj = zpozdi(řekniAhoj, 3000);
 
-sayHi("John"); // Hello, John! (after 3 seconds)
+řekniAhoj("Jan"); // Ahoj, Jan! (po 3 sekundách)
 ```
 
-As we've seen already, that mostly works. The wrapper function `(*)` performs the call after the timeout.
+Jak jsme již viděli, většinou to funguje. Obalová funkce `(*)` provede volání po stanoveném čase.
 
-But a wrapper function does not forward property read/write operations or anything else. After the wrapping, the access is lost to properties of the original functions, such as `name`, `length` and others:
+Avšak obalová funkce nepředává dál operace čtení a zápisu do vlastností nebo cokoli jiného. Po obalení ztratíme přístup k vlastnostem původní funkce, např. `name`, `length` a jiným:
 
 ```js run
-function delay(f, ms) {
+function zpozdi(f, ms) {
   return function() {
     setTimeout(() => f.apply(this, arguments), ms);
   };
 }
 
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
+function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
 }
 
 *!*
-alert(sayHi.length); // 1 (function length is the arguments count in its declaration)
+alert(řekniAhoj.length); // 1 (length=délka, délka funkce je počet argumentů v její deklaraci)
 */!*
 
-sayHi = delay(sayHi, 3000);
+řekniAhoj = zpozdi(řekniAhoj, 3000);
 
 *!*
-alert(sayHi.length); // 0 (in the wrapper declaration, there are zero arguments)
+alert(řekniAhoj.length); // 0 (v deklaraci obalu je 0 argumentů)
 */!*
 ```
 
-`Proxy` is much more powerful, as it forwards everything to the target object.
+`Proxy` je mnohem silnější, jelikož cílovému objektu předává všechno.
 
-Let's use `Proxy` instead of a wrapping function:
+Použijme `Proxy` místo obalové funkce:
 
 ```js run
-function delay(f, ms) {
+function zpozdi(f, ms) {
   return new Proxy(f, {
-    apply(target, thisArg, args) {
-      setTimeout(() => target.apply(thisArg, args), ms);
+    apply(cíl, thisArg, args) {
+      setTimeout(() => cíl.apply(thisArg, args), ms);
     }
   });
 }
 
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
+function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
 }
 
-sayHi = delay(sayHi, 3000);
+řekniAhoj = zpozdi(řekniAhoj, 3000);
 
 *!*
-alert(sayHi.length); // 1 (*) proxy forwards "get length" operation to the target
+alert(řekniAhoj.length); // 1 (*) proxy předá cíli operaci „get length“
 */!*
 
-sayHi("John"); // Hello, John! (after 3 seconds)
+řekniAhoj("Jan"); // Ahoj, Jan! (po 3 sekundách)
 ```
 
-The result is the same, but now not only calls, but all operations on the proxy are forwarded to the original function. So `sayHi.length` is returned correctly after the wrapping in the line `(*)`.
+Výsledek je stejný, ale nyní se původní funkci předávají nejen volání, ale všechny operace na proxy. Po obalení se tedy `řekniAhoj.length` na řádku `(*)` vrátí správně.
 
-We've got a "richer" wrapper.
+Získali jsme „bohatší“ obal.
 
-Other traps exist: the full list is in the beginning of this article. Their usage pattern is similar to the above.
+Existují i jiné pasti: jejich úplný seznam je uveden na začátku tohoto článku. Jejich vzorec použití je podobný uvedenému.
 
 ## Reflect
 
-`Reflect` is a built-in object that simplifies creation of `Proxy`.
+`Reflect` je vestavěný objekt, který zjednodušuje vytváření `Proxy`.
 
-It was said previously that internal methods, such as `[[Get]]`, `[[Set]]` and others are specification-only, they can't be called directly.
+Již jsme uvedli, že interní metody, např. `[[Get]]`, `[[Set]]` a jiné, jsou jen specifikační a nemůžeme je volat přímo.
 
-The `Reflect` object makes that somewhat possible. Its methods are minimal wrappers around the internal methods.
+Objekt `Reflect` to částečně umožňuje. Jeho metody jsou minimální obaly okolo interních metod.
 
-Here are examples of operations and `Reflect` calls that do the same:
+Zde jsou příklady operací a volání `Reflect`, která udělají totéž:
 
-| Operation |  `Reflect` call | Internal method |
+| Operace | Volání `Reflect` | Interní metoda |
 |-----------------|----------------|-------------|
-| `obj[prop]` | `Reflect.get(obj, prop)` | `[[Get]]` |
-| `obj[prop] = value` | `Reflect.set(obj, prop, value)` | `[[Set]]` |
-| `delete obj[prop]` | `Reflect.deleteProperty(obj, prop)` | `[[Delete]]` |
-| `new F(value)` | `Reflect.construct(F, value)` | `[[Construct]]` |
+| `obj[vlastnost]` | `Reflect.get(obj, vlastnost)` | `[[Get]]` |
+| `obj[vlastnost] = hodnota` | `Reflect.set(obj, vlastnost, hodnota)` | `[[Set]]` |
+| `delete obj[vlastnost]` | `Reflect.deleteProperty(obj, vlastnost)` | `[[Delete]]` |
+| `new F(hodnota)` | `Reflect.construct(F, hodnota)` | `[[Construct]]` |
 | ... | ... | ... |
 
-For example:
+Například:
 
 ```js run
-let user = {};
+let uživatel = {};
 
-Reflect.set(user, 'name', 'John');
+Reflect.set(uživatel, 'jméno', 'Jan');
 
-alert(user.name); // John
+alert(uživatel.jméno); // Jan
 ```
 
-In particular, `Reflect` allows us to call operators (`new`, `delete`...) as functions (`Reflect.construct`, `Reflect.deleteProperty`, ...). That's an interesting capability, but here another thing is important.
+Konkrétně nám `Reflect` umožňuje volat operátory (`new`, `delete`...) jako funkce (`Reflect.construct`, `Reflect.deleteProperty`, ...). To je zajímavá schopnost, ale tady je důležitá jiná věc.
 
-**For every internal method, trappable by `Proxy`, there's a corresponding method in `Reflect`, with the same name and arguments as the `Proxy` trap.**
+**Pro každou interní metodu, kterou může zachytit `Proxy`, je v `Reflect` odpovídající metoda se stejným názvem a argumenty jako past v `Proxy`.**
 
-So we can use `Reflect` to forward an operation to the original object.
+Můžeme tedy používat `Reflect` k předání operace původnímu objektu.
 
-In this example, both traps `get` and `set` transparently (as if they didn't exist) forward reading/writing operations to the object, showing a message:
+V tomto příkladu obě pasti `get` a `set` průhledně (jako by neexistovaly) předají objektu operace čtení nebo zápisu a zobrazí zprávu:
 
 ```js run
-let user = {
-  name: "John",
+let uživatel = {
+  jméno: "Jan",
 };
 
-user = new Proxy(user, {
-  get(target, prop, receiver) {
-    alert(`GET ${prop}`);
+uživatel = new Proxy(uživatel, {
+  get(cíl, vlastnost, příjemce) {
+    alert(`GET ${vlastnost}`);
 *!*
-    return Reflect.get(target, prop, receiver); // (1)
+    return Reflect.get(cíl, vlastnost, příjemce); // (1)
 */!*
   },
-  set(target, prop, val, receiver) {
-    alert(`SET ${prop}=${val}`);
+  set(cíl, vlastnost, hodnota, příjemce) {
+    alert(`SET ${vlastnost}=${hodnota}`);
 *!*
-    return Reflect.set(target, prop, val, receiver); // (2)
+    return Reflect.set(cíl, vlastnost, hodnota, příjemce); // (2)
 */!*
   }
 });
 
-let name = user.name; // shows "GET name"
-user.name = "Pete"; // shows "SET name=Pete"
+let jméno = uživatel.jméno; // zobrazí "GET jméno"
+uživatel.jméno = "Petr"; // zobrazí "SET jméno=Petr"
 ```
 
-Here:
+Zde:
 
-- `Reflect.get` reads an object property.
-- `Reflect.set` writes an object property and returns `true` if successful, `false` otherwise.
+- `Reflect.get` načte vlastnost objektu.
+- `Reflect.set` zapíše vlastnost objektu a vrátí `true`, je-li úspěšná, jinak `false`.
 
-That is, everything's simple: if a trap wants to forward the call to the object, it's enough to call `Reflect.<method>` with the same arguments.
+Všechno je přitom jednoduché: jestliže past chce předat volání objektu, stačí jí volat `Reflect.<metoda>` se stejnými argumenty.
 
-In most cases we can do the same without `Reflect`, for instance, reading a property `Reflect.get(target, prop, receiver)` can be replaced by `target[prop]`. There are important nuances though.
+Ve většině případů můžeme udělat totéž i bez `Reflect`, například načítání vlastnosti pomocí `Reflect.get(cíl, vlastnost, příjemce)` můžeme nahradit za `cíl[vlastnost]`. Jsou tady však důležité drobnosti.
 
-### Proxying a getter
+### Proxování getteru
 
-Let's see an example that demonstrates why `Reflect.get` is better. And we'll also see why `get/set` have the third argument `receiver`, that we didn't use before.
+Podívejme se na příklad, který demonstruje, proč je `Reflect.get` lepší. A také uvidíme, proč `get/set` mají třetí argument `příjemce`, který jsme zatím nepoužívali.
 
-We have an object `user` with `_name` property and a getter for it.
+Máme objekt `uživatel` s vlastností `_jméno` a jejím getterem.
 
-Here's a proxy around it:
+Zde je proxy okolo něj:
 
 ```js run
-let user = {
-  _name: "Guest",
-  get name() {
-    return this._name;
+let uživatel = {
+  _jméno: "Host",
+  get jméno() {
+    return this._jméno;
   }
 };
 
 *!*
-let userProxy = new Proxy(user, {
-  get(target, prop, receiver) {
-    return target[prop];
+let uživatelProxy = new Proxy(uživatel, {
+  get(cíl, vlastnost, příjemce) {
+    return cíl[vlastnost];
   }
 });
 */!*
 
-alert(userProxy.name); // Guest
+alert(uživatelProxy.jméno); // Host
 ```
 
-The `get` trap is "transparent" here, it returns the original property, and doesn't do anything else. That's enough for our example.
+Past `get` je zde „průhledná“, vrací původní vlastnost a nic jiného nedělá. To pro náš příklad stačí.
 
-Everything seems to be all right. But let's make the example a little bit more complex.
+Vypadá to, že je všechno v pořádku. Učiňme však tento příklad trochu složitějším.
 
-After inheriting another object `admin` from `user`, we can observe the incorrect behavior:
+Po zdědění jiného objektu `správce` z objektu `uživatel` můžeme pozorovat nesprávné chování:
 
 ```js run
-let user = {
-  _name: "Guest",
-  get name() {
-    return this._name;
+let uživatel = {
+  _jméno: "Host",
+  get jméno() {
+    return this._jméno;
   }
 };
 
-let userProxy = new Proxy(user, {
-  get(target, prop, receiver) {
-    return target[prop]; // (*) target = user
+let uživatelProxy = new Proxy(uživatel, {
+  get(cíl, vlastnost, příjemce) {
+    return cíl[vlastnost]; // (*) cíl = uživatel
   }
 });
 
 *!*
-let admin = {
-  __proto__: userProxy,
-  _name: "Admin"
+let správce = {
+  __proto__: uživatelProxy,
+  _jméno: "Správce"
 };
 
-// Expected: Admin
-alert(admin.name); // outputs: Guest (?!?)
+// Očekáváme: Správce
+alert(správce.jméno); // vypíše: Host (?!?)
 */!*
 ```
 
-Reading `admin.name` should return `"Admin"`, not `"Guest"`!
+Načtení `správce.jméno` by mělo vrátit `"Správce"`, ne `"Host"`!
 
-What's the matter? Maybe we did something wrong with the inheritance?
+V čem je problém? Udělali jsme snad něco špatně s dědičností?
 
-But if we remove the proxy, then everything will work as expected.
+Pokud však odstraníme proxy, bude všechno fungovat tak, jak očekáváme.
 
-The problem is actually in the proxy, in the line `(*)`.
+Problém je ve skutečnosti v proxy na řádku `(*)`.
 
-1. When we read `admin.name`, as `admin` object doesn't have such own property, the search goes to its prototype.
-2. The prototype is `userProxy`.
-3. When reading `name` property from the proxy, its `get` trap triggers and returns it from the original object as `target[prop]` in the line `(*)`.
+1. Když načítáme `správce.jméno`, objekt `správce` takovou vlastnost nemá, a proto hledání přejde k jeho prototypu.
+2. Prototypem je `uživatelProxy`.
+3. Když načítáme vlastnost `jméno` z proxy, spustí se jeho past `get` a na řádku `(*)` ji vrátí z původního objektu jako `cíl[vlastnost]`.
 
-    A call to `target[prop]`, when `prop` is a getter, runs its code in the context `this=target`. So the result is `this._name` from the original object `target`, that is: from `user`.
+    Volání `cíl[vlastnost]`, když `vlastnost` je getter, spustí kód tohoto getteru v kontextu `this=cíl`. Výsledkem je tedy `this._jméno` z původního objektu `cíl`, což je: z objektu `uživatel`.
 
-To fix such situations, we need `receiver`, the third argument of `get` trap. It keeps the correct `this` to be passed to a getter. In our case that's `admin`.
+Abychom takové situace opravili, potřebujeme `příjemce`, třetí argument pasti `get`. Ten udržuje správné `this`, které bude předáno getteru. V našem případě to je `správce`.
 
-How to pass the context for a getter? For a regular function we could use `call/apply`, but that's a getter, it's not "called", just accessed.
+Jak předat kontext getteru? Pro běžnou funkci bychom mohli použít `call/apply`, ale tohle je getter, ten se „nevolá“, jenom se k němu přistupuje.
 
-`Reflect.get` can do that. Everything will work right if we use it.
+Může to udělat `Reflect.get`. Pokud ji použijeme, bude všechno fungovat správně.
 
-Here's the corrected variant:
+Zde je opravená varianta:
 
 ```js run
-let user = {
-  _name: "Guest",
-  get name() {
-    return this._name;
+let uživatel = {
+  _jméno: "Host",
+  get jméno() {
+    return this._jméno;
   }
 };
 
-let userProxy = new Proxy(user, {
-  get(target, prop, receiver) { // receiver = admin
+let uživatelProxy = new Proxy(uživatel, {
+  get(cíl, vlastnost, příjemce) { // příjemce = správce
 *!*
-    return Reflect.get(target, prop, receiver); // (*)
+    return Reflect.get(cíl, vlastnost, příjemce); // (*)
 */!*
   }
 });
 
 
-let admin = {
-  __proto__: userProxy,
-  _name: "Admin"
+let správce = {
+  __proto__: uživatelProxy,
+  _jméno: "Správce"
 };
 
 *!*
-alert(admin.name); // Admin
+alert(správce.jméno); // Správce
 */!*
 ```
 
-Now `receiver` that keeps a reference to the correct `this` (that is `admin`), is passed to the getter using `Reflect.get` in the line `(*)`.
+Nyní je getteru předán `příjemce`, který si udržuje odkaz na správné `this` (což je `správce`), pomocí `Reflect.get` na řádku `(*)`.
 
-We can rewrite the trap even shorter:
+Tuto past můžeme ještě zkrátit:
 
 ```js
-get(target, prop, receiver) {
+get(cíl, vlastnost, příjemce) {
   return Reflect.get(*!*...arguments*/!*);
 }
 ```
 
+Metody `Reflect` jsou pojmenovány přesně stejně jako pasti a přijímají stejné argumenty. Byly tak úmyslně navrženy.
 
-`Reflect` calls are named exactly the same way as traps and accept the same arguments. They were specifically designed this way.
+`return Reflect...` tedy poskytuje bezpečný a srozumitelný způsob, jak předat dál operaci a zajistit, abychom nezapomněli na nic, co se k ní vztahuje.
 
-So, `return Reflect...` provides a safe no-brainer to forward the operation and make sure we don't forget anything related to that.
+## Omezení proxy
 
-## Proxy limitations
+Proxy poskytují unikátní způsob, jak změnit nebo upravit chování existujících objektů na nejnižší úrovni. Přesto nejsou dokonalé a mají svá omezení.
 
-Proxies provide a unique way to alter or tweak the behavior of the existing objects at the lowest level. Still, it's not perfect. There are limitations.
+### Zabudované objekty: Interní sloty
 
-### Built-in objects: Internal slots
+Mnoho zabudovaných objektů, např. `Map`, `Set`, `Date`, `Promise` a jiné, využívá tzv. „interní sloty“.
 
-Many built-in objects, for example `Map`, `Set`, `Date`, `Promise` and others make use of so-called "internal slots".
+Podobají se vlastnostem, ale jsou rezervovány pro vnitřní, výhradně specifikační účely. Například `Map` si ukládá prvky do interního slotu `[[MapData]]`. Vestavěné metody k nim přistupují přímo, ne interními metodami `[[Get]]/[[Set]]`. `Proxy` je tedy nemůže zachytit.
 
-These are like properties, but reserved for internal, specification-only purposes. For instance, `Map` stores items in the internal slot `[[MapData]]`. Built-in methods access them directly, not via `[[Get]]/[[Set]]` internal methods. So `Proxy` can't intercept that.
+Proč se o to starat? Jsou přece interní!
 
-Why care? They're internal anyway!
+Zde je důvod. Když bude podobný vestavěný objekt proxován, proxy objekt nebude tyto interní sloty mít, takže vestavěné metody selžou.
 
-Well, here's the issue. After a built-in object like that gets proxied, the proxy doesn't have these internal slots, so built-in methods will fail.
-
-For example:
+Například:
 
 ```js run
-let map = new Map();
+let mapa = new Map();
 
-let proxy = new Proxy(map, {});
+let proxy = new Proxy(mapa, {});
 
 *!*
-proxy.set('test', 1); // Error
+proxy.set('test', 1); // Chyba
 */!*
 ```
 
-Internally, a `Map` stores all data in its `[[MapData]]` internal slot. The proxy doesn't have such a slot. The [built-in method `Map.prototype.set`](https://tc39.es/ecma262/#sec-map.prototype.set) method tries to access the internal property `this.[[MapData]]`, but because `this=proxy`, can't find it in `proxy` and just fails.
+Vnitřně si `Map` ukládá všechna data do svého interního slotu `[[MapData]]`. Proxy takový slot nemá. [Vestavěná metoda `Map.prototype.set`](https://tc39.es/ecma262/#sec-map.prototype.set) se pokusí přistoupit k interní vlastnosti `this.[[MapData]]`, ale protože `this=proxy`, nenajde ji v `proxy` a prostě selže.
 
-Fortunately, there's a way to fix it:
+Naštěstí existuje způsob, jak to opravit:
 
 ```js run
-let map = new Map();
+let mapa = new Map();
 
-let proxy = new Proxy(map, {
-  get(target, prop, receiver) {
-    let value = Reflect.get(...arguments);
+let proxy = new Proxy(mapa, {
+  get(cíl, vlastnost, příjemce) {
+    let hodnota = Reflect.get(...arguments);
 *!*
-    return typeof value == 'function' ? value.bind(target) : value;
+    return typeof hodnota == 'function' ? hodnota.bind(cíl) : hodnota;
 */!*
   }
 });
 
 proxy.set('test', 1);
-alert(proxy.get('test')); // 1 (works!)
+alert(proxy.get('test')); // 1 (funguje!)
 ```
 
-Now it works fine, because `get` trap binds function properties, such as `map.set`, to the target object (`map`) itself.
+Teď to funguje dobře, protože past `get` naváže funkční vlastnosti, např. `mapa.set`, na samotný cílový objekt (`mapa`).
 
-Unlike the previous example, the value of `this` inside `proxy.set(...)` will be not `proxy`, but the original `map`. So when the internal implementation of `set` tries to access `this.[[MapData]]` internal slot, it succeeds.
+Na rozdíl od předchozího příkladu hodnota `this` uvnitř `proxy.set(...)` nebude `proxy`, ale původní `mapa`. Když se tedy vnitřní implementace metody `set` pokusí přistoupit k internímu slotu `this.[[MapData]]`, uspěje.
 
-```smart header="`Array` has no internal slots"
-A notable exception: built-in `Array` doesn't use internal slots. That's for historical reasons, as it appeared so long ago.
+```smart header="`Array` nemá interní sloty"
+Významná výjimka: vestavěné `Array` nepoužívá interní sloty. Je tomu tak z historických důvodů, jelikož se objevilo již před dlouhou dobou.
 
-So there's no such problem when proxying an array.
+Při proxování pole tedy takový problém nenastává.
 ```
 
-### Private fields
+### Soukromá pole
 
-A similar thing happens with private class fields.
+Obdobný problém nastává se soukromými třídními poli.
 
-For example, `getName()` method accesses the private `#name` property and breaks after proxying:
+Například metoda `vraťJméno()` přistupuje k soukromé vlastnosti `#jméno` a po proxování se rozbije:
 
 ```js run
-class User {
-  #name = "Guest";
+class Uživatel {
+  #jméno = "Host";
 
-  getName() {
-    return this.#name;
+  vraťJméno() {
+    return this.#jméno;
   }
 }
 
-let user = new User();
+let uživatel = new Uživatel();
 
-user = new Proxy(user, {});
+uživatel = new Proxy(uživatel, {});
 
 *!*
-alert(user.getName()); // Error
+alert(uživatel.vraťJméno()); // Chyba
 */!*
 ```
 
-The reason is that private fields are implemented using internal slots. JavaScript does not use `[[Get]]/[[Set]]` when accessing them.
+Důvodem je, že soukromá pole jsou implementována pomocí interních slotů. Při přístupu k nim JavaScript nepoužívá `[[Get]]/[[Set]]`.
 
-In the call `getName()` the value of `this` is the proxied `user`, and it doesn't have the slot with private fields.
+Při volání `vraťJméno()` je hodnota `this` proxovaný `uživatel`, který neobsahuje slot se soukromými poli.
 
-Once again, the solution with binding the method makes it work:
+Opět to opraví řešení s navázáním metody:
 
 ```js run
-class User {
-  #name = "Guest";
+class Uživatel {
+  #jméno = "Host";
 
-  getName() {
-    return this.#name;
+  vraťJméno() {
+    return this.#jméno;
   }
 }
 
-let user = new User();
+let uživatel = new Uživatel();
 
-user = new Proxy(user, {
-  get(target, prop, receiver) {
-    let value = Reflect.get(...arguments);
-    return typeof value == 'function' ? value.bind(target) : value;
+uživatel = new Proxy(uživatel, {
+  get(cíl, vlastnost, příjemce) {
+    let hodnota = Reflect.get(...arguments);
+    return typeof hodnota == 'function' ? hodnota.bind(cíl) : hodnota;
   }
 });
 
-alert(user.getName()); // Guest
+alert(uživatel.vraťJméno()); // Host
 ```
 
-That said, the solution has drawbacks, as explained previously: it exposes the original object to the method, potentially allowing it to be passed further and breaking other proxied functionality.
+Při tom všem však toto řešení má nevýhody, jak bylo vysvětleno dříve: vystaví metodě původní objekt, čímž umožní, aby byl předáván dál a rozbíjel ostatní proxovanou funkcionalitu.
 
-### Proxy != target
+### Proxy != cíl
 
-The proxy and the original object are different objects. That's natural, right?
+Proxovaný a původní objekt jsou různé objekty. To je přirozené, ne?
 
-So if we use the original object as a key, and then proxy it, then the proxy can't be found:
+Když tedy použijeme původní objekt jako klíč a pak jej naproxujeme, proxovaný objekt nebude nalezen:
 
 ```js run
-let allUsers = new Set();
+let všichniUživatelé = new Set();
 
-class User {
-  constructor(name) {
-    this.name = name;
-    allUsers.add(this);
+class Uživatel {
+  constructor(jméno) {
+    this.jméno = jméno;
+    všichniUživatelé.add(this);
   }
 }
 
-let user = new User("John");
+let uživatel = new Uživatel("Jan");
 
-alert(allUsers.has(user)); // true
+alert(všichniUživatelé.has(uživatel)); // true
 
-user = new Proxy(user, {});
+uživatel = new Proxy(uživatel, {});
 
 *!*
-alert(allUsers.has(user)); // false
+alert(všichniUživatelé.has(uživatel)); // false
 */!*
 ```
 
-As we can see, after proxying we can't find `user` in the set `allUsers`, because the proxy is a different object.
+Jak vidíme, po naproxování nenajdeme objekt `uživatel` v množině `všichniUživatelé`, jelikož proxovaný objekt je jiný.
 
-```warn header="Proxies can't intercept a strict equality test `===`"
-Proxies can intercept many operators, such as `new` (with `construct`), `in` (with `has`), `delete` (with `deleteProperty`) and so on.
+```warn header="Proxy nezachycují test striktní rovnosti `===`"
+Proxy mohou zachytit mnoho operátorů, např. `new` (pomocí `construct`), `in` (pomocí `has`), `delete` (pomocí `deleteProperty`) a tak dále.
 
-But there's no way to intercept a strict equality test for objects. An object is strictly equal to itself only, and no other value.
+Neexistuje však žádný způsob, jak zachytit test striktní rovnosti objektů. Objekt je striktně roven pouze sám sobě a žádné jiné hodnotě.
 
-So all operations and built-in classes that compare objects for equality will differentiate between the object and the proxy. No transparent replacement here.
+Všechny operace a vestavěné třídy, které porovnávají objekty, tedy budou rozlišovat mezi objektem a jeho proxy. Tady neexistuje žádná průhledná náhrada.
 ```
 
-## Revocable proxies
+## Zrušitelné proxy
 
-A *revocable* proxy is a proxy that can be disabled.
+*Zrušitelná* proxy je proxy, která může být zakázána.
 
-Let's say we have a resource, and would like to close access to it any moment.
+Řekněme, že máme zdroj a chtěli bychom k němu kdykoli uzavřít přístup.
 
-What we can do is to wrap it into a revocable proxy, without any traps. Such a proxy will forward operations to object, and we can disable it at any moment.
+Můžeme to udělat tak, že jej obalíme do zrušitelné proxy bez jakýchkoli pastí. Taková proxy pak bude předávat objektu operace a my ji budeme moci kdykoli zakázat.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-let {proxy, revoke} = Proxy.revocable(target, handler)
+let {proxy, revoke} = Proxy.revocable(cíl, handler)
 ```
 
-The call returns an object with the `proxy` and `revoke` function to disable it.
+Toto volání vrátí objekt s `proxy` a funkci `revoke`, která tuto proxy zakáže.
 
-Here's an example:
+Zde je příklad:
 
 ```js run
-let object = {
-  data: "Valuable data"
+let objekt = {
+  data: "Cenná data"
 };
 
-let {proxy, revoke} = Proxy.revocable(object, {});
+let {proxy, revoke} = Proxy.revocable(objekt, {});
 
-// pass the proxy somewhere instead of object...
-alert(proxy.data); // Valuable data
+// předáme někam proxy místo objektu...
+alert(proxy.data); // Cenná data
 
-// later in our code
+// později v našem kódu
 revoke();
 
-// the proxy isn't working any more (revoked)
-alert(proxy.data); // Error
+// proxy nadále nefunguje (je zakázána)
+alert(proxy.data); // Chyba
 ```
 
-A call to `revoke()` removes all internal references to the target object from the proxy, so they are no longer connected. 
+Volání `revoke()` odstraní z proxy veškeré interní odkazy na cílový objekt, takže již nebudou propojeny.
 
-Initially, `revoke` is separate from `proxy`, so that we can pass `proxy` around while leaving `revoke` in the current scope.
+Na začátku je `revoke` od `proxy` odděleno, takže můžeme předávat `proxy` dále, zatímco `revoke` zůstane v aktuálním rozsahu platnosti.
 
-We can also bind `revoke` method to proxy by setting `proxy.revoke = revoke`.
+Můžeme také metodu `revoke` navázat na proxy nastavením `proxy.revoke = revoke`.
 
-Another option is to create a `WeakMap` that has `proxy` as the key and the corresponding `revoke` as the value, that allows to easily find `revoke` for a proxy:
+Další možností je vytvořit `WeakMap`, která obsahuje `proxy` jako klíč a odpovídající metodu `revoke` jako hodnotu, což nám umožní snadno najít `revoke` pro požadovanou proxy:
 
 ```js run
 *!*
-let revokes = new WeakMap();
+let zákazy = new WeakMap();
 */!*
 
-let object = {
-  data: "Valuable data"
+let objekt = {
+  data: "Cenná data"
 };
 
-let {proxy, revoke} = Proxy.revocable(object, {});
+let {proxy, revoke} = Proxy.revocable(objekt, {});
 
-revokes.set(proxy, revoke);
+zákazy.set(proxy, revoke);
 
-// ..somewhere else in our code..
-revoke = revokes.get(proxy);
+// ..někde jinde v našem kódu..
+revoke = zákazy.get(proxy);
 revoke();
 
-alert(proxy.data); // Error (revoked)
+alert(proxy.data); // Chyba (zakázáno)
 ```
 
-We use `WeakMap` instead of `Map` here because it won't block garbage collection. If a proxy object becomes "unreachable" (e.g. no variable references it any more), `WeakMap` allows it to be wiped from memory together with its `revoke` that we won't need any more.
+Zde používáme `WeakMap` místo `Map`, protože neblokuje sběr odpadků. Pokud se proxovaný objekt stane „nedosažitelným“ (např. protože na něj už nebude odkazovat žádná proměnná), `WeakMap` umožní, aby byl odstraněn z paměti spolu s jeho metodou `revoke`, která už nadále nebude zapotřebí.
 
-## References
+## Odkazy
 
-- Specification: [Proxy](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots).
+- Specifikace: [Proxy](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots).
 - MDN: [Proxy](mdn:/JavaScript/Reference/Global_Objects/Proxy).
 
-## Summary
+## Shrnutí
 
-`Proxy` is a wrapper around an object, that forwards operations on it to the object, optionally trapping some of them.
+`Proxy` je obal okolo objektu, který objektu předává operace na něm prováděné a může některé z nich zachytit.
 
-It can wrap any kind of object, including classes and functions.
+Může obalit objekt jakéhokoli druhu včetně tříd a funkcí.
 
-The syntax is:
+Syntaxe je:
 
 ```js
-let proxy = new Proxy(target, {
-  /* traps */
+let proxy = new Proxy(cíl, {
+  /* pasti */
 });
 ```
 
-...Then we should use `proxy` everywhere instead of `target`. A proxy doesn't have its own properties or methods. It traps an operation if the trap is provided, otherwise forwards it to `target` object.
+...Pak můžeme všude používat `proxy` místo objektu `cíl`. Proxy nemá své vlastní vlastnosti nebo metody. Jestliže mu je poskytnuta past, zachytí příslušnou operaci, jinak ji předá objektu `cíl`.
 
-We can trap:
-- Reading (`get`), writing (`set`), deleting (`deleteProperty`) a property (even a non-existing one).
-- Calling a function (`apply` trap).
-- The `new` operator (`construct` trap).
-- Many other operations (the full list is at the beginning of the article and in the [docs](mdn:/JavaScript/Reference/Global_Objects/Proxy)).
+Můžeme zachytávat:
+- Čtení (`get`), zápis (`set`), mazání (`deleteProperty`) vlastnosti (i neexistující).
+- Volání funkce (past `apply`).
+- Operátor `new` (past `construct`).
+- Mnoho dalších operací (jejich úplný seznam je na začátku tohoto článku a v [dokumentaci](mdn:/JavaScript/Reference/Global_Objects/Proxy)).
 
-That allows us to create "virtual" properties and methods, implement default values, observable objects, function decorators and so much more.
+To nám umožňuje vytvářet „virtuální“ vlastnosti a metody, implementovat výchozí hodnoty, pozorovatelné objekty, dekorátory funkcí a mnoho dalšího.
 
-We can also wrap an object multiple times in different proxies, decorating it with various aspects of functionality.
+Můžeme také obalit objekt vícekrát do různých proxy a dekorovat jej tak různými aspekty funkcionality.
 
-The [Reflect](mdn:/JavaScript/Reference/Global_Objects/Reflect) API is designed to complement [Proxy](mdn:/JavaScript/Reference/Global_Objects/Proxy). For any `Proxy` trap, there's a `Reflect` call with same arguments. We should use those to forward calls to target objects.
+API [Reflect](mdn:/JavaScript/Reference/Global_Objects/Reflect) je navrženo k doplnění [Proxy](mdn:/JavaScript/Reference/Global_Objects/Proxy). Pro každou past `Proxy` existuje v `Reflect` odpovídající metoda se stejnými argumenty. K předávání volání cílovým objektům bychom měli používat tyto metody.
 
-Proxies have some limitations:
+Proxy mají určitá omezení:
 
-- Built-in objects have "internal slots", access to those can't be proxied. See the workaround above.
-- The same holds true for private class fields, as they are internally implemented using slots. So proxied method calls must have the target object as `this` to access them.
-- Object equality tests `===` can't be intercepted.
-- Performance: benchmarks depend on an engine, but generally accessing a property using a simplest proxy takes a few times longer. In practice that only matters for some "bottleneck" objects though.
+- Vestavěné objekty mají „interní sloty“ a přístup k nim nemůže být proxován. Viz výše.
+- Totéž platí pro soukromá třídní pole, protože ta jsou vnitřně implementována pomocí slotů. Volání proxovaných metod tedy musí nastavovat cílový objekt jako `this`, aby se k nim dalo přistupovat.
+- Nelze zachytávat testy rovnosti objektů `===`.
+- Výkon: výsledky benchmarků závisejí na motoru, ale obecně přístup k vlastnosti i přes tu nejjednodušší proxy trvá několikrát déle. V praxi na tom však záleží jen u některých objektů, které tvoří „úzké hrdlo“.
