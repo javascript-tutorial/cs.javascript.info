@@ -1,20 +1,20 @@
 
-# Rewrite using async/await
+# Přepište za použití async/await
 
-Rewrite this example code from the chapter <info:promise-chaining> using `async/await` instead of `.then/catch`:
+Přepište tento příklad kódu z kapitoly <info:promise-chaining> za použití `async/await` namísto `.then/catch`:
 
 ```js run
-function loadJson(url) {
+function načtiJson(url) {
   return fetch(url)
-    .then(response => {
-      if (response.status == 200) {
-        return response.json();
+    .then(odpověď => {
+      if (odpověď.status == 200) {
+        return odpověď.json();
       } else {
-        throw new Error(response.status);
+        throw new Error(odpověď.status);
       }
     });
 }
 
-loadJson('https://javascript.info/no-such-user.json')
-  .catch(alert); // Error: 404
+načtiJson('https://javascript.info/takovy-uzivatel-neni.json')
+  .catch(alert); // Chyba: 404
 ```

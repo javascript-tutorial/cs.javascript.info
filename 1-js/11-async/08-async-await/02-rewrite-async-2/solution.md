@@ -1,49 +1,49 @@
 
-There are no tricks here. Just replace `.catch` with `try..catch` inside `demoGithubUser` and add `async/await` where needed:
+Nejsou tady žádné triky. Stačí uvnitř `demoUživatelGitHubu` nahradit `.catch` za `try..catch` a přidat `async/await`, kde jsou zapotřebí:
 
 ```js run
-class HttpError extends Error {
-  constructor(response) {
-    super(`${response.status} for ${response.url}`);
-    this.name = 'HttpError';
-    this.response = response;
+class ChybaHttp extends Error {
+  constructor(odpověď) {
+    super(`${odpověď.status} pro ${odpověď.url}`);
+    this.name = 'ChybaHttp';
+    this.odpověď = odpověď;
   }
 }
 
-async function loadJson(url) {
-  let response = await fetch(url);
-  if (response.status == 200) {
-    return response.json();
+async function načtiJson(url) {
+  let odpověď = await fetch(url);
+  if (odpověď.status == 200) {
+    return odpověď.json();
   } else {
-    throw new HttpError(response);
+    throw new ChybaHttp(odpověď);
   }
 }
 
-// Ask for a user name until github returns a valid user
-async function demoGithubUser() {
+// Ptáme se na uživatelské jméno, dokud GitHub nevrátí platného uživatele
+async function demoUživatelGitHubu() {
 
-  let user;
+  let uživatel;
   while(true) {
-    let name = prompt("Enter a name?", "iliakan");
+    let jméno = prompt("Zadejte jméno", "iliakan");
 
     try {
-      user = await loadJson(`https://api.github.com/users/${name}`);
-      break; // no error, exit loop
-    } catch(err) {
-      if (err instanceof HttpError && err.response.status == 404) {
-        // loop continues after the alert
-        alert("No such user, please reenter.");
+      uživatel = await načtiJson(`https://api.github.com/users/${jméno}`);
+      break; // žádná chyba, opustíme cyklus
+    } catch(chyba) {
+      if (chyba instanceof ChybaHttp && chyba.odpověď.status == 404) {
+        // po alertu bude cyklus pokračovat
+        alert("Takový uživatel neexistuje, prosím zadejte znovu.");
       } else {
-        // unknown error, rethrow
-        throw err;
+        // neznámá chyba, vyvoláme ji znovu
+        throw chyba;
       }
     }      
   }
 
 
-  alert(`Full name: ${user.name}.`);
-  return user;
+  alert(`Celé jméno: ${uživatel.name}.`);
+  return uživatel;
 }
 
-demoGithubUser();
+demoUživatelGitHubu();
 ```
