@@ -1,20 +1,20 @@
 
-Answers:
+Odpovědi:
 
 1. `true`. 
 
-    The assignment to `Rabbit.prototype` sets up `[[Prototype]]` for new objects, but it does not affect the existing ones. 
+    Přiřazení do `Králík.prototype` nastaví `[[Prototype]]` pro nové objekty, ale neovlivní již existující.
 
 2. `false`. 
 
-    Objects are assigned by reference. The object from `Rabbit.prototype` is not duplicated, it's still a single object referenced both by `Rabbit.prototype` and by the `[[Prototype]]` of `rabbit`. 
+    Objekty jsou přiřazovány odkazem. Objekt z `Králík.prototype` není duplikován, ale je to stále jediný objekt, na který se odkazují jak `Králík.prototype`, tak `[[Prototype]]` objektu `králík`. 
 
-    So when we change its content through one reference, it is visible through the other one.
+    Když tedy změníme jeho obsah skrz jeden odkaz, uvidíme to i druhým odkazem.
 
 3. `true`.
 
-    All `delete` operations are applied directly to the object. Here `delete rabbit.eats` tries to remove `eats` property from `rabbit`, but it doesn't have it. So the operation won't have any effect.
+    Všechny operace `delete` se aplikují přímo na objekt. Zde se `delete králík.žere` pokusí odstranit vlastnost `žere` z objektu `králík`, ale ten ji neobsahuje. Operace tedy nemá žádný účinek.
 
 4. `undefined`.
 
-    The property `eats` is deleted from the prototype, it doesn't exist any more.
+    Vlastnost `žere` je smazána z prototypu a nadále neexistuje.
