@@ -1,39 +1,39 @@
-describe("counter", function() {
+describe("čítač", function() {
 
-  it("increases from call to call", function() {
+  it("zvýší se při každém volání", function() {
 
-    let counter = makeCounter();
+    let čítač = vytvořČítač();
 
-    assert.equal( counter(), 0 ); 
-    assert.equal( counter(), 1 ); 
-    assert.equal( counter(), 2 ); 
+    assert.equal( čítač(), 0 ); 
+    assert.equal( čítač(), 1 ); 
+    assert.equal( čítač(), 2 ); 
   });
 
   
-  describe("counter.set", function() {
-    it("sets the count", function() {
+  describe("čítač.nastav", function() {
+    it("nastaví počet", function() {
 
-      let counter = makeCounter();
+      let čítač = vytvořČítač();
 
-      counter.set(10);
+      čítač.nastav(10);
 
-      assert.equal( counter(), 10 ); 
-      assert.equal( counter(), 11 ); 
+      assert.equal( čítač(), 10 ); 
+      assert.equal( čítač(), 11 ); 
     });
   });
   
-  describe("counter.decrease", function() {
-    it("decreases the count", function() {
+  describe("čítač.sniž", function() {
+    it("sníží počet", function() {
 
-      let counter = makeCounter();
+      let čítač = vytvořČítač();
 
-      counter.set(10);
+      čítač.nastav(10);
 
-      assert.equal( counter(), 10 ); 
+      assert.equal( čítač(), 10 ); 
 
-      counter.decrease();
+      čítač.sniž();
 
-      assert.equal( counter(), 10 ); 
+      assert.equal( čítač(), 10 ); 
 
     });
   });
