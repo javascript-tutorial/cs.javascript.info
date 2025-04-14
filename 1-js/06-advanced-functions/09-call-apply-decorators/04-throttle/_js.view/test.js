@@ -1,4 +1,4 @@
-describe("throttle(f, 1000)", function() {
+describe("tlum(f, 1000)", function() {
   let f1000;
   let log = "";
 
@@ -7,56 +7,56 @@ describe("throttle(f, 1000)", function() {
   }
 
   before(function() {
-    this.clock = sinon.useFakeTimers();
-    f1000 = throttle(f, 1000);
+    this.hodiny = sinon.useFakeTimers();
+    f1000 = tlum(f, 1000);
   });
 
-  it("the first call runs now", function() {
-    f1000(1); // runs now
+  it("první volání se spustí hned", function() {
+    f1000(1); // spustí se hned
     assert.equal(log, "1");
   });
 
-  it("then calls are ignored till 1000ms when the last call works", function() {
-    f1000(2); // (throttling - less than 1000ms since the last run)
-    f1000(3); // (throttling - less than 1000ms since the last run)
-    // after 1000 ms f(3) call is scheduled
+  it("další volání jsou ignorována 1000 ms, po nichž se spustí poslední volání", function() {
+    f1000(2); // (tlumeno - méně než 1000 ms od posledního spuštění)
+    f1000(3); // (tlumeno - méně než 1000 ms od posledního spuštění)
+    // po 1000 ms se načasuje volání f(3)
 
-    assert.equal(log, "1"); // right now only the 1st call done
+    assert.equal(log, "1"); // právě teď bylo provedeno jen 1. volání
 
-    this.clock.tick(1000); // after 1000ms...
-    assert.equal(log, "13"); // log==13, the call to f1000(3) is made
+    this.hodiny.tick(1000); // po 1000 ms...
+    assert.equal(log, "13"); // log==13, provede se volání f1000(3)
   });
 
-  it("the third call waits 1000ms after the second call", function() {
-    this.clock.tick(100);
-    f1000(4); // (throttling - less than 1000ms since the last run)
-    this.clock.tick(100);
-    f1000(5); // (throttling - less than 1000ms since the last run)
-    this.clock.tick(700);
-    f1000(6); // (throttling - less than 1000ms since the last run)
+  it("třetí volání čeká 1000 ms po druhém", function() {
+    this.hodiny.tick(100);
+    f1000(4); // (tlumeno - méně než 1000 ms od posledního spuštění)
+    this.hodiny.tick(100);
+    f1000(5); // (tlumeno - méně než 1000 ms od posledního spuštění)
+    this.hodiny.tick(700);
+    f1000(6); // (tlumeno - méně než 1000 ms od posledního spuštění)
 
-    this.clock.tick(100); // now 100 + 100 + 700 + 100 = 1000ms passed
+    this.hodiny.tick(100); // nyní uplynulo 100 + 100 + 700 + 100 = 1000 ms
 
-    assert.equal(log, "136"); // the last call was f(6)
+    assert.equal(log, "136"); // poslední volání bylo f(6)
   });
 
   after(function() {
-    this.clock.restore();
+    this.hodiny.restore();
   });
 
 });
 
-describe('throttle', () => {
+describe('tlum', () => {
 
-  it('runs a forwarded call once', done => {
+  it('spustí předané volání jednou', hotovo => {
     let log = '';
-    const f = str => log += str;
-    const f10 = throttle(f, 10);
-    f10('once');
+    const f = řetězec => log += řetězec;
+    const f10 = tlum(f, 10);
+    f10('jednou');
 
     setTimeout(() => {
-      assert.equal(log, 'once');
-      done();
+      assert.equal(log, 'jednou');
+      hotovo();
     }, 20);
   });
 
