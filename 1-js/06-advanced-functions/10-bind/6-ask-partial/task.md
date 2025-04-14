@@ -2,33 +2,33 @@ importance: 5
 
 ---
 
-# Partial application for login
+# Částečná aplikace pro přihlášení
 
-The task is a little more complex variant of <info:task/question-use-bind>. 
+Tato úloha je trochu složitější variantou úlohy <info:task/question-use-bind>. 
 
-The `user` object was modified. Now instead of two functions `loginOk/loginFail`, it has a single function `user.login(true/false)`.
+Objekt `uživatel` se změnil. Nyní má místo dvou funkcí `přihlášeníOK/přihlášeníSelhalo` jedinou funkci `uživatel.přihlaš(true/false)`.
 
-What should we pass `askPassword` in the code below, so that it calls `user.login(true)` as `ok` and `user.login(false)` as `fail`?
+Co bychom měli předat funkci `zeptejSeNaHeslo` v následujícím kódu, aby volala `uživatel.přihlaš(true)` jako `ok` a `uživatel.přihlaš(false)` jako `selhal`?
 
 ```js
-function askPassword(ok, fail) {
-  let password = prompt("Password?", '');
-  if (password == "rockstar") ok();
-  else fail();
+function zeptejSeNaHeslo(ok, selhal) {
+  let heslo = prompt("Heslo?", '');
+  if (heslo == "rockstar") ok();
+  else selhal();
 }
 
-let user = {
-  name: 'John',
+let uživatel = {
+  jméno: 'Jan',
 
-  login(result) {
-    alert( this.name + (result ? ' logged in' : ' failed to log in') );
+  přihlaš(výsledek) {
+    alert( this.jméno + (výsledek ? ' se přihlásil' : ' se nedokázal přihlásit') );
   }
 };
 
 *!*
-askPassword(?, ?); // ?
+zeptejSeNaHeslo(?, ?); // ?
 */!*
 ```
 
-Your changes should only modify the highlighted fragment.
+Vaše změny by měly modifikovat pouze zvýrazněnou část.
 

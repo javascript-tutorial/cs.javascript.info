@@ -2,18 +2,18 @@ importance: 5
 
 ---
 
-# Second bind
+# Druhá vazba
 
-Can we change `this` by additional binding?
+Můžeme změnit `this` další vazbou?
 
-What will be the output?
+Jaký bude výstup?
 
 ```js no-beautify
 function f() {
-  alert(this.name);
+  alert(this.jméno);
 }
 
-f = f.bind( {name: "John"} ).bind( {name: "Ann" } );
+f = f.bind( {jméno: "Jan"} ).bind( {jméno: "Anna" } );
 
 f();
 ```
