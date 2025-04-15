@@ -2,35 +2,35 @@ importance: 5
 
 ---
 
-# Sort by field
+# Řazení podle vlastnosti
 
-We've got an array of objects to sort:
+Máme pole objektů, které chceme seřadit:
 
 ```js
-let users = [
-  { name: "John", age: 20, surname: "Johnson" },
-  { name: "Pete", age: 18, surname: "Peterson" },
-  { name: "Ann", age: 19, surname: "Hathaway" }
+let uživatelé = [
+  { jméno: "Jan", věk: 20, příjmení: "Janík" },
+  { jméno: "Petr", věk: 18, příjmení: "Petřík" },
+  { jméno: "Anna", věk: 19, příjmení: "Hadrabová" }
 ];
 ```
 
-The usual way to do that would be:
+Obvyklý způsob, jak to udělat, by byl:
 
 ```js
-// by name (Ann, John, Pete)
-users.sort((a, b) => a.name > b.name ? 1 : -1);
+// podle jména (Anna, Jan, Petr)
+uživatelé.sort((a, b) => a.jméno > b.jméno ? 1 : -1);
 
-// by age (Pete, Ann, John)
-users.sort((a, b) => a.age > b.age ? 1 : -1);
+// podle věku (Petr, Anna, Jan)
+uživatelé.sort((a, b) => a.věk > b.věk ? 1 : -1);
 ```
 
-Can we make it even less verbose, like this?
+Můžeme to učinit ještě stručněji, například takto?
 
 ```js
-users.sort(byField('name'));
-users.sort(byField('age'));
+uživatelé.sort(podleVlastnosti('jméno'));
+uživatelé.sort(podleVlastnosti('věk'));
 ```
 
-So, instead of writing a function, just put `byField(fieldName)`.
+Místo psaní funkce tedy jednoduše napíšeme `podleVlastnosti(názevVlastnosti)`.
 
-Write the function `byField` that can be used for that.
+Napište funkci `podleVlastnosti`, kterou k tomu můžeme použít.

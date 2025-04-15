@@ -1,5 +1,5 @@
-function byField(fieldName){
+function podleVlastnosti(názevVlastnosti){
 
-  // Your code goes here.
+  // Sem přijde váš kód.
 
 }
