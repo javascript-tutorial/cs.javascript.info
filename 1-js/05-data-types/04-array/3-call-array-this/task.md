@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Calling in an array context
+# Volání v kontextu pole
 
-What is the result? Why?
+Jaký je výsledek? Proč?
 
 ```js
-let arr = ["a", "b"];
+let pole = ["a", "b"];
 
-arr.push(function() {
+pole.push(function() {
   alert( this );
 });
 
-arr[2](); // ?
+pole[2](); // ?
 ```
 

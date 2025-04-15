@@ -2,18 +2,18 @@ importance: 3
 
 ---
 
-# Is array copied?
+# Zkopíruje se pole?
 
-What is this code going to show?
+Co zobrazí tento kód?
 
 ```js
-let fruits = ["Apples", "Pear", "Orange"];
+let ovoce = ["Jablko", "Hruška", "Pomeranč"];
 
-// push a new value into the "copy"
-let shoppingCart = fruits;
-shoppingCart.push("Banana");
+// přidáme do „kopie“ novou hodnotu
+let nákupníKošík = ovoce;
+nákupníKošík.push("Banán");
 
-// what's in fruits?
-alert( fruits.length ); // ?
+// co bude v poli ovoce?
+alert( ovoce.length ); // ?
 ```
 

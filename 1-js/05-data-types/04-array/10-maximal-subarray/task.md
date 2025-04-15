@@ -2,29 +2,29 @@ importance: 2
 
 ---
 
-# A maximal subarray
+# Maximální podpole
 
-The input is an array of numbers, e.g. `arr = [1, -2, 3, 4, -9, 6]`.
+Na vstupu je pole čísel, např. `pole = [1, -2, 3, 4, -9, 6]`.
 
-The task is: find the contiguous subarray of `arr` with the maximal sum of items.
+Úkol zní: najděte souvislé podpole tohoto pole s maximálním součtem prvků.
 
-Write the function `getMaxSubSum(arr)` that will return that sum.
+Napište funkci `vraťMaxSoučetPodpole(pole)`, která tento součet vrátí.
 
-For instance:
-
-```js
-getMaxSubSum([-1, *!*2, 3*/!*, -9]) == 5 (the sum of highlighted items)
-getMaxSubSum([*!*2, -1, 2, 3*/!*, -9]) == 6
-getMaxSubSum([-1, 2, 3, -9, *!*11*/!*]) == 11
-getMaxSubSum([-2, -1, *!*1, 2*/!*]) == 3
-getMaxSubSum([*!*100*/!*, -9, 2, -3, 5]) == 100
-getMaxSubSum([*!*1, 2, 3*/!*]) == 6 (take all)
-```
-
-If all items are negative, it means that we take none (the subarray is empty), so the sum is zero:
+Příklad:
 
 ```js
-getMaxSubSum([-1, -2, -3]) = 0
+vraťMaxSoučetPodpole([-1, *!*2, 3*/!*, -9]) == 5 (součet zvýrazněných prvků)
+vraťMaxSoučetPodpole([*!*2, -1, 2, 3*/!*, -9]) == 6
+vraťMaxSoučetPodpole([-1, 2, 3, -9, *!*11*/!*]) == 11
+vraťMaxSoučetPodpole([-2, -1, *!*1, 2*/!*]) == 3
+vraťMaxSoučetPodpole([*!*100*/!*, -9, 2, -3, 5]) == 100
+vraťMaxSoučetPodpole([*!*1, 2, 3*/!*]) == 6 (vezmi vše)
 ```
 
-Please try to think of a fast solution: [O(n<sup>2</sup>)](https://en.wikipedia.org/wiki/Big_O_notation) or even O(n) if you can.
+Jsou-li všechny prvky záporné, znamená to, že nevezmeme žádný (podpole je prázdné), takže součet je nulový:
+
+```js
+vraťMaxSoučetPodpole([-1, -2, -3]) = 0
+```
+
+Snažte se prosíme vymyslet rychlé řešení: [O(n<sup>2</sup>)](https://cs.wikipedia.org/wiki/Landauova_notace) nebo dokonce O(n), jestliže to dokážete.

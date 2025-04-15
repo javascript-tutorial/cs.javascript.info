@@ -1,11 +1,11 @@
-function getMaxSubSum(arr) {
-  let maxSum = 0;
-  let partialSum = 0;
+function vraťMaxSoučetPodpole(arr) {
+  let maxSoučet = 0;
+  let částečnýSoučet = 0;
 
-  for (let item of arr) {
-    partialSum += item;
-    maxSum = Math.max(maxSum, partialSum);
-    if (partialSum < 0) partialSum = 0;
+  for (let prvek of pole) {
+    částečnýSoučet += prvek;
+    maxSoučet = Math.max(maxSoučet, částečnýSoučet);
+    if (částečnýSoučet < 0) částečnýSoučet = 0;
   }
-  return maxSum;
+  return maxSoučet;
 }
