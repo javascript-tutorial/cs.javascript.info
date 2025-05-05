@@ -22,7 +22,7 @@ Otevřou se vývojářské nástroje na záložce „Console“.
 
 Budou vypadat zhruba takto:
 
-![chrome](chrome.png)
+![chrome](chrome.webp)
 
 Vzhled vývojářských nástrojů závisí na vaší verzi Chrome. Čas od času se mění, ale měl by se podobat obrázku.
 
@@ -49,7 +49,11 @@ Jejich vzhled je vcelku podobný. Až budete vědět, jak používat nástroje v
 
 Safari (prohlížeč pro Mac, není podporován ve Windows nebo Linuxu) je v tomto ohledu trochu zvláštní. Nejprve musíme povolit „menu Vývoj“.
 
+<<<<<<< HEAD
 Otevřete „Preferences“ a jděte na záložku „Advanced“. Dole uvidíte checkbox, který zaškrtněte:
+=======
+Open Settings and go to the "Advanced" pane. There's a checkbox at the bottom:
+>>>>>>> 540d753e90789205fc6e75c502f68382c87dea9b
 
 ![safari](safari.png)
 
