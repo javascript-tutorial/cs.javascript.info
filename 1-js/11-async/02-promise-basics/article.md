@@ -36,7 +36,7 @@ So to summarize: the executor runs automatically and attempts to perform a job. 
 The `promise` object returned by the `new Promise` constructor has these internal properties:
 
 - `state` — initially `"pending"`, then changes to either `"fulfilled"` when `resolve` is called or `"rejected"` when `reject` is called.
-- `result` — initially `undefined`, then changes to `value` when `resolve(value)` called or `error` when `reject(error)` is called.
+- `result` — initially `undefined`, then changes to `value` when `resolve(value)` is called or `error` when `reject(error)` is called.
 
 So the executor eventually moves `promise` to one of these states:
 
@@ -46,7 +46,7 @@ Later we'll see how "fans" can subscribe to these changes.
 
 Here's an example of a promise constructor and a simple executor function with  "producing code" that takes time (via `setTimeout`):
 
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   // the function is executed automatically when the promise is constructed
 
@@ -222,7 +222,7 @@ The idea of `finally` is to set up a handler for performing cleanup/finalizing a
 
 E.g. stopping loading indicators, closing no longer needed connections, etc.
 
-Think of it as a party finisher. No matter was a party good or bad, how many friends were in it, we still need (or at least should) do a cleanup after it.
+Think of it as a party finisher. Irresepective of whether a party was good or bad, how many friends were in it, we still need (or at least should) do a cleanup after it.
 
 The code may look like this:
 
@@ -281,7 +281,7 @@ To summarize:
 - If a `finally` handler returns something, it's ignored.
 - When `finally` throws an error, then the execution goes to the nearest error handler.
 
-These features are helpful and make things work just the right way if we `finally` how it's supposed to be used: for generic cleanup procedures.
+These features are helpful and make things work just the right way if we use `finally` how it's supposed to be used: for generic cleanup procedures.
 
 ````smart header="We can attach handlers to settled promises"
 If a promise is pending, `.then/catch/finally` handlers wait for its outcome.

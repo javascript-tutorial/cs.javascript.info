@@ -29,9 +29,8 @@ Hlavní rozdíl mezi „textovým editorem“ a „IDE“ je, že „IDE“ prac
 
 V praxi mají textové editory obvykle velké množství zásuvných modulů a rozšíření včetně syntaktických analyzátorů a automatického doplňování na adresářové úrovni, takže mezi textovými editory a vývojovými prostředími neexistuje pevně daná hranice.
 
-Vaši pozornost si zasluhují následující možnosti:
+Možností je mnoho, například:
 
-- [Atom](https://atom.io/) (různé platformy, zdarma).
 - [Sublime Text](http://www.sublimetext.com) (různé platformy, shareware).
 - [Notepad++](https://notepad-plus-plus.org/) (Windows, zdarma).
 - Také [Vim](http://www.vim.org/) a [Emacs](https://www.gnu.org/software/emacs/) jsou výborné, jestliže je umíte používat.
@@ -42,4 +41,9 @@ Ve výše uvedených seznamech jsou zmíněny editory, které já nebo moji př�
 
 Svět je velký a existují v něm i jiné skvělé editory. Vyberte si prosím ten, který se vám nejvíce líbí.
 
-Výběr editoru, stejně jako výběr každého nástroje, je individuální záležitost a závisí na projektech, zvyklostech a osobním vkusu každého vývojáře.
+Výběr editoru, stejně jako výběr kteréhokoli jiného nástroje, je individuální záležitost a závisí na vašich projektech, zvyklostech a osobním vkusu.
+
+Autorovo osobní mínění:
+
+- Když vyvíjím převážně frontend, používám [Visual Studio Code](https://code.visualstudio.com/).
+- Jinak, pokud je to většinou jiný jazyk/platforma a částečně frontend, zvažte jiné editory, například XCode (Mac), Visual Studio (Windows) nebo rodinu Jetbrains (Webstorm, PHPStorm, RubyMine atd. v závislosti na jazyce).
