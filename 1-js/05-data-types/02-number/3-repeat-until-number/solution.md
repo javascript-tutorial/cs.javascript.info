@@ -1,23 +1,23 @@
 
 ```js run demo
-function readNumber() {
-  let num;
+function načtiČíslo() {
+  let číslo;
 
   do {
-    num = prompt("Enter a number please?", 0);
-  } while ( !isFinite(num) );
+    číslo = prompt("Zadejte číslo, prosím:", 0);
+  } while ( !isFinite(číslo) );
 
-  if (num === null || num === '') return null;
+  if (číslo === null || číslo === '') return null;
   
-  return +num;
+  return +číslo;
 }
 
-alert(`Read: ${readNumber()}`);
+alert(`Načteno: ${načtiČíslo()}`);
 ```
 
-The solution is a little bit more intricate that it could be because we need to handle `null`/empty lines.
+Řešení je trochu složitější, než by mohlo být, protože si musíme poradit s `null`/prázdnými řádky.
 
-So we actually accept the input until it is a "regular number". Both `null` (cancel) and empty line also fit that condition, because in numeric form they are `0`.
+Ve skutečnosti tedy přijímáme vstup tak dlouho, dokud to není „skutečné číslo“. Tuto podmínku splňují i `null` (storno) a prázdný řádek, protože v číselné podobě jsou obě `0`.
 
-After we stopped, we need to treat `null` and empty line specially (return `null`), because converting them to a number would return `0`.
+Po skončení musíme zacházet s `null` a s prázdným řádkem speciálně (vrátit `null`), jelikož jejich konverze na číslo by vrátila `0`.
 
