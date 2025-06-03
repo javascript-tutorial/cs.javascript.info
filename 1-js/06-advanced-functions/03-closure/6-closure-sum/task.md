@@ -2,16 +2,16 @@ importance: 4
 
 ---
 
-# Sum with closures
+# Součet s uzávěry
 
-Write function `sum` that works like this: `sum(a)(b) = a+b`.
+Napište funkci `sečti`, která bude fungovat takto: `sečti(a)(b) = a+b`.
 
-Yes, exactly this way, using double parentheses (not a mistype).
+Ano, přesně takto, pomocí dvojích závorek (to není překlep).
 
-For instance:
+Například:
 
 ```js
-sum(1)(2) = 3
-sum(5)(-1) = 4
+sečti(1)(2) = 3
+sečti(5)(-1) = 4
 ```
 
