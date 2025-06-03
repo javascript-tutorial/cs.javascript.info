@@ -1,19 +1,19 @@
-describe("sum", function(){
+describe("sečti", function(){
   
-  it("sum(1)(2) == 3", function(){
-    assert.equal(3, sum(1)(2));
+  it("sečti(1)(2) == 3", function(){
+    assert.equal(3, sečti(1)(2));
   });
 
-  it("sum(5)(-1)(2) == 6", function(){
-    assert.equal(6, sum(5)(-1)(2));
+  it("sečti(5)(-1)(2) == 6", function(){
+    assert.equal(6, sečti(5)(-1)(2));
   });
   
-  it("sum(6)(-1)(-2)(-3) == 0", function(){
-    assert.equal(0, sum(6)(-1)(-2)(-3));
+  it("sečti(6)(-1)(-2)(-3) == 0", function(){
+    assert.equal(0, sečti(6)(-1)(-2)(-3));
   });
 
-  it("sum(0)(1)(2)(3)(4)(5) == 15", function(){
-    assert.equal(15, sum(0)(1)(2)(3)(4)(5));
+  it("sečti(0)(1)(2)(3)(4)(5) == 15", function(){
+    assert.equal(15, sečti(0)(1)(2)(3)(4)(5));
   });
 });
 
