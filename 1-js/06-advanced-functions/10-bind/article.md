@@ -125,7 +125,7 @@ funkceUživatel(); // Jan
 */!*
 ```
 
-Zde je `funkce.bind(uživatel)` jako „vázaná varianta“ `funkce` s napevno nastaveným `this=uživatel`.
+Zde je `funkce.bind(uživatel)` „vázanou variantou“ `funkce` s napevno nastaveným `this=uživatel`.
 
 Všechny argumenty se předávají do původní `funkce` beze změny, například:
 

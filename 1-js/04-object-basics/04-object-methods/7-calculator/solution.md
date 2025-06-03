@@ -1,21 +1,21 @@
 
 ```js run demo solution
-let calculator = {
-  sum() {
+let kalkulátor = {
+  součet() {
     return this.a + this.b;
   },
 
-  mul() {
+  součin() {
     return this.a * this.b;
   },
 
-  read() {
+  načti() {
     this.a = +prompt('a?', 0);
     this.b = +prompt('b?', 0);
   }
 };
 
-calculator.read();
-alert( calculator.sum() );
-alert( calculator.mul() );
+kalkulátor.načti();
+alert( kalkulátor.součet() );
+alert( kalkulátor.součin() );
 ```

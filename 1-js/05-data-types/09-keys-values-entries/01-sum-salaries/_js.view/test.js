@@ -1,15 +1,15 @@
-describe("sumSalaries", function() {
-  it("returns sum of salaries", function() {
-    let salaries = {
-      "John": 100,
-      "Pete": 300,
-      "Mary": 250
+describe("sečtiProdeje", function() {
+  it("vrátí součet prodejů", function() {
+    let prodeje = {
+      "Jan": 100,
+      "Petr": 300,
+      "Marie": 250
     };
 
-    assert.equal( sumSalaries(salaries), 650 );
+    assert.equal( sečtiProdeje(prodeje), 650 );
   });
 
-  it("returns 0 for the empty object", function() {
-    assert.strictEqual( sumSalaries({}), 0);
+  it("pro prázdný objekt vrátí 0", function() {
+    assert.strictEqual( sečtiProdeje({}), 0);
   });
 });
