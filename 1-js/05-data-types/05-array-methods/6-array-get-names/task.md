@@ -2,21 +2,21 @@ importance: 5
 
 ---
 
-# Map to names
+# Mapování na jména
 
-You have an array of `user` objects, each one has `user.name`. Write the code that converts it into an array of names.
+Máte pole objektů `uživatel`, každý z nich má vlastnost `uživatel.jméno`. Napište kód, který je převede na pole jmen.
 
-For instance:
+Příklad:
 
 ```js no-beautify
-let john = { name: "John", age: 25 };
-let pete = { name: "Pete", age: 30 };
-let mary = { name: "Mary", age: 28 };
+let jan = { jméno: "Jan", věk: 25 };
+let petr = { jméno: "Petr", věk: 30 };
+let marie = { jméno: "Marie", věk: 28 };
 
-let users = [ john, pete, mary ];
+let uživatelé = [ jan, petr, marie ];
 
-let names = /* ... your code */
+let jména = /* ... váš kód */
 
-alert( names ); // John, Pete, Mary
+alert( jména ); // Jan, Petr, Marie
 ```
 
