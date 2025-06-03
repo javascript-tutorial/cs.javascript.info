@@ -95,12 +95,6 @@ const bigInt = 1234567890123456789012345678901234567890n;
 
 Protože čísla typu `BigInt` potřebujeme jen málokdy, nebudeme je tady probírat, ale věnujeme jim zvláštní kapitolu <info:bigint>. Až budete tak velká čísla potřebovat, přečtěte si ji.
 
-```smart header="Otázka kompatibility"
-Právě nyní je `BigInt` podporován ve Firefoxu/Chrome/Edge/Safari, ale ne v IE.
-```
-
-Nahlédnutím do [*MDN* tabulky kompatibility pro BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#Browser_compatibility) zjistíte, které verze prohlížeče jej podporují.
-
 ## Řetězec
 
 Řetězec (anglicky string) v JavaScriptu musí být uzavřen do uvozovek.
@@ -224,7 +218,7 @@ Typ `symbol` se používá k vytváření unikátních identifikátorů pro obje
 
 ## Operátor typeof [#type-typeof]
 
-Operátor `typeof` vrací typ argumentu. Je užitečný, když chceme hodnoty různých typů zpracovávat různě anebo si jen chceme typ rychle ověřit.
+Operátor `typeof` vrací typ operandu. Je užitečný, když chceme hodnoty různých typů zpracovávat různě anebo si jen chceme typ rychle ověřit.
 
 Volání `typeof x` vrátí řetězec s názvem typu:
 
