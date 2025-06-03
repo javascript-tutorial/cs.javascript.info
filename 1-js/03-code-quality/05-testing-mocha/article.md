@@ -1,279 +1,279 @@
-# Automated testing with Mocha
+# Automatické testování pomocí Mochy
 
-Automated testing will be used in further tasks, and it's also widely used in real projects.
+Automatické testování bude používáno v dalších úlohách a široce se používá i ve skutečných projektech.
 
-## Why do we need tests?
+## K čemu potřebujeme testy?
 
-When we write a function, we can usually imagine what it should do: which parameters give which results.
+Když píšeme funkci, můžeme si obvykle představit, co by měla dělat: jaké parametry by měly dávat jaké výsledky.
 
-During development, we can check the function by running it and comparing the outcome with the expected one. For instance, we can do it in the console.
+Během vývoje můžeme tuto funkci zkontrolovat tak, že ji spustíme a porovnáme její výsledek s očekávaným. Můžeme to udělat například na konzoli.
 
-If something is wrong -- then we fix the code, run again, check the result -- and so on till it works.
+Jestliže je něco špatně -- pak opravíme kód, znovu spustíme funkci, zkontrolujeme výsledek -- a tak dále, dokud to nebude fungovat.
 
-But such manual "re-runs" are imperfect.
+Avšak takové ruční „znovuspouštění“ není dokonalé.
 
-**When testing a code by manual re-runs, it's easy to miss something.**
+**Když testujeme kód tím, že ho znovu ručně spouštíme, můžeme snadno něco přehlédnout.**
 
-For instance, we're creating a function `f`. Wrote some code, testing: `f(1)` works, but `f(2)` doesn't work. We fix the code and now `f(2)` works. Looks complete? But we forgot to re-test `f(1)`. That may lead to an error.
+Například vytváříme funkci `f`. Napíšeme kód a testujeme: `f(1)` funguje, ale `f(2)` ne. Opravíme kód a nyní `f(2)` funguje. Vypadá to kompletně? Ale zapomněli jsme znovu otestovat `f(1)`. To může vést k chybě.
 
-That's very typical. When we develop something, we keep a lot of possible use cases in mind. But it's hard to expect a programmer to check all of them manually after every change. So it becomes easy to fix one thing and break another one.
+To je velmi typické. Když něco vyvíjíme, máme na paměti mnoho možných případů použití. Těžko však očekávat od programátora, že je po každé změně všechny znovu ručně prověří. Lehce se tedy stává, že opravíme jednu věc a rozbijeme jinou.
 
-**Automated testing means that tests are written separately, in addition to the code. They run our functions in various ways and compare results with the expected.**
+**Automatické testování znamená, že testy jsou psány odděleně navíc ke kódu. Různými způsoby spouštějí naše funkce a porovnávají jejich výsledky s očekávanými.**
 
-## Behavior Driven Development (BDD)
+## Vývoj řízený chováním (BDD)
 
-Let's start with a technique named [Behavior Driven Development](http://en.wikipedia.org/wiki/Behavior-driven_development) or, in short, BDD.
+Začněme technikou nazývanou *Vývoj řízený chováním*, anglicky [Behavior Driven Development](http://en.wikipedia.org/wiki/Behavior-driven_development), zkráceně BDD.
 
-**BDD is three things in one: tests AND documentation AND examples.**
+**BDD jsou tři věci v jedné: testy A dokumentace A příklady.**
 
-To understand BDD, we'll examine a practical case of development.
+Abychom BDD pochopili, prozkoumáme praktický příklad vývoje.
 
-## Development of "pow": the spec
+## Vývoj funkce „mocnina“: specifikace
 
-Let's say we want to make a function `pow(x, n)` that raises `x` to an integer power `n`. We assume that `n≥0`.
+Řekněme, že chceme vytvořit funkci `mocnina(x, n)`, která umocní `x` na celočíselný exponent `n`. Předpokládáme, že `n≥0`.
 
-That task is just an example: there's the `**` operator in JavaScript that can do that, but here we concentrate on the development flow that can be applied to more complex tasks as well.
+Tato úloha je jenom příklad: v JavaScriptu je operátor `**`, který to umí, ale zde se soustředíme na proces vývoje, který může být aplikován i na složitější úlohy.
 
-Before creating the code of `pow`, we can imagine what the function should do and describe it.
+Před vytvořením kódu funkce `mocnina` si představíme, co by tato funkce měla dělat, a popíšeme to.
 
-Such description is called a *specification* or, in short, a spec, and contains descriptions of use cases together with tests for them, like this:
+Takový popis se nazývá *specifikace* a obsahuje popisy případů použití společně s jejich testy, například takto:
 
 ```js
-describe("pow", function() {
+describe("mocnina", function() {
 
-  it("raises to n-th power", function() {
-    assert.equal(pow(2, 3), 8);
+  it("umocní na n-tou", function() {
+    assert.equal(mocnina(2, 3), 8);
   });
 
 });
 ```
 
-A spec has three main building blocks that you can see above:
+Specifikace má tři hlavní stavební bloky, které vidíte výše:
 
-`describe("title", function() { ... })`
-: What functionality we're describing? In our case we're describing the function `pow`. Used to group "workers" -- the `it` blocks.
+`describe("název", function() { ... })`
+: Jakou funkcionalitu popisujeme? V našem případě popisujeme funkci `mocnina`. Používá se k seskupení „pracovníků“ -- bloků `it`.
 
-`it("use case description", function() { ... })`
-: In the title of `it` we *in a human-readable way* describe the particular use case, and the second argument is a function that tests it.
+`it("popis případu použití", function() { ... })`
+: V titulku `it` popíšeme *lidsky čitelným způsobem* konkrétní případ použití. Druhým argumentem je funkce, která jej otestuje.
 
-`assert.equal(value1, value2)`
-: The code inside `it` block, if the implementation is correct, should execute without errors.
+`assert.equal(hodnota1, hodnota2)`
+: Je-li implementace korektní, kód uvnitř bloku `it` by se měl spustit bez chyb.
 
-    Functions `assert.*` are used to check whether `pow` works as expected. Right here we're using one of them -- `assert.equal`, it compares arguments and yields an error if they are not equal. Here it checks that the result of `pow(2, 3)` equals `8`. There are other types of comparisons and checks, that we'll add later.
+Funkce `assert.*` se používají k ověření, zda `mocnina` funguje tak, jak očekáváme. Právě zde používáme jednu z nich -- `assert.equal`, která porovná argumenty a vyvolá chybu, pokud si nejsou rovny. Zde zkontroluje, zda výsledek `mocnina(2, 3)` se rovná `8`. Existují i jiné druhy porovnání a kontrol, které přidáme později.
 
-The specification can be executed, and it will run the test specified in `it` block. We'll see that later.
+Specifikaci můžeme spustit a ta pak spustí test specifikovaný v bloku `it`. To uvidíme později.
 
-## The development flow
+## Proces vývoje
 
-The flow of development usually looks like this:
+Proces vývoje obvykle vypadá takto:
 
-1. An initial spec is written, with tests for the most basic functionality.
-2. An initial implementation is created.
-3. To check whether it works, we run the testing framework [Mocha](https://mochajs.org/) (more details soon) that runs the spec. While the functionality is not complete, errors are displayed. We make corrections until everything works.
-4. Now we have a working initial implementation with tests.
-5. We add more use cases to the spec, probably not yet supported by the implementations. Tests start to fail.
-6. Go to 3, update the implementation till tests give no errors.
-7. Repeat steps 3-6 till the functionality is ready.
+1. Napíše se úvodní specifikace s testy pro většinu základní funkcionality.
+2. Vytvoří se úvodní implementace.
+3. Abychom prověřili, zda funguje, spustíme testovací rámec [Mocha](https://mochajs.org/) (více později), který spustí specifikaci. Dokud funkcionalita není úplná, budou se zobrazovat chyby. Provádíme opravy, dokud nebude vše fungovat.
+4. Nyní máme funkční úvodní implementaci s testy.
+5. Do specifikace přidáváme další případy použití, které implementace pravděpodobně ještě nepodporuje. Testy začnou selhávat.
+6. Vrátíme se ke kroku 3 a vylepšujeme implementaci, dokud testy nepřestanou vydávat chyby.
+7. Opakujeme kroky 3-6, dokud nebude funkcionalita připravena.
 
-So, the development is *iterative*. We write the spec, implement it, make sure tests pass, then write more tests, make sure they work etc. At the end we have both a working implementation and tests for it.
+Vývoj je tedy *iterativní*. Napíšeme specifikaci, implementujeme ji, ujistíme se, že testy projdou, napíšeme další testy, ujistíme se, že projdou, atd. Nakonec máme funkční implementaci i její testy.
 
-Let's see this development flow in our practical case.
+Podívejme se na tento proces vývoje v praxi.
 
-The first step is already complete: we have an initial spec for `pow`. Now, before making the implementation, let's use a few JavaScript libraries to run the tests, just to see that they are working (they will all fail).
+První krok je již téměř hotov: máme úvodní specifikaci funkce `mocnina`. Nyní před vytvořením implementace použijeme několik JavaScriptových knihoven ke spuštění testů, abychom viděli, zda fungují (všechny testy selžou).
 
-## The spec in action
+## Specifikace v akci
 
-Here in the tutorial we'll be using the following JavaScript libraries for tests:
+V tomto tutoriálu budeme pro testy používat následující JavaScriptové knihovny:
 
-- [Mocha](https://mochajs.org/) -- the core framework: it provides common testing functions including `describe` and `it` and the main function that runs tests.
-- [Chai](https://www.chaijs.com/) -- the library with many assertions. It allows to use a lot of different assertions, for now we need only `assert.equal`.
-- [Sinon](https://sinonjs.org/) -- a library to spy over functions, emulate built-in functions and more, we'll need it much later.
+- [Mocha](https://mochajs.org/) -- jádro rámce: poskytuje běžné testovací funkce včetně `describe` a `it` a hlavní funkci, která spouští testy.
+- [Chai](https://www.chaijs.com/) -- knihovna s mnoha kontrolami. Umožňuje nám použít spoustu různých kontrol, ale nyní budeme potřebovat jen `assert.equal`.
+- [Sinon](https://sinonjs.org/) -- knihovna k prozkoumávání funkcí, emulování vestavěných funkcí a podobně. Budeme ji potřebovat až mnohem později.
 
-These libraries are suitable for both in-browser and server-side testing. Here we'll consider the browser variant.
+Tyto knihovny jsou vhodné pro testování v prohlížeči i na straně serveru. Zde budeme uvažovat prohlížečovou variantu.
 
-The full HTML page with these frameworks and `pow` spec:
+Celá HTML stránka s těmito rámci a specifikací funkce `mocnina`:
 
 ```html src="index.html"
 ```
 
-The page can be divided into five parts:
+Tuto stránku lze rozdělit do pěti částí:
 
-1. The `<head>` -- add third-party libraries and styles for tests.
-2. The `<script>` with the function to test, in our case -- with the code for `pow`.
-3. The tests -- in our case an external script `test.js` that has `describe("pow", ...)` from above.
-4. The HTML element `<div id="mocha">` will be used by Mocha to output results.
-5. The tests are started by the command `mocha.run()`.
+1. `<head>` -- přidává knihovny třetích stran a styly pro testy.
+2. `<script>` s funkcí k testování, v našem případě s kódem funkce `mocnina`.
+3. Testy -- v našem případě externí skript `test.js`, který obsahuje výše uvedené `describe("mocnina", ...)`.
+4. HTML značka `<div id="mocha">`, kterou bude používat Mocha k výstupu výsledků.
+5. Testy jsou zahájeny příkazem `mocha.run()`.
 
-The result:
+Výsledek:
 
 [iframe height=250 src="pow-1" border=1 edit]
 
-As of now, the test fails, there's an error. That's logical: we have an empty function code in `pow`, so `pow(2,3)` returns `undefined` instead of `8`.
+Prozatím test selže a vydá chybu. To je logické: ve funkci `mocnina` máme prázdný kód, takže `mocnina(2, 3)` vrátí `undefined` namísto `8`.
 
-For the future, let's note that there are more high-level test-runners, like [karma](https://karma-runner.github.io/) and others, that make it easy to autorun many different tests.
+Do budoucna poznamenejme, že existuje více vysokoúrovňových spouštěčů testů, např. [karma](https://karma-runner.github.io/) a jiné, které usnadňují automatické provádění mnoha různých testů.
 
-## Initial implementation
+## Úvodní implementace
 
-Let's make a simple implementation of `pow`, for tests to pass:
+Vytvořme jednoduchou implementaci funkce `mocnina`, aby testy prošly:
 
 ```js
-function pow(x, n) {
-  return 8; // :) we cheat!
+function mocnina(x, n) {
+  return 8; // :) podvádíme!
 }
 ```
 
-Wow, now it works!
+Hurá, teď to funguje!
 
 [iframe height=250 src="pow-min" border=1 edit]
 
-## Improving the spec
+## Zlepšení specifikace
 
-What we've done is definitely a cheat. The function does not work: an attempt to calculate `pow(3,4)` would give an incorrect result, but tests pass.
+To, co jsme udělali, je samozřejmě podvod. Funkce nefunguje: pokus o výpočet `mocnina(3, 4)` vydá nekorektní výsledek, ale testy projdou.
 
-...But the situation is quite typical, it happens in practice. Tests pass, but the function works wrong. Our spec is imperfect. We need to add more use cases to it.
+...Tato situace je však poměrně typická, v praxi k ní dochází. Testy projdou, ale funkce funguje špatně. Naše specifikace je nedokonalá. Musíme do ní přidat další případy použití.
 
-Let's add one more test to check that `pow(3, 4) = 81`.
+Přidejme jeden další test, který ověří, zda `mocnina(3, 4) = 81`.
 
-We can select one of two ways to organize the test here:
+Zde si můžeme vybrat jeden ze dvou způsobů, jak test organizovat:
 
-1. The first variant -- add one more `assert` into the same `it`:
+1. První varianta -- přidáme jeden další `assert` do stejného `it`:
 
     ```js
-    describe("pow", function() {
+    describe("mocnina", function() {
 
-      it("raises to n-th power", function() {
-        assert.equal(pow(2, 3), 8);
+      it("umocní na n-tou", function() {
+        assert.equal(mocnina(2, 3), 8);
     *!*
-        assert.equal(pow(3, 4), 81);
+        assert.equal(mocnina(3, 4), 81);
     */!*
       });
 
     });
     ```
-2. The second -- make two tests:
+2. Druhá varianta -- vytvoříme dva testy:
 
     ```js
-    describe("pow", function() {
+    describe("mocnina", function() {
 
-      it("2 raised to power 3 is 8", function() {
-        assert.equal(pow(2, 3), 8);
+      it("2 na 3 je 8", function() {
+        assert.equal(mocnina(2, 3), 8);
       });
 
-      it("3 raised to power 4 is 81", function() {
-        assert.equal(pow(3, 4), 81);
+      it("3 na 4 je 81", function() {
+        assert.equal(mocnina(3, 4), 81);
       });
 
     });
     ```
 
-The principal difference is that when `assert` triggers an error, the `it` block immediately terminates. So, in the first variant if the first `assert` fails, then we'll never see the result of the second `assert`.
+Principiální rozdíl je v tom, že když `assert` vyvolá chybu, blok `it` se okamžitě ukončí. Jestliže tedy v první variantě první `assert` neuspěje, neuvidíme výsledek druhého `assert`.
 
-Making tests separate is useful to get more information about what's going on, so the second variant is better.
+Rozdělení testů je užitečné pro získání více informací o tom, co se děje, takže druhá varianta je lepší.
 
-And besides that, there's one more rule that's good to follow.
+A kromě toho existuje ještě jedno pravidlo, které se vyplatí dodržovat.
 
-**One test checks one thing.**
+**Jeden test kontroluje jednu věc.**
 
-If we look at the test and see two independent checks in it, it's better to split it into two simpler ones.
+Podíváme-li se na test a uvidíme v něm dvě nezávislé kontroly, je lepší ho rozdělit na dva jednodušší testy.
 
-So let's continue with the second variant.
+Budeme tedy pokračovat druhou variantou.
 
-The result:
+Výsledek:
 
 [iframe height=250 src="pow-2" edit border="1"]
 
-As we could expect, the second test failed. Sure, our function always returns `8`, while the `assert` expects `81`.
+Jak se dalo očekávat, druhý test neuspěje. Pochopitelně, naše funkce vrátí vždy `8`, zatímco `assert` očekává `81`.
 
-## Improving the implementation
+## Zlepšení implementace
 
-Let's write something more real for tests to pass:
+Napišme něco reálnějšího, aby testy prošly:
 
 ```js
-function pow(x, n) {
-  let result = 1;
+function mocnina(x, n) {
+  let výsledek = 1;
 
   for (let i = 0; i < n; i++) {
-    result *= x;
+    výsledek *= x;
   }
 
-  return result;
+  return výsledek;
 }
 ```
 
-To be sure that the function works well, let's test it for more values. Instead of writing `it` blocks manually, we can generate them in `for`:
+Abychom se ujistili, že funkce funguje správně, otestujme ji na dalších hodnotách. Namísto manuálního psaní `it` bloků je můžeme vytvořit v cyklu `for`:
 
 ```js
-describe("pow", function() {
+describe("mocnina", function() {
 
-  function makeTest(x) {
-    let expected = x * x * x;
-    it(`${x} in the power 3 is ${expected}`, function() {
-      assert.equal(pow(x, 3), expected);
+  function vytvořTest(x) {
+    let očekáváno = x * x * x;
+    it(`${x} na 3 je ${očekáváno}`, function() {
+      assert.equal(mocnina(x, 3), očekáváno);
     });
   }
 
   for (let x = 1; x <= 5; x++) {
-    makeTest(x);
+    vytvořTest(x);
   }
 
 });
 ```
 
-The result:
+Výsledek:
 
 [iframe height=250 src="pow-3" edit border="1"]
 
-## Nested describe
+## Vnořené „describe“
 
-We're going to add even more tests. But before that let's note that the helper function `makeTest` and `for` should be grouped together. We won't need `makeTest` in other tests, it's needed only in `for`: their common task is to check how `pow` raises into the given power.
+Přidáme ještě další testy. Předtím však poznamenejme, že pomocná funkce `vytvořTest` a cyklus `for` by měly být seskupeny. Nebudeme potřebovat `vytvořTest` v jiných testech, je zapotřebí jedině ve `for`: jejich společným úkolem je zkontrolovat, jak `mocnina` umocňuje na zadaný exponent.
 
-Grouping is done with a nested `describe`:
+Seskupení se provádí pomocí vnořeného `describe`:
 
 ```js
-describe("pow", function() {
+describe("mocnina", function() {
 
 *!*
-  describe("raises x to power 3", function() {
+  describe("umocní x na 3", function() {
 */!*
 
-    function makeTest(x) {
-      let expected = x * x * x;
-      it(`${x} in the power 3 is ${expected}`, function() {
-        assert.equal(pow(x, 3), expected);
+    function vytvořTest(x) {
+      let očekáváno = x * x * x;
+      it(`${x} na 3 je ${očekáváno}`, function() {
+        assert.equal(mocnina(x, 3), očekáváno);
       });
     }
 
     for (let x = 1; x <= 5; x++) {
-      makeTest(x);
+      vytvořTest(x);
     }
 
 *!*
   });
 */!*
 
-  // ... more tests to follow here, both describe and it can be added
+  // ... zde budou následovat další testy, můžeme přidat jak describe, tak it
 });
 ```
 
-The nested `describe` defines a new "subgroup" of tests. In the output we can see the titled indentation:
+Vnořené `describe` definuje novou „podskupinu“ testů. Na výstupu můžeme vidět otitulkované odsazení:
 
 [iframe height=250 src="pow-4" edit border="1"]
 
-In the future we can add more `it` and `describe` on the top level with helper functions of their own, they won't see `makeTest`.
+V budoucnosti můžeme přidávat další `it` a `describe` na nejvyšší úrovni s vlastními pomocnými funkcemi. V nich nebude vidět `vytvořTest`.
 
-````smart header="`before/after` and `beforeEach/afterEach`"
-We can setup `before/after` functions that execute before/after running tests, and also `beforeEach/afterEach` functions that execute before/after *every* `it`.
+````smart header="`before/after` a `beforeEach/afterEach`"
+Můžeme nastavit funkce `before/after`, které se spustí před provedením/po provedení testů, a také funkce `beforeEach/afterEach`, které se spustí před provedením/po provedení *každého* `it`.
 
-For instance:
+Například:
 
 ```js no-beautify
 describe("test", function() {
 
-  before(() => alert("Testing started – before all tests"));
-  after(() => alert("Testing finished – after all tests"));
+  before(() => alert("Začíná testování - před všemi testy"));
+  after(() => alert("Končí testování - po všech testech"));
 
-  beforeEach(() => alert("Before a test – enter a test"));
-  afterEach(() => alert("After a test – exit a test"));
+  beforeEach(() => alert("Před testem - vstup do testu"));
+  afterEach(() => alert("Po testu - výstup z testu"));
 
   it('test 1', () => alert(1));
   it('test 2', () => alert(2));
@@ -281,129 +281,129 @@ describe("test", function() {
 });
 ```
 
-The running sequence will be:
+Provedená sekvence bude:
 
 ```
-Testing started – before all tests (before)
-Before a test – enter a test (beforeEach)
+Začíná testování - před všemi testy (before)
+Před testem - vstup do testu        (beforeEach)
 1
-After a test – exit a test   (afterEach)
-Before a test – enter a test (beforeEach)
+Po testu - výstup z testu           (afterEach)
+Před testem - vstup do testu        (beforeEach)
 2
-After a test – exit a test   (afterEach)
-Testing finished – after all tests (after)
+Po testu - výstup z testu           (afterEach)
+Končí testování - po všech testech  (after)
 ```
 
-[edit src="beforeafter" title="Open the example in the sandbox."]
+[edit src="beforeafter" title="Otevře příklad na pískovišti."]
 
-Usually, `beforeEach/afterEach` and `before/after` are used to perform initialization, zero out counters or do something else between the tests (or test groups).
+Obvykle se `beforeEach/afterEach` a `before/after` používají k provedení inicializace, vynulování čítačů nebo provedení něčeho jiného mezi testy (nebo skupinami testů).
 ````
 
-## Extending the spec
+## Rozšíření specifikace
 
-The basic functionality of `pow` is complete. The first iteration of the development is done. When we're done celebrating and drinking champagne -- let's go on and improve it.
+Základní funkcionalita funkce `mocnina` je hotová. První kolo vývoje je za námi. Až skončíme oslavu a dopijeme šampaňské, půjdeme ji zlepšit.
 
-As it was said, the function `pow(x, n)` is meant to work with positive integer values `n`.
+Jak bylo řečeno, funkce `mocnina(x, n)` je zamýšlena tak, aby fungovala s kladnými celočíselnými hodnotami `n`.
 
-To indicate a mathematical error, JavaScript functions usually return `NaN`. Let's do the same for invalid values of `n`.
+Funkce JavaScriptu obvykle oznamují matematickou chybu tak, že vrátí `NaN`. Proveďme totéž pro neplatné hodnoty `n`.
 
-Let's first add the behavior to the spec(!):
+Nejprve přidáme toto chování do specifikace(!):
 
 ```js
-describe("pow", function() {
+describe("mocnina", function() {
 
   // ...
 
-  it("for negative n the result is NaN", function() {
+  it("pro záporné n je výsledek NaN", function() {
 *!*
-    assert.isNaN(pow(2, -1));
+    assert.isNaN(mocnina(2, -1));
 */!*
   });
 
-  it("for non-integer n the result is NaN", function() {
+  it("pro necelé n je výsledek NaN", function() {
 *!*
-    assert.isNaN(pow(2, 1.5));    
+    assert.isNaN(mocnina(2, 1.5));    
 */!*
   });
 
 });
 ```
 
-The result with new tests:
+Výsledek s novými testy:
 
 [iframe height=530 src="pow-nan" edit border="1"]
 
-The newly added tests fail, because our implementation does not support them. That's how BDD is done: first we write failing tests, and then make an implementation for them.
+Nově přidané testy selžou, protože je naše implementace nepodporuje. Tímto způsobem se provádí BDD: nejprve napíšeme selhávající testy, až pak pro ně vytvoříme implementaci.
 
-```smart header="Other assertions"
-Please note the assertion `assert.isNaN`: it checks for `NaN`.
+```smart header="Další kontroly"
+Všimněte si prosím kontroly `assert.isNaN`: kontroluje hodnotu `NaN`.
 
-There are other assertions in [Chai](https://www.chaijs.com/) as well, for instance:
+V [Chai](https://www.chaijs.com/) jsou i jiné kontroly, například:
 
-- `assert.equal(value1, value2)` -- checks the equality  `value1 == value2`.
-- `assert.strictEqual(value1, value2)` -- checks the strict equality `value1 === value2`.
-- `assert.notEqual`, `assert.notStrictEqual` -- inverse checks to the ones above.
-- `assert.isTrue(value)` -- checks that `value === true`
-- `assert.isFalse(value)` -- checks that `value === false`
-- ...the full list is in the [docs](https://www.chaijs.com/api/assert/)
+- `assert.equal(hodnota1, hodnota2)` -- prověří rovnost  `hodnota1 == hodnota2`.
+- `assert.strictEqual(hodnota1, hodnota2)` -- prověří striktní rovnost `hodnota1 === hodnota2`.
+- `assert.notEqual`, `assert.notStrictEqual` -- inverzní kontroly k výše uvedeným.
+- `assert.isTrue(hodnota)` -- prověří, zda `hodnota === true`
+- `assert.isFalse(hodnota)` -- prověří, zda `hodnota === false`
+- ...úplný seznam najdete v [dokumentaci](https://www.chaijs.com/api/assert/)
 ```
 
-So we should add a couple of lines to `pow`:
+Do funkce `mocnina` bychom tedy měli přidat několik řádků:
 
 ```js
-function pow(x, n) {
+function mocnina(x, n) {
 *!*
   if (n < 0) return NaN;
   if (Math.round(n) != n) return NaN;
 */!*
 
-  let result = 1;
+  let výsledek = 1;
 
   for (let i = 0; i < n; i++) {
-    result *= x;
+    výsledek *= x;
   }
 
-  return result;
+  return výsledek;
 }
 ```
 
-Now it works, all tests pass:
+Nyní to funguje a všechny testy projdou:
 
 [iframe height=300 src="pow-full" edit border="1"]
 
-[edit src="pow-full" title="Open the full final example in the sandbox."]
+[edit src="pow-full" title="Otevřít úplný konečný příklad na pískovišti."]
 
-## Summary
+## Shrnutí
 
-In BDD, the spec goes first, followed by implementation. At the end we have both the spec and the code.
+V BDD se nejprve vytváří specifikace, pak až následuje implementace. Nakonec máme jak specifikaci, tak kód.
 
-The spec can be used in three ways:
+Specifikaci můžeme použít třemi způsoby:
 
-1. As **Tests** - they guarantee that the code works correctly.
-2. As **Docs** -- the titles of `describe` and `it` tell what the function does.
-3. As **Examples** -- the tests are actually working examples showing how a function can be used.
+1. Jako **testy** -- zaručí nám, že kód funguje správně.
+2. Jako **dokumentaci** -- titulky `describe` a `it` nám říkají, co funkce provádí.
+3. Jako **příklady** -- testy jsou v podstatě fungující příklady, které nám ukazují, jak může být funkce použita.
 
-With the spec, we can safely improve, change, even rewrite the function from scratch and make sure it still works right.
+S touto specifikací můžeme funkci bezpečně zlepšovat, měnit nebo i od začátku přepisovat a máme jistotu, že stále bude fungovat správně.
 
-That's especially important in large projects when a function is used in many places. When we change such a function, there's just no way to manually check if every place that uses it still works right.
+To je obzvláště důležité ve velkých projektech, v nichž se funkce používá na mnoha místech. Když takovou funkci změníme, nemáme žádný způsob, jak ručně ověřit, zda stále funguje správně na všech místech, kde se používá.
 
-Without tests, people have two ways:
+Bez testů mají lidé dvě možnosti:
 
-1. To perform the change, no matter what. And then our users meet bugs, as we probably fail to check something manually.
-2. Or, if the punishment for errors is harsh, as there are no tests, people become afraid to modify such functions, and then the code becomes outdated, no one wants to get into it. Not good for development.
+1. Provést změnu, ať už jakoukoli. Pak se naši uživatelé setkají s chybami, jelikož pravděpodobně něco ručně nezkontrolujeme.
+2. Nebo, je-li trest za chyby příliš tvrdý, bez testů se lidé budou bát takové funkce modifikovat, kód se pak stane zastaralým a nikdo do něj nebude chtít pronikat. To není dobré pro vývoj.
 
-**Automatic testing helps to avoid these problems!**
+**Automatické testování pomáhá předejít těmto problémům!**
 
-If the project is covered with tests, there's just no such problem. After any changes, we can run tests and see a lot of checks made in a matter of seconds.
+Jestliže je projekt pokryt testy, žádný takový problém nenastane. Po každé změně můžeme provést testy a uvidíme spoustu kontrol, které se provedou během několika sekund.
 
-**Besides, a well-tested code has better architecture.**
+**Kromě toho dobře testovaný kód má lepší architekturu.**
 
-Naturally, that's because auto-tested code is easier to modify and improve. But there's also another reason.
+Přirozeně je to proto, že automaticky testovaný kód se snadněji modifikuje a vylepšuje. Je tady však i jiný důvod.
 
-To write tests, the code should be organized in such a way that every function has a clearly described task, well-defined input and output. That means a good architecture from the beginning.
+Abychom mohli psát testy, měl by kód být organizován tak, aby každá funkce měla jasně popsaný úkol a dobře definovaný vstup a výstup. To znamená mít od začátku dobrou architekturu.
 
-In real life that's sometimes not that easy. Sometimes it's difficult to write a spec before the actual code, because it's not yet clear how it should behave. But in general writing tests makes development faster and more stable.
+V reálném životě to někdy nebývá tak lehké. Někdy je obtížné napsat specifikaci dříve než skutečný kód, protože ještě není zřejmé, jak by se měl chovat. Obecně však psaní testů činí vývoj rychlejším a stabilnějším.
 
-Later in the tutorial you will meet many tasks with tests baked-in. So you'll see more practical examples.
+Později v tomto tutoriálu se setkáme s mnoha úlohami s vestavěnými testy. Uvidíte tedy i praktičtější příklady.
 
-Writing tests requires good JavaScript knowledge. But we're just starting to learn it. So, to settle down everything, as of now you're not required to write tests, but you should already be able to read them even if they are a little bit more complex than in this chapter.
+Psaní testů vyžaduje dobrou znalost JavaScriptu. My jsme se ho však teprve začali učit. Proto abychom vás uklidnili, prozatím od vás nevyžadujeme, abyste psali testy, ale měli byste už být schopni je číst, i když budou trochu složitější než v této kapitole.
