@@ -1,33 +1,34 @@
 
-function formatDate(date) {
-  let diff = new Date() - date; // the difference in milliseconds
+function formátujDatum(datum) {
+  let rozdíl = new Date() - datum; // rozdíl v milisekundách
 
-  if (diff < 1000) { // less than 1 second
-    return 'right now';
+  if (rozdíl < 1000) { // méně než 1 sekunda
+    return 'právě teď';
   }
 
-  let sec = Math.floor(diff / 1000); // convert diff to seconds
+  let sec = Math.floor(rozdíl / 1000); // převedeme rozdíl na sekundy
 
   if (sec < 60) {
-    return sec + ' sec. ago';
+    return 'před ' + sec + ' s';
   }
 
-  let min = Math.floor(diff / 60000); // convert diff to minutes
+  let min = Math.floor(rozdíl / 60000); // převedeme rozdíl na minuty
   if (min < 60) {
-    return min + ' min. ago';
+    return 'před ' + min + ' min.';
   }
 
-  // format the date
-  // add leading zeroes to single-digit day/month/hours/minutes
-  let d = date;
+  // naformátujeme datum
+  // před jednociferný den/měsíc/hodiny/minuty přidáme nulu
+  let d = datum;
   d = [
     '0' + d.getDate(),
     '0' + (d.getMonth() + 1),
     '' + d.getFullYear(),
     '0' + d.getHours(),
     '0' + d.getMinutes()
-  ].map(component => component.slice(-2)); // take last 2 digits of every component
+  ].map(složka => složka.slice(-2)); // z každé složky vezmeme poslední 2 číslice
 
-  // join the components into date
+  // spojíme složky do data
   return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':');
 }
+

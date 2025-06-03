@@ -2,22 +2,22 @@ importance: 5
 
 ---
 
-# Does a function pickup latest changes?
+# Odrážejí se ve funkci poslední změny?
 
-The function sayHi uses an external variable name. When the function runs, which value is it going to use?
+Funkce `řekniAhoj` využívá název externí proměnné. Když bude spuštěna, kterou hodnotu použije?
 
 ```js
-let name = "John";
+let jméno = "Jan";
 
-function sayHi() {
-  alert("Hi, " + name);
+function řekniAhoj() {
+  alert("Ahoj, " + jméno);
 }
 
-name = "Pete";
+jméno = "Petr";
 
-sayHi(); // what will it show: "John" or "Pete"?
+řekniAhoj(); // co zobrazí: "Jan" nebo "Petr"?
 ```
 
-Such situations are common both in browser and server-side development. A function may be scheduled to execute later than it is created, for instance after a user action or a network request.
+Takové situace jsou běžné při vývoji v prohlížeči i na straně serveru. Funkce může být navržena ke spuštění později, než byla vytvořena, například po uživatelské akci nebo síťovém požadavku.
 
-So, the question is: does it pick up the latest changes?
+Otázka tedy zní: odráží poslední změny?

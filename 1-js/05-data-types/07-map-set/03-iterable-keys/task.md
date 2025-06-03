@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# Iterable keys
+# Iterovatelné klíče
 
-We'd like to get an array of `map.keys()` in a variable and then apply array-specific methods to it, e.g. `.push`.
+Chtěli bychom uložit pole klíčů mapy `mapa.keys()` do proměnné a pak na ní volat metody specifické pro pole, např. `.push`.
 
-But that doesn't work:
+Tohle však nefunguje:
 
 ```js run
-let map = new Map();
+let mapa = new Map();
 
-map.set("name", "John");
+mapa.set("jméno", "Jan");
 
-let keys = map.keys();
+let klíče = mapa.keys();
 
 *!*
-// Error: keys.push is not a function
-keys.push("more");
+// Chyba: klíče.push není funkce
+klíče.push("další");
 */!*
 ```
 
-Why? How can we fix the code to make `keys.push` work?
+Proč? Jak můžeme opravit kód, aby `klíče.push` fungovalo?
