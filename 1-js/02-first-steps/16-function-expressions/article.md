@@ -82,7 +82,7 @@ let řekniAhoj = function() { // (1) vytvoření
   alert( "Ahoj" );
 };
 
-let funkce = řekniAhoj;
+let funkce = řekniAhoj; // (2)
 // ...
 ```
 

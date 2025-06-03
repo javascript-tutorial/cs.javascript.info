@@ -29,7 +29,7 @@ Například zde zobrazíme `anonym`, jestliže proměnná `uživatel` není defi
 ```js run
 let uživatel;
 
-alert(uživatel ?? "anonym"); // anonym (uživatel není definován)
+alert(uživatel ?? "Anonym"); // Anonym (uživatel má hodnotu undefined)
 ```
 
 Zde je příklad, kde má proměnná `uživatel` přiřazenou hodnotu:
@@ -37,7 +37,7 @@ Zde je příklad, kde má proměnná `uživatel` přiřazenou hodnotu:
 ```js run
 let uživatel = "Jan";
 
-alert(uživatel ?? "anonym"); // Jan (uživatel je definován)
+alert(uživatel ?? "Anonym"); // Jan (uživatel nemá hodnotu null/undefined)
 ```
 
 Můžeme také použít sekvenci `??` k výběru první hodnoty ze seznamu, která není `null/undefined`.

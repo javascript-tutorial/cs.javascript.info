@@ -22,7 +22,7 @@ Otevřou se vývojářské nástroje na záložce „Console“.
 
 Budou vypadat zhruba takto:
 
-![chrome](chrome.png)
+![chrome](chrome.webp)
 
 Vzhled vývojářských nástrojů závisí na vaší verzi Chrome. Čas od času se mění, ale měl by se podobat obrázku.
 
@@ -49,8 +49,8 @@ Jejich vzhled je vcelku podobný. Až budete vědět, jak používat nástroje v
 
 Safari (prohlížeč pro Mac, není podporován ve Windows nebo Linuxu) je v tomto ohledu trochu zvláštní. Nejprve musíme povolit „menu Vývoj“.
 
-Otevřete „Preferences“ a jděte na záložku „Advanced“. Dole uvidíte checkbox, který zaškrtněte:
-
+Otevřete „Settings“ a jděte na záložku „Advanced“. Dole uvidíte checkbox, který zaškrtněte:
+  
 ![safari](safari.png)
 
 Nyní můžete zapínat konzoli pomocí `key:Cmd+Opt+C`. Všimněte si také, že v horním menu se objevila nová položka s názvem „Develop“ („Vývoj“), která obsahuje mnoho příkazů a nastavení.
