@@ -1,11 +1,11 @@
-describe("isEmpty", function() {
-  it("returns true for an empty object", function() {
-    assert.isTrue(isEmpty({}));
+describe("jePrázdný", function() {
+  it("vrátí true pro prázdný objekt", function() {
+    assert.isTrue(jePrázdný({}));
   });
 
-  it("returns false if a property exists", function() {
-    assert.isFalse(isEmpty({
-      anything: false
+  it("vrátí false, jestliže existuje nějaká vlastnost", function() {
+    assert.isFalse(jePrázdný({
+      cokoli: false
     }));
   });
 });

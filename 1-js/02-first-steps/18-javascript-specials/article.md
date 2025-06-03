@@ -103,13 +103,13 @@ Více v kapitole: <info:variables> a <info:types>.
 
 Jako pracovní prostředí používáme prohlížeč, takže základní funkce uživatelského rozhraní budou:
 
-[`prompt(otázka, [default])`](mdn:api/Window/prompt)
+[`prompt(otázka, [default])`](https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt)
 : Položí otázku `otázka` a vrátí buď to, co návštěvník zadal, nebo `null`, jestliže stiskl „Storno“.
 
-[`confirm(otázka)`](mdn:api/Window/confirm)
+[`confirm(otázka)`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)
 : Položí otázku `otázka` a nabídne na výběr mezi OK a Storno. Zvolená možnost je vrácena jako `true/false`.
 
-[`alert(zpráva)`](mdn:api/Window/alert)
+[`alert(zpráva)`](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)
 : Vypíše zprávu `zpráva`.
 
 Všechny tyto funkce jsou *modální*. Pozastaví vykonávání kódu a znemožní uživateli jinou interakci se stránkou, dokud neodpoví.
@@ -144,7 +144,7 @@ Přiřazení
 : Existuje jednoduché přiřazení `a = b` a kombinovaná přiřazení, např. `a *= 2`.
 
 Bitové
-: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](mdn:/JavaScript/Guide/Expressions_and_Operators#bitwise_operators).
+: Bitové operátory pracují se 32-bitovými celými čísly na nejnižší, bitové úrovni: až je budete potřebovat, viz [dokumentaci](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#bitwise_operators).
 
 Podmíněný
 : Jediný operátor se třemi parametry: `podmínka ? výsledekA : výsledekB`. Je-li `podmínka` pravdivá, vrátí `výsledekA`, jinak vrátí `výsledekB`.

@@ -170,8 +170,8 @@ alert( new MalýUživatel().jméno );  // Jan
 
 Konstruktory obvykle příkaz `return` neobsahují. Speciální chování s vracením objektů zde zmiňujeme zejména pro úplnost.
 
-````smart header="Vypuštění závorek"
-Mimochodem, závorky za `new` můžeme vypustit:
+````smart header="Omitting parentheses"
+By the way, we can omit parentheses after `new`:
 
 ```js
 let uživatel = new Uživatel; // <-- bez závorek
