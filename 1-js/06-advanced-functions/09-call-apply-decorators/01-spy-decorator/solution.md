@@ -1,1 +1,1 @@
-The wrapper returned by `spy(f)` should store all arguments and then use `f.apply` to forward the call.
+Obal, který vrátí `špión(f)`, by si měl uložit všechny argumenty a pak pomocí `f.apply` přesměrovat volání.
