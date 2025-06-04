@@ -2,10 +2,10 @@ importance: 4
 
 ---
 
-# Eval-calculator
+# Kalkulátor
 
-Create a calculator that prompts for an arithmetic expression and returns its result.
+Vytvořte kalkulátor, který se zeptá na aritmetický výraz a vrátí jeho výsledek.
 
-There's no need to check the expression for correctness in this task. Just evaluate and return the result.
+V této úloze není třeba ověřovat správnost výrazu. Jenom ho vyhodnoťte a vraťte výsledek.
 
 [demo]
