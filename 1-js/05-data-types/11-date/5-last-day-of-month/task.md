@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Last day of month?
+# Poslední den v měsíci?
 
-Write a function `getLastDayOfMonth(year, month)` that returns the last day of month. Sometimes it is 30th, 31st or even 28/29th for Feb.
+Napište funkci `vraťPosledníDenVMěsíci(rok, měsíc)`, která vrátí číslo posledního dne v měsíci. Někdy je to 30., někdy 31., v únoru dokonce 28. nebo 29.
 
-Parameters:
+Parametry:
 
-- `year` -- four-digits year, for instance 2012.
-- `month` -- month, from 0 to 11.
+- `rok` -- čtyřčíslicový rok, např. 2012.
+- `měsíc` -- měsíc, od 0 do 11.
 
-For instance, `getLastDayOfMonth(2012, 1) = 29` (leap year, Feb).
+Například `vraťPosledníDenVMěsíci(2012, 1) = 29` (přestupný rok, únor).

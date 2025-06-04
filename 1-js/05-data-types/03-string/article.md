@@ -1,522 +1,522 @@
-# Strings
+# Řetězce
 
-In JavaScript, the textual data is stored as strings. There is no separate type for a single character.
+Textová data se v JavaScriptu ukládají jako řetězce. Neexistuje zvláštní typ pro jediný znak.
 
-The internal format for strings is always [UTF-16](https://en.wikipedia.org/wiki/UTF-16), it is not tied to the page encoding.
+Interní formát řetězce je vždy [UTF-16](https://cs.wikipedia.org/wiki/UTF-16), nezávisle na kódování stránky.
 
-## Quotes
+## Uvozovky
 
-Let's recall the kinds of quotes.
+Připomeňme si druhy uvozovek.
 
-Strings can be enclosed within either single quotes, double quotes or backticks:
+Řetězce mohou být uzavřeny do jednoduchých, dvojitých nebo zpětných uvozovek:
 
 ```js
-let single = 'single-quoted';
-let double = "double-quoted";
+let jednoduché = 'jednoduché uvozovky';
+let dvojité = "dvojité uvozovky";
 
-let backticks = `backticks`;
+let zpětné = `zpětné uvozovky`;
 ```
 
-Single and double quotes are essentially the same. Backticks, however, allow us to embed any expression into the string, by wrapping it in `${…}`:
+Jednoduché a dvojité uvozovky fungují v zásadě stejně. Zpětné uvozovky nám však umožňují vložit do řetězce jakýkoli výraz, když jej uzavřeme do `${…}`:
 
 ```js run
-function sum(a, b) {
+function součet(a, b) {
   return a + b;
 }
 
-alert(`1 + 2 = ${sum(1, 2)}.`); // 1 + 2 = 3.
+alert(`1 + 2 = ${součet(1, 2)}.`); // 1 + 2 = 3.
 ```
 
-Another advantage of using backticks is that they allow a string to span multiple lines:
+Další výhodou používání zpětných uvozovek je, že umožňují rozdělit řetězec na více řádků:
 
 ```js run
-let guestList = `Guests:
- * John
- * Pete
- * Mary
+let seznamHostů = `Hosté:
+ * Jan
+ * Petr
+ * Marie
 `;
 
-alert(guestList); // a list of guests, multiple lines
+alert(seznamHostů); // seznam hostů, více řádků
 ```
 
-Looks natural, right? But single or double quotes do not work this way.
+Vypadá to přirozeně, že? Ale jednoduché nebo dvojité uvozovky takto nefungují.
 
-If we use them and try to use multiple lines, there'll be an error:
+Jestliže je použijeme a pokusíme se rozdělit text na více řádků, nastane chyba:
 
 ```js run
-let guestList = "Guests: // Error: Unexpected token ILLEGAL
-  * John";
+let seznamHostů = "Hosté: // Error: Unexpected token ILLEGAL
+  * Jan";
 ```
 
-Single and double quotes come from ancient times of language creation, when the need for multiline strings was not taken into account. Backticks appeared much later and thus are more versatile.
+Jednoduché a dvojité uvozovky pocházejí ze starých časů vzniku jazyka, kdy nebyla brána v úvahu potřeba víceřádkových řetězců. Zpětné uvozovky se objevily mnohem později, a tak jsou univerzálnější.
 
-Backticks also allow us to specify a "template function" before the first backtick. The syntax is: <code>func&#96;string&#96;</code>. The function `func` is called automatically, receives the string and embedded expressions and can process them. This feature is called "tagged templates", it's rarely seen, but you can read about it in the MDN: [Template literals](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
+Zpětné uvozovky nám také umožňují specifikovat „šablonovou funkci“ před levými uvozovkami. Syntaxe je: <code>funkce&#96;řetězec&#96;</code>. Funkce `funkce` je volána automaticky, obdrží řetězec a vnořené výrazy a může je zpracovat. Tato vlastnost se nazývá „značkované šablony“ (anglicky „tagged templates“). Je k vidění jen zřídka, ale můžete si o ní přečíst v MDN: [Šablonové literály](mdn:/JavaScript/Reference/Template_literals#Tagged_templates).
 
-## Special characters
+## Speciální znaky
 
-It is still possible to create multiline strings with single and double quotes by using a so-called "newline character", written as `\n`, which denotes a line break:
+Je ovšem možné vytvořit víceřádkové řetězce uzavřené do jednoduchých nebo dvojitých uvozovek pomocí tzv. „znaku nového řádku“, který se zapisuje `\n` a stanovuje konec řádku:
 
 ```js run
-let guestList = "Guests:\n * John\n * Pete\n * Mary";
+let seznamHostů = "Hosté:\n * Jan\n * Petr\n * Marie";
 
-alert(guestList); // a multiline list of guests, same as above
+alert(seznamHostů); // víceřádkový seznam hostů, stejný jako výše
 ```
 
-As a simpler example, these two lines are equal, just written differently:
+Jednodušší příklad: tyto dva řádky mají stejný význam, jen jsou různě zapsané:
 
 ```js run
-let str1 = "Hello\nWorld"; // two lines using a "newline symbol"
+let řetězec1 = "Ahoj\nsvěte"; // dva řádky pomocí „symbolu konce řádku“
 
-// two lines using a normal newline and backticks
-let str2 = `Hello
-World`;
+// dva řádky pomocí obyčejného nového řádku a zpětných uvozovek
+let řetězec2 = `Ahoj
+světe`;
 
-alert(str1 == str2); // true
+alert(řetězec1 == řetězec2); // true
 ```
 
-There are other, less common special characters:
+Existují i jiné, méně běžné speciální znaky:
 
-| Character | Description |
-|-----------|-------------|
-|`\n`|New line|
-|`\r`|In Windows text files a combination of two characters `\r\n` represents a new break, while on non-Windows OS it's just `\n`. That's for historical reasons, most Windows software also understands `\n`. |
-|`\'`,&nbsp;`\"`,&nbsp;<code>\\`</code>|Quotes|
-|`\\`|Backslash|
-|`\t`|Tab|
-|`\b`, `\f`, `\v`| Backspace, Form Feed, Vertical Tab -- mentioned for completeness, coming from old times, not used nowadays (you can forget them right now). |
+| Znak | Popis |
+|------|-------|
+|`\n`|Nový řádek|
+|`\r`|V textových souborech ve Windows reprezentuje konec řádku kombinace dvou znaků `\r\n`, zatímco v jiných OS je to pouze `\n`. Je to z historických důvodů, většina softwaru pod Windows rozumí i `\n`.|
+|`\'`,&nbsp;`\"`,&nbsp;<code>\\`</code>|Uvozovky|
+|`\\`|Zpětné lomítko|
+|`\t`|Tabulátor|
+|`\b`, `\f`, `\v`| Backspace, Form Feed, vertikální tabulátor -- uvedeny jen pro úplnost, pocházejí z dřívější doby, v současnosti se nepoužívají (můžete na ně rovnou zapomenout). |
 
-As you can see, all special characters start with a backslash character `\`. It is also called an "escape character".
+Jak vidíte, všechny speciální znaky začínají zpětným lomítkem `\`, které se také nazývá „únikový znak“.
 
-Because it's so special, if we need to show an actual backslash `\` within the string, we need to double it:
+Protože je tak speciální, musíme je zdvojit, jestliže chceme v řetězci zobrazit skutečné zpětné lomítko `\`:
 
 ```js run
-alert( `The backslash: \\` ); // The backslash: \
+alert( `Zpětné lomítko: \\` ); // Zpětné lomítko: \
 ```
 
-So-called "escaped" quotes `\'`, `\"`, <code>\\`</code> are used to insert a quote into the same-quoted string.
+ K vložení uvozovek do řetězce, který je ohraničen stejným druhem uvozovek, se používají tzv. „únikované“ uvozovky `\'`, `\"`, <code>\\`</code>.
 
-For instance:
+Například:
 
 ```js run
-alert( 'I*!*\'*/!*m the Walrus!' ); // *!*I'm*/!* the Walrus!
+alert( 'To*!*\'*/!*s přehnal!' ); // *!*To's*/!* přehnal!
 ```
 
-As you can see, we have to prepend the inner quote by the backslash `\'`, because otherwise it would indicate the string end.
+Jak vidíme, museli jsme před vnitřními jednoduchými uvozovkami uvést zpětné lomítko `\'`, jinak by tyto uvozovky znamenaly konec řetězce.
 
-Of course, only the quotes that are the same as the enclosing ones need to be escaped. So, as a more elegant solution, we could switch to double quotes or backticks instead:
+Samozřejmě musíme předznamenat únikovým znakem jen stejný druh uvozovek jako ty, které obklopují řetězec. Jako elegantnější řešení bychom tedy mohli použít dvojité nebo zpětné uvozovky:
 
 ```js run
-alert( "I'm the Walrus!" ); // I'm the Walrus!
+alert( `To's přehnal!` ); // To's přehnal!
 ```
 
-Besides these special characters, there's also a special notation for Unicode codes `\u…`, it's rarely used and is covered in the optional chapter about [Unicode](info:unicode).
+Kromě těchto speciálních znaků existuje i speciální zápis pro kódy Unicode `\u…`. Používá se jen málokdy a je vysvětlen v pokročilejší kapitole o [Unicode](info:unicode).
 
-## String length
+## Délka řetězce
 
-The `length` property has the string length:
+Délku řetězce obsahuje vlastnost `length`:
 
 ```js run
-alert( `My\n`.length ); // 3
+alert( `Já\n`.length ); // 3
 ```
 
-Note that `\n` is a single "special" character, so the length is indeed `3`.
+Všimněte si, že `\n` je jediný „speciální“ znak, takže délka bude opravdu `3`.
 
-```warn header="`length` is a property"
-People with a background in some other languages sometimes mistype by calling `str.length()` instead of just `str.length`. That doesn't work.
+```warn header="`length` je vlastnost"
+Lidé zvyklí na některé jiné jazyky někdy nesprávně píší volání funkce `řetězec.length()` místo `řetězec.length`. To nefunguje.
 
-Please note that `str.length` is a numeric property, not a function. There is no need to add parenthesis after it. Not `.length()`, but `.length`.
+Prosíme všimněte si, že `řetězec.length` je číselná vlastnost, ne funkce. Není důvod za ní uvádět závorky. Nepíše se `.length()`, ale `.length`.
 ```
 
-## Accessing characters
+## Přístup ke znakům
 
-To get a character at position `pos`, use square brackets `[pos]` or call the method [str.at(pos)](mdn:js/String/at). The first character starts from the zero position:
+Abyste získali znak na pozici `poz`, použijte hranaté závorky `[poz]` nebo zavolejte metodu [řetězec.at(poz)](mdn:js/String/at). První znak se nachází na pozici nula:
 
 ```js run
-let str = `Hello`;
+let řetězec = `Ahoj`;
 
-// the first character
-alert( str[0] ); // H
-alert( str.at(0) ); // H
+// první znak
+alert( řetězec[0] ); // A
+alert( řetězec.at(0) ); // A
 
-// the last character
-alert( str[str.length - 1] ); // o
-alert( str.at(-1) );
+// poslední znak
+alert( řetězec[řetězec.length - 1] ); // j
+alert( řetězec.at(-1) );
 ```
 
-As you can see, the `.at(pos)` method has a benefit of allowing negative position. If `pos` is negative, then it's counted from the end of the string.
+Jak vidíte, metoda `.at(poz)` má výhodu v tom, že umožňuje zadat zápornou pozici. Je-li `poz` záporná, počítá se od konce řetězce.
 
-So `.at(-1)` means the last character, and `.at(-2)` is the one before it, etc.
+Takže `.at(-1)` znamená poslední znak, `.at(-2)` je znak před ním atd.
 
-The square brackets always return `undefined` for negative indexes, for instance:
+Hranaté závorky se záporným indexem vrátí vždy `undefined`, například:
 
 ```js run
-let str = `Hello`;
+let řetězec = `Ahoj`;
 
-alert( str[-2] ); // undefined
-alert( str.at(-2) ); // l
+alert( řetězec[-2] ); // undefined
+alert( řetězec.at(-2) ); // o
 ```
 
-We can also iterate over characters using `for..of`:
+Můžeme také procházet jednotlivé znaky pomocí `for..of`:
 
 ```js run
-for (let char of "Hello") {
-  alert(char); // H,e,l,l,o (char becomes "H", then "e", then "l" etc)
+for (let znak of "Ahoj") {
+  alert(znak); // A,h,o,j (znak bude "A", pak "h", pak "o" atd.)
 }
 ```
 
-## Strings are immutable
+## Řetězce jsou neměnné
 
-Strings can't be changed in JavaScript. It is impossible to change a character.
+Řetězce v JavaScriptu nelze měnit. Není možné v nich změnit některý znak.
 
-Let's try it to show that it doesn't work:
+Zkusme to, abychom viděli, že to nefunguje:
 
 ```js run
-let str = 'Hi';
+let řetězec = 'Ahoj';
 
-str[0] = 'h'; // error
-alert( str[0] ); // doesn't work
+řetězec[0] = 'a'; // chyba
+alert( řetězec[0] ); // nefunguje to
 ```
 
-The usual workaround is to create a whole new string and assign it to `str` instead of the old one.
+Obvyklý způsob, jak to obejít, je vytvořit úplně nový řetězec a přiřadit jej do proměnné `řetězec` namísto starého.
 
-For instance:
+Například:
 
 ```js run
-let str = 'Hi';
+let řetězec = 'Pa';
 
-str = 'h' + str[1]; // replace the string
+řetězec = 'p' + řetězec[1]; // nahradí řetězec
 
-alert( str ); // hi
+alert( řetězec ); // pa
 ```
 
-In the following sections we'll see more examples of this.
+V následujících podkapitolách uvidíme další příklady.
 
-## Changing the case
+## Změna písmen na malá nebo velká
 
-Methods [toLowerCase()](mdn:js/String/toLowerCase) and [toUpperCase()](mdn:js/String/toUpperCase) change the case:
+Metoda [toLowerCase()](mdn:js/string/toLowerCase) mění písmena řetězce na malá a metoda [toUpperCase()](mdn:js/string/toUpperCase) na velká:
 
 ```js run
-alert( 'Interface'.toUpperCase() ); // INTERFACE
-alert( 'Interface'.toLowerCase() ); // interface
+alert( 'Rozhraní'.toUpperCase() ); // ROZHRANÍ
+alert( 'Rozhraní'.toLowerCase() ); // rozhraní
 ```
 
-Or, if we want a single character lowercased:
+Nebo pokud chceme jediný znak, změněný na malé písmeno:
 
 ```js run
-alert( 'Interface'[0].toLowerCase() ); // 'i'
+alert( 'Rozhraní'[0].toLowerCase() ); // 'r'
 ```
 
-## Searching for a substring
+## Hledání podřetězce
 
-There are multiple ways to look for a substring within a string.
+Je mnoho způsobů, jak v řetězci najít podřetězec.
 
-### str.indexOf
+### řetězec.indexOf
 
-The first method is [str.indexOf(substr, pos)](mdn:js/String/indexOf).
+První metoda je [řetězec.indexOf(podřetězec, pozice)](mdn:js/string/indexOf).
 
-It looks for the `substr` in `str`, starting from the given position `pos`, and returns the position where the match was found or `-1` if nothing can be found.
+Hledá `podřetězec` v `řetězec`, počínajíc zadanou pozicí `pozice`, a vrátí pozici, na níž byla nalezena shoda. Jestliže podřetězec nebyl nalezen, vrátí `-1`.
 
-For instance:
+Například:
 
 ```js run
-let str = 'Widget with id';
+let řetězec = 'Prorokovo oko';
 
-alert( str.indexOf('Widget') ); // 0, because 'Widget' is found at the beginning
-alert( str.indexOf('widget') ); // -1, not found, the search is case-sensitive
+alert( řetězec.indexOf('Prorokovo') ); // 0, protože 'Prorokovo' je nalezen na začátku
+alert( řetězec.indexOf('prorokovo') ); // -1, nenalezeno, hledání rozlišuje malá a velká písmena
 
-alert( str.indexOf("id") ); // 1, "id" is found at the position 1 (..idget with id)
+alert( řetězec.indexOf("oko") ); // 4, "oko" nalezeno na pozici 4 (..okovo oko)
 ```
 
-The optional second parameter allows us to start searching from a given position.
+Nepovinný druhý parametr nám umožňuje zahájit hledání na zadané pozici.
 
-For instance, the first occurrence of `"id"` is at position `1`. To look for the next occurrence, let's start the search from position `2`:
+Například první výskyt `"oko"` je na pozici `4`. Chceme-li hledat další výskyt, začněme hledání od pozice `5`:
 
 ```js run
-let str = 'Widget with id';
+let řetězec = 'Prorokovo oko';
 
-alert( str.indexOf('id', 2) ) // 12
+alert( řetězec.indexOf('oko', 5) ) // 10
 ```
 
-If we're interested in all occurrences, we can run `indexOf` in a loop. Every new call is made with the position after the previous match:
+Pokud nás zajímají všechny výskyty, můžeme spustit `indexOf` v cyklu. Každé nové volání bude začínat na pozici za předchozím nálezem:
 
 ```js run
-let str = 'As sly as a fox, as strong as an ox';
+let řetězec = 'Kdyby byly v řece ryby, nebylo by třeba rybníka';
 
-let target = 'as'; // let's look for it
+let cíl = 'by'; // hledejme
 
-let pos = 0;
+let poz = 0;
 while (true) {
-  let foundPos = str.indexOf(target, pos);
-  if (foundPos == -1) break;
+  let nalezenáPozice = řetězec.indexOf(cíl, poz);
+  if (nalezenáPozice == -1) break;
 
-  alert( `Found at ${foundPos}` );
-  pos = foundPos + 1; // continue the search from the next position
+  alert( `Nalezeno na ${nalezenáPozice}` );
+  poz = nalezenáPozice + 1; // pokračujeme v hledání od další pozice
 }
 ```
 
-The same algorithm can be layed out shorter:
+Stejný algoritmus lze napsat kratším způsobem:
 
 ```js run
-let str = "As sly as a fox, as strong as an ox";
-let target = "as";
+let řetězec = "Kdyby byly v řece ryby, nebylo by třeba rybníka";
+let cíl = "by";
 
 *!*
-let pos = -1;
-while ((pos = str.indexOf(target, pos + 1)) != -1) {
-  alert( pos );
+let poz = -1;
+while ((poz = řetězec.indexOf(cíl, poz + 1)) != -1) {
+  alert( poz );
 }
 */!*
 ```
 
-```smart header="`str.lastIndexOf(substr, position)`"
-There is also a similar method [str.lastIndexOf(substr, position)](mdn:js/String/lastIndexOf) that searches from the end of a string to its beginning.
+```smart header="`řetězec.lastIndexOf(podřetězec, pozice)`"
+Existuje i podobná metoda [řetězec.lastIndexOf(podřetězec, pozice)](mdn:js/string/lastIndexOf), která hledá od konce řetězce směrem k jeho začátku.
 
-It would list the occurrences in the reverse order.
+Ta by vypsala výskyty v opačném pořadí.
 ```
 
-There is a slight inconvenience with `indexOf` in the `if` test. We can't put it in the `if` like this:
+Metoda `indexOf` vnáší do podmínky v `if` drobnou nepříjemnost. Nemůžeme ji umístit do `if` takto:
 
 ```js run
-let str = "Widget with id";
+let řetězec = "Prorokovo oko";
 
-if (str.indexOf("Widget")) {
-    alert("We found it"); // doesn't work!
+if (řetězec.indexOf("Prorokovo")) {
+    alert("Našli jsme"); // to nefunguje!
 }
 ```
 
-The `alert` in the example above doesn't show because `str.indexOf("Widget")` returns `0` (meaning that it found the match at the starting position). Right, but `if` considers `0` to be `false`.
+V uvedeném příkladu se `alert` nezobrazí, protože metoda `řetězec.indexOf("Prorokovo")` vrátila `0` (což znamená, že našla shodu na počáteční pozici). To je správně, ale `if` považuje `0` za `false`.
 
-So, we should actually check for `-1`, like this:
+Správně bychom tedy měli porovnávat s `-1`, např. takto:
 
 ```js run
-let str = "Widget with id";
+let řetězec = "Prorokovo oko";
 
 *!*
-if (str.indexOf("Widget") != -1) {
+if (řetězec.indexOf("Prorokovo") != -1) {
 */!*
-    alert("We found it"); // works now!
+    alert("Našli jsme"); // teď to funguje!
 }
 ```
 
 ### includes, startsWith, endsWith
 
-The more modern method [str.includes(substr, pos)](mdn:js/String/includes) returns `true/false` depending on whether `str` contains `substr` within.
+Modernější metoda [řetězec.includes(podřetězec, poz)](mdn:js/string/includes) vrátí `true/false` podle toho, zda `řetězec` v sobě obsahuje `podřetězec`.
 
-It's the right choice if we need to test for the match, but don't need its position:
-
-```js run
-alert( "Widget with id".includes("Widget") ); // true
-
-alert( "Hello".includes("Bye") ); // false
-```
-
-The optional second argument of `str.includes` is the position to start searching from:
+Je to ta pravá možnost, když potřebujeme testovat výskyt, ale nezajímá nás jeho pozice:
 
 ```js run
-alert( "Widget".includes("id") ); // true
-alert( "Widget".includes("id", 3) ); // false, from position 3 there is no "id"
+alert( "Prorokovo oko".includes("Prorok") ); // true
+
+alert( "Ahoj".includes("Sbohem") ); // false
 ```
 
-The methods [str.startsWith](mdn:js/String/startsWith) and [str.endsWith](mdn:js/String/endsWith) do exactly what they say:
+Nepovinný druhý argument `řetězec.includes` je pozice, od níž se má začít hledat:
 
 ```js run
-alert( "*!*Wid*/!*get".startsWith("Wid") ); // true, "Widget" starts with "Wid"
-alert( "Wid*!*get*/!*".endsWith("get") ); // true, "Widget" ends with "get"
+alert( "Prorokovo".includes("oko") ); // true
+alert( "Prorokovo".includes("oko", 5) ); // false, od pozice 5 není žádné "oko"
 ```
 
-## Getting a substring
+Metody [řetězec.startsWith](mdn:js/string/startsWith) a [řetězec.endsWith](mdn:js/string/endsWith) dělají přesně to, co je jejich názvem *(zjistí, zda řetězec začíná „startsWith“ nebo končí „endsWith“ zadaným podřetězcem -- pozn. překl.)*:
 
-There are 3 methods in JavaScript to get a substring: `substring`, `substr` and `slice`.
-
-`str.slice(start [, end])`
-: Returns the part of the string from `start` to (but not including) `end`.
-
-    For instance:
-
-    ```js run
-    let str = "stringify";
-    alert( str.slice(0, 5) ); // 'strin', the substring from 0 to 5 (not including 5)
-    alert( str.slice(0, 1) ); // 's', from 0 to 1, but not including 1, so only character at 0
-    ```
-
-    If there is no second argument, then `slice` goes till the end of the string:
-
-    ```js run
-    let str = "st*!*ringify*/!*";
-    alert( str.slice(2) ); // 'ringify', from the 2nd position till the end
-    ```
-
-    Negative values for `start/end` are also possible. They mean the position is counted from the string end:
-
-    ```js run
-    let str = "strin*!*gif*/!*y";
-
-    // start at the 4th position from the right, end at the 1st from the right
-    alert( str.slice(-4, -1) ); // 'gif'
-    ```
-
-`str.substring(start [, end])`
-: Returns the part of the string *between* `start` and `end` (not including `end`).
-
-    This is almost the same as `slice`, but it allows `start` to be greater than `end` (in this case it simply swaps `start` and `end` values).
-
-    For instance:
-
-    ```js run
-    let str = "st*!*ring*/!*ify";
-
-    // these are same for substring
-    alert( str.substring(2, 6) ); // "ring"
-    alert( str.substring(6, 2) ); // "ring"
-
-    // ...but not for slice:
-    alert( str.slice(2, 6) ); // "ring" (the same)
-    alert( str.slice(6, 2) ); // "" (an empty string)
-
-    ```
-
-    Negative arguments are (unlike slice) not supported, they are treated as `0`.
-
-`str.substr(start [, length])`
-: Returns the part of the string from `start`, with the given `length`.
-
-    In contrast with the previous methods, this one allows us to specify the `length` instead of the ending position:
-
-    ```js run
-    let str = "st*!*ring*/!*ify";
-    alert( str.substr(2, 4) ); // 'ring', from the 2nd position get 4 characters
-    ```
-
-    The first argument may be negative, to count from the end:
-
-    ```js run
-    let str = "strin*!*gi*/!*fy";
-    alert( str.substr(-4, 2) ); // 'gi', from the 4th position get 2 characters
-    ```
-
-    This method resides in the [Annex B](https://tc39.es/ecma262/#sec-string.prototype.substr) of the language specification. It means that only browser-hosted Javascript engines should support it, and it's not recommended to use it. In practice, it's supported everywhere.
-
-Let's recap these methods to avoid any confusion:
-
-| method | selects... | negatives |
-|--------|-----------|-----------|
-| `slice(start, end)` | from `start` to `end` (not including `end`) | allows negatives |
-| `substring(start, end)` | between `start` and `end` (not including `end`)| negative values mean `0` |
-| `substr(start, length)` | from `start` get `length` characters | allows negative `start` |
-
-```smart header="Which one to choose?"
-All of them can do the job. Formally, `substr` has a minor drawback: it is described not in the core JavaScript specification, but in Annex B, which covers browser-only features that exist mainly for historical reasons. So, non-browser environments may fail to support it. But in practice it works everywhere.
-
-Of the other two variants, `slice` is a little bit more flexible, it allows negative arguments and shorter to write.
-
-So, for practical use it's enough to remember only `slice`.
+```js run
+alert( "*!*Pro*/!*rok".startsWith("Pro") ); // true, "Prorok" začíná na "Pro"
+alert( "Pro*!*rok*/!*".endsWith("rok") ); // true, "Prorok" končí na "rok"
 ```
 
-## Comparing strings
+## Získání podřetězce
 
-As we know from the chapter <info:comparison>, strings are compared character-by-character in alphabetical order.
+V JavaScriptu jsou 3 metody pro získání podřetězce: `substring`, `substr` a `slice`.
 
-Although, there are some oddities.
+`řetězec.slice(začátek [, konec])`
+: Vrátí část řetězce od pozice `začátek` do (ale ne včetně) pozice `konec`.
 
-1. A lowercase letter is always greater than the uppercase:
+    Například:
+
+    ```js run
+    let řetězec = "řetězení";
+    alert( řetězec.slice(0, 5) ); // 'řetěz', podřetězec od 0 do 5 (mimo 5)
+    alert( řetězec.slice(0, 1) ); // 'ř', od 0 do 1, ale mimo 1, takže jediný znak na pozici 0
+    ```
+
+    Není-li uveden druhý argument, `slice` vrátí podřetězec až do konce řetězce:
+
+    ```js run
+    let řetězec = "ře*!*tězení*/!*";
+    alert( řetězec.slice(2) ); // 'tězení', od 2. pozice do konce
+    ```
+
+    Je možné, aby `začátek/konec` měly záporné hodnoty. Ty znamenají, že pozice se počítá od konce řetězce:
+
+    ```js run
+    let řetězec = "řetě*!*zen*/!*í";
+
+    // začátek na 4. pozici zprava, konec na 1. pozici zprava
+    alert( řetězec.slice(-4, -1) ); // 'zen'
+    ```
+
+`řetězec.substring(začátek [, konec])`
+: Vrátí část řetězce *mezi* pozicemi `začátek` a `konec` (nezahrnuje `konec`).
+
+    Je to téměř totéž jako `slice`, ale umožňuje, aby `začátek` byl větší než `konec` (v takovém případě se hodnoty `začátek` a `konec` jednoduše prohodí).
+
+    Například:
+
+    ```js run
+    let řetězec = "ře*!*těze*/!*ní";
+
+    // tyto hodnoty jsou totéž pro substring:
+    alert( řetězec.substring(2, 6) ); // "těze"
+    alert( řetězec.substring(6, 2) ); // "těze"
+
+    // ...ale ne pro slice:
+    alert( řetězec.slice(2, 6) ); // "těze" (totéž)
+    alert( řetězec.slice(6, 2) ); // "" (prázdný řetězec)
+
+    ```
+
+    Záporné argumenty (na rozdíl od `slice`) nejsou podporovány a zachází se s nimi jako s `0`.
+
+`řetězec.substr(začátek [, délka])`
+: Vrátí část řetězce od pozice `začátek` se zadanou délkou `délka`.
+
+    Na rozdíl od předchozích metod nám tato umožňuje specifikovat délku namísto koncové pozice:
+
+    ```js run
+    let řetězec = "ře*!*těze*/!*ní";
+    alert( řetězec.substr(2, 4) ); // 'těze', od 2. pozice vezme 4 znaky
+    ```
+
+    První argument může být záporný, pak se bude počítat od konce:
+
+    ```js run
+    let řetězec = "řetě*!*ze*/!*ní";
+    alert( řetězec.substr(-4, 2) ); // 'ze', od 4. pozice zprava vezme 2 znaky
+    ```
+
+Tato metoda je obsažena v [Dodatku B](https://tc39.es/ecma262/#sec-string.prototype.substr) specifikace jazyka. Znamená to, že by ji měly podporovat jedině motory JavaScriptu uvnitř prohlížečů a nedoporučuje se ji používat. V praxi je však podporována všude.
+
+Abychom předešli zmatkům, všechny tyto metody si zrekapitulujme:
+
+| metoda | vybírá... | záporné hodnoty |
+|--------|-----------|-----------------|
+| `slice(začátek, konec)` | od `začátek` do `konec` (mimo `konec`) | umožňuje záporné hodnoty |
+| `substring(začátek, konec)` | mezi `začátek` a `konec` (mimo `konec`) | záporné hodnoty znamenají `0` |
+| `substr(začátek, délka)` | od `začátek` vezme `délka` znaků | umožňuje záporný `začátek` |
+
+```smart header="Kterou zvolit?"
+Potřebnou práci odvedou všechny. Formálně má `substr` drobnou nevýhodu: není popsána v jádru specifikace JavaScriptu, ale v Dodatku B, který pokrývá vlastnosti fungující jen v prohlížečích a existující zejména z historických důvodů. Prostředí mimo prohlížeče ji tedy nemusejí podporovat. V praxi však funguje všude.
+
+Ze zbývajících dvou variant je `slice` trochu flexibilnější, protože umožňuje záporné hodnoty a je kratší na napsání. 
+
+Pro praktické použití si tedy stačí pamatovat jen `slice`.
+```
+
+## Porovnávání řetězců
+
+Jak víme z kapitoly <info:comparison>, řetězce se porovnávají znak po znaku v abecedním pořadí.
+
+Existují však některé zvláštnosti.
+
+1. Malé písmeno je vždy větší než velké:
 
     ```js run
     alert( 'a' > 'Z' ); // true
     ```
 
-2. Letters with diacritical marks are "out of order":
+2. Písmena s diakritickými znaménky jsou „mimo pořadí“:
 
     ```js run
-    alert( 'Österreich' > 'Zealand' ); // true
+    alert( 'Írán' > 'Zéland' ); // true
     ```
 
-    This may lead to strange results if we sort these country names. Usually people would expect `Zealand` to come after `Österreich` in the list.
+    To může vést ke zvláštním výsledkům, budeme-li řadit tyto názvy zemí. Obvykle se očekává, že `Zéland` bude v seznamu až za `Írán`.
 
-To understand what happens, we should be aware that strings in Javascript are encoded using [UTF-16](https://en.wikipedia.org/wiki/UTF-16). That is: each character has a corresponding numeric code.
+Abychom pochopili, co se tady děje, měli bychom vědět, že všechny řetězce jsou zakódovány pomocí [UTF-16](https://cs.wikipedia.org/wiki/UTF-16). To znamená, že každý znak má odpovídající číselný kód. 
 
-There are special methods that allow to get the character for the code and back:
+Existují speciální metody, které umožňují získat znak pro zadaný kód a naopak:
 
-`str.codePointAt(pos)`
-: Returns a decimal number representing the code for the character at position `pos`:
+`řetězec.codePointAt(poz)`
+: Vrátí desítkové číslo představující kód znaku na pozici `poz`:
 
     ```js run
-    // different case letters have different codes
+    // malá a velká písmena mají různé kódy
     alert( "Z".codePointAt(0) ); // 90
     alert( "z".codePointAt(0) ); // 122
-    alert( "z".codePointAt(0).toString(16) ); // 7a (if we need a hexadecimal value)
+    alert( "z".codePointAt(0).toString(16) ); // 7a (potřebujeme-li hexadecimální hodnotu)
     ```
 
-`String.fromCodePoint(code)`
-: Creates a character by its numeric `code`
+`String.fromCodePoint(kód)`
+: Vytvoří znak podle jeho číselného kódu `kód`:
 
     ```js run
     alert( String.fromCodePoint(90) ); // Z
-    alert( String.fromCodePoint(0x5a) ); // Z (we can also use a hex value as an argument)
+    alert( String.fromCodePoint(0x5a) ); // Z (jako argument můžeme použít i hexadecimální hodnotu)
     ```
 
-Now let's see the characters with codes `65..220` (the latin alphabet and a little bit extra) by making a string of them:
+Nyní se podívejme na znaky s kódy `65..220` (latinská abeceda a něco navíc), když z nich vytvoříme řetězec:
 
 ```js run
-let str = '';
+let řetězec = '';
 
 for (let i = 65; i <= 220; i++) {
-  str += String.fromCodePoint(i);
+  řetězec += String.fromCodePoint(i);
 }
-alert( str );
-// Output:
+alert( řetězec );
+// Výstup:
 // ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 // ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜ
 ```
 
-See? Capital characters go first, then a few special ones, then lowercase characters, and `Ö` near the end of the output.
+Vidíte? Napřed jsou velká písmena, pak několik speciálních znaků, pak malá písmena a `Í` je poblíž konce výstupu.
 
-Now it becomes obvious why `a > Z`.
+Nyní bude zřejmé, proč `a > Z`.
 
-The characters are compared by their numeric code. The greater code means that the character is greater. The code for `a` (97) is greater than the code for `Z` (90).
+Znaky se porovnávají podle svého číselného kódu. Vyšší kód znamená, že znak je větší. Kód `a` (97) je vyšší než kód `Z` (90).
 
-- All lowercase letters go after uppercase letters because their codes are greater.
-- Some letters like `Ö` stand apart from the main alphabet. Here, its code is greater than anything from `a` to `z`.
+- Všechna malá písmena jsou až za velkými písmeny, protože jejich kódy jsou vyšší.
+- Některá písmena, např. `Í`, stojí mimo hlavní abecedu. Jejich kód je zde vyšší než kód kteréhokoli písmene od `a` do `z`.
 
-### Correct comparisons [#correct-comparisons]
+### Správné porovnání [#correct-comparisons]
 
-The "right" algorithm to do string comparisons is more complex than it may seem, because alphabets are different for different languages.
+„Správný“ algoritmus pro porovnání řetězců je složitější, než se může zdát, protože různé jazyky mají různé abecedy.
 
-So, the browser needs to know the language to compare.
+Prohlížeč tedy musí znát jazyk, v němž porovnává.
 
-Luckily, modern browsers support the internationalization standard [ECMA-402](https://www.ecma-international.org/publications-and-standards/standards/ecma-402/).
+Naštěstí moderní prohlížeče podporují internacionalizační standard [ECMA-402](https://www.ecma-international.org/publications-and-standards/standards/ecma-402/).
 
-It provides a special method to compare strings in different languages, following their rules.
+Ten poskytuje speciální metodu, jak porovnávat řetězce v různých jazycích podle jejich pravidel.
 
-The call [str.localeCompare(str2)](mdn:js/String/localeCompare) returns an integer indicating whether `str` is less, equal or greater than `str2` according to the language rules:
+Volání [řetězec.localeCompare(řetězec2)](mdn:js/string/localeCompare) vrátí celé číslo, které oznamuje, zda `řetězec` je menší, roven nebo větší než `řetězec2` podle pravidel jazyka:
 
-- Returns a negative number if `str` is less than `str2`.
-- Returns a positive number if `str` is greater than `str2`.
-- Returns `0` if they are equivalent.
+- Je-li `řetězec` menší než `řetězec2`, vrátí záporné číslo.
+- Je-li `řetězec` větší než `řetězec2`, vrátí kladné číslo.
+- Jsou-li si rovny, vrátí `0`.
 
-For instance:
+Například:
 
 ```js run
-alert( 'Österreich'.localeCompare('Zealand') ); // -1
+alert( 'Česko'.localeCompare('Zéland') ); // -1
 ```
 
-This method actually has two additional arguments specified in [the documentation](mdn:js/String/localeCompare), which allows it to specify the language (by default taken from the environment, letter order depends on the language) and setup additional rules like case sensitivity or should `"a"` and `"á"` be treated as the same etc.
+Tato metoda má ve skutečnosti ještě dva další argumenty specifikované v [dokumentaci](mdn:js/string/localeCompare), které umožňují specifikovat jazyk (standardně se vezme z prostředí, na jazyku závisí pořadí písmen) a nastavit další pravidla, např. rozlišování malých a velkých písmen, nebo zda se `"a"` a `"á"` mají považovat za stejné znaky, atd.
 
-## Summary
+## Shrnutí
 
-- There are 3 types of quotes. Backticks allow a string to span multiple lines and embed expressions `${…}`.
-- We can use special characters, such as a line break `\n`.
-- To get a character, use: `[]` or `at` method.
-- To get a substring, use: `slice` or `substring`.
-- To lowercase/uppercase a string, use: `toLowerCase/toUpperCase`.
-- To look for a substring, use: `indexOf`, or `includes/startsWith/endsWith` for simple checks.
-- To compare strings according to the language, use: `localeCompare`, otherwise they are compared by character codes.
+- Existují 3 druhy uvozovek. Zpětné uvozovky umožňují rozdělit řetězec na více řádků a vnořit výrazy `${…}`.
+- Můžeme používat speciální znaky, například konec řádku `\n`.
+- Chceme-li získat znak, použijeme `[]` nebo metodu `at`.
+- Chceme-li získat podřetězec, použijeme `slice` nebo `substring`.
+- Chceme-li převést řetězec na malá/velká písmena, použijeme `toLowerCase/toUpperCase`.
+- Chceme-li najít podřetězec, použijeme `indexOf` nebo pro jednoduché kontroly `includes/startsWith/endsWith`.
+- Chceme-li porovnat řetězce podle jazykových pravidel, použijeme `localeCompare`, jinak se budou porovnávat podle kódů znaků.
 
-There are several other helpful methods in strings:
+Pro řetězce existuje i několik dalších užitečných metod:
 
-- `str.trim()` -- removes ("trims") spaces from the beginning and end of the string.
-- `str.repeat(n)` -- repeats the string `n` times.
-- ...and more to be found in the [manual](mdn:js/String).
+- `řetězec.trim()` -- odstraní mezery ze začátku a konce řetězce.
+- `řetězec.repeat(n)` -- zopakuje řetězec `n`-krát.
+- ...a další lze najít v [manuálu](mdn:js/string).
 
-Strings also have methods for doing search/replace with regular expressions. But that's big topic, so it's explained in a separate tutorial section <info:regular-expressions>.
+Řetězce mají také metody pro hledání a nahrazování pomocí regulárních výrazů. To je však rozsáhlé téma, proto je vysvětleno v samostatné části tutoriálu <info:regular-expressions>.
 
-Also, as of now it's important to know that strings are based on Unicode encoding, and hence there're issues with comparisons. There's more about Unicode in the chapter <info:unicode>.
+Nyní je také důležité vědět, že řetězce jsou založeny na kódování Unicode, a proto jsou zde určité problémy s porovnáváním. O Unicode se dozvíte víc v kapitole <info:unicode>.

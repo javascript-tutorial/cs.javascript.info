@@ -1,40 +1,40 @@
-The result is: **error**.
+Výsledek bude: **chyba**.
 
-Try running it:
+Zkuste si to spustit:
 
 ```js run
 let x = 1;
 
-function func() {
+function funkce() {
 *!*
-  console.log(x); // ReferenceError: Cannot access 'x' before initialization
+  console.log(x); // ReferenceError: Nelze přistupovat k 'x' před inicializací
 */!*
   let x = 2;
 }
 
-func();
+funkce();
 ```
 
-In this example we can observe the peculiar difference between a "non-existing" and "uninitialized" variable.
+V tomto příkladu můžeme vidět pozoruhodný rozdíl mezi „neexistující“ a „neinicializovanou“ proměnnou.
 
-As you may have read in the article [](info:closure), a variable starts in the "uninitialized" state from the moment when the execution enters a code block (or a function). And it stays uninitalized until the corresponding `let` statement.
+Jak jste si mohli přečíst v článku [](info:closure), proměnná začíná v „neinicializovaném“ stavu ve chvíli, kdy běh vstoupí do kódového bloku (nebo do funkce). A zůstane neinicializovaná až do příslušného příkazu `let`.
 
-In other words, a variable technically exists, but can't be used before `let`.
+Jinými slovy, před `let` proměnná technicky existuje, ale nemůže být používána.
 
-The code above demonstrates it.
+Uvedený kód to demonstruje.
 
 ```js
-function func() {
+function funkce() {
 *!*
-  // the local variable x is known to the engine from the beginning of the function,
-  // but "uninitialized" (unusable) until let ("dead zone")
-  // hence the error
+  // motor zná lokální proměnnou x od začátku této funkce,
+  // ale ta je „neinicializovaná“ (nepoužitelná) až do příkazu let („mrtvá zóna“)
+  // proto chyba
 */!*
 
-  console.log(x); // ReferenceError: Cannot access 'x' before initialization
+  console.log(x); // ReferenceError: Nelze přistupovat k 'x' před inicializací
 
   let x = 2;
 }
 ```
 
-This zone of temporary unusability of a variable (from the beginning of the code block till `let`) is sometimes called the "dead zone".
+Tato zóna dočasné nepoužitelnosti proměnné (od začátku kódového bloku do `let`) se někdy nazývá „mrtvá zóna“.

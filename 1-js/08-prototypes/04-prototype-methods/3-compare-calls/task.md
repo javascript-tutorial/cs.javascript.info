@@ -2,26 +2,26 @@ importance: 5
 
 ---
 
-# The difference between calls
+# Rozdíl mezi voláními
 
-Let's create a new `rabbit` object:
+Vytvořme nový objekt `králík`:
 
 ```js
-function Rabbit(name) {
-  this.name = name;
+function Králík(jméno) {
+  this.jméno = jméno;
 }
-Rabbit.prototype.sayHi = function() {
-  alert(this.name);
+Králík.prototype.řekniAhoj = function() {
+  alert(this.jméno);
 };
 
-let rabbit = new Rabbit("Rabbit");
+let králík = new Králík("Králík");
 ```
 
-These calls do the same thing or not?
+Učiní všechna tato volání totéž, nebo ne?
 
 ```js
-rabbit.sayHi();
-Rabbit.prototype.sayHi();
-Object.getPrototypeOf(rabbit).sayHi();
-rabbit.__proto__.sayHi();
+králík.řekniAhoj();
+Králík.prototype.řekniAhoj();
+Object.getPrototypeOf(králík).řekniAhoj();
+králík.__proto__.řekniAhoj();
 ```

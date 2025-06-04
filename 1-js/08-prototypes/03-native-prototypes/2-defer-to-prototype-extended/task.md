@@ -2,18 +2,18 @@ importance: 4
 
 ---
 
-# Add the decorating "defer()" to functions
+# Přidejte do funkcí dekorační „odlož()“
 
-Add to the prototype of all functions the method `defer(ms)`, that returns a wrapper, delaying the call by `ms` milliseconds.
+Přidejte do prototypu všech funkcí metodu `odlož(ms)`, která vrátí obal, který odloží volání funkce o `ms` milisekund.
 
-Here's an example of how it should work:
+Zde je příklad, jak by to mělo fungovat:
 
 ```js
 function f(a, b) {
   alert( a + b );
 }
 
-f.defer(1000)(1, 2); // shows 3 after 1 second
+f.odlož(1000)(1, 2); // zobrazí 3 za 1 sekundu
 ```
 
-Please note that the arguments should be passed to the original function.
+Prosíme všimněte si, že argumenty by měly být předány původní funkci.
