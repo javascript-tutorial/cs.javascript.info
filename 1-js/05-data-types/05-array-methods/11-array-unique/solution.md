@@ -1,39 +1,39 @@
-Let's walk the array items:
-- For each item we'll check if the resulting array already has that item.
-- If it is so, then ignore, otherwise add to results.
+Projděme si prvky pole:
+- U každého prvku ověříme, zda výsledné pole již tento prvek obsahuje.
+- Pokud je tomu tak, budeme ho ignorovat, jinak ho přidáme do výsledku.
 
 ```js run demo
-function unique(arr) {
-  let result = [];
+function unikát(pole) {
+  let výsledek = [];
 
-  for (let str of arr) {
-    if (!result.includes(str)) {
-      result.push(str);
+  for (let řetězec of pole) {
+    if (!výsledek.includes(řetězec)) {
+      výsledek.push(řetězec);
     }
   }
 
-  return result;
+  return výsledek;
 }
 
-let strings = ["Hare", "Krishna", "Hare", "Krishna",
-  "Krishna", "Krishna", "Hare", "Hare", ":-O"
+let řetězce = ["Haré", "Kršna", "Haré", "Kršna",
+  "Kršna", "Kršna", "Haré", "Haré", ":-O"
 ];
 
-alert( unique(strings) ); // Hare, Krishna, :-O
+alert( unikát(řetězce) ); // Haré, Kršna, :-O
 ```
 
-The code works, but there's a potential performance problem in it.
+Tento kód funguje, ale má potenciální problém s výkonem.
 
-The method `result.includes(str)` internally walks the array `result` and compares each element against `str` to find the match.
+Metoda `výsledek.includes(řetězec)` vnitřně prochází pole `výsledek` a porovná každý jeho prvek s `řetězec`, aby našla shodu.
 
-So if there are `100` elements in `result` and no one matches `str`, then it will walk the whole `result` and do exactly `100` comparisons. And if `result` is large, like `10000`, then there would be `10000` comparisons.
+Jestliže tedy v poli `výsledek` je `100` prvků a žádný se nerovná `řetězec`, pak projde celé pole `výsledek` a provede právě `100` porovnání. A je-li `výsledek` velký, např. `10000`, pak se vykoná `10000` porovnání.
 
-That's not a problem by itself, because JavaScript engines are very fast, so walk `10000` array is a matter of microseconds.
+To samo o sobě není problém, jelikož JavaScriptové motory jsou velmi rychlé, takže projít pole `10000` prvků je otázkou mikrosekund.
 
-But we do such test for each element of `arr`, in the `for` loop.
+My však provádíme takový test pro každý prvek `pole` v cyklu `for`.
 
-So if `arr.length` is `10000` we'll have something like `10000*10000` = 100 millions of comparisons. That's a lot.
+Jestliže tedy `pole.length` je `10000`, budeme mít něco jako `10000*10000` = 100 miliónů porovnání. To je hodně.
 
-So the solution is only good for small arrays.
+Toto řešení je tedy dobré jen pro malá pole.
 
-Further in the chapter <info:map-set> we'll see how to optimize it.
+Později v kapitole <info:map-set> uvidíme, jak je optimalizovat.

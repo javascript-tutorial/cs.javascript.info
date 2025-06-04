@@ -1,64 +1,64 @@
 
-Using `setInterval`:
+Pomocí `setInterval`:
 
 ```js run
-function printNumbers(from, to) {
-  let current = from;
+function vypišČísla(začátek, konec) {
+  let aktuální = začátek;
 
-  let timerId = setInterval(function() {
-    alert(current);
-    if (current == to) {
-      clearInterval(timerId);
+  let idČasovače = setInterval(function() {
+    alert(aktuální);
+    if (aktuální == konec) {
+      clearInterval(idČasovače);
     }
-    current++;
+    aktuální++;
   }, 1000);
 }
 
-// usage:
-printNumbers(5, 10);
+// použití:
+vypišČísla(5, 10);
 ```
 
-Using nested `setTimeout`:
+Pomocí vnořeného `setTimeout`:
 
 
 ```js run
-function printNumbers(from, to) {
-  let current = from;
+function vypišČísla(začátek, konec) {
+  let aktuální = začátek;
 
-  setTimeout(function go() {
-    alert(current);
-    if (current < to) {
-      setTimeout(go, 1000);
+  setTimeout(function spusť() {
+    alert(aktuální);
+    if (aktuální < konec) {
+      setTimeout(spusť, 1000);
     }
-    current++;
+    aktuální++;
   }, 1000);
 }
 
-// usage:
-printNumbers(5, 10);
+// použití:
+vypišČísla(5, 10);
 ```
 
-Note that in both solutions, there is an initial delay before the first output. The function is called after `1000ms` the first time.
+Všimněte si, že v obou řešeních je úvodní prodleva před prvním výstupem. Funkce je poprvé volána za `1000 ms`.
 
-If we also want the function to run immediately, then we can add an additional call on a separate line, like this:
+Jestliže chceme, aby se funkce spustila okamžitě, můžeme přidat další volání na samostatný řádek, například takto:
 
 ```js run
-function printNumbers(from, to) {
-  let current = from;
+function vypišČísla(začátek, konec) {
+  let aktuální = začátek;
 
-  function go() {
-    alert(current);
-    if (current == to) {
-      clearInterval(timerId);
+  function spusť() {
+    alert(aktuální);
+    if (aktuální == konec) {
+      clearInterval(idČasovače);
     }
-    current++;
+    aktuální++;
   }
 
 *!*
-  go();
+  spusť();
 */!*
-  let timerId = setInterval(go, 1000);
+  let idČasovače = setInterval(spusť, 1000);
 }
 
-printNumbers(5, 10);
+vypišČísla(5, 10);
 ```

@@ -1,231 +1,231 @@
-# Constructor, operator "new"
+# Konstruktor, operátor „new“
 
-The regular `{...}` syntax allows us to create one object. But often we need to create many similar objects, like multiple users or menu items and so on.
+Obvyklá syntaxe `{...}` nám umožňuje vytvořit jeden objekt. Často však potřebujeme vytvořit mnoho podobných objektů, např. více uživatelů, položek menu a podobně.
 
-That can be done using constructor functions and the `"new"` operator.
+To můžeme učinit pomocí konstruktorů a operátoru `"new"`.
 
-## Constructor function
+## Konstruktor
 
-Constructor functions technically are regular functions. There are two conventions though:
+Konstruktory jsou z technického hlediska obvyklé funkce. Platí pro ně však dvě konvence:
 
-1. They are named with capital letter first.
-2. They should be executed only with `"new"` operator.
+1. Jejich název začíná velkým písmenem.
+2. Měly by být volány jen pomocí operátoru `„new“`.
 
-For instance:
+Například:
 
 ```js run
-function User(name) {
-  this.name = name;
-  this.isAdmin = false;
+function Uživatel(jméno) {
+  this.jméno = jméno;
+  this.jeSprávce = false;
 }
 
 *!*
-let user = new User("Jack");
+let uživatel = new Uživatel("Kuba");
 */!*
 
-alert(user.name); // Jack
-alert(user.isAdmin); // false
+alert(uživatel.jméno); // Kuba
+alert(uživatel.jeSprávce); // false
 ```
 
-When a function is executed with `new`, it does the following steps:
+Když je funkce volána pomocí `new`, provedou se následující kroky:
 
-1. A new empty object is created and assigned to `this`.
-2. The function body executes. Usually it modifies `this`, adds new properties to it.
-3. The value of `this` is returned.
+1. Vytvoří se nový prázdný objekt a přiřadí se do `this`.
+2. Vykoná se tělo funkce. To obvykle modifikuje `this`, do něhož přidá nové vlastnosti.
+3. Vrátí se hodnota `this`.
 
-In other words, `new User(...)` does something like:
+Jinými slovy, `new Uživatel(...)` udělá něco jako:
 
 ```js
-function User(name) {
+function Uživatel(jméno) {
 *!*
-  // this = {};  (implicitly)
+  // this = {};  (implicitně)
 */!*
 
-  // add properties to this
-  this.name = name;
-  this.isAdmin = false;
+  // přidá vlastnosti do this
+  this.jméno = jméno;
+  this.jeSprávce = false;
 
 *!*
-  // return this;  (implicitly)
+  // return this;  (implicitně)
 */!*
 }
 ```
 
-So `let user = new User("Jack")` gives the same result as:
+Takže `let uživatel = new Uživatel("Kuba")` vydá stejný výsledek jako:
 
 ```js
-let user = {
-  name: "Jack",
-  isAdmin: false
+let uživatel = {
+  jméno: "Kuba",
+  jeSprávce: false
 };
 ```
 
-Now if we want to create other users, we can call `new User("Ann")`, `new User("Alice")` and so on. Much shorter than using literals every time, and also easy to read.
+Když nyní budeme chtít vytvořit jiné uživatele, můžeme volat `new Uživatel("Anna")`, `new Uživatel("Alice")` a tak dále. Je to mnohem kratší než pokaždé používat literály a je to i snadno čitelné.
 
-That's the main purpose of constructors -- to implement reusable object creation code.
+To je hlavní smysl konstruktorů -- implementovat opakovaně použitelný kód pro vytváření objektů.
 
-Let's note once again -- technically, any function (except arrow functions, as they don't have `this`) can be used as a constructor. It can be run with `new`, and it will execute the algorithm above. The "capital letter first" is a common agreement, to make it clear that a function is to be run with `new`.
+Znovu poznamenejme, že technicky může být libovolná funkce (s výjimkou šipkových funkcí, jelikož ty nemají `this`) použita jako konstruktor. Může být volána pomocí `new` a pak se vykoná výše uvedený algoritmus. „Velké první písmeno“ je obvyklá úmluva, aby bylo zřejmé, že funkce má být volána pomocí `new`.
 
 ````smart header="new function() { ... }"
-If we have many lines of code all about creation of a single complex object, we can wrap them in an immediately called constructor function, like this:
+Máme-li mnoho řádků kódu a všechny se týkají vytvoření jediného složitého objektu, můžeme je zapouzdřit do konstruktoru, který okamžitě zavoláme, například:
 
 ```js
-// create a function and immediately call it with new
-let user = new function() { 
-  this.name = "John";
-  this.isAdmin = false;
+// vytvoříme funkci a okamžitě ji zavoláme pomocí new
+let uživatel = new function() {
+  this.jméno = "Jan";
+  this.jeSprávce = false;
 
-  // ...other code for user creation
-  // maybe complex logic and statements
-  // local variables etc
+  // ...další kód pro vytváření uživatele
+  // možná složitá logika a příkazy
+  // lokální proměnné atd.
 };
 ```
 
-This constructor can't be called again, because it is not saved anywhere, just created and called. So this trick aims to encapsulate the code that constructs the single object, without future reuse.
+Tento konstruktor nemůžeme volat znovu, protože není nikde uložen, bude pouze vytvořen a zavolán. Smyslem tohoto triku je tedy zapouzdřit kód, který vytvoří jediný objekt a dále se nepoužívá.
 ````
 
-## Constructor mode test: new.target
+## Test režimu konstruktoru: new.target
 
-```smart header="Advanced stuff"
-The syntax from this section is rarely used, skip it unless you want to know everything.
+```smart header="Pokročilá záležitost"
+Syntaxe z této části se používá málokdy. Pokud nechcete znát opravdu všechno, můžete ji přeskočit.
 ```
 
-Inside a function, we can check whether it was called with `new` or without it, using a special `new.target` property.
+Uvnitř funkce můžeme ověřit, zda byla volána pomocí `new` nebo bez něj, pomocí speciální vlastnosti `new.target`.
 
-It is undefined for regular calls and equals the function if called with `new`:
+Ta je při běžném volání `undefined`, ale pokud je funkce volána pomocí `new`, je rovna této funkci:
 
 ```js run
-function User() {
+function Uživatel() {
   alert(new.target);
 }
 
-// without "new":
+// bez „new“:
 *!*
-User(); // undefined
+Uživatel(); // undefined
 */!*
 
-// with "new":
+// s „new“:
 *!*
-new User(); // function User { ... }
+new Uživatel(); // function Uživatel { ... }
 */!*
 ```
 
-That can be used inside the function to know whether it was called with `new`, "in constructor mode", or without it, "in regular mode".
+Můžeme ji použít uvnitř funkce, abychom se dozvěděli, zda byla volána „v režimu konstruktoru“ pomocí `new` nebo „v běžném režimu“ bez něj.
 
-We can also make both `new` and regular calls to do the same, like this:
+Můžeme také funkci přimět, aby při volání pomocí `new` a při běžném volání prováděla totéž, například takto:
 
 ```js run
-function User(name) {
-  if (!new.target) { // if you run me without new
-    return new User(name); // ...I will add new for you
+function Uživatel(jméno) {
+  if (!new.target) { // pokud mě spustíte bez new
+    return new Uživatel(jméno); // ...přidám new pro vás
   }
 
-  this.name = name;
+  this.jméno = jméno;
 }
 
-let john = User("John"); // redirects call to new User
-alert(john.name); // John
+let jan = Uživatel("Jan"); // přesměruje volání na new Uživatel
+alert(jan.jméno); // Jan
 ```
 
-This approach is sometimes used in libraries to make the syntax more flexible. So that people may call the function with or without `new`, and it still works.
+Tento přístup se někdy používá v knihovnách, aby byla syntaxe flexibilnější. Lidé pak mohou volat funkci s `new` nebo bez něj a funkce pokaždé funguje.
 
-Probably not a good thing to use everywhere though, because omitting `new` makes it a bit less obvious what's going on. With `new` we all know that the new object is being created.
+Pravděpodobně však není dobré používat jej všude, protože bez uvedení `new` je trochu méně zřejmé, co se děje. Když je uvedeno `new`, všichni víme, že se vytváří nový objekt.
 
-## Return from constructors
+## Návrat z konstruktorů
 
-Usually, constructors do not have a `return` statement. Their task is to write all necessary stuff into `this`, and it automatically becomes the result.
+Konstruktory obvykle nemají příkaz `return`. Jejich úkolem je zapsat všechno potřebné do `this` a to se pak automaticky stane výsledkem.
 
-But if there is a `return` statement, then the rule is simple:
+Jestliže však je příkaz `return` přítomen, platí jednoduché pravidlo:
 
-- If `return` is called with an object, then the object is returned instead of `this`.
-- If `return` is called with a primitive, it's ignored.
+- Je-li `return` volán s objektem, vrátí se namísto `this` tento objekt.
+- Je-li `return` volán s primitivem, tento primitiv se ignoruje.
 
-In other words, `return` with an object returns that object, in all other cases `this` is returned.
+Jinými slovy, `return` s objektem vrátí onen objekt, ve všech ostatních případech se vrátí `this`.
 
-For instance, here `return` overrides `this` by returning an object:
+Například zde `return` přepisuje `this` vrácením objektu:
 
 ```js run
-function BigUser() {
+function VelkýUživatel() {
 
-  this.name = "John";
+  this.jméno = "Jan";
 
-  return { name: "Godzilla" };  // <-- returns this object
+  return { jméno: "Godzilla" };  // <-- vrátí tento objekt
 }
 
-alert( new BigUser().name );  // Godzilla, got that object
+alert( new VelkýUživatel().jméno );  // Godzilla, získali jsme onen objekt
 ```
 
-And here's an example with an empty `return` (or we could place a primitive after it, doesn't matter):
+A zde je příklad s prázdným `return` (nebo za něj můžeme umístit primitiv, na tom nezáleží):
 
 ```js run
-function SmallUser() {
+function MalýUživatel() {
 
-  this.name = "John";
+  this.jméno = "Jan";
 
-  return; // <-- returns this
+  return; // <-- vrátí this
 }
 
-alert( new SmallUser().name );  // John
+alert( new MalýUživatel().jméno );  // Jan
 ```
 
-Usually constructors don't have a `return` statement. Here we mention the special behavior with returning objects mainly for the sake of completeness.
+Konstruktory obvykle příkaz `return` neobsahují. Speciální chování s vracením objektů zde zmiňujeme zejména pro úplnost.
 
 ````smart header="Omitting parentheses"
 By the way, we can omit parentheses after `new`:
 
 ```js
-let user = new User; // <-- no parentheses
-// same as
-let user = new User();
+let uživatel = new Uživatel; // <-- bez závorek
+// totéž jako
+let uživatel = new Uživatel();
 ```
 
-Omitting parentheses here is not considered a "good style", but the syntax is permitted by specification.
+Vypouštění závorek zde se nepovažuje za „dobrý styl“, ale specifikace tuto syntaxi povoluje.
 ````
 
-## Methods in constructor
+## Metody v konstruktoru
 
-Using constructor functions to create objects gives a great deal of flexibility. The constructor function may have parameters that define how to construct the object, and what to put in it.
+Používání konstruktorů k vytváření objektů nám dává velké množství flexibility. Konstruktor může mít parametry, které definují, jak objekt zkonstruovat a co do něj uložit.
 
-Of course, we can add to `this` not only properties, but methods as well.
+Samozřejmě do `this` můžeme přidávat nejen vlastnosti, ale také metody.
 
-For instance, `new User(name)` below creates an object with the given `name` and the method `sayHi`:
+Například níže uvedené `new Uživatel(jméno)` vytvoří objekt se zadanou vlastností `jméno` a metodou `řekniAhoj`:
 
 ```js run
-function User(name) {
-  this.name = name;
+function Uživatel(jméno) {
+  this.jméno = jméno;
 
-  this.sayHi = function() {
-    alert( "My name is: " + this.name );
+  this.řekniAhoj = function() {
+    alert( "Jmenuji se: " + this.jméno );
   };
 }
 
 *!*
-let john = new User("John");
+let jan = new Uživatel("Jan");
 
-john.sayHi(); // My name is: John
+jan.řekniAhoj(); // Jmenuji se: Jan
 */!*
 
 /*
-john = {
-   name: "John",
-   sayHi: function() { ... }
+jan = {
+   jméno: "Jan",
+   řekniAhoj: function() { ... }
 }
 */
 ```
 
-To create complex objects, there's a more advanced syntax, [classes](info:classes), that we'll cover later.
+K vytváření složitých objektů existuje i pokročilejší syntaxe -- [třídy](info:classes), kterou probereme později.
 
-## Summary
+## Shrnutí
 
-- Constructor functions or, briefly, constructors, are regular functions, but there's a common agreement to name them with capital letter first.
-- Constructor functions should only be called using `new`. Such a call implies a creation of empty `this` at the start and returning the populated one at the end.
+- Konstruktory jsou obvyklé funkce, avšak panuje běžná úmluva, že jejich název by měl mít velké první písmeno.
+- Konstruktory by měly být volány jedině pomocí `new`. Takové volání způsobí, že se na začátku vytvoří prázdné `this` a to se pak na konci vrátí naplněné.
 
-We can use constructor functions to make multiple similar objects.
+Konstruktory můžeme používat k vytváření více podobných objektů.
 
-JavaScript provides constructor functions for many built-in language objects: like `Date` for dates, `Set` for sets and others that we plan to study.
+JavaScript poskytuje konstruktory pro mnoho vestavěných jazykových objektů: např. `Date` pro data, `Set` pro množiny a jiné, které máme v plánu prostudovat.
 
-```smart header="Objects, we'll be back!"
-In this chapter we only cover the basics about objects and constructors. They are essential for learning more about data types and functions in the next chapters.
+```smart header="Objekty, vrátíme se!"
+V této kapitole probíráme ohledně objektů a konstruktorů jen základy, které jsou podstatné pro pochopení dalších věcí ohledně datových typů a funkcí v dalších kapitolách.
 
-After we learn that, we return to objects and cover them in-depth in the chapters <info:prototypes> and <info:classes>.
+Až se je naučíme, vrátíme se k objektům a probereme je do hloubky v kapitolách <info:prototypes> a <info:classes>.
 ```

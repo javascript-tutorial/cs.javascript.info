@@ -1,7 +1,7 @@
-function debounce(func, ms) {
-  let timeout;
+function vyčkej(funkce, ms) {
+  let časovač;
   return function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, arguments), ms);
+    clearTimeout(časovač);
+    časovač = setTimeout(() => funkce.apply(this, arguments), ms);
   };
 }

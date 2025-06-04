@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# Sort users by age
+# Seřazení uživatelů podle věku
 
-Write the function `sortByAge(users)` that gets an array of objects with the `age` property and sorts them by `age`.
+Napište funkci `seřaďPodleVěku(uživatelé)`, která obdrží pole objektů s vlastností `věk` a seřadí je podle této vlastnosti.
 
-For instance:
+Příklad:
 
 ```js no-beautify
-let john = { name: "John", age: 25 };
-let pete = { name: "Pete", age: 30 };
-let mary = { name: "Mary", age: 28 };
+let jan = { jméno: "Jan", věk: 25 };
+let petr = { jméno: "Petr", věk: 30 };
+let marie = { jméno: "Marie", věk: 28 };
 
-let arr = [ pete, john, mary ];
+let pole = [ petr, jan, marie ];
 
-sortByAge(arr);
+seřaďPodleVěku(pole);
 
-// now: [john, mary, pete]
-alert(arr[0].name); // John
-alert(arr[1].name); // Mary
-alert(arr[2].name); // Pete
+// nyní: [jan, marie, petr]
+alert(pole[0].jméno); // Jan
+alert(pole[1].jméno); // Marie
+alert(pole[2].jméno); // Petr
 ```

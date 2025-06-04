@@ -1,44 +1,44 @@
-describe("spy", function() {
-  it("records calls into its property", function() {
-    function work() {}
+describe("špión", function() {
+  it("zapisuje volání do své vlastnosti", function() {
+    function práce() {}
 
-    work = spy(work);
-    assert.deepEqual(work.calls, []);
+    práce = špión(práce);
+    assert.deepEqual(práce.volání, []);
 
-    work(1, 2);
-    assert.deepEqual(work.calls, [
+    práce(1, 2);
+    assert.deepEqual(práce.volání, [
       [1, 2]
     ]);
 
-    work(3, 4);
-    assert.deepEqual(work.calls, [
+    práce(3, 4);
+    assert.deepEqual(práce.volání, [
       [1, 2],
       [3, 4]
     ]);
   });
 
-  it("transparently wraps functions", function() {
+  it("transparentně obaluje funkce", function() {
 
-    let sum = sinon.spy((a, b) => a + b);
+    let sečti = sinon.spy((a, b) => a + b);
 
-    let wrappedSum = spy(sum);
+    let obalenéSečti = špión(sečti);
 
-    assert.equal(wrappedSum(1, 2), 3);
-    assert(sum.calledWith(1, 2));
+    assert.equal(obalenéSečti(1, 2), 3);
+    assert(sečti.calledWith(1, 2));
   });
 
 
-  it("transparently wraps methods", function() {
+  it("transparentně obaluje metody", function() {
 
-    let calc = {
-      sum: sinon.spy((a, b) => a + b)
+    let vypočítej = {
+      sečti: sinon.spy((a, b) => a + b)
     };
 
-    calc.wrappedSum = spy(calc.sum);
+    vypočítej.obalenéSečti = špión(vypočítej.sečti);
 
-    assert.equal(calc.wrappedSum(1, 2), 3);
-    assert(calc.sum.calledWith(1, 2));
-    assert(calc.sum.calledOn(calc));
+    assert.equal(vypočítej.obalenéSečti(1, 2), 3);
+    assert(vypočítej.sečti.calledWith(1, 2));
+    assert(vypočítej.sečti.calledOn(vypočítej));
   });
 
 });
