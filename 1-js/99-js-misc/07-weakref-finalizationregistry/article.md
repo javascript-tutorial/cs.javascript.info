@@ -1,483 +1,452 @@
 
-# WeakRef and FinalizationRegistry
+# WeakRef a FinalizationRegistry
 
-```warn header="\"Hidden\" features of the language"
-This article covers a very narrowly focused topic, that most developers extremely rarely encounter in practice (and may not even be aware of its existence).  
+```warn header="„Skryté“ prvky jazyka"
+Tento článek pokrývá velmi úzce zaměřené téma, s nímž se většina vývojářů v praxi setká jen velmi vzácně (a možná ani neví o jeho existenci).
 
-We recommend skipping this chapter if you have just started learning JavaScript.
+Pokud se JavaScript teprve začínáte učit, doporučujeme vám tuto kapitolu přeskočit.
 ```
 
-Recalling the basic concept of the *reachability principle* from the <info:garbage-collection> chapter,
-we can note that the JavaScript engine is guaranteed to keep values in memory that are accessible or in use.
+Vzpomeňme si na základní koncept *principu dosažitelnosti* z kapitoly <info:garbage-collection> a poznamenejme, že motor JavaScriptu zaručeně udrží v paměti hodnoty, které jsou dostupné nebo se používají.
 
-For example:
+Například:
 
 
 ```js
-//  the user variable holds a strong reference to the object
-let user = { name: "John" };
+// proměnná uživatel obsahuje silný odkaz na objekt
+let uživatel = { jméno: "Jan" };
 
-// let's overwrite the value of the user variable
-user = null;
+// přepíšeme hodnotu proměnné uživatel
+uživatel = null;
 
-// the reference is lost and the object will be deleted from memory
+// odkaz je ztracen a objekt bude vymazán z paměti
 
 ```
 
-Or a similar, but slightly more complicated code with two strong references:
+Nebo podobný, ale trošku složitější kód se dvěma silnými odkazy:
 
 ```js
-//  the user variable holds a strong reference to the object
-let user = { name: "John" };
+// proměnná uživatel obsahuje silný odkaz na objekt
+let uživatel = { jméno: "Jan" };
 
-// copied the strong reference to the object into the admin variable
+// zkopírujeme silný odkaz na objekt do proměnné správce
 *!*
-let admin = user;
+let správce = uživatel;
 */!*
 
-// let's overwrite the value of the user variable
-user = null;
+// přepíšeme hodnotu proměnné uživatel
+uživatel = null;
 
-// the object is still reachable through the admin variable
+// objekt je stále dosažitelný z proměnné správce
 ```
-The object `{ name: "John" }` would only be deleted from memory if there were no strong references to it (if we also overwrote the value of the `admin` variable).  
+Objekt `{ jméno: "Jan" }` bude smazán z paměti teprve tehdy, až na něj nebudou existovat žádné silné odkazy (tedy až přepíšeme i hodnotu proměnné `správce`).
 
-In JavaScript, there is a concept called `WeakRef`, which behaves slightly differently in this case.
+V JavaScriptu existuje koncept nazývaný `WeakRef`, který se v tomto případě chová poněkud odlišně.
 
 
-````smart header="Terms: \"Strong reference\", \"Weak reference\""
-**Strong reference** - is a reference to an object or value, that prevents them from being deleted by the garbage collector. Thereby, keeping the object or value in memory, to which it points.  
+````smart header="Pojmy: „silný odkaz“, „slabý odkaz“"
+**Silný odkaz** - je odkaz na objekt nebo hodnotu, který zabraňuje jejich smazání sběračem odpadků. Udržuje tedy objekt nebo hodnotu v paměti, na níž ukazuje.
 
-This means, that the object or value remains in memory and is not collected by the garbage collector as long, as there are active strong references to it.  
+To znamená, že objekt nebo hodnota zůstane v paměti a nebude odklizen sběračem odpadků, dokud na něj budou existovat aktivní silné odkazy.
 
-In JavaScript, ordinary references to objects are strong references. For example:
+Běžné odkazy na objekty v JavaScriptu jsou silné odkazy. Například:
 
 ```js
-// the user variable holds a strong reference to this object
-let user = { name: "John" };
+// proměnná uživatel obsahuje silný odkaz na objekt
+let uživatel = { jméno: "Jan" };
 ```
-**Weak reference** - is a reference to an object or value, that does *not* prevent them from being deleted by the garbage collector.
-An object or value can be deleted by the garbage collector if, the only remaining references to them are weak references.
+**Slabý odkaz** - je odkaz na objekt nebo hodnotu, který *nebrání* jejich smazání sběračem odpadků.
+Objekt nebo hodnota může být smazán sběračem odpadků, jestliže všechny zbývající odkazy na něj jsou slabé.
 ````
 
 ## WeakRef
 
 
-````warn header="Note of caution"
-Before we dive into it, it is worth noting that the correct use of the structures discussed in this article requires very careful thought, and they are best avoided if possible. 
+````warn header="Upozornění"
+Než se do toho ponoříme, stojí za zmínku, že korektní používání struktur probíraných v tomto článku vyžaduje velmi opatrné přemýšlení a je lépe se jim vyhnout, pokud je to možné.
 ````
 
-`WeakRef` - is an object, that contains a weak reference to another object, called `target` or `referent`. 
+`WeakRef` - je objekt, který obsahuje slabý odkaz na jiný objekt, nazývaný `cíl` nebo `referent`. 
 
-The peculiarity of `WeakRef` is that it does not prevent the garbage collector from deleting its referent-object. In other words, a `WeakRef` object does not keep the `referent` object alive.  
+Zvláštnost `WeakRef` spočívá v tom, že nebrání sběrači odpadků v odstranění svého referovaného objektu. Jinými slovy, objekt `WeakRef` neponechává objekt `referent` naživu.
 
-Now let's take the `user` variable as the "referent" and create a weak reference from it to the `admin` variable.
-To create a weak reference, you need to use the `WeakRef` constructor, passing in the target object (the object you want a weak reference to).
+Vezměme nyní jako referovaný objekt proměnnou `uživatel` a vytvořme na ni slabý odkaz z proměnné `správce`.
+Abychom vytvořili slabý odkaz, musíme použít konstruktor třídy `WeakRef` a předat mu cílový objekt (objekt, na který chceme slabý odkaz vytvořit).
 
-In our case — this is the `user` variable:
+V našem případě to bude proměnná `uživatel`:
 
 
 ```js
-//  the user variable holds a strong reference to the object
-let user = { name: "John" };
+// proměnná uživatel obsahuje silný odkaz na objekt
+let uživatel = { jméno: "Jan" };
 
-//  the admin variable holds a weak reference to the object
+// proměnná správce obsahuje slabý odkaz na objekt
 *!*
-let admin = new WeakRef(user);
+let správce = new WeakRef(uživatel);
 */!*
 
 ```
 
-The diagram below depicts two types of references: a strong reference using the `user` variable and a weak reference using the `admin` variable:
+Následující diagram zobrazuje dva druhy odkazů: silný odkaz pomocí proměnné `uživatel` a slabý odkaz pomocí proměnné `správce`:
 
 ![](weakref-finalizationregistry-01.svg)  
 
-Then, at some point, we stop using the `user` variable - it gets overwritten, goes out of scope, etc., while keeping the `WeakRef` instance in the `admin` variable:
+Pak v určitém okamžiku přestaneme používat proměnnou `uživatel` - bude přepsána, opustí rozsah platnosti atd., zatímco instanci `WeakRef` v proměnné `správce` budeme udržovat:
 
 ```js
-// let's overwrite the value of the user variable
-user = null;
+// přepíšeme hodnotu proměnné uživatel
+uživatel = null;
 ```
 
-A weak reference to an object is not enough to keep it "alive". When the only remaining references to a referent-object are weak references, the garbage collector is free to destroy this object and use its memory for something else.
+Slabý odkaz na objekt nestačí k jeho udržení „naživu“. Když budou všechny zbývající odkazy na referovaný objekt slabé, sběrač odpadků může tento objekt zničit a paměť, kterou objekt obsazoval, může být využita k něčemu jinému.
 
-However, until the object is actually destroyed, the weak reference may return it, even if there are no more strong references to this object.
-That is, our object becomes a kind of "[Schrödinger's cat](https://en.wikipedia.org/wiki/Schr%C3%B6dinger%27s_cat)" – we cannot know for sure whether it's "alive" or "dead":
+Dokud však není objekt skutečně zničen, slabý odkaz jej může vracet, i když na něj už neexistují žádné silné odkazy.
+Náš objekt se tedy stává něčím jako „[Schrödingerova kočka](https://cs.wikipedia.org/wiki/Schr%C3%B6dingerova_ko%C4%8Dka)“ – nemůžeme s jistotou vědět, zda je „živý“ nebo „mrtvý“:
 
 ![](weakref-finalizationregistry-02.svg)
 
-At this point, to get the object from the `WeakRef` instance, we will use its `deref()` method.  
+Když v této chvíli chceme získat objekt z instance `WeakRef`, použijeme její metodu `deref()`.
 
-The `deref()` method returns the referent-object that the `WeakRef` points to, if the object is still in memory. If the object has been deleted by the garbage collector, then the `deref()` method will return `undefined`:
+Metoda `deref()` vrátí referovaný objekt, na který `WeakRef` ukazuje, pokud je tento objekt stále v paměti. Jestliže byl objekt smazán sběračem odpadků, pak metoda `deref()` vrátí `undefined`:
 
 
 ```js
-let ref = admin.deref();
+let ref = správce.deref();
 
 if (ref) {
-  // the object is still accessible: we can perform any manipulations with it
+  // objekt je stále dostupný: můžeme s ním provádět jakékoli manipulace
 } else {
-  // the object has been collected by the garbage collector
+  // objekt byl odklizen sběračem odpadků
 }
 ```
 
-## WeakRef use cases
+## Případy použití WeakRef
 
-`WeakRef` is typically used to create caches or [associative arrays](https://en.wikipedia.org/wiki/Associative_array) that store resource-intensive objects.
-This allows one to avoid preventing these objects from being collected by the garbage collector solely based on their presence in the cache or associative array.  
+`WeakRef` se obvykle používá k vytváření mezipamětí (cache) nebo [asociativních polí](https://cs.wikipedia.org/wiki/Asociativn%C3%AD_pole), do nichž se ukládají objekty náročné na zdroje.
+To nám umožňuje vyhnout se tomu, aby tyto objekty nemohly být odklizeny sběračem odpadků jen proto, že jsou uloženy v mezipaměti nebo asociativním poli.
 
-One of the primary examples - is a situation when we have numerous binary image objects (for instance, represented as `ArrayBuffer` or `Blob`), and we want to associate a name or path with each image.
-Existing data structures are not quite suitable for these purposes:
+Jedním z primárních příkladů je situace, kdy máme větší množství objektů binárních obrázků (reprezentovaných například jako `ArrayBuffer` nebo `Blob`) a chceme ke každému z nich připojit název nebo cestu.
+Existující datové struktury nejsou pro tento účel příliš vhodné:
 
-- Using `Map` to create associations between names and images, or vice versa, will keep the image objects in memory since they are present in the `Map` as keys or values.
-- `WeakMap` is ineligible for this goal either: because the objects represented as `WeakMap` keys use weak references, and are not protected from deletion by the garbage collector.
+- Použijeme-li k vytvoření asociací mezi názvy a obrázky nebo opačně `Map`, objekty obrázků budou stále zůstávat v paměti, neboť se budou nacházet v `Map` jako klíče nebo hodnoty.
+- Ani `WeakMap` se pro tento účel nehodí, protože objekty představované jako klíče `WeakMap` používají slabé odkazy a nejsou tedy chráněny před smazáním sběračem odpadků.
 
-But, in this situation, we need a data structure that would use weak references in its values.
+V této situaci však potřebujeme datovou strukturu, která by používala slabé odkazy ve svých hodnotách.
 
-For this purpose, we can use a `Map` collection, whose values are `WeakRef` instances referring to the large objects we need.
-Consequently, we will not keep these large and unnecessary objects in memory longer than they should be.  
+K tomuto účelu můžeme použít kolekci `Map`, jejíž hodnoty jsou instance `WeakRef`, které odkazují na potřebné velké objekty.
+Důsledkem bude, že tyto velké a nepotřebné objekty nebudeme udržovat v paměti déle, než bychom měli.
 
-Otherwise, this is a way to get the image object from the cache if it is still reachable.
-If it has been garbage collected, we will re-generate or re-download it again.  
+Kromě toho to je způsob, jak získat z mezipaměti objekt obrázku, je-li stále dosažitelný.
+Pokud již byl odstraněn sběračem odpadků, můžeme jej přegenerovat nebo stáhnout znovu.
 
-This way, less memory is used in some situations.  
+Tímto způsobem v některým situacích spotřebujeme méně paměti.
 
-## Example №1: using WeakRef for caching
+## Příklad číslo 1: použití WeakRef pro mezipaměť
 
-Below is a code snippet that demonstrates the technique of using `WeakRef`.  
+Následující úryvek kódu demonstruje techniku používání `WeakRef`.  
 
-In short, we use a `Map` with string keys and `WeakRef` objects as their values.
-If the `WeakRef` object has not been collected by the garbage collector, we get it from the cache.
-Otherwise, we re-download it again and put it in the cache for further possible reuse:  
+Zkráceně řečeno, použijeme `Map`, jejíž klíče budou řetězce a jejíž hodnoty budou objekty `WeakRef`.
+Jestliže objekt ve `WeakRef` ještě nebyl odklizen sběračem odpadků, získáme jej z mezipaměti.
+V opačném případě jej znovu stáhneme a uložíme do mezipaměti pro případné další znovupoužití:
 
 ```js
-function fetchImg() {
-    // abstract function for downloading images...
+function stáhniObrázek() {
+    // abstraktní funkce pro stahování obrázků...
 }
 
-function weakRefCache(fetchImg) { // (1)
-    const imgCache = new Map(); // (2)
+function najdiVMezipaměti(stáhniObrázek) { // (1)
+    const paměťObrázků = new Map(); // (2)
 
-    return (imgName) => { // (3)
-        const cachedImg = imgCache.get(imgName); // (4)
+    return (názevObrázku) => { // (3)
+        const obrázekVPaměti = paměťObrázků.get(názevObrázku); // (4)
 
-        if (cachedImg?.deref()) { // (5)
-            return cachedImg?.deref();
+        if (obrázekVPaměti?.deref()) { // (5)
+            return obrázekVPaměti?.deref();
         }
 
-        const newImg = fetchImg(imgName); // (6)
-        imgCache.set(imgName, new WeakRef(newImg)); // (7)
+        const novýObrázek = stáhniObrázek(názevObrázku); // (6)
+        paměťObrázků.set(názevObrázku, new WeakRef(novýObrázek)); // (7)
 
-        return newImg;
+        return novýObrázek;
     };
 }
 
-const getCachedImg = weakRefCache(fetchImg);
+const vraťObrázekVPaměti = najdiVMezipaměti(stáhniObrázek);
 ```  
 
-Let's delve into the details of what happened here:
-1. `weakRefCache` - is a higher-order function that takes another function, `fetchImg`, as an argument. In this example, we can neglect a detailed description of the `fetchImg` function, since it can be any logic for downloading images.
-2. `imgCache` - is a cache of images, that stores cached results of the `fetchImg` function, in the form of string keys (image name) and `WeakRef` objects as their values.
-3. Return an anonymous function that takes the image name as an argument. This argument will be used as a key for the cached image.
-4. Trying to get the cached result from the cache, using the provided key (image name).
-5. If the cache contains a value for the specified key, and the `WeakRef` object has not been deleted by the garbage collector, return the cached result.
-6. If there is no entry in the cache with the requested key, or `deref()` method returns `undefined` (meaning that the `WeakRef` object has been garbage collected), the `fetchImg` function downloads the image again.
-7. Put the downloaded image into the cache as a `WeakRef` object.  
+Podívejme se podrobně, co se tady děje:
+1. `najdiVMezipaměti` - je funkce vyššího řádu, která jako argument obdrží jinou funkci, `stáhniObrázek`. V tomto příkladu můžeme podrobný popis funkce `stáhniObrázek` vynechat, jelikož to může být jakákoli logika stahování obrázků.
+2. `paměťObrázků` - je úložiště obrázků, do něhož se ukládají výsledky funkce `stáhniObrázek` ve formě řetězcových klíčů (název obrázku) a objektů třídy `WeakRef` jako hodnot.
+3. Vrátíme anonymní funkci, jejímž argumentem je název obrázku. Tento argument bude použit jako klíč pro uložený obrázek.
+4. Snažíme se získat uložený výsledek z úložiště podle zadaného klíče (název obrázku).
+5. Jestliže úložiště obsahuje pro zadaný klíč nějakou hodnotu a objekt `WeakRef` nebyl odklizen sběračem odpadků, vrátíme uložený výsledek.
+6. Jestliže pro požadovaný klíč neexistuje v úložišti žádný záznam nebo metoda `deref()` vrátí `undefined` (což znamená, že objekt `WeakRef` byl odklizen sběračem odpadků), funkce `stáhniObrázek` stáhne obrázek znovu.
+7. Stažený obrázek uložíme do úložiště jako objekt `WeakRef`.
 
-Now we have a `Map` collection, where the keys - are image names as strings, and values - are `WeakRef` objects containing the images themselves.
+Nyní máme kolekci `Map`, jejíž klíče jsou řetězce s názvy obrázků a jejíž hodnoty jsou objekty `WeakRef` obsahující samotné obrázky.
 
-This technique helps to avoid allocating a large amount of memory for resource-intensive objects, that nobody uses anymore.
-It also saves memory and time in case of reusing cached objects.  
+Tato technika nám pomůže vyhnout se zabírání velkého množství paměti pro objekty náročné na zdroje, které již nikdo nepoužívá.
+Rovněž šetří paměť a čas v případě opakovaného použití uložených objektů.
 
-Here is a visual representation of what this code looks like:  
+Následuje vizuální reprezentace toho, jak tento kód vypadá:
 
 ![](weakref-finalizationregistry-03.svg) 
 
-But, this implementation has its drawbacks: over time, `Map` will be filled with strings as keys, that point to a `WeakRef`, whose referent-object has already been garbage collected:  
+Tato implementace však má své nevýhody: po čase bude `Map` plná řetězcových klíčů, které ukazují na `WeakRef`, jejichž referovaný objekt již byl odstraněn sběračem:
 
 ![](weakref-finalizationregistry-04.svg)
 
-One way to handle this problem - is to periodically scavenge the cache and clear out "dead" entries.
-Another way - is to use finalizers, which we will explore next.  
+Jedním způsobem, jak tento problém vyřešit, je pravidelně procházet úložiště a odstraňovat „mrtvé“ záznamy.
+Dalším způsobem je použít finalizátory, které prozkoumáme později. 
 
 
-## Example №2: Using WeakRef to track DOM objects
+## Příklad číslo 2: použití WeakRef ke sledování DOM objektů
 
-Another use case for `WeakRef` - is tracking DOM objects.  
+Dalším případem použití `WeakRef` je sledování DOM objektů.
 
-Let's imagine a scenario where some third-party code or library interacts with elements on our page as long as they exist in the DOM.
-For example, it could be an external utility for monitoring and notifying about the system's state (commonly so-called "logger" – a program that sends informational messages called "logs").
+Představme si scénář, v němž kód nebo knihovna třetí strany pracuje s elementy na naší stránce tak dlouho, dokud existují v DOMu. Může to být například externí utilita pro monitorování a oznamování stavu systému (běžně nazývaná „logger“ – program, který posílá informační zprávy nazývané „logy“).
 
-Interactive example:  
+Interaktivní příklad: 
 
 [codetabs height=420 src="weakref-dom"]  
 
-When the "Start sending messages" button is clicked, in the so-called "logs display window" (an element with the `.window__body` class), messages (logs) start to appear.  
+Když kliknete na tlačítko „Začít posílat zprávy“, začnou se objevovat zprávy (logy) v tzv. „okně zobrazování zpráv“ (element třídy `.window__body`).
 
-But, as soon as this element is deleted from the DOM, the logger should stop sending messages.
-To reproduce the removal of this element, just click the "Close" button in the top right corner.  
+Jakmile je však tento element z DOMu smazán, logger by měl přestat zprávy zasílat. Abyste odstranění tohoto elementu reprodukovali, stačí kliknout na tlačítko „Zavřít“ v pravém horním rohu.
 
-In order not to complicate our work, and not to notify third-party code every time our DOM-element is available, and when it is not, it will be enough to create a weak reference to it using `WeakRef`.    
+Abychom si nekomplikovali práci a neposílali oznámení kódu třetí strany pokaždé, když je a když není náš DOM element k dispozici, postačí na něj vytvořit slabý odkaz pomocí `WeakRef`.    
 
-Once the element is removed from the DOM, the logger will notice it and stop sending messages.  
+Když bude element odstraněn z DOMu, logger si toho všimne a přestane zprávy posílat.
 
-Now let's take a closer look at the source code (*tab `index.js`*):
+Nyní se blíže podívejme na zdrojový kód (*záložka `index.js`*):
 
-1. Get the DOM-element of the "Start sending messages" button.
-2. Get the DOM-element of the "Close" button.
-3. Get the DOM-element of the logs display window using the `new WeakRef()` constructor. This way, the `windowElementRef` variable holds a weak reference to the DOM-element.
-4. Add an event listener on the "Start sending messages" button, responsible for starting the logger when clicked.
-5. Add an event listener on the "Close" button, responsible for closing the logs display window when clicked.
-6. Use `setInterval` to start displaying a new message every second.
-7. If the DOM-element of the logs display window is still accessible and kept in memory, create and send a new message.
-8. If the `deref()` method returns `undefined`, it means that the DOM-element has been deleted from memory. In this case, the logger stops displaying messages and clears the timer.
-9. `alert`, which will be called, after the DOM-element of the logs display window is deleted from memory (i.e. after clicking the "Close" button). **Note, that deletion from memory may not happen immediately, as it depends only on the internal mechanisms of the garbage collector.**
+1. Získáme DOM element tlačítka „Začít posílat zprávy“.
+2. Získáme DOM element tlačítka „Zavřít“.
+3. Získáme DOM element okna zobrazení logů pomocí konstruktoru `new WeakRef()`. Pak bude proměnná `odkazNaElementOkna` obsahovat slabý odkaz na tento DOM element.
+4. Přidáme k tlačítku „Začít posílat zprávy“ posluchače událostí, který bude zajišťovat rozběhnutí loggeru po kliknutí na tlačítko.
+5. Přidáme k tlačítku „Zavřít“ posluchače událostí, který bude zajišťovat zavření okna s logy po kliknutí na tlačítko.
+6. Pomocí `setInterval` začneme každou sekundu zobrazovat zprávu.
+7. Jestliže je DOM element okna zobrazujícího zprávy stále dostupný a udržovaný v paměti, vytvoříme a pošleme novou zprávu.
+8. Jestliže metoda `deref()` vrátí `undefined`, znamená to, že DOM element byl odstraněn z paměti. V tom případě logger přestane zobrazovat zprávy a zruší časovač.
+9. Tento `alert` bude volán poté, co bude DOM element okna zobrazování zpráv odstraněn z paměti (tj. po kliknutí na tlačítko „Zavřít“). **Všimněte si, že k odstranění z paměti nemusí dojít okamžitě. Závisí to výhradně na vnitřních mechanismech sběrače odpadků.**
 
-   We cannot control this process directly from the code. However, despite this, we still have the option to force garbage collection from the browser.
-
-   In Google Chrome, for example, to do this, you need to open the developer tools (`key:Ctrl` + `key:Shift` + `key:J` on Windows/Linux or `key:Option` + `key:⌘` + `key:J` on macOS), go to the "Performance" tab, and click on the bin icon button – "Collect garbage":
+   Tento proces nemůžeme ovládat přímo z kódu. Přesto však máme možnost vynutit si spuštění sběru odpadků z prohlížeče.
+   
+   Například v Google Chrome to provedeme tak, že otevřeme vývojářské nástroje (`key:Ctrl` + `key:Shift` + `key:J` ve Windows/Linuxu nebo `key:Option` + `key:⌘` + `key:J` v macOS), přejdeme na záložku „Výkon“ („Performance“) a klikneme na ikonu odpadkového koše -- „Uvolnění paměti“ („Collect garbage“):
 
    ![](google-chrome-developer-tools.png)
 
     <br>
-    This functionality is supported in most modern browsers. After the actions are taken, the <code>alert</code> will trigger immediately.
+    Tuto funkcionalitu podporuje většina moderních prohlížečů. Po provedení těchto akcí se okamžitě spustí <code>alert</code>.
 
 ## FinalizationRegistry
 
-Now it is time to talk about finalizers. Before we move on, let's clarify the terminology:  
+Nyní nastal čas pohovořit o finalizátorech. Než budeme pokračovat, ujasníme si terminologii:
 
-**Cleanup callback (finalizer)** - is a function that is executed, when an object, registered in the `FinalizationRegistry`, is deleted from memory by the garbage collector.  
+**Úklidový callback (finalizátor)** - je funkce, která je spuštěna, když je objekt registrovaný ve `FinalizationRegistry` odstraněn z paměti sběračem odpadků.
 
-Its purpose - is to provide the ability to perform additional operations, related to the object, after it has been finally deleted from memory.  
+Jejím účelem je poskytnout možnost provést další operace vztahující se k objektu poté, co byl definitivně odstraněn z paměti.
 
-**Registry** (or `FinalizationRegistry`) - is a special object in JavaScript that manages the registration and unregistration of objects and their cleanup callbacks.  
+**Registr** (nebo `FinalizationRegistry`) - je speciální objekt v JavaScriptu, který spravuje registraci a deregistraci objektů a jejich úklidových callbacků.
 
-This mechanism allows registering an object to track and associate a cleanup callback with it.
-Essentially it is a structure that stores information about registered objects and their cleanup callbacks, and then automatically invokes those callbacks when the objects are deleted from memory.  
+Tento mechanismus umožňuje registrovat objekt ke sledování a připojit k němu úklidový callback.
+V zásadě je to struktura, která ukládá informace o registrovaných objektech a jejich úklidových callbaccích a pak, když jsou objekty odstraněny z paměti, tyto callbacky automaticky vyvolává.
 
-To create an instance of the `FinalizationRegistry`, it needs to call its constructor, which takes a single argument - the cleanup callback (finalizer).  
+Abychom vytvořili instanci třídy `FinalizationRegistry`, musíme volat její konstruktor, který obsahuje jediný argument - úklidový callback (finalizátor).  
 
-Syntax:
+Syntaxe:
 
 ```js
-function cleanupCallback(heldValue) { 
-  // cleanup callback code 
+function úklidovýCallback(uchovávanáHodnota) { 
+  // kód úklidového callbacku
 }
 
-const registry = new FinalizationRegistry(cleanupCallback);
+const registr = new FinalizationRegistry(úklidovýCallback);
 ```
 
-Here:
+Zde:
 
-- `cleanupCallback` - a cleanup callback that will be automatically called when a registered object is deleted from memory.
-- `heldValue` - the value that is passed as an argument to the cleanup callback. If `heldValue` is an object, the registry keeps a strong reference to it.
-- `registry` - an instance of `FinalizationRegistry`.
+- `úklidovýCallback` - úklidový callback, který bude automaticky zavolán, až bude registrovaný objekt odstraněn z paměti.
+- `uchovávanáHodnota` - hodnota, která je předána úklidovému callbacku jako argument. Pokud `uchovávanáHodnota` je objekt, registr si na něj uchovává silný odkaz.
+- `registr` - instance třídy `FinalizationRegistry`.
 
-`FinalizationRegistry` methods:
+Metody třídy `FinalizationRegistry`:
 
-- `register(target, heldValue [, unregisterToken])` - used to register objects in the registry.
+- `register(cíl, uchovávanáHodnota [, registračníZnámka])` - používá se k registraci objektů v registru.
 
-  `target` - the object being registered for tracking. If the `target` is garbage collected, the cleanup callback will be called with `heldValue` as its argument.
+  `cíl` - objekt registrovaný pro sledování. Pokud je `cíl` odstraněn sběračem odpadků, bude zavolán úklidový callback s argumentem `uchovávanáHodnota`.
+  
+  Nepovinná `registračníZnámka` – známka pro zrušení registrace. Můžeme ji předat, abychom mohli registraci objektu zrušit ještě dříve, než jej sběrač odpadků odstraní. Zpravidla se jako `registračníZnámka` používá objekt `cíl`, což je standardní praktika.
+- `unregister(registračníZnámka)` - metoda `unregister` se používá ke zrušení registrace objektu v registru. Obsahuje jeden argument - `registračníZnámka` (známka pro zrušení registrace, která byla zadána při registraci objektu).
 
-  Optional `unregisterToken` – an unregistration token. It can be passed to unregister an object before the garbage collector deletes it. Typically, the `target` object is used as `unregisterToken`, which is the standard practice.
-- `unregister(unregisterToken)` - the `unregister` method is used to unregister an object from the registry. It takes one argument - `unregisterToken` (the unregister token that was obtained when registering the object).  
-
-Now let's move on to a simple example. Let's use the already-known `user` object and create an instance of `FinalizationRegistry`:  
+Přejděme nyní k jednoduchému příkladu. Využijme již známý objekt `uživatel` a vytvořme instanci třídy `FinalizationRegistry`:  
 
 ```js
-let user = { name: "John" };
+let uživatel = { jméno: "Jan" };
 
-const registry = new FinalizationRegistry((heldValue) => {
-  console.log(`${heldValue} has been collected by the garbage collector.`);
+const registr = new FinalizationRegistry((uchovávanáHodnota) => {
+  console.log(`${uchovávanáHodnota} byl odstraněn sběračem odpadků.`);
 });
 ```
 
-Then, we will register the object, that requires a cleanup callback by calling the `register` method:
+Pak objekt, pro který požadujeme úklidový callback, zaregistrujeme voláním metody `register`:
 
 ```js
-registry.register(user, user.name);
+registr.register(uživatel, uživatel.jméno);
 ```
 
-The registry does not keep a strong reference to the object being registered, as this would defeat its purpose. If the registry kept a strong reference, then the object would never be garbage collected.  
+Registr si na registrovaný objekt neuchovává silný odkaz, protože by tím ztratil smysl. Kdyby si jej uchovával, objekt by nikdy nebyl sběračem odpadků odklizen.
 
-If the object is deleted by the garbage collector, our cleanup callback may be called at some point in the future, with the `heldValue` passed to it:
+Jestliže objekt bude odklizen sběračem odpadků, může být někdy v budoucnu zavolán náš úklidový callback, kterému se předá `uchovávanáHodnota`:
 
 ```js
-// When the user object is deleted by the garbage collector, the following message will be printed in the console:
-"John has been collected by the garbage collector."
+// Když je objekt uživatel odklizen sběračem odpadků, vypíše se na konzoli následující zpráva:
+"Jan byl odstraněn sběračem odpadků."
 ```
 
-There are also situations where, even in implementations that use a cleanup callback, there is a chance that it will not be called.
+Existují však situace, v nichž se i v implementacích využívajících úklidový callback může stát, že úklidový callback nebude nikdy zavolán.
 
-For example:
-- When the program fully terminates its operation (for example, when closing a tab in a browser).
-- When the `FinalizationRegistry` instance itself is no longer reachable to JavaScript code.
-  If the object that creates the `FinalizationRegistry` instance goes out of scope or is deleted, the cleanup callbacks registered in that registry might also not be invoked.
+Například:
+- Když běh programu zcela skončí  (např. při zavření záložky v prohlížeči).
+- Když se samotná instance `FinalizationRegistry` stane nedosažitelnou z JavaScriptového kódu.
+  Jestliže objekt, který vytvořil instanci třídy `FinalizationRegistry`, opustí rozsah platnosti nebo bude smazán, úklidové callbacky registrované v tomto registru nemusejí být vyvolány.
 
-## Caching with FinalizationRegistry
+## Ukládání do mezipaměti pomocí FinalizationRegistry
 
-Returning to our *weak* cache example, we can notice the following:
-- Even though the values wrapped in the `WeakRef` have been collected by the garbage collector, there is still an issue of "memory leakage" in the form of the remaining keys, whose values have been collected by the garbage collector.
+Když se vrátíme k našemu příkladu *slabé* mezipaměti, můžeme si všimnout následujícího:
+- I když byly hodnoty zabalené do `WeakRef` odklizeny sběračem odpadků, stále je tady problém s „únikem paměti“ v podobě zbývajících klíčů, jejichž hodnoty sběrač odpadků odstranil.
 
-Here is an improved caching example using `FinalizationRegistry`:
+Následuje vylepšený příklad mezipaměti s využitím `FinalizationRegistry`:
 
 ```js
-function fetchImg() {
-  // abstract function for downloading images...
+function stáhniObrázek() {
+  // abstraktní funkce pro načítání obrázků...
 }
 
-function weakRefCache(fetchImg) {
-  const imgCache = new Map();
+function najdiVMezipaměti(stáhniObrázek) {
+  const paměťObrázků = new Map();
 
   *!*
-  const registry = new FinalizationRegistry((imgName) => { // (1)
-    const cachedImg = imgCache.get(imgName);
-    if (cachedImg && !cachedImg.deref()) imgCache.delete(imgName);
+  const registr = new FinalizationRegistry((názevObrázku) => { // (1)
+    const obrázekVPaměti = paměťObrázků.get(názevObrázku);
+    if (obrázekVPaměti && !obrázekVPaměti.deref()) paměťObrázků.delete(názevObrázku);
   });
   */!*
 
-  return (imgName) => {
-    const cachedImg = imgCache.get(imgName);
+  return (názevObrázku) => {
+    const obrázekVPaměti = paměťObrázků.get(názevObrázku);
     
-    if (cachedImg?.deref()) {
-      return cachedImg?.deref();
+    if (obrázekVPaměti?.deref()) {
+      return obrázekVPaměti?.deref();
     }
 
-    const newImg = fetchImg(imgName);
-    imgCache.set(imgName, new WeakRef(newImg));
+    const novýObrázek = stáhniObrázek(názevObrázku);
+    paměťObrázků.set(názevObrázku, new WeakRef(novýObrázek));
     *!*
-    registry.register(newImg, imgName); // (2)
+    registr.register(novýObrázek, názevObrázku); // (2)
     */!*
 
-    return newImg;
+    return novýObrázek;
   };
 }
 
-const getCachedImg = weakRefCache(fetchImg);
+const vraťObrázekVPaměti = najdiVMezipaměti(stáhniObrázek);
 ```
 
-1. To manage the cleanup of "dead" cache entries, when the associated `WeakRef` objects are collected by the garbage collector, we create a `FinalizationRegistry` cleanup registry.
+1. Abychom zajistili úklid „mrtvých“ záznamů v mezipaměti, když jsou připojené objekty ve `WeakRef` odklizeny sběračem odpadků, vytvoříme úklidový registr `FinalizationRegistry`.
 
-   The important point here is, that in the cleanup callback, it should be checked, if the entry was deleted by the garbage collector and not re-added, in order not to delete a "live" entry.
-2. Once the new value (image) is downloaded and put into the cache, we register it in the finalizer registry to track the `WeakRef` object.
+   Důležitým bodem zde je, že v úklidovém callbacku bychom měli ověřovat, zda záznam byl odstraněn sběračem odpadků a nebyl znovu přidán, abychom nesmazali „živý“ záznam.
+2. Když je stažena a umístěna do mezipaměti nová hodnota (obrázek), zaregistrujeme ji v registru finalizátorů, abychom mohli sledovat objekt `WeakRef`.
 
-This implementation contains only actual or "live" key/value pairs.
-In this case, each `WeakRef` object is registered in the `FinalizationRegistry`.
-And after the objects are cleaned up by the garbage collector, the cleanup callback will delete all `undefined` values.
+Tato implementace obsahuje pouze aktuální neboli „živé“ dvojice klíč/hodnota. V tomto případě je každý objekt `WeakRef` zaregistrován ve `FinalizationRegistry` a poté, co jsou objekty odstraněny sběračem odpadků, úklidový callback smaže všechny hodnoty `undefined`.
 
-Here is a visual representation of the updated code:  
+Na obrázku je vizuální reprezentace vylepšeného kódu: 
 
 ![](weakref-finalizationregistry-05.svg)
 
-A key aspect of the updated implementation is that finalizers allow parallel processes to be created between the "main" program and cleanup callbacks.
-In the context of JavaScript, the "main" program - is our JavaScript-code, that runs and executes in our application or web page.  
+Klíčovým aspektem vylepšené implementace je, že finalizátory umožňují vytváření paralelních procesů mezi „hlavním“ programem a úklidovými callbacky. V kontextu JavaScriptu je „hlavním“ programem náš JavaScriptový kód, který je spuštěn a běží v naší aplikaci nebo webové stránce.
 
-Hence, from the moment an object is marked for deletion by the garbage collector, and to the actual execution of the cleanup callback, there may be a certain time gap.
-It is important to understand that during this time gap, the main program can make any changes to the object or even bring it back to memory.  
+Proto může mezi okamžikem, kdy je objekt označen ke smazání sběračem odpadků, a skutečným spuštěním úklidového callbacku nastat určitá časová prodleva. Je důležité pochopit, že během této prodlevy může hlavní program provést v objektu jakékoli změny nebo jej dokonce vrátit zpět do paměti.
 
-That's why, in the cleanup callback, we must check to see if an entry has been added back to the cache by the main program to avoid deleting "live" entries.
-Similarly, when searching for a key in the cache, there is a chance that the value has been deleted by the garbage collector, but the cleanup callback has not been executed yet.  
+Z tohoto důvodu musíme v úklidovém callbacku ověřovat, zda hlavní program nepřidal záznam zpět do mezipaměti, abychom se vyhnuli mazání „živých“ záznamů. Obdobně když v mezipaměti hledáme klíč, je možné, že jeho hodnota byla vymazána sběračem odpadků, ale úklidový callback ještě nebyl spuštěn.
 
-Such situations require special attention if you are working with `FinalizationRegistry`.
+Takové situace vyžadují při práci s `FinalizationRegistry` zvláštní pozornost.
 
-## Using WeakRef and FinalizationRegistry in practice
+## Použití WeakRef a FinalizationRegistry v praxi
 
-Moving from theory to practice, imagine a real-life scenario, where a user synchronizes their photos on a mobile device with some cloud service
-(such as [iCloud](https://en.wikipedia.org/wiki/ICloud) or [Google Photos](https://en.wikipedia.org/wiki/Google_Photos)),
-and wants to view them from other devices. In addition to the basic functionality of viewing photos, such services offer a lot of additional features, for example:  
+Přejděme od teorie k praxi. Představte si scénář ze skutečného života, kdy si uživatel synchronizuje své fotografie na mobilním zařízení s nějakou cloudovou službou (např. [iCloud](https://cs.wikipedia.org/wiki/ICloud) nebo [Fotky Google](https://cs.wikipedia.org/wiki/Fotky_Google)) a chce si je prohlížet z jiných zařízení. Takové služby nabízejí kromě základní functionality prohlížení fotografií řadu dalších funkcí, například:
 
-- Photo editing and video effects.
-- Creating "memories" and albums.
-- Video montage from a series of photos.
-- ...and much more.
+- Editaci fotografií a videoefektů.
+- Vytváření „vzpomínek“ a alb.
+- Montáž videa ze série fotografií.
+- ...a mnoho dalšího.
 
-Here, as an example, we will use a fairly primitive implementation of such a service.
-The main point - is to show a possible scenario of using `WeakRef` and `FinalizationRegistry` together in real life.
+Jako příklad zde uvedeme poměrně primitivní implementaci takové služby. Hlavním smyslem je ukázat možný scénář společného použití `WeakRef` a `FinalizationRegistry` ve skutečném životě.
 
-Here is what it looks like:
+Bude to vypadat následovně:
 
 ![](weakref-finalizationregistry-demo-01.png)
 
 <br>
-On the left side, there is a cloud library of photos (they are displayed as thumbnails).
-We can select the images we need and create a collage, by clicking the "Create collage" button on the right side of the page.
-Then, the resulting collage can be downloaded as an image.
+Na levé straně je cloudová knihovna fotografií (jsou zobrazeny jako náhledy). Můžeme si zvolit obrázky, jaké chceme, a kliknutím na tlačítko „Vytvořit koláž“ na pravé straně stránky z nich vytvořit koláž. Výslednou koláž si pak můžeme stáhnout jako obrázek.
 </br><br>
 
-To increase page loading speed, it would be reasonable to download and display photo thumbnails in *compressed* quality.
-But, to create a collage from selected photos, download and use them in *full-size* quality.  
+Abychom zvýšili rychlost načítání stránky, bude rozumné stahovat a zobrazovat náhledy fotografií v *komprimované* kvalitě. Když však ze zvolených fotografií budeme vytvářet koláž, stáhneme a použijeme je v *plné* kvalitě.
 
-Below, we can see, that the intrinsic size of the thumbnails is 240x240 pixels.
-The size was chosen on purpose to increase loading speed.
-Moreover, we do not need full-size photos in preview mode.
+Níže vidíme, že vnitřní velikost náhledů je 240x240 pixelů. Tuto velikost jsme zvolili, abychom zvýšili rychlost nahrávání. Navíc v režimu prohlížení nepotřebujeme fotografie v plné velikosti.
 
 ![](weakref-finalizationregistry-demo-02.png)
 
 <br>
-Let's assume, that we need to create a collage of 4 photos: we select them, and then click the "Create collage" button.
-At this stage, the already known to us <code>weakRefCache</code> function checks whether the required image is in the cache.
-If not, it downloads it from the cloud and puts it in the cache for further use.
-This happens for each selected image:
+Předpokládejme, že potřebujeme vytvořit koláž čtyř fotografií: vybereme si je a pak klikneme na tlačítko „Vytvořit koláž“. V tuto chvíli funkce <code>najdiVMezipaměti</code>, kterou už známe, ověří, zda je požadovaný obrázek v mezipaměti. Pokud ne, stáhne jej z cloudu a uloží jej do mezipaměti pro další použití. To se bude odehrávat pro každý zvolený obrázek:
 </br><br>
 
 ![](weakref-finalizationregistry-demo-03.gif)
 
 </br>
 
-Paying attention to the output in the console, you can see, which of the photos were downloaded from the cloud - this is indicated by <span style="background-color:#133159;color:white;font-weight:500">FETCHED_IMAGE</span>.
-Since this is the first attempt to create a collage, this means, that at this stage the "weak cache" was still empty, and all the photos were downloaded from the cloud and put in it.
+Když budete sledovat výstup na konzoli, uvidíte, které z fotografií byly staženy z cloudu - ty jsou označeny jako <span style="background-color:#133159;color:white;font-weight:500">STAŽENÝ_OBRÁZEK</span> (<span style="background-color:#133159;color:white;font-weight:500">FETCHED_IMAGE</span>). Protože to je první pokus o vytvoření koláže, znamená to, že v této chvíli je „slabá mezipaměť“ ještě prázdná, a tak všechny fotografie budou staženy z cloudu a uloženy do ní.
 
-But, along with the process of downloading images, there is also a process of memory cleanup by the garbage collector.
-This means, that the object stored in the cache, which we refer to, using a weak reference, is deleted by the garbage collector.
-And our finalizer executes successfully, thereby deleting the key, by which the image was stored in the cache.
-<span style="background-color:#901e30;color:white;font-weight:500;">CLEANED_IMAGE</span> notifies us about it:
+Společně s procesem stahování obrázků je zde však také proces čištění paměti sběračem odpadků. To znamená, že objekt uložený v mezipaměti, na který se odkazujeme slabým odkazem, je smazán sběračem odpadků. A náš finalizátor se úspěšně spustí a tím smaže klíč, pod nímž byl obrázek uložen v mezipaměti. Oznamuje nám to <span style="background-color:#901e30;color:white;font-weight:500;">SMAZANÝ_OBRÁZEK</span> (<span style="background-color:#901e30;color:white;font-weight:500;">DELETED_IMAGE</span>):
 
 ![](weakref-finalizationregistry-demo-04.jpg)
 
 <br>
-Next, we realize that we do not like the resulting collage, and decide to change one of the images and create a new one.
-To do this, just deselect the unnecessary image, select another one, and click the "Create collage" button again:
+Pak zjistíme, že se nám výsledná koláž nelíbí, a rozhodneme se jeden obrázek změnit a vytvořit novou. To uděláme jednoduše tak, že smažeme nechtěný obrázek, vybereme jiný a opět klikneme na tlačítko „Vytvořit koláž“:
 </br><br>
 
 ![](weakref-finalizationregistry-demo-05.gif)
 
 <br>
-But this time not all images were downloaded from the network, and one of them was taken from the weak cache: the <span style="background-color:#385950;color:white;font-weight:500;">CACHED_IMAGE</span> message tells us about it.
-This means that at the time of collage creation, the garbage collector had not yet deleted our image, and we boldly took it from the cache,
-thereby reducing the number of network requests and speeding up the overall time of the collage creation process:
+Tentokrát však všechny obrázky nebyly staženy ze sítě, ale jeden z nich byl převzat ze slabé mezipaměti: o tom nám říká zpráva <span style="background-color:#385950;color:white;font-weight:500;">OBRÁZEK_Z_PAMĚTI</span> (<span style="background-color:#385950;color:white;font-weight:500;">CACHED_IMAGE</span>). To znamená, že v okamžiku vytvoření koláže sběrač odpadků náš obrázek ještě nesmazal a my jsme ho jen vytáhli z mezipaměti, čímž jsme snížili počet síťových požadavků a urychlili celkovou dobu procesu vytváření obrázků:
 </br><br>
 
 ![](weakref-finalizationregistry-demo-06.jpg)
 
 <br>
-Let's "play around" a little more, by replacing one of the images again and creating a new collage:
+„Pohrajme si“ ještě dál. Znovu nahraďme jeden z obrázků jiným a vytvořme novou koláž:
 </br><br>
 
 ![](weakref-finalizationregistry-demo-07.gif)
 
 <br>
-This time the result is even more impressive. Of the 4 images selected, 3 of them were taken from the weak cache, and only one had to be downloaded from the network.
-The reduction in network load was about 75%. Impressive, isn't it?
+Výsledek je tentokrát ještě působivější. Ze čtyř zvolených obrázků byly tři vytaženy ze slabé mezipaměti a pouze jeden musel být stažen ze sítě. Síťová zátěž byla snížena zhruba o 75%. Úžasné, ne?
 </br><br>
 
 ![](weakref-finalizationregistry-demo-08.jpg)
 
 </br>
 
-Of course, it is important to remember, that such behavior is not guaranteed, and depends on the specific implementation and operation of the garbage collector.  
+Je samozřejmě důležité mít na paměti, že takové chování není zaručeno a závisí na specifické implementaci a operacích sběrače odpadků.
 
-Based on this, a completely logical question immediately arises: why do not we use an ordinary cache, where we can manage its entities ourselves, instead of relying on the garbage collector?
-That's right, in the vast majority of cases there is no need to use `WeakRef` and `FinalizationRegistry`.  
+Při tom okamžitě vyvstává zcela logická otázka: proč se spoléháme na sběrač odpadků a nepoužijeme místo toho obyčejnou mezipaměť, v níž bychom mohli záznamy spravovat sami? Je to pravda, v naprosté většině případů není potřeba `WeakRef` a `FinalizationRegistry` používat.
 
-Here, we simply demonstrated an alternative implementation of similar functionality, using a non-trivial approach with interesting language features.
-Still, we cannot rely on this example, if we need a constant and predictable result.
+Zde jsme jednoduše předvedli alternativní implementaci podobné functionality použitím netriviálního přístupu se zajímavými vlastnostmi jazyka. Stále se však na tento příklad nemůžeme spolehnout, potřebujeme-li stabilní a předvídatelný výsledek.
 
-You can [open this example in the sandbox](sandbox:weakref-finalizationregistry).
+Tento příklad si můžete [otevřít na pískovišti](sandbox:weakref-finalizationregistry).
 
-## Summary
+## Shrnutí
 
-`WeakRef` - designed to create weak references to objects, allowing them to be deleted from memory by the garbage collector if there are no longer strong references to them.
-This is beneficial for addressing excessive memory usage and optimizing the utilization of system resources in applications.
+`WeakRef` - byla navržena pro vytváření slabých odkazů na objekty a umožňuje jejich smazání z paměti sběračem odpadků, pokud na ně už neexistují žádné silné odkazy. To se vyplatí pro adresování rozsáhlého využití paměti a optimalizaci využití systémových zdrojů v aplikacích.
 
-`FinalizationRegistry` - is a tool for registering callbacks, that are executed when objects that are no longer strongly referenced, are destroyed.
-This allows releasing resources associated with the object or performing other necessary operations before deleting the object from memory.
+`FinalizationRegistry` - je nástroj pro registraci callbacků, které budou spuštěny při smazání objektů, na které již neexistují žádné silné odkazy. To nám umožňuje uvolnit zdroje spojené s těmito objekty nebo provést jiné nezbytné operace, než bude objekt z paměti odklizen.
