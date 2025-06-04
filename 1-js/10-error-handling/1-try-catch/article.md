@@ -1,556 +1,555 @@
-# Error handling, "try...catch"
+# Ošetřování chyb, „try...catch“
 
-No matter how great we are at programming, sometimes our scripts have errors. They may occur because of our mistakes, an unexpected user input, an erroneous server response, and for a thousand other reasons.
+Ať jsme sebelepší programátoři, v našich skriptech se někdy vyskytnou chyby. Může se to stát naší vinou, kvůli neočekávanému uživatelskému vstupu, chybné odpovědi serveru nebo z tisíce jiných důvodů.
 
-Usually, a script "dies" (immediately stops) in case of an error, printing it to console.
+V případě chyby skript obvykle „spadne“ (okamžitě se zastaví) a vypíše chybu na konzoli.
 
-But there's a syntax construct `try...catch` that allows us to "catch" errors so the script can, instead of dying, do something more reasonable.
+Existuje však syntaktická konstrukce `try...catch`, která nám umožňuje „zachytávat“ chyby, takže skript může místo spadnutí udělat něco rozumnějšího.
 
-## The "try...catch" syntax
+## Syntaxe „try...catch“
 
-The `try...catch` construct has two main blocks: `try`, and then `catch`:
+Konstrukt `try...catch` má dva hlavní bloky: `try` a za ním `catch`:
 
 ```js
 try {
 
-  // code...
+  // kód...
 
-} catch (err) {
+} catch (chyba) {
 
-  // error handling
+  // ošetření chyby
 
 }
 ```
 
-It works like this:
+Funguje následovně:
 
-1. First, the code in `try {...}` is executed.
-2. If there were no errors, then `catch (err)` is ignored: the execution reaches the end of `try` and goes on, skipping `catch`.
-3. If an error occurs, then the `try` execution is stopped, and control flows to the beginning of `catch (err)`. The `err` variable (we can use any name for it) will contain an error object with details about what happened.
+1. Nejprve se spustí kód v bloku `try {...}`.
+2. Pokud v něm nejsou chyby, blok `catch (chyba)` je ignorován: běh dosáhne konce `try`, přeskočí blok `catch` a pokračuje dál.
+3. Pokud nastane chyba, výkon bloku `try` se ukončí a běh pokračuje začátkem bloku `catch (chyba)`. Proměnná `chyba` (můžeme ji pojmenovat jakkoli) bude obsahovat chybový objekt s podrobnostmi o tom, co se stalo.
 
 ![](try-catch-flow.svg)
 
-So, an error inside the `try {...}` block does not kill the script -- we have a chance to handle it in `catch`.
+Chyba uvnitř bloku `try {...}` tedy neshodí skript -- máme šanci ji zpracovat v bloku `catch`.
 
-Let's look at some examples.
+Podívejme se na příklady.
 
-- An errorless example: shows `alert` `(1)` and `(2)`:
+- Příklad bez chyby: zobrazí `alert` `(1)` a `(2)`:
 
     ```js run
     try {
 
-      alert('Start of try runs');  // *!*(1) <--*/!*
+      alert('Spuštěn začátek bloku try');  // *!*(1) <--*/!*
 
-      // ...no errors here
+      // ...zde nejsou žádné chyby
 
-      alert('End of try runs');   // *!*(2) <--*/!*
+      alert('Spuštěn konec bloku try');   // *!*(2) <--*/!*
 
-    } catch (err) {
+    } catch (chyba) {
 
-      alert('Catch is ignored, because there are no errors'); // (3)
+      alert('Blok catch je ignorován, protože nenastaly žádné chyby'); // (3)
 
     }
     ```
-- An example with an error: shows `(1)` and `(3)`:
+- Příklad s chybou: zobrazí `(1)` a `(3)`:
 
     ```js run
     try {
 
-      alert('Start of try runs');  // *!*(1) <--*/!*
+      alert('Spuštěn začátek bloku try');  // *!*(1) <--*/!*
 
     *!*
-      lalala; // error, variable is not defined!
+      lalala; // chyba, proměnná není definována!
     */!*
 
-      alert('End of try (never reached)');  // (2)
+      alert('Spuštěn konec bloku try (nikdy nedosaženo)');  // (2)
 
-    } catch (err) {
+    } catch (chyba) {
 
-      alert(`Error has occurred!`); // *!*(3) <--*/!*
+      alert(`Nastala chyba!`); // *!*(3) <--*/!*
 
     }
     ```
 
 
-````warn header="`try...catch` only works for runtime errors"
-For `try...catch` to work, the code must be runnable. In other words, it should be valid JavaScript.
+````warn header="`try...catch` funguje jen pro běhové chyby"
+Aby `try...catch` fungoval, kód musí být spustitelný. Jinými slovy, musí to být platný kód v JavaScriptu.
 
-It won't work if the code is syntactically wrong, for instance it has unmatched curly braces:
+Nebude fungovat, když bude kód syntakticky nesprávný, například bude obsahovat neuzavřené složené závorky:
 
 ```js run
 try {
   {{{{{{{{{{{{
-} catch (err) {
-  alert("The engine can't understand this code, it's invalid");
+} catch (chyba) {
+  alert("Motor tomuto kódu nerozumí, kód je nesprávný");
 }
 ```
 
-The JavaScript engine first reads the code, and then runs it. The errors that occur on the reading phase are called "parse-time" errors and are unrecoverable (from inside that code). That's because the engine can't understand the code.
+JavaScriptový motor nejdříve načte kód a pak jej spustí. Chyby, které nastanou při fázi načítání, se nazývají „překladové“ (parse-time) chyby a nelze se z nich zotavit (zevnitř kódu). Je to proto, že motor takovému kódu nedokáže porozumět.
 
-So, `try...catch` can only handle errors that occur in valid code. Such errors are called "runtime errors" or, sometimes, "exceptions".
+Blok `try...catch` tedy umí ošetřit jen chyby, které se vyskytnou v platném kódu. Takové chyby se nazývají „běhové (runtime) chyby“ nebo někdy „výjimky“.
 ````
 
 
-````warn header="`try...catch` works synchronously"
-If an exception happens in "scheduled" code, like in `setTimeout`, then `try...catch` won't catch it:
+````warn header="`try...catch` funguje synchronně"
+Jestliže výjimka nastane v „naplánovaném“ kódu, např. v `setTimeout`, pak ji `try...catch` neodchytí:
 
 ```js run
 try {
   setTimeout(function() {
-    noSuchVariable; // script will die here
+    neexistujícíProměnná; // skript tady spadne
   }, 1000);
-} catch (err) {
-  alert( "won't work" );
+} catch (chyba) {
+  alert( "nebude to fungovat" );
 }
 ```
 
-That's because the function itself is executed later, when the engine has already left the `try...catch` construct.
+Je to proto, že samotná funkce se spustí později, když motor již opustil konstrukt `try...catch`.
 
-To catch an exception inside a scheduled function, `try...catch` must be inside that function:
+Abychom zachytili výjimku uvnitř naplánované funkce, `try...catch` musí být uvnitř této funkce:
 ```js run
 setTimeout(function() {
   try {    
-    noSuchVariable; // try...catch handles the error!
+    neexistujícíProměnná; // try...catch tuto chybu zpracuje!
   } catch {
-    alert( "error is caught here!" );
+    alert( "zde je odchycena chyba!" );
   }
 }, 1000);
 ```
 ````
 
-## Error object
+## Chybový objekt
 
-When an error occurs, JavaScript generates an object containing the details about it. The object is then passed as an argument to `catch`:
+Když nastane chyba, JavaScript vygeneruje objekt obsahující podrobnosti o této chybě. Tento objekt je pak předán jako argument do bloku `catch`:
 
 ```js
 try {
   // ...
-} catch (err) { // <-- the "error object", could use another word instead of err
+} catch (chyba) { // <-- „chybový objekt“, místo „chyba“ můžeme použít jakýkoli název
   // ...
 }
 ```
 
-For all built-in errors, the error object has two main properties:
+U všech vestavěných chyb má chybový objekt dvě hlavní vlastnosti:
 
-`name`
-: Error name. For instance, for an undefined variable that's `"ReferenceError"`.
+`name` (název)
+: Název chyby. Například pro nedefinovanou proměnnou je to `"ReferenceError"`.
 
-`message`
-: Textual message about error details.
+`message` (zpráva)
+: Textová zpráva o podrobnostech chyby.
 
-There are other non-standard properties available in most environments. One of most widely used and supported is:
+Ve většině prostředí jsou k dispozici i další nestandardní vlastnosti. Jedna z nejpoužívanějších a nejpodporovanějších je:
 
-`stack`
-: Current call stack: a string with information about the sequence of nested calls that led to the error. Used for debugging purposes.
+`stack` (zásobník)
+: Aktuální zásobník volání: řetězec s informací o posloupnosti vnořených volání, která vedla k chybě. Používá se pro účely ladění.
 
-For instance:
+Například:
 
 ```js run untrusted
 try {
 *!*
-  lalala; // error, variable is not defined!
+  lalala; // chyba, proměnná není definována!
 */!*
-} catch (err) {
-  alert(err.name); // ReferenceError
-  alert(err.message); // lalala is not defined
-  alert(err.stack); // ReferenceError: lalala is not defined at (...call stack)
+} catch (chyba) {
+  alert(chyba.name); // ReferenceError
+  alert(chyba.message); // lalala is not defined
+  alert(chyba.stack); // ReferenceError: lalala is not defined at (...zásobník volání)
 
-  // Can also show an error as a whole
-  // The error is converted to string as "name: message"
-  alert(err); // ReferenceError: lalala is not defined
+  // Můžeme také zobrazit chybu jako celek
+  // Chyba se pak převede na řetězec ve tvaru "name: message"
+  alert(chyba); // ReferenceError: lalala is not defined
 }
 ```
 
-## Optional "catch" binding
+## Objekt chyby v „catch“ je nepovinný
 
 [recent browser=new]
 
-If we don't need error details, `catch` may omit it:
+Pokud nepotřebujeme podrobnosti o chybě, `catch` ji může vynechat:
 
 ```js
 try {
   // ...
-} catch { // <-- without (err)
+} catch { // <-- bez (chyba)
   // ...
 }
 ```
 
-## Using "try...catch"
+## Použití „try...catch“
 
-Let's explore a real-life use case of `try...catch`.
+Prozkoumejme případ použití `try...catch` z reálného života.
 
-As we already know, JavaScript supports the [JSON.parse(str)](mdn:js/JSON/parse) method to read JSON-encoded values.
+Jak už víme, JavaScript podporuje metodu [JSON.parse(str)](mdn:js/JSON/parse) k načtení hodnot zakódovaných do JSONu.
 
-Usually it's used to decode data received over the network, from the server or another source.
+Obvykle se používá k dekódování dat získaných po síti, ze serveru nebo z jiného zdroje.
 
-We receive it and call `JSON.parse` like this:
+Načteme data a zavoláme `JSON.parse` následovně:
 
 ```js run
-let json = '{"name":"John", "age": 30}'; // data from the server
+let json = '{"jméno": "Jan", "věk": 30}'; // data ze serveru
 
 *!*
-let user = JSON.parse(json); // convert the text representation to JS object
+let uživatel = JSON.parse(json); // převedeme textovou reprezentaci na objekt JS
 */!*
 
-// now user is an object with properties from the string
-alert( user.name ); // John
-alert( user.age );  // 30
+// nyní je uživatel objekt s vlastnostmi z řetězce
+alert( uživatel.jméno ); // Jan
+alert( uživatel.věk );  // 30
 ```
 
-You can find more detailed information about JSON in the <info:json> chapter.
+Podrobnější informace o JSON naleznete v kapitole <info:json>.
 
-**If `json` is malformed, `JSON.parse` generates an error, so the script "dies".**
+**Je-li `json` poškozen, pak `JSON.parse` vygeneruje chybu, takže skript „spadne“.**
 
-Should we be satisfied with that? Of course not!
+Měli bychom se s tím spokojit? Ovšemže ne!
 
-This way, if something's wrong with the data, the visitor will never know that (unless they open the developer console). And people really don't like when something "just dies" without any error message.
+Pokud je v datech něco špatně, tímto způsobem se o tom návštěvník nikdy nedozví (pokud si neotevře vývojářskou konzoli). A lidé opravdu nemají rádi, když něco „jen tak spadne“ bez jakéhokoli chybového hlášení.
 
-Let's use `try...catch` to handle the error:
+Použijme tedy k ošetření chyby `try...catch`:
 
 ```js run
-let json = "{ bad json }";
+let json = "{ špatný json }";
 
 try {
 
 *!*
-  let user = JSON.parse(json); // <-- when an error occurs...
+  let uživatel = JSON.parse(json); // <-- když nastane chyba...
 */!*
-  alert( user.name ); // doesn't work
+  alert( uživatel.jméno ); // nespustí se
 
-} catch (err) {
+} catch (chyba) {
 *!*
-  // ...the execution jumps here
-  alert( "Our apologies, the data has errors, we'll try to request it one more time." );
-  alert( err.name );
-  alert( err.message );
+  // ...provádění skočí sem
+  alert( "Omlouváme se, v datech byly chyby, pokusíme se o ně požádat ještě jednou." );
+  alert( chyba.name );
+  alert( chyba.message );
 */!*
 }
 ```
 
-Here we use the `catch` block only to show the message, but we can do much more: send a new network request, suggest an alternative to the visitor, send information about the error to a logging facility, ... . All much better than just dying.
+Zde používáme blok `catch` jen k zobrazení zprávy, ale můžeme toho udělat mnohem víc: poslat nový požadavek po síti, nabídnout návštěvníkovi alternativu, poslat informace o chybě na logovací zařízení... Všechno je mnohem lepší než pouhé spadnutí.
 
-## Throwing our own errors
+## Vyvolávání našich vlastních chyb
 
-What if `json` is syntactically correct, but doesn't have a required `name` property?
+Co když je `json` syntakticky správně, ale neobsahuje požadovanou vlastnost `jméno`?
 
-Like this:
+Například:
 
 ```js run
-let json = '{ "age": 30 }'; // incomplete data
+let json = '{ "věk": 30 }'; // neúplná data
 
 try {
 
-  let user = JSON.parse(json); // <-- no errors
+  let uživatel = JSON.parse(json); // <-- žádná chyba
 *!*
-  alert( user.name ); // no name!
+  alert( uživatel.jméno ); // jméno není!
 */!*
 
-} catch (err) {
-  alert( "doesn't execute" );
+} catch (chyba) {
+  alert( "toto se nespustí" );
 }
 ```
 
-Here `JSON.parse` runs normally, but the absence of `name` is actually an error for us.
+Zde `JSON.parse` proběhl normálně, ale absence vlastnosti `jméno` pro nás ve skutečnosti představuje chybu.
 
-To unify error handling, we'll use the `throw` operator.
+Abychom sjednotili ošetřování chyb, použijeme operátor `throw`.
 
-### "Throw" operator
+### Operátor „throw“
 
-The `throw` operator generates an error.
+Operátor `throw` vygeneruje chybu.
 
-The syntax is:
+Jeho syntaxe je:
 
 ```js
-throw <error object>
+throw <chybový objekt>
 ```
 
-Technically, we can use anything as an error object. That may be even a primitive, like a number or a string, but it's better to use objects, preferably with `name` and `message` properties (to stay somewhat compatible with built-in errors).
+Technicky můžeme jako chybový objekt použít cokoli. Může to být dokonce i primitiv, např. číslo nebo řetězec, ale je lepší používat objekty, přednostně s vlastnostmi `name` a `message` (abychom zůstali alespoň zčásti kompatibilní se zabudovanými chybami).
 
-JavaScript has many built-in constructors for standard errors: `Error`, `SyntaxError`, `ReferenceError`, `TypeError` and others. We can use them to create error objects as well.
+JavaScript obsahuje mnoho vestavěných konstruktorů pro standardní chyby: `Error`, `SyntaxError`, `ReferenceError`, `TypeError` a jiné. I ty můžeme použít k vytvoření chybových objektů.
 
-Their syntax is:
+Jejich syntaxe je:
 
 ```js
-let error = new Error(message);
-// or
-let error = new SyntaxError(message);
-let error = new ReferenceError(message);
+let chyba = new Error(zpráva);
+// nebo
+let chyba = new SyntaxError(zpráva);
+let chyba = new ReferenceError(zpráva);
 // ...
 ```
 
-For built-in errors (not for any objects, just for errors), the `name` property is exactly the name of the constructor. And `message` is taken from the argument.
+Ve vestavěných chybách (ne ve všech objektech, pouze v chybách) je vlastnost `name` přesný název konstruktoru a `message` se převezme z argumentu.
 
-For instance:
+Například:
 
 ```js run
-let error = new Error("Things happen o_O");
+let chyba = new Error("Dějí se věci o_O");
 
-alert(error.name); // Error
-alert(error.message); // Things happen o_O
+alert(chyba.name); // Error
+alert(chyba.message); // Dějí se věci o_O
 ```
 
-Let's see what kind of error `JSON.parse` generates:
+Podívejme se, jaký druh chyby generuje `JSON.parse`:
 
 ```js run
 try {
-  JSON.parse("{ bad json o_O }");
-} catch (err) {
+  JSON.parse("{ špatný json o_O }");
+} catch (chyba) {
 *!*
-  alert(err.name); // SyntaxError
+  alert(chyba.name); // SyntaxError
 */!*
-  alert(err.message); // Unexpected token b in JSON at position 2
+  alert(chyba.message); // Unexpected token š in JSON at position 2
 }
 ```
 
-As we can see, that's a `SyntaxError`.
+Jak vidíme, je to `SyntaxError`.
 
-And in our case, the absence of `name` is an error, as users must have a `name`.
+A v našem případě je absence vlastnosti `jméno` chyba, jelikož `jméno` musí mít každý uživatel.
 
-So let's throw it:
+Vyvolejme tedy chybu:
 
 ```js run
-let json = '{ "age": 30 }'; // incomplete data
+let json = '{ "věk": 30 }'; // neúplná data
 
 try {
 
-  let user = JSON.parse(json); // <-- no errors
+  let uživatel = JSON.parse(json); // <-- žádná chyba
 
-  if (!user.name) {
+  if (!uživatel.jméno) {
 *!*
-    throw new SyntaxError("Incomplete data: no name"); // (*)
+    throw new SyntaxError("Neúplná data: chybí jméno"); // (*)
 */!*
   }
 
-  alert( user.name );
+  alert( uživatel.jméno );
 
-} catch (err) {
-  alert( "JSON Error: " + err.message ); // JSON Error: Incomplete data: no name
+} catch (chyba) {
+  alert( "Chyba JSONu: " + chyba.message ); // Chyba JSONu: Neúplná data: chybí jméno
 }
 ```
 
-In the line `(*)`, the `throw` operator generates a `SyntaxError` with the given `message`, the same way as JavaScript would generate it itself. The execution of `try` immediately stops and the control flow jumps into `catch`.
+Na řádku `(*)` operátor `throw` generuje chybu `SyntaxError` se zadanou zprávou `message`, stejným způsobem, jakým by ji vygeneroval samotný JavaScript. Výkon bloku `try` okamžitě skončí a běh skočí do bloku `catch`.
 
-Now `catch` became a single place for all error handling: both for `JSON.parse` and other cases.
+Nyní se `catch` stalo jediným místem pro ošetření všech chyb: jak pro `JSON.parse`, tak pro jiné případy.
 
-## Rethrowing
+## Opětovné vyvolání
 
-In the example above we use `try...catch` to handle incorrect data. But is it possible that *another unexpected error* occurs within the `try {...}` block? Like a programming error (variable is not defined) or something else, not just this "incorrect data" thing.
+V uvedeném příkladu jsme použili `try...catch` ke zpracování nekorektních dat. Je však možné, že uprostřed bloku `try {...}` nastane i *jiná neočekávaná chyba*? Například programátorská chyba (proměnná není definována) nebo něco jiného, nejenom tahle věc s „nekorektními daty“.
 
-For example:
+Například:
 
 ```js run
-let json = '{ "age": 30 }'; // incomplete data
+let json = '{ "věk": 30 }'; // neúplná data
 
 try {
-  user = JSON.parse(json); // <-- forgot to put "let" before user
+  uživatel = JSON.parse(json); // <-- zapomněli jsme uvést „let“ před proměnnou uživatel
 
   // ...
-} catch (err) {
-  alert("JSON Error: " + err); // JSON Error: ReferenceError: user is not defined
-  // (no JSON Error actually)
+} catch (chyba) {
+  alert("Chyba JSONu: " + chyba); // Chyba JSONu: ReferenceError: uživatel is not defined
+  // (ve skutečnosti to není chyba JSONu)
 }
 ```
 
-Of course, everything's possible! Programmers do make mistakes. Even in open-source utilities used by millions for decades -- suddenly a bug may be discovered that leads to terrible hacks.
+Samozřejmě, všechno je možné! Programátoři dělají chyby. I v utilitách se zveřejněným zdrojovým kódem, které používají milióny lidí desítky let, může být náhle odhalena chyba, která vede ke strašlivým útokům hackerů.
 
-In our case, `try...catch` is placed to catch "incorrect data" errors. But by its nature, `catch` gets *all* errors from `try`. Here it gets an unexpected error, but still shows the same `"JSON Error"` message. That's wrong and also makes the code more difficult to debug.
+V našem případě je `try...catch` použit k tomu, aby zachytil chyby „nekorektních dat“. Ze své povahy však `catch` zachytí *všechny* chyby zevnitř `try`. Tady obdrží nečekanou chybu, ale stále zobrazí stejnou zprávu `"Chyba JSONu"`. To je špatně a ztěžuje to ladění kódu.
 
-To avoid such problems, we can employ the "rethrowing" technique. The rule is simple:
+Abychom se takovým problémům vyhnuli, můžeme využít techniku „opětovného vyvolání“. Pravidlo je jednoduché:
 
-**Catch should only process errors that it knows and "rethrow" all others.**
+**Blok catch by měl zpracovávat jen chyby, které zná, a „opětovně vyvolat“ všechny ostatní.**
 
-The "rethrowing" technique can be explained in more detail as:
+Techniku „opětovného vyvolání“ můžeme podrobněji vysvětlit takto:
 
-1. Catch gets all errors.
-2. In the `catch (err) {...}` block we analyze the error object `err`.
-3. If we don't know how to handle it, we do `throw err`.
+1. Blok catch zachytí všechny chyby.
+2. V bloku `catch (chyba) {...}` analyzujeme chybový objekt `chyba`.
+3. Pokud jej neumíme zpracovat, vyvoláme `throw chyba`.
 
-Usually, we can check the error type using the `instanceof` operator:
+Obvykle můžeme ověřit typ chyby operátorem `instanceof`:
 
 ```js run
 try {
-  user = { /*...*/ };
-} catch (err) {
+  uživatel = { /*...*/ };
+} catch (chyba) {
 *!*
-  if (err instanceof ReferenceError) {
+  if (chyba instanceof ReferenceError) {
 */!*
-    alert('ReferenceError'); // "ReferenceError" for accessing an undefined variable
+    alert('ReferenceError'); // "ReferenceError" kvůli přístupu k nedefinované proměnné
   }
 }
 ```
 
-We can also get the error class name from `err.name` property. All native errors have it. Another option is to read `err.constructor.name`.
+Můžeme také získat název třídy chyby z vlastnosti `chyba.name`. Tu mají všechny nativní chyby. Další možností je načíst `chyba.constructor.name`.
 
-In the code below, we use rethrowing so that `catch` only handles `SyntaxError`:
+V následujícím kódu můžeme využít opětovné vyvolání tak, že `catch` bude zpracovávat pouze `SyntaxError`:
 
 ```js run
-let json = '{ "age": 30 }'; // incomplete data
+let json = '{ "věk": 30 }'; // neúplná data
 try {
 
-  let user = JSON.parse(json);
+  let uživatel = JSON.parse(json);
 
-  if (!user.name) {
-    throw new SyntaxError("Incomplete data: no name");
+  if (!uživatel.jméno) {
+    throw new SyntaxError("Neúplná data: chybí jméno");
   }
 
 *!*
-  blabla(); // unexpected error
+  blabla(); // neočekávaná chyba
 */!*
 
-  alert( user.name );
+  alert( uživatel.jméno );
 
-} catch (err) {
+} catch (chyba) {
 
 *!*
-  if (err instanceof SyntaxError) {
-    alert( "JSON Error: " + err.message );
+  if (chyba instanceof SyntaxError) {
+    alert( "Chyba JSONu: " + chyba.message );
   } else {
-    throw err; // rethrow (*)
+    throw chyba; // opětovné vyvolání (*)
   }
 */!*
 
 }
 ```
 
-The error throwing on line `(*)` from inside `catch` block "falls out" of `try...catch` and can be either caught by an outer `try...catch` construct (if it exists), or it kills the script.
+Chyba vyvolaná na řádku `(*)` zevnitř bloku `catch` „vypadne“ z bloku `try...catch` a buď může být zachycena vnějším konstruktem `try...catch` (pokud existuje), nebo shodí skript.
 
-So the `catch` block actually handles only errors that it knows how to deal with and "skips" all others.
+Blok `catch` tedy ve skutečnosti ošetří jen chyby, s nimiž si umí poradit, a všechny ostatní „přeskočí“.
 
-The example below demonstrates how such errors can be caught by one more level of `try...catch`:
+Následující příklad předvádí, jak lze takové chyby zachytit další úrovní `try...catch`:
 
 ```js run
-function readData() {
-  let json = '{ "age": 30 }';
+function načtiData() {
+  let json = '{ "věk": 30 }';
 
   try {
     // ...
 *!*
-    blabla(); // error!
+    blabla(); // chyba!
 */!*
-  } catch (err) {
+  } catch (chyba) {
     // ...
-    if (!(err instanceof SyntaxError)) {
+    if (!(chyba instanceof SyntaxError)) {
 *!*
-      throw err; // rethrow (don't know how to deal with it)
+      throw chyba; // opětovné vyvolání (neumíme si s ní poradit)
 */!*
     }
   }
 }
 
 try {
-  readData();
-} catch (err) {
+  načtiData();
+} catch (chyba) {
 *!*
-  alert( "External catch got: " + err ); // caught it!
+  alert( "Vnější catch zachytil chybu: " + chyba ); // chytili jsme ji!
 */!*
 }
 ```
 
-Here `readData` only knows how to handle `SyntaxError`, while the outer `try...catch` knows how to handle everything.
+Zde funkce `načtiData` umí ošetřit jedině `SyntaxError`, zatímco vnější `try...catch` umí ošetřit všechno.
 
 ## try...catch...finally
 
-Wait, that's not all.
+Počkat, to ještě není všechno.
 
-The `try...catch` construct may have one more code clause: `finally`.
+Konstrukt `try...catch` může mít ještě jednu kódovou klauzuli: `finally`.
 
-If it exists, it runs in all cases:
+Pokud existuje, spustí se ve všech případech:
 
-- after `try`, if there were no errors,
-- after `catch`, if there were errors.
+- po `try`, pokud nenastaly žádné chyby,
+- po `catch`, pokud nastaly chyby.
 
-The extended syntax looks like this:
+Rozšířená syntaxe vypadá následovně:
 
 ```js
 *!*try*/!* {
-   ... try to execute the code ...
-} *!*catch*/!* (err) {
-   ... handle errors ...
+   ... pokusíme se spustit kód ...
+} *!*catch*/!* (chyba) {
+   ... ošetříme chyby ...
 } *!*finally*/!* {
-   ... execute always ...
+   ... toto se vždy spustí ...
 }
 ```
 
-Try running this code:
+Zkuste si spustit tento kód:
 
 ```js run
 try {
   alert( 'try' );
-  if (confirm('Make an error?')) BAD_CODE();
-} catch (err) {
+  if (confirm('Vyvolat chybu?')) CHYBNÝ_KÓD();
+} catch (chyba) {
   alert( 'catch' );
 } finally {
   alert( 'finally' );
 }
 ```
 
-The code has two ways of execution:
+Tento kód může běžet dvěma možnými cestami:
 
-1. If you answer "Yes" to "Make an error?", then `try -> catch -> finally`.
-2. If you say "No", then `try -> finally`.
+1. Pokud odpovíte „Ano“ na „Vyvolat chybu?“, pak `try -> catch -> finally`.
+2. Pokud odpovíte „Ne“, pak `try -> finally`.
 
-The `finally` clause is often used when we start doing something and want to finalize it in any case of outcome.
+Klauzule `finally` se často používá, když začneme něco dělat a chceme to ukončit, ať je výsledek jakýkoli.
 
-For instance, we want to measure the time that a Fibonacci numbers function `fib(n)` takes. Naturally, we can start measuring before it runs and finish afterwards. But what if there's an error during the function call? In particular, the implementation of `fib(n)` in the code below returns an error for negative or non-integer numbers.
+Například chceme změřit čas, jaký spotřebuje funkce `fib(n)` pro výpočet Fibonacciho čísel. Přirozeně můžeme zahájit měření předtím, než se spustí, a ukončit je posléze. Co když však během volání funkce nastane chyba? Konkrétně implementace `fib(n)` v následujícím kódu vrátí chybu pro záporná nebo necelá čísla.
 
-The `finally` clause is a great place to finish the measurements no matter what.
+Klauzule `finally` je vhodné místo, v němž můžeme ukončit měření, ať funkce dopadne jakkoli.
 
-Here `finally` guarantees that the time will be measured correctly in both situations -- in case of a successful execution of `fib` and in case of an error in it:
+Zde `finally` zaručuje, že čas bude správně změřen v obou situacích -- v případě úspěšného spuštění `fib` i v případě, že během něj nastane chyba:
 
 ```js run
-let num = +prompt("Enter a positive integer number?", 35)
+let číslo = +prompt("Zadejte kladné celé číslo", 35)
 
-let diff, result;
+let rozdíl, výsledek;
 
 function fib(n) {
   if (n < 0 || Math.trunc(n) != n) {
-    throw new Error("Must not be negative, and also an integer.");
+    throw new Error("Číslo nesmí být záporné a musí být celé.");
   }
   return n <= 1 ? n : fib(n - 1) + fib(n - 2);
 }
 
-let start = Date.now();
+let začátek = Date.now();
 
 try {
-  result = fib(num);
-} catch (err) {
-  result = 0;
+  výsledek = fib(číslo);
+} catch (chyba) {
+  výsledek = 0;
 *!*
 } finally {
-  diff = Date.now() - start;
+  rozdíl = Date.now() - začátek;
 }
 */!*
 
-alert(result || "error occurred");
+alert(výsledek || "nastala chyba");
 
-alert( `execution took ${diff}ms` );
+alert( `výkon funkce trval ${rozdíl} ms` );
 ```
 
-You can check by running the code with entering `35` into `prompt` -- it executes normally, `finally` after `try`. And then enter `-1` -- there will be an immediate error, and the execution will take `0ms`. Both measurements are done correctly.
+Můžete si to ověřit, když spustíte kód a do `prompt` zadáte `35` -- spustí se normálně, `finally` přijde po `try`. A pak zadejte `-1` -- okamžitě nastane chyba a výkon funkce bude trvat `0 ms`. Obě měření proběhla správně.
 
-In other words, the function may finish with `return` or `throw`, that doesn't matter. The `finally` clause executes in both cases.
+Jinými slovy, funkce může skončit pomocí `return` nebo `throw`, na tom nezáleží. Klauzule `finally` se spustí v obou případech.
 
+```smart header="Proměnné uvnitř `try...catch...finally` jsou lokální"
+Prosíme všimněte si, že proměnné `výsledek` a `rozdíl` v uvedeném kódu jsou deklarovány *před* `try...catch`.
 
-```smart header="Variables are local inside `try...catch...finally`"
-Please note that `result` and `diff` variables in the code above are declared *before* `try...catch`.
-
-Otherwise, if we declared `let` in `try` block, it would only be visible inside of it.
+Jinak kdybychom deklarovali `let` v bloku `try`, proměnné by byly viditelné jen uvnitř bloku.
 ```
 
-````smart header="`finally` and `return`"
-The `finally` clause works for *any* exit from `try...catch`. That includes an explicit `return`.
+````smart header="`finally` a `return`"
+Klauzule `finally` funguje při *jakémkoli* opuštění bloku `try...catch`. To platí i pro výslovně uvedený `return`.
 
-In the example below, there's a `return` in `try`. In this case, `finally` is executed just before the control returns to the outer code.
+V následujícím příkladu je `return` uvnitř `try`. V tom případě se `finally` spustí právě předtím, než se běh vrátí do vnějšího kódu.
 
 ```js run
-function func() {
+function funkce() {
 
   try {
 *!*
     return 1;
 */!*
 
-  } catch (err) {
+  } catch (chyba) {
     /* ... */
   } finally {
 *!*
@@ -559,117 +558,117 @@ function func() {
   }
 }
 
-alert( func() ); // first works alert from finally, and then this one
+alert( funkce() ); // nejprve se spustí alert z finally a pak tento
 ```
 ````
 
 ````smart header="`try...finally`"
 
-The `try...finally` construct, without `catch` clause, is also useful. We apply it when we don't want to handle errors here (let them fall through), but want to be sure that processes that we started are finalized.
+Konstrukt `try...finally` je užitečný i bez klauzule `catch`. Používáme jej, když zde nechceme ošetřovat chyby (necháme je vypadnout ven), ale chceme mít jistotu, že procesy, které jsme zahájili, budou dokončeny.
 
 ```js
-function func() {
-  // start doing something that needs completion (like measurements)
+function funkce() {
+  // začneme dělat něco, co musíme dokončit (např. měření)
   try {
     // ...
   } finally {
-    // complete that thing even if all dies
+    // dokončíme to, i když všechno spadne
   }
 }
 ```
-In the code above, an error inside `try` always falls out, because there's no `catch`. But `finally` works before the execution flow leaves the function.
+V uvedeném kódu chyba vzniklá uvnitř `try` vždy vypadne, protože zde není `catch`. Ale `finally` se vykoná ještě předtím, než běh opustí funkci.
 ````
 
-## Global catch
+## Globální zachycení
 
-```warn header="Environment-specific"
-The information from this section is not a part of the core JavaScript.
+```warn header="Specifické pro určité prostředí"
+Informace z této části nejsou součástí jádra JavaScriptu.
 ```
 
-Let's imagine we've got a fatal error outside of `try...catch`, and the script died. Like a programming error or some other terrible thing.
+Představme si, že jsme získali fatální chybu mimo `try...catch` a skript spadl. Například programátorskou chybu nebo něco jiného strašného.
 
-Is there a way to react on such occurrences? We may want to log the error, show something to the user (normally they don't see error messages), etc.
+Existuje způsob, jak na takové výskyty reagovat? Můžeme chtít chybu zalogovat, zobrazit něco uživateli (ten obvykle chybové zprávy nevidí) a podobně.
 
-There is none in the specification, but environments usually provide it, because it's really useful. For instance, Node.js has [`process.on("uncaughtException")`](https://nodejs.org/api/process.html#process_event_uncaughtexception) for that. And in the browser we can assign a function to the special [window.onerror](mdn:api/GlobalEventHandlers/onerror) property, that will run in case of an uncaught error.
+Ve specifikaci žádný není, ale prostředí jej obvykle poskytují, protože je opravdu užitečný. Například Node.js má k tomuto účelu [`process.on("uncaughtException")`](https://nodejs.org/api/process.html#process_event_uncaughtexception). A v prohlížeči můžeme přiřadit speciální vlastnosti [window.onerror](mdn:api/GlobalEventHandlers/onerror) funkci, která se spustí v případě nezachycené chyby.
 
-The syntax:
+Syntaxe:
 
 ```js
-window.onerror = function(message, url, line, col, error) {
+window.onerror = function(zpráva, url, řádek, sloupec, chyba) {
   // ...
 };
 ```
 
-`message`
-: Error message.
+`zpráva`
+: Chybová zpráva.
 
 `url`
-: URL of the script where error happened.
+: URL skriptu, v němž došlo k chybě.
 
-`line`, `col`
-: Line and column numbers where error happened.
+`řádek`, `sloupec`
+: Číslo řádku a číslo sloupce, v nichž chyba nastala.
 
-`error`
-: Error object.
+`chyba`
+: Chybový objekt.
 
-For instance:
+Například:
 
 ```html run untrusted refresh height=1
 <script>
 *!*
-  window.onerror = function(message, url, line, col, error) {
-    alert(`${message}\n At ${line}:${col} of ${url}`);
+  window.onerror = function(zpráva, url, řádek, sloupec, chyba) {
+    alert(`${zpráva}\n Na ${řádek}:${sloupec} adresy ${url}`);
   };
 */!*
 
-  function readData() {
-    badFunc(); // Whoops, something went wrong!
+  function načtiData() {
+    špatnáFunkce(); // Ouha, něco se pokazilo!
   }
 
-  readData();
+  načtiData();
 </script>
 ```
 
-The role of the global handler `window.onerror` is usually not to recover the script execution -- that's probably impossible in case of programming errors, but to send the error message to developers.
+Úkolem globálního handleru `window.onerror` obvykle není obnovit běh skriptu -- to je v případě programátorských chyb už zřejmě nemožné, ale poslat vývojářům chybovou zprávu.
 
-There are also web-services that provide error-logging for such cases, like <https://muscula.com> or <https://www.sentry.io>.
+Existují i webové služby, které poskytují logování chyb pro tyto případy, například <https://www.muscula.com> nebo or <https://www.sentry.io>.
 
-They work like this:
+Fungují následovně:
 
-1. We register at the service and get a piece of JS (or a script URL) from them to insert on pages.
-2. That JS script sets a custom `window.onerror` function.
-3. When an error occurs, it sends a network request about it to the service.
-4. We can log in to the service web interface and see errors.
+1. Zaregistrujeme se na službě a dostaneme od ní kousek kódu v JS (nebo URL skriptu), který si vložíme na stránku.
+2. Skript v JS nastaví uživatelskou funkci `window.onerror`.
+3. Když nastane chyba, skript pošle službě síťový požadavek s informací o chybě.
+4. Pak se můžeme přihlásit na webové rozhraní služby a chyby si prohlédnout.
 
-## Summary
+## Shrnutí
 
-The `try...catch` construct allows to handle runtime errors. It literally allows to "try" running the code and "catch" errors that may occur in it.
+Konstrukt `try...catch` nám umožňuje ošetřovat běhové chyby. Doslova nám umožňuje „pokusit se“ (anglicky „try“) spustit kód a „zachytit“ (anglicky „catch“) chyby, které v něm mohou nastat.
 
-The syntax is:
+Syntaxe je:
 
 ```js
 try {
-  // run this code
-} catch (err) {
-  // if an error happened, then jump here
-  // err is the error object
+  // spustí se tento kód
+} catch (chyba) {
+  // pokud nastala chyba, skočí se sem
+  // v proměnné chyba je chybový objekt
 } finally {
-  // do in any case after try/catch
+  // toto se provede v každém případě po try/catch
 }
 ```
 
-There may be no `catch` section or no `finally`, so shorter constructs `try...catch` and `try...finally` are also valid.
+Sekce `catch` nebo `finally` tam nemusí být, takže fungují i kratší konstrukty `try...catch` a `try...finally`.
 
-Error objects have following properties:
+Chybové objekty mají následující vlastnosti:
 
-- `message` -- the human-readable error message.
-- `name` -- the string with error name (error constructor name).
-- `stack` (non-standard, but well-supported) -- the stack at the moment of error creation.
+- `message` -- chybová zpráva čitelná člověkem.
+- `name` -- řetězec s názvem chyby (název konstruktoru chyby).
+- `stack` (nestandardní, ale široce podporovaná) -- zásobník v okamžiku vzniku chyby.
 
-If an error object is not needed, we can omit it by using `catch {` instead of `catch (err) {`.
+Pokud chybový objekt nepotřebujeme, můžeme jej vynechat a použít jen `catch {` namísto `catch (chyba) {`.
 
-We can also generate our own errors using the `throw` operator. Technically, the argument of `throw` can be anything, but usually it's an error object inheriting from the built-in `Error` class. More on extending errors in the next chapter.
+Můžeme také generovat své vlastní chyby pomocí operátoru `throw`. Technicky může být argumentem `throw` cokoli, ale obvykle to je chybový objekt zděděný z vestavěné třídy `Error`. O rozšiřování chyb se dozvíme více v příští kapitole.
 
-*Rethrowing* is a very important pattern of error handling: a `catch` block usually expects and knows how to handle the particular error type, so it should rethrow errors it doesn't know.
+Velmi důležitým vzorcem ošetřování chyb je *opětovné vyvolání*: blok `catch` obvykle očekává a umí ošetřit jen chyby určitého typu, takže chyby, které nezná, by měl opětovně vyvolat.
 
-Even if we don't have `try...catch`, most environments allow us to setup a "global" error handler to catch errors that "fall out". In-browser, that's `window.onerror`.
+I když nemáme `try...catch`, většina prostředí nám umožňuje nastavit „globální“ chybový handler, který bude zachytávat chyby, které „vypadnou“. V prohlížeči je to `window.onerror`.
