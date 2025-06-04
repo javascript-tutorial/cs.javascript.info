@@ -1,454 +1,454 @@
-# Export and Import
+# Export a import
 
-Export and import directives have several syntax variants.
+Direktivy pro export a import mají několik syntaktických variant.
 
-In the previous article we saw a simple use, now let's explore more examples.
+V předchozím článku jsme viděli jednoduché použití, nyní prozkoumejme další příklady.
 
-## Export before declarations
+## Export před deklaracemi
 
-We can label any declaration as exported by placing `export` before it, be it a variable, function or a class.
+Kteroukoli deklaraci můžeme označit jako exportovanou tím, že před ní uvedeme `export`, ať už je to proměnná, funkce nebo třída.
 
-For instance, here all exports are valid:
+Například zde jsou všechny exporty platné:
 
 ```js
-// export an array
-*!*export*/!* let months = ['Jan', 'Feb', 'Mar','Apr', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+// export pole
+*!*export*/!* let měsíce = ['Led', 'Úno', 'Bře', 'Dub', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'];
 
-// export a constant
-*!*export*/!* const MODULES_BECAME_STANDARD_YEAR = 2015;
+// export konstanty
+*!*export*/!* const ROK_VSTUPU_MODULŮ_DO_STANDARDU = 2015;
 
-// export a class
-*!*export*/!* class User {
-  constructor(name) {
-    this.name = name;
+// export třídy
+*!*export*/!* class Uživatel {
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 ```
 
-````smart header="No semicolons after export class/function"
-Please note that `export` before a class or a function does not make it a [function expression](info:function-expressions). It's still a function declaration, albeit exported.
+````smart header="Za exportovanou třídou nebo funkcí není středník"
+Prosíme všimněte si, že `export` před třídou nebo funkcí z ní nedělá [funkční výraz](info:function-expressions). Je to stále deklarace funkce, byť exportovaná.
 
-Most JavaScript style guides don't recommend semicolons after function and class declarations.
+Většina stylových průvodců JavaScriptu nedoporučuje středníky za deklaracemi funkcí a tříd.
 
-That's why there's no need for a semicolon at the end of `export class` and `export function`:
+Z tohoto důvodu není na konci `export class` a `export function` nutný středník:
 
 ```js
-export function sayHi(user) {
-  alert(`Hello, ${user}!`);
-} *!* // no ; at the end */!*
+export function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
+} *!* // na konci není ; */!*
 ```
 
 ````
 
-## Export apart from declarations
+## Export mimo deklarace
 
-Also, we can put `export` separately.
+Můžeme uvést `export` i odděleně.
 
-Here we first declare, and then export:
+Zde nejprve deklarujeme a pak exportujeme:
 
-```js
-// 📁 say.js
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
+```js  
+// 📁 řekni.js
+function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
 }
 
-function sayBye(user) {
-  alert(`Bye, ${user}!`);
+function řekniNashle(uživatel) {
+  alert(`Nashle, ${uživatel}!`);
 }
 
 *!*
-export {sayHi, sayBye}; // a list of exported variables
+export {řekniAhoj, řekniNashle}; // seznam exportovaných proměnných
 */!*
 ```
 
-...Or, technically we could put `export` above functions as well.
+...Nebo technicky můžeme umístit `export` i nad funkce.
 
 ## Import *
 
-Usually, we put a list of what to import in curly braces `import {...}`, like this:
+Obvykle uvádíme seznam toho, co se má importovat, ve složených závorkách `import {...}`, například:
 
 ```js
 // 📁 main.js
 *!*
-import {sayHi, sayBye} from './say.js';
+import {řekniAhoj, řekniNashle} from './řekni.js';
 */!*
 
-sayHi('John'); // Hello, John!
-sayBye('John'); // Bye, John!
+řekniAhoj('Jan'); // Ahoj, Jan!
+řekniNashle('Jan'); // Nashle, Jan!
 ```
 
-But if there's a lot to import, we can import everything as an object using `import * as <obj>`, for instance:
+Pokud je toho však hodně, můžeme importovat všechno jako objekt použitím `import * as <obj>`, například:
 
 ```js
 // 📁 main.js
 *!*
-import * as say from './say.js';
+import * as řekni from './řekni.js';
 */!*
 
-say.sayHi('John');
-say.sayBye('John');
+řekni.řekniAhoj('Jan');
+řekni.řekniNashle('Jan');
 ```
 
-At first sight, "import everything" seems such a cool thing, short to write, why should we ever explicitly list what we need to import?
+Na první pohled vypadá „import všeho“ jako bezvadná věc, krátce se zapisuje, proč bychom tedy vůbec někdy měli výslovně uvádět seznam toho, co potřebujeme importovat?
 
-Well, there are few reasons.
+Je k tomu ovšem několik důvodů.
 
-1. Explicitly listing what to import gives shorter names: `sayHi()` instead of `say.sayHi()`.
-2. Explicit list of imports gives better overview of the code structure: what is used and where. It makes code support and refactoring easier.
+1. Výslovné uvedení toho, co se má importovat, nám umožňuje psát kratší názvy: `řekniAhoj()` místo `řekni.řekniAhoj()`.
+2. Výslovný seznam importů nám dává lepší přehled o struktuře kódu: vidíme, co a kde je použito. Usnadňuje podporu a refaktorizaci kódu.
 
-```smart header="Don't be afraid to import too much"
-Modern build tools, such as [webpack](https://webpack.js.org/) and others, bundle modules together and optimize them to speedup loading. They also remove unused imports.
+```smart header="Nebojte se, že importujete příliš mnoho"
+Moderní sestavovací nástroje, např. [webpack](https://webpack.js.org/) a jiné, spojují moduly dohromady a optimalizují je, aby urychlily načítání. Rovněž odstraňují nepoužité importy.
 
-For instance, if you `import * as library` from a huge code library, and then use only few methods, then unused ones [will not be included](https://github.com/webpack/webpack/tree/main/examples/harmony-unused#examplejs) into the optimized bundle.
+Jestliže například importujete `import * as knihovna` z obrovské knihovny kódu a pak použijete jen několik metod, nepoužité metody [nebudou zahrnuty](https://github.com/webpack/webpack/tree/main/examples/harmony-unused#examplejs) do optimalizovaného svazku.
 ```
 
-## Import "as"
+## Import „as“
 
-We can also use `as` to import under different names.
+Můžeme také importovat pod odlišnými názvy, a to pomocí `as`.
 
-For instance, let's import `sayHi` into the local variable `hi` for brevity, and import `sayBye` as `bye`:
+Například importujme `řekniAhoj` pro stručnost do lokální proměnné `ahoj` a importujme `řekniNashle` jako `nashle`:
 
 ```js
 // 📁 main.js
 *!*
-import {sayHi as hi, sayBye as bye} from './say.js';
+import {řekniAhoj as ahoj, řekniNashle as nashle} from './řekni.js';
 */!*
 
-hi('John'); // Hello, John!
-bye('John'); // Bye, John!
+ahoj('Jan'); // Ahoj, Jan!
+nashle('Jan'); // Nashle, Jan!
 ```
 
-## Export "as"
+## Export „as“
 
-The similar syntax exists for `export`.
+Podobná syntaxe existuje i pro `export`.
 
-Let's export functions as `hi` and `bye`:
+Exportujme funkce pod názvy `ahoj` a `nashle`:
 
 ```js
-// 📁 say.js
+// 📁 řekni.js
 ...
-export {sayHi as hi, sayBye as bye};
+export {řekniAhoj as ahoj, řekniNashle as nashle};
 ```
 
-Now `hi` and `bye` are official names for outsiders, to be used in imports:
+Nyní jsou `ahoj` a `nashle` oficiální názvy pro vnější kód, které budou použity v importech:
 
 ```js
 // 📁 main.js
-import * as say from './say.js';
+import * as řekni from './řekni.js';
 
-say.*!*hi*/!*('John'); // Hello, John!
-say.*!*bye*/!*('John'); // Bye, John!
+řekni.*!*ahoj*/!*('Jan'); // Ahoj, Jan!
+řekni.*!*nashle*/!*('Jan'); // Nashle, Jan!
 ```
 
 ## Export default
 
-In practice, there are mainly two kinds of modules.
+V praxi se používají převážně dva druhy modulů.
 
-1. Modules that contain a library, pack of functions, like `say.js` above.
-2. Modules that declare a single entity, e.g. a module `user.js` exports only `class User`.
+1. Moduly, které obsahují knihovnu, balíček funkcí, podobně jako `řekni.js` výše.
+2. Moduly, které deklarují jedinou entitu, např. modul `uživatel.js` exportuje pouze `class Uživatel`.
 
-Mostly, the second approach is preferred, so that every "thing" resides in its own module.
+Většinou se dává přednost druhému uvedenému přístupu, takže každá „věc“ sídlí ve svém vlastním modulu.
 
-Naturally, that requires a lot of files, as everything wants its own module, but that's not a problem at all. Actually, code navigation becomes easier if files are well-named and structured into folders.
+Přirozeně to vyžaduje spoustu souborů, jelikož všechno chce svůj vlastní modul, ale to vůbec není problém. Ve skutečnosti je navigace v kódu snadnější, jsou-li soubory dobře pojmenovány a strukturovány ve složkách.
 
-Modules provide a special `export default` ("the default export") syntax to make the "one thing per module" way look better.
+Moduly poskytují speciální syntaxi `export default` („výchozí export“), aby přístup „jedna věc v jednom modulu“ vypadal lépe.
 
-Put `export default` before the entity to export:
+Umístěte `export default` před entitu, která se má exportovat:
 
 ```js
-// 📁 user.js
-export *!*default*/!* class User { // just add "default"
-  constructor(name) {
-    this.name = name;
+// 📁 uživatel.js
+export *!*default*/!* class Uživatel { // jen přidáme „default“
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 ```
 
-There may be only one `export default` per file.
+V jednom souboru může být pouze jeden `export default`.
 
-...And then import it without curly braces:
+...A pak jej importujte bez složených závorek:
 
 ```js
 // 📁 main.js
-import *!*User*/!* from './user.js'; // not {User}, just User
+import *!*Uživatel*/!* from './uživatel.js'; // ne {Uživatel}, jen Uživatel
 
-new User('John');
+new Uživatel('Jan');
 ```
 
-Imports without curly braces look nicer. A common mistake when starting to use modules is to forget curly braces at all. So, remember, `import` needs curly braces for named exports and doesn't need them for the default one.
+Importy bez složených závorek vypadají lépe. Obvyklá chyba v začátcích používání modulů je zapomínat uvádět složené závorky úplně. Proto si pamatujte, že `import` potřebuje složené závorky pro pojmenované exporty a nepotřebuje je pro výchozí.
 
-| Named export | Default export |
+| Pojmenovaný export | Výchozí export |
 |--------------|----------------|
-| `export class User {...}` | `export default class User {...}` |
-| `import {User} from ...` | `import User from ...`|
+| `export class Uživatel {...}` | `export default class Uživatel {...}` |
+| `import {Uživatel} from ...` | `import Uživatel from ...`|
 
-Technically, we may have both default and named exports in a single module, but in practice people usually don't mix them. A module has either named exports or the default one.
+Technicky můžeme mít v jednom modulu současně výchozí i pojmenované exporty, ale v praxi je lidé obvykle nesměšují. Modul obsahuje buď pojmenované exporty, nebo výchozí export.
 
-As there may be at most one default export per file, the exported entity may have no name.
+Protože v jednom souboru může být nanejvýše jeden výchozí export, exportovaná entita nemusí mít název.
 
-For instance, these are all perfectly valid default exports:
+Například tohle všechno jsou zcela platné výchozí exporty:
 
 ```js
-export default class { // no class name
+export default class { // žádný název třídy
   constructor() { ... }
 }
 ```
 
 ```js
-export default function(user) { // no function name
-  alert(`Hello, ${user}!`);
+export default function(uživatel) { // žádný název funkce
+  alert(`Ahoj, ${uživatel}!`);
 }
 ```
 
 ```js
-// export a single value, without making a variable
-export default ['Jan', 'Feb', 'Mar','Apr', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+// exportujeme jedinou hodnotu, aniž bychom vytvořili proměnnou
+export default ['Led', 'Úno', 'Bře', 'Dub', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'];
 ```
 
-Not giving a name is fine, because there is only one `export default` per file, so `import` without curly braces knows what to import.
+Neuvést název je v pořádku, protože v jednom souboru je jen jeden `export default`, takže `import` bez složených závorek ví, co má importovat.
 
-Without `default`, such an export would give an error:
+Bez `default` by takový export ohlásil chybu:
 
 ```js
-export class { // Error! (non-default export needs a name)
+export class { // Chyba! (nevýchozí export vyžaduje název)
   constructor() {}
 }
 ```
 
-### The "default" name
+### „Výchozí“ název
 
-In some situations the `default` keyword is used to reference the default export.
+V některých situacích se klíčové slovo `default` používá k odkazu na výchozí export.
 
-For example, to export a function separately from its definition:
+Například k exportu funkce odděleně od její definice:
 
 ```js
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
+function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
 }
 
-// same as if we added "export default" before the function
-export {sayHi as default};
+// totéž, jako bychom před funkcí uvedli „export default“
+export {řekniAhoj as default};
 ```
 
-Or, another situation, let's say a module `user.js` exports one main "default" thing, and a few named ones (rarely the case, but it happens):
+Nebo jiná situace: řekněme, že modul `uživatel.js` exportuje jednu hlavní „výchozí“ věc a několik pojmenovaných (vzácný případ, ale stává se to):
 
 ```js
-// 📁 user.js
-export default class User {
-  constructor(name) {
-    this.name = name;
+// 📁 uživatel.js
+export default class Uživatel {
+  constructor(jméno) {
+    this.jméno = jméno;
   }
 }
 
-export function sayHi(user) {
-  alert(`Hello, ${user}!`);
+export function řekniAhoj(uživatel) {
+  alert(`Ahoj, ${uživatel}!`);
 }
 ```
 
-Here's how to import the default export along with a named one:
+Tímto způsobem importujeme výchozí export společně s pojmenovaným:
 
 ```js
 // 📁 main.js
-import {*!*default as User*/!*, sayHi} from './user.js';
+import {*!*default as Uživatel*/!*, řekniAhoj} from './uživatel.js';
 
-new User('John');
+new Uživatel('Jan');
 ```
 
-And, finally, if importing everything `*` as an object, then the `default` property is exactly the default export:
+A nakonec, jestliže importujeme všechno `*` jako objekt, pak vlastnost `default` je přesně výchozí export:
 
 ```js
 // 📁 main.js
-import * as user from './user.js';
+import * as uživatel from './uživatel.js';
 
-let User = user.default; // the default export
-new User('John');
+let Uživatel = uživatel.default; // výchozí export
+new Uživatel('Jan');
 ```
 
-### A word against default exports
+### Pár slov proti výchozím exportům
 
-Named exports are explicit. They exactly name what they import, so we have that information from them; that's a good thing.
+Pojmenované exporty jsou explicitní. To, co exportují, mají přesně pojmenováno, takže od nich tuto informaci dostaneme; to je dobrá věc.
 
-Named exports force us to use exactly the right name to import:
+Pojmenované exporty nás nutí při importu používat přesně ten správný název:
 
 ```js
-import {User} from './user.js';
-// import {MyUser} won't work, the name must be {User}
+import {Uživatel} from './uživatel.js';
+// import {MůjUživatel} nefunguje, název musí být {Uživatel}
 ```
 
-...While for a default export, we always choose the name when importing:
+...Zatímco u výchozího exportu si při importu název vždy volíme:
 
 ```js
-import User from './user.js'; // works
-import MyUser from './user.js'; // works too
-// could be import Anything... and it'll still work
+import Uživatel from './uživatel.js'; // funguje
+import MůjUživatel from './uživatel.js'; // funguje také
+// může být import Cokoli... a pořád to bude fungovat
 ```
 
-So team members may use different names to import the same thing, and that's not good.
+Členové týmu tedy mohou používat různé názvy při importu stejné věci, a to není dobré.
 
-Usually, to avoid that and keep the code consistent, there's a rule that imported variables should correspond to file names, e.g:
+Abychom se tomu vyhnuli a udrželi kód konzistentní, obvykle platí pravidlo, že importované proměnné by měly odpovídat názvům souborů, například:
 
 ```js
-import User from './user.js';
-import LoginForm from './loginForm.js';
-import func from '/path/to/func.js';
+import Uživatel from './uživatel.js';
+import PřihlašovacíFormulář from './přihlašovacíFormulář.js';
+import funkce from '/cesta/do/funkce.js';
 ...
 ```
 
-Still, some teams consider it a serious drawback of default exports. So they prefer to always use named exports. Even if only a single thing is exported, it's still exported under a name, without `default`.
+I tak to ovšem některé týmy považují za vážnou nevýhodu výchozích exportů. Dávají tedy přednost používání výhradně pojmenovaných exportů. I když je exportována pouze jediná věc, je stále exportována pod svým názvem, bez `default`.
 
-That also makes re-export (see below) a little bit easier.
+To také trochu usnadňuje reexport (viz dále).
 
-## Re-export
+## Reexport
 
-"Re-export" syntax `export ... from ...` allows to import things and immediately export them (possibly under another name), like this:
+Syntaxe „reexportu“ `export ... from ...` nám umožňuje importovat věci a okamžitě je exportovat (třeba i pod jiným názvem), například:
 
 ```js
-export {sayHi} from './say.js'; // re-export sayHi
+export {řekniAhoj} from './řekni.js'; // reexport řekniAhoj
 
-export {default as User} from './user.js'; // re-export default
+export {default as Uživatel} from './uživatel.js'; // reexport výchozího exportu
 ```
 
-Why would that be needed? Let's see a practical use case.
+K čemu by to bylo potřeba? Podívejme se na praktický případ použití.
 
-Imagine, we're writing a "package": a folder with a lot of modules, with some of the functionality exported outside (tools like NPM allow us to publish and distribute such packages, but we don't have to use them), and many modules are just "helpers", for internal use in other package modules.
+Představme si, že píšeme „balíček“: složku s mnoha moduly, některá funkcionalita z nich bude exportována ven (publikování a distribuci takových balíčků nám umožňují nástroje jako NPM, ale nemusíme je používat) a mnoho modulů je jen „pomocných“ pro vnitřní použití v jiných modulech balíčku.
 
-The file structure could be like this:
+Struktura souborů by mohla být takováto:
 ```
 auth/
-    index.js
-    user.js
-    helpers.js
-    tests/
+    index.js  
+    uživatel.js
+    pomocné.js
+    testy/
         login.js
-    providers/
+    poskytovatelé/
         github.js
         facebook.js
         ...
 ```
 
-We'd like to expose the package functionality via a single entry point.
+Rádi bychom vystavili funkcionalitu celého balíčku v jediném vstupním bodu. 
 
-In other words, a person who would like to use our package, should import only from the "main file" `auth/index.js`.
+Jinými slovy, člověk, který by chtěl náš balíček používat, by měl importovat jen z „hlavního souboru“ `auth/index.js`.
 
-Like this:
+Například takto:
 
 ```js
 import {login, logout} from 'auth/index.js'
 ```
 
-The "main file", `auth/index.js` exports all the functionality that we'd like to provide in our package.
+„Hlavní soubor“ `auth/index.js` exportuje veškerou funkcionalitu, kterou bychom v našem balíčku chtěli poskytnout.
 
-The idea is that outsiders, other programmers who use our package, should not meddle with its internal structure, search for files inside our package folder. We export only what's necessary in `auth/index.js` and keep the rest hidden from prying eyes.
+Myšlenkou je, že lidé zvnějšku, jiní programátoři používající náš balíček, by se neměli zabývat jeho vnitřní strukturou a hledat soubory uvnitř složky s naším balíčkem. V `auth/index.js` exportujeme jen to, co je nutné, a zbytek je před zvědavýma očima ukryt.
 
-As the actual exported functionality is scattered among the package, we can import it into `auth/index.js` and export from it:
-
-```js
-// 📁 auth/index.js
-
-// import login/logout and immediately export them
-import {login, logout} from './helpers.js';
-export {login, logout};
-
-// import default as User and export it
-import User from './user.js';
-export {User};
-...
-```
-
-Now users of our package can `import {login} from "auth/index.js"`.
-
-The syntax `export ... from ...` is just a shorter notation for such import-export:
+Protože naše skutečná exportovaná funkcionalita je roztroušena po celém balíčku, můžeme ji importovat do `auth/index.js` a exportovat z něj:
 
 ```js
 // 📁 auth/index.js
-// re-export login/logout
-export {login, logout} from './helpers.js';
 
-// re-export the default export as User
-export {default as User} from './user.js';
+// importujeme přihlas/odhlas a ihned je exportujeme
+import {přihlas, odhlas} from './pomocníci.js';
+export {přihlas, odhlas};
+
+// importujeme výchozí export jako Uživatel a exportujeme ho
+import Uživatel from './uživatel.js';
+export {Uživatel};
 ...
 ```
 
-The notable difference of `export ... from` compared to `import/export` is that re-exported modules aren't available in the current file. So inside the above example of `auth/index.js` we can't use re-exported `login/logout` functions.
+Nyní mohou uživatelé našeho balíčku použít `import {přihlas} from "auth/index.js"`.
 
-### Re-exporting the default export
-
-The default export needs separate handling when re-exporting.
-
-Let's say we have `user.js` with the `export default class User` and would like to re-export it:
+Syntaxe `export ... from ...` je jen kratší notace takového importu-exportu:
 
 ```js
-// 📁 user.js
-export default class User {
+// 📁 auth/index.js
+// reexport přihlas/odhlas 
+export {přihlas, odhlas} from './pomocníci.js';
+
+// reexport výchozího exportu jako Uživatel
+export {default as Uživatel} from './uživatel.js';
+...
+```
+
+Významný rozdíl `export ... from` ve srovnání s `import/export` spočívá v tom, že reexportované moduly nejsou v aktuálním souboru dostupné. Uvnitř uvedeného příkladu `auth/index.js` tedy nemůžeme používat reexportované funkce `přihlas/odhlas`.
+
+### Reexportování výchozího exportu
+
+Výchozí export musí být při reexportu zpracován odděleně.
+
+Řekněme, že máme soubor `uživatel.js` obsahující `export default class Uživatel` a chtěli bychom ji reexportovat:
+
+```js
+// 📁 uživatel.js
+export default class Uživatel {
   // ...
 }
 ```
 
-We can come across two problems with it:
+Můžeme s tím narazit na dva problémy:
 
-1. `export User from './user.js'` won't work. That would lead to a syntax error.
+1. `export Uživatel from './uživatel.js'` nefunguje. Povede k syntaktické chybě.
 
-    To re-export the default export, we have to write `export {default as User}`, as in the example above.
+    Abychom reexportovali výchozí export, musíme napsat `export {default as Uživatel}`, jako v uvedeném příkladu.
 
-2. `export * from './user.js'` re-exports only named exports, but ignores the default one.
+2. `export * from './uživatel.js'` reexportuje pouze pojmenované exporty, ale ignoruje výchozí.
 
-    If we'd like to re-export both named and default exports, then two statements are needed:
+    Pokud chceme reexportovat jak pojmenované, tak výchozí exporty, potřebujeme dva příkazy:
     ```js
-    export * from './user.js'; // to re-export named exports
-    export {default} from './user.js'; // to re-export the default export
+    export * from './uživatel.js'; // reexport pojmenovaných exportů
+    export {default} from './uživatel.js'; // reexport výchozího exportu
     ```
 
-Such oddities of re-exporting a default export are one of the reasons why some developers don't like default exports and prefer named ones.
+Tyto zvláštnosti reexportu výchozího exportu jsou jedním z důvodů, proč někteří vývojáři nemají rádi výchozí exporty a dávají přednost pojmenovaným.
 
-## Summary
+## Shrnutí
 
-Here are all types of `export` that we covered in this and previous articles.
+Zde jsou všechny druhy `export`, které jsme uvedli v této a v předchozí kapitole.
 
-You can check yourself by reading them and recalling what they mean:
+Můžete vyzkoušet sami sebe, když si je přečtete a pokusíte se vzpomenout si, co znamenají:
 
-- Before declaration of a class/function/..:
+- Před deklarací třídy/funkce/..:
   - `export [default] class/function/variable ...`
-- Standalone export:
+- Samostatný export:
   - `export {x [as y], ...}`.
-- Re-export:
-  - `export {x [as y], ...} from "module"`
-  - `export * from "module"` (doesn't re-export default).
-  - `export {default [as y]} from "module"` (re-export default).
+- Reexport:
+  - `export {x [as y], ...} from "modul"`
+  - `export * from "modul"` (nereexportuje výchozí export).
+  - `export {default [as y]} from "modul"` (reexportuje výchozí export).
 
 Import:
 
-- Importing named exports:
-  - `import {x [as y], ...} from "module"`
-- Importing the default export:
-  - `import x from "module"`
-  - `import {default as x} from "module"`
-- Import all:
-  - `import * as obj from "module"`
-- Import the module (its code runs), but do not assign any of its exports to variables:
-  - `import "module"`
+- Import pojmenovaných exportů:
+  - `import {x [as y], ...} from "modul"`
+- Import výchozího exportu:
+  - `import x from "modul"`
+  - `import {default as x} from "modul"`
+- Import všeho:
+  - `import * as obj from "modul"`
+- Import modulu (spustí se jeho kód), ale bez přiřazení jeho exportů do proměnných:
+  - `import "modul"`
 
-We can put `import/export` statements at the top or at the bottom of a script, that doesn't matter.
+Příkazy `import/export` můžeme uvést na začátku nebo na konci skriptu, na tom nezáleží.
 
-So, technically this code is fine:
+Technicky je tedy tento kód v pořádku:
 ```js
-sayHi();
+řekniAhoj();
 
 // ...
 
-import {sayHi} from './say.js'; // import at the end of the file
+import {řekniAhoj} from './řekni.js'; // import na konci souboru
 ```
 
-In practice imports are usually at the start of the file, but that's only for more convenience.
+V praxi se importy obvykle uvádějí na začátku souboru, ale to je jen pro větší přehlednost.
 
-**Please note that import/export statements don't work if inside `{...}`.**
+**Prosíme všimněte si, že příkazy import/export nefungují, jsou-li uvnitř `{...}`.**
 
-A conditional import, like this, won't work:
+Podmíněný import, například tento, nefunguje:
 ```js
-if (something) {
-  import {sayHi} from "./say.js"; // Error: import must be at top level
+if (něco) {
+  import {řekniAhoj} from "./řekni.js"; // Chyba: import musí být na nejvyšší úrovni
 }
 ```
 
-...But what if we really need to import something conditionally? Or at the right time? Like, load a module upon request, when it's really needed?
+...Co když však opravdu potřebujeme něco importovat podmíněně? Nebo ve správnou dobu? Například načíst modul na požádání až tehdy, když je opravdu zapotřebí?
 
-We'll see dynamic imports in the next article.
+Dynamické importy uvidíme v dalším článku.
