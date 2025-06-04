@@ -1,13 +1,13 @@
-The answer is: **no, it won't**:
+Odpověď zní: **ne, nespustí**:
 
 ```js run
-new Promise(function(resolve, reject) {
+new Promise(function(splň, zamítni) {
   setTimeout(() => {
-    throw new Error("Whoops!");
+    throw new Error("Ouha!");
   }, 1000);
 }).catch(alert);
 ```
 
-As said in the chapter, there's an "implicit `try..catch`" around the function code. So all synchronous errors are handled.
+Jak bylo řečeno v této kapitole, kolem kódu funkce je „implicitní `try..catch`“. Všechny synchronní chyby tedy budou ošetřeny.
 
-But here the error is generated not while the executor is running, but later. So the promise can't handle it. 
+Zde však není chyba generována při běhu exekutoru, ale později. Příslib ji tedy nemůže zpracovat.
