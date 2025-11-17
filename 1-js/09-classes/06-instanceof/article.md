@@ -55,9 +55,15 @@ Algoritmus operátoru `obj instanceof Třída` funguje zhruba následovně:
     Například:
 
     ```js run
+<<<<<<< HEAD
     // nastavíme ověření instanceOf tak, aby předpokládalo,
     // že všechno, co má vlastnost můžeŽrát, je zvíře
     class Zvíře {
+=======
+    // set up instanceof check that assumes that
+    // anything with canEat property is an animal
+    class Animal {
+>>>>>>> 5e893cffce8e2346d4e50926d5148c70af172533
       static [Symbol.hasInstance](obj) {
         if (obj.můžeŽrát) return true;
       }
@@ -68,7 +74,11 @@ Algoritmus operátoru `obj instanceof Třída` funguje zhruba následovně:
     alert(obj instanceof Zvíře); // true: zavolá se Zvíře[Symbol.hasInstance](obj)
     ```
 
+<<<<<<< HEAD
 2. Většina tříd nemá `Symbol.hasInstance`. V tom případě je použita standardní logika: `obj instanceOf Třída` zjistí, zda se `Třída.prototype` rovná některému z prototypů v prototypovém řetězci objektu `obj`.
+=======
+2. Most classes do not have `Symbol.hasInstance`. In that case, the standard logic is used: `obj instanceof Class` checks whether `Class.prototype` is equal to one of the prototypes in the `obj` prototype chain.
+>>>>>>> 5e893cffce8e2346d4e50926d5148c70af172533
 
     Jinými slovy, porovnává jeden po druhém:
     ```js
