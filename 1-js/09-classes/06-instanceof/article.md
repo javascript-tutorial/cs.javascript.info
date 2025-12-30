@@ -55,15 +55,9 @@ Algoritmus operátoru `obj instanceof Třída` funguje zhruba následovně:
     Například:
 
     ```js run
-<<<<<<< HEAD
     // nastavíme ověření instanceOf tak, aby předpokládalo,
     // že všechno, co má vlastnost můžeŽrát, je zvíře
     class Zvíře {
-=======
-    // set up instanceof check that assumes that
-    // anything with canEat property is an animal
-    class Animal {
->>>>>>> d78b01e9833009fab534462e05c03cffc51bf0e3
       static [Symbol.hasInstance](obj) {
         if (obj.můžeŽrát) return true;
       }
