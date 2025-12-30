@@ -209,16 +209,8 @@ Jak se přes tyto příklady přenést? Měli bychom si tyto zvláštnosti neust
 
 ## Shrnutí
 
-<<<<<<< HEAD
 - Porovnávací operátory vracejí hodnotu typu boolean.
 - Řetězce se porovnávají znak po znaku podle „slovníkového“ pořadí.
 - Když se porovnávají hodnoty různých typů, převedou se na čísla (s výjimkou operátoru striktní rovnosti).
 - Hodnoty `null` a `undefined` se rovnají `==` sobě navzájem, ale nerovnají se žádné jiné hodnotě.
 - Buďte opatrní při používání porovnávání jako `<` nebo `>` na proměnné, které mohou být `null/undefined`. Dobrý nápad je odděleně ověřit, zda opravdu jsou `null/undefined`.
-=======
-- Comparison operators return a boolean value.
-- Strings are compared letter-by-letter in the "dictionary" order.
-- When values of different types are compared, they get converted to numbers (with the exclusion of a strict equality check).
-- The values `null` and `undefined` are equal `==` to themselves and each other, but do not equal any other value.
-- Be careful when using comparisons like `>` or `<` with variables that can occasionally be `null/undefined`. Checking for `null/undefined` separately is a good idea.
->>>>>>> d78b01e9833009fab534462e05c03cffc51bf0e3
