@@ -100,11 +100,7 @@ Dejme tomu, že chceme získat poslední prvek pole.
 
 Některé programovací jazyky umožňují ke stejnému účelu použít záporné indexy, například `ovoce[-1]`.
 
-<<<<<<< HEAD
 V JavaScriptu to však nefunguje. Výsledek bude `undefined`, protože index v hranatých závorkách se zpracovává tak, jak je uveden.
-=======
-However, in JavaScript it won't work. The result will be `undefined`, because the index in square brackets is treated literally.
->>>>>>> d78b01e9833009fab534462e05c03cffc51bf0e3
 
 Můžeme výslovně vypočítat index posledního prvku a pak jej použít: `ovoce[ovoce.length - 1]`.
 
