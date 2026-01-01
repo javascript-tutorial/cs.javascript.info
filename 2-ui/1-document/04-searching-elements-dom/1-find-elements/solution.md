@@ -1,35 +1,35 @@
-There are many ways to do it.
+Je mnoho způsobů, jak toho dosáhnout.
 
-Here are some of them:
+Zde jsou některé z nich:
 
 ```js
-// 1. The table with `id="age-table"`.
-let table = document.getElementById('age-table')
+// 1. Tabulka s `id="tabulka-věků"`.
+let tabulka = document.getElementById('tabulka-věků')
 
-// 2. All label elements inside that table
-table.getElementsByTagName('label')
-// or
-document.querySelectorAll('#age-table label')
+// 2. Všechny elementy <label> uvnitř této tabulky
+tabulka.getElementsByTagName('label')
+// nebo
+document.querySelectorAll('#tabulka-věků label')
 
-// 3. The first td in that table (with the word "Age")
-table.rows[0].cells[0]
-// or
-table.getElementsByTagName('td')[0]
-// or
-table.querySelector('td')
+// 3. První element <td> v této tabulce (se slovem „Věk“)
+tabulka.rows[0].cells[0]
+// nebo
+tabulka.getElementsByTagName('td')[0]
+// nebo
+tabulka.querySelector('td')
 
-// 4. The form with the name "search"
-// assuming there's only one element with name="search" in the document
-let form = document.getElementsByName('search')[0]
-// or, form specifically
-document.querySelector('form[name="search"]')
+// 4. Formulář s názvem "hledání"
+// předpokládáme, že v dokumentu je jen jeden element s name="hledání"
+let form = document.getElementsByName('hledání')[0]
+// nebo specificky formulář
+document.querySelector('form[name="hledání"]')
 
-// 5. The first input in that form.
+// 5. První <input> v tomto formuláři
 form.getElementsByTagName('input')[0]
-// or
+// nebo
 form.querySelector('input')
 
-// 6. The last input in that form
-let inputs = form.querySelectorAll('input') // find all inputs
-inputs[inputs.length-1] // take the last one
+// 6. Poslední <input> v tomto formuláři
+let vstupy = form.querySelectorAll('input') // najdeme všechny vstupy
+vstupy[vstupy.length-1] // vezmeme poslední
 ```
