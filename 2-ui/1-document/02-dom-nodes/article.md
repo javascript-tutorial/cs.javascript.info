@@ -4,49 +4,49 @@ libs:
 
 ---
 
-# DOM tree
+# DOM strom
 
-The backbone of an HTML document is tags.
+Páteří každého HTML dokumentu jsou značky neboli tagy.
 
-According to the Document Object Model (DOM), every HTML tag is an object. Nested tags are  "children" of the enclosing one. The text inside a tag is an object as well.
+Podle DOMu (Document Object Model) je každá HTML značka objekt. Vnořené značky jsou „dětmi“ vnějších. Text uvnitř značky je také objekt.
 
-All these objects are accessible using JavaScript, and we can use them to modify the page.
+Všechny tyto objekty jsou v JavaScriptu dostupné a my můžeme s jejich pomocí měnit stránku.
 
-For example, `document.body` is the object representing the `<body>` tag.
+Například `document.body` je objekt, který představuje značku `<body>`.
 
-Running this code will make the `<body>` red for 3 seconds:
+Po spuštění tohoto kódu `<body>` na 3 sekundy změní barvu na červenou:
 
 ```js run
-document.body.style.background = 'red'; // make the background red
+document.body.style.background = 'red'; // změní barvu pozadí na červenou
 
-setTimeout(() => document.body.style.background = '', 3000); // return back
+setTimeout(() => document.body.style.background = '', 3000); // vrátí ji zpět
 ```
 
-Here we used `style.background` to change the background color of `document.body`, but there are many other properties, such as:
+Zde jsme použili `style.background`, abychom změnili barvu pozadí `document.body`, ale existuje mnoho dalších vlastností, například:
 
-- `innerHTML` -- HTML contents of the node.
-- `offsetWidth` -- the node width (in pixels)
-- ...and so on.
+- `innerHTML` -- HTML obsah uzlu.
+- `offsetWidth` -- šířka uzlu (v pixelech)
+- ...a tak dále.
 
-Soon we'll learn more ways to manipulate the DOM, but first we need to know about its structure.
+Brzy se naučíme další způsoby, jak manipulovat s DOMem, ale nejprve musíme poznat jeho strukturu.
 
-## An example of the DOM
+## Příklad DOMu
 
-Let's start with the following simple document:
+Začněme s následujícím jednoduchým dokumentem:
 
 ```html run no-beautify
 <!DOCTYPE HTML>
 <html>
 <head>
-  <title>About elk</title>
+  <title>O losovi</title>
 </head>
 <body>
-  The truth about elk.
+  Pravda o losovi.
 </body>
 </html>
 ```
 
-The DOM represents HTML as a tree structure of tags. Here's how it looks:
+DOM reprezentuje HTML v podobě stromové struktury značek. Vypadá následovně:
 
 <div class="domtree"></div>
 
@@ -57,35 +57,35 @@ drawHtmlTree(node1, 'div.domtree', 690, 320);
 </script>
 
 ```online
-On the picture above, you can click on element nodes and their children will open/collapse.
+Na uvedeném obrázku můžete klikat na elementové uzly a jejich děti se budou rozbalovat a schovávat.
 ```
 
-Every tree node is an object.
+Každý uzel stromu je objektem.
 
-Tags are *element nodes* (or just elements) and form the tree structure: `<html>` is at the root, then `<head>` and `<body>` are its children, etc.
+Značky jsou *elementové uzly* (nebo jen elementy) a tvoří strukturu stromu: jeho kořenem je `<html>`, jeho dětmi jsou `<head>` a `<body>`, a tak dále.
 
-The text inside elements forms *text nodes*, labelled as `#text`. A text node contains only a string. It may not have children and is always a leaf of the tree.
+Text uvnitř elementů tvoří *textové uzly*, označené jako `#text`. Textový uzel obsahuje pouze řetězec. Nesmí mít děti a je vždy listem stromu.
 
-For instance, the `<title>` tag has the text `"About elk"`.
+Například značka `<title>` obsahuje text `"O losovi"`.
 
-Please note the special characters in text nodes:
+Prosíme, všimněte si těchto zvláštních znaků v textových uzlech:
 
-- a newline: `↵` (in JavaScript known as `\n`)
-- a space: `␣`
+- konec řádku: `↵` (v JavaScriptu znám jako `\n`)
+- mezera: `␣`
 
-Spaces and newlines are totally valid characters, like letters and digits. They form text nodes and become a part of the DOM. So, for instance, in the example above the `<head>` tag contains some spaces before `<title>`, and that text becomes a `#text` node (it contains a newline and some spaces only).
+Mezery a konce řádků jsou zcela platnými znaky, tak jako písmena a číslice. Tvoří textové uzly a stávají se součástí DOMu. Například v uvedeném příkladu značka `<head>` obsahuje před `<title>` několik mezer, které se staly uzlem `#text` (který obsahuje pouze znak konce řádku a několik mezer).
 
-There are only two top-level exclusions:
-1. Spaces and newlines before `<head>` are ignored for historical reasons.
-2. If we put something after `</body>`, then that is automatically moved inside the `body`, at the end, as the HTML spec requires that all content must be inside `<body>`. So there can't be any spaces after `</body>`.
+Existují jen dvě výjimky na nejvyšší úrovni:
+1. Mezery a konce řádků před `<head>` se z historických důvodů ignorují.
+2. Jestliže vložíme něco za `</body>`, bude to automaticky přemístěno dovnitř `body` na konec, jelikož specifikace HTML vyžaduje, aby všechen obsah byl uvnitř `<body>`. Za `</body>` tedy nemohou být žádné mezery.
 
-In other cases everything's straightforward -- if there are spaces (just like any character) in the document, then they become text nodes in the DOM, and if we remove them, then there won't be any.
+V ostatních případech je všechno jasné -- jestliže jsou v dokumentu mezery (stejně jako kterýkoli jiný znak), stanou se v DOMu textovými uzly, a pokud je odstraníme, nebudou tam.
 
-Here are no space-only text nodes:
+Zde nejsou žádné textové uzly, které by obsahovaly jen mezery:
 
 ```html no-beautify
 <!DOCTYPE HTML>
-<html><head><title>About elk</title></head><body>The truth about elk.</body></html>
+<html><head><title>O losovi</title></head><body>Pravda o losovi.</body></html>
 ```
 
 <div class="domtree"></div>
@@ -96,21 +96,21 @@ let node2 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node2, 'div.domtree', 690, 210);
 </script>
 
-```smart header="Spaces at string start/end and space-only text nodes are usually hidden in tools"
-Browser tools (to be covered soon) that work with DOM usually do not show spaces at the start/end of the text and empty text nodes (line-breaks) between tags.
+```smart header="Mezery na začátku a konci řetězce a textové uzly obsahující pouze mezery jsou v nástrojích obvykle skryty"
+Prohlížečové nástroje (brzy se o nich dozvíme), které pracují s DOMem, obvykle nezobrazují mezery na začátku a konci textu a prázdné textové uzly (konce řádků) mezi značkami.
 
-Developer tools save screen space this way.
+Vývojářské nástroje tímto způsobem šetří místo na obrazovce.
 
-On further DOM pictures we'll sometimes omit them when they are irrelevant. Such spaces usually do not affect how the document is displayed.
+Na dalších obrázcích DOMu je také někdy budeme vypouštět, když nebudou mít význam. Tyto mezery zpravidla nemají vliv na to, jak je dokument zobrazen.
 ```
 
-## Autocorrection
+## Automatické opravy
 
-If the browser encounters malformed HTML, it automatically corrects it when making the DOM.
+Jestliže prohlížeč narazí na poškozený HTML kód, při vytváření DOMu jej automaticky opraví.
 
-For instance, the top tag is always `<html>`. Even if it doesn't exist in the document, it will exist in the DOM, because the browser will create it. The same goes for `<body>`.
+Například nejvyšší značka bude vždy `<html>`. I kdyby v dokumentu nebyla, bude v DOMu vždy existovat, protože prohlížeč ji vytvoří. Totéž platí pro `<body>`.
 
-As an example, if the HTML file is the single word `"Hello"`, the browser will wrap it into `<html>` and `<body>`, and add the required `<head>`, and the DOM will be:
+Například jestliže je HTML soubor tvořen jediným slovem `"Ahoj"`, pak jej prohlížeč zabalí do `<html>` a `<body>`, přidá požadovanou značku `<head>` a DOM bude vypadat následovně:
 
 
 <div class="domtree"></div>
@@ -121,65 +121,65 @@ let node3 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node3, 'div.domtree', 690, 150);
 </script>
 
-While generating the DOM, browsers automatically process errors in the document, close tags and so on.
+Prohlížeče při generování DOMu automaticky zpracují chyby v dokumentu, uzavřou značky a podobně.
 
-A document with unclosed tags:
+Dokument s neuzavřenými značkami:
 
 ```html no-beautify
-<p>Hello
-<li>Mom
-<li>and
-<li>Dad
+<p>Ahoj
+<li>mami
+<li>a
+<li>tati
 ```
 
-...will become a normal DOM as the browser reads tags and restores the missing parts:
+...se stane normálním DOMem, jelikož prohlížeč načte značky a obnoví chybějící části:
 
 <div class="domtree"></div>
 
 <script>
-let node4 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,"children":[]},{"name":"BODY","nodeType":1,"children":[{"name":"P","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Hello"}]},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Mom"}]},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"and"}]},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Dad"}]}]}]}
+let uzel4 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,"children":[]},{"name":"BODY","nodeType":1,"children":[{"name":"P","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Hello"}]},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Mom"}]},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"and"}]},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Dad"}]}]}]}
 
-drawHtmlTree(node4, 'div.domtree', 690, 360);
+drawHtmlTree(uzel4, 'div.domtree', 690, 360);
 </script>
 
-````warn header="Tables always have `<tbody>`"
-An interesting "special case" is tables. By DOM specification they must have `<tbody>` tag, but HTML text may omit it. Then the browser creates `<tbody>` in the DOM automatically.
+````warn header="Tabulky mají vždy `<tbody>`"
+Zajímavým „zvláštním případem“ jsou tabulky. Podle specifikace DOMu musejí mít značku `<tbody>`, ale HTML kód ji může vynechat. Pak prohlížeč vytvoří `<tbody>` v DOMu automaticky.
 
-For the HTML:
+Pro HTML:
 
 ```html no-beautify
-<table id="table"><tr><td>1</td></tr></table>
+<table id="tabulka"><tr><td>1</td></tr></table>
 ```
 
-DOM-structure will be:
+Struktura DOMu bude následující:
 <div class="domtree"></div>
 
 <script>
-let node5 = {"name":"TABLE","nodeType":1,"children":[{"name":"TBODY","nodeType":1,"children":[{"name":"TR","nodeType":1,"children":[{"name":"TD","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"1"}]}]}]}]};
+let uzel5 = {"name":"TABLE","nodeType":1,"children":[{"name":"TBODY","nodeType":1,"children":[{"name":"TR","nodeType":1,"children":[{"name":"TD","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"1"}]}]}]}]};
 
-drawHtmlTree(node5,  'div.domtree', 600, 200);
+drawHtmlTree(uzel5,  'div.domtree', 600, 200);
 </script>
 
-You see? The `<tbody>` appeared out of nowhere. We should keep this in mind while working with tables to avoid surprises.
+Vidíte? Značka `<tbody>` se zjevila odnikud. Při práci s tabulkami bychom to měli mít na paměti, abychom se vyhnuli překvapením.
 ````
 
-## Other node types
+## Ostatní typy uzlů
 
-There are some other node types besides elements and text nodes.
+Existují i jiné typy uzlů, než elementové a textové.
 
-For example, comments:
+Například komentáře:
 
 ```html
 <!DOCTYPE HTML>
 <html>
 <body>
-  The truth about elk.
+  Pravda o losovi.
   <ol>
-    <li>An elk is a smart</li>
+    <li>Los je elegantní</li>
 *!*
-    <!-- comment -->
+    <!-- komentář -->
 */!*
-    <li>...and cunning animal!</li>
+    <li>...a mazané zvíře!</li>
   </ol>
 </body>
 </html>
@@ -188,95 +188,96 @@ For example, comments:
 <div class="domtree"></div>
 
 <script>
-let node6 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,"children":[]},{"name":"BODY","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"\n  The truth about elk.\n  "},{"name":"OL","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"\n    "},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"An elk is a smart"}]},{"name":"#text","nodeType":3,"content":"\n    "},{"name":"#comment","nodeType":8,"content":"comment"},{"name":"#text","nodeType":3,"content":"\n    "},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"...and cunning animal!"}]},{"name":"#text","nodeType":3,"content":"\n  "}]},{"name":"#text","nodeType":3,"content":"\n\n\n"}]}]};
+let node6 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,"children":[]},{"name":"BODY","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"\n  Pravda o losovi.\n  "},{"name":"OL","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"\n    "},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"Los je elegantní"}]},{"name":"#text","nodeType":3,"content":"\n    "},{"name":"#comment","nodeType":8,"content":"comment"},{"name":"#text","nodeType":3,"content":"\n    "},{"name":"LI","nodeType":1,"children":[{"name":"#text","nodeType":3,"content":"...a mazané zvíře!"}]},{"name":"#text","nodeType":3,"content":"\n  "}]},{"name":"#text","nodeType":3,"content":"\n\n\n"}]}]};
 
 drawHtmlTree(node6, 'div.domtree', 690, 500);
 </script>
 
-We can see here a new tree node type -- *comment node*, labeled as `#comment`, between two text nodes.
+Tady vidíme mezi dvěma textovými uzly nový typ stromového uzlu -- *komentářový uzel*, označený jako `#comment`.
 
-We may think -- why is a comment added to the DOM? It doesn't affect the visual representation in any way. But there's a rule -- if something's in HTML, then it also must be in the DOM tree.
+Může nás napadnout -- proč se vlastně do DOMu přidává komentář? Ten přece nemá na vzhled stránky žádný vliv. Existuje však pravidlo -- jestliže je něco v HTML, musí to být i v DOM stromu.
 
-**Everything in HTML, even comments, becomes a part of the DOM.**
+**Vše v HTML, včetně komentářů, se stává součástí DOMu.**
 
-Even the `<!DOCTYPE...>` directive at the very beginning of HTML is also a DOM node. It's in the DOM tree right before `<html>`. Few people know about that. We are not going to touch that node, we even don't draw it on diagrams, but it's there.
+Dokonce i direktiva `<!DOCTYPE...>` na samém začátku HTML je DOM uzlem. V DOM stromu se nachází těsně před `<html>`. O tom ví jen málokdo. Nebudeme na tento uzel sahat, nebudeme jej ani kreslit v diagramech, ale je tam.
 
-The `document` object that represents the whole document is, formally, a DOM node as well.
+Objekt `document`, který představuje celý dokument, je formálně také DOM uzlem.
 
-There are [12 node types](https://dom.spec.whatwg.org/#node). In practice we usually work with 4 of them:
+Celkem existuje [12 typů uzlů](https://dom.spec.whatwg.org/#node). V praxi obvykle pracujeme se čtyřmi z nich:
 
-1. `document` -- the "entry point" into DOM.
-2. element nodes -- HTML-tags, the tree building blocks.
-3. text nodes -- contain text.
-4. comments -- sometimes we can put information there, it won't be shown, but JS can read it from the DOM.
+1. `document` -- „vstupní bod“ DOMu.
+2. elementové uzly -- HTML značky, stavební kameny stromu.
+3. textové uzly -- obsahují text.
+4. komentáře -- někdy do nich můžeme vkládat informace, které se nezobrazí, ale JS je může z DOMu načíst.
 
-## See it for yourself
+## Podívejte se sami
 
-To see the DOM structure in real-time, try [Live DOM Viewer](https://software.hixie.ch/utilities/js/live-dom-viewer/). Just type in the document, and it will show up as a DOM at an instant.
+Chcete-li vidět strukturu DOMu v reálném čase, zkuste [Live DOM Viewer](https://software.hixie.ch/utilities/js/live-dom-viewer/). Stačí psát do dokumentu a ten se za okamžik zobrazí jako DOM.
 
-Another way to explore the DOM is to use the browser developer tools. Actually, that's what we use when developing.
+Dalším způsobem, jak prozkoumávat DOM, je používat prohlížečové vývojářské nástroje. Právě ty používáme při programování.
 
-To do so, open the web page [elk.html](elk.html), turn on the browser developer tools and switch to the Elements tab.
+Abyste tak učinili, otevřete si webovou stránku [elk.html](elk.html), zapněte si prohlížečové vývojářské nástroje a přepněte se na záložku Elements.
 
-It should look like this:
+Měla by vypadat přibližně takto:
 
 ![](elk.svg)
 
-You can see the DOM, click on elements, see their details and so on.
 
-Please note that the DOM structure in developer tools is simplified. Text nodes are shown just as text. And there are no "blank" (space only) text nodes at all. That's fine, because most of the time we are interested in element nodes.
+Vidíte DOM, klikáte na elementy, vidíte jejich detaily a podobně.
 
-Clicking the <span class="devtools" style="background-position:-328px -124px"></span> button in the left-upper corner allows us to choose a node from the webpage using a mouse (or other pointer devices) and "inspect" it (scroll to it in the Elements tab). This works great when we have a huge HTML page (and corresponding huge DOM) and would like to see the place of a particular element in it.
+Prosíme všimněte si, že struktura DOMu ve vývojářských nástrojích je zjednodušená. Textové uzly jsou zobrazeny pouze jako text. A „prázdné“ textové uzly (obsahující jen mezery) nejsou zobrazeny vůbec. To je dobře, neboť ve většině případů nás zajímají pouze elementové uzly.
 
-Another way to do it would be just right-clicking on a webpage and selecting "Inspect" in the context menu.
+Po kliknutí na tlačítko <span class="devtools" style="background-position:-328px -124px"></span> v levém horním rohu si můžeme zvolit uzel z webové stránky pomocí myši (nebo jiného ukazovacího zařízení) a „prozkoumat“ jej (záložka Elements se na něj posune). To funguje skvěle, když máme obrovskou HTML stránku (a odpovídající obrovský DOM) a chceme se podívat na umístění určitého jejího elementu.
+
+Další způsob, jak to udělat, je kliknout pravým tlačítkem na webovou stránku a v kontextovém menu zvolit „Prozkoumat“ („Inspect“).
 
 ![](inspect.svg)
 
-At the right part of the tools there are the following subtabs:
-- **Styles** -- we can see CSS applied to the current element rule by rule, including built-in rules (gray). Almost everything can be edited in-place, including the dimensions/margins/paddings of the box below.
-- **Computed** -- to see CSS applied to the element by property: for each property we can see a rule that gives it (including CSS inheritance and such).
-- **Event Listeners** -- to see event listeners attached to DOM elements (we'll cover them in the next part of the tutorial).
-- ...and so on.
+V pravé části nástrojů se nacházejí následující podzáložky:
+- **Styles** -- můžeme vidět CSS aplikované na aktuální element, jedno pravidlo po druhém, včetně vestavěných pravidel (zobrazena šedě). Téměř všechno můžeme na místě editovat, včetně rozměrů a vnějších i vnitřních okrajů boxu.
+- **Computed** -- vidíme CSS aplikované na element podle vlastností: pro každou vlastnost vidíme pravidlo, které ji definuje (včetně CSS dědičnosti a podobně).
+- **Event Listeners** -- vidíme posluchače událostí připojené k DOM elementům (probereme je v příští části tutoriálu).
+- ...a tak dále.
 
-The best way to study them is to click around. Most values are editable in-place.
+Nejlepší způsob, jak je prostudovat, je klikat kolem dokola. Většinu hodnot lze na místě editovat.
 
-## Interaction with console
+## Interakce s konzolí
 
-As we work the DOM, we also may want to apply JavaScript to it. Like: get a node and run some code to modify it, to see the result. Here are few tips to travel between the Elements tab and the console.
+Při práci s DOMem na něj můžeme také chtít aplikovat JavaScript. Například můžeme chtít načíst uzel a spustit nějaký kód, který ho modifikuje, abychom viděli výsledek. Následuje několik rad, jak cestovat mezi záložkou Elements a konzolí.
 
-For the start:
+Pro začátek:
 
-1. Select the first `<li>` in the Elements tab.
-2. Press `key:Esc` -- it will open console right below the Elements tab.
+1. Na záložce Elements zvolte první značku `<li>`.
+2. Stiskněte `key:Esc` -- přímo pod záložkou Elements se otevře konzole.
 
-Now the last selected element is available as `$0`, the previously selected is `$1` etc.
+Nyní je poslední zvolený element k dispozici jako `$0`, předposlední zvolený jako `$1`, a tak dále.
 
-We can run commands on them. For instance, `$0.style.background = 'red'` makes the selected list item red, like this:
+Můžeme na nich spouštět příkazy. Například `$0.style.background = 'red'` obarví zvolený prvek seznamu červeně, takto:
 
 ![](domconsole0.svg)
 
-That's how to get a node from Elements in Console.
+Tímto způsobem tedy získáme uzel ze záložky Elements v konzoli.
 
-There's also a road back. If there's a variable referencing a DOM node, then we can use the command `inspect(node)` in Console to see it in the Elements pane.
+Existuje i opačná cesta. Jestliže se nějaká proměnná odkazuje na DOM uzel, můžeme v konzoli použít příkaz `inspect(uzel)`, abychom jej viděli v záložce Elements.
 
-Or we can just output the DOM node in the console and explore "in-place", like `document.body` below:
+Nebo si prostě můžeme vypsat DOM uzel v konzoli a prozkoumat jej „na místě“, například `document.body` následovně:
 
 ![](domconsole1.svg)
 
-That's for debugging purposes of course. From the next chapter on we'll access and modify DOM using JavaScript.
+To samozřejmě slouží pro účely ladění. Od následující kapitoly budeme k DOMu přistupovat a modifikovat jej pomocí JavaScriptu.
 
-The browser developer tools are a great help in development: we can explore the DOM, try things and see what goes wrong.
+Prohlížečové vývojářské nástroje představují při vývoji značnou pomoc: můžeme prozkoumávat DOM, zkoušet různé věci a vidíme, co se pokazilo.
 
-## Summary
+## Shrnutí
 
-An HTML/XML document is represented inside the browser as the DOM tree.
+HTML/XML dokument je v prohlížeči reprezentován DOM stromem.
 
-- Tags become element nodes and form the structure.
-- Text becomes text nodes.
-- ...etc, everything in HTML has its place in DOM, even comments.
+- Značky se stávají elementovými uzly a tvoří jeho strukturu.
+- Text se stává textovými uzly.
+- ...atd., vše, co je v HTML, včetně komentářů, má v DOMu své místo.
 
-We can use developer tools to inspect DOM and modify it manually.
+Pomocí vývojářských nástrojů můžeme DOM prozkoumávat a ručně jej měnit.
 
-Here we covered the basics, the most used and important actions to start with. There's an extensive documentation about Chrome Developer Tools at <https://developers.google.com/web/tools/chrome-devtools>. The best way to learn the tools is to click here and there, read menus: most options are obvious. Later, when you know them in general, read the docs and pick up the rest.
+V této kapitole jsme uvedli základy, nejpoužívanější a nejdůležitější akce, s kterými začneme. Rozsáhlá dokumentace vývojářských nástrojů Chrome (Chrome Developer Tools) se nachází na <https://developers.google.com/web/tools/chrome-devtools>. Nejlepší způsob, jak se naučit nástroje používat, je klikat sem a tam a číst menu: většina možností je zřejmá. Až je budete později obecně znát, přečtěte si dokumentaci a naučte se zbytek.
 
-DOM nodes have properties and methods that allow us to travel between them, modify them, move around the page, and more. We'll get down to them in the next chapters.
+DOM uzly obsahují vlastnosti a metody, které nám umožňují mezi nimi cestovat, měnit je, přesunovat je na stránce a podobně. Dostaneme se k nim v dalších kapitolách.
