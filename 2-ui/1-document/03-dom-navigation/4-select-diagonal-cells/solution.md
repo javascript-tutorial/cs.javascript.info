@@ -1,1 +1,1 @@
-We'll be using `rows` and `cells` properties to access diagonal table cells.
+K přístupu k diagonálním buňkám tabulky budeme používat vlastnosti `rows` a `cells`.

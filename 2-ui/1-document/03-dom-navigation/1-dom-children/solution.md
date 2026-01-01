@@ -1,27 +1,27 @@
-There are many ways, for instance:
+Způsobů je mnoho, například:
 
 
-The `<div>` DOM node:
+DOM uzel `<div>`:
 
 ```js
 document.body.firstElementChild
-// or
+// nebo
 document.body.children[0]
-// or (the first node is space, so we take 2nd)
+// nebo (první uzel je mezerový, takže vezmeme až druhý)
 document.body.childNodes[1]
 ```
 
-The `<ul>` DOM node:
+DOM uzel `<ul>`:
 
 ```js
 document.body.lastElementChild
-// or
+// nebo
 document.body.children[1]
 ```
 
-The second `<li>` (with Pete):
+Druhý uzel `<li>` (obsahující Petra):
 
 ```js
-// get <ul>, and then get its last element child
+// získáme <ul> a pak získáme jeho poslední elementové dítě
 document.body.lastElementChild.lastElementChild
 ```

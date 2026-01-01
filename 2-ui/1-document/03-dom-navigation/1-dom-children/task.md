@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# DOM children
+# Děti DOMu
 
-Look at this page:
+Podívejte se na tuto stránku:
 
 ```html
 <html>
 <body>
-  <div>Users:</div>
+  <div>Uživatelé:</div>
   <ul>
-    <li>John</li>
-    <li>Pete</li>
+    <li>Jan</li>
+    <li>Petr</li>
   </ul>
 </body>
 </html>
 ```
 
-For each of the following, give at least one way of how to access them:
-- The `<div>` DOM node?
-- The `<ul>` DOM node?
-- The second `<li>` (with Pete)?
+Pro každý z následujících uzlů uveďte aspoň jeden způsob, jak k němu přistoupit:
+- DOM uzel `<div>`?
+- DOM uzel `<ul>`?
+- Druhý uzel `<li>` (obsahující Petra)?

@@ -5,37 +5,37 @@ libs:
 ---
 
 
-# Walking the DOM
+# Procházení DOMem
 
-The DOM allows us to do anything with elements and their contents, but first we need to reach the corresponding DOM object.
+DOM nám umožňuje provádět s elementy a jejich obsahem všechno, co chceme, ale nejprve se musíme dostat k příslušnému DOM objektu.
 
-All operations on the DOM start with the `document` object. That's the main "entry point" to DOM. From it we can access any node.
+Všechny operace na DOMu začínají na objektu `document`. To je hlavní „vstupní bod“ DOMu. Odtamtud můžeme přistupovat k jakémukoli uzlu.
 
-Here's a picture of links that allow for travel between DOM nodes:
+Následující obrázek ukazuje odkazy, které nám umožňují pohybovat se mezi DOM uzly:
 
 ![](dom-links.svg)
 
-Let's discuss them in more detail.
+Proberme je podrobněji.
 
-## On top: documentElement and body
+## Na vrcholu: documentElement a body
 
-The topmost tree nodes are available directly as `document` properties:
+Vrchní uzly stromu jsou dostupné přímo jako vlastnosti objektu `document`:
 
 `<html>` = `document.documentElement`
-: The topmost document node is `document.documentElement`. That's the DOM node of the `<html>` tag.
+: Nejvyšší uzel dokumentu je `document.documentElement`. To je DOM uzel značky `<html>`.
 
 `<body>` = `document.body`
-: Another widely used DOM node is the `<body>` element -- `document.body`.
+: Další zeširoka používaný DOM uzel je element `<body>` -- `document.body`.
 
 `<head>` = `document.head`
-: The `<head>` tag is available as `document.head`.
+: Značka `<head>` je dostupná jako `document.head`.
 
-````warn header="There's a catch: `document.body` can be `null`"
-A script cannot access an element that doesn't exist at the moment of running.
+````warn header="Je tady chyták: `document.body` může být `null`"
+Skript nemůže přistupovat k elementu, který v okamžiku jeho spuštění neexistuje.
 
-In particular, if a script is inside `<head>`, then `document.body` is unavailable, because the browser did not read it yet.
+Konkrétně, jestliže je skript umístěn uvnitř `<head>`, pak `document.body` nebude k dispozici, protože prohlížeč je ještě nenačetl.
 
-So, in the example below the first `alert` shows `null`:
+V uvedeném příkladu tedy první `alert` zobrazí `null`:
 
 ```html run
 <html>
@@ -43,7 +43,7 @@ So, in the example below the first `alert` shows `null`:
 <head>
   <script>
 *!*
-    alert( "From HEAD: " + document.body ); // null, there's no <body> yet
+    alert( "Ze značky HEAD: " + document.body ); // null, zatím není žádné <body>
 */!*
   </script>
 </head>
@@ -51,7 +51,7 @@ So, in the example below the first `alert` shows `null`:
 <body>
 
   <script>
-    alert( "From BODY: " + document.body ); // HTMLBodyElement, now it exists
+    alert( "Ze značky BODY: " + document.body ); // HTMLBodyElement, nyní existuje
   </script>
 
 </body>
@@ -59,49 +59,49 @@ So, in the example below the first `alert` shows `null`:
 ```
 ````
 
-```smart header="In the DOM world `null` means \"doesn't exist\""
-In the DOM, the `null` value means "doesn't exist" or "no such node".
+```smart header="Ve světě DOMu `null` znamená „neexistuje“"
+V DOMu hodnota `null` znamená „neexistuje“ nebo „takový uzel není“.
 ```
 
-## Children: childNodes, firstChild, lastChild
+## Děti: childNodes, firstChild, lastChild
 
-There are two terms that we'll use from now on:
+Od nynějška budeme používat následující dva pojmy:
 
-- **Child nodes (or children)** -- elements that are direct children. In other words, they are nested exactly in the given one. For instance, `<head>` and `<body>` are children of `<html>` element.
-- **Descendants** -- all elements that are nested in the given one, including children, their children and so on.
+- **Dětské uzly (nebo děti)** -- elementy, které jsou přímými dětmi. Jinými slovy, jsou vnořeny přímo v daném uzlu. Například `<head>` a `<body>` jsou dětmi elementu `<html>`.
+- **Potomci** -- všechny elementy, které jsou vnořeny v daném uzlu, tedy děti, jejich děti a tak dále.
 
-For instance, here `<body>` has children `<div>` and `<ul>` (and few blank text nodes):
+Například `<body>` zde má děti `<div>` a `<ul>` (a několik prázdných textových uzlů):
 
 ```html run
 <html>
 <body>
-  <div>Begin</div>
+  <div>Začátek</div>
 
   <ul>
     <li>
-      <b>Information</b>
+      <b>Informace</b>
     </li>
   </ul>
 </body>
 </html>
 ```
 
-...And descendants of `<body>` are not only direct children `<div>`, `<ul>` but also more deeply nested elements, such as `<li>` (a child of `<ul>`) and `<b>` (a child of `<li>`) -- the entire subtree.
+...A potomci `<body>` jsou nejen přímé děti `<div>` a `<ul>`, ale i hlouběji vnořené elementy, například `<li>` (dítě `<ul>`) a `<b>` (dítě `<li>`) -- celý podstrom.
 
-**The `childNodes` collection lists all child nodes, including text nodes.**
+**Všechny dětské uzly včetně textových obsahuje kolekce `childNodes`.**
 
-The example below shows children of `document.body`:
+Následující příklad zobrazí děti elementu `document.body`:
 
 ```html run
 <html>
 <body>
-  <div>Begin</div>
+  <div>Začátek</div>
 
   <ul>
-    <li>Information</li>
+    <li>Informace</li>
   </ul>
 
-  <div>End</div>
+  <div>Konec</div>
 
   <script>
 *!*
@@ -110,81 +110,81 @@ The example below shows children of `document.body`:
     }
 */!*
   </script>
-  ...more stuff...
+  ...něco dalšího...
 </body>
 </html>
 ```
 
-Please note an interesting detail here. If we run the example above, the last element shown is `<script>`. In fact, the document has more stuff below, but at the moment of the script execution the browser did not read it yet, so the script doesn't see it.
+Prosíme všimněte si zde jednoho zajímavého detailu. Když uvedený příklad spustíme, posledním zobrazeným elementem bude `<script>`. Ve skutečnosti dokument obsahuje ještě další prvky pod ním, ale ve chvíli spuštění skriptu je prohlížeč ještě nenačetl, takže je skript nevidí.
 
-**Properties `firstChild` and `lastChild` give fast access to the first and last children.**
+**Rychlý přístup k prvnímu a poslednímu dítěti poskytují vlastnosti `firstChild` a `lastChild`.**
 
-They are just shorthands. If there exist child nodes, then the following is always true:
+Jsou to jenom zkratky. Pokud dětské uzly existují, vždy platí následující:
 ```js
 elem.childNodes[0] === elem.firstChild
 elem.childNodes[elem.childNodes.length - 1] === elem.lastChild
 ```
 
-There's also a special function `elem.hasChildNodes()` to check whether there are any child nodes.
+Existuje i speciální funkce `elem.hasChildNodes()`, která zjistí, zda element má nějaké dětské uzly.
 
-### DOM collections
+### Kolekce DOMu
 
-As we can see, `childNodes` looks like an array. But actually it's not an array, but rather a *collection* -- a special array-like iterable object.
+Jak vidíme, `childNodes` vypadá jako pole. Ve skutečnosti to však není pole, ale *kolekce* -- speciální iterovatelný objekt podobný poli.
 
-There are two important consequences:
+To má dva důležité důsledky:
 
-1. We can use `for..of` to iterate over it:
+1. Můžeme nad ním iterovat pomocí `for..of`:
   ```js
-  for (let node of document.body.childNodes) {
-    alert(node); // shows all nodes from the collection
+  for (let uzel of document.body.childNodes) {
+    alert(uzel); // zobrazí všechny uzly z kolekce
   }
   ```
-  That's because it's iterable (provides the `Symbol.iterator` property, as required).
+  Je to proto, že objekt je iterovatelný (poskytuje požadovanou vlastnost `Symbol.iterator`).
 
-2. Array methods won't work, because it's not an array:
+2. Metody polí nefungují, protože tento objekt není pole:
   ```js run
-  alert(document.body.childNodes.filter); // undefined (there's no filter method!)
+  alert(document.body.childNodes.filter); // undefined (neobsahuje metodu filter!)
   ```
 
-The first thing is nice. The second is tolerable, because we can use `Array.from` to create a "real" array from the collection, if we want array methods:
+To první je pěkné. To druhé lze tolerovat, protože jestliže chceme metody polí, můžeme z kolekce vytvořit „opravdové“ pole pomocí metody `Array.from`:
 
   ```js run
   alert( Array.from(document.body.childNodes).filter ); // function
   ```
 
-```warn header="DOM collections are read-only"
-DOM collections, and even more -- *all* navigation properties listed in this chapter are read-only.
+```warn header="DOM kolekce jsou pouze pro čtení"
+DOM kolekce, ba dokonce *všechny* navigační vlastnosti uvedené v této kapitole jsou pouze pro čtení.
 
-We can't replace a child by something else by assigning `childNodes[i] = ...`.
+Nemůžeme nahradit dítě něčím jiným pomocí přiřazení `childNodes[i] = ...`.
 
-Changing DOM needs other methods. We will see them in the next chapter.
+Ke změnám v DOMu jsou zapotřebí jiné metody. Uvidíme je v příští kapitole.
 ```
 
-```warn header="DOM collections are live"
-Almost all DOM collections with minor exceptions are *live*. In other words, they reflect the current state of DOM.
+```warn header="DOM kolekce jsou živé"
+Téměř všechny DOM kolekce až na několik drobných výjimek jsou *živé*. Jinými slovy, odrážejí aktuální stav DOMu.
 
-If we keep a reference to `elem.childNodes`, and add/remove nodes into DOM, then they appear in the collection automatically.
+Jestliže si budeme udržovat odkaz na `elem.childNodes` a budeme v DOMu přidávat nebo odstraňovat uzly, automaticky se to v této kolekci projeví.
 ```
 
-````warn header="Don't use `for..in` to loop over collections"
-Collections are iterable using `for..of`. Sometimes people try to use `for..in` for that.
+````warn header="Nepoužívejte `for..in` pro iterování nad kolekcemi"
+Kolekce jsou iterovatelné pomocí `for..of`. Někdy se k tomu lidé snaží použít `for..in`.
 
-Please, don't. The `for..in` loop iterates over all enumerable properties. And collections have some "extra" rarely used properties that we usually do not want to get:
+Prosíme, nedělejte to. Cyklus `for..in` iteruje nad všemi enumerovatelnými vlastnostmi. A kolekce mají některé vzácně používané vlastnosti „navíc“, které obvykle nechceme získat:
 
 ```html run
 <body>
 <script>
-  // shows 0, 1, length, item, values and more.
-  for (let prop in document.body.childNodes) alert(prop);
+  // zobrazí 0, 1, length, item, values a další.
+  for (let vlastnost in document.body.childNodes) alert(vlastnost);
 </script>
 </body>
 ````
 
-## Siblings and the parent
+## Sourozenci a rodič
 
-*Siblings* are nodes that are children of the same parent.
+*Sourozenci* jsou uzly, které jsou dětmi stejného rodiče.
 
-For instance, here `<head>` and `<body>` are siblings:
+Například zde jsou `<head>` a `<body>` sourozenci:
 
 ```html
 <html>
@@ -192,75 +192,74 @@ For instance, here `<head>` and `<body>` are siblings:
 </html>
 ```
 
-- `<body>` is said to be the "next" or "right" sibling of `<head>`,
-- `<head>` is said to be the "previous" or "left" sibling of `<body>`.
+- `<body>` se nazývá „další“ nebo „pravý“ sourozenec `<head>`,
+- `<head>` se nazývá „předchozí“ nebo „levý“ sourozenec `<body>`.
 
-The next sibling is in `nextSibling` property, and the previous one - in `previousSibling`.
+Dalšího sourozence poskytuje vlastnost `nextSibling` a předchozího vlastnost `previousSibling`.
 
-The parent is available as `parentNode`.
+Rodič je dostupný ve vlastnosti `parentNode`.
 
-For example:
+Příklad:
 
 ```js run
-// parent of <body> is <html>
+// rodičem <body> je <html>
 alert( document.body.parentNode === document.documentElement ); // true
 
-// after <head> goes <body>
+// po <head> následuje <body>
 alert( document.head.nextSibling ); // HTMLBodyElement
 
-// before <body> goes <head>
+// před <body> se nachází <head>
 alert( document.body.previousSibling ); // HTMLHeadElement
 ```
 
-## Element-only navigation
+## Navigace pouze po elementech
 
-Navigation properties listed above refer to *all* nodes. For instance, in `childNodes` we can see both text nodes, element nodes, and even comment nodes if they exist.
+Dosud uvedené navigační vlastnosti odkazují na *všechny* uzly. Například ve vlastnosti `childNodes` vidíme textové uzly, elementové uzly a dokonce i komentářové uzly, pokud existují.
 
-But for many tasks we don't want text or comment nodes. We want to manipulate element nodes that represent tags and form the structure of the page.
+V mnoha úlohách však nechceme textové nebo komentářové uzly. Chceme manipulovat s elementovými uzly, které představují značky a tvoří strukturu stránky.
 
-So let's see more navigation links that only take *element nodes* into account:
+Podívejme se tedy na další navigační odkazy, které berou v úvahu jen *elementové uzly*:
 
 ![](dom-links-elements.svg)
 
-The links are similar to those given above, just with `Element` word inside:
+Odkazy jsou podobné těm uvedeným výše, jen se slovem `Element` uprostřed:
 
-- `children` -- only those children that are element nodes.
-- `firstElementChild`, `lastElementChild` -- first and last element children.
-- `previousElementSibling`, `nextElementSibling` -- neighbor elements.
-- `parentElement` -- parent element.
+- `children` -- jen ty děti, které jsou elementy. 
+- `firstElementChild`, `lastElementChild` -- první a poslední dětský element.
+- `previousElementSibling`, `nextElementSibling` -- sousední elementy.
+- `parentElement` -- rodičovský element.
 
-````smart header="Why `parentElement`? Can the parent be *not* an element?"
-The `parentElement` property returns the "element" parent, while `parentNode` returns "any node" parent. These properties are usually the same: they both get the parent.
+````smart header="Proč `parentElement`? Může snad rodič *nebýt* element?"
+Vlastnost `parentElement` vrací „elementového“ rodiče, zatímco vlastnost `parentNode` vrací „jakéhokoli“ rodiče. Tyto vlastnosti jsou obvykle stejné: obě vracejí rodiče.
 
-With the one exception of `document.documentElement`:
+Jedinou výjimkou je `document.documentElement`:
 
 ```js run
 alert( document.documentElement.parentNode ); // document
 alert( document.documentElement.parentElement ); // null
 ```
 
-The reason is that the root node `document.documentElement` (`<html>`) has `document` as its parent. But `document` is not an element node, so `parentNode` returns it and `parentElement` does not.
+Důvodem je, že rodičem kořenového uzlu `document.documentElement` (`<html>`) je `document`. Avšak `document` není elementový uzel, takže jej `parentNode` vrací a `parentElement` ne.
 
-This detail may be useful when we want to travel up from an arbitrary element `elem` to `<html>`, but not to the `document`:
+Tento detail může být užitečný, když se chceme přesunout od libovolného elementu `elem` nahoru až na `<html>`, ale ne na `document`:
 ```js
-while(elem = elem.parentElement) { // go up till <html>
+while(elem = elem.parentElement) { // jdeme nahoru až na <html>
   alert( elem );
 }
 ```
 ````
-
-Let's modify one of the examples above: replace `childNodes` with `children`. Now it shows only elements:
+Pozměňme jeden z uvedených příkladů: nahraďme `childNodes` za `children`. Teď bude zobrazovat jen elementy:
 
 ```html run
 <html>
 <body>
-  <div>Begin</div>
+  <div>Začátek</div>
 
   <ul>
-    <li>Information</li>
+    <li>Informace</li>
   </ul>
 
-  <div>End</div>
+  <div>Konec</div>
 
   <script>
 *!*
@@ -274,60 +273,60 @@ Let's modify one of the examples above: replace `childNodes` with `children`. No
 </html>
 ```
 
-## More links: tables [#dom-navigation-tables]
+## Další odkazy: tabulky [#dom-navigation-tables]
 
-Till now we described the basic navigation properties.
+Dosud jsme popisovali základní navigační vlastnosti.
 
-Certain types of DOM elements may provide additional properties, specific to their type, for convenience.
+Určité druhy DOM elementů mohou pro pohodlnější přístup poskytovat další vlastnosti, specifické pro jejich typ.
 
-Tables are a great example of that, and represent a particularly important case:
+Výborným příkladem jsou tabulky, které představují zvlášť důležitý případ:
 
-**The `<table>`** element supports (in addition to the given above) these properties:
-- `table.rows` -- the collection of `<tr>` elements of the table.
-- `table.caption/tHead/tFoot` -- references to elements `<caption>`, `<thead>`, `<tfoot>`.
-- `table.tBodies` -- the collection of `<tbody>` elements (can be many according to the standard, but there will always be at least one -- even if it is not in the source HTML, the browser will put it in the DOM).
+Element **`<table>`** podporuje tyto vlastnosti (navíc k výše uvedeným):
+- `table.rows` -- kolekce elementů `<tr>` tabulky.
+- `table.caption/tHead/tFoot` -- odkazy na elementy `<caption>`, `<thead>`, `<tfoot>`.
+- `table.tBodies` -- kolekce elementů `<tbody>` (podle standardu jich může být více, ale vždy bude nejméně jeden -- i když není ve zdrojovém HTML, prohlížeč jej do DOMu vloží).
 
-**`<thead>`, `<tfoot>`, `<tbody>`** elements provide the `rows` property:
-- `tbody.rows` -- the collection of `<tr>` inside.
+Elementy **`<thead>`, `<tfoot>`, `<tbody>`** poskytují vlastnost `rows`:
+- `tbody.rows` -- kolekce `<tr>` uvnitř.
 
 **`<tr>`:**
-- `tr.cells` -- the collection of `<td>` and `<th>` cells inside the given `<tr>`.
-- `tr.sectionRowIndex` -- the position (index) of the given `<tr>` inside the enclosing `<thead>/<tbody>/<tfoot>`.
-- `tr.rowIndex` -- the number of the `<tr>` in the table as a whole (including all table rows).
+- `tr.cells` -- kolekce buněk `<td>` a `<th>` uvnitř příslušného `<tr>`.
+- `tr.sectionRowIndex` -- pozice (index) příslušného `<tr>` uvnitř uzavírajícího `<thead>/<tbody>/<tfoot>`.
+- `tr.rowIndex` -- celkové pořadí tohoto `<tr>` v tabulce (mezi všemi tabulkovými řádky).
 
-**`<td>` and `<th>`:**
-- `td.cellIndex` -- the number of the cell inside the enclosing `<tr>`.
+**`<td>` a `<th>`:**
+- `td.cellIndex` -- pořadí této buňky uvnitř uzavírajícího `<tr>`.
 
-An example of usage:
+Příklad použití:
 
 ```html run height=100
-<table id="table">
+<table id="tabulka">
   <tr>
-    <td>one</td><td>two</td>
+    <td>jedna</td><td>dvě</td>
   </tr>
   <tr>
-    <td>three</td><td>four</td>
+    <td>tři</td><td>čtyři</td>
   </tr>
 </table>
 
 <script>
-  // get td with "two" (first row, second column)
-  let td = table.*!*rows[0].cells[1]*/!*;
-  td.style.backgroundColor = "red"; // highlight it
+  // získáme td s "dvě" (první řádek, druhý sloupec)
+  let td = tabulka.*!*rows[0].cells[1]*/!*;
+  td.style.backgroundColor = "red"; // zvýrazníme ji
 </script>
 ```
 
-The specification: [tabular data](https://html.spec.whatwg.org/multipage/tables.html).
+Specifikace: [tabulková data](https://html.spec.whatwg.org/multipage/tables.html).
 
-There are also additional navigation properties for HTML forms. We'll look at them later when we start working with forms.
+Dodatečné navigační vlastnosti existují i pro HTML formuláře. Podíváme se na ně později, až začneme s formuláři  pracovat.
 
-## Summary
+## Shrnutí
 
-Given a DOM node, we can go to its immediate neighbors using navigation properties.
+Máme-li zadaný DOM uzel, můžeme se z něj pomocí navigačních vlastností dostat na jeho bezprostřední sousedy.
 
-There are two main sets of them:
+Vlastnosti se dělí do dvou základních sad:
 
-- For all nodes: `parentNode`, `childNodes`, `firstChild`, `lastChild`, `previousSibling`, `nextSibling`.
-- For element nodes only: `parentElement`, `children`, `firstElementChild`, `lastElementChild`, `previousElementSibling`, `nextElementSibling`.
+- Pro všechny uzly: `parentNode`, `childNodes`, `firstChild`, `lastChild`, `previousSibling`, `nextSibling`.
+- Jen pro elementové uzly: `parentElement`, `children`, `firstElementChild`, `lastElementChild`, `previousElementSibling`, `nextElementSibling`.
 
-Some types of DOM elements, e.g. tables, provide additional properties and collections to access their content.
+Některé druhy DOM elementů, např. tabulky, poskytují další vlastnosti a kolekce pro přístup ke svému obsahu.
