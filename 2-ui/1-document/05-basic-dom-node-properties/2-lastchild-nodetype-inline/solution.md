@@ -1,8 +1,8 @@
-There's a catch here.
+Je tady chyták.
 
-At the time of `<script>` execution the last DOM node is exactly `<script>`, because the browser did not process the rest of the page yet.
+Ve chvíli výkonu skriptu `<script>` je poslední DOM uzel právě `<script>`, protože prohlížeč ještě nezpracoval zbytek stránky.
 
-So the result is `1` (element node).
+Výsledek je tedy `1` (elementový uzel).
 
 ```html run height=60
 <html>

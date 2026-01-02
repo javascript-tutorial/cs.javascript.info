@@ -2,16 +2,16 @@ importance: 3
 
 ---
 
-# Tag in comment
+# Značka v komentáři
 
-What does this code show?
+Co zobrazí tento kód?
 
 ```html
 <script>
-  let body = document.body;
+  let tělo = document.body;
 
-  body.innerHTML = "<!--" + body.tagName + "-->";
+  tělo.innerHTML = "<!--" + tělo.tagName + "-->";
 
-  alert( body.firstChild.data ); // what's here?
+  alert( tělo.firstChild.data ); // co bude zde?
 </script>
 ```

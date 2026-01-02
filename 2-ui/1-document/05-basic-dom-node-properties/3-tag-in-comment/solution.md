@@ -1,17 +1,17 @@
-The answer: **`BODY`**.
+Odpověď zní: **`BODY`**.
 
 ```html run
 <script>
-  let body = document.body;
+  let tělo = document.body;
 
-  body.innerHTML = "<!--" + body.tagName + "-->";
+  tělo.innerHTML = "<!--" + tělo.tagName + "-->";
 
-  alert( body.firstChild.data ); // BODY
+  alert( tělo.firstChild.data ); // BODY
 </script>
 ```
 
-What's going on step by step:
+Krok za krokem, co se děje:
 
-1. The content of `<body>` is replaced with the comment. The comment is `<!--BODY-->`, because `body.tagName == "BODY"`. As we remember, `tagName` is always uppercase in HTML.
-2. The comment is now the only child node, so we get it in `body.firstChild`.
-3. The `data` property of the comment is its contents (inside `<!--...-->`): `"BODY"`.
+1. Obsah značky `<body>` je nahrazen komentářem. Tímto komentářem je `<!--BODY-->`, jelikož `body.tagName == "BODY"`. Jak si pamatujeme, `tagName` je v HTML vždy velkými písmeny.
+2. Tento komentář je nyní jediným dětským uzlem, takže jej získáme v `body.firstChild`.
+3. Vlastnost `data` komentáře obsahuje jeho obsah (uvnitř `<!--...-->`): `"BODY"`.

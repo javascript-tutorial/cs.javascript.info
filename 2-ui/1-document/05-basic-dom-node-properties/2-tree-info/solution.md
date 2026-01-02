@@ -1,4 +1,4 @@
-Let's make a loop over `<li>`:
+Vytvořme cyklus nad `<li>`:
 
 ```js
 for (let li of document.querySelectorAll('li')) {
@@ -6,16 +6,16 @@ for (let li of document.querySelectorAll('li')) {
 }
 ```
 
-In the loop we need to get the text inside every `li`.
+V cyklu musíme získat text uvnitř každého `li`.
 
-We can read the text from the first child node of `li`, that is the text node:
+Můžeme přečíst text z prvního dítěte uzlu `li`, kterým je textový uzel:
 
 ```js
 for (let li of document.querySelectorAll('li')) {
-  let title = li.firstChild.data;
+  let titulek = li.firstChild.data;
 
-  // title is the text in <li> before any other nodes
+  // titulek je text v <li> před všemi ostatními uzly
 }
 ```
 
-Then we can get the number of descendants as `li.getElementsByTagName('li').length`.
+Počet potomků pak můžeme získat jako `li.getElementsByTagName('li').length`.
