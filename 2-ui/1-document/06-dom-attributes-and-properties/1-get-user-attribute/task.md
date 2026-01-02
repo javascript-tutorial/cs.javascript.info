@@ -2,19 +2,19 @@ importance: 5
 
 ---
 
-# Get the attribute
+# Načtěte atribut
 
-Write the code to select the element with `data-widget-name` attribute from the document and to read its value.
+Napište kód, který z dokumentu vybere element s atributem `data-název-widgetu` a načte jeho hodnotu.
 
 ```html run
 <!DOCTYPE html>
 <html>
 <body>
 
-  <div data-widget-name="menu">Choose the genre</div>
+  <div data-název-widgetu="menu">Vyberte žánr</div>
 
   <script>
-    /* your code */
+    /* váš kód */
   </script>
 </body>
 </html>

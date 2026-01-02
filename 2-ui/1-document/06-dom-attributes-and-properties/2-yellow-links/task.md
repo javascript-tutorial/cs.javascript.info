@@ -2,18 +2,18 @@ importance: 3
 
 ---
 
-# Make external links orange
+# Obarvěte externí odkazy oranžově
 
-Make all external links orange by altering their `style` property.
+Obarvěte všechny externí odkazy oranžově změnou jejich vlastnosti `style`.
 
-A link is external if:
-- Its `href` has `://` in it
-- But doesn't start with `http://internal.com`.
+Odkaz je externí, jestliže:
+- Jeho `href` obsahuje `://`.
+- Ale nezačíná `http://internal.com`.
 
-Example:
+Příklad:
 
 ```html run
-<a name="list">the list</a>
+<a name="seznam">seznam</a>
 <ul>
   <li><a href="http://google.com">http://google.com</a></li>
   <li><a href="/tutorial">/tutorial.html</a></li>
@@ -24,12 +24,12 @@ Example:
 </ul>
 
 <script>
-  // setting style for a single link
-  let link = document.querySelector('a');
-  link.style.color = 'orange';
+  // nastavíme styl pro jediný odkaz
+  let odkaz = document.querySelector('a');
+  odkaz.style.color = 'orange';
 </script>
 ```
 
-The result should be:
+Výsledek by měl být:
 
 [iframe border=1 height=180 src="solution"]
