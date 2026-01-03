@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Show descendants in a tree
+# Zobrazte potomky ve stromě
 
-There's a tree organized as nested `ul/li`.
+Máme strom, organizovaný jako vnořené `ul/li`.
 
-Write the code that adds to each `<li>` the number of its descendants. Skip leaves (nodes without children).
+Napište kód, který ke každému `<li>` přidá počet jeho potomků. Listy (uzly bez dětí) přeskakujte.
 
-The result:
+Výsledek:
 
 [iframe border=1 src="solution"]

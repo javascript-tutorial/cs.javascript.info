@@ -3,52 +3,52 @@
 <body>
 
   <ul>
-    <li>Animals
+    <li>Zvířata
       <ul>
-        <li>Mammals
+        <li>Savci
           <ul>
-            <li>Cows</li>
-            <li>Donkeys</li>
-            <li>Dogs</li>
-            <li>Tigers</li>
+            <li>Krávy</li>
+            <li>Osli</li>
+            <li>Psi</li>
+            <li>Tygři</li>
           </ul>
         </li>
-        <li>Other
+        <li>Ostatní
           <ul>
-            <li>Snakes</li>
-            <li>Birds</li>
-            <li>Lizards</li>
+            <li>Hadi</li>
+            <li>Ptáci</li>
+            <li>Ještěrky</li>
           </ul>
         </li>
       </ul>
     </li>
-    <li>Fishes
+    <li>Ryby
       <ul>
-        <li>Aquarium
+        <li>Akvarijní
           <ul>
-            <li>Guppy</li>
-            <li>Angelfish</li>
+            <li>Paví očko</li>
+            <li>Skalára</li>
           </ul>
         </li>
-        <li>Sea
+        <li>Mořské
           <ul>
-            <li>Sea trout</li>
+            <li>Mořský pstruh</li>
           </ul>
         </li>
       </ul>
     </li>
   </ul>
-
+  
   <script>
-    let lis = document.getElementsByTagName('li');
+    let všechnyLi = document.getElementsByTagName('li');
 
-    for (let li of lis) {
-      // get the count of all <li> below this <li>
-      let descendantsCount = li.getElementsByTagName('li').length;
-      if (!descendantsCount) continue;
+    for (let li of všechnyLi) {
+      // zjistíme počet všech <li> pod touto <li>
+      let početPotomků = li.getElementsByTagName('li').length;
+      if (!početPotomků) continue;
 
-      // add directly to the text node (append to the text)
-      li.firstChild.data += ' [' + descendantsCount + ']';
+      // přidáme ho přímo do textového uzlu (připojíme k textu)
+      li.firstChild.data += ' [' + početPotomků + ']';
     }
   </script>
 

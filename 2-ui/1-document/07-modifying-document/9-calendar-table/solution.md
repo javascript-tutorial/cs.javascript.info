@@ -1,9 +1,9 @@
-We'll create the table as a string: `"<table>...</table>"`, and then assign it to  `innerHTML`.
+Vytvoříme tabulku jako řetězec: `"<table>...</table>"` a pak ji přiřadíme do `innerHTML`.
 
-The algorithm:
+Algoritmus:
 
-1. Create the table header with `<th>` and weekday names.
-2. Create the date object `d = new Date(year, month-1)`. That's the first day of `month` (taking into account that months in JavaScript start from `0`, not `1`).
-3. First few cells till the first day of the month `d.getDay()` may be empty. Let's fill them in with `<td></td>`.
-4. Increase the day in `d`: `d.setDate(d.getDate()+1)`. If `d.getMonth()` is not yet the next month, then add the new cell `<td>` to the calendar. If that's a Sunday, then add a newline <code>"&lt;/tr&gt;&lt;tr&gt;"</code>.
-5. If the month has finished, but the table row is not yet full, add empty `<td>` into it, to make it square.
+1. Vytvoříme záhlaví tabulky se značkou `<th>` a názvy dnů v týdnu.
+2. Vytvoříme objekt s datem `d = new Date(rok, měsíc-1)`. To je první den v měsíci `měsíc` (bereme v úvahu, že měsíce v JavaScriptu začínají od `0`, ne od `1`).
+3. Několik prvních buněk před prvním dnem v měsíci `d.getDay()` může být prázdných. Vyplníme je značkami `<td></td>`.
+4. Zvýšíme den v `d`: `d.setDate(d.getDate()+1)`. Pokud `d.getMonth()` ještě není další měsíc, přidáme do kalendáře další buňku `<td>`. Pokud je to neděle, přidáme nový řádek <code>"&lt;/tr&gt;&lt;tr&gt;"</code>.
+5. Pokud měsíc skončil, ale řádek tabulky ještě není zcela zaplněný, přidáme do něj prázdné `<td>`, abychom dokončili čtverec.

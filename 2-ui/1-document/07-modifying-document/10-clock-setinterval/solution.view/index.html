@@ -2,7 +2,7 @@
 <html>
 <head>
   <style>
-    .hour {
+    .hod {
       color: red
     }
 
@@ -18,51 +18,51 @@
 
 <body>
 
-  <div id="clock">
-    <span class="hour">hh</span>:<span class="min">mm</span>:<span class="sec">ss</span>
+  <div id="hodiny">
+    <span class="hod">hh</span>:<span class="min">mm</span>:<span class="sec">ss</span>
   </div>
 
   <script>
-    let timerId;
+    let idČasovače;
+    
+    function aktualizuj() {
+      let hodiny = document.getElementById('hodiny');
+      let datum = new Date(); // (*)
 
-    function update() {
-      let clock = document.getElementById('clock');
-      let date = new Date();
+      let hod = datum.getHours();
+      if (hod < 10) hod = '0' + hod;
+      hodiny.children[0].innerHTML = hod;
 
-      let hours = date.getHours();
-      if (hours < 10) hours = '0' + hours;
-      clock.children[0].innerHTML = hours;
+      let minuty = datum.getMinutes();
+      if (minuty < 10) minuty = '0' + minuty;
+      hodiny.children[1].innerHTML = minuty;
 
-      let minutes = date.getMinutes();
-      if (minutes < 10) minutes = '0' + minutes;
-      clock.children[1].innerHTML = minutes;
-
-      let seconds = date.getSeconds();
-      if (seconds < 10) seconds = '0' + seconds;
-      clock.children[2].innerHTML = seconds;
+      let sekundy = datum.getSeconds();
+      if (sekundy < 10) sekundy = '0' + sekundy;
+      hodiny.children[2].innerHTML = sekundy;
     }
 
-    function clockStart() {
-      // set a new interval only if the clock is stopped
-      // otherwise we would rewrite the timerID reference to the running interval and wouldn't be able to stop the clock ever again
-      if (!timerId) {
-        timerId = setInterval(update, 1000);
+    function spusťHodiny() {
+      // nastaví nový interval, jen pokud jsou hodiny zastaveny
+      // jinak bychom přepsali odkaz na idČasovače běžícího intervalu a nemohli bychom hodiny už nikdy zastavit
+      if (!idČasovače) {
+        idČasovače = setInterval(aktualizuj, 1000);
       }
-      update(); // <--  start right now, don't wait 1 second till the first setInterval works
+      aktualizuj(); // <-- začneme právě teď a nebudeme čekat 1 sekundu, než se spustí první setInterval
     }
 
-    function clockStop() {
-      clearInterval(timerId);
-      timerId = null; // <-- clear timerID to indicate that the clock has been stopped, so that it is possible to start it again in clockStart()
+    function zastavHodiny() {
+      clearInterval(idČasovače);
+      idČasovače = null; // <-- smažeme idČasovače, abychom si poznamenali, že hodiny byly zastaveny a mohou se ve funkci spusťHodiny() znovu spustit
     }
 
   </script>
 
-  <!-- click on this button calls clockStart() -->
-  <input type="button" onclick="clockStart()" value="Start">
+  <!-- kliknutí na toto tlačítko vyvolá spusťHodiny() -->
+  <input type="button" onclick="spusťHodiny()" value="Start">
 
-  <!-- click on this button calls clockStop() -->
-  <input type="button" onclick="clockStop()" value="Stop">
+  <!-- kliknutí na toto tlačítko vyvolá zastavHodiny() -->
+  <input type="button" onclick="zastavHodiny()" value="Stop">
 
 </body>
 </html>

@@ -2,50 +2,50 @@ importance: 5
 
 ---
 
-# Create a tree from the object
+# Vytvořte strom z objektu
 
-Write a function `createTree` that creates a nested `ul/li` list from the nested object.
+Napište funkci `vytvořStrom`, která z vnořeného objektu vytvoří vnořený seznam `ul/li`.
 
-For instance:
+Například:
 
 ```js
 let data = {
-  "Fish": {
-    "trout": {},
-    "salmon": {}
+  "Ryby": {
+    "pstruh": {},
+    "losos": {}
   },
 
-  "Tree": {
-    "Huge": {
-      "sequoia": {},
-      "oak": {}
+  "Stromy": {
+    "Velké": {
+      "sekvoj": {},
+      "dub": {}
     },
-    "Flowering": {
-      "apple tree": {},
-      "magnolia": {}
+    "Kvetoucí": {
+      "jabloň": {},
+      "magnólie": {}
     }
   }
 };
 ```
 
-The syntax:
+Syntaxe:
 
 ```js
-let container = document.getElementById('container');
+let kontejner = document.getElementById('kontejner');
 *!*
-createTree(container, data); // creates the tree in the container
+vytvořStrom(kontejner, data); // vytvoří strom v kontejneru
 */!*
 ```
 
-The result (tree) should look like this:
+Výsledek (strom) by měl vypadat takto:
 
 [iframe border=1 src="build-tree-dom"]
 
-Choose one of two ways of solving this task:
+Zvolte si jeden ze dvou způsobů, jak tento úkol vyřešit:
 
-1. Create the HTML for the tree and then assign to `container.innerHTML`.
-2. Create tree nodes and append with DOM methods.
+1. Vytvořte HTML pro strom a přiřaďte jej do `kontejner.innerHTML`.
+2. Vytvořte uzly stromu a připojujte je DOM metodami.
 
-Would be great if you could do both.
+Pokud dokážete obojí, bude to vynikající.
 
-P.S. The tree should not have "extra" elements like empty `<ul></ul>` for the leaves.
+P.S. Strom by neměl obsahovat elementy „navíc“, například prázdné `<ul></ul>` pro listy.

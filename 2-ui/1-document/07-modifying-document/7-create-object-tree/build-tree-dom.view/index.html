@@ -2,45 +2,45 @@
 <html>
 <body>
 
-  <div id="container"></div>
+  <div id="kontejner"></div>
 
   <script>
     let data = {
-      "Fish": {
-        "trout": {},
-        "salmon": {}
+      "Ryby": {
+        "pstruh": {},
+        "losos": {}
       },
 
-      "Tree": {
-        "Huge": {
-          "sequoia": {},
-          "oak": {}
+      "Stromy": {
+        "Velké": {
+          "sekvoj": {},
+          "dub": {}
         },
-        "Flowering": {
-          "apple tree": {},
-          "magnolia": {}
+        "Kvetoucí": {
+          "jabloň": {},
+          "magnólie": {}
         }
       }
     };
 
-    function createTree(container, obj) {
-      container.append(createTreeDom(obj));
+    function vytvořStrom(kontejner, obj) {
+      kontejner.append(vytvořDomStromu(obj));
     }
 
-    function createTreeDom(obj) {
-      // if there's no children, then the call returns undefined
-      // and the <ul> won't be created
+    function vytvořDomStromu(obj) {
+      // pokud nejsou žádné děti, toto volání vrátí undefined
+      // a <ul> se nevytvoří
       if (!Object.keys(obj).length) return;
 
       let ul = document.createElement('ul');
 
-      for (let key in obj) {
+      for (let klíč in obj) {
         let li = document.createElement('li');
-        li.innerHTML = key;
+        li.innerHTML = klíč;
 
-        let childrenUl = createTreeDom(obj[key]);
-        if (childrenUl) {
-          li.append(childrenUl);
+        let dětiUl = vytvořDomStromu(obj[klíč]);
+        if (dětiUl) {
+          li.append(dětiUl);
         }
 
         ul.append(li);
@@ -49,8 +49,8 @@
       return ul;
     }
 
-    let container = document.getElementById('container');
-    createTree(container, data);
+    let kontejner = document.getElementById('kontejner');
+    vytvořStrom(kontejner, data);
   </script>
 
 </body>

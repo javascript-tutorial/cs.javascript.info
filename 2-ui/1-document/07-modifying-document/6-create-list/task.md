@@ -2,18 +2,18 @@ importance: 4
 
 ---
 
-# Create a list
+# Vytvořte seznam
 
-Write an interface to create a list from user input.
+Napište uživatelské rozhraní, které vytvoří seznam z uživatelského vstupu.
 
-For every list item:
+Pro každý prvek seznamu:
 
-1. Ask a user about its content using `prompt`.
-2. Create the `<li>` with it and add it to `<ul>`.
-3. Continue until the user cancels the input (by pressing `key:Esc` or via an empty entry).
+1. Zeptejte se uživatele na jeho obsah pomocí `prompt`.
+2. Vytvořte značku `<li>`, která ho bude obsahovat, a přidejte ji do `<ul>`.
+3. Pokračujte, dokud uživatel nezruší vstup (stisknutím klávesy `key:Esc` nebo prázdným vstupem).
 
-All elements should be created dynamically.
+Všechny elementy by měly být vytvářeny dynamicky.
 
-If a user types HTML-tags, they should be treated like a text.
+Jestliže uživatel zadá HTML značky, mělo by se s nimi zacházet jako s textem.
 
 [demo src="solution"]

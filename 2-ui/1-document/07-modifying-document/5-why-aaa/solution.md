@@ -1,9 +1,9 @@
-The HTML in the task is incorrect. That's the reason of the odd thing.
+Důvodem této podivnosti je, že HTML v tomto úkolu je nekorektní.
 
-The browser has to fix it automatically. But there may be no text inside the `<table>`: according to the spec only table-specific tags are allowed. So the browser shows `"aaa"` *before* the `<table>`.
+Prohlížeč ho musí automaticky opravit. Uvnitř `<table>` však nesmí být žádný text: podle specifikace jsou povoleny jen značky specifické pro tabulku. Prohlížeč tedy zobrazí `"aaa"` *před* `<table>`.
 
-Now it's obvious that when we remove the table, it remains.
+Nyní je jasné, proč zůstane, i když tabulku odstraníme.
 
-The question can be easily answered by exploring the DOM using the browser tools. You'll see `"aaa"` before the `<table>`.
+Na tuto otázku lze snadno odpovědět po prozkoumání DOMu prohlížečovými nástroji. Uvidíte `"aaa"` před `<table>`.
 
-The HTML standard specifies in detail how to process bad HTML, and such behavior of the browser is correct.
+Standard HTML podrobně specifikuje, jak se má zpracovávat vadný HTML, a tak je toto chování prohlížeče korektní.

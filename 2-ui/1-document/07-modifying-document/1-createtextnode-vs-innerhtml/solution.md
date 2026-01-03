@@ -1,8 +1,8 @@
-Answer: **1 and 3**.
+Odpověď: **1 a 3**.
 
-Both commands result in adding the `text` "as text" into the `elem`.
+Oba příkazy mají za následek přidání textu `text` „jako text“ do elementu `elem`.
 
-Here's an example:
+Zde je příklad:
 
 ```html run height=80
 <div id="elem1"></div>
