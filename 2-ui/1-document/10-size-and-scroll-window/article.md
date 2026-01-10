@@ -1,176 +1,176 @@
-# Window sizes and scrolling
+# Velikost a rolování okna
 
-How do we find the width and height of the browser window? How do we get the full width and height of the document, including the scrolled out part? How do we scroll the page using JavaScript?
+Jak zjistíme šířku a výšku okna prohlížeče? Jak získáme šířku a výšku celého dokumentu včetně odrolované části? Jak můžeme rolovat stránku v JavaScriptu?
 
-For this type of information, we can use the root document element `document.documentElement`, that corresponds to the `<html>` tag. But there are additional methods and peculiarities to consider.
+Pro zjištění informací tohoto druhu můžeme použít kořenový element dokumentu `document.documentElement`, který odpovídá značce `<html>`. Jsou tady však i další metody a zvláštnosti, které bychom měli vzít v úvahu.
 
-## Width/height of the window
+## Šířka a výška okna
 
-To get window width and height, we can use the `clientWidth/clientHeight` of `document.documentElement`:
+K získání šířky a výšky okna můžeme použít vlastnosti `clientWidth/clientHeight` elementu `document.documentElement`:
 
 ![](document-client-width-height.svg)
 
 ```online
-For instance, this button shows the height of your window:
+Například toto tlačítko zobrazí výšku vašeho okna:
 
 <button onclick="alert(document.documentElement.clientHeight)">alert(document.documentElement.clientHeight)</button>
 ```
 
-````warn header="Not `window.innerWidth/innerHeight`"
-Browsers also support properties like `window.innerWidth/innerHeight`. They look like what we want, so why not to use them instead?
+````warn header="Nepoužívejte `window.innerWidth/innerHeight`"
+Prohlížeče podporují i vlastnosti jako `window.innerWidth/innerHeight`. Vypadají jako ty, které chceme, tak proč bychom je neměli použít?
 
-If there exists a scrollbar, and it occupies some space, `clientWidth/clientHeight` provide the width/height without it (subtract it). In other words, they return the width/height of the visible part of the document, available for the content.
+Jestliže v dokumentu je posuvník a zabírá nějaké místo, pak `clientWidth/clientHeight` poskytují šířku/výšku bez něj (odečítají jej). Jinými slovy, vracejí šířku/výšku viditelné části dokumentu, která je dostupná pro obsah.
 
-`window.innerWidth/innerHeight` includes the scrollbar.
+`window.innerWidth/innerHeight` zahrnují i posuvník.
 
-If there's a scrollbar, and it occupies some space, then these two lines show different values:
+Pokud je v dokumentu posuvník a zabírá nějaké místo, následující dva řádky zobrazí různé hodnoty:
 ```js run
-alert( window.innerWidth ); // full window width
-alert( document.documentElement.clientWidth ); // window width minus the scrollbar
+alert( window.innerWidth ); // šířka celého okna
+alert( document.documentElement.clientWidth ); // šířka okna minus šířka posuvníku
 ```
 
-In most cases, we need the *available* window width in order to draw or position something within scrollbars (if there are any), so we should use `documentElement.clientHeight/clientWidth`.
+Ve většině případů potřebujeme znát šířku *dostupného* okna, abychom mohli něco nakreslit nebo umístit uvnitř posuvníků (pokud tam nějaké jsou), takže bychom měli použít `documentElement.clientHeight/clientWidth`.
 ````
 
-```warn header="`DOCTYPE` is important"
-Please note: top-level geometry properties may work a little bit differently when there's no `<!DOCTYPE HTML>` in HTML. Odd things are possible.
+```warn header="`DOCTYPE` je důležité"
+Prosíme všimněte si, že geometrické vlastnosti na nejvyšší úrovni mohou fungovat trochu jinak, když v HTML kódu není `<!DOCTYPE HTML>`. Může dojít k podivnému chování.
 
-In modern HTML we should always write `DOCTYPE`.
+V moderním HTML bychom `DOCTYPE` měli vždy psát.
 ```
 
-## Width/height of the document
+## Šířka a výška dokumentu
 
-Theoretically, as the root document element is `document.documentElement`, and it encloses all the content, we could measure the document's full size as `document.documentElement.scrollWidth/scrollHeight`.
+Když je kořenový element dokumentu `document.documentElement` a uzavírá všechen obsah, teoreticky bychom mohli změřit velikost celého dokumentu pomocí `document.documentElement.scrollWidth/scrollHeight`.
 
-But on that element, for the whole page, these properties do not work as intended. In Chrome/Safari/Opera, if there's no scroll, then `documentElement.scrollHeight` may be even less than `documentElement.clientHeight`! Weird, right?
+Avšak na tomto elementu, pro celou stránku, tyto vlastnosti nefungují tak, jak zamýšlíme. V Chrome/Safari/Opeře, pokud není rolování, pak `documentElement.scrollHeight` může být dokonce menší než `documentElement.clientHeight`! Podivné, že?
 
-To reliably obtain the full document height, we should take the maximum of these properties:
+Abychom spolehlivě zjistili výšku celého dokumentu, měli bychom vzít maximum z těchto vlastností:
 
 ```js run
-let scrollHeight = Math.max(
+let výškaSRolováním = Math.max(
   document.body.scrollHeight, document.documentElement.scrollHeight,
   document.body.offsetHeight, document.documentElement.offsetHeight,
   document.body.clientHeight, document.documentElement.clientHeight
 );
 
-alert('Full document height, with scrolled out part: ' + scrollHeight);
+alert('Výška celého dokumentu včetně odrolované části: ' + výškaSRolováním);
 ```
 
-Why so? Better don't ask. These inconsistencies come from ancient times, not a "smart" logic.
+Proč tomu tak je? Raději se neptejte. Tyto nekonzistence pocházejí z dřívější doby, není to „chytrá“ logika.
 
-## Get the current scroll [#page-scroll]
+## Zjištění aktuální velikosti rolování [#page-scroll]
 
-DOM elements have their current scroll state in their `scrollLeft/scrollTop` properties.
+DOM elementy obsahují svou aktuální velikost rolování ve vlastnostech `scrollLeft/scrollTop`.
 
-For document scroll, `document.documentElement.scrollLeft/scrollTop` works in most browsers, except older WebKit-based ones, like Safari (bug [5991](https://bugs.webkit.org/show_bug.cgi?id=5991)), where we should use `document.body` instead of `document.documentElement`.
+Pro rolování dokumentu funguje `document.documentElement.scrollLeft/scrollTop` ve většině prohlížečů kromě starších založených na WebKitu, např. Safari (chyba [5991](https://bugs.webkit.org/show_bug.cgi?id=5991)), kde bychom místo `document.documentElement` měli používat `document.body`.
 
-Luckily, we don't have to remember these peculiarities at all, because the scroll is available in the special properties, `window.pageXOffset/pageYOffset`:
+Naštěstí si tyto zvláštnosti nemusíme vůbec pamatovat, neboť velikost rolování je k dispozici ve speciálních vlastnostech `window.pageXOffset/pageYOffset`:
 
 ```js run
-alert('Current scroll from the top: ' + window.pageYOffset);
-alert('Current scroll from the left: ' + window.pageXOffset);
+alert('Aktuální odrolování shora: ' + window.pageYOffset);
+alert('Aktuální odrolování zleva: ' + window.pageXOffset);
 ```
 
-These properties are read-only.
+Tyto vlastnosti jsou pouze pro čtení.
 
-```smart header="Also available as `window` properties `scrollX` and `scrollY`"
-For historical reasons, both properties exist, but they are the same:
-- `window.pageXOffset` is an alias of `window.scrollX`.
-- `window.pageYOffset` is an alias of `window.scrollY`.
+```smart header="Jsou k dispozici i jako vlastnosti `scrollX` a `scrollY` objektu `window`"
+Z historických důvodů existují obě vlastnosti, ale jsou stejné:
+- `window.pageXOffset` je totéž jako `window.scrollX`.
+- `window.pageYOffset` je totéž jako `window.scrollY`.
 ```
 
-## Scrolling: scrollTo, scrollBy, scrollIntoView [#window-scroll]
+## Rolování: scrollTo, scrollBy, scrollIntoView [#window-scroll]
 
 ```warn
-To scroll the page with JavaScript, its DOM must be fully built.
+Abychom mohli rolovat stránku v JavaScriptu, musí být vytvořen celý její DOM.
 
-For instance, if we try to scroll the page with a script in `<head>`, it won't work.
+Pokud se například pokusíme rolovat stránku skriptem v `<head>`, nebude to fungovat.
 ```
 
-Regular elements can be scrolled by changing `scrollTop/scrollLeft`.
+Běžné elementy můžeme rolovat tak, že měníme vlastnosti `scrollTop/scrollLeft`.
 
-We can do the same for the page using `document.documentElement.scrollTop/scrollLeft` (except Safari, where `document.body.scrollTop/Left` should be used instead).
+Se stránkou můžeme udělat totéž pomocí `document.documentElement.scrollTop/scrollLeft` (s výjimkou Safari, v němž bychom místo toho měli použít `document.body.scrollTop/Left`).
 
-Alternatively, there's a simpler, universal solution: special methods [window.scrollBy(x,y)](mdn:api/Window/scrollBy) and [window.scrollTo(pageX,pageY)](mdn:api/Window/scrollTo).
+Alternativně je tady jednodušší a univerzální řešení: speciální metody [window.scrollBy(x,y)](mdn:api/Window/scrollBy) a [window.scrollTo(pageX,pageY)](mdn:api/Window/scrollTo).
 
-- The method `scrollBy(x,y)` scrolls the page *relative to its current position*. For instance, `scrollBy(0,10)` scrolls the page `10px` down.
+- Metoda `scrollBy(x,y)` roluje stránku *relativně vzhledem k její aktuální pozici*. Například `scrollBy(0,10)` odroluje stránku o `10px` dolů.
 
     ```online
-    The button below demonstrates this:
+    Předvádí to následující tlačítko:
 
     <button onclick="window.scrollBy(0,10)">window.scrollBy(0,10)</button>
     ```
-- The method `scrollTo(pageX,pageY)` scrolls the page *to absolute coordinates*, so that the top-left corner of the visible part has coordinates `(pageX, pageY)` relative to the document's top-left corner. It's like setting `scrollLeft/scrollTop`.
+- Metoda `scrollTo(stránkaX,stránkaY)` roluje stránku *na absolutní souřadnice*, tedy tak, aby levý horní roh viditelné stránky měl vzhledem k levému hornímu rohu dokumentu souřadnice `(stránkaX, stránkaY)`. Podobá se to nastavení `scrollLeft/scrollTop`.
 
-    To scroll to the very beginning, we can use `scrollTo(0,0)`.
+    K rolování na samotný začátek můžeme použít `scrollTo(0,0)`.
 
     ```online
     <button onclick="window.scrollTo(0,0)">window.scrollTo(0,0)</button>
     ```
 
-These methods work for all browsers the same way.
+Tyto metody fungují ve všech prohlížečích stejně.
 
 ## scrollIntoView
 
-For completeness, let's cover one more method: [elem.scrollIntoView(top)](mdn:api/Element/scrollIntoView).
+Pro úplnost uveďme ještě jednu metodu: [elem.scrollIntoView(nahoru)](mdn:api/Element/scrollIntoView).
 
-The call to `elem.scrollIntoView(top)` scrolls the page to make `elem` visible. It has one argument:
+Volání `elem.scrollIntoView(nahoru)` roluje stránku tak, aby byl `elem` viditelný. Má jeden argument:
 
-- If `top=true` (that's the default), then the page will be scrolled to make `elem` appear on the top of the window. The upper edge of the element will be aligned with the window top.
-- If `top=false`, then the page scrolls to make `elem` appear at the bottom. The bottom edge of the element will be aligned with the window bottom.
+- Je-li `nahoru=true` (standardně), pak stránka bude odrolována tak, aby se `elem` objevil v okně nahoře. Horní okraj elementu bude zarovnán s horním okrajem okna.
+- Je-li `nahoru=false`, pak stránka bude odrolována tak, aby se `elem` objevil v okně dole. Dolní okraj elementu bude zarovnán s dolním okrajem okna.
 
 ```online
-The button below scrolls the page to position itself at the window top:
+Následující tlačítko odroluje stránku tak, aby se ocitlo na vrchu okna:
 
 <button onclick="this.scrollIntoView()">this.scrollIntoView()</button>
 
-And this button scrolls the page to position itself at the bottom:
+A následující tlačítko ji odroluje tak, aby se ocitlo na spodku okna:
 
 <button onclick="this.scrollIntoView(false)">this.scrollIntoView(false)</button>
 ```
 
-## Forbid the scrolling
+## Zákaz rolování
 
-Sometimes we need to make the document "unscrollable". For instance, when we need to cover the page with a large message requiring immediate attention, and we want the visitor to interact with that message, not with the document.
+Někdy potřebujeme rolování v dokumentu znemožnit. Například tehdy, když potřebujeme překrýt stránku velkou zprávou, která vyžaduje okamžitou pozornost, a chceme, aby návštěvník komunikoval se zprávou a ne s dokumentem.
 
-To make the document unscrollable, it's enough to set `document.body.style.overflow = "hidden"`. The page will "freeze" at its current scroll position.
+Abychom znemožnili rolování dokumentu, stačí nastavit `document.body.style.overflow = "hidden"`. Stránka pak „zamrzne“ na své momentální rolovací pozici.
 
 ```online
-Try it:
+Zkuste si to:
 
 <button onclick="document.body.style.overflow = 'hidden'">document.body.style.overflow = 'hidden'</button>
 
 <button onclick="document.body.style.overflow = ''">document.body.style.overflow = ''</button>
 
-The first button freezes the scroll, while the second one releases it.
+První tlačítko znemožní rolování, druhé je zase umožní.
 ```
 
-We can use the same technique to freeze the scroll for other elements, not just for `document.body`.
+Stejnou techniku můžeme použít k zákazu rolování i u jiných elementů, nejen u `document.body`.
 
-The drawback of the method is that the scrollbar disappears. If it occupied some space, then that space is now free and the content "jumps" to fill it.
+Nevýhodou této metody je, že posuvník zmizí. Pokud zabíral místo, pak se toto místo uvolní a obsah „poskočí“, aby je vyplnil.
 
-That looks a bit odd, but can be worked around if we compare `clientWidth` before and after the freeze. If it increased (the scrollbar disappeared), then add `padding` to `document.body` in place of the scrollbar to keep the content width the same.
+Vypadá to trochu divně, ale dá se to obejít, jestliže porovnáme `clientWidth` před a po zamrznutí. Pokud se zvýšila (posuvník zmizel), pak místo posuvníku přidáme `padding` do `document.body`, abychom udrželi šířku obsahu stejnou.
 
-## Summary
+## Shrnutí
 
-Geometry:
+Geometrie:
 
-- Width/height of the visible part of the document (content area width/height): `document.documentElement.clientWidth/clientHeight`
-- Width/height of the whole document, with the scrolled out part:
+- Šířka/výška viditelné části dokumentu (šířka/výška plochy obsahu): `document.documentElement.clientWidth/clientHeight`
+- Šířka/výška celého dokumentu včetně odrolované části:
 
     ```js
-    let scrollHeight = Math.max(
+    let výškaSRolováním = Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     );
     ```
 
-Scrolling:
+Rolování:
 
-- Read the current scroll: `window.pageYOffset/pageXOffset`.
-- Change the current scroll:
+- Načtení aktuální velikosti rolování: `window.pageYOffset/pageXOffset`.
+- Změna aktuální velikosti rolování:
 
-    - `window.scrollTo(pageX,pageY)` -- absolute coordinates,
-    - `window.scrollBy(x,y)` -- scroll relative the current place,
-    - `elem.scrollIntoView(top)` -- scroll to make `elem` visible (align with the top/bottom of the window).
+    - `window.scrollTo(stránkaX,stránkaY)` -- absolutní souřadnice,
+    - `window.scrollBy(x,y)` -- rolování vzhledem k aktuálnímu místu,
+    - `elem.scrollIntoView(nahoru)` -- rolování tak, aby byl vidět `elem` (zarovná se k hornímu/dolnímu okraji okna).
