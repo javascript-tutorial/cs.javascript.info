@@ -2,23 +2,23 @@ importance: 5
 
 ---
 
-# Find window coordinates of the field
+# Najděte okenní souřadnice hřiště
 
-In the iframe below you can see a document with the green "field".
+V následujícím rámu vidíte dokument obsahující zelené „hřiště“.
 
-Use JavaScript to find window coordinates of corners pointed by with arrows.
+Pomocí JavaScriptu najděte okenní souřadnice rohů, na které ukazují šipky.
 
-There's a small feature implemented in the document for convenience. A click at any place shows coordinates there.
+V dokumentu je pro usnadnění implementován drobný prvek. Po kliknutí na kterékoli místo se zobrazí jeho souřadnice.
 
 [iframe border=1 height=360 src="source" link edit]
 
-Your code should use DOM to get window coordinates of:
+Váš kód by měl pomocí DOMu zjistit okenní souřadnice:
 
-1. Upper-left, outer corner (that's simple).
-2. Bottom-right, outer corner (simple too).
-3. Upper-left, inner corner (a bit harder).
-4. Bottom-right, inner corner (there are several ways, choose one).
+1. Vnějšího levého horního rohu (to je jednoduché).
+2. Vnějšího pravého dolního rohu (i to je jednoduché).
+3. Vnitřního levého horního rohu (trochu těžší).
+4. Vnitřního pravého dolního rohu (je několik způsobů, vyberte si jeden).
 
-The coordinates that you calculate should be the same as those returned by the mouse click.
+Souřadnice, které vypočítáte, by měly být stejné jako ty, které se vrátí po kliknutí myší.
 
-P.S. The code should also work if the element has another size or border, not bound to any fixed values.
+P.S. Kód by měl fungovat i pro element, který má jinou velikost nebo ohraničení, neměl by být vázán na pevné hodnoty.

@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Show a note near the element
+# Zobrazte poznámku poblíž elementu
 
-Create a function `positionAt(anchor, position, elem)` that positions `elem`, depending on `position` near `anchor` element.
+Vytvořte funkci `umístiNa(kotva, pozice, elem)`, která umístí element `elem` do blízkosti elementu `kotva` podle argumentu `pozice`.
 
-The `position` must be a string with any one of 3 values:
-- `"top"` - position `elem` right above `anchor`
-- `"right"` - position `elem` immediately at the right of `anchor`
-- `"bottom"` - position `elem` right below `anchor`
+`pozice` musí být řetězec obsahující některou z těchto tří hodnot:
+- `"nahoru"` - umístí `elem` přesně nad element `kotva`
+- `"doprava"` - umístí `elem` přesně doprava od elementu `kotva`
+- `"dolů"` - umístí `elem` přesně pod element `kotva`
 
-It's used inside function `showNote(anchor, position, html)`, provided in the task source code, that creates a "note" element with given `html` and shows it at the given `position` near the `anchor`.
+Funkce je použita ve funkci `zobrazPoznámku(kotva, pozice, html)`, která je poskytnuta ve zdrojovém kódu této úlohy. Ta vytvoří element „poznámky“ se zadaným `html` kódem a zobrazí jej na zadané pozici `pozice` poblíž elementu `kotva`.
 
-Here's the demo of notes:
+Zde je demo poznámek:
 
 [iframe src="solution" height="350" border="1" link]

@@ -1,4 +1,4 @@
-In this task we only need to accurately calculate the coordinates. See the code for details.
+V této úloze musíme jenom správně vypočítat souřadnice. Podrobnosti viz kód.
 
-Please note: the elements must be in the document to read `offsetHeight` and other properties.
-A hidden (`display:none`) or out of the document element has no size.
+Prosíme všimněte si, že abychom mohli načíst `offsetHeight` a jiné vlastnosti, elementy musejí být obsaženy v dokumentu.
+Skrytý element (`display:none`) nebo element mimo dokument nemá žádnou velikost.

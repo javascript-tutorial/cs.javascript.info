@@ -1,42 +1,42 @@
-# Outer corners
+# Vnější rohy
 
-Outer corners are basically what we get from [elem.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/DOM/element.getBoundingClientRect).
+Vnější rohy jsou v zásadě to, co dostaneme od funkce [elem.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/DOM/element.getBoundingClientRect).
 
-Coordinates of the upper-left corner `answer1` and the bottom-right corner `answer2`:
+Souřadnice levého horního rohu `odpověď1` a pravého dolního rohu `odpověď2`:
 
 ```js
-let coords = elem.getBoundingClientRect();
+let souřadnice = elem.getBoundingClientRect();
 
-let answer1 = [coords.left, coords.top];
-let answer2 = [coords.right, coords.bottom];
+let odpověď1 = [souřadnice.left, souřadnice.top];
+let odpověď2 = [souřadnice.right, souřadnice.bottom];
 ```
 
-# Left-upper inner corner
+# Vnitřní levý horní roh
 
-That differs from the outer corner by the border width. A reliable way to get the distance is `clientLeft/clientTop`:
+Od vnějšího rohu se liší o šířku ohraničení. Spolehlivý způsob, jak vzdálenost zjistit, je `clientLeft/clientTop`:
 
 ```js
-let answer3 = [coords.left + field.clientLeft, coords.top + field.clientTop];
+let odpověď3 = [souřadnice.left + hřiště.clientLeft, souřadnice.top + hřiště.clientTop];
 ```
 
-# Right-bottom inner corner
+# Vnitřní pravý dolní roh
 
-In our case we need to substract the border size from the outer coordinates.
+V našem případě musíme odečíst velikost ohraničení od vnějších souřadnic.
 
-We could use CSS way:
+Můžeme použít CSS:
 
 ```js
-let answer4 = [
-  coords.right - parseInt(getComputedStyle(field).borderRightWidth),
-  coords.bottom - parseInt(getComputedStyle(field).borderBottomWidth)
+let odpověď4 = [
+  souřadnice.right - parseInt(getComputedStyle(hřiště).borderRightWidth),
+  souřadnice.bottom - parseInt(getComputedStyle(hřiště).borderBottomWidth)
 ];
 ```
 
-An alternative way would be to add `clientWidth/clientHeight` to coordinates of the left-upper corner. That's probably even better:
+Alternativní způsob by byl přičíst `clientWidth/clientHeight` k souřadnicím levého horního rohu. To je asi ještě lepší:
 
 ```js
-let answer4 = [
-  coords.left + elem.clientLeft + elem.clientWidth,
-  coords.top + elem.clientTop + elem.clientHeight
+let odpověď4 = [
+  souřadnice.left + hřiště.clientLeft + hřiště.clientWidth,
+  souřadnice.top + hřiště.clientTop + hřiště.clientHeight
 ];
 ```
