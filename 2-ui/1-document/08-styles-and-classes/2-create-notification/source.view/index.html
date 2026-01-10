@@ -6,7 +6,7 @@
 
 <body>
 
-  <h2>Notification is on the right</h2>
+  <h2>Oznámení je vpravo</h2>
 
   <p>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum aspernatur quam ex eaque inventore quod voluptatem adipisci omnis nemo nulla fugit iste numquam ducimus cumque minima porro ea quidem maxime necessitatibus beatae labore soluta voluptatum
@@ -15,18 +15,18 @@
   </p>
 
   <script>
-    function showNotification({top = 0, right = 0, className, html}) {
-      /* your code */
+    function zobrazOznámení({top = 0, right = 0, className, html}) {
+      /* váš kód */
     }
 
-    // test it
+    // otestování
     let i = 1;
     setInterval(() => {
-      showNotification({
+      zobrazOznámení({
         top: 10,
         right: 10,
-        html: 'Hello ' + i++,
-        className: "welcome"
+        html: 'Ahoj ' + i++,
+        className: "uvítání"
       });
     }, 2000);
   </script>

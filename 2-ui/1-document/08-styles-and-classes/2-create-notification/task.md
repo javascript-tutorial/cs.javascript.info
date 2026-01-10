@@ -2,23 +2,22 @@ importance: 5
 
 ---
 
-# Create a notification
+# Vytvořte oznámení
 
-Write a function `showNotification(options)` that creates a notification: `<div class="notification">` with the given content. The notification should automatically disappear after 1.5 seconds.
+Napište funkci `zobrazOznámení(možnosti)`, která vytvoří oznámení: `<div class="oznámení">` v zadaném kontextu. Toto oznámení by mělo za 1,5 sekundy automaticky zmizet.
 
-The options are:
+Možnosti jsou:
 
 ```js
-// shows an element with the text "Hello" near the right-top of the window
-showNotification({
-  top: 10, // 10px from the top of the window (by default 0px)
-  right: 10, // 10px from the right edge of the window (by default 0px)
-  html: "Hello!", // the HTML of notification
-  className: "welcome" // an additional class for the div (optional)
+// zobrazí element s textem "Ahoj" poblíž pravého horního rohu okna
+zobrazOznámení({
+  top: 10, // 10px od horního okraje okna (standardně 0px)
+  right: 10, // 10px od pravého okraje okna (standardně 0px)
+  html: "Ahoj!", // HTML s oznámením
+  className: "uvítání" // další třída pro tento div (nepovinná)
 });
 ```
 
 [demo src="solution"]
 
-
-Use CSS positioning to show the element at given top/right coordinates. The source document has the necessary styles.
+Pro zobrazení elementu na zadaných souřadnicích shora a zprava použijte umisťování pomocí CSS. Zdrojový dokument obsahuje nezbytné styly.
