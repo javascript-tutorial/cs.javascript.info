@@ -3,26 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let elem = document.getElementById('coords-show-mark');
 
-  // no elem in ebook (pdf/epub) mode
+  // v režimu e-knih (pdf/epub) elem není
   if (elem) {
     elem.onclick = function() {
 
-      function createMessageUnder(elem, text) {
-        let coords = elem.getBoundingClientRect();
-        let message = document.createElement('div');
-        message.style.cssText = "position:fixed; color: red";
+      function vytvořZprávuPod(elem, text) {
+        let souřadnice = elem.getBoundingClientRect();
+        let zpráva = document.createElement('div');
+        zpráva.style.cssText = "position:fixed; color: red";
 
-        message.style.left = coords.left + "px";
-        message.style.top = coords.bottom + "px";
+        zpráva.style.left = souřadnice.left + "px";
+        zpráva.style.top = souřadnice.bottom + "px";
 
-        message.innerHTML = text;
+        zpráva.innerHTML = text;
 
-        return message;
+        return zpráva;
       }
 
-      let message = createMessageUnder(elem, 'Hello, world!');
-      document.body.append(message);
-      setTimeout(() => message.remove(), 5000);
+      let zpráva = vytvořZprávuPod(elem, 'Ahoj, světe!');
+      document.body.append(zpráva);
+      setTimeout(() => zpráva.remove(), 5000);
     }
   }
 
