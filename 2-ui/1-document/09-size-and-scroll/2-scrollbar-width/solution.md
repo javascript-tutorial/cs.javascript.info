@@ -1,20 +1,20 @@
-To get the scrollbar width, we can create an element with the scroll, but without borders and paddings.
+Abychom zjistili šířku posuvníku, můžeme vytvořit element s rolováním, ale bez ohraničení a vnitřních okrajů.
 
-Then the difference between its full width `offsetWidth` and the inner content area width `clientWidth` will be exactly the scrollbar:
+Pak bude rozdíl mezi jeho úplnou šířkou `offsetWidth` a šířkou vnitřní plochy obsahu `clientWidth` přesně šířka posuvníku:
 
 ```js run
-// create a div with the scroll
+// vytvoříme div s posuvníkem
 let div = document.createElement('div');
 
 div.style.overflowY = 'scroll';
 div.style.width = '50px';
 div.style.height = '50px';
 
-// must put it in the document, otherwise sizes will be 0
+// musíme jej vložit do dokumentu, jinak budou velikosti nulové
 document.body.append(div);
-let scrollWidth = div.offsetWidth - div.clientWidth;
+let šířkaPosuvníku = div.offsetWidth - div.clientWidth;
 
 div.remove();
 
-alert(scrollWidth);
+alert(šířkaPosuvníku);
 ```
