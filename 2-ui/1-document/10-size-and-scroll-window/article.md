@@ -58,13 +58,13 @@ alert('Výška celého dokumentu včetně odrolované části: ' + výškaSRolov
 
 Proč tomu tak je? Raději se neptejte. Tyto nekonzistence pocházejí z dřívější doby, není to „chytrá“ logika.
 
-## Zjištění aktuální velikosti rolování [#page-scroll]
+## Zjištění aktuální délky odrolování [#page-scroll]
 
-DOM elementy obsahují svou aktuální velikost posunu ve vlastnostech `scrollLeft/scrollTop`.
+DOM elementy obsahují aktuální délku, o kterou byly rolovány, ve vlastnostech `scrollLeft/scrollTop`.
 
 Pro rolování dokumentu funguje `document.documentElement.scrollLeft/scrollTop` ve většině prohlížečů kromě starších založených na WebKitu, např. Safari (chyba [5991](https://bugs.webkit.org/show_bug.cgi?id=5991)), kde bychom místo `document.documentElement` měli používat `document.body`.
 
-Naštěstí si tyto zvláštnosti nemusíme vůbec pamatovat, neboť velikost posunu je k dispozici ve speciálních vlastnostech `window.pageXOffset/pageYOffset`:
+Naštěstí si tyto zvláštnosti nemusíme vůbec pamatovat, neboť délka odrolování je k dispozici ve speciálních vlastnostech `window.pageXOffset/pageYOffset`:
 
 ```js run
 alert('Aktuální odrolování shora: ' + window.pageYOffset);
@@ -168,8 +168,8 @@ Geometrie:
 
 Rolování:
 
-- Načtení aktuální velikosti rolování: `window.pageYOffset/pageXOffset`.
-- Změna aktuální velikosti rolování:
+- Načtení aktuální délky odrolování: `window.pageYOffset/pageXOffset`.
+- Změna aktuální délky odrolování:
 
     - `window.scrollTo(stránkaX,stránkaY)` -- absolutní souřadnice,
     - `window.scrollBy(x,y)` -- rolování vzhledem k aktuálnímu místu,

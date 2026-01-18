@@ -207,7 +207,7 @@ Obě souřadnicové soustavy jsou propojeny těmito vzorci:
 - `pageY` = `clientY` + výška odrolované svislé části dokumentu.
 - `pageX` = `clientX` + šířka odrolované vodorovné části dokumentu.
 
-Funkce `vraťSouřadnice(elem)` vezme okenní souřadnice z `elem.getBoundingClientRect()` a přičte k nim aktuální posun:
+Funkce `vraťSouřadnice(elem)` vezme okenní souřadnice z `elem.getBoundingClientRect()` a přičte k nim aktuální délku odrolování:
 
 ```js
 // získá dokumentové souřadnice elementu
@@ -248,7 +248,7 @@ function vytvořZprávuPod(elem, html) {
 Každý bod na stránce má souřadnice:
 
 1. Relativní vzhledem k oknu (okenní) -- `elem.getBoundingClientRect()`.
-2. Relativní vzhledem k dokumentu (dokumentové) -- `elem.getBoundingClientRect()` plus aktuální posun stránky.
+2. Relativní vzhledem k dokumentu (dokumentové) -- `elem.getBoundingClientRect()` plus aktuální délka odrolování stránky.
 
 Okenní souřadnice se výborně používají spolu s `position:fixed` a dokumentové souřadnice se dobře hodí k `position:absolute`.
 
