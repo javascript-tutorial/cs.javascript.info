@@ -1,24 +1,24 @@
-# Bubbling and capturing
+# Bublání a zachytávání
 
-Let's start with an example.
+Začněme příkladem.
 
-This handler is assigned to `<div>`, but also runs if you click any nested tag like `<em>` or `<code>`:
+Tento handler je přiřazen elementu `<div>`, ale spustí se i tehdy, když kliknete na kteroukoli vnořenou značku, např. `<em>` nebo `<code>`:
 
 ```html autorun height=60
-<div onclick="alert('The handler!')">
-  <em>If you click on <code>EM</code>, the handler on <code>DIV</code> runs.</em>
+<div onclick="alert('Handler!')">
+  <em>Pokud kliknete na <code>EM</code>, handler na <code>DIV</code> se spustí.</em>
 </div>
 ```
 
-Isn't it a bit strange? Why does the handler on `<div>` run if the actual click was on `<em>`?
+Není to trochu divné? Proč se handler na `<div>` spustí, když ve skutečnosti bylo kliknuto na `<em>`?
 
-## Bubbling
+## Bublání
 
-The bubbling principle is simple.
+Princip bublání je jednoduchý.
 
-**When an event happens on an element, it first runs the handlers on it, then on its parent, then all the way up on other ancestors.**
+**Když se na elementu stane nějaká událost, nejprve se spustí handlery na něm, pak na jeho rodiči, pak směrem nahoru na ostatních předcích.**
 
-Let's say we have 3 nested elements `FORM > DIV > P` with a handler on each of them:
+Řekněme, že máme tři vnořené elementy `FORM > DIV > P` a na každém z nich je handler:
 
 ```html run autorun
 <style>
@@ -35,125 +35,124 @@ Let's say we have 3 nested elements `FORM > DIV > P` with a handler on each of t
 </form>
 ```
 
-A click on the inner `<p>` first runs `onclick`:
-1. On that `<p>`.
-2. Then on the outer `<div>`.
-3. Then on the outer `<form>`.
-4. And so on upwards till the `document` object.
+Kliknutí na vnitřní `<p>` nejprve spustí `onclick`:
+1. Na tomto `<p>`.
+2. Pak na vnějším `<div>`.
+3. Pak na vnějším `<form>`.
+4. A tak dále nahoru až k objektu `document`.
 
 ![](event-order-bubbling.svg)
 
-So if we click on `<p>`, then we'll see 3 alerts: `p` -> `div` -> `form`.
+Když tedy klikneme na `<p>`, uvidíme 3 zprávy: `p` -> `div` -> `form`.
 
-The process is called "bubbling", because events "bubble" from the inner element up through parents like a bubble in the water.
+Tento proces se nazývá „bublání“, jelikož události „bublají“ od vnitřního elementu nahoru skrz jeho rodiče jako bublina ve vodě.
 
-```warn header="*Almost* all events bubble."
-The key word in this phrase is "almost".
+```warn header="*Téměř* všechny události bublají."
+Klíčovým slovem v této větě je „téměř“.
 
-For instance, a `focus` event does not bubble. There are other examples too, we'll meet them. But still it's an exception, rather than a rule, most events do bubble.
+Například událost `focus` nebublá. Jsou i jiné příklady, setkáme se s nimi. Je to však stále spíše výjimka než pravidlo, většina událostí bublá.
 ```
 
-## event.target
+## událost.target
 
-A handler on a parent element can always get the details about where it actually happened.
+Handler na rodičovském elementu může vždy získat podrobnosti o tom, kde se událost doopravdy stala.
 
-**The most deeply nested element that caused the event is called a *target* element, accessible as `event.target`.**
+**Nejhlouběji vnořený element, který vyvolal událost, se nazývá *cílový* element a je dostupný jako `událost.target`.**
 
-Note the differences from `this` (=`event.currentTarget`):
+Všimněte si rozdílů oproti `this` (=`událost.currentTarget`):
 
-- `event.target` -- is the "target" element that initiated the event, it doesn't change through the bubbling process.
-- `this` -- is the "current" element, the one that has a currently running handler on it.
+- `událost.target` -- je „cílový“ element, který vyvolal událost, a během procesu bublání se nemění.
+- `this` -- je „aktuální“ element, ten, na kterém je umístěn právě běžící handler.
 
-For instance, if we have a single handler `form.onclick`, then it can "catch" all clicks inside the form. No matter where the click happened, it bubbles up to `<form>` and runs the handler.
+Jestliže například máme jediný handler `form.onclick`, pak může „zachytávat“ všechna kliknutí uvnitř formuláře. Ať ke kliknutí došlo kdekoli, probublá až nahoru do `<form>` a spustí handler.
 
-In `form.onclick` handler:
+V handleru `form.onclick`:
 
-- `this` (=`event.currentTarget`) is the `<form>` element, because the handler runs on it.
-- `event.target` is the actual element inside the form that was clicked.
+- `this` (=`událost.currentTarget`) je element `<form>`, protože handler byl spuštěn na něm.
+- `událost.target` je aktuální element uvnitř formuláře, na který bylo kliknuto.
 
-Check it out:
+Zkuste si to:
 
 [codetabs height=220 src="bubble-target"]
 
-It's possible that `event.target` could equal `this` -- it happens when the click is made directly on the `<form>` element.
+Může se stát, že `událost.target` se rovná `this` -- to se stane tehdy, když je kliknuto přímo na element `<form>`.
 
-## Stopping bubbling
+## Zastavení bublání
 
-A bubbling event goes from the target element straight up. Normally it goes upwards till `<html>`, and then to `document` object, and some events even reach `window`, calling all handlers on the path.
+Bublající událost stoupá od cílového elementu přímo nahoru. Běžně dojde nahoru až k `<html>`, pak k objektu `document` a některé události dosáhnou až k `window`, přičemž volají všechny handlery po cestě.
 
-But any handler may decide that the event has been fully processed and stop the bubbling.
+Libovolný handler však může rozhodnout, že událost již byla zcela zpracována, a bublání zastavit.
 
-The method for it is `event.stopPropagation()`.
+K tomu slouží metoda `událost.stopPropagation()`.
 
-For instance, here `body.onclick` doesn't work if you click on `<button>`:
+Například zde `body.onclick` nebude fungovat, když kliknete na tlačítko `<button>`:
 
 ```html run autorun height=60
-<body onclick="alert(`the bubbling doesn't reach here`)">
-  <button onclick="event.stopPropagation()">Click me</button>
+<body onclick="alert(`sem se bublání nedostane`)">
+  <button onclick="event.stopPropagation()">Klikni na mě</button>
 </body>
 ```
 
 ```smart header="event.stopImmediatePropagation()"
-If an element has multiple event handlers on a single event, then even if one of them stops the bubbling, the other ones still execute.
+Jestliže element má pro jednu událost více handlerů, pak i když jeden z nich zastaví bublání, ostatní se stále spustí.
 
-In other words, `event.stopPropagation()` stops the move upwards, but on the current element all other handlers will run.
+Jinými slovy, `událost.stopPropagation()` zastaví pohyb vzhůru, ale na aktuálním elementu se všechny ostatní handlery spustí.
 
-To stop the bubbling and prevent handlers on the current element from running, there's a method `event.stopImmediatePropagation()`. After it no other handlers execute.
+K zastavení bublání a zabránění spuštění handlerů na aktuálním elementu slouží metoda `událost.stopImmediatePropagation()`. Po ní se už žádné další handlery nespustí.
 ```
 
-```warn header="Don't stop bubbling without a need!"
-Bubbling is convenient. Don't stop it without a real need: obvious and architecturally well thought out.
+```warn header="Nezastavujte bublání, pokud to není třeba!"
+Bublání je užitečné. Nezastavujte je, pokud k tomu nemáte skutečný, očividný a dobře architekturálně promyšlený důvod.
 
-Sometimes `event.stopPropagation()` creates hidden pitfalls that later may become problems.
+Někdy `událost.stopPropagation()` vytvoří skryté chytáky, které později mohou působit problémy.
 
-For instance:
+Příklad:
 
-1. We create a nested menu. Each submenu handles clicks on its elements and calls `stopPropagation` so that the outer menu won't trigger.
-2. Later we decide to catch clicks on the whole window, to track users' behavior (where people click). Some analytic systems do that. Usually the code uses `document.addEventListener('click'…)` to catch all clicks.
-3. Our analytic won't work over the area where clicks are stopped by `stopPropagation`. Sadly, we've got a "dead zone".
+1. Vytvoříme vnořené menu. Každé submenu ošetřuje kliknutí na své elementy a volá `stopPropagation`, aby se vnější menu nespustilo.
+2. Později se rozhodneme zachytávat klikání na celé okno, abychom sledovali chování uživatelů (kam lidé klikají). Některé analytické systémy to dělají. Kód obvykle k zachycení všech kliknutí používá `document.addEventListener('click'…)`.
+3. Naše analýza však nebude fungovat v oblastech, kde jsou kliknutí zastavena metodou `stopPropagation`. Naneštěstí jsme vytvořili „mrtvou zónu“.
 
-There's usually no real need to prevent the bubbling. A task that seemingly requires that may be solved by other means. One of them is to use custom events, we'll cover them later. Also we can write our data into the `event` object in one handler and read it in another one, so we can pass to handlers on parents information about the processing below.
+Obvykle není ve skutečnosti nutné bránit v bublání. Úloha, která to zdánlivě vyžaduje, může být vyřešena jinak. Jednou z možností je použít vlastní události, probereme je později. Navíc si do objektu `událost` můžeme v jednom handleru zapsat naše data a v jiném je načíst, takže do handlerů na rodičích můžeme předávat informace o zpracování v potomcích.
 ```
 
 
-## Capturing
+## Zachytávání
 
-There's another phase of event processing called "capturing". It is rarely used in real code, but sometimes can be useful.
+Existuje i další fáze zpracování událostí, která se nazývá „zachytávání“. Ve skutečném kódu se používá málokdy, ale občas může být užitečná.
 
-The standard [DOM Events](https://www.w3.org/TR/DOM-Level-3-Events/) describes 3 phases of event propagation:
+Standard [DOM Events](https://www.w3.org/TR/DOM-Level-3-Events/) popisuje tři fáze průběhu události:
 
-1. Capturing phase -- the event goes down to the element.
-2. Target phase -- the event reached the target element.
-3. Bubbling phase -- the event bubbles up from the element.
+1. Fáze zachytávání -- událost prochází dolů k elementu.
+2. Fáze zacílení -- událost dosáhla cílového elementu.
+3. Fáze bublání -- událost bublá vzhůru od elementu.
 
-Here's the picture, taken from the specification, of the capturing `(1)`, target `(2)` and bubbling `(3)` phases for a click event on a `<td>` inside a table:
+Následující obrázek, převzatý ze specifikace, ukazuje fázi zachytávání `(1)`, zacílení `(2)` a bublání `(3)` události kliknutí na `<td>` v tabulce:
 
 ![](eventflow.svg)
 
-That is: for a click on `<td>` the event first goes through the ancestors chain down to the element (capturing phase), then it reaches the target and triggers there (target phase), and then it goes up (bubbling phase), calling handlers on its way.
+Tedy: při kliknutí na `<td>` událost napřed prochází řetězem předků až dolů k elementu (fáze zachytávání), pak dosáhne cíle a tam se spustí (fáze zacílení) a pak stoupá vzhůru (fáze bublání), přičemž po cestě volá handlery.
 
-Until now, we only talked about bubbling, because the capturing phase is rarely used.
+Dosud jsme hovořili jen o bublání, neboť fáze zachytávání se používá zřídkakdy.
 
-In fact, the capturing phase was invisible for us, because handlers added using `on<event>`-property or using HTML attributes or using two-argument `addEventListener(event, handler)` don't know anything about capturing, they only run on the 2nd and 3rd phases.
+Ve skutečnosti je pro nás fáze zachytávání neviditelná, jelikož handlery přidané pomocí vlastnosti `on<událost>`, prostřednictvím HTML atributů nebo voláním `addEventListener(událost, handler)` se dvěma argumenty o zachytávání nic nevědí, spouštějí se až ve 2. a 3. fázi.
 
-To catch an event on the capturing phase, we need to set the handler `capture` option to `true`:
+Abychom zachytili událost ve fázi zachytávání, musíme nastavit možnost `capture` handleru na `true`:
 
 ```js
 elem.addEventListener(..., {capture: true})
 
-// or, just "true" is an alias to {capture: true}
+// nebo jen "true", což je totéž jako {capture: true}
 elem.addEventListener(..., true)
 ```
 
-There are two possible values of the `capture` option:
+Možnost `capture` může mít jednu ze dvou hodnot:
 
-- If it's `false` (default), then the handler is set on the bubbling phase.
-- If it's `true`, then the handler is set on the capturing phase.
+- Pokud je `false` (standardně), pak se handler nastaví pro fázi bublání.
+- Pokud je `true`, pak se handler nastaví pro fázi zachytávání.
 
+Všimněte si, že ačkoli formálně existují 3 fáze, druhá fáze („fáze cílování“: událost dosáhla elementu) není zpracována odděleně: v této fázi se spouštějí handlery z fáze zachytávání i z fáze bublání.
 
-Note that while formally there are 3 phases, the 2nd phase ("target phase": the event reached the element) is not handled separately: handlers on both capturing and bubbling phases trigger at that phase.
-
-Let's see both capturing and bubbling in action:
+Podívejme se na zachytávání i bublání v akci:
 
 ```html run autorun height=140 edit
 <style>
@@ -171,63 +170,63 @@ Let's see both capturing and bubbling in action:
 
 <script>
   for(let elem of document.querySelectorAll('*')) {
-    elem.addEventListener("click", e => alert(`Capturing: ${elem.tagName}`), true);
-    elem.addEventListener("click", e => alert(`Bubbling: ${elem.tagName}`));
+    elem.addEventListener("click", e => alert(`Zachytávání: ${elem.tagName}`), true);
+    elem.addEventListener("click", e => alert(`Bublání: ${elem.tagName}`));
   }
 </script>
 ```
 
-The code sets click handlers on *every* element in the document to see which ones are working.
+Kód nastaví handlery kliknutí na *každém* elementu v dokumentu, abychom viděli, které z nich se spustí.
 
-If you click on `<p>`, then the sequence is:
+Pokud kliknete na `<p>`, pak sekvence je následující:
 
-1. `HTML` -> `BODY` -> `FORM` -> `DIV -> P` (capturing phase, the first listener):
-2. `P` -> `DIV` -> `FORM` -> `BODY` -> `HTML` (bubbling phase, the second listener).
+1. `HTML` -> `BODY` -> `FORM` -> `DIV -> P` (fáze zachytávání, první posluchač):
+2. `P` -> `DIV` -> `FORM` -> `BODY` -> `HTML` (fáze bublání, druhý posluchač).
 
-Please note, the `P` shows up twice, because we've set two listeners: capturing and bubbling. The target triggers at the end of the first and at the beginning of the second phase.
+Prosíme všimněte si, že `P` se zobrazí dvakrát, protože jsme nastavili dva posluchače: pro zachytávání a pro bublání. Cíl se spustí na konci první a na začátku druhé fáze.
 
-There's a property `event.eventPhase` that tells us the number of the phase on which the event was caught. But it's rarely used, because we usually know it in the handler.
+Existuje vlastnost `událost.eventPhase`, která nám sděluje číslo fáze, v níž byla událost zachycena. Používá se však jen málokdy, protože v handleru už obvykle fázi známe.
 
-```smart header="To remove the handler, `removeEventListener` needs the same phase"
-If we `addEventListener(..., true)`, then we should mention the same phase in `removeEventListener(..., true)` to correctly remove the handler.
+```smart header="Pro odstranění handleru `removeEventListener` potřebuje stejnou fázi"
+Pokud nastavíme `addEventListener(..., true)`, měli bychom v `removeEventListener(..., true)` uvést stejnou fázi, abychom handler korektně odstranili.
 ```
 
-````smart header="Listeners on the same element and same phase run in their set order"
-If we have multiple event handlers on the same phase, assigned to the same element with `addEventListener`, they run in the same order as they are created:
+````smart header="Posluchače na stejném elementu ve stejné fázi se spustí v pořadí svého nastavení"
+Přiřadíme-li stejnému elementu pomocí `addEventListener` více handlerů události pro stejnou fázi, pak se tyto handlery spustí ve stejném pořadí, v jakém byly vytvořeny:
 
 ```js
-elem.addEventListener("click", e => alert(1)); // guaranteed to trigger first
+elem.addEventListener("click", e => alert(1)); // zaručeně se spustí první
 elem.addEventListener("click", e => alert(2));
 ```
 ````
 
-```smart header="The `event.stopPropagation()` during the capturing also prevents the bubbling"
-The `event.stopPropagation()` method and its sibling `event.stopImmediatePropagation()` can also be called on the capturing phase. Then not only the futher capturing is stopped, but the bubbling as well.
+```smart header="Metoda `událost.stopPropagation()` při zachytávání zastaví i bublání"
+Metoda `událost.stopPropagation()` a její sourozenec `událost.stopImmediatePropagation()` mohou být volány i ve fázi zachytávání. Pak se zastaví nejen další zachytávání, ale i bublání.
 
-In other words, normally the event goes first down ("capturing") and then up ("bubbling"). But if `event.stopPropagation()` is called during the capturing phase, then the event travel stops, no bubbling will occur.
+Jinými slovy, běžně událost prochází napřed směrem dolů („zachytávání“) a pak nahoru („bublání“). Pokud je však během fáze zachytávání volána `událost.stopPropagation()`, pak se průběh události zastaví a k bublání nedojde.
 ```
 
 
-## Summary
+## Shrnutí
 
-When an event happens -- the most nested element where it happens gets labeled as the "target element" (`event.target`).
+Když se stane událost, nejhlouběji vnořený element, na němž se stala, se nazývá „cílový element“ (`událost.target`).
 
-- Then the event moves down from the document root to `event.target`, calling handlers assigned with `addEventListener(..., true)` on the way (`true` is a shorthand for `{capture: true}`).
-- Then handlers are called on the target element itself.
-- Then the event bubbles up from `event.target` to the root, calling handlers assigned using `on<event>`, HTML attributes and `addEventListener` without the 3rd argument or with the 3rd argument `false/{capture:false}`.
+- Pak se událost přesunuje směrem dolů od kořenového dokumentu k `událost.target`, přičemž po cestě volá handlery přiřazené pomocí `addEventListener(..., true)` (`true` je zkratka pro `{capture: true}`).
+- Pak se volají handlery na samotném cílovém elementu.
+- Pak událost bublá od `událost.target` až ke kořeni, přičemž volá handlery přiřazené pomocí `on<událost>`, HTML atributů a `addEventListener` bez třetího argumentu nebo se třetím argumentem `false/{capture:false}`.
 
-Each handler can access `event` object properties:
+Každý handler má přístup k vlastnostem objektu `událost`:
 
-- `event.target` -- the deepest element that originated the event.
-- `event.currentTarget` (=`this`) -- the current element that handles the event (the one that has the handler on it)
-- `event.eventPhase` -- the current phase (capturing=1, target=2, bubbling=3).
+- `událost.target` -- nejhlouběji vnořený element, který událost spustil.
+- `událost.currentTarget` (=`this`) -- aktuální element, který událost právě zpracovává (ten, kterému je přiřazen tento handler)
+- `událost.eventPhase` -- aktuální fáze (zachytávání=1, zacílení=2, bublání=3).
 
-Any event handler can stop the event by calling `event.stopPropagation()`, but that's not recommended, because we can't really be sure we won't need it above, maybe for completely different things.
+Kterýkoli handler může událost zastavit voláním `událost.stopPropagation()`, ale to se nedoporučuje, protože si nemůžeme být zcela jisti, zda událost nebudeme potřebovat výše, třeba i kvůli něčemu úplně jinému.
 
-The capturing phase is used very rarely, usually we handle events on bubbling. And there's a logical explanation for that.
+Fáze zachytávání se používá velmi zřídka, obvykle události zpracováváme při bublání. A má to logické vysvětlení.
 
-In real world, when an accident happens, local authorities react first. They know best the area where it happened. Then higher-level authorities if needed.
+Když se ve skutečném světě stane nehoda, jako první na ni reagují místní úřady. Ty totiž nejlépe znají místo, kde se stala. Pak reagují úřady na vyšší úrovni, pokud je to zapotřebí.
 
-The same for event handlers. The code that set the handler on a particular element knows maximum details about the element and what it does. A handler on a particular `<td>` may be suited for that exactly `<td>`, it knows everything about it, so it should get the chance first. Then its immediate parent also knows about the context, but a little bit less, and so on till the very top element that handles general concepts and runs the last one.
+Pro handlery událostí platí totéž. Kód, který nastavil handler na určitém elementu, má maximální množství podrobností o tomto elementu a o tom, co dělá. Handler na určitém `<td>` může být vyladěn přesně pro tento `<td>`, ví o něm všechno, a tak by měl dostat šanci jako první. Jeho bezprostřední rodič také zná kontext, ale o něco méně, a tak dále až k nejvyššímu elementu, který zpracovává obecné koncepty a spustí se jako poslední.
 
-Bubbling and capturing lay the foundation for "event delegation" -- an extremely powerful event handling pattern that we study in the next chapter.
+Bublání a zachytávání představují základy pro „delegování událostí“ -- extrémně silný vzor zpracování událostí, který prostudujeme v následující kapitole.
