@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Add a closing button
+# Přidejte uzavírací tlačítko
 
-There's a list of messages.
+Máme seznam zpráv.
 
-Use JavaScript to add a closing button to the right-upper corner of each message.
+V JavaScriptu přidejte do pravého horního rohu každé zprávy uzavírací tlačítko.
 
-The result should look like this:
+Výsledek by měl vypadat následovně:
 
 [iframe src="solution" height=450]

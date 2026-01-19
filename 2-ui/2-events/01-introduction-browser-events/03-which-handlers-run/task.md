@@ -2,16 +2,16 @@ importance: 5
 
 ---
 
-# Which handlers run?
+# Které handlery se spustí?
 
-There's a button in the variable. There are no handlers on it.
+V proměnné je tlačítko, na kterém není žádný handler.
 
-Which handlers run on click after the following code? Which alerts show up?
+Které handlery se po vykonání následujícího kódu spustí kliknutím na tlačítko? Které zprávy se zobrazí?
 
 ```js no-beautify
-button.addEventListener("click", () => alert("1"));
+tlačítko.addEventListener("click", () => alert("1"));
 
-button.removeEventListener("click", () => alert("1"));
+tlačítko.removeEventListener("click", () => alert("1"));
 
-button.onclick = () => alert(2);
+tlačítko.onclick = () => alert(2);
 ```

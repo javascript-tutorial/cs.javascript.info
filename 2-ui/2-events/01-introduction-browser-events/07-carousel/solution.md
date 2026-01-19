@@ -1,17 +1,17 @@
-The images ribbon can be represented as `ul/li` list of images `<img>`.
+Pás obrázků můžeme reprezentovat jako seznam `ul/li` obrázků `<img>`.
 
-Normally, such a ribbon is wide, but we put a fixed-size `<div>` around to "cut" it, so that only a part of the ribbon is visible:
+Normálně by takový pás byl široký, ale umístíme kolem něj `<div>` s pevnou velikostí, abychom jej „odřízli“, takže bude vidět jen část pásu:
 
 ![](carousel1.svg)
 
-To make the list show horizontally we need to apply correct CSS properties for `<li>`, like `display: inline-block`.
+Aby se seznam zobrazil vodorovně, musíme na `<li>` aplikovat správné CSS vlastnosti, např. `display: inline-block`.
 
-For `<img>` we should also adjust `display`, because by default it's `inline`. There's extra space reserved under `inline` elements for "letter tails", so we can use `display:block` to remove it.
+U `<img>` bychom také měli pozměnit `display`, neboť standardně je `inline`. Pod `inline` elementy je rezervován prostor navíc pro „ocásky pod písmeny“, takže ho můžeme odstranit pomocí `display:block`.
 
-To do the scrolling, we can shift `<ul>`. There are many ways to do it, for instance by changing `margin-left` or (better performance) use `transform: translateX()`:
+Abychom provedli rolování, můžeme posunout `<ul>`. To lze udělat mnoha způsoby, například změnou `margin-left` nebo (pro lepší výkon) použít `transform: translateX()`:
 
 ![](carousel2.svg)
 
-The outer `<div>` has a fixed width, so "extra" images are cut.
+Vnější `<div>` má pevnou šířku, takže „extra“ obrázky budou odříznuty.
 
-The whole carousel is a self-contained "graphical component" on the page, so we'd better wrap it into a single `<div class="carousel">` and style things inside it.
+Celý kolotoč je samostatná „grafická komponenta“ na stránce, takže je lepší ho zabalit do jediného `<div class="kolotoč">` a nastavovat styly věcí, které jsou uvnitř.

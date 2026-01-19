@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <style>
-    #field {
+    #hřiště {
       width: 200px;
       height: 150px;
       border: 10px solid black;
@@ -14,7 +14,7 @@
       cursor: pointer;
     }
 
-    #ball {
+    #míč {
       position: absolute;
       left: 0;
       top: 0;
@@ -27,47 +27,46 @@
 
 <body style="height:2000px">
 
-  Click on a field to move the ball there.
+  Kliknutím na hřiště přesunete míč na místo kliknutí.
   <br>
 
 
-  <div id="field">
-    <img src="https://en.js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  <div id="hřiště">
+    <img src="https://en.js.cx/clipart/ball.svg" id="míč"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
   </div>
 
   <script>
-    field.onclick = function(event) {
+    hřiště.onclick = function(událost) {
 
-      // window-relative field coordinates
-      let fieldCoords = this.getBoundingClientRect();
+      // souřadnice hřiště vzhledem k oknu
+      let souřadniceHřiště = this.getBoundingClientRect();
 
-      // the ball has position:absolute, the field: position:relative
-      // so ball coordinates are relative to the field inner left-upper corner
-      let ballCoords = {
-        top: event.clientY - fieldCoords.top - field.clientTop - ball.clientHeight / 2,
-        left: event.clientX - fieldCoords.left - field.clientLeft - ball.clientWidth / 2
+      // míč má position:absolute, hřiště má position:relative
+      // souřadnice míče jsou tedy relativní vzhledem k levému hornímu rohu hřiště
+      let souřadniceMíče = {
+        top: událost.clientY - souřadniceHřiště.top - hřiště.clientTop - míč.clientHeight / 2,
+        left: událost.clientX - souřadniceHřiště.left - hřiště.clientLeft - míč.clientWidth / 2
       };
 
-      // prevent crossing the top field boundary
-      if (ballCoords.top < 0) ballCoords.top = 0;
+      // zabráníme překročení horního okraje hřiště
+      if (souřadniceMíče.top < 0) souřadniceMíče.top = 0;
 
-      // prevent crossing the left field boundary
-      if (ballCoords.left < 0) ballCoords.left = 0;
+      // zabráníme překročení levého okraje hřiště
+      if (souřadniceMíče.left < 0) souřadniceMíče.left = 0;
 
-
-      // // prevent crossing the right field boundary
-      if (ballCoords.left + ball.clientWidth > field.clientWidth) {
-        ballCoords.left = field.clientWidth - ball.clientWidth;
+      // zabráníme překročení pravého okraje hřiště
+      if (souřadniceMíče.left + míč.clientWidth > hřiště.clientWidth) {
+        souřadniceMíče.left = hřiště.clientWidth - míč.clientWidth;
       }
 
-      // prevent crossing the bottom field boundary
-      if (ballCoords.top + ball.clientHeight > field.clientHeight) {
-        ballCoords.top = field.clientHeight - ball.clientHeight;
+      // zabráníme překročení dolního okraje hřiště
+      if (souřadniceMíče.top + míč.clientHeight > hřiště.clientHeight) {
+        souřadniceMíče.top = hřiště.clientHeight - míč.clientHeight;
       }
 
-      ball.style.left = ballCoords.left + 'px';
-      ball.style.top = ballCoords.top + 'px';
+      míč.style.left = souřadniceMíče.left + 'px';
+      míč.style.top = souřadniceMíče.top + 'px';
     }
   </script>
 

@@ -2,7 +2,7 @@ body {
   padding: 10px;
 }
 
-.carousel {
+.kolotoč {
   position: relative;
   width: 398px;
   padding: 10px 40px;
@@ -11,14 +11,14 @@ body {
   background: #eee;
 }
 
-.carousel img {
+.kolotoč img {
   width: 130px;
   height: 130px;
-  /* make it block to remove space around images */
+  /* učiníme jej blokem, abychom odstranili místo kolem obrázků */
   display: block;
 }
 
-.arrow {
+.šipka {
   position: absolute;
   top: 60px;
   padding: 0;
@@ -31,40 +31,40 @@ body {
   display: block;
 }
 
-.arrow:focus {
+.šipka:focus {
   outline: none;
 }
 
-.arrow:hover {
+.šipka:hover {
   background: #ccc;
   cursor: pointer;
 }
 
-.prev {
+.předchozí {
   left: 7px;
 }
 
-.next {
+.další {
   right: 7px;
 }
 
-.gallery {
+.galerie {
   width: 390px;
   overflow: hidden;
 }
 
-.gallery ul {
+.galerie ul {
   height: 130px;
   width: 9999px;
   margin: 0;
   padding: 0;
   list-style: none;
   transition: margin-left 250ms;
-  /* remove white-space between inline-block'ed li */
+  /* odstraníme prázdné místo mezi elementy li, které jsou inline-block */
   /* http://davidwalsh.name/remove-whitespace-inline-block */
   font-size: 0;
 }
 
-.gallery li {
+.galerie li {
   display: inline-block;
 }

@@ -1,13 +1,13 @@
 
-To add the button we can use either `position:absolute` (and make the pane `position:relative`) or `float:right`. The `float:right` has the benefit that the button never overlaps the text, but `position:absolute` gives more freedom. So the choice is yours.
+K přidání tlačítka můžeme použít buď `position:absolute` (a nastavit u záložky `position:relative`), nebo `float:right`. `float:right` má tu výhodu, že tlačítko nikdy nepřekryje text, ale `position:absolute` nám dává větší svobodu. Volba je tedy na vás.
 
-Then for each pane the code can be like:
+Pak může kód pro každou záložku vypadat takto:
 ```js
-pane.insertAdjacentHTML("afterbegin", '<button class="remove-button">[x]</button>');
+záložka.insertAdjacentHTML("afterbegin", '<button class="tlačítko-odstranit">[x]</button>');
 ```
 
-Then the `<button>` becomes `pane.firstChild`, so we can add a handler to it like this:
+Pak se `<button>` stane `záložka.firstChild`, takže k němu můžeme přidat handler následovně:
 
 ```js
-pane.firstChild.onclick = () => pane.remove();
+záložka.firstChild.onclick = () => záložka.remove();
 ```

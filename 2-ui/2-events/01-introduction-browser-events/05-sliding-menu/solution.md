@@ -1,47 +1,47 @@
 
 # HTML/CSS
-First let's create HTML/CSS.
+Nejprve vytvořme HTML/CSS.
 
-A menu is a standalone graphical component on the page, so it's better to put it into a single DOM element.
+Menu je samostatná grafická komponenta na stránce, proto bude lepší je umístit do jediného DOM elementu.
 
-A list of menu items can be laid out as a list `ul/li`.
+Seznam prvků menu můžeme vytvořit jako seznam `ul/li`.
 
-Here's the example structure:
+Struktura příkladu vypadá takto:
 
 ```html
 <div class="menu">
-  <span class="title">Sweeties (click me)!</span>
+  <span class="titulek">Sladkosti (klikni na mě)!</span>
   <ul>
-    <li>Cake</li>
-    <li>Donut</li>
-    <li>Honey</li>
+    <li>Koláč</li>
+    <li>Kobliha</li>
+    <li>Med</li>
   </ul>
 </div>
 ```
 
-We use `<span>` for the title, because `<div>` has an implicit `display:block` on it, and it will occupy 100% of the horizontal width.
+Pro titulek používáme `<span>`, jelikož `<div>` má implicitně `display:block` a obsadil by 100% vodorovné šířky.
 
-Like this:
-
-```html autorun height=50
-<div style="border: solid red 1px" onclick="alert(1)">Sweeties (click me)!</div>
-```
-
-So if we set `onclick` on it, then it will catch clicks to the right of the text.
-
-As `<span>` has an implicit `display: inline`, it occupies exactly enough place to fit all the text:
+Příklad:
 
 ```html autorun height=50
-<span style="border: solid red 1px" onclick="alert(1)">Sweeties (click me)!</span>
+<div style="border: solid red 1px" onclick="alert(1)">Sladkosti (klikni na mě)!</div>
 ```
 
-# Toggling the menu
+Jestliže tedy na něm nastavíme `onclick`, bude zachytávat i kliknutí napravo od textu.
 
-Toggling the menu should change the arrow and show/hide the menu list.
+Protože `<span>` má implicitně `display: inline`, zabere přesně tolik místa, aby se do něj vešel celý text:
 
-All these changes are perfectly handled by CSS. In JavaScript we should label the current state of the menu by adding/removing the class `.open`.
+```html autorun height=50
+<span style="border: solid red 1px" onclick="alert(1)">Sladkosti (klikni na mě)!</span>
+```
 
-Without it, the menu will be closed:
+# Přepínání menu
+
+Při přepnutí menu by se měla změnit šipka a zobrazit nebo skrýt seznam menu.
+
+Všechny tyto změny lze dokonale ošetřit v CSS. V JavaScriptu bychom měli označit aktuální stav menu přidáním nebo odebráním třídy `.otevřeno`.
+
+Bez ní bude menu zavřené:
 
 ```css
 .menu ul {
@@ -51,21 +51,21 @@ Without it, the menu will be closed:
   display: none;
 }
 
-.menu .title::before {
+.menu .titulek::before {
   content: '▶ ';
   font-size: 80%;
   color: green;
 }
 ```
 
-...And with `.open` the arrow changes and the list shows up:
+...A s třídou `.otevřeno` se šipka změní a seznam se zobrazí:
 
 ```css
-.menu.open .title::before {
+.menu.otevřeno .titulek::before {
   content: '▼ ';
 }
 
-.menu.open ul {
+.menu.otevřeno ul {
   display: block;
 }
 ```

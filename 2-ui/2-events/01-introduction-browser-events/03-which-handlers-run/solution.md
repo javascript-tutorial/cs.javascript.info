@@ -1,16 +1,16 @@
-The answer: `1` and `2`.
+Odpověď zní: `1` a `2`.
 
-The first handler triggers, because it's not removed by `removeEventListener`. To remove the handler we need to pass exactly the function that was assigned. And in the code a new function is passed, that looks the same, but is still another function.
+První handler se spustí proto, že nebyl odstraněn funkcí `removeEventListener`. Abychom handler odstranili, museli bychom předat přesně tutéž funkci, která byla přiřazena. V kódu je však předána nová funkce, která vypadá stejně, ale přesto je to jiná funkce.
 
-To remove a function object, we need to store a reference to it, like this:
+Abychom odstranili objekt funkce, museli bychom si uložit odkaz na něj, například:
 
 ```js
 function handler() {
   alert(1);
 }
 
-button.addEventListener("click", handler);
-button.removeEventListener("click", handler);
+tlačítko.addEventListener("click", handler);
+tlačítko.removeEventListener("click", handler);
 ```
 
-The handler `button.onclick` works independently and in addition to `addEventListener`.
+Handler `tlačítko.onclick` funguje nezávisle a navíc k `addEventListener`.
