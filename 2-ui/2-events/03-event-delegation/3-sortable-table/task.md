@@ -2,42 +2,42 @@ importance: 4
 
 ---
 
-# Sortable table
+# Řaditelná tabulka
 
-Make the table sortable: clicks on `<th>` elements should sort it by corresponding column.
+Umožněte řazení tabulky: po kliknutí na element `<th>` by se měla seřadit podle příslušného sloupce.
 
-Each `<th>` has the type in the attribute, like this:
+Každý `<th>` má v atributu typ, například:
 
 ```html
 <table id="grid">
   <thead>
     <tr>
 *!*
-      <th data-type="number">Age</th>
-      <th data-type="string">Name</th>
+      <th data-type="number">Věk</th>
+      <th data-type="string">Jméno</th>
 */!*
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>5</td>
-      <td>John</td>
+      <td>Jan</td>
     </tr>
     <tr>
       <td>10</td>
-      <td>Ann</td>
+      <td>Anna</td>
     </tr>
     ...
   </tbody>
 </table>
 ```
 
-In the example above the first column has numbers, and the second one -- strings. The sorting function should handle sort according to the type.
+V uvedeném příkladu první sloupec obsahuje čísla a druhý řetězce. Řadicí funkce by měla provádět řazení podle typu.
 
-Only `"string"` and `"number"` types should be supported.
+Měly by být podporovány jen typy `"string"` a `"number"`.
 
-The working example:
+Funkční příklad:
 
 [iframe border=1 src="solution" height=190]
 
-P.S. The table can be big, with any number of rows and columns.
+P.S. Tabulka může být velká, počet řádků a sloupců může být libovolný.

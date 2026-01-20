@@ -1,131 +1,131 @@
 
-# Event delegation
+# Delegování událostí
 
-Capturing and bubbling allow us to implement one of the most powerful event handling patterns called *event delegation*.
+Zachytávání a bublání nám umožňuje implementovat jeden z nejsilnějších vzorů zpracování událostí, nazývaný *delegování událostí*.
 
-The idea is that if we have a lot of elements handled in a similar way, then instead of assigning a handler to each of them -- we put a single handler on their common ancestor.
+Myšlenkou je, že když máme spoustu elementů, které se zpracovávají podobným způsobem, pak místo abychom přiřadili handler každému z nich, umístíme jediný handler na jejich společného předka.
 
-In the handler we get `event.target` to see where the event actually happened and handle it.
+V tomto handleru po načtení `událost.target` uvidíme, kde se událost opravdu stala, a zpracujeme ji.
 
-Let's see an example -- the [Ba-Gua diagram](http://en.wikipedia.org/wiki/Ba_gua) reflecting the ancient Chinese philosophy.
+Podívejme se na příklad -- diagram [Osmi trigramů (Pa-kua)](https://cs.wikipedia.org/wiki/Osm_trigram%C5%AF), který zobrazuje starověkou čínskou filozofii.
 
-Here it is:
+Je zde:
 
 [iframe height=350 src="bagua" edit link]
 
-The HTML is like this:
+Jeho HTML kód je následující:
 
 ```html
 <table>
   <tr>
-    <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
+    <th colspan="3">Tabulka <em>Pa-kua</em>: směr, element, barva, význam</th>
   </tr>
   <tr>
-    <td class="nw"><strong>Northwest</strong><br>Metal<br>Silver<br>Elders</td>
+    <td class="nw"><strong>Severozápad</strong><br>Kov<br>Stříbrná<br>Stáří</td>
     <td class="n">...</td>
     <td class="ne">...</td>
   </tr>
-  <tr>...2 more lines of this kind...</tr>
-  <tr>...2 more lines of this kind...</tr>
+  <tr>...2 další řádky stejného druhu...</tr>
+  <tr>...2 další řádky stejného druhu...</tr>
 </table>
 ```
 
-The table has 9 cells, but there could be 99 or 9999, doesn't matter.
+Tabulka má 9 buněk, ale může jich být třeba 99 nebo 9999, na tom nezáleží.
 
-**Our task is to highlight a cell `<td>` on click.**
+**Naším úkolem je zvýraznit buňku `<td>` po kliknutí.**
 
-Instead of assign an `onclick` handler to each `<td>` (can be many) -- we'll setup the "catch-all" handler on `<table>` element.
+Místo přiřazování handleru `onclick` ke každé `<td>` (kterých může být mnoho) nastavíme „všezachytávající“ handler na elementu `<table>`.
 
-It will use `event.target` to get the clicked element and highlight it.
+Ke zjištění elementu, na který bylo kliknuto, a jeho zvýraznění bude používat `událost.target`.
 
-The code:
+Kód:
 
 ```js
-let selectedTd;
+let zvolenáTd;
 
 *!*
-table.onclick = function(event) {
-  let target = event.target; // where was the click?
+tabulka.onclick = function(událost) {
+  let cíl = událost.target; // kam bylo kliknuto?
 
-  if (target.tagName != 'TD') return; // not on TD? Then we're not interested
+  if (cíl.tagName != 'TD') return; // ne na TD? Pak nás to nezajímá
 
-  highlight(target); // highlight it
+  zvýrazni(cíl); // zvýrazni to
 };
 */!*
 
-function highlight(td) {
-  if (selectedTd) { // remove the existing highlight if any
-    selectedTd.classList.remove('highlight');
+function zvýrazni(td) {
+  if (zvolenáTd) { // odstraníme existující třídu zvýraznění, pokud tam je
+    zvolenáTd.classList.remove('zvýraznění');
   }
-  selectedTd = td;
-  selectedTd.classList.add('highlight'); // highlight the new td
+  zvolenáTd = td;
+  zvolenáTd.classList.add('zvýraznění'); // zvýrazní novou td
 }
 ```
 
-Such a code doesn't care how many cells there are in the table. We can add/remove `<td>` dynamically at any time and the highlighting will still work.
+Takový kód se nestará o to, kolik buněk je v tabulce. Kdykoli můžeme dynamicky přidávat i odstraňovat `<td>` a zvýraznění bude stále fungovat.
 
-Still, there's a drawback.
+Pořád to však má nevýhodu.
 
-The click may occur not on the `<td>`, but inside it.
+Ke kliknutí může dojít nikoli na `<td>`, ale uvnitř ní.
 
-In our case if we take a look inside the HTML, we can see nested tags inside `<td>`, like `<strong>`:
+Když se v našem případě podíváme do HTML kódu, uvidíme uvnitř `<td>` vnořené značky, např. `<strong>`:
 
 ```html
 <td>
 *!*
-  <strong>Northwest</strong>
+  <strong>Severozápad</strong>
 */!*
   ...
 </td>
 ```
 
-Naturally, if a click happens on that `<strong>` then it becomes the value of `event.target`.
+Pochopitelně, když uživatel klikne na tento `<strong>`, pak se hodnotou `událost.target` stane on.
 
 ![](bagua-bubble.svg)
 
-In the handler `table.onclick` we should take such `event.target` and find out whether the click was inside `<td>` or not.
+V handleru `table.onclick` bychom měli takový `událost.target` vzít a zjistit, zda ke kliknutí došlo uvnitř `<td>` nebo ne.
 
-Here's the improved code:
+Vylepšený kód:
 
 ```js
-table.onclick = function(event) {
-  let td = event.target.closest('td'); // (1)
+tabulka.onclick = function(událost) {
+  let td = událost.target.closest('td'); // (1)
 
   if (!td) return; // (2)
 
-  if (!table.contains(td)) return; // (3)
+  if (!tabulka.contains(td)) return; // (3)
 
-  highlight(td); // (4)
+  zvýrazni(td); // (4)
 };
 ```
 
-Explanations:
-1. The method `elem.closest(selector)` returns the nearest ancestor that matches the selector. In our case we look for `<td>` on the way up from the source element.
-2. If `event.target` is not inside any `<td>`, then the call returns immediately, as there's nothing to do.
-3. In case of nested tables, `event.target` may be a `<td>`, but lying outside of the current table. So we check if that's actually *our table's* `<td>`.
-4. And, if it's so, then highlight it.
+Vysvětlení:
+1. Metoda `elem.closest(selektor)` vrátí nejbližšího předka, který odpovídá selektoru. V našem případě hledáme `<td>` cestou nahoru od zdrojového elementu.
+2. Jestliže `událost.target` není uvnitř žádné `<td>`, volání se okamžitě vrátí, protože není co dělat.
+3. V případě vnořených tabulek `událost.target` může být `<td>`, ale ležící mimo aktuální tabulku. Ověříme tedy, zda je to skutečně `<td>` *z naší tabulky*.
+4. Pokud je tomu tak, zvýrazníme ji.
 
-As the result, we have a fast, efficient highlighting code, that doesn't care about the total number of `<td>` in the table.
+Výsledkem je, že máme rychlý a efektivní kód pro zvýrazňování, který se nezajímá o celkový počet `<td>` v tabulce.
 
-## Delegation example: actions in markup
+## Příklad delegování: akce v menu
 
-There are other uses for event delegation.
+Delegování událostí má i jiná využití.
 
-Let's say, we want to make a menu with buttons "Save", "Load", "Search" and so on. And there's an object with methods `save`, `load`, `search`... How to match them?
+Dejme tomu, že chceme vytvořit menu s tlačítky „Uložit“, „Načíst“, „Hledat“ a podobně. A máme objekt s metodami `ulož`, `načti`, `hledej`... Jak je propojit?
 
-The first idea may be to assign a separate handler to each button. But there's a more elegant solution. We can add a handler for the whole menu and `data-action` attributes for buttons that has the method to call:
+První myšlenkou může být přiřadit každému tlačítku oddělený handler. Existuje však elegantnější řešení. Můžeme přidat k celému menu handler a k tlačítkům atribut `data-akce`, který bude obsahovat metodu, která se má volat:
 
 ```html
-<button *!*data-action="save"*/!*>Click to Save</button>
+<button *!*data-akce="ulož"*/!*>Kliknutím uložíte</button>
 ```
 
-The handler reads the attribute and executes the method. Take a look at the working example:
+Handler načte atribut a spustí metodu. Podívejte se na funkční příklad:
 
 ```html autorun height=60 run untrusted
 <div id="menu">
-  <button data-action="save">Save</button>
-  <button data-action="load">Load</button>
-  <button data-action="search">Search</button>
+  <button data-akce="ulož">Uložit</button>
+  <button data-akce="načti">Načíst</button>
+  <button data-akce="hledej">Hledat</button>
 </div>
 
 <script>
@@ -135,23 +135,23 @@ The handler reads the attribute and executes the method. Take a look at the work
       elem.onclick = this.onClick.bind(this); // (*)
     }
 
-    save() {
-      alert('saving');
+    ulož() {
+      alert('ukládám');
     }
 
-    load() {
-      alert('loading');
+    načti() {
+      alert('načítám');
     }
 
-    search() {
-      alert('searching');
+    hledej() {
+      alert('hledám');
     }
 
-    onClick(event) {
+    onClick(událost) {
 *!*
-      let action = event.target.dataset.action;
-      if (action) {
-        this[action]();
+      let akce = událost.target.dataset.akce;
+      if (akce) {
+        this[akce]();
       }
 */!*
     };
@@ -161,71 +161,71 @@ The handler reads the attribute and executes the method. Take a look at the work
 </script>
 ```
 
-Please note that `this.onClick` is bound to `this` in `(*)`. That's important, because otherwise `this` inside it would reference the DOM element (`elem`), not the `Menu` object, and `this[action]` would not be what we need.
+Prosíme všimněte si, že `this.onClick` je v `(*)` navázáno na `this`. To je důležité, protože jinak by `this` uvnitř něj odkazovalo na DOM element (`elem`), ne na objekt `Menu`, a `this[akce]` by nedělala to, co potřebujeme.
 
-So, what advantages does delegation give us here?
+Jaké výhody nám tedy zde delegování poskytuje?
 
 ```compare
-+ We don't need to write the code to assign a handler to each button. Just make a method and put it in the markup.
-+ The HTML structure is flexible, we can add/remove buttons at any time.
++ Nemusíme psát ke každému tlačítku kód, který mu přiřadí handler. Jen vytvoříme metodu a vložíme ji do elementu.
++ HTML struktura je flexibilní, můžeme kdykoli přidávat nebo odstraňovat tlačítka.
 ```
 
-We could also use classes `.action-save`, `.action-load`, but an attribute `data-action` is better semantically. And we can use it in CSS rules too.
+Mohli bychom použít i třídy `.akce-ulož`, `.akce-načti`, ale atribut `data-akce` je sémanticky lepší. A můžeme jej použít i v CSS pravidlech.
 
-## The "behavior" pattern
+## Vzor „chování“
 
-We can also use event delegation to add "behaviors" to elements *declaratively*, with special attributes and classes.
+Delegování událostí můžeme použít také k přidávání „chování“ do elementů *deklarativně*, se speciálními atributy a třídami.
 
-The pattern has two parts:
-1. We add a custom attribute to an element that describes its behavior.
-2. A document-wide handler tracks events, and if an event happens on an attributed element -- performs the action.
+Tento vzor má dvě části:
+1. Přidáme do elementu vlastní atribut, který bude popisovat jeho chování.
+2. Handler na úrovni dokumentu bude sledovat události, a jestliže událost nastane na elementu s tímto atributem, provede akci.
 
-### Behavior: Counter
+### Chování: Čítač
 
-For instance, here the attribute `data-counter` adds a behavior: "increase value on click" to buttons:
+Například zde atribut `data-čítač` přidá chování „po kliknutí zvýšit hodnotu“ tlačítkům:
 
 ```html run autorun height=60
-Counter: <input type="button" value="1" data-counter>
-One more counter: <input type="button" value="2" data-counter>
+Čítač: <input type="button" value="1" data-čítač>
+Další čítač: <input type="button" value="2" data-čítač>
 
 <script>
-  document.addEventListener('click', function(event) {
+  document.addEventListener('click', function(událost) {
 
-    if (event.target.dataset.counter != undefined) { // if the attribute exists...
-      event.target.value++;
+    if (událost.target.dataset.čítač != undefined) { // pokud atribut existuje...
+      událost.target.value++;
     }
 
   });
 </script>
 ```
 
-If we click a button -- its value is increased. Not buttons, but the general approach is important here.
+Jestliže klikneme na tlačítko, jeho hodnota se zvýší. Důležitá tady nejsou tlačítka, ale obecný přístup.
 
-There can be as many attributes with `data-counter` as we want. We can add new ones to HTML at any moment. Using the event delegation we "extended" HTML, added an attribute that describes a new behavior.
+Atributů `data-čítač` můžeme mít tolik, kolik chceme. Můžeme kdykoli přidat do HTML kódu nový. Pomocí delegování událostí jsme „rozšířili“ HTML přidáním atributu, který popisuje nové chování.
 
-```warn header="For document-level handlers -- always `addEventListener`"
-When we assign an event handler to the `document` object, we should always use `addEventListener`, not `document.on<event>`, because the latter will cause conflicts: new handlers overwrite old ones.
+```warn header="Pro handlery na úrovni dokumentu vždy používejte `addEventListener`"
+Když přiřazujeme handler události objektu `document`, měli bychom vždy používat `addEventListener`, ne `document.on<událost>`, protože to způsobuje konflikty: nové handlery přepíší staré.
 
-For real projects it's normal that there are many handlers on `document` set by different parts of the code.
+U skutečných projektů je běžné, že `document` obsahuje mnoho handlerů, které byly nastaveny v různých částech kódu.
 ```
 
-### Behavior: Toggler
+### Chování: přepínač
 
-One more example of behavior. A click on an element with the attribute `data-toggle-id` will show/hide the element with the given `id`:
+Ještě jeden příklad chování. Kliknutí na element s atributem `data-přepni-id` zobrazí nebo skryje element se zadaným `id`:
 
 ```html autorun run height=60
-<button *!*data-toggle-id="subscribe-mail"*/!*>
-  Show the subscription form
+<button *!*data-přepni-id="registrační-mail"*/!*>
+  Zobraz formulář pro registraci
 </button>
 
-<form id="subscribe-mail" hidden>
-  Your mail: <input type="email">
+<form id="registrační-mail" hidden>
+  Váš e-mail: <input type="email">
 </form>
 
 <script>
 *!*
-  document.addEventListener('click', function(event) {
-    let id = event.target.dataset.toggleId;
+  document.addEventListener('click', function(událost) {
+    let id = událost.target.dataset.přepniId;
     if (!id) return;
 
     let elem = document.getElementById(id);
@@ -236,37 +236,37 @@ One more example of behavior. A click on an element with the attribute `data-tog
 </script>
 ```
 
-Let's note once again what we did. Now, to add toggling functionality to an element -- there's no need to know JavaScript, just use the attribute `data-toggle-id`.
+Všimněte si ještě jednou, co jsme udělali. Když nyní chceme přidat elementu funkcionalitu přepínání, nemusíme znát JavaScript -- stačí použít atribut `data-přepni-id`.
 
-That may become really convenient -- no need to write JavaScript for every such element. Just use the behavior. The document-level handler makes it work for any element of the page.
+To se může opravdu hodit -- není nutné psát JavaScript ke každému takovému elementu. Stačí použít toto chování. Handler na úrovni dokumentu způsobí, že bude fungovat na každém elementu této stránky.
 
-We can combine multiple behaviors on a single element as well.
+Můžeme i zkombinovat více chování na jednom elementu.
 
-The "behavior" pattern can be an alternative to mini-fragments of JavaScript.
+Vzor „chování“ může být alternativou k minifragmentům JavaScriptu.
 
-## Summary
+## Shrnutí
 
-Event delegation is really cool! It's one of the most helpful patterns for DOM events.
+Delegování událostí je opravdu skvělé! Je to jeden z nejužitečnějších vzorů pro DOM události.
 
-It's often used to add the same handling for many similar elements, but not only for that.
+Často se používá k přidání stejného zpracování pro mnoho podobných elementů, ale nejenom k tomu.
 
-The algorithm:
+Algoritmus:
 
-1. Put a single handler on the container.
-2. In the handler -- check the source element `event.target`.
-3. If the event happened inside an element that interests us, then handle the event.
+1. Umístíme jeden handler na kontejner.
+2. V tomto handleru ověříme zdrojový element `událost.target`.
+3. Pokud se událost stala uvnitř elementu, který nás zajímá, pak ji zpracujeme.
 
-Benefits:
+Výhody:
 
 ```compare
-+ Simplifies initialization and saves memory: no need to add many handlers.
-+ Less code: when adding or removing elements, no need to add/remove handlers.
-+ DOM modifications: we can mass add/remove elements with `innerHTML` and the like.
++ Zjednodušuje inicializaci a šetří paměť: nemusíme přidávat množství handlerů.
++ Méně kódu: když přidáváme nebo odstraňujeme elementy, nemusíme přidávat nebo odstraňovat handlery.
++ Úpravy DOMu: můžeme masově přidávat nebo odstraňovat elementy s `innerHTML` a podobně.
 ```
 
-The delegation has its limitations of course:
+Delegování má ovšem i svá omezení:
 
 ```compare
-- First, the event must be bubbling. Some events do not bubble. Also, low-level handlers should not use `event.stopPropagation()`.
-- Second, the delegation may add CPU load, because the container-level handler reacts on events in any place of the container, no matter whether they interest us or not. But usually the load is negligible, so we don't take it into account.
+- Za prvé, událost musí bublat, což některé události nedělají. Navíc handlery na nižší úrovni by neměly používat `událost.stopPropagation()`.
+- Za druhé, delegování může zvýšit zátěž CPU, jelikož handler na úrovni kontejneru reaguje na události na všech místech kontejneru bez ohledu na to, zda nás zajímají nebo ne. Zátěž je však obvykle zanedbatelná, takže ji nemusíme brát v úvahu.
 ```

@@ -25,30 +25,30 @@
   <table id="grid">
     <thead>
       <tr>
-        <th data-type="number">Age</th>
-        <th data-type="string">Name</th>
+        <th data-type="number">Věk</th>
+        <th data-type="string">Jméno</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>5</td>
-        <td>John</td>
+        <td>Jan</td>
       </tr>
       <tr>
         <td>2</td>
-        <td>Pete</td>
+        <td>Petr</td>
       </tr>
       <tr>
         <td>12</td>
-        <td>Ann</td>
+        <td>Anna</td>
       </tr>
       <tr>
         <td>9</td>
-        <td>Eugene</td>
+        <td>Evžen</td>
       </tr>
       <tr>
         <td>1</td>
-        <td>Ilya</td>
+        <td>Ilja</td>
       </tr>
     </tbody>
   </table>
@@ -59,38 +59,38 @@
       if (e.target.tagName != 'TH') return;
 
       let th = e.target;
-      // if TH, then sort
-      // cellIndex is the number of th:
-      //   0 for the first column
-      //   1 for the second column, etc
-      sortGrid(th.cellIndex, th.dataset.type);
+      // pokud je to TH, provedeme řazení
+      // cellIndex je číslo th:
+      //   0 první sloupec
+      //   1 druhý sloupec, atd.
+      seřaďGrid(th.cellIndex, th.dataset.type);
     };
 
-    function sortGrid(colNum, type) {
+    function seřaďGrid(čísloSloupce, typ) {
       let tbody = grid.querySelector('tbody');
 
-      let rowsArray = Array.from(tbody.rows);
+      let poleŘádků = Array.from(tbody.rows);
 
-      // compare(a, b) compares two rows, need for sorting
-      let compare;
+      // porovnej(a, b) porovná dva řádky, je nutné pro řazení
+      let porovnej;
 
-      switch (type) {
+      switch (typ) {
         case 'number':
-          compare = function(rowA, rowB) {
-            return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML;
+          porovnej = function(řádekA, řádekB) {
+            return řádekA.cells[čísloSloupce].innerHTML - řádekB.cells[čísloSloupce].innerHTML;
           };
           break;
         case 'string':
-          compare = function(rowA, rowB) {
-            return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML ? 1 : -1;
+          porovnej = function(řádekA, řádekB) {
+            return řádekA.cells[čísloSloupce].innerHTML > řádekB.cells[čísloSloupce].innerHTML ? 1 : -1;
           };
           break;
       }
 
-      // sort
-      rowsArray.sort(compare);
+      // řazení
+      poleŘádků.sort(porovnej);
 
-      tbody.append(...rowsArray);
+      tbody.append(...poleŘádků);
     }
   </script>
 
