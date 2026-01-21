@@ -1,88 +1,88 @@
-# Dispatching custom events
+# Vyvolávání vlastních událostí
 
-We can not only assign handlers, but also generate events from JavaScript.
+V JavaScriptu můžeme nejen přiřazovat handlery, ale také generovat události.
 
-Custom events can be used to create "graphical components". For instance, a root element of our own JS-based menu may trigger events telling what happens with the menu: `open` (menu open), `select` (an item is selected) and so on. Another code may listen for the events and observe what's happening with the menu.
+Vlastní události můžeme používat k vytváření „grafických komponent“. Například kořenový element našeho vlastního menu založeného na JS může spouštět události, které budou říkat, co se děje s menu: `otevři` (otevření menu), `vyber` (položka je vybrána) a podobně. Další kód může těmto událostem naslouchat a pozorovat, co se s menu děje.
 
-We can generate not only completely new events, that we invent for our own purposes, but also built-in ones, such as `click`, `mousedown` etc. That may be helpful for automated testing.
+Můžeme generovat nejenom úplně nové události, které si vymyslíme pro vlastní účely, ale také vestavěné události, např. `click`, `mousedown` atd. To může být užitečné pro automatické testování.
 
-## Event constructor
+## Konstruktor události
 
-Built-in event classes form a hierarchy, similar to DOM element classes. The root is the built-in [Event](https://dom.spec.whatwg.org/#events) class.
+Třídy vestavěných událostí tvoří hierarchii, podobně jako třídy DOM elementů. Jejím kořenem je vestavěná třída [Event](https://dom.spec.whatwg.org/#events).
 
-We can create `Event` objects like this:
+Objekty třídy `Event` můžeme vytvářet následovně:
 
 ```js
-let event = new Event(type[, options]);
+let událost = new Event(typ[, možnosti]);
 ```
 
-Arguments:
+Argumenty:
 
-- *type* -- event type, a string like `"click"` or our own like `"my-event"`.
-- *options* -- the object with two optional properties:
-  - `bubbles: true/false` -- if `true`, then the event bubbles.
-  - `cancelable: true/false` -- if `true`, then the "default action"  may be prevented. Later we'll see what it means for custom events.
+- *typ* -- typ události, řetězec, např. `"click"` nebo náš vlastní, třeba `"moje-událost"`.
+- *možnosti* -- objekt se dvěma nepovinnými vlastnostmi:
+  - `bubbles: true/false` -- pokud je `true`, pak událost bublá.
+  - `cancelable: true/false` -- pokud je  `true`, pak lze zabránit „standardní akci“. Později uvidíme, co to znamená pro vlastní události.
 
-  By default both are false: `{bubbles: false, cancelable: false}`.
+  Standardně jsou obě vlastnosti false: `{bubbles: false, cancelable: false}`.
 
 ## dispatchEvent
 
-After an event object is created, we should "run" it on an element using the call `elem.dispatchEvent(event)`.
+Když vytvoříme objekt události, měli bychom ji „spustit“ na nějakém elementu voláním `elem.dispatchEvent(událost)`.
 
-Then handlers react on it as if it were a regular browser event. If the event was created with the `bubbles` flag, then it bubbles.
+Pak na ni handlery budou reagovat, jako by to byla běžná událost prohlížeče. Pokud byla událost vytvořena s příznakem `bubbles`, bude bublat.
 
-In the example below the `click` event is initiated in JavaScript. The handler works same way as if the button was clicked:
+V následujícím příkladu je v JavaScriptu spuštěna událost `click`. Handler funguje stejně, jako při kliknutí na tlačítko:
 
 ```html run no-beautify
-<button id="elem" onclick="alert('Click!');">Autoclick</button>
+<button id="elem" onclick="alert('Klik!');">Automatický klik</button>
 
 <script>
-  let event = new Event("click");
-  elem.dispatchEvent(event);
+  let událost = new Event("click");
+  elem.dispatchEvent(událost);
 </script>
 ```
 
 ```smart header="event.isTrusted"
-There is a way to tell a "real" user event from a script-generated one.
+Existuje způsob, jak poznat „opravdovou“ uživatelskou událost od události generované skriptem.
 
-The property `event.isTrusted` is `true` for events that come from real user actions and `false` for script-generated events.
+Vlastnost `událost.isTrusted` je `true` pro události, které pocházejí od skutečných uživatelských akcí, a `false` pro události generované skriptem.
 ```
 
-## Bubbling example
+## Příklad bublání
 
-We can create a bubbling event with the name `"hello"` and catch it on `document`.
+Můžeme vytvořit bublající událost s názvem `"ahoj"` a zachytávat ji v `document`.
 
-All we need is to set `bubbles` to `true`:
+Stačí nastavit `bubbles` na `true`:
 
 ```html run no-beautify
-<h1 id="elem">Hello from the script!</h1>
+<h1 id="elem">Ahoj ze skriptu!</h1>
 
 <script>
-  // catch on document...
-  document.addEventListener("hello", function(event) { // (1)
-    alert("Hello from " + event.target.tagName); // Hello from H1
+  // zachytávání v dokumentu...
+  document.addEventListener("ahoj", function(událost) { // (1)
+    alert("Ahoj z " + událost.target.tagName); // Ahoj z H1
   });
 
-  // ...dispatch on elem!
-  let event = new Event("hello", {bubbles: true}); // (2)
-  elem.dispatchEvent(event);
+  // ...vyvoláme ji na elem!
+  let událost = new Event("ahoj", {bubbles: true}); // (2)
+  elem.dispatchEvent(událost);
 
-  // the handler on document will activate and display the message.
+  // handler na dokumentu se aktivuje a zobrazí zprávu.
 
 </script>
 ```
 
 
-Notes:
+Poznámky:
 
-1. We should use `addEventListener` for our custom events, because `on<event>` only exists for built-in events, `document.onhello` doesn't work.
-2. Must set `bubbles:true`, otherwise the event won't bubble up.
+1. Naše vlastní události bychom měli přidávat pomocí `addEventListener`, jelikož `on<událost>` existuje jedině pro vestavěné události, `document.onahoj` nebude fungovat.
+2. Musíme nastavit `bubbles:true`, jinak událost nebude bublat.
 
-The bubbling mechanics is the same for built-in (`click`) and custom (`hello`) events. There are also capturing and bubbling stages.
+Mechanika bublání funguje pro vestavěné (`click`) a vlastní (`ahoj`) události stejně. I u nich probíhá fáze zachytávání a fáze bublání.
 
-## MouseEvent, KeyboardEvent and others
+## MouseEvent, KeyboardEvent a jiné
 
-Here's a short list of classes for UI Events from the [UI Event specification](https://www.w3.org/TR/uievents):
+Následuje krátký seznam UI událostí ze [specifikace UI událostí](https://www.w3.org/TR/uievents):
 
 - `UIEvent`
 - `FocusEvent`
@@ -91,14 +91,14 @@ Here's a short list of classes for UI Events from the [UI Event specification](h
 - `KeyboardEvent`
 - ...
 
-We should use them instead of `new Event` if we want to create such events. For instance, `new MouseEvent("click")`.
+Pokud chceme vytvořit takovou událost, měli bychom je používat místo `new Event`, například `new MouseEvent("click")`.
 
-The right constructor allows to specify standard properties for that type of event.
+Správný konstruktor nám umožňuje specifikovat standardní vlastnosti pro příslušný typ události.
 
-Like `clientX/clientY` for a mouse event:
+Například `clientX/clientY` pro událost myši:
 
 ```js run
-let event = new MouseEvent("click", {
+let událost = new MouseEvent("click", {
   bubbles: true,
   cancelable: true,
   clientX: 100,
@@ -106,189 +106,189 @@ let event = new MouseEvent("click", {
 });
 
 *!*
-alert(event.clientX); // 100
+alert(událost.clientX); // 100
 */!*
 ```
 
-Please note: the generic `Event` constructor does not allow that.
+Prosíme všimněte si, že generický konstruktor `Event` to neumožňuje.
 
-Let's try:
+Zkusme to:
 
 ```js run
-let event = new Event("click", {
-  bubbles: true, // only bubbles and cancelable
-  cancelable: true, // work in the Event constructor
+let událost = new Event("click", {
+  bubbles: true,    // v konstruktoru Event fungují
+  cancelable: true, // pouze bubbles a cancelable
   clientX: 100,
   clientY: 100
 });
 
 *!*
-alert(event.clientX); // undefined, the unknown property is ignored!
+alert(událost.clientX); // undefined, neznámá vlastnost je ignorována!
 */!*
 ```
 
-Technically, we can work around that by assigning directly `event.clientX=100` after creation. So that's a matter of convenience and following the rules. Browser-generated events always have the right type.
+Technicky bychom to mohli obejít tak, že po vytvoření události přímo přiřadíme `událost.clientX=100`. Je to tedy otázka konvencí a dodržování pravidel. Události generované prohlížečem mají vždy správný typ.
 
-The full list of properties for different UI events is in the specification, for instance, [MouseEvent](https://www.w3.org/TR/uievents/#mouseevent).
+Úplný seznam vlastností různých UI událostí, například [MouseEvent](https://www.w3.org/TR/uievents/#mouseevent), je uveden ve specifikaci.
 
-## Custom events
+## Vlastní události
 
-For our own, completely new events types like `"hello"` we should use `new CustomEvent`. Technically [CustomEvent](https://dom.spec.whatwg.org/#customevent) is the same as `Event`, with one exception.
+Pro naše vlastní, zcela nové typy událostí, např. `"ahoj"`, bychom měli používat `new CustomEvent`. Technicky je [CustomEvent](https://dom.spec.whatwg.org/#customevent) totéž jako `Event`, ale s jednou výjimkou.
 
-In the second argument (object) we can add an additional property `detail` for any custom information that we want to pass with the event.
+Ve druhém argumentu (v objektu) můžeme přidat další vlastnost `detail` s jakoukoli vlastní informací, kterou chceme události předat.
 
-For instance:
+Příklad:
 
 ```html run refresh
-<h1 id="elem">Hello for John!</h1>
+<h1 id="elem">Ahoj pro Jana!</h1>
 
 <script>
-  // additional details come with the event to the handler
-  elem.addEventListener("hello", function(event) {
-    alert(*!*event.detail.name*/!*);
+  // s událostí přijdou do handleru další detaily
+  elem.addEventListener("ahoj", function(událost) {
+    alert(*!*událost.detail.jméno*/!*);
   });
 
-  elem.dispatchEvent(new CustomEvent("hello", {
+  elem.dispatchEvent(new CustomEvent("ahoj", {
 *!*
-    detail: { name: "John" }
+    detail: { jméno: "Jan" }
 */!*
   }));
 </script>
 ```
 
-The `detail` property can have any data. Technically we could live without, because we can assign any properties into a regular `new Event` object after its creation. But `CustomEvent` provides the special `detail` field for it to evade conflicts with other event properties.
+Vlastnost `detail` může obsahovat jakákoli data. Technicky se můžeme obejít i bez ní, protože běžnému objektu `new Event` můžeme po vytvoření přiřazovat jakékoli vlastnosti, ale `CustomEvent` k tomu poskytuje speciální pole `detail`, abychom se vyhnuli konfliktům s jinými vlastnostmi události.
 
-Besides, the event class describes "what kind of event" it is, and if the event is custom, then we should use `CustomEvent` just to be clear about what it is.
+Kromě toho třída události popisuje, o „jaký druh události“ jde, a je-li událost naše vlastní, měli bychom používat `CustomEvent` prostě proto, aby bylo zřejmé, co je zač.
 
-## event.preventDefault()
+## událost.preventDefault()
 
-Many browser events have a "default action", such as navigating to a link, starting a selection, and so on.
+Mnoho událostí prohlížeče má „standardní akci“, např. navigaci na odkaz, zahájení výběru a podobně.
 
-For new, custom events, there are definitely no default browser actions, but a code that dispatches such event may have its own plans what to do after triggering the event.
+U nových, vlastních událostí rozhodně žádné standardní akce prohlížeče nejsou, ale kód, který takovou událost vyvolává, může mít vlastní plány, co bude po spuštění události dělat.
 
-By calling `event.preventDefault()`, an event handler may send a signal that those actions should be canceled.
+Voláním `událost.preventDefault()` může handler události poslat signál, že tyto akce by měly být zrušeny.
 
-In that case the call to `elem.dispatchEvent(event)` returns `false`. And the code that dispatched it knows that it shouldn't continue.
+V takovém případě volání `elem.dispatchEvent(událost)` vrátí `false`. A kód, který událost vyvolal, ví, že by neměl pokračovat.
 
-Let's see a practical example - a hiding rabbit (could be a closing menu or something else).
+Podívejme se na praktický příklad -- skrývající se králík (ale může to být i zavírající se menu nebo cokoli jiného).
 
-Below you can see a `#rabbit` and `hide()` function that dispatches `"hide"` event on it, to let all interested parties know that the rabbit is going to hide.
+Níže vidíte `#králík` a funkci `skryj()`, která na něm vyvolává událost `"skryj"`, aby oznámila všem stranám, které o to mají zájem, že se králík hodlá skrýt.
 
-Any handler can listen for that event with `rabbit.addEventListener('hide',...)` and, if needed, cancel the action using `event.preventDefault()`. Then the rabbit won't disappear:
+Jakýkoli handler může této události naslouchat pomocí `králík.addEventListener('skryj',...)` a pak, je-li to nutné, zrušit akci voláním `událost.preventDefault()`. Pak králík nezmizí:
 
 ```html run refresh autorun
-<pre id="rabbit">
+<pre id="králík">
   |\   /|
    \|_|/
    /. .\
   =\_Y_/=
    {>o<}
 </pre>
-<button onclick="hide()">Hide()</button>
+<button onclick="skryj()">Skryj()</button>
 
 <script>
-  function hide() {
-    let event = new CustomEvent("hide", {
-      cancelable: true // without that flag preventDefault doesn't work
+  function skryj() {
+    let událost = new CustomEvent("skryj", {
+      cancelable: true // bez tohoto přepínače preventDefault nefunguje
     });
-    if (!rabbit.dispatchEvent(event)) {
-      alert('The action was prevented by a handler');
+    if (!králík.dispatchEvent(událost)) {
+      alert('Akci bylo zabráněno handlerem');
     } else {
-      rabbit.hidden = true;
+      králík.hidden = true;
     }
   }
 
-  rabbit.addEventListener('hide', function(event) {
-    if (confirm("Call preventDefault?")) {
-      event.preventDefault();
+  králík.addEventListener('skryj', function(událost) {
+    if (confirm("Volat preventDefault?")) {
+      událost.preventDefault();
     }
   });
 </script>
 ```
 
-Please note: the event must have the flag `cancelable: true`, otherwise the call `event.preventDefault()` is ignored.
+Prosíme všimněte si, že událost musí mít přepínač `cancelable: true`, jinak bude volání `událost.preventDefault()` ignorováno.
 
-## Events-in-events are synchronous
+## Události v událostech jsou synchronní
 
-Usually events are processed in a queue. That is: if the browser is processing `onclick` and a new event occurs, e.g. mouse moved, then its handling is queued up, corresponding `mousemove` handlers will be called after `onclick` processing is finished.
+Události se obvykle zpracovávají ve frontě. To znamená, že jestliže prohlížeč zpracovává `onclick` a objeví se nová událost, např. pohyb myši, pak se její zpracování uloží do fronty a odpovídající handlery `mousemove` budou volány po skončení zpracování `onclick`.
 
-The notable exception is when one event is initiated from within another one, e.g. using `dispatchEvent`. Such events are processed immediately: the new event handlers are called, and then the current event handling is resumed.
+Pozoruhodnou výjimkou je situace, kdy je událost vyvolána zevnitř jiné události, např. pomocí `dispatchEvent`. Takové události se zpracují okamžitě: volají se handlery nové události a teprve pak se obnoví zpracování aktuální události.
 
-For instance, in the code below the `menu-open` event is triggered during the `onclick`.
+Například v následujícím kódu se událost `otevři-menu` spustí během události `onclick`.
 
-It's processed immediately, without waiting for `onclick` handler to end:
+Bude zpracována okamžitě bez čekání na skončení handleru `onclick`:
 
 
 ```html run autorun
-<button id="menu">Menu (click me)</button>
+<button id="menu">Menu (klikni na mě)</button>
 
 <script>
   menu.onclick = function() {
     alert(1);
 
-    menu.dispatchEvent(new CustomEvent("menu-open", {
+    menu.dispatchEvent(new CustomEvent("otevři-menu", {
       bubbles: true
     }));
 
     alert(2);
   };
 
-  // triggers between 1 and 2
-  document.addEventListener('menu-open', () => alert('nested'));
+  // přepíná mezi 1 a 2
+  document.addEventListener('otevři-menu', () => alert('vnořená'));
 </script>
 ```
 
-The output order is: 1 -> nested -> 2.
+Pořadí výstupů je: 1 -> vnořená -> 2.
 
-Please note that the nested event `menu-open` is caught on the `document`. The propagation and handling of the nested event is finished before the processing gets back to the outer code (`onclick`).
+Prosíme všimněte si, že vnořená událost `otevři-menu` se zachytává v `document`. Předávání a zpracování vnořené události skončí dříve, než se proces vrátí do vnějšího kódu (`onclick`).
 
-That's not only about `dispatchEvent`, there are other cases. If an event handler calls methods that trigger other events -- they are processed synchronously too, in a nested fashion.
+Neplatí to jen pro `dispatchEvent`, jsou i jiné případy. Jestliže handler události volá metody, které spouštějí jiné události, budou také zpracovány synchronně, vnořeny do sebe.
 
-Let's say we don't like it. We'd want `onclick` to be fully processed first, independently from `menu-open` or any other nested events.
+Dejme tomu, že se nám to nelíbí. Chceme, aby byla nejdříve zcela zpracována `onclick`, nezávisle na `otevři-menu` nebo jiných vnořených událostech.
 
-Then we can either put the `dispatchEvent` (or another event-triggering call) at the end of `onclick` or, maybe better, wrap it in the zero-delay `setTimeout`:
+Pak můžeme buď umístit `dispatchEvent` (nebo jiné volání spouštějící událost) na konec `onclick`, nebo, což je možná lepší, zabalit je do `setTimeout` s nulovou prodlevou:
 
 ```html run
-<button id="menu">Menu (click me)</button>
+<button id="menu">Menu (klikni na mě)</button>
 
 <script>
   menu.onclick = function() {
     alert(1);
 
-    setTimeout(() => menu.dispatchEvent(new CustomEvent("menu-open", {
+    setTimeout(() => menu.dispatchEvent(new CustomEvent("otevři-menu", {
       bubbles: true
     })));
 
     alert(2);
   };
 
-  document.addEventListener('menu-open', () => alert('nested'));
+  document.addEventListener('otevři-menu', () => alert('vnořená'));
 </script>
 ```
 
-Now `dispatchEvent` runs asynchronously after the current code execution is finished, including `menu.onclick`, so event handlers are totally separate.
+Nyní se `dispatchEvent` spustí asynchronně po skončení výkonu aktuálního kódu, včetně `menu.onclick`, takže handlery událostí budou zcela oddělené.
 
-The output order becomes: 1 -> 2 -> nested.
+Pořadí výstupů se změní na: 1 -> 2 -> vnořená.
 
-## Summary
+## Shrnutí
 
-To generate an event from code, we first need to create an event object.
+Abychom generovali událost z kódu, musíme nejprve vytvořit objekt události.
 
-The generic `Event(name, options)` constructor accepts an arbitrary event name and the `options` object with two properties:
-- `bubbles: true` if the event should bubble.
-- `cancelable: true` if the `event.preventDefault()` should work.
+Obecný konstruktor `Event(název, možnosti)` přijímá libovolný název události a objekt `možnosti` se dvěma vlastnostmi:
+- `bubbles: true`, pokud událost má bublat.
+- `cancelable: true`, pokud má fungovat `událost.preventDefault()`.
 
-Other constructors of native events like `MouseEvent`, `KeyboardEvent` and so on accept properties specific to that event type. For instance, `clientX` for mouse events.
+Jiné konstruktory nativních událostí, např. `MouseEvent`, `KeyboardEvent` a podobně, přijímají vlastnosti specifické pro příslušný typ události, například `clientX` pro události myši.
 
-For custom events we should use `CustomEvent` constructor. It has an additional option named `detail`, we should assign the event-specific data to it. Then all handlers can access it as `event.detail`.
+Pro vlastní události bychom měli používat konstruktor `CustomEvent`. Ten má další možnost nazvanou `detail`, do níž bychom měli uložit data specifická pro naši událost. K nim pak všechny handlery budou moci přistupovat pomocí `událost.detail`.
 
-Despite the technical possibility of generating browser events like `click` or `keydown`, we should use them with great care.
+Přestože je technicky možné generovat události prohlížeče, např. `click` nebo `keydown`, měli bychom je používat s velkou obezřetností.
 
-We shouldn't generate browser events as it's a hacky way to run handlers. That's bad architecture most of the time.
+Neměli bychom generovat události prohlížeče jen jako trik pro spuštění handlerů. To je ve většině případů špatná architektura.
 
-Native events might be generated:
+Nativní události můžeme generovat:
 
-- As a dirty hack to make 3rd-party libraries work the needed way, if they don't provide other means of interaction.
-- For automated testing, to "click the button" in the script and see if the interface reacts correctly.
+- Jako ošklivý způsob, jak přinutit knihovny třetích stran fungovat tak, jak potřebujeme, pokud nám neposkytují jinou možnost interakce.
+- Pro automatické testování, abychom ve skriptu „klikli na tlačítko“ a viděli, zda rozhraní správně reaguje.
 
-Custom events with our own names are often generated for architectural purposes, to signal what happens inside our menus, sliders, carousels etc.
+Vlastní události s našimi vlastními názvy se často generují z architektonických důvodů, aby signalizovaly, co se děje uvnitř našich menu, posuvníků, kolotočů a podobně.

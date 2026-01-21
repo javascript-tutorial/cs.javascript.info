@@ -1,5 +1,5 @@
-That's a great use of the event delegation pattern.
+Zde skvěle využijeme vzor delegování událostí.
 
-In real life instead of asking we can send a "logging" request to the server that saves the information about where the visitor left. Or we can load the content and show it right in the page (if allowable).
+Ve skutečném životě můžeme místo dotazu poslat na server požadavek na „logování“, který si uloží informace o tom, kam návštěvník odešel. Nebo můžeme načíst obsah a zobrazit jej přímo na stránce (pokud je to dovoleno).
 
-All we need is to catch the `contents.onclick` and use `confirm` to ask the user. A good idea would be to use `link.getAttribute('href')` instead of `link.href` for the URL. See the solution for details.
+Stačí nám zachytávat `obsah.onclick` a pomocí `confirm` se zeptat uživatele. Dobrý nápad by byl použít pro URL `odkaz.getAttribute('href')` namísto `odkaz.href`. Podrobnosti viz řešení.

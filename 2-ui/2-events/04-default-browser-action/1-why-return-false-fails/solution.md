@@ -1,16 +1,16 @@
-When the browser reads the `on*` attribute like `onclick`, it creates the handler from its content.
+Když prohlížeč načte atribut `on*`, např. `onclick`, vytvoří handler z jeho obsahu.
 
-For `onclick="handler()"` the function will be:
+Pro `onclick="handler()"` funkce bude:
 
 ```js
-function(event) {
-  handler() // the content of onclick
+function(událost) {
+  handler() // obsah atributu onclick
 }
 ```
 
-Now we can see that the value returned by `handler()` is not used and does not affect the result.
+Nyní vidíme, že hodnota, kterou vrátí `handler()`, není použita a nemá vliv na výsledek.
 
-The fix is simple:
+Oprava je jednoduchá:
 
 ```html run
 <script>
@@ -23,14 +23,14 @@ The fix is simple:
 <a href="https://w3.org" onclick="*!*return handler()*/!*">w3.org</a>
 ```
 
-Also we can use `event.preventDefault()`, like this:
+Můžeme také použít `událost.preventDefault()` následovně:
 
 ```html run
 <script>
 *!*
-  function handler(event) {
+  function handler(událost) {
     alert("...");
-    event.preventDefault();
+    událost.preventDefault();
   }
 */!*
 </script>

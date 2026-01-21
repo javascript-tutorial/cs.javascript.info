@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Image gallery
+# Obrázková galerie
 
-Create an image gallery where the main image changes by the click on a thumbnail.
+Vytvořte obrázkovou galerii, v níž se hlavní obrázek změní po kliknutí na náhled.
 
-Like this:
+Příklad:
 
 [iframe src="solution" height=600]
 
-P.S. Use event delegation.
+P.S. Použijte delegování událostí.
