@@ -2,15 +2,15 @@ importance: 5
 
 ---
 
-# Slider
+# Posuvník
 
-Create a slider:
+Vytvořte posuvník:
 
 [iframe src="solution" height=60 border=1]
 
-Drag the blue thumb with the mouse and move it.
+Uchopte modré šoupátko myší a přesuňte je.
 
-Important details:
+Důležité detaily:
 
-- When the mouse button is pressed, during the dragging the mouse may go over or below the slider. The slider will still work (convenient for the user).
-- If the mouse moves very fast to the left or to the right, the thumb should stop exactly at the edge.
+- Když je tlačítko myši stisknuto, ukazatel myši se během přetahování může dostat nad nebo pod posuvník. Posuvník bude stále fungovat (pohodlné pro uživatele).
+- Pokud se ukazatel přesune velmi rychle doleva nebo doprava, šoupátko by se mělo zastavit přesně na kraji.

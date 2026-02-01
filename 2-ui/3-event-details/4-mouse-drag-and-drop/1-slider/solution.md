@@ -1,5 +1,5 @@
-As we can see from HTML/CSS, the slider is a `<div>` with a colored background, that contains a runner -- another `<div>` with `position:relative`.
+Jak vidíme z HTML/CSS, posuvník je `<div>` s barevným pozadím, který obsahuje šoupátko -- další `<div>` s `position:relative`.
 
-To position the runner we use `position:relative`, to provide the coordinates relative to its parent, here it's more convenient here than `position:absolute`.
+Pro umístění šoupátka použijeme `position:relative`, abychom mu poskytli souřadnice relativní vzhledem k jeho rodiči. Zde je to vhodnější než `position:absolute`.
 
-Then we implement horizontal-only Drag'n'Drop with limitation by width.
+Pak implementujeme výhradně vodorovné přetahování omezené šířkou.

@@ -1,11 +1,11 @@
-#parent {
+#rodič {
   background: #99C0C3;
   width: 160px;
   height: 120px;
   position: relative;
 }
 
-#child {
+#dítě {
   background: #FFDE99;
   width: 50%;
   height: 50%;

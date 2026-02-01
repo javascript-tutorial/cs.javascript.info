@@ -1,4 +1,4 @@
-.hours {
+.hod {
   color: red;
 }
 
@@ -6,15 +6,15 @@ body {
   margin: 0;
 }
 
-.minutes {
+.min {
   color: green;
 }
 
-.seconds {
+.sec {
   color: blue;
 }
 
-.clock {
+.hodiny {
   border: 1px dashed black;
   padding: 5px;
   display: inline-block;

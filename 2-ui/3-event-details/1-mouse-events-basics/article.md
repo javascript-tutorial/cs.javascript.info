@@ -1,212 +1,212 @@
 
-# Mouse events
+# Události myši
 
-In this chapter we'll get into more details about mouse events and their properties.
+V této kapitole pronikneme do dalších detailů ohledně událostí myši a jejich vlastností.
 
-Please note: such events may come not only from "mouse devices", but are also from other devices, such as phones and tablets, where they are emulated for compatibility.
+Prosíme všimněte si, že tyto události mohou přicházet nejenom z myši, ale i z jiných zařízení, např. telefonů a tabletů, kde jsou emulovány z důvodu zachování kompatibility.
 
-## Mouse event types
+## Typy událostí myši
 
-We've already seen some of these events:
+Některé z těchto událostí jsme už viděli:
 
 `mousedown/mouseup`
-: Mouse button is clicked/released over an element.
+: Nad elementem je stisknuto/uvolněno tlačítko myši.
 
 `mouseover/mouseout`
-: Mouse pointer comes over/out from an element.
+: Nad element vstoupí/element opustí ukazatel myši.
 
 `mousemove`
-: Every mouse move over an element triggers that event.
+: Tuto událost vyvolá každý pohyb myši nad elementem.
 
 `click`
-: Triggers after `mousedown` and then `mouseup` over the same element if the left mouse button was used.
+: Spustí se po `mousedown` a pak `mouseup` nad stejným elementem, jestliže bylo použito levé tlačítko myši.
 
 `dblclick`
-: Triggers after two clicks on the same element within a short timeframe. Rarely used nowadays.
+: Spustí se po dvou kliknutích na stejný element v krátkém časovém rozmezí. V současnosti se používá zřídka.
 
 `contextmenu`
-: Triggers when the right mouse button is pressed. There are other ways to open a context menu, e.g. using a special keyboard key, it triggers in that case also, so it's not exactly the mouse event.
+: Spustí se, když je stisknuto pravé tlačítko myši. Jsou i jiné způsoby, jak otevřít kontextové menu, např. stisknutím speciální klávesy na klávesnici. V takovém případě se tato událost spustí také, takže to není pouze událost myši.
 
-...There are several other events too, we'll cover them later.
+...Existuje i několik dalších událostí, které probereme později.
 
-## Events order
+## Pořadí událostí
 
-As you can see from the list above, a user action may trigger multiple events.
+Jak vidíte z uvedeného seznamu, jedna uživatelská akce může spustit více událostí.
 
-For instance, a left-button click first triggers `mousedown`, when the button is pressed, then `mouseup` and `click` when it's released.
+Například stisk levého tlačítka myši vyvolá nejprve `mousedown`, když je tlačítko stisknuto, a pak `mouseup` a `click`, když je uvolněno.
 
-In cases when a single action initiates multiple events, their order is fixed. That is, the handlers are called in the order `mousedown` -> `mouseup` -> `click`.
+V případech, kdy jedna akce vyvolá více událostí, je jejich pořadí pevně dáno. To znamená, že handlery jsou volány v pořadí `mousedown` -> `mouseup` -> `click`.
 
 ```online
-Click the button below and you'll see the events. Try double-click too.
+Klikněte na následující tlačítko a uvidíte události. Zkuste si i dvojité kliknutí.
 
-On the teststand below, all mouse events are logged, and if there is more than a 1 second delay between them, they are separated by a horizontal rule.
+V uvedeném testu jsou všechny události myši logovány, a pokud je mezi nimi delší prodleva než 1 sekunda, budou odděleny vodorovnou čarou.
 
-Also, we can see the `button` property that allows us to detect the mouse button; it's explained below.
+Vidíme také vlastnost `button`, která nám umožňuje zjistit, o které tlačítko šlo; vysvětlíme ji dále.
 
-<input onmousedown="return logMouse(event)" onmouseup="return logMouse(event)" onclick="return logMouse(event)" oncontextmenu="return logMouse(event)" ondblclick="return logMouse(event)" value="Click me with the right or the left mouse button" type="button"> <input onclick="logClear('test')" value="Clear" type="button"> <form id="testform" name="testform"> <textarea style="font-size:12px;height:150px;width:360px;"></textarea></form>
+<input onmousedown="return logMouse(event)" onmouseup="return logMouse(event)" onclick="return logMouse(event)" oncontextmenu="return logMouse(event)" ondblclick="return logMouse(event)" value="Klikněte na mě pravým nebo levým tlačítkem myši" type="button"> <input onclick="logClear('test')" value="Vymazat" type="button"> <form id="testform" name="testform"> <textarea style="font-size:12px;height:150px;width:360px;"></textarea></form>
 ```
 
-## Mouse button
+## Tlačítko myši
 
-Click-related events always have the `button` property, which allows to get the exact mouse button.
+Události týkající se klikání mají vždy vlastnost `button`, která nám umožňuje přesně zjistit tlačítko.
 
-We usually don't use it for `click` and `contextmenu` events, because the former happens only on left-click, and the latter -- only on right-click.
+Při událostech `click` a `contextmenu` ji obvykle nepoužíváme, jelikož první uvedená se stává jen při kliknutí levým tlačítkem a druhá při kliknutí pravým.
 
-On the other hand, `mousedown` and `mouseup` handlers may need `event.button`, because these events trigger on any button, so `button` allows to distinguish between "right-mousedown" and "left-mousedown".
+Naproti tomu `mousedown` a `mouseup` mohou `událost.button` potřebovat, protože tyto události se spouštějí při každém tlačítku, takže nám `button` umožní rozlišovat mezi „stiskem pravého tlačítka“ a „stiskem levého tlačítka“.
 
-The possible values of `event.button` are:
+Možné hodnoty `událost.button` jsou:
 
-| Button state | `event.button` |
+| Stav tlačítka | `událost.button` |
 |--------------|----------------|
-| Left button (primary) | 0 |
-| Middle button (auxiliary) | 1 |
-| Right button (secondary) | 2 |
-| X1 button (back) | 3 |
-| X2 button (forward) | 4 |
+| Levé tlačítko (primární) | 0 |
+| Prostřední tlačítko (pomocné) | 1 |
+| Pravé tlačítko (sekundární) | 2 |
+| Tlačítko X1 (zpět) | 3 |
+| Tlačítko X2 (dopředu) | 4 |
 
-Most mouse devices only have the left and right buttons, so possible values are `0` or `2`. Touch devices also generate similar events when one taps on them.
+Většina myší má jen levé a pravé tlačítko, takže možné hodnoty jsou `0` a `2`. Podobné události generují i doteková zařízení, když se jich uživatel dotkne.
 
-Also there's `event.buttons` property that has all currently pressed buttons as an integer, one bit per button. In practice this property is very rarely used, you can find details at [MDN](mdn:/api/MouseEvent/buttons) if you ever need it.
+Existuje také vlastnost `událost.buttons`, která obsahuje všechna stisknutá tlačítka ve formě celého čísla, jeden bit pro každé tlačítko. V praxi se tato vlastnost používá jen velmi zřídka. Kdybyste ji někdy potřebovali, naleznete podrobnosti na [MDN](mdn:/api/MouseEvent/buttons).
 
-```warn header="The outdated `event.which`"
-Old code may use `event.which` property that's an old non-standard way of getting a button, with possible values:
+```warn header="Zastaralá `událost.which`"
+Starý kód může využívat vlastnost `událost.which`, která představuje starý a nestandardní způsob, jak zjistit tlačítko. Má tyto možné hodnoty:
 
-- `event.which == 1` – left button,
-- `event.which == 2` – middle button,
-- `event.which == 3` – right button.
+- `událost.which == 1` – levé tlačítko,
+- `událost.which == 2` – prostřední tlačítko,
+- `událost.which == 3` – pravé tlačítko.
 
-As of now, `event.which` is deprecated, we shouldn't use it.
+V současnosti je `událost.which` zastaralá a neměli bychom ji používat.
 ```
 
-## Modifiers: shift, alt, ctrl and meta
+## Modifikátory: shift, alt, ctrl a meta
 
-All mouse events include the information about pressed modifier keys.
+Všechny události myši obsahují informaci o stisknutých modifikačních klávesách.
 
-Event properties:
+Vlastnosti událostí:
 
 - `shiftKey`: `key:Shift`
-- `altKey`: `key:Alt` (or `key:Opt` for Mac)
+- `altKey`: `key:Alt` (nebo `key:Opt` pro Mac)
 - `ctrlKey`: `key:Ctrl`
-- `metaKey`: `key:Cmd` for Mac
+- `metaKey`: `key:Cmd` pro Mac
 
-They are `true` if the corresponding key was pressed during the event.
+Jsou `true`, jestliže byla během události stisknuta odpovídající klávesa.
 
-For instance, the button below only works on `key:Alt+Shift`+click:
+Například následující tlačítko funguje jen při kliknutí spolu se stiskem `key:Alt+Shift`:
 
 ```html autorun height=60
-<button id="button">Alt+Shift+Click on me!</button>
+<button id="tlačítko">Alt+Shift+Klikněte na mě!</button>
 
 <script>
-  button.onclick = function(event) {
+  tlačítko.onclick = function(událost) {
 *!*
-    if (event.altKey && event.shiftKey) {
+    if (událost.altKey && událost.shiftKey) {
 */!*
-      alert('Hooray!');
+      alert('Hurá!');
     }
   };
 </script>
 ```
 
-```warn header="Attention: on Mac it's usually `Cmd` instead of `Ctrl`"
-On Windows and Linux there are modifier keys `key:Alt`, `key:Shift` and `key:Ctrl`. On Mac there's one more: `key:Cmd`, corresponding to the property `metaKey`.
+```warn header="Upozornění: na Macu je místo `Ctrl` zpravidla `Cmd`"
+Ve Windows a Linuxu jsou modifikační klávesy `key:Alt`, `key:Shift` a `key:Ctrl`. Na Macu je ještě jedna: `key:Cmd`, které odpovídá vlastnost `metaKey`.
 
-In most applications, when Windows/Linux uses `key:Ctrl`, on Mac `key:Cmd` is used.
+Ve většině aplikací platí, že tam, kde Windows/Linux používá `key:Ctrl`, se na Macu používá `key:Cmd`.
 
-That is: where a Windows user presses `key:Ctrl+Enter` or `key:Ctrl+A`, a Mac user would press `key:Cmd+Enter` or `key:Cmd+A`, and so on.
+To znamená, že když uživatel Windows stiskne `key:Ctrl+Enter` nebo `key:Ctrl+A`, uživatel Macu by stiskl `key:Cmd+Enter` nebo `key:Cmd+A`, a podobně.
 
-So if we want to support combinations like `key:Ctrl`+click, then for Mac it makes sense to use `key:Cmd`+click. That's more comfortable for Mac users.
+Jestliže tedy chceme podporovat kombinace jako `key:Ctrl`+kliknutí, na Macu dává smysl použít `key:Cmd`+kliknutí. Pro uživatele Macu je to pohodlnější.
 
-Even if we'd like to force Mac users to `key:Ctrl`+click -- that's kind of difficult. The problem is: a left-click with `key:Ctrl` is interpreted as a *right-click* on MacOS, and it generates the `contextmenu` event, not `click` like Windows/Linux.
+I kdybychom chtěli přinutit uživatele Macu stisknout `key:Ctrl`+kliknout, je to poněkud obtížné. Problém spočívá v tom, že levé kliknutí spolu s `key:Ctrl` je v MacOS interpretováno jako *pravé kliknutí* a vygeneruje událost `contextmenu`, ne `click` jako Windows/Linux.
 
-So if we want users of all operating systems to feel comfortable, then together with `ctrlKey` we should check `metaKey`.
+Pokud tedy chceme, aby se uživatelé všech operačních systémů cítili pohodlně, měli bychom spolu s `ctrlKey` kontrolovat i `metaKey`.
 
-For JS-code it means that we should check `if (event.ctrlKey || event.metaKey)`.
+Pro kód v JS to znamená, že bychom měli kontrolovat `if (událost.ctrlKey || událost.metaKey)`.
 ```
 
-```warn header="There are also mobile devices"
-Keyboard combinations are good as an addition to the workflow. So that if the visitor uses a keyboard -- they work. 
+```warn header="Jsou také mobilní zařízení"
+Klávesové kombinace jsou vhodné jako doplněk k práci. Jestliže uživatel používá klávesnici, fungují.
 
-But if their device doesn't have it -- then there should be a way to live without modifier keys.
+Pokud ji však jeho zařízení nemá, měl by existovat způsob, jak se obejít i bez modifikačních kláves.
 ```
 
-## Coordinates: clientX/Y, pageX/Y
+## Souřadnice: clientX/Y, pageX/Y
 
-All mouse events provide coordinates in two flavours:
+Všechny události myši poskytují souřadnice dvěma způsoby:
 
-1. Window-relative: `clientX` and `clientY`.
-2. Document-relative: `pageX` and `pageY`.
+1. Relativní vzhledem k oknu: `clientX` a `clientY`.
+2. Relativní vzhledem k dokumentu: `pageX` a `pageY`.
 
-We already covered the difference between them in the chapter <info:coordinates>.
+Rozdíl mezi nimi jsme již probrali v kapitole <info:coordinates>.
 
-In short, document-relative coordinates `pageX/Y` are counted from the left-upper corner of the document, and do not change when the page is scrolled, while `clientX/Y` are counted from the current window left-upper corner. When the page is scrolled, they change.
+Ve zkratce, souřadnice relativní vzhledem k dokumentu `pageX/Y` se počítají od levého horního rohu dokumentu a při rolování stránky se nemění, zatímco `clientX/Y` se počítají od aktuálního levého horního rohu okna, a když stránka roluje, mění se.
 
-For instance, if we have a window of the size 500x500, and the mouse is in the left-upper corner, then `clientX` and `clientY` are `0`, no matter how the page is scrolled. 
+Máme-li například okno o rozměrech 500x500 a myš je v levém horním rohu, pak `clientX` a `clientY` jsou `0` bez ohledu na to, kam je stránka odrolovaná.
 
-And if the mouse is in the center, then `clientX` and `clientY` are `250`, no matter what place in the document it is. They are similar to `position:fixed` in that aspect.
+A jestliže je myš uprostřed, pak `clientX` a `clientY` jsou `250` bez ohledu na to, na kterém místě dokumentu se myš nachází. V tomto ohledu se podobají `position:fixed`.
 
 ````online
-Move the mouse over the input field to see `clientX/clientY` (the example is in the `iframe`, so coordinates are relative to that `iframe`):
+Přesuňte myš nad vstupní pole, abyste viděli `clientX/clientY` (příklad je umístěn v `iframe`, takže souřadnice jsou relativní vzhledem k tomuto `iframe`):
 
 ```html autorun height=50
-<input onmousemove="this.value=event.clientX+':'+event.clientY" value="Mouse over me">
+<input onmousemove="this.value=event.clientX+':'+event.clientY" value="Přesuňte myš na mě">
 ```
 ````
 
-## Preventing selection on mousedown
+## Zákaz označení textu při události mousedown
 
-Double mouse click has a side effect that may be disturbing in some interfaces: it selects text.
+Dvojité kliknutí myší má jeden vedlejší efekt, který může být v některých rozhraních rušivý: označuje text.
 
-For instance, double-clicking on the text below selects it in addition to our handler:
+Například dvojité kliknutí na následující text jej kromě spuštění našeho handleru označí:
 
 ```html autorun height=50
-<span ondblclick="alert('dblclick')">Double-click me</span>
+<span ondblclick="alert('dblclick')">Dvakrát na mě klikněte</span>
 ```
 
-If one presses the left mouse button and, without releasing it, moves the mouse, that also makes the selection, often unwanted.
+Rovněž když uživatel stiskne levé tlačítko myši a bez jeho uvolnění myší pohne, vyvolá tím označení, často nechtěné.
 
-There are multiple ways to prevent the selection, that you can read in the chapter <info:selection-range>.
+Způsobů, jak označení zakázat, existuje víc. Můžete si o nich přečíst v kapitole <info:selection-range>.
 
-In this particular case the most reasonable way is to prevent the browser action on `mousedown`. It prevents both these selections:
+V tomto konkrétním případě je nejrozumnějším způsobem zakázat akci prohlížeče při události `mousedown`. Tím zakážeme obě tato označení:
 
 ```html autorun height=50
-Before...
-<b ondblclick="alert('Click!')" *!*onmousedown="return false"*/!*>
-  Double-click me
+Před...
+<b ondblclick="alert('Klik!')" *!*onmousedown="return false"*/!*>
+  Dvakrát na mě klikněte
 </b>
-...After
+...Za
 ```
 
-Now the bold element is not selected on double clicks, and pressing the left button on it won't start the selection.
+Nyní nebude tučný element při dvojitém kliknutí označen a ani stisknutí levého tlačítka na něm nevyvolá označení.
 
-Please note: the text inside it is still selectable. However, the selection should start not on the text itself, but before or after it. Usually that's fine for users.
+Prosíme všimněte si, že označit text uvnitř je stále možné. Označení by však nemělo začínat na samotném textu, ale před nebo za ním. Tak se to uživatelům obvykle hodí.
 
-````smart header="Preventing copying"
-If we want to disable selection to protect our page content from copy-pasting, then we can use another event: `oncopy`.
+````smart header="Zákaz kopírování"
+Jestliže chceme zakázat označení proto, abychom chránili obsah naší stránky před zkopírováním a vložením jinam, můžeme použít jinou událost: `oncopy`.
 
 ```html autorun height=80 no-beautify
-<div *!*oncopy="alert('Copying forbidden!');return false"*/!*>
-  Dear user,
-  The copying is forbidden for you.
-  If you know JS or HTML, then you can get everything from the page source though.
+<div *!*oncopy="alert('Zákaz kopírování!');return false"*/!*>
+  Drahý uživateli,
+  kopírování je ti zakázáno.
+  Pokud ovšem znáš JS nebo HTML, můžeš i tak všechno získat ze zdrojového kódu stránky.
 </div>
 ```
-If you try to copy a piece of text in the `<div>`, that won't work, because the default action `oncopy` is prevented.
+Pokud se pokusíte zkopírovat část textu uvnitř `<div>`, nepůjde to, protože standardní akci `oncopy` bylo zabráněno.
 
-Surely the user has access to HTML-source of the page, and can take the content from there, but not everyone knows how to do it.
+Samozřejmě uživatel má přístup k HTML kódu stránky a může získat obsah odtamtud, avšak ne každý to umí.
 ````
 
-## Summary
+## Shrnutí
 
-Mouse events have the following properties:
+Události myši mají následující vlastnosti:
 
-- Button: `button`.
-- Modifier keys (`true` if pressed): `altKey`, `ctrlKey`, `shiftKey` and `metaKey` (Mac).
-  - If you want to handle `key:Ctrl`, then don't forget Mac users, they usually use `key:Cmd`, so it's better to check `if (e.metaKey || e.ctrlKey)`.
+- Tlačítko: `button`.
+- Modifikační klávesy (`true`, je-li stisknuta): `altKey`, `ctrlKey`, `shiftKey` a `metaKey` (Mac).
+  - Pokud chcete zpracovat `key:Ctrl`, nezapomínejte na uživatele Macu, kteří obvykle používají `key:Cmd`, proto je lepší kontrolovat `if (e.metaKey || e.ctrlKey)`.
 
-- Window-relative coordinates: `clientX/clientY`.
-- Document-relative coordinates: `pageX/pageY`.
+- Souřadnice vzhledem k oknu: `clientX/clientY`.
+- Souřadnice vzhledem k dokumentu: `pageX/pageY`.
 
-The default browser action of `mousedown` is text selection, if it's not good for the interface, then it should be prevented.
+Standardní akce prohlížeče při `mousedown` je označení textu. Pokud se do rozhraní nehodí, měli byste je zakázat.
 
-In the next chapter we'll see more details about events that follow pointer movement and how to track element changes under it.
+V následující kapitole uvidíme další podrobnosti o událostech, které následují po pohybu ukazatele, a o tom, jak sledovat změny elementů pod ním.

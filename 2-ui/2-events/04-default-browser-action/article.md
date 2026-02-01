@@ -6,11 +6,11 @@ Například:
 
 - Kliknutí na odkaz -- vyvolá navigaci na jeho URL.
 - Kliknutí na tlačítko odeslání formuláře -- vyvolá jeho odeslání na server.
-- Stisknutí tlačítka myši nad textem a přesun ukazatele -- vybere text.
+- Stisknutí tlačítka myši nad textem a přesun ukazatele -- označí text.
 
 Jestliže v JavaScriptu zpracováváme událost, můžeme chtít, aby se příslušná akce prohlížeče nevykonala, protože místo ní chceme implementovat jiné chování.
 
-## Zabránění akcím prohlížeče
+## Zákaz akcí prohlížeče
 
 Existují dva způsoby, jak sdělit prohlížeči, že nechceme, aby konal svou akci:
 
@@ -56,7 +56,7 @@ Položky menu jsou implementovány jako HTML odkazy `<a>`, ne jako tlačítka `<
 - Mnozí lidé rádi používají „kliknutí pravým tlačítkem“ -- „otevření v novém okně“. Pokud bychom použili `<button>` nebo `<span>`, nefungovalo by to.
 - Vyhledávací stroje při indexování následují `<a href="...">`.
 
-V tomto kódu tedy používáme `<a>`. Chceme však kliknutí zpracovávat v JavaScriptu, takže bychom měli zabránit standardní akci prohlížeče.
+V tomto kódu tedy používáme `<a>`. Chceme však kliknutí zpracovávat v JavaScriptu, takže bychom měli zakázat standardní akci prohlížeče.
 
 Například:
 
@@ -68,7 +68,7 @@ menu.onclick = function(událost) {
   alert( href ); // ...může načítat ze serveru, generovat UI atd.
 
 *!*
-  return false; // zabrání v akci prohlížeče (nepřejde na URL)
+  return false; // zakáže akci prohlížeče (nepřejde na URL)
 */!*
 };
 ```
@@ -78,9 +78,9 @@ Kdybychom vypustili `return false`, pak by po provedení našeho kódu prohlíž
 Mimochodem, použití delegování událostí zde učiní naše menu velmi flexibilním. Můžeme přidávat vnořené seznamy a pomocí CSS je stylizovat, aby „klouzaly dolů“.
 
 ````smart header="Následné události"
-Některé události plynou jedna do druhé. Pokud zabráníme první události, nedojde ke druhé.
+Některé události plynou jedna do druhé. Pokud zakážeme první událost, nedojde ke druhé.
 
-Například událost `mousedown` na poli `<input>` vede k zaměření vstupu na pole a k vyvolání události `focus`. Pokud události `mousedown` zabráníme, k zaměření nedojde.
+Například událost `mousedown` na poli `<input>` vede k zaměření vstupu na pole a k vyvolání události `focus`. Pokud událost `mousedown` zakážeme, k zaměření nedojde.
 
 Zkuste si kliknout níže na první `<input>` -- událost `focus` nastane. Pokud však kliknete na druhý, zaměření nenastane.
 
@@ -98,7 +98,7 @@ Volitelná možnost `passive: true` metody `addEventListener` oznamuje prohlíž
 
 K čemu to může být potřeba?
 
-Existují události, např. `touchmove` na mobilních zařízeních (když se uživatel posune prstem na obrazovce), které standardně vyvolají rolování, ale v handleru lze tomuto rolování zabránit pomocí `preventDefault()`.
+Existují události, např. `touchmove` na mobilních zařízeních (když se uživatel posune prstem na obrazovce), které standardně vyvolají rolování, ale v handleru lze toto rolování zakázat voláním `preventDefault()`.
 
 Když tedy prohlížeč detekuje takovou událost, musí nejprve zpracovat všechny handlery, a teprve pokud nikde nebylo voláno `preventDefault`, může provádět rolování. To může způsobit nechtěné prodlevy a „kolísání“ v UI.
 
@@ -109,7 +109,7 @@ V některých prohlížečích (Firefox, Chrome) je `passive` standardně `true`
 
 ## událost.defaultPrevented
 
-Vlastnost `událost.defaultPrevented` je `true`, pokud bylo standardní akci zabráněno, v opačném případě je `false`.
+Vlastnost `událost.defaultPrevented` je `true`, pokud byla standardní akce zakázána, v opačném případě je `false`.
 
 Má to zajímavý případ použití.
 
@@ -119,7 +119,7 @@ Někdy místo toho můžeme použít `událost.defaultPrevented`, abychom oznám
 
 Podívejme se na praktický příklad.
 
-Standardně prohlížeč na událost `contextmenu` (kliknutí pravým tlačítkem myši) zobrazí kontextové menu se standardními možnostmi. Můžeme tomu zabránit a zobrazit vlastní menu, například:
+Standardně prohlížeč na událost `contextmenu` (kliknutí pravým tlačítkem myši) zobrazí kontextové menu se standardními možnostmi. Můžeme to zakázat a zobrazit vlastní menu, například:
 
 ```html autorun height=50 no-beautify run
 <button>Pravé kliknutí zobrazí kontextové menu prohlížeče</button>
@@ -176,7 +176,7 @@ Jak to opravit? Jedno z řešení je pomyslet si: „Když zpracujeme pravé kli
 
 Nyní menu pro tlačítko funguje tak, jak jsme zamýšleli, ale cena za to je vysoká. Navždy se vzdáváme přístupu k informaci o pravém kliknutí v celém vnějším kódu, včetně počítadel, která shromažďují statistiku a podobně. To není příliš moudré.
 
-Alternativním řešením by bylo v handleru v `document` prověřovat, zda bylo standardní akci zabráněno. Pokud ano, událost byla zpracována a my na ni nemusíme reagovat.
+Alternativním řešením by bylo v handleru v `document` prověřovat, zda byla standardní akce zakázána. Pokud ano, událost byla zpracována a my na ni nemusíme reagovat.
 
 
 ```html autorun height=80 no-beautify run
@@ -218,23 +218,23 @@ Potom by však každá část kódu, která chce kontextové menu, měla tento o
 
 Existuje mnoho standardních akcí prohlížeče:
 
-- `mousedown` -- zahájení výběru (pohyb myší pro výběr).
+- `mousedown` -- zahájení označení textu (pohybem myší).
 - `click` na `<input type="checkbox">` -- zaškrtne/odškrtne tento `input`.
 - `submit` -- tuto událost vyvolá kliknutí na `<input type="submit">` nebo stisknutí `key:Enter` uvnitř formulářového pole, prohlížeč pak formulář odešle.
 - `keydown` -- stisknutí klávesy může vést k přidání znaku do pole nebo jiným akcím.
 - `contextmenu` -- událost se stane při kliknutí pravým tlačítkem, akcí je zobrazení kontextového menu prohlížeče.
 - ...jsou i další...
 
-Všem standardním akcím je možné zabránit, pokud chceme událost zpracovávat výlučně v JavaScriptu.
+Všechny standardní akce je možné zakázat, pokud chceme událost zpracovávat výlučně v JavaScriptu.
 
-Abychom zabránili standardní akci, použijeme buď `událost.preventDefault()`, nebo `return false`. Druhý způsob funguje jen pro handlery přiřazené pomocí `on<událost>`.
+Abychom zakázali standardní akci, použijeme buď `událost.preventDefault()`, nebo `return false`. Druhý způsob funguje jen pro handlery přiřazené pomocí `on<událost>`.
 
-Možnost `passive: true` metody `addEventListener` oznamuje prohlížeči, že akci nebude zabráněno. To je užitečné pro některé mobilní události, např. `touchstart` a `touchmove`, abychom sdělili prohlížeči, že před rolováním nemusí čekat na skončení všech handlerů.
+Možnost `passive: true` metody `addEventListener` oznamuje prohlížeči, že akce nebude zakázána. To je užitečné pro některé mobilní události, např. `touchstart` a `touchmove`, abychom sdělili prohlížeči, že před rolováním nemusí čekat na skončení všech handlerů.
 
-Pokud bylo standardní akci zabráněno, hodnota `událost.defaultPrevented` se nastaví na `true`, v opačném případě je `false`.
+Pokud byla standardní akce zakázána, hodnota `událost.defaultPrevented` se nastaví na `true`, v opačném případě je `false`.
 
 ```warn header="Zachovejte sémantiku"
-Zabráněním standardním akcím a přidáním JavaScriptu si technicky můžeme přizpůsobit chování kteréhokoli elementu. Můžeme například způsobit, že odkaz `<a>` bude fungovat jako tlačítko a tlačítko `<button>` se bude chovat jako odkaz (přesměruje na jiné URL a podobně).
+Zákazem standardních akcí a přidáním JavaScriptu si technicky můžeme přizpůsobit chování kteréhokoli elementu. Můžeme například způsobit, že odkaz `<a>` bude fungovat jako tlačítko a tlačítko `<button>` se bude chovat jako odkaz (přesměruje na jiné URL a podobně).
 
 Obecně bychom však měli zachovávat sémantický význam HTML elementů. Například navigaci by mělo provádět `<a>`, ne tlačítko.
 

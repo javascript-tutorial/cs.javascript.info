@@ -1,98 +1,98 @@
 'use strict';
 
-describe("hoverIntent", function() {
+describe("setrvání", function() {
 
-  function mouse(eventType, x, y, options) {
-    let eventOptions = Object.assign({
+  function myš(typUdálosti, x, y, možnosti) {
+    let možnostiUdálosti = Object.assign({
       bubbles: true,
       clientX: x,
       clientY: y,
       pageX: x,
       pageY: y,
       target: elem
-    }, options || {});
+    }, možnosti || {});
 
-    elem.dispatchEvent(new MouseEvent(eventType, eventOptions));
+    elem.dispatchEvent(new MouseEvent(typUdálosti, možnostiUdálosti));
   }
 
 
-  let isOver;
-  let hoverIntent;
+  let jeNadElementem;
+  let setrvání;
 
 
   before(function() {
-    this.clock = sinon.useFakeTimers();
+    this.hodiny = sinon.useFakeTimers();
   });
 
   after(function() {
-    this.clock.restore();
+    this.hodiny.restore();
   });
 
 
   beforeEach(function() {
-    isOver = false;
+    jeNadElementem = false;
 
-    hoverIntent = new HoverIntent({
+    setrvání = new Setrvání({
       elem: elem,
       over: function() {
-        isOver = true;
+        jeNadElementem = true;
       },
       out: function() {
-        isOver = false;
+        jeNadElementem = false;
       }
     });
   })
 
   afterEach(function() {
-    if (hoverIntent) {
-      hoverIntent.destroy();
+    if (setrvání) {
+      setrvání.destroy();
     }
   })
 
-  it("mouseover -> when the pointer just arrived, no tooltip", function() {
-    mouse('mouseover', 10, 10);
-    assert.isFalse(isOver);
+  it("mouseover -> když ukazatel právě dorazil, nezobrazí se tooltip", function() {
+    myš('mouseover', 10, 10);
+    assert.isFalse(jeNadElementem);
   });
 
-  it("mouseover -> after a delay, the tooltip shows up", function() {
-    mouse('mouseover', 10, 10);
-    this.clock.tick(100);
-    assert.isTrue(isOver);
+  it("mouseover -> po prodlevě se tooltip zobrazí", function() {
+    myš('mouseover', 10, 10);
+    this.hodiny.tick(100);
+    assert.isTrue(jeNadElementem);
   });
 
-  it("mouseover -> followed by fast mouseout leads doesn't show tooltip", function() {
-    mouse('mouseover', 10, 10);
+  it("mouseover -> následované rychlými pohyby myši nezobrazí tooltip", function() {
+    myš('mouseover', 10, 10);
     setTimeout(
-      () => mouse('mouseout', 300, 300, { relatedTarget: document.body}),
+      () => myš('mouseout', 300, 300, { relatedTarget: document.body}),
       30
     );
-    this.clock.tick(100);
-    assert.isFalse(isOver);
+    this.hodiny.tick(100);
+    assert.isFalse(jeNadElementem);
   });
 
 
-  it("mouseover -> slow move -> tooltips", function() {
-    mouse('mouseover', 10, 10);
+  it("mouseover -> pomalý pohyb -> zobrazí se tooltip", function() {
+    myš('mouseover', 10, 10);
     for(let i=10; i<200; i+= 10) {
       setTimeout(
-        () => mouse('mousemove', i/5, 10),
+        () => myš('mousemove', i/5, 10),
         i
       );
     }
-    this.clock.tick(200);
-    assert.isTrue(isOver);
+    this.hodiny.tick(200);
+    assert.isTrue(jeNadElementem);
   });
 
-  it("mouseover -> fast move -> no tooltip", function() {
-    mouse('mouseover', 10, 10);
+  it("mouseover -> rychlý pohyb -> nezobrazí se tooltip", function() {
+    myš('mouseover', 10, 10);
     for(let i=10; i<200; i+= 10) {
       setTimeout(
-        () => mouse('mousemove', i, 10),
+        () => myš('mousemove', i, 10),
         i
       );
     }
-    this.clock.tick(200);
-    assert.isFalse(isOver);
+    this.hodiny.tick(200);
+    assert.isFalse(jeNadElementem);
   });
 
 });

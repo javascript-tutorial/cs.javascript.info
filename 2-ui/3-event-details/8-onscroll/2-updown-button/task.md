@@ -2,15 +2,15 @@ importance: 5
 
 ---
 
-# Up/down button
+# Tlačítko „na začátek“
 
-Create a "to the top" button to help with page scrolling.
+Vytvořte tlačítko „na začátek“, které bude pomáhat s rolováním stránky.
 
-It should work like this:
-- While the page is not scrolled down at least for the window height -- it's invisible.
-- When the page is scrolled down more than the window height -- there appears an "upwards" arrow in the left-top corner. If the page is scrolled back, it disappears.
-- When the arrow is clicked, the page scrolls to the top.
+Mělo by fungovat následovně:
+- Dokud není stránka odrolována nejméně o výšku okna, není vidět.
+- Když je stránka odrolována dolů nejméně o výšku okna, v levém horním rohu se zobrazí šipka nahoru. Pokud je stránka rolována zpět, zmizí.
+- Po kliknutí na šipku stránka odroluje nahoru na začátek.
 
-Like this (top-left corner, scroll to see):
+Takto (levý horní roh, po rolování uvidíte):
 
 [iframe border="1" height="200" link src="solution"]

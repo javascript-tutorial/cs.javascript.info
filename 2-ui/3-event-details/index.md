@@ -1,3 +1,3 @@
-# UI Events
+# Události uživatelského rozhraní
 
-Here we cover most important user interface events and how to work with them.
+Zde probereme nejdůležitější události uživatelského rozhraní a naučíme se s nimi pracovat.

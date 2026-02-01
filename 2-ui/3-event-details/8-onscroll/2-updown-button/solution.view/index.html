@@ -10,14 +10,14 @@
       margin: 0;
     }
 
-    #matrix {
+    #matice {
       width: 400px;
       margin: auto;
       overflow: auto;
       text-align: justify;
     }
 
-    #arrowTop {
+    #šipkaNahoru {
       height: 9px;
       width: 14px;
       color: green;
@@ -27,7 +27,7 @@
       cursor: pointer;
     }
 
-    #arrowTop::before {
+    #šipkaNahoru::before {
       content: '▲';
     }
 
@@ -37,23 +37,23 @@
 
 <body>
 
-  <div id="matrix">
+  <div id="matice">
     <script>
       for (let i = 0; i < 2000; i++) document.writeln(i)
     </script>
   </div>
 
-  <div id="arrowTop" hidden></div>
+  <div id="šipkaNahoru" hidden></div>
 
   <script>
 
-    arrowTop.onclick = function() {
+    šipkaNahoru.onclick = function() {
       window.scrollTo(pageXOffset, 0);
-      // after scrollTo, there will be a "scroll" event, so the arrow will hide automatically
+      // po scrollTo nastane událost „scroll“, takže šipka se automaticky skryje
     };
 
     window.addEventListener('scroll', function() {
-      arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
+      šipkaNahoru.hidden = (pageYOffset < document.documentElement.clientHeight);
     });
   </script>
 

@@ -21,7 +21,7 @@ Argumenty:
 - *typ* -- typ události, řetězec, např. `"click"` nebo náš vlastní, třeba `"moje-událost"`.
 - *možnosti* -- objekt se dvěma nepovinnými vlastnostmi:
   - `bubbles: true/false` -- pokud je `true`, pak událost bublá.
-  - `cancelable: true/false` -- pokud je  `true`, pak lze zabránit „standardní akci“. Později uvidíme, co to znamená pro vlastní události.
+  - `cancelable: true/false` -- pokud je  `true`, pak lze zakázat „standardní akci“. Později uvidíme, co to znamená pro vlastní události.
 
   Standardně jsou obě vlastnosti false: `{bubbles: false, cancelable: false}`.
 
@@ -162,7 +162,7 @@ Kromě toho třída události popisuje, o „jaký druh události“ jde, a je-l
 
 ## událost.preventDefault()
 
-Mnoho událostí prohlížeče má „standardní akci“, např. navigaci na odkaz, zahájení výběru a podobně.
+Mnoho událostí prohlížeče má „standardní akci“, např. navigaci na odkaz, zahájení označení a podobně.
 
 U nových, vlastních událostí rozhodně žádné standardní akce prohlížeče nejsou, ale kód, který takovou událost vyvolává, může mít vlastní plány, co bude po spuštění události dělat.
 
@@ -192,7 +192,7 @@ Jakýkoli handler může této události naslouchat pomocí `králík.addEventLi
       cancelable: true // bez tohoto přepínače preventDefault nefunguje
     });
     if (!králík.dispatchEvent(událost)) {
-      alert('Akci bylo zabráněno handlerem');
+      alert('Akce byla zakázána handlerem');
     } else {
       králík.hidden = true;
     }

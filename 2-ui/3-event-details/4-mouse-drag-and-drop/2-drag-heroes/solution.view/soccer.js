@@ -1,116 +1,116 @@
-let isDragging = false;
+let jeTáhnutí = false;
 
-document.addEventListener('mousedown', function(event) {
+document.addEventListener('mousedown', function(událost) {
 
-  let dragElement = event.target.closest('.draggable');
+  let taženýElement = událost.target.closest('.přetahovatelný');
 
-  if (!dragElement) return;
+  if (!taženýElement) return;
 
-  event.preventDefault();
+  událost.preventDefault();
 
-  dragElement.ondragstart = function() {
+  taženýElement.ondragstart = function() {
       return false;
   };
 
-  let coords, shiftX, shiftY;
+  let souřadnice, posunX, posunY;
 
-  startDrag(dragElement, event.clientX, event.clientY);
+  začniTáhnutí(taženýElement, událost.clientX, událost.clientY);
 
-  function onMouseUp(event) {
-    finishDrag();
+  function onMouseUp(událost) {
+    ukončiTáhnutí();
   };
 
-  function onMouseMove(event) {
-    moveAt(event.clientX, event.clientY);
+  function onMouseMove(událost) {
+    přesuňNa(událost.clientX, událost.clientY);
   }
 
-  // on drag start:
-  //   remember the initial shift
-  //   move the element position:fixed and a direct child of body
-  function startDrag(element, clientX, clientY) {
-    if(isDragging) {
+  // při začátku táhnutí:
+  //   zapamatujeme si úvodní posun
+  //   přesuneme element s position:fixed jako přímé dítě těla (body)
+  function začniTáhnutí(element, clientX, clientY) {
+    if(jeTáhnutí) {
       return;
     }
 
-    isDragging = true;
+    jeTáhnutí = true;
 
     document.addEventListener('mousemove', onMouseMove);
     element.addEventListener('mouseup', onMouseUp);
 
-    shiftX = clientX - element.getBoundingClientRect().left;
-    shiftY = clientY - element.getBoundingClientRect().top;
+    posunX = clientX - element.getBoundingClientRect().left;
+    posunY = clientY - element.getBoundingClientRect().top;
 
     element.style.position = 'fixed';
 
-    moveAt(clientX, clientY);
+    přesuňNa(clientX, clientY);
   };
 
-  // switch to absolute coordinates at the end, to fix the element in the document
-  function finishDrag() {
-    if(!isDragging) {
+  // na konci přepneme element na absolutní souřadnice, abychom jej upevnili v dokumentu
+  function ukončiTáhnutí() {
+    if(!jeTáhnutí) {
       return;
     }
 
-    isDragging = false;
+    jeTáhnutí = false;
 
-    dragElement.style.top = parseInt(dragElement.style.top) + window.pageYOffset + 'px';
-    dragElement.style.position = 'absolute';
+    taženýElement.style.top = parseInt(taženýElement.style.top) + window.pageYOffset + 'px';
+    taženýElement.style.position = 'absolute';
 
     document.removeEventListener('mousemove', onMouseMove);
-    dragElement.removeEventListener('mouseup', onMouseUp);
+    taženýElement.removeEventListener('mouseup', onMouseUp);
   }
 
-  function moveAt(clientX, clientY) {
-    // new window-relative coordinates
-    let newX = clientX - shiftX;
-    let newY = clientY - shiftY;
+  function přesuňNa(clientX, clientY) {
+    // nové souřadnice, relativní vzhledem k oknu
+    let novéX = clientX - posunX;
+    let novéY = clientY - posunY;
 
-    // check if the new coordinates are below the bottom window edge
-    let newBottom = newY + dragElement.offsetHeight; // new bottom
+    // ověříme, zda nové souřadnice jsou pod dolním okrajem okna
+    let novýDolní = novéY + taženýElement.offsetHeight; // nový dolní okraj
 
-    // below the window? let's scroll the page
-    if (newBottom > document.documentElement.clientHeight) {
-      // window-relative coordinate of document end
-      let docBottom = document.documentElement.getBoundingClientRect().bottom;
+    // jsou pod oknem? pak rolujeme stránku
+    if (novýDolní > document.documentElement.clientHeight) {
+      // okenní souřadnice konce dokumentu
+      let dokumentDolní = document.documentElement.getBoundingClientRect().bottom;
 
-      // scroll the document down by 10px has a problem
-      // it can scroll beyond the end of the document
-      // Math.min(how much left to the end, 10)
-      let scrollY = Math.min(docBottom - newBottom, 10);
+      // rolování dokumentu dolů o 10px má problém
+      // může rolovat za konec dokumentu
+      // Math.min(kolik zbývá do konce, 10)
+      let rolováníY = Math.min(dokumentDolní - novýDolní, 10);
 
-      // calculations are imprecise, there may be rounding errors that lead to scrolling up
-      // that should be impossible, fix that here
-      if (scrollY < 0) scrollY = 0;
+      // výpočty jsou nepřesné, může dojít k zaokrouhlovacím chybám, které by vedly k rolování nahoru
+      // to by nemělo být možné, tady to zajistíme
+      if (rolováníY < 0) rolováníY = 0;
 
-      window.scrollBy(0, scrollY);
+      window.scrollBy(0, rolováníY);
 
-      // a swift mouse move make put the cursor beyond the document end
-      // if that happens -
-      // limit the new Y by the maximally possible (right at the bottom of the document)
-      newY = Math.min(newY, document.documentElement.clientHeight - dragElement.offsetHeight);
+      // rychlý posun myši může dostat ukazatel za konec dokumentu
+      // pokud se tak stane -
+      // omezíme nové Y na maximální možnou hodnotu (přesně dolní okraj dokumentu)
+      novéY = Math.min(novéY, document.documentElement.clientHeight - taženýElement.offsetHeight);
     }
 
-    // check if the new coordinates are above the top window edge (similar logic)
-    if (newY < 0) {
-      // scroll up
-      let scrollY = Math.min(-newY, 10);
-      if (scrollY < 0) scrollY = 0; // check precision errors
+    // ověříme, zda nové souřadnice jsou nad horním okrajem okna (podobná logika)
+    if (novéY < 0) {
+      // rolování nahoru
+      let rolováníY = Math.min(-novéY, 10);
+      if (rolováníY < 0) rolováníY = 0; // ověříme chyby přesnosti
 
-      window.scrollBy(0, -scrollY);
-      // a swift mouse move can put the cursor beyond the document start
-      newY = Math.max(newY, 0); // newY may not be below 0
+      window.scrollBy(0, -rolováníY);
+      // rychlý posun myši může dostat ukazatel před začátek dokumentu
+      novéY = Math.max(novéY, 0); // novéY nesmí být menší než 0
     }
 
 
-    // limit the new X within the window boundaries
-    // there's no scroll here so it's simple
-    if (newX < 0) newX = 0;
-    if (newX > document.documentElement.clientWidth - dragElement.offsetWidth) {
-      newX = document.documentElement.clientWidth - dragElement.offsetWidth;
+    // omezíme nové X hranicemi okna
+    // zde není rolování, takže je to jednoduché
+    if (novéX < 0) novéX = 0;
+    if (novéX > document.documentElement.clientWidth - taženýElement.offsetWidth) {
+      novéX = document.documentElement.clientWidth - taženýElement.offsetWidth;
     }
 
-    dragElement.style.left = newX + 'px';
-    dragElement.style.top = newY + 'px';
+    taženýElement.style.left = novéX + 'px';
+    taženýElement.style.top = novéY + 'px';
   }
 
 });

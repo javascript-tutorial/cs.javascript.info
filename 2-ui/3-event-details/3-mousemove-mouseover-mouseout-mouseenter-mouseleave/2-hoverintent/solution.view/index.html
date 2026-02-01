@@ -11,16 +11,16 @@
 
 <body>
 
-  <div id="elem" class="clock">
-    <span class="hours">12</span> :
-    <span class="minutes">30</span> :
-    <span class="seconds">00</span>
+  <div id="elem" class="hodiny">
+    <span class="hod">12</span> :
+    <span class="min">30</span> :
+    <span class="sec">00</span>
   </div>
 
   <div id="tooltip" hidden>Tooltip</div>
 
   <script>
-    new HoverIntent({
+    new Setrvání({
       elem,
       over() {
         tooltip.style.left = elem.getBoundingClientRect().left + 5 + 'px';

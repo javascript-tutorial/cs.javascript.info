@@ -1,8 +1,8 @@
-kinput.onkeydown = kinput.onkeyup = kinput.onkeypress = handle;
+kinput.onkeydown = kinput.onkeyup = kinput.onkeypress = zpracuj;
 
-let lastTime = Date.now();
+let posledníČas = Date.now();
 
-function handle(e) {
+function zpracuj(e) {
   if (form.elements[e.type + 'Ignore'].checked) return;
 
   area.scrollTop = 1e6;
@@ -17,10 +17,10 @@ function handle(e) {
     (e.repeat ? ' (repeat)' : '') +
     "\n";
 
-  if (area.value && Date.now() - lastTime > 250) {
+  if (area.value && Date.now() - posledníČas > 250) {
     area.value += new Array(81).join('-') + '\n';
   }
-  lastTime = Date.now();
+  posledníČas = Date.now();
 
   area.value += text;
 

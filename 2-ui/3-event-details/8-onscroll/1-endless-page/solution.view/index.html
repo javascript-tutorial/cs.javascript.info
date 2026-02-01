@@ -6,20 +6,20 @@
 
 <body>
 
-<h1>Scroll me</h1>
+<h1>Roluj mě</h1>
 
 <script>
-  function populate() {
+  function přidejDatum() {
     while(true) {
-      let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
-      if (windowRelativeBottom > document.documentElement.clientHeight + 100) break;
+      let spodekVzhledemKOknu = document.documentElement.getBoundingClientRect().bottom;
+      if (spodekVzhledemKOknu > document.documentElement.clientHeight + 100) break;
       document.body.insertAdjacentHTML("beforeend", `<p>Date: ${new Date()}</p>`);
     }
   }
 
-  window.addEventListener('scroll', populate);
+  window.addEventListener('scroll', přidejDatum);
 
-  populate(); // init document
+  přidejDatum(); // inicializace dokumentu
 </script>
 
 </body>

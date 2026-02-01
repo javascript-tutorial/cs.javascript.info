@@ -24,13 +24,13 @@
       box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
     }
 
-    #house {
+    #dům {
       margin-top: 50px;
       width: 400px;
       border: 1px solid brown;
     }
 
-    #roof {
+    #střecha {
       width: 0;
       height: 0;
       border-left: 200px solid transparent;
@@ -49,42 +49,42 @@
 <body>
 
 
-  <div data-tooltip="Here is the house interior" id="house">
-    <div data-tooltip="Here is the roof" id="roof"></div>
+  <div data-tooltip="Zde – je interiér domu" id="dům">
+    <div data-tooltip="Zde – je střecha" id="střecha"></div>
 
-    <p>Once upon a time there was a mother pig who had three little pigs.</p>
+    <p>Byla jednou jedna prasečí maminka a ta měla tři malá prasátka.</p>
 
-    <p>The three little pigs grew so big that their mother said to them, "You are too big to live here any longer. You must go and build houses for yourselves. But take care that the wolf does not catch you."</p>
+    <p>Jednoho dne už byla prasátka tak velká, že jim maminka řekla: „Už jste moc velcí na to, abyste bydleli pořád tady. Musíte jít a postavit si své vlastní domečky. Ale dávejte pozor, aby vás nechytil vlk.“</p>
 
-    <p>The three little pigs set off. "We will take care that the wolf does not catch us," they said.</p>
+    <p>Tři prasátka se vydala na cestu. „Dáme si pozor, aby nás vlk nechytil,“ řekla.</p>
 
-    <p>Soon they met a man. <a href="https://en.wikipedia.org/wiki/The_Three_Little_Pigs" data-tooltip="Read on…">Hover over me</a></p>
+    <p>Brzy potkala jednoho pána. <a href="https://en.wikipedia.org/wiki/The_Three_Little_Pigs" data-tooltip="Číst dál…">Najeďte na mě</a></p>
 
   </div>
 
   <script>
     let tooltip;
 
-    document.onmouseover = function(event) {
-      // important: a fast-moving mouse may "jump" right to a child on an annotated node, skipping the parent
-      // so mouseover may happen on a child.
+    document.onmouseover = function(událost) {
+      // důležité: při rychlém pohybu může myš „přeskočit“ přímo na dítě uzlu s tooltipem a vynechat rodiče
+      // mouseover se tedy může stát na dítěti.
 
-      let anchorElem = event.target.closest('[data-tooltip]');
+      let kotva = událost.target.closest('[data-tooltip]');
 
-      if (!anchorElem) return;
+      if (!kotva) return;
 
-      // show tooltip and remember it
-      tooltip = showTooltip(anchorElem, anchorElem.dataset.tooltip);
+      // zobrazíme tooltip a zapamatujeme si ho
+      tooltip = zobrazTooltip(kotva, kotva.dataset.tooltip);
     }
 
     document.onmouseout = function() {
-      // it is possible that mouseout triggered, but we're still inside the element
-      // (its target was inside, and it bubbled)
-      // but in this case we'll have an immediate mouseover,
-      // so the tooltip will be destroyed and shown again
+      // je možné, že se spustí mouseout, ale my jsme stále uvnitř stejného elementu
+      // (jeho cíl byl uvnitř a událost probublala)
+      // ale v tom případě máme okamžitý mouseover,
+      // takže tooltip bude zničen a znovu zobrazen
       //
-      // luckily, the "blinking" won't be visible,
-      // as both events happen almost at the same time
+      // naštěstí „bliknutí“ nebude vidět,
+      // protože obě události se stanou téměř současně
       if (tooltip) {
         tooltip.remove();
         tooltip = false;
@@ -93,25 +93,25 @@
     }
 
 
-    function showTooltip(anchorElem, html) {
+    function zobrazTooltip(kotva, html) {
       let tooltipElem = document.createElement('div');
       tooltipElem.className = 'tooltip';
       tooltipElem.innerHTML = html;
       document.body.append(tooltipElem);
 
-      let coords = anchorElem.getBoundingClientRect();
+      let souřadnice = kotva.getBoundingClientRect();
 
-      // position the tooltip over the center of the element
-      let left = coords.left + (anchorElem.offsetWidth - tooltipElem.offsetWidth) / 2;
-      if (left < 0) left = 0;
+      // umístíme tooltip nad střed elementu
+      let vlevo = souřadnice.left + (kotva.offsetWidth - tooltipElem.offsetWidth) / 2;
+      if (vlevo < 0) vlevo = 0;
 
-      let top = coords.top - tooltipElem.offsetHeight - 5;
-      if (top < 0) {
-        top = coords.top + anchorElem.offsetHeight + 5;
+      let nahoře = souřadnice.top - tooltipElem.offsetHeight - 5;
+      if (nahoře < 0) {
+        nahoře = souřadnice.top + kotva.offsetHeight + 5;
       }
 
-      tooltipElem.style.left = left + 'px';
-      tooltipElem.style.top = top + 'px';
+      tooltipElem.style.left = vlevo + 'px';
+      tooltipElem.style.top = nahoře + 'px';
 
       return tooltipElem;
     }

@@ -1,27 +1,27 @@
 <!doctype html>
 <body style="height: 200px">
-  <p>Drag the ball.</p>
+  <p>Přetáhněte míč.</p>
 
-  <img src="https://js.cx/clipart/ball.svg" style="cursor:pointer" width="40" height="40" id="ball">
+  <img src="https://js.cx/clipart/ball.svg" style="cursor:pointer" width="40" height="40" id="míč">
 
   <script>
 
-    ball.onpointerdown = log;
-    ball.onpointerup = log;
-    ball.onpointermove = log;
-    ball.onpointercancel = log;
+    míč.onpointerdown = log;
+    míč.onpointerup = log;
+    míč.onpointermove = log;
+    míč.onpointercancel = log;
 
-    let lastEventType;
+    let typPosledníUdálosti;
     let n = 1;
-    function log(event) {
-      if (lastEventType == event.type) {
+    function log(událost) {
+      if (typPosledníUdálosti == událost.type) {
         n++;
-        text.value = text.value.replace(/.*\n$/, `${event.type} * ${n}\n`);
+        text.value = text.value.replace(/.*\n$/, `${událost.type} * ${n}\n`);
         return;
       }
-      lastEventType = event.type;
+      typPosledníUdálosti = událost.type;
       n = 1;
-      text.value += event.type + '\n';
+      text.value += událost.type + '\n';
       text.scrollTop = 1e9;
     }
   </script>

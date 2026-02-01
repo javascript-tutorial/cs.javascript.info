@@ -1,48 +1,48 @@
-let parent = document.getElementById('parent');
-parent.onmouseover = parent.onmouseout = parent.onmousemove = handler;
+let rodič = document.getElementById('rodič');
+rodič.onmouseover = rodič.onmouseout = rodič.onmousemove = handler;
 
-function handler(event) {
-  let type = event.type;
-  while (type.length < 11) type += ' ';
+function handler(událost) {
+  let typ = událost.type;
+  while (typ.length < 11) typ += ' ';
 
-  log(type + " target=" + event.target.id)
+  log(typ + " target=" + událost.target.id)
   return false;
 }
 
 
-function clearText() {
+function vymažText() {
   text.value = "";
-  lastMessage = "";
+  posledníZpráva = "";
 }
 
-let lastMessageTime = 0;
-let lastMessage = "";
-let repeatCounter = 1;
+let časPosledníZprávy = 0;
+let posledníZpráva = "";
+let početOpakování = 1;
 
-function log(message) {
-  if (lastMessageTime == 0) lastMessageTime = new Date();
+function log(zpráva) {
+  if (časPosledníZprávy == 0) časPosledníZprávy = new Date();
 
-  let time = new Date();
+  let čas = new Date();
 
-  if (time - lastMessageTime > 500) {
-    message = '------------------------------\n' + message;
+  if (čas - časPosledníZprávy > 500) {
+    zpráva = '------------------------------\n' + zpráva;
   }
 
-  if (message === lastMessage) {
-    repeatCounter++;
-    if (repeatCounter == 2) {
+  if (zpráva === posledníZpráva) {
+    početOpakování++;
+    if (početOpakování == 2) {
       text.value = text.value.trim() + ' x 2\n';
     } else {
-      text.value = text.value.slice(0, text.value.lastIndexOf('x') + 1) + repeatCounter + "\n";
+      text.value = text.value.slice(0, text.value.lastIndexOf('x') + 1) + početOpakování + "\n";
     }
 
   } else {
-    repeatCounter = 1;
-    text.value += message + "\n";
+    početOpakování = 1;
+    text.value += zpráva + "\n";
   }
 
   text.scrollTop = text.scrollHeight;
 
-  lastMessageTime = time;
-  lastMessage = message;
+  časPosledníZprávy = čas;
+  posledníZpráva = zpráva;
 }

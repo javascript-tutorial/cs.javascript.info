@@ -8,35 +8,35 @@
 
 <body>
 
-  <div id="slider" class="slider">
-    <div class="thumb"></div>
+  <div id="posuvník" class="posuvník">
+    <div class="šoupátko"></div>
   </div>
 
   <script>
-    let thumb = slider.querySelector('.thumb');
+    let šoupátko = posuvník.querySelector('.šoupátko');
 
-    thumb.onmousedown = function(event) {
-      event.preventDefault(); // prevent selection start (browser action)
+    šoupátko.onmousedown = function(událost) {
+      událost.preventDefault(); // prevent selection start (browser action)
 
-      let shiftX = event.clientX - thumb.getBoundingClientRect().left;
-      // shiftY not needed, the thumb moves only horizontally
+      let posunX = událost.clientX - šoupátko.getBoundingClientRect().left;
+      // posunY není nutný, šoupátko se pohybuje jen vodorovně
 
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
 
-      function onMouseMove(event) {
-        let newLeft = event.clientX - shiftX - slider.getBoundingClientRect().left;
+      function onMouseMove(událost) {
+        let nováLevá = událost.clientX - posunX - posuvník.getBoundingClientRect().left;
 
-        // the pointer is out of slider => lock the thumb within the bounaries
-        if (newLeft < 0) {
-          newLeft = 0;
+        // ukazatel je mimo posuvník => zamkneme šoupátko uvnitř jeho hranic
+        if (nováLevá < 0) {
+          nováLevá = 0;
         }
-        let rightEdge = slider.offsetWidth - thumb.offsetWidth;
-        if (newLeft > rightEdge) {
-          newLeft = rightEdge;
+        let pravýOkraj = posuvník.offsetWidth - šoupátko.offsetWidth;
+        if (nováLevá > pravýOkraj) {
+          nováLevá = pravýOkraj;
         }
 
-        thumb.style.left = newLeft + 'px';
+        šoupátko.style.left = nováLevá + 'px';
       }
 
       function onMouseUp() {
@@ -46,7 +46,7 @@
 
     };
 
-    thumb.ondragstart = function() {
+    šoupátko.ondragstart = function() {
       return false;
     };
 

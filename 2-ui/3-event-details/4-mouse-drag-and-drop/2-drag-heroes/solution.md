@@ -1,5 +1,5 @@
-To drag the element we can use `position:fixed`, it makes coordinates easier to manage. At the end we should switch it back to `position:absolute` to lay the element into the document.
+Pro přetažení elementu můžeme použít `position:fixed`, se souřadnicemi se pak jednodušeji pracuje. Na konci bychom měli přepnout zpět na `position:absolute`, abychom element umístili do dokumentu.
 
-When coordinates are at window top/bottom, we use `window.scrollTo` to scroll it.
+Když jsou souřadnice na horním nebo dolním okraji okna, použijeme k rolování `window.scrollTo`.
 
-More details in the code, in comments.
+Další podrobnosti najdete v kódu v komentářích.

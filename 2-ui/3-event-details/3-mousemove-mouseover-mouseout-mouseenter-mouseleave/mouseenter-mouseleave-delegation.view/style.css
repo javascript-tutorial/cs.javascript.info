@@ -4,12 +4,12 @@
   width: 456px;
 }
 
-#table th {
+#tabulka th {
   text-align: center;
   font-weight: bold;
 }
 
-#table td {
+#tabulka td {
   width: 150px;
   white-space: nowrap;
   text-align: center;
@@ -19,48 +19,48 @@
   cursor: pointer;
 }
 
-#table .nw {
+#tabulka .nw {
   background: #999;
 }
 
-#table .n {
+#tabulka .n {
   background: #03f;
   color: #fff;
 }
 
-#table .ne {
+#tabulka .ne {
   background: #ff6;
 }
 
-#table .w {
+#tabulka .w {
   background: #ff0;
 }
 
-#table .c {
+#tabulka .c {
   background: #60c;
   color: #fff;
 }
 
-#table .e {
+#tabulka .e {
   background: #09f;
   color: #fff;
 }
 
-#table .sw {
+#tabulka .sw {
   background: #963;
   color: #fff;
 }
 
-#table .s {
+#tabulka .s {
   background: #f60;
   color: #fff;
 }
 
-#table .se {
+#tabulka .se {
   background: #0c3;
   color: #fff;
 }
 
-#table .highlight {
+#tabulka .zvýrazni {
   background: red;
 }

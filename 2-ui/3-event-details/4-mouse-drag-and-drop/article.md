@@ -1,204 +1,204 @@
-# Drag'n'Drop with mouse events
+# Přetahování pomocí událostí myši
 
-Drag'n'Drop is a great interface solution. Taking something and dragging and dropping it is a clear and simple way to do many things, from copying and moving documents (as in file managers) to ordering (dropping items into a cart).
+Přetahování (Drag'n'Drop) je vynikající řešení uživatelského rozhraní. Uchopit něco, přetáhnout to a položit jinam je jasný a jednoduchý způsob, jak provést ledacos, od kopírování a přesunu dokumentů (např. ve správcích souborů) až po objednávání (vkládání předmětů do nákupního košíku).
 
-In the modern HTML standard there's a [section about Drag and Drop](https://html.spec.whatwg.org/multipage/interaction.html#dnd) with special events such as `dragstart`, `dragend`, and so on.
+Moderní standard HTML obsahuje [kapitolu věnovanou přetahování](https://html.spec.whatwg.org/multipage/interaction.html#dnd) se speciálními událostmi, např. `dragstart`, `dragend` a podobně.
 
-These events allow us to support special kinds of drag'n'drop, such as handling dragging a file from OS file-manager and dropping it into the browser window. Then JavaScript can access the contents of such files.
+Tyto události nám umožňují podporovat speciální druhy přetahování, například přetažení souboru ze správce souborů v operačním systému a jeho položení do okna prohlížeče. Pak může JavaScript přistupovat k obsahu tohoto souboru.
 
-But native Drag Events also have limitations. For instance, we can't prevent dragging from a certain area. Also we can't make the dragging "horizontal" or "vertical" only. And there are many other drag'n'drop tasks that can't be done using them. Also, mobile device support for such events is very weak.
+Nativní přetahovací události však mají i svá omezení. Nemůžeme například zakázat přetahování z určité oblasti, nebo nemůžeme povolit přetahovat jen „vodorovně“ nebo „svisle“. A existuje i mnoho dalších úloh týkajících se přetahování, které s jejich pomocí nelze vyřešit. Rovněž podpora těchto událostí v mobilních zařízeních je velmi slabá.
 
-So here we'll see how to implement Drag'n'Drop using mouse events.
+Zde tedy uvidíme, jak implementovat přetahování pomocí událostí myši.
 
-## Drag'n'Drop algorithm
+## Algoritmus přetahování
 
-The basic Drag'n'Drop algorithm looks like this:
+Základní algoritmus přetahování vypadá následovně:
 
-1. On `mousedown` - prepare the element for moving, if needed (maybe create a clone of it, add a class to it or whatever).
-2. Then on `mousemove` move it by changing `left/top` with `position:absolute`.
-3. On `mouseup` - perform all actions related to finishing the drag'n'drop.
+1. Při `mousedown` připravíme element k přesunu, je-li to nutné (třeba vytvoříme jeho klon, přidáme mu třídu a podobně).
+2. Pak jej při `mousemove` posuneme změnou `left/top` s `position:absolute`.
+3. Při `mouseup` provedeme všechny akce související s ukončením přetahování.
 
-These are the basics. Later we'll see how to add other features, such as highlighting current underlying elements while we drag over them.
+To jsou základy. Později uvidíme, jak přidat další prvky, například zvýraznění aktuálních elementů pod ukazatelem, když přes ně přetahujeme.
 
-Here's the implementation of dragging a ball:
+Následuje implementace přetahování míče:
 
 ```js
-ball.onmousedown = function(event) {
-  // (1) prepare to moving: make absolute and on top by z-index
-  ball.style.position = 'absolute';
-  ball.style.zIndex = 1000;
+míč.onmousedown = function(událost) {
+  // (1) příprava přesunu: nastavíme absolutní polohu elementu a pomocí z-indexu ho umístíme nahoru
+  míč.style.position = 'absolute';
+  míč.style.zIndex = 1000;
 
-  // move it out of any current parents directly into body
-  // to make it positioned relative to the body
-  document.body.append(ball);
+  // přesuneme ho z jeho aktuálních rodičů přímo do těla
+  // aby jeho pozice byla relativní vzhledem k tělu
+  document.body.append(míč);
 
-  // centers the ball at (pageX, pageY) coordinates
-  function moveAt(pageX, pageY) {
-    ball.style.left = pageX - ball.offsetWidth / 2 + 'px';
-    ball.style.top = pageY - ball.offsetHeight / 2 + 'px';
+  // vycentrujeme míč na souřadnicích (stránkaX, stránkaY)
+  function přesuňNa(stránkaX, stránkaY) {
+    míč.style.left = stránkaX - míč.offsetWidth / 2 + 'px';
+    míč.style.top = stránkaY - míč.offsetHeight / 2 + 'px';
   }
 
-  // move our absolutely positioned ball under the pointer
-  moveAt(event.pageX, event.pageY);
+  // přesuneme míč s absolutní pozicí pod ukazatel
+  přesuňNa(událost.pageX, událost.pageY);
 
-  function onMouseMove(event) {
-    moveAt(event.pageX, event.pageY);
+  function onMouseMove(událost) {
+    přesuňNa(událost.pageX, událost.pageY);
   }
 
-  // (2) move the ball on mousemove
+  // (2) přesuneme míč při události mousemove
   document.addEventListener('mousemove', onMouseMove);
 
-  // (3) drop the ball, remove unneeded handlers
-  ball.onmouseup = function() {
+  // (3) položíme míč, odstraníme nepotřebné handlery
+  míč.onmouseup = function() {
     document.removeEventListener('mousemove', onMouseMove);
-    ball.onmouseup = null;
+    míč.onmouseup = null;
   };
 
 };
 ```
 
-If we run the code, we can notice something strange. On the beginning of the drag'n'drop, the ball "forks": we start dragging its "clone".
+Když si tento kód spustíme, můžeme si všimnout něčeho zvláštního. Na začátku přetahování se míč „zdvojí“: začneme přetahovat jeho „klon“.
 
 ```online
-Here's an example in action:
+Příklad v akci:
 
 [iframe src="ball" height=230]
 
-Try to drag'n'drop with the mouse and you'll see such behavior.
+Zkuste přetahovat myší a uvidíte zmíněné chování.
 ```
 
-That's because the browser has its own drag'n'drop support for images and some other elements. It runs automatically and conflicts with ours.
+Je to tím, že prohlížeč má svou vlastní podporu přetahování obrázků a některých dalších elementů. Ta se automaticky spustí a koliduje s naším kódem.
 
-To disable it:
+Potlačíme ji následovně:
 
 ```js
-ball.ondragstart = function() {
+míč.ondragstart = function() {
   return false;
 };
 ```
 
-Now everything will be all right.
+Nyní bude všechno v pořádku.
 
 ```online
-In action:
+V akci:
 
 [iframe src="ball2" height=230]
 ```
 
-Another important aspect -- we track `mousemove` on `document`, not on `ball`. From the first sight it may seem that the mouse is always over the ball, and we can put `mousemove` on it.
+Dalším důležitým aspektem je, že `mousemove` sledujeme na `document`, ne na `míč`. Na první pohled se může zdát, že ukazatel je pořád na míči a my můžeme umístit `mousemove` na něj.
 
-But as we remember, `mousemove` triggers often, but not for every pixel. So after swift move the pointer can jump from the ball somewhere in the middle of document (or even outside of the window).
+Jenže jak si pamatujeme, `mousemove` se spouští často, ale ne na každém pixelu. Po rychlém přesunu tedy ukazatel může skočit z míče někam doprostřed dokumentu (nebo dokonce mimo okno).
 
-So we should listen on `document` to catch it.
+Abychom tedy tuto událost zachytili, měli bychom jí naslouchat na `document`.
 
-## Correct positioning
+## Správné umisťování
 
-In the examples above the ball is always moved so that its center is under the pointer:
+V uvedených příkladech se míč vždy přemístí tak, aby jeho střed byl pod ukazatelem:
 
 ```js
-ball.style.left = pageX - ball.offsetWidth / 2 + 'px';
-ball.style.top = pageY - ball.offsetHeight / 2 + 'px';
+míč.style.left = stránkaX - míč.offsetWidth / 2 + 'px';
+míč.style.top = stránkaY - míč.offsetHeight / 2 + 'px';
 ```
 
-Not bad, but there's a side effect. To initiate the drag'n'drop, we can `mousedown` anywhere on the ball. But if "take" it from its edge, then the ball suddenly "jumps" to become centered under the mouse pointer.
+To není špatné, ale má to vedlejší efekt. Abychom zahájili přetahování, můžeme vyvolat `mousedown` kdekoli na míči. Pokud ho však „uchopíme“ na kraji, míč náhle „poskočí“, aby jeho střed byl pod ukazatelem myši.
 
-It would be better if we keep the initial shift of the element relative to the pointer.
+Bylo by lepší, kdybychom zachovávali počáteční polohu elementu vzhledem k ukazateli.
 
-For instance, if we start dragging by the edge of the ball, then the pointer should remain over the edge while dragging.
+Pokud například začneme přetahovat na okraji míče, pak by ukazatel měl během přetahování zůstat na okraji.
 
 ![](ball_shift.svg)
 
-Let's update our algorithm:
+Vylepšíme náš algoritmus:
 
-1. When a visitor presses the button (`mousedown`) - remember the distance from the pointer to the left-upper corner of the ball in variables `shiftX/shiftY`. We'll keep that distance while dragging.
+1. Když návštěvník stiskne tlačítko (`mousedown`), zapamatujeme si vzdálenost ukazatele od levého horního rohu míče v proměnných `posunX/posunY`. Tuto vzdálenost budeme při přetahování zachovávat.
 
-    To get these shifts we can substract the coordinates:
-
+    Tyto posuny můžeme zjistit odečtením souřadnic:
+    
     ```js
     // onmousedown
-    let shiftX = event.clientX - ball.getBoundingClientRect().left;
-    let shiftY = event.clientY - ball.getBoundingClientRect().top;
+    let posunX = událost.clientX - míč.getBoundingClientRect().left;
+    let posunY = událost.clientY - míč.getBoundingClientRect().top;
     ```
 
-2. Then while dragging we position the ball on the same shift relative to the pointer, like this:
+2. Pak při přetahování umístíme míč do stejné vzdálenosti od ukazatele, například:
 
     ```js
     // onmousemove
-    // ball has position:absolute
-    ball.style.left = event.pageX - *!*shiftX*/!* + 'px';
-    ball.style.top = event.pageY - *!*shiftY*/!* + 'px';
+    // míč má position:absolute
+    míč.style.left = událost.pageX - *!*posunX*/!* + 'px';
+    míč.style.top = událost.pageY - *!*posunY*/!* + 'px';
     ```
 
-The final code with better positioning:
+Výsledný kód s vylepšeným umisťováním:
 
 ```js
-ball.onmousedown = function(event) {
+míč.onmousedown = function(událost) {
 
 *!*
-  let shiftX = event.clientX - ball.getBoundingClientRect().left;
-  let shiftY = event.clientY - ball.getBoundingClientRect().top;
+  let posunX = událost.clientX - míč.getBoundingClientRect().left;
+  let posunY = událost.clientY - míč.getBoundingClientRect().top;
 */!*
 
-  ball.style.position = 'absolute';
-  ball.style.zIndex = 1000;
-  document.body.append(ball);
+  míč.style.position = 'absolute';
+  míč.style.zIndex = 1000;
+  document.body.append(míč);
 
-  moveAt(event.pageX, event.pageY);
+  přesuňNa(událost.pageX, událost.pageY);
 
-  // moves the ball at (pageX, pageY) coordinates
-  // taking initial shifts into account
-  function moveAt(pageX, pageY) {
-    ball.style.left = pageX - *!*shiftX*/!* + 'px';
-    ball.style.top = pageY - *!*shiftY*/!* + 'px';
+  // přesune míč na souřadnice (pageX, pageY)
+  // vezme v úvahu počáteční posun
+  function přesuňNa(stránkaX, stránkaY) {
+    míč.style.left = stránkaX - *!*posunX*/!* + 'px';
+    míč.style.top = stránkaY - *!*posunY*/!* + 'px';
   }
 
-  function onMouseMove(event) {
-    moveAt(event.pageX, event.pageY);
+  function onMouseMove(událost) {
+    přesuňNa(událost.pageX, událost.pageY);
   }
 
-  // move the ball on mousemove
+  // přesuneme míč při mousemove
   document.addEventListener('mousemove', onMouseMove);
 
-  // drop the ball, remove unneeded handlers
-  ball.onmouseup = function() {
+  // položíme míč, odstraníme nepotřebné handlery
+  míč.onmouseup = function() {
     document.removeEventListener('mousemove', onMouseMove);
-    ball.onmouseup = null;
+    míč.onmouseup = null;
   };
 
 };
 
-ball.ondragstart = function() {
+míč.ondragstart = function() {
   return false;
 };
 ```
 
 ```online
-In action (inside `<iframe>`):
+V akci (uvnitř `<iframe>`):
 
 [iframe src="ball3" height=230]
 ```
 
-The difference is especially noticeable if we drag the ball by its right-bottom corner. In the previous example the ball "jumps" under the pointer. Now it fluently follows the pointer from the current position.
+Rozdíl je obzvláště viditelný, když uchopíme míč v jeho pravém dolním rohu. V předchozím příkladu míč „skočil“ pod ukazatel, ale nyní plynule následuje ukazatel ze své aktuální pozice.
 
-## Potential drop targets (droppables)
+## Možné cíle položení (droppables)
 
-In previous examples the ball could be dropped just "anywhere" to stay. In real-life we usually take one element and drop it onto another. For instance, a "file" into a "folder" or something else.
+V předchozích příkladech jsme mohli míč položit „kamkoli“ a on tam zůstal stát. Ve skutečném životě obvykle vezmeme jeden element a položíme ho na jiný, například „soubor“ na „složku“ nebo něco jiného.
 
-Speaking abstract, we take a "draggable" element and drop it onto "droppable" element.
+Když hovoříme abstraktně, vezmeme „přetahovatelný“ (draggable) element a umístíme jej na „cílový“ (droppable) element.
 
-We need to know:
-- where the element was dropped at the end of Drag'n'Drop -- to do the corresponding action,
-- and, preferably, know the droppable we're dragging over, to highlight it.
+Musíme vědět:
+- kam byl element na konci přetahování položen, abychom mohli vykonat odpovídající akci,
+- a pokud možno znát element, na který pokládáme, abychom jej mohli zvýraznit.
 
-The solution is kind-of interesting and just a little bit tricky, so let's cover it here.
+Řešení je poměrně zajímavé a trochu komplikované, takže je zde proberme.
 
-What may be the first idea? Probably to set `mouseover/mouseup` handlers on potential droppables?
+Jaký může být první nápad? Třeba nastavit handlery `mouseover/mouseup` na potenciálních cílích?
 
-But that doesn't work.
+To však nebude fungovat.
 
-The problem is that, while we're dragging, the draggable element is always above other elements. And mouse events only happen on the top element, not on those below it.
+Problém spočívá v tom, že při přetahování je přetahovaný element vždy nad ostatními elementy. A události myši se odehrávají vždy jen nad vrchním elementem, ne nad elementy pod ním.
 
-For instance, below are two `<div>` elements, red one on top of the blue one (fully covers). There's no way to catch an event on the blue one, because the red is on top:
+Například zde jsou dva elementy `<div>`, červený na modrém (ten je úplně zakryt). Neexistuje žádný způsob, jak zachytit událost na modrém, protože červený je na vrchu:
 
 ```html run autorun height=60
 <style>
@@ -209,95 +209,95 @@ For instance, below are two `<div>` elements, red one on top of the blue one (fu
     top: 0;
   }
 </style>
-<div style="background:blue" onmouseover="alert('never works')"></div>
-<div style="background:red" onmouseover="alert('over red!')"></div>
+<div style="background:blue" onmouseover="alert('nespustí se')"></div>
+<div style="background:red" onmouseover="alert('nad červeným!')"></div>
 ```
 
-The same with a draggable element. The ball is always on top over other elements, so events happen on it. Whatever handlers we set on lower elements, they won't work.
+Pro přetahovaný element platí totéž. Míč je vždy na vrchu ostatních elementů, takže události se odehrávají na něm. Ať nastavíme na nižších elementech jakékoli handlery, nespustí se.
 
-That's why the initial idea to put handlers on potential droppables doesn't work in practice. They won't run.
+Z tohoto důvodu tedy původní nápad umístit handlery na potenciální cíle nebude v praxi fungovat. Tyto handlery se nespustí.
 
-So, what to do?
+Co tedy můžeme dělat?
 
-There's a method called `document.elementFromPoint(clientX, clientY)`. It returns the most nested element on given window-relative coordinates (or `null` if given coordinates are out of the window). If there are multiple overlapping elements on the same coordinates, then the topmost one is returned.
+Existuje metoda nazvaná `document.elementFromPoint(clientX, clientY)`, která vrátí nejvnořenější element na zadaných souřadnicích relativních vzhledem k oknu (nebo `null`, pokud jsou zadané souřadnice mimo okno). Jestliže se na stejných souřadnicích nachází více navzájem se překrývajících elementů, metoda vrátí ten, který je na vrchu.
 
-We can use it in any of our mouse event handlers to detect the potential droppable under the pointer, like this:
+Můžeme ji použít v kterémkoli našem handleru událostí myši, abychom zjistili cílový element pod ukazatelem, například:
 
 ```js
-// in a mouse event handler
-ball.hidden = true; // (*) hide the element that we drag
+// v handleru události myši
+míč.hidden = true; // (*) schováme element, který přetahujeme
 
-let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-// elemBelow is the element below the ball, may be droppable
+let elemPod = document.elementFromPoint(událost.clientX, událost.clientY);
+// elemPod je element pod míčem, může být cílem
 
-ball.hidden = false;
+míč.hidden = false;
 ```
 
-Please note: we need to hide the ball before the call `(*)`. Otherwise we'll usually have a ball on these coordinates, as it's the top element under the pointer: `elemBelow=ball`. So we hide it and immediately show again.
+Prosíme všimněte si, že před voláním `(*)` musíme míč skrýt. Jinak bychom na těchto souřadnicích zpravidla měli míč, jelikož je vrchním elementem pod ukazatelem: `elemPod=míč`. Proto ho schováme a okamžitě znovu zobrazíme.
 
-We can use that code to check what element we're "flying over" at any time. And handle the drop when it happens.
+Pomocí tohoto kódu můžeme kdykoli ověřit, na kterém elementu se právě nacházíme, a když dojde k položení, zpracovat je.
 
-An extended code of `onMouseMove` to find "droppable" elements:
+Rozšířený kód `onMouseMove`, který bude hledat možné cílové elementy:
 
 ```js
-// potential droppable that we're flying over right now
-let currentDroppable = null;
+// potenciální cíl, nad kterým se právě pohybujeme
+let aktuálníCíl = null;
 
-function onMouseMove(event) {
-  moveAt(event.pageX, event.pageY);
+function onMouseMove(událost) {
+  přesuňNa(událost.pageX, událost.pageY);
 
-  ball.hidden = true;
-  let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-  ball.hidden = false;
+  míč.hidden = true;
+  let elemPod = document.elementFromPoint(událost.clientX, událost.clientY);
+  míč.hidden = false;
 
-  // mousemove events may trigger out of the window (when the ball is dragged off-screen)
-  // if clientX/clientY are out of the window, then elementFromPoint returns null
-  if (!elemBelow) return;
+  // události mousemove se mohou spustit mimo okno (když je míč přetažen mimo obrazovku)
+  // jsou-li clientX/clientY mimo okno, pak elementFromPoint vrátí null
+  if (!elemPod) return;
 
-  // potential droppables are labeled with the class "droppable" (can be other logic)
-  let droppableBelow = elemBelow.closest('.droppable');
+  // potenciální cíle jsou označeny třídou "droppable" (může tu být i jiná logika)
+  let cílPod = elemPod.closest('.droppable');
 
-  if (currentDroppable != droppableBelow) {
-    // we're flying in or out...
-    // note: both values can be null
-    //   currentDroppable=null if we were not over a droppable before this event (e.g over an empty space)
-    //   droppableBelow=null if we're not over a droppable now, during this event
+  if (aktuálníCíl != cílPod) {
+    // směřujeme dovnitř nebo ven...
+    // poznámka: obě hodnoty mohou být null
+    //   aktuálníCíl=null, pokud jsme před touto událostí nebyli na možném cílovém elementu (např. v prázdném prostoru)
+    //   cílPod=null, pokud nyní během této události nejsme na možném cílovém elementu
 
-    if (currentDroppable) {
-      // the logic to process "flying out" of the droppable (remove highlight)
-      leaveDroppable(currentDroppable);
+    if (aktuálníCíl) {
+      // logika zpracování „odtažení“ z cílového elementu (odstraníme zvýraznění)
+      opusťCíl(aktuálníCíl);
     }
-    currentDroppable = droppableBelow;
-    if (currentDroppable) {
-      // the logic to process "flying in" of the droppable
-      enterDroppable(currentDroppable);
+    aktuálníCíl = cílPod;
+    if (aktuálníCíl) {
+      // logika zpracování „přetažení“ na cílový element
+      vstupNaCíl(aktuálníCíl);
     }
   }
 }
 ```
 
-In the example below when the ball is dragged over the soccer goal, the goal is highlighted.
+Když v následujícím příkladu přetáhnete míč na fotbalovou branku, branka se zvýrazní.
 
 [codetabs height=250 src="ball4"]
 
-Now we have the current "drop target", that we're flying over, in the variable `currentDroppable` during the whole process and can use it to highlight or any other stuff.
+Nyní máme během celého procesu v proměnné `aktuálníCíl` aktuální „cíl položení“, nad který jsme se přesunuli, a s její pomocí můžeme zvýrazňovat nebo provádět cokoli jiného.
 
-## Summary
+## Shrnutí
 
-We considered a basic Drag'n'Drop algorithm.
+Probrali jsme základní algoritmus přetahování.
 
-The key components:
+Klíčové komponenty jsou:
 
-1. Events flow: `ball.mousedown` -> `document.mousemove` -> `ball.mouseup` (don't forget to cancel native `ondragstart`).
-2. At the drag start -- remember the initial shift of the pointer relative to the element: `shiftX/shiftY` and keep it during the dragging.
-3. Detect droppable elements under the pointer using `document.elementFromPoint`.
+1. Tok událostí: `míč.mousedown` -> `document.mousemove` -> `míč.mouseup` (nezapomeňte zrušit nativní `ondragstart`).
+2. Při začátku přetahování si zapamatujeme počáteční posun ukazatele vzhledem k elementu: `posunX/posunY` a během přetahování jej budeme zachovávat.
+3. Cílové elementy pod ukazatelem detekujeme pomocí `document.elementFromPoint`.
 
-We can lay a lot on this foundation.
+Na těchto základech můžeme postavit mnohé.
 
-- On `mouseup` we can intellectually finalize the drop: change data, move elements around.
-- We can highlight the elements we're flying over.
-- We can limit dragging by a certain area or direction.
-- We can use event delegation for `mousedown/up`. A large-area event handler that checks  `event.target` can manage Drag'n'Drop for hundreds of elements.
-- And so on.
+- Při `mouseup` můžeme intelektuálně dokončit položení: změnit data, přesunout elementy.
+- Můžeme zvýrazňovat elementy, nad nimiž přetahujeme.
+- Můžeme omezit přetahování na určitou oblast nebo směr.
+- Můžeme pro `mousedown/up` použít delegování událostí. Handler události pro velkou oblast, který prověřuje `událost.target`, může zvládnout přetahování pro stovky elementů.
+- A podobně.
 
-There are frameworks that build architecture over it: `DragZone`, `Droppable`, `Draggable` and other classes. Most of them do the similar stuff to what's described above, so it should be easy to understand them now. Or roll your own, as you can see that that's easy enough to do, sometimes easier than adapting a third-party solution.
+Existují rámce, které na tom budují architekturu: `DragZone`, `Droppable`, `Draggable` a jiné třídy. Většina z nich provádí věci podobné těm, které jsme popsali, takže nyní by mělo být snadné jim porozumět. Anebo si vytvořte vlastní -- vidíte, že je to docela jednoduché, někdy lehčí než adaptovat řešení třetí strany.
