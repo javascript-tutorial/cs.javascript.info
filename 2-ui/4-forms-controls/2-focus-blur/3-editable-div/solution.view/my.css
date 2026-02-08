@@ -1,4 +1,4 @@
-.view,
+.náhled,
 .edit {
   height: 150px;
   width: 400px;
@@ -7,19 +7,19 @@
   display: block;
 }
 
-.view {
+.náhled {
   /* padding + border = 3px */
   padding: 2px;
   border: 1px solid black;
 }
 
 .edit {
-  /* replace padding with border (still 3px not to shift the contents) */
+  /* nahradíme vnitřní okraj ohraničením (stále 3px, aby se obsah neposunul) */
   border: 3px solid blue;
   padding: 0px;
 }
 
 .edit:focus {
-  /* remove focus border in Safari */
+  /* odstraníme ohraničení fokusu v Safari */
   outline: none;
 }

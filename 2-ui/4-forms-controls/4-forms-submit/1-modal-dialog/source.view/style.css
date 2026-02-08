@@ -6,7 +6,7 @@ body {
   margin: 0;
 }
 
-#prompt-form {
+#formulář-dotazu {
   display: inline-block;
   padding: 5px 5px 5px 70px;
   width: 200px;
@@ -15,7 +15,7 @@ body {
   vertical-align: middle;
 }
 
-#prompt-form-container {
+#kontejner-formuláře-dotazu {
   position: fixed;
   top: 0;
   left: 0;
@@ -25,14 +25,14 @@ body {
   text-align: center;
 }
 
-#prompt-form-container:before {
+#kontejner-formuláře-dotazu:before {
   display: inline-block;
   height: 100%;
   content: '';
   vertical-align: middle;
 }
 
-#prompt-form input[name="text"] {
+#formulář-dotazu input[name="text"] {
   display: block;
   margin: 5px;
   width: 180px;

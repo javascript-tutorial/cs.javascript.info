@@ -4,17 +4,17 @@
   padding: 0;
   display: block;
   
-  /* remove resizing handle in Firefox */
+  /* odstraní změnu velikosti ve Firefoxu */
   resize: none;
   
-  /* remove outline on focus in Chrome */
+  /* odstraní orámování fokusu v Chrome */
   outline: none;
   
-  /* remove scrollbar in IE */
+  /* odstraní posuvník v IE */
   overflow: auto;
 }
 
-.edit-controls {
+.edit-tlačítka {
   position: absolute;
 }
 

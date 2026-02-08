@@ -9,44 +9,44 @@
 <body>
 
   <ul>
-    <li>Click the div to edit.</li>
-    <li>Enter or blur saves the result.</li>
+    <li>Kliknutím na div jej můžete editovat.</li>
+    <li>Po stisknutí Enter nebo po ztrátě fokusu se výsledek uloží.</li>
   </ul>
 
-  HTML is allowed.
+  HTML je dovolen.
 
-  <div id="view" class="view">Text</div>
+  <div id="náhled" class="náhled">Text</div>
 
   <script>
-    let area = null;
-    let view = document.getElementById('view');
+    let oblast = null;
+    let náhled = document.getElementById('náhled');
 
-    view.onclick = function() {
-      editStart();
+    náhled.onclick = function() {
+      začniEditaci();
     };
 
-    function editStart() {
-      area = document.createElement('textarea');
-      area.className = 'edit';
-      area.value = view.innerHTML;
+    function začniEditaci() {
+      oblast = document.createElement('textarea');
+      oblast.className = 'edit';
+      oblast.value = náhled.innerHTML;
 
-      area.onkeydown = function(event) {
-        if (event.key == 'Enter') {
+      oblast.onkeydown = function(událost) {
+        if (událost.key == 'Enter') {
           this.blur();
         }
       };
 
-      area.onblur = function() {
-        editEnd();
+      oblast.onblur = function() {
+        ukončiEditaci();
       };
 
-      view.replaceWith(area);
-      area.focus();
+      náhled.replaceWith(oblast);
+      oblast.focus();
     }
 
-    function editEnd() {
-      view.innerHTML = area.value;
-      area.replaceWith(view);
+    function ukončiEditaci() {
+      náhled.innerHTML = oblast.value;
+      oblast.replaceWith(náhled);
     }
   </script>
 

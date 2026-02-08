@@ -2,32 +2,32 @@ importance: 5
 
 ---
 
-# Modal form
+# Modální formulář
 
-Create a function `showPrompt(html, callback)` that shows a form with the message `html`, an input field and buttons `OK/CANCEL`.
+Vytvořte funkci `zobrazDotaz(html, callback)`, která zobrazí formulář se zprávou `html`, vstupním polem a tlačítky `OK/STORNO`.
 
-- A user should type something into a text field and press `key:Enter` or the OK button, then `callback(value)` is called with the value they entered.
-- Otherwise if the user presses `key:Esc` or CANCEL, then `callback(null)` is called.
+- Uživatel by měl něco napsat do textového pole a stisknout `key:Enter` nebo tlačítko OK, pak bude volána funkce `callback(hodnota)` s hodnotou, kterou zadal.
+- Jinak pokud uživatel stiskne `key:Esc` nebo STORNO, bude volána `callback(null)`.
 
-In both cases that ends the input process and removes the form.
+V obou případech bude proces vstupu ukončen a formulář se odstraní.
 
-Requirements:
+Požadavky:
 
-- The form should be in the center of the window.
-- The form is *modal*. In other words, no interaction with the rest of the page is possible until the user closes it.
-- When the form is shown, the focus should be inside the `<input>` for the user.
-- Keys `key:Tab`/`key:Shift+Tab` should shift the focus between form fields, don't allow it to leave for other page elements.
+- Formulář by měl být uprostřed okna.
+- Formulář je *modální*. Jinými slovy, není možná žádná interakce se zbytkem stránky, dokud ho uživatel nezavře.
+- Když se formulář zobrazí, fokus by měl být nastaven na `<input>` pro uživatele.
+- Klávesy `key:Tab`/`key:Shift+Tab` by měly přepínat fokus mezi poli formuláře a neměly by umožnit odchod na jiné prvky stránky.
 
-Usage example:
+Příklad použití:
 
 ```js
-showPrompt("Enter something<br>...smart :)", function(value) {
-  alert(value);
+zobrazDotaz("Zadejte něco<br>...chytrého :)", function(hodnota) {
+  alert(hodnota);
 });
 ```
 
-A demo in the iframe:
+Demo ve vnitřním rámu:
 
 [iframe src="solution" height=160 border=1]
 
-P.S. The source document has HTML/CSS for the form with fixed positioning, but it's up to you to make it modal.
+P.S. Zdrojový dokument obsahuje HTML/CSS pro formulář s fixní pozicí, ale učinit ho modálním je už na vás.

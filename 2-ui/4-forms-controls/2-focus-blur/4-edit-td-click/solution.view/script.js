@@ -1,33 +1,33 @@
-let table = document.getElementById('bagua-table');
+let tabulka = document.getElementById('tabulka-pa-kua');
 
-let editingTd;
+let editovanáTd;
 
-table.onclick = function(event) {
+tabulka.onclick = function(událost) {
 
-  // 3 possible targets
-  let target = event.target.closest('.edit-cancel,.edit-ok,td');
+  // 3 možné cíle
+  let cíl = událost.target.closest('.edit-storno,.edit-ok,td');
 
-  if (!table.contains(target)) return;
+  if (!tabulka.contains(cíl)) return;
 
-  if (target.className == 'edit-cancel') {
-    finishTdEdit(editingTd.elem, false);
-  } else if (target.className == 'edit-ok') {
-    finishTdEdit(editingTd.elem, true);
-  } else if (target.nodeName == 'TD') {
-    if (editingTd) return; // already editing
+  if (cíl.className == 'edit-storno') {
+    ukončiEditaciTd(editovanáTd.elem, false);
+  } else if (cíl.className == 'edit-ok') {
+    ukončiEditaciTd(editovanáTd.elem, true);
+  } else if (cíl.nodeName == 'TD') {
+    if (editovanáTd) return; // již editujeme
 
-    makeTdEditable(target);
+    učiňTdEditovatelnou(cíl);
   }
 
 };
 
-function makeTdEditable(td) {
-  editingTd = {
+function učiňTdEditovatelnou(td) {
+  editovanáTd = {
     elem: td,
     data: td.innerHTML
   };
 
-  td.classList.add('edit-td'); // td is in edit state, CSS also styles the area inside
+  td.classList.add('edit-td'); // td je ve stavu editace, CSS také nastaví styly plochy uvnitř
 
   let textArea = document.createElement('textarea');
   textArea.style.width = td.clientWidth + 'px';
@@ -40,16 +40,16 @@ function makeTdEditable(td) {
   textArea.focus();
 
   td.insertAdjacentHTML("beforeEnd",
-    '<div class="edit-controls"><button class="edit-ok">OK</button><button class="edit-cancel">CANCEL</button></div>'
+    '<div class="edit-tlačítka"><button class="edit-ok">OK</button><button class="edit-storno">STORNO</button></div>'
   );
 }
 
-function finishTdEdit(td, isOk) {
-  if (isOk) {
+function ukončiEditaciTd(td, jeOk) {
+  if (jeOk) {
     td.innerHTML = td.firstChild.value;
   } else {
-    td.innerHTML = editingTd.data;
+    td.innerHTML = editovanáTd.data;
   }
   td.classList.remove('edit-td'); 
-  editingTd = null;
+  editovanáTd = null;
 }

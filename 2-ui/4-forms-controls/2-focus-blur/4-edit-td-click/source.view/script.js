@@ -1,3 +1,3 @@
-let table = document.getElementById('bagua-table');
+let tabulka = document.getElementById('tabulka-pa-kua');
 
-/* your code */
+/* váš kód */

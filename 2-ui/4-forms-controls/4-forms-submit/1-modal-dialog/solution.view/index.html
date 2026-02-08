@@ -8,94 +8,94 @@
 
 <body style="height:3000px">
 
-  <h2>Click the button below</h2>
+  <h2>Klikněte na následující tlačítko</h2>
 
-  <input type="button" value="Click to show the form" id="show-button">
+  <input type="button" value="Kliknutím zobrazíte formulář" id="tlačítko-zobrazení">
 
 
-  <div id="prompt-form-container">
-    <form id="prompt-form">
-      <div id="prompt-message"></div>
+  <div id="kontejner-formuláře-dotazu">
+    <form id="formulář-dotazu">
+      <div id="zpráva-dotazu"></div>
       <input name="text" type="text">
       <input type="submit" value="Ok">
-      <input type="button" name="cancel" value="Cancel">
+      <input type="button" name="storno" value="Storno">
     </form>
   </div>
 
   <script>
-    // Show a half-transparent DIV to "shadow" the page
-    // (the form is not inside, but near it, because it shouldn't be half-transparent)
-    function showCover() {
-      let coverDiv = document.createElement('div');
-      coverDiv.id = 'cover-div';
+    // Zobrazí poloprůhledný DIV, který „zastíní“ stránku
+    // (formulář není uvnitř něj, ale vedle něj, protože by neměl být poloprůhledný)
+    function zobrazZakrytí() {
+      let zakrývajícíDiv = document.createElement('div');
+      zakrývajícíDiv.id = 'zakrývající-div';
 
-      // make the page unscrollable while the modal form is open
+      // zakážeme rolování stránky, dokud je modální formulář otevřený
       document.body.style.overflowY = 'hidden';
 
-      document.body.append(coverDiv);
+      document.body.append(zakrývajícíDiv);
     }
 
-    function hideCover() {
-      document.getElementById('cover-div').remove();
+    function skryjZakrytí() {
+      document.getElementById('zakrývající-div').remove();
       document.body.style.overflowY = '';
     }
 
-    function showPrompt(text, callback) {
-      showCover();
-      let form = document.getElementById('prompt-form');
-      let container = document.getElementById('prompt-form-container');
-      document.getElementById('prompt-message').innerHTML = text;
-      form.text.value = '';
+    function zobrazDotaz(text, callback) {
+      zobrazZakrytí();
+      let formulář = document.getElementById('formulář-dotazu');
+      let kontejner = document.getElementById('kontejner-formuláře-dotazu');
+      document.getElementById('zpráva-dotazu').innerHTML = text;
+      formulář.text.value = '';
 
-      function complete(value) {
-        hideCover();
-        container.style.display = 'none';
+      function dokonči(hodnota) {
+        skryjZakrytí();
+        kontejner.style.display = 'none';
         document.onkeydown = null;
-        callback(value);
+        callback(hodnota);
       }
 
-      form.onsubmit = function() {
-        let value = form.text.value;
-        if (value == '') return false; // ignore empty submit
+      formulář.onsubmit = function() {
+        let hodnota = formulář.text.value;
+        if (hodnota == '') return false; // ignorujeme prázdné odeslání
 
-        complete(value);
+        dokonči(hodnota);
         return false;
       };
 
-      form.cancel.onclick = function() {
-        complete(null);
+      formulář.storno.onclick = function() {
+        dokonči(null);
       };
 
       document.onkeydown = function(e) {
         if (e.key == 'Escape') {
-          complete(null);
+          dokonči(null);
         }
       };
 
-      let lastElem = form.elements[form.elements.length - 1];
-      let firstElem = form.elements[0];
+      let posledníElement = formulář.elements[formulář.elements.length - 1];
+      let prvníElement = formulář.elements[0];
 
-      lastElem.onkeydown = function(e) {
+      posledníElement.onkeydown = function(e) {
         if (e.key == 'Tab' && !e.shiftKey) {
-          firstElem.focus();
+          prvníElement.focus();
           return false;
         }
       };
 
-      firstElem.onkeydown = function(e) {
+      prvníElement.onkeydown = function(e) {
         if (e.key == 'Tab' && e.shiftKey) {
-          lastElem.focus();
+          posledníElement.focus();
           return false;
         }
       };
 
-      container.style.display = 'block';
-      form.elements.text.focus();
+      kontejner.style.display = 'block';
+      formulář.elements.text.focus();
     }
 
-    document.getElementById('show-button').onclick = function() {
-      showPrompt("Enter something<br>...smart :)", function(value) {
-        alert("You entered: " + value);
+    document.getElementById('tlačítko-zobrazení').onclick = function() {
+      zobrazDotaz("Zadejte něco<br>...chytrého :)", function(hodnota) {
+        alert("Zadali jste: " + hodnota);
       });
     };
   </script>
