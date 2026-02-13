@@ -1,6 +1,6 @@
 
-The algorithm:
-1. Make `img` for every source.
-2. Add `onload/onerror` for every image.
-3. Increase the counter when either `onload` or `onerror` triggers.
-4. When the counter value equals to the sources count -- we're done: `callback()`.
+Algoritmus:
+1. Vytvořte `img` pro každý obrázek.
+2. Přidejte `onload/onerror` ke každému obrázku.
+3. Když se spustí `onload` nebo `onerror`, zvyšte čítač.
+4. Když se hodnota čítače rovná počtu zdrojů, jsme hotovi: `callback()`.

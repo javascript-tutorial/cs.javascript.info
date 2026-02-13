@@ -1,1 +1,1 @@
-noSuchFunction();
+takováFunkceNení();

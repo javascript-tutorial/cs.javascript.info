@@ -1,79 +1,79 @@
 
-# Dangerous Promise.all
+# Nebezpečný Promise.all
 
-`Promise.all` is a great way to parallelize multiple operations. It's especially useful when we need to make parallel requests to multiple services.
+`Promise.all` je skvělý způsob, jak paralelizovat vícenásobné operace. Obzvláště se hodí, když potřebujeme vytvořit paralelní požadavky na více služeb.
 
-However, there's a hidden danger. We'll see an example in this task and explore how to avoid it.
+Skrývá se v něm však nebezpečí. V této úloze uvidíme jeho příklad a prozkoumáme, jak se mu vyhnout.
 
-Let's say we have a connection to a remote service, such as a database.
+Dejme tomu, že máme připojení ke vzdálené službě, například k databázi.
 
-There're two functions: `connect()` and `disconnect()`.
+Máme pro něj dvě funkce: `připoj()` a `odpoj()`.
 
-When connected, we can send requests using `database.query(...)` - an async function which usually returns the result but also may throw an error.
+Když se připojíme, můžeme posílat požadavky voláním `databáze.dotaz(...)` -- asynchronní funkce, která obvykle vrátí výsledek, ale může také vygenerovat chybu.
 
-Here's a simple implementation:
+Jednoduchá implementace:
 
 ```js
-let database;
+let databáze;
 
-function connect() {
-  database = {
-    async query(isOk) {
-      if (!isOk) throw new Error('Query failed');
+function připoj() {
+  databáze = {
+    async dotaz(jeOk) {
+      if (!jeOk) throw new Error('Dotaz selhal');
     }
   };
 }
 
-function disconnect() {
-  database = null;
+function odpoj() {
+  databáze = null;
 }
 
-// intended usage:
-// connect()
+// zamýšlené použití:
+// připoj()
 // ...
-// database.query(true) to emulate a successful call
-// database.query(false) to emulate a failed call
+// databáze.dotaz(true) pro emulaci úspěšného volání
+// databáze.dotaz(false) pro emulaci neúspěšného volání
 // ...
-// disconnect()
+// odpoj()
 ```
 
-Now here's the problem.
+Nyní zde máme problém.
 
-We wrote the code to connect and send 3 queries in parallel (all of them take different time, e.g. 100, 200 and 300ms), then disconnect:
+Napíšeme kód pro připojení a pošleme paralelně 3 dotazy (každý z nich trvá jinou dobu, např. 100, 200 a 300 ms), pak se odpojíme:
 
 ```js
-// Helper function to call async function `fn` after `ms` milliseconds
-function delay(fn, ms) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => fn().then(resolve, reject), ms);
+// pomocná funkce pro volání asynchronní funkce `fn` za `ms` milisekund
+function čekej(fn, ms) {
+  return new Promise((splň, zamítni) => {
+    setTimeout(() => fn().then(splň, zamítni), ms);
   });
 }
 
-async function run() {
-  connect();
+async function spusť() {
+  připoj();
 
   try {
     await Promise.all([
-      // these 3 parallel jobs take different time: 100, 200 and 300 ms
-      // we use the `delay` helper to achieve this effect
+      // tyto 3 paralelní úkoly trvají každý jinou dobu: 100, 200 a 300 ms
+      // k dosažení tohoto efektu použijeme pomocnou funkci `čekej`
 *!*
-      delay(() => database.query(true), 100),
-      delay(() => database.query(false), 200),
-      delay(() => database.query(false), 300)
+      čekej(() => databáze.dotaz(true), 100),
+      čekej(() => databáze.dotaz(false), 200),
+      čekej(() => databáze.dotaz(false), 300)
 */!*
     ]);
-  } catch(error) {
-    console.log('Error handled (or was it?)');
+  } catch(chyba) {
+    console.log('Chyba zpracována (opravdu?)');
   }
 
-  disconnect();
+  odpoj();
 }
 
-run();
+spusť();
 ```
 
-Two of these queries happen to be unsuccessful, but we're smart enough to wrap the `Promise.all` call into a `try..catch` block.
+Dva z těchto dotazů byly neúspěšné, ale my jsme natolik chytří, že jsme volání `Promise.all` umístili do bloku `try..catch`.
 
-However, this doesn't help! This script actually leads to an uncaught error in console!
+Ale to nepomůže! Tento skript ve skutečnosti vyvolá nezachycenou chybu v konzoli!
 
-Why? How to avoid it?
+Proč? Jak se tomu vyhnout?

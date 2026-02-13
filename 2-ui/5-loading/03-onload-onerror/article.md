@@ -1,206 +1,206 @@
-# Resource loading: onload and onerror
+# Načítání zdrojů: onload a onerror
 
-The browser allows us to track the loading of external resources -- scripts, iframes, pictures and so on.
+Prohlížeč nám umožňuje sledovat načítání externích zdrojů -- skriptů, vnitřních rámů, obrázků a jiných.
 
-There are two events for it:
+K tomu slouží dvě události:
 
-- `onload` -- successful load,
-- `onerror` -- an error occurred.
+- `onload` -- úspěšné načtení,
+- `onerror` -- došlo k chybě.
 
-## Loading a script
+## Načítání skriptu
 
-Let's say we need to load a third-party script and call a function that resides there.
+Řekněme, že potřebujeme načíst skript třetí strany a zavolat funkci, která je v něm obsažena.
 
-We can load it dynamically, like this:
+Můžeme jej načíst dynamicky, například:
 
 ```js
-let script = document.createElement('script');
-script.src = "my.js";
+let skript = document.createElement('script');
+skript.src = "my.js";
 
-document.head.append(script);
+document.head.append(skript);
 ```
 
-...But how to run the function that is declared inside that script? We need to wait until the script loads, and only then we can call it.
+...Jak ale spustit funkci, která je deklarována uvnitř tohoto skriptu? Musíme počkat, než se skript načte, a teprve pak ji můžeme volat.
 
 ```smart
-For our own scripts we could use [JavaScript modules](info:modules) here, but they are not widely adopted by third-party libraries.
+Pro naše vlastní skripty bychom zde mohli použít [JavaScriptové moduly](info:modules), ale knihovny třetích stran je příliš široce nepřijímají.
 ```
 
 ### script.onload
 
-The main helper is the `load` event. It triggers after the script was loaded and executed.
+Hlavním pomocníkem je událost `load`, která se spustí poté, co je skript načten a vykonán.
 
-For instance:
+Příklad:
 
 ```js run untrusted
-let script = document.createElement('script');
+let skript = document.createElement('script');
 
-// can load any script, from any domain
-script.src = "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"
-document.head.append(script);
+// můžeme načíst jakýkoli skript z jakékoli domény
+skript.src = "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"
+document.head.append(skript);
 
 *!*
-script.onload = function() {
-  // the script creates a variable "_"
-  alert( _.VERSION ); // shows library version
+skript.onload = function() {
+  // skript vytvoří proměnnou "_"
+  alert( _.VERSION ); // zobrazí verzi knihovny
 };
 */!*
 ```
 
-So in `onload` we can use script variables, run functions etc.
+V `onload` tedy můžeme používat proměnné skriptu, spouštět jeho funkce a podobně.
 
-...And what if the loading failed? For instance, there's no such script (error 404) or the server is down (unavailable).
+...A co když načítání selže? Například když takový skript neexistuje (chyba 404) nebo server je mimo provoz (nedostupný).
 
 ### script.onerror
 
-Errors that occur during the loading of the script can be tracked in an `error` event.
+Chyby, která nastávají během načítání skriptu, můžeme sledovat v události `error`.
 
-For instance, let's request a script that doesn't exist:
+Vyžádejme si například skript, který neexistuje:
 
 ```js run
-let script = document.createElement('script');
-script.src = "https://example.com/404.js"; // no such script
-document.head.append(script);
+let skript = document.createElement('script');
+skript.src = "https://example.com/404.js"; // takový skript neexistuje
+document.head.append(skript);
 
 *!*
-script.onerror = function() {
-  alert("Error loading " + this.src); // Error loading https://example.com/404.js
+skript.onerror = function() {
+  alert("Chyba při načítání " + this.src); // Chyba při načítání https://example.com/404.js
 };
 */!*
 ```
 
-Please note that we can't get HTTP error details here. We don't know if it was an error 404 or 500 or something else. Just that the loading failed.
+Prosíme všimněte si, že tady nemůžeme získat podrobnosti o HTTP chybě. Nevíme, zda to byla chyba 404, 500 nebo nějaká jiná. Víme jen to, že načítání neuspělo.
 
 ```warn
-Events `onload`/`onerror` track only the loading itself.
+Události `onload`/`onerror` sledují pouze samotné načítání.
 
-Errors that may occur during script processing and execution are out of scope for these events. That is: if a script loaded successfully, then `onload` triggers, even if it has programming errors in it. To track script errors, one can use `window.onerror` global handler.
+Chyby, které mohou nastat při zpracování a výkonu skriptu, jsou mimo dosah těchto událostí. To znamená, že jestliže se skript načte úspěšně, `onload` se spustí i tehdy, když v něm jsou programové chyby. Pro sledování chyb ve skriptech můžeme použít globální handler `window.onerror`.
 ```
 
-## Other resources
+## Jiné zdroje
 
-The `load` and `error` events also work for other resources, basically for any resource that has an external `src`.
+Události `load` a `error` fungují i pro jiné zdroje, v zásadě pro každý zdroj, který obsahuje externí `src`.
 
-For example:
+Příklad:
 
 ```js run
-let img = document.createElement('img');
-img.src = "https://js.cx/clipart/train.gif"; // (*)
+let obrázek = document.createElement('img');
+obrázek.src = "https://js.cx/clipart/train.gif"; // (*)
 
-img.onload = function() {
-  alert(`Image loaded, size ${img.width}x${img.height}`);
+obrázek.onload = function() {
+  alert(`Obrázek načten, velikost ${obrázek.width}x${obrázek.height}`);
 };
 
-img.onerror = function() {
-  alert("Error occurred while loading image");
+obrázek.onerror = function() {
+  alert("Při načítání obrázku došlo k chybě");
 };
 ```
 
-There are some notes though:
+Jsou tady však některé zvláštnosti:
 
-- Most resources start loading when they are added to the document. But `<img>` is an exception. It starts loading when it gets a src `(*)`.
-- For `<iframe>`, the `iframe.onload` event triggers when the iframe loading finished, both for successful load and in case of an error.
+- Většina zdrojů se začne načítat ve chvíli, kdy jsou přidány do dokumentu. Výjimkou je však `<img>`, který se začne načítat, když obdrží zdroj `(*)`.
+- Pro `<iframe>` se událost `iframe.onload` spustí vždy, když skončilo načítání vnitřního rámu, a to jak při úspěšném načtení, tak v případě chyby.
 
-That's for historical reasons.
+Je tomu tak z historických důvodů.
 
-## Crossorigin policy
+## Politika jiného původu
 
-There's a rule: scripts from one site can't access contents of the other site. So, e.g. a script at `https://facebook.com` can't read the user's mailbox at `https://gmail.com`.
+Platí pravidlo, že skripty z jednoho webového sídla nemohou přistupovat k obsahu z jiného sídla. Například skript na `https://facebook.com` nemůže přečíst uživatelovu poštovní schránku na `https://gmail.com`.
 
-Or, to be more precise, one origin (domain/port/protocol triplet) can't access the content from another one. So even if we have a subdomain, or just another port, these are different origins with no access to each other.
+Nebo, přesněji řečeno, z jednoho původu (trojice doména/port/protokol) nelze přistupovat k obsahu jiného původu. I když tedy máme subdoménu nebo jen jiný port, jsou to odlišné původy, které nemají přístup k sobě navzájem.
 
-This rule also affects resources from other domains.
+Toto pravidlo má vliv i na zdroje z jiných domén.
 
-If we're using a script from another domain, and there's an error in it, we can't get error details.
+Jestliže používáme skript z jiné domény a v něm je chyba, nemůžeme o ní získat podrobnosti.
 
-For example, let's take a script `error.js` that consists of a single (bad) function call:
+Vezměme například skript `error.js`, který se skládá z jediného (špatného) volání funkce:
 ```js
 // 📁 error.js
-noSuchFunction();
+takováFunkceNení();
 ```
 
-Now load it from the same site where it's located:
+Nyní jej načteme ze stejného sídla, na němž je umístěn:
 
 ```html run height=0
 <script>
-window.onerror = function(message, url, line, col, errorObj) {
-  alert(`${message}\n${url}, ${line}:${col}`);
+window.onerror = function(zpráva, url, řádek, sloupec, objektChyby) {
+  alert(`${zpráva}\n${url}, ${řádek}:${sloupec}`);
 };
 </script>
 <script src="/article/onload-onerror/crossorigin/error.js"></script>
 ```
 
-We can see a good error report, like this:
+Vidíme pěkné chybové hlášení, například:
 
 ```
-Uncaught ReferenceError: noSuchFunction is not defined
+Uncaught ReferenceError: takováFunkceNení is not defined
 https://javascript.info/article/onload-onerror/crossorigin/error.js, 1:1
 ```
 
-Now let's load the same script from another domain:
+Teď načteme stejný skript z jiné domény:
 
 ```html run height=0
 <script>
-window.onerror = function(message, url, line, col, errorObj) {
-  alert(`${message}\n${url}, ${line}:${col}`);
+window.onerror = function(zpráva, url, řádek, sloupec, objektChyby) {
+  alert(`${zpráva}\n${url}, ${řádek}:${sloupec}`);
 };
 </script>
 <script src="https://cors.javascript.info/article/onload-onerror/crossorigin/error.js"></script>
 ```
 
-The report is different, like this:
+Hlášení je odlišné, například:
 
 ```
 Script error.
 , 0:0
 ```
 
-Details may vary depending on the browser, but the idea is the same: any information about the internals of a script, including error stack traces, is hidden. Exactly because it's from another domain.
+Podrobnosti se mohou na různých prohlížečích lišit, ale myšlenka je stejná: jakékoli informace o vnitřních záležitostech skriptu, včetně zásobníku volání při chybě, jsou skryty. Právě proto, že skript pochází z jiné domény.
 
-Why do we need error details?
+Co když potřebujeme podrobnosti o chybě?
 
-There are many services (and we can build our own) that listen for global errors using `window.onerror`, save errors and provide an interface to access and analyze them. That's great, as we can see real errors, triggered by our users. But if a script comes from another origin, then there's not much information about errors in it, as we've just seen.
+Existuje mnoho služeb (můžeme si vytvořit i svou vlastní), které naslouchají globálním chybám pomocí `window.onerror`, ukládají je a poskytují rozhraní pro přístup k nim a jejich analýzu. To je skvělé, jelikož vidíme skutečné chyby, které vyvolali naši uživatelé. Pokud však skript pochází z jiného původu, nemáme o jeho chybách mnoho informací, jak jsme právě viděli.
 
-Similar cross-origin policy (CORS) is enforced for other types of resources as well.
+Podobná politika jiného původu (cross-origin policy, CORS) je vyžadována i pro ostatní druhy zdrojů.
 
-**To allow cross-origin access, the `<script>` tag needs to have the `crossorigin` attribute, plus the remote server must provide special headers.**
+**Abychom umožnili přístup na jiný původ, značka `<script>` musí mít atribut `crossorigin` a vzdálený server navíc musí poskytovat speciální hlavičky.**
 
-There are three levels of cross-origin access:
+Přístup na jiný původ má tři úrovně:
 
-1. **No `crossorigin` attribute** -- access prohibited.
-2. **`crossorigin="anonymous"`** -- access allowed if the server responds with the header `Access-Control-Allow-Origin` with `*` or our origin. Browser does not send authorization information and cookies to remote server.
-3. **`crossorigin="use-credentials"`** -- access allowed if the server sends back the header `Access-Control-Allow-Origin` with our origin and `Access-Control-Allow-Credentials: true`. Browser sends authorization information and cookies to remote server.
+1. **Atribut `crossorigin` není uveden** -- přístup zakázán.
+2. **`crossorigin="anonymous"`** -- přístup povolen, jestliže odpověď serveru obsahuje hlavičku `Access-Control-Allow-Origin` obsahující `*` nebo náš původ. Prohlížeč neposílá na vzdálený server autorizační informace ani cookies.
+3. **`crossorigin="use-credentials"`** -- přístup povolen, jestliže server pošle zpět hlavičku `Access-Control-Allow-Origin` obsahující náš původ a hlavičku `Access-Control-Allow-Credentials: true`. Prohlížeč posílá na vzdálený server autorizační informace a cookies.
 
 ```smart
-You can read more about cross-origin access in the chapter <info:fetch-crossorigin>. It describes the `fetch` method for network requests, but the policy is exactly the same.
+Více informací o přístupu na jiný původ si můžete přečíst v kapitole <info:fetch-crossorigin>. Ta sice popisuje metodu `fetch` pro síťové požadavky, ale její politika je naprosto stejná.
 
-Such thing as "cookies" is out of our current scope, but you can read about them in the chapter <info:cookie>.
+„Cookies“ a podobné věci jsou momentálně mimo náš rozsah, ale můžete si o nich přečíst v kapitole <info:cookie>.
 ```
 
-In our case, we didn't have any crossorigin attribute. So the cross-origin access was prohibited. Let's add it.
+V našem případě jsme neměli atribut `crossorigin`, proto byl přístup na jiný původ zakázán. Přidejme ho.
 
-We can choose between `"anonymous"` (no cookies sent, one server-side header needed) and `"use-credentials"` (sends cookies too, two server-side headers needed).
+Můžeme si vybrat mezi `"anonymous"` (neposílají se cookies, potřebujeme od serveru jednu hlavičku) a `"use-credentials"` (posílají se i cookies, potřebujeme od serveru dvě hlavičky).
 
-If we don't care about cookies, then `"anonymous"` is the way to go:
+Pokud nás nezajímají cookies, vydáme se cestou `"anonymous"`:
 
 ```html run height=0
 <script>
-window.onerror = function(message, url, line, col, errorObj) {
-  alert(`${message}\n${url}, ${line}:${col}`);
+window.onerror = function(zpráva, url, řádek, sloupec, objektChyby) {
+  alert(`${zpráva}\n${url}, ${řádek}:${sloupec}`);
 };
 </script>
 <script *!*crossorigin="anonymous"*/!* src="https://cors.javascript.info/article/onload-onerror/crossorigin/error.js"></script>
 ```
 
-Now, assuming that the server provides an `Access-Control-Allow-Origin` header, everything's fine. We have the full error report.
+Za předpokladu, že server poskytne hlavičku `Access-Control-Allow-Origin`, je nyní vše v pořádku. Máme úplné chybové hlášení.
 
-## Summary
+## Shrnutí
 
-Images `<img>`, external styles, scripts and other resources provide `load` and `error` events to track their loading:
+Obrázky `<img>`, externí styly, skripty a jiné zdroje poskytují události `load` a `error`, které umožňují sledovat jejich načítání:
 
-- `load` triggers on a successful load,
-- `error` triggers on a failed load.
+- `load` se spustí při úspěšném načtení,
+- `error` se spustí při neúspěšném načtení.
 
-The only exception is `<iframe>`: for historical reasons it always triggers `load`, for any load completion, even if the page is not found.
+Jedinou výjimku představuje `<iframe>`: z historických důvodů se na něm vždy spustí `load`, ať načítání dopadne jakkoli, i když stránka nebude nalezena.
 
-The `readystatechange` event also works for resources, but is rarely used, because `load/error` events are simpler.
+Pro zdroje funguje i událost `readystatechange`, ale používá se zřídka, jelikož události `load/error` jsou jednodušší.

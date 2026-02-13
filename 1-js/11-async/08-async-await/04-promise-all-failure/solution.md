@@ -1,77 +1,77 @@
 
-The root of the problem is that `Promise.all` immediately rejects when one of its promises rejects, but it do nothing to cancel the other promises.
+Jádro problému spočívá v tom, že `Promise.all` se okamžitě zamítne, když bude zamítnut jeden z jeho příslibů, ale neudělá nic, aby zrušilo ostatní přísliby.
 
-In our case, the second query fails, so `Promise.all` rejects, and the `try...catch` block catches this error.Meanwhile, other promises are *not affected* - they independently continue their execution. In our case, the third query throws an error of its own after a bit of time. And that error is never caught, we can see it in the console.
+V našem případě selže druhý dotaz, takže `Promise.all` se zamítne a blok `try...catch` tuto chybu zachytí. Mezitím však ostatní přísliby *nejsou ovlivněny* -- jejich vykonávání nezávisle pokračuje. V našem případě třetí příslib za nějakou dobu vygeneruje chybu sám o sobě. A tato chyba není ničím zachycena a my ji uvidíme v konzoli.
 
-The problem is especially dangerous in server-side environments, such as Node.js, when an uncaught error may cause the process to crash.
+Tento problém je obzvláště nebezpečný v prostředích na straně serveru, například Node.js, kde nezachycená chyba může vést k havárii procesu.
 
-How to fix it?
+Jak to opravit?
 
-An ideal solution would be to cancel all unfinished queries when one of them fails. This way we avoid any potential errors.
+Ideální řešení by bylo zrušit všechny nedokončené dotazy ve chvíli, kdy jeden z nich selže. Tímto způsobem se vyhneme všem potenciálním chybám.
 
-However, the bad news is that service calls (such as `database.query`) are often implemented by a 3rd-party library which doesn't support cancellation. Then there's no way to cancel a call.
+Špatná zpráva však je, že volání služeb (např. `databáze.dotaz`) je často implementováno knihovnou třetí strany, která nepodporuje rušení. Pak neexistuje žádný způsob, jak volání zrušit.
 
-As an alternative, we can write our own wrapper function around `Promise.all` which adds a custom `then/catch` handler to each promise to track them: results are gathered and, if an error occurs, all subsequent promises are ignored.
+Jako alternativu si můžeme napsat vlastní obalovou funkci kolem `Promise.all`, která přidá ke každému příslibu vlastní handler `then/catch`, který je bude sledovat: výsledky se shromáždí, a pokud dojde k chybě, všechny ostatní přísliby jsou ignorovány.
 
 ```js
-function customPromiseAll(promises) {
-  return new Promise((resolve, reject) => {
-    const results = [];
-    let resultsCount = 0;
-    let hasError = false; // we'll set it to true upon first error
+function vlastníPromiseAll(přísliby) {
+  return new Promise((splň, zamítni) => {
+    const výsledky = [];
+    let početVýsledků = 0;
+    let mámeChybu = false; // po první chybě to nastavíme na true
 
-    promises.forEach((promise, index) => {
-      promise
-        .then(result => {
-          if (hasError) return; // ignore the promise if already errored
-          results[index] = result;
-          resultsCount++;
-          if (resultsCount === promises.length) {
-            resolve(results); // when all results are ready - successs
+    přísliby.forEach((příslib, index) => {
+      příslib
+        .then(výsledek => {
+          if (mámeChybu) return; // pokud už máme chybu, příslib ignorujeme
+          výsledky[index] = výsledek;
+          početVýsledků++;
+          if (početVýsledků === přísliby.length) {
+            splň(výsledky); // když jsou všechny výsledky připraveny - úspěch
           }
         })
-        .catch(error => {
-          if (hasError) return; // ignore the promise if already errored
-          hasError = true; // wops, error!
-          reject(error); // fail with rejection
+        .catch(chyba => {
+          if (mámeChybu) return; // pokud už máme chybu, příslib ignorujeme
+          mámeChybu = true; // ouha, chyba!
+          zamítni(chyba); // zamítnutí při selhání
         });
     });
   });
 }
 ```
 
-This approach has an issue of its own - it's often undesirable to `disconnect()` when queries are still in the process.
+Tento přístup má sám o sobě problém -- často není žádoucí volat `odpoj()`, když jsou dotazy ještě zpracovávány.
 
-It may be important that all queries complete, especially if some of them make important updates.
+Může být důležité, aby se všechny dotazy zpracovaly, zvláště když některé z nich provádějí důležité zápisy do databáze.
 
-So we should wait until all promises are settled before going further with the execution and eventually disconnecting.
+Než tedy budeme pokračovat v provádění a nakonec se odpojíme, měli bychom počkat, než budou všechny přísliby usazeny.
 
-Here's another implementation. It behaves similar to `Promise.all` - also resolves with the first error, but waits until all promises are settled.
+Zde je jiná implementace. Chová se podobně jako `Promise.all` -- také se vyhodnotí při první chybě, ale počká, dokud nebudou všechny přísliby usazeny.
 
 ```js
-function customPromiseAllWait(promises) {
-  return new Promise((resolve, reject) => {
-    const results = new Array(promises.length);
-    let settledCount = 0;
-    let firstError = null;
+function vlastníPromiseAllSČekáním(přísliby) {
+  return new Promise((splň, zamítni) => {
+    const výsledky = new Array(přísliby.length);
+    let početUsazených = 0;
+    let prvníChyba = null;
 
-    promises.forEach((promise, index) => {
-      Promise.resolve(promise)
-        .then(result => {
-          results[index] = result;
+    přísliby.forEach((příslib, index) => {
+      Promise.splň(příslib)
+        .then(výsledek => {
+          výsledky[index] = výsledek;
         })
-        .catch(error => {
-          if (firstError === null) {
-            firstError = error;
+        .catch(chyba => {
+          if (prvníChyba === null) {
+            prvníChyba = chyba;
           }
         })
         .finally(() => {
-          settledCount++;
-          if (settledCount === promises.length) {
-            if (firstError !== null) {
-              reject(firstError);
+          početUsazených++;
+          if (početUsazených === přísliby.length) {
+            if (prvníChyba !== null) {
+              zamítni(prvníChyba);
             } else {
-              resolve(results);
+              splň(výsledky);
             }
           }
         });
@@ -80,34 +80,34 @@ function customPromiseAllWait(promises) {
 }
 ```
 
-Now `await customPromiseAllWait(...)` will stall the execution until all queries are processed.
+Nyní `await vlastníPromiseAllSČekáním(...)` pozastaví provádění, dokud nebudou všechny dotazy zpracovány.
 
-This is a more reliable approach, as it guarantees a predictable execution flow.
+Tento přístup je spolehlivější, neboť zaručuje předvídatelný průběh provádění.
 
-Lastly, if we'd like to process all errors, we can use either use `Promise.allSettled` or write a wrapper around it to gathers all errors in a single [AggregateError](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError) object and rejects with it.
+Nakonec, kdybychom chtěli zpracovat všechny chyby, můžeme buď použít `Promise.allSettled`, nebo kolem něj napsat obal, který shromáždí všechny chyby do jediného objektu [AggregateError](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError) a zamítne se s ním.
 
 ```js
-// wait for all promises to settle
-// return results if no errors
-// throw AggregateError with all errors if any
-function allOrAggregateError(promises) {
-  return Promise.allSettled(promises).then(results => {
-    const errors = [];
-    const values = [];
+// počkáme na usazení všech příslibů
+// pokud nebyla žádná chyba, vrátíme výsledky
+// pokud byly chyby, vygenerujeme AggregateError se všemi chybami
+function všechnoNeboAggregateError(přísliby) {
+  return Promise.allSettled(přísliby).then(výsledky => {
+    const chyby = [];
+    const hodnoty = [];
 
-    results.forEach((res, i) => {
-      if (res.status === 'fulfilled') {
-        values[i] = res.value;
+    výsledky.forEach((výsl, i) => {
+      if (výsl.status === 'fulfilled') {
+        hodnoty[i] = výsl.value;
       } else {
-        errors.push(res.reason);
+        chyby.push(výsl.reason);
       }
     });
 
-    if (errors.length > 0) {
-      throw new AggregateError(errors, 'One or more promises failed');
+    if (chyby.length > 0) {
+      throw new AggregateError(chyby, 'Jeden nebo více příslibů selhalo');
     }
 
-    return values;
+    return hodnoty;
   });
 }
 ```
