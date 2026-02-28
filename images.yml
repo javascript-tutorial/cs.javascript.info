@@ -223,22 +223,22 @@ promiseQueue.svg:
 eventLoop-full.svg:
   script: 'skript'
   event:
-    text: 'událost'
+    text: 'smyčka'
   loop:
-    text: 'cyklus'
+    text: 'událostí'
   microtasks: 'mikroúlohy'
   render: 'renderování'
 
 eventLoop.svg:
   script: 'skript'
   event:
-    text: 'událost'
+    text: 'smyčka'
   loop:
-    text: 'cyklus'
+    text: 'událostí'
   macrotask:
-    text: 'makroúloha'
-  queue:
     text: 'fronta'
+  queue:
+    text: 'makroúloh'
 
 cookie-xsrf.svg:
   _defaults:
@@ -290,12 +290,16 @@ selection-firefox.svg:
   selection: 'výběr'
 
 selection-direction-backward.svg:
-  focus: 'zaměření'
+  focus: 'fokus'
   anchor: 'kotva'
+  'mouse move direction': 'směr pohybu myši'
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
 
 selection-direction-forward.svg:
-  focus: 'zaměření'
+  focus: 'fokus'
   anchor: 'kotva'
+  'mouse move direction': 'směr pohybu myši'
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
 
 object-prototype-empty.svg:
   'object': 'objekt'
@@ -658,3 +662,14 @@ ball-shift.svg:
   'shiftX': 'posunX'
   'shiftY': 'posunY'
   
+range-hello-1.svg:
+  '&lt;p&gt;Hello&lt;/p&gt;': '&lt;p&gt;Nazdar&lt;/p&gt;'
+  
+range-example-p-0-1.svg:
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
+    
+range-example-p-1-3.svg:
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
+      
+range-example-p-2-b-3.svg:
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'

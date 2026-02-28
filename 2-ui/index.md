@@ -1,3 +1,3 @@
-# Browser: Document, Events, Interfaces 
+# Prohlížeč: dokument, události, rozhraní
 
-Learning how to manage the browser page: add elements, manipulate their size and position, dynamically create interfaces and interact with the visitor.
+Zde se naučíme, jak spravovat stránku v prohlížeči: jak přidávat elementy, měnit jejich velikost a umístění, dynamicky vytvářet rozhraní a komunikovat s návštěvníkem.

@@ -1,50 +1,50 @@
-The console output is: 1 7 3 5 2 6 4.
+Výstup na konzoli bude: 1 7 3 5 2 6 4.
 
-The task is quite simple, we just need to know how microtask and macrotask queues work.
+Tato úloha je poměrně jednoduchá. Stačí jen vědět, jak fungují fronty mikroúloh a makroúloh.
 
-Let's see what's going on, step by step.
+Podívejme se krok za krokem, co se děje.
 
 ```js
 console.log(1);
-// The first line executes immediately, it outputs `1`.
-// Macrotask and microtask queues are empty, as of now.
+// První řádek se spustí okamžitě a vypíše `1`.
+// Fronta makroúloh i fronta mikroúloh jsou zatím prázdné.
 
 setTimeout(() => console.log(2));
-// `setTimeout` appends the callback to the macrotask queue.
-// - macrotask queue content:
+// `setTimeout` přidá callback do fronty makroúloh.
+// - obsah fronty makroúloh:
 //   `console.log(2)`
 
 Promise.resolve().then(() => console.log(3));
-// The callback is appended to the microtask queue.
-// - microtask queue content:
+// Callback se přidá do fronty mikroúloh.
+// - obsah fronty mikroúloh:
 //   `console.log(3)`
 
 Promise.resolve().then(() => setTimeout(() => console.log(4)));
-// The callback with `setTimeout(...4)` is appended to microtasks
-// - microtask queue content:
+// Callback se `setTimeout(...4)` se přidá do fronty mikroúloh.
+// - obsah fronty mikroúloh:
 //   `console.log(3); setTimeout(...4)`
 
 Promise.resolve().then(() => console.log(5));
-// The callback is appended to the microtask queue
-// - microtask queue content:
+// Callback se přidá do fronty mikroúloh.
+// - obsah fronty mikroúloh:
 //   `console.log(3); setTimeout(...4); console.log(5)`
 
 setTimeout(() => console.log(6));
-// `setTimeout` appends the callback to macrotasks
-// - macrotask queue content:
+// `setTimeout` přidá callback do fronty makroúloh.
+// - obsah fronty makroúloh:
 //   `console.log(2); console.log(6)`
 
 console.log(7);
-// Outputs 7 immediately.
+// Okamžitě vypíše 7.
 ```
 
-To summarize,
+Když to shrneme:
 
-1. Numbers `1` and `7` show up immediately, because simple `console.log` calls don't use any queues.
-2. Then, after the main code flow is finished, the microtask queue runs.
-    - It has commands: `console.log(3); setTimeout(...4); console.log(5)`.
-    - Numbers `3` and `5` show up, while `setTimeout(() => console.log(4))` adds the `console.log(4)` call to the end of the macrotask queue.
-    - The macrotask queue is now: `console.log(2); console.log(6); console.log(4)`.
-3. After the microtask queue becomes empty, the macrotask queue executes. It outputs `2`, `6`, `4`.
+1. Čísla `1` a `7` se zobrazí okamžitě, neboť jednoduchá volání `console.log` nepoužívají žádnou frontu.
+2. Pak po dokončení běhu hlavního kódu se spustí fronta mikroúloh.
+    - Obsahuje tyto příkazy: `console.log(3); setTimeout(...4); console.log(5)`.
+    - Zobrazí se čísla `3` a `5`, zatímco `setTimeout(() => console.log(4))` přidá volání `console.log(4)` na konec fronty makroúloh.
+    - Fronta makroúloh je nyní: `console.log(2); console.log(6); console.log(4)`.
+3. Po vyprázdnění fronty mikroúloh se spustí fronta makroúloh a vypíše `2`, `6`, `4`.
 
-Finally, we have the output: `1 7 3 5 2 6 4`.
+Nakonec tedy máme výstup: `1 7 3 5 2 6 4`.

@@ -1,136 +1,136 @@
 
-# Event loop: microtasks and macrotasks
+# Smyčka událostí: mikroúlohy a makroúlohy
 
-Browser JavaScript execution flow, as well as in Node.js, is based on an *event loop*.
+Běh JavaScriptu v prohlížeči i v Node.js je založen na *smyčce událostí*.
 
-Understanding how event loop works is important for optimizations, and sometimes for the right architecture.
+Porozumět, jak smyčka událostí funguje, je důležité pro optimalizace a někdy pro správnou architekturu.
 
-In this chapter we first cover theoretical details about how things work, and then see practical applications of that knowledge.
+V této kapitole nejprve probereme teoretické podrobnosti o tom, jak to vše funguje, a pak se podíváme na praktické aplikace těchto znalostí.
 
-## Event Loop
+## Smyčka událostí
 
-The *event loop* concept is very simple. There's an endless loop, where the JavaScript engine waits for tasks, executes them and then sleeps, waiting for more tasks.
+Koncept *smyčky událostí* je velmi jednoduchý. Je to nekonečná smyčka, v níž motor JavaScriptu čeká na úlohy, spouští je a pak spí a čeká na další úlohy.
 
-The general algorithm of the engine:
+Obecný algoritmus motoru:
 
-1. While there are tasks:
-    - execute them, starting with the oldest task.
-2. Sleep until a task appears, then go to 1.
+1. Dokud jsou úlohy:
+    - spouštěj je v pořadí od nejstarší.
+2. Čekej, dokud se neobjeví úloha, a pak přejdi k bodu 1.
 
-That's a formalization of what we see when browsing a page. The JavaScript engine does nothing most of the time, it only runs if a script/handler/event activates.
+To je formalizace toho, co vidíme při prohlížení stránky. Motor JavaScriptu většinu času nic nedělá a spustí se jen tehdy, když se aktivuje skript, handler nebo událost.
 
-Examples of tasks:
+Příklady úloh:
 
-- When an external script `<script src="...">` loads, the task is to execute it.
-- When a user moves their mouse, the task is to dispatch `mousemove` event and execute handlers.
-- When the time is due for a scheduled `setTimeout`, the task is to run its callback.
-- ...and so on.
+- Když se načte externí skript `<script src="...">`, úlohou je spustit jej.
+- Když uživatel pohne myší, úlohou je vyvolat událost `mousemove` a spustit handlery.
+- Když nastal čas na naplánovaný `setTimeout`, úlohou je spustit jeho callback.
+- ...a podobně.
 
-Tasks are set -- the engine handles them -- then waits for more tasks (while sleeping and consuming close to zero CPU).
+Úlohy se nastaví -- motor je zpracuje -- a pak čeká na další úlohy (zatímco spí a nespotřebovává téměř žádné zdroje CPU).
 
-It may happen that a task comes while the engine is busy, then it's enqueued.
+Může se stát, že úloha přijde v době, kdy motor zrovna pracuje. Pak se úloha zařadí do fronty.
 
-The tasks form a queue, the so-called "macrotask queue" ([v8](https://v8.dev/) term):
+Úlohy tvoří frontu, nazývanou „fronta makroúloh“ (pojem z [v8](https://v8.dev/)):
 
 ![](eventLoop.svg)
 
-For instance, while the engine is busy executing a `script`, a user may move their mouse causing `mousemove`, and `setTimeout` may be due and so on, these tasks form a queue, as illustrated in the picture above.
+Například zatímco je motor zaneprázdněn výkonem skriptu, uživatel může pohnout myší a vyvolat `mousemove`, může nastat čas na `setTimeout` a podobně. Tyto úlohy vytvoří frontu, jak je zobrazeno na uvedeném obrázku.
 
-Tasks from the queue are processed on a "first come – first served" basis. When the engine browser is done with the `script`, it handles `mousemove` event, then `setTimeout` handler, and so on.
+Úlohy z fronty se zpracovávají principem „kdo dřív přijde, ten je dřív obsloužen“. Když motor v prohlížeči dokončí `script`, zpracuje událost `mousemove`, pak handler `setTimeout` a tak dále.
 
-So far, quite simple, right?
+Zatím je to docela jednoduché, že?
 
-Two more details:
-1. Rendering never happens while the engine executes a task. It doesn't matter if the task takes a long time. Changes to the DOM are painted only after the task is complete.
-2. If a task takes too long, the browser can't do other tasks, such as processing user events. So after some time, it raises an alert like "Page Unresponsive", suggesting killing the task with the whole page. That happens when there are a lot of complex calculations or a programming error leading to an infinite loop.
+Dva další detaily:
+1. Dokud motor provádí úlohu, nikdy se neprovádí vykreslování. Nezáleží na tom, že provádění úlohy bude trvat dlouhou dobu. Změny v DOMu se vykreslí až po dokončení úlohy.
+2. Jestliže úloha trvá příliš dlouho, prohlížeč nemůže provádět jiné úlohy, například zpracování uživatelských událostí. Po nějaké době tedy zobrazí oznámení jako „Stránka nereaguje“ a navrhne ukončit úlohu spolu s celou stránkou. To se stane tehdy, když úloha obsahuje spoustu složitých výpočtů nebo když programátorská chyba vede k nekonečnému cyklu.
 
-That was the theory. Now let's see how we can apply that knowledge.
+To byla teorie. Nyní se podívejme, jak můžeme tyto znalosti využít.
 
-## Use-case 1: splitting CPU-hungry tasks
+## Případ použití 1: rozdělení úloh náročných na CPU
 
-Let's say we have a CPU-hungry task.
+Řekněme, že máme úlohu náročnou na CPU.
 
-For example, syntax-highlighting (used to colorize code examples on this page) is quite CPU-heavy. To highlight the code, it performs the analysis, creates many colored elements, adds them to the document -- for a large amount of text that takes a lot of time.
+Například zvýrazňování syntaxe (používané k obarvení příkladů kódu na této stránce) je na CPU poměrně náročné. Aby bylo možné kód obarvit, musí se provést analýza, vytvořit mnoho barevných elementů, přidat je do dokumentu -- pro velké množství textu to trvá dlouhou dobu.
 
-While the engine is busy with syntax highlighting, it can't do other DOM-related stuff, process user events, etc. It may even cause the browser to "hiccup" or even "hang" for a bit, which is unacceptable.
+Zatímco motor pracuje na zvýrazňování syntaxe, nemůže provádět jiné věci vztahující se k DOMu, zpracovávat uživatelské události a podobně. Může dokonce způsobit, že se prohlížeč „zadrhne“ nebo dokonce na nějakou dobu „zatuhne“, což je nepřijatelné.
 
-We can avoid problems by splitting the big task into pieces. Highlight the first 100 lines, then schedule `setTimeout` (with zero-delay) for the next 100 lines, and so on.
+Těmto problémům se můžeme vyhnout, když velkou úlohu rozdělíme na části. Zvýrazníme prvních 100 řádků, pak naplánujeme `setTimeout` (s nulovou prodlevou) pro dalších 100 řádků, a tak dále.
 
-To demonstrate this approach, for the sake of simplicity, instead of text-highlighting, let's take a function that counts from `1` to `1000000000`.
+Abychom tento přístup předvedli, pro zjednodušení místo zvýrazňování syntaxe použijeme funkci, která bude počítat od `1` do `1000000000`.
 
-If you run the code below, the engine will "hang" for some time. For server-side JS that's clearly noticeable, and if you are running it in-browser, then try to click other buttons on the page -- you'll see that no other events get handled until the counting finishes.
+Když spustíte následující kód, motor na nějakou dobu „zatuhne“. U JS na serverové straně je to zjevně vidět, a pokud si ho spustíte v prohlížeči, pokuste se klikat na jiná tlačítka na stránce -- uvidíte, že dokud počítání neskončí, žádné jiné události nebudou zpracovány.
 
 ```js run
 let i = 0;
 
-let start = Date.now();
+let začátek = Date.now();
 
-function count() {
+function počítej() {
 
-  // do a heavy job
+  // provede těžkou práci
   for (let j = 0; j < 1e9; j++) {
     i++;
   }
 
-  alert("Done in " + (Date.now() - start) + 'ms');
+  alert("Hotovo za " + (Date.now() - začátek) + ' ms');
 }
 
-count();
+počítej();
 ```
 
-The browser may even show a "the script takes too long" warning.
+Prohlížeč může dokonce zobrazit upozornění „skript trvá příliš dlouho“.
 
-Let's split the job using nested `setTimeout` calls:
+Rozdělme tuto práci pomocí vnořených volání `setTimeout`:
 
 ```js run
 let i = 0;
 
-let start = Date.now();
+let začátek = Date.now();
 
-function count() {
+function počítej() {
 
-  // do a piece of the heavy job (*)
+  // provede část těžké práce (*)
   do {
     i++;
   } while (i % 1e6 != 0);
 
   if (i == 1e9) {
-    alert("Done in " + (Date.now() - start) + 'ms');
+    alert("Hotovo za " + (Date.now() - začátek) + ' ms');
   } else {
-    setTimeout(count); // schedule the new call (**)
+    setTimeout(počítej); // naplánujeme další volání (**)
   }
 
 }
 
-count();
+počítej();
 ```
 
-Now the browser interface is fully functional during the "counting" process.
+Nyní je rozhraní prohlížeče během procesu „počítání“ plně funkční.
 
-A single run of `count` does a part of the job `(*)`, and then re-schedules itself `(**)` if needed:
+Jedno spuštění `počítej` odvede část práce `(*)` a pak se znovu naplánuje `(**)`, pokud je to zapotřebí:
 
-1. First run counts: `i=1...1000000`.
-2. Second run counts: `i=1000001..2000000`.
-3. ...and so on.
+1. První běh spočítá: `i=1...1000000`.
+2. Druhý běh spočítá: `i=1000001..2000000`.
+3. ...a tak dále.
 
-Now, if a new side task (e.g. `onclick` event) appears while the engine is busy executing part 1, it gets queued and then executes when part 1 finished, before the next part. Periodic returns to the event loop between `count` executions provide just enough "air" for the JavaScript engine to do something else, to react to other user actions.
+Pokud se nyní objeví nová vedlejší úloha (např. událost `onclick`), zatímco je motor zaneprázdněn výkonem části 1, zařadí se do fronty a pak se spustí, až bude část 1 dokončena, ještě před další částí. Periodické návraty do smyčky událostí mezi spuštěními `počítej` poskytnou motoru JavaScriptu dostatek „vzduchu k nadechnutí“, aby prováděl něco jiného, aby reagoval na jiné uživatelské akce.
 
-The notable thing is that both variants -- with and without splitting the job by `setTimeout` -- are comparable in speed. There's not much difference in the overall counting time.
+Stojí za zmínku, že obě varianty -- s rozdělením práce pomocí `setTimeout` i bez něj -- mají srovnatelnou rychlost. V celkové době výpočtu není velký rozdíl.
 
-To make them closer, let's make an improvement.
+Abychom je ještě přiblížili, vytvořme zlepšení.
 
-We'll move the scheduling to the beginning of the `count()`:
+Přesuneme naplánování na začátek funkce `počítej()`:
 
 ```js run
 let i = 0;
 
-let start = Date.now();
+let začátek = Date.now();
 
-function count() {
+function počítej() {
 
-  // move the scheduling to the beginning
+  // přesuneme naplánování na začátek
   if (i < 1e9 - 1e6) {
-    setTimeout(count); // schedule the new call
+    setTimeout(počítej); // naplánujeme nové volání
   }
 
   do {
@@ -138,202 +138,202 @@ function count() {
   } while (i % 1e6 != 0);
 
   if (i == 1e9) {
-    alert("Done in " + (Date.now() - start) + 'ms');
+    alert("Hotovo za " + (Date.now() - začátek) + ' ms');
   }
 
 }
 
-count();
+počítej();
 ```
 
-Now when we start to `count()` and see that we'll need to `count()` more, we schedule that immediately, before doing the job.
+Když nyní zahájíme funkci `počítej()` a vidíme, že budeme potřebovat volat `počítej()` dál, naplánujeme to hned, ještě před provedením práce.
 
-If you run it, it's easy to notice that it takes significantly less time.
+Když si to spustíte, všimnete si, že to trvá výrazně méně času.
 
-Why?  
+Proč? 
 
-That's simple: as you remember, there's the in-browser minimal delay of 4ms for many nested `setTimeout` calls. Even if we set `0`, it's `4ms` (or a bit more). So the earlier we schedule it - the faster it runs.
+Důvod je jednoduchý: jak si pamatujete, v prohlížeči je minimální prodleva pro mnoho vnořených volání funkce `setTimeout` 4 ms. I když nastavíme `0`, bude to `4 ms` (nebo o trochu víc). Čím dříve ji tedy nastavíme, tím rychleji se spustí.
 
-Finally, we've split a CPU-hungry task into parts - now it doesn't block the user interface. And its overall execution time isn't much longer.
+Nakonec jsme tedy rozdělili úlohu náročnou na CPU na části -- nyní neblokuje uživatelské rozhraní. A její celková doba běhu není příliš delší.
 
-## Use case 2: progress indication
+## Případ použití 2: zobrazování průběhu
 
-Another benefit of splitting heavy tasks for browser scripts is that we can show progress indication.
+Další výhodou rozdělení těžkých úloh v prohlížečových skriptech je, že můžeme zobrazovat indikátor průběhu.
 
-As mentioned earlier, changes to DOM are painted only after the currently running task is completed, irrespective of how long it takes.
+Jak jsme uvedli dříve, změny v DOMu se vykreslí teprve po dokončení aktuálně běžící úlohy, ať trvá jakkoli dlouho.
 
-On one hand, that's great, because our function may create many elements, add them one-by-one to the document and change their styles -- the visitor won't see any "intermediate", unfinished state. An important thing, right?
+Na jednu stranu je to skvělé, protože naše funkce může vytvořit množství elementů, přidávat je do dokumentu jeden po druhém a měnit jejich styly -- návštěvník nespatří žádný nedokončený „mezistav“. To je důležité, ne?
 
-Here's the demo, the changes to `i` won't show up until the function finishes, so we'll see only the last value:
+V následujícím demu se změny proměnné `i` nezobrazí, dokud funkce neskončí, takže uvidíme pouze poslední hodnotu:
 
 
 ```html run
-<div id="progress"></div>
+<div id="průběh"></div>
 
 <script>
 
-  function count() {
+  function počítej() {
     for (let i = 0; i < 1e6; i++) {
       i++;
-      progress.innerHTML = i;
+      průběh.innerHTML = i;
     }
   }
 
-  count();
+  počítej();
 </script>
 ```
 
-...But we also may want to show something during the task, e.g. a progress bar.
+...Ale současně můžeme chtít při běhu úlohy něco zobrazovat, například ukazatel průběhu.
 
-If we split the heavy task into pieces using `setTimeout`, then changes are painted out in-between them.
+Jestliže rozdělíme těžkou úlohu na části pomocí `setTimeout`, budou změny vykresleny mezi nimi.
 
-This looks prettier:
+Tohle vypadá lépe:
 
 ```html run
-<div id="progress"></div>
+<div id="průběh"></div>
 
 <script>
   let i = 0;
 
-  function count() {
+  function počítej() {
 
-    // do a piece of the heavy job (*)
+    // provede část těžké práce (*)
     do {
       i++;
-      progress.innerHTML = i;
+      průběh.innerHTML = i;
     } while (i % 1e3 != 0);
 
     if (i < 1e7) {
-      setTimeout(count);
+      setTimeout(počítej);
     }
 
   }
 
-  count();
+  počítej();
 </script>
 ```
 
-Now the `<div>` shows increasing values of `i`, a kind of a progress bar.
+Nyní bude `<div>` zobrazovat zvyšující se hodnoty `i`, tedy něco jako ukazatel průběhu.
 
 
-## Use case 3: doing something after the event
+## Případ použití 3: provedení něčeho po události
 
-In an event handler we may decide to postpone some actions until the event bubbled up and was handled on all levels. We can do that by wrapping the code in zero delay `setTimeout`.
+V handleru události se můžeme rozhodnout odložit některé akce až na dobu, kdy událost probublala a byla zpracována na všech úrovních. To můžeme udělat zapouzdřením kódu do `setTimeout` s nulovou prodlevou.
 
-In the chapter <info:dispatch-events> we saw an example: custom event `menu-open` is dispatched in `setTimeout`, so that it happens after the "click" event is fully handled.
+Příklad jsme již viděli v kapitole <info:dispatch-events>: naše vlastní událost `otevři-menu` je vyvolána v `setTimeout`, takže nastane až poté, co je událost `click` plně zpracována.
 
 ```js
 menu.onclick = function() {
   // ...
 
-  // create a custom event with the clicked menu item data
-  let customEvent = new CustomEvent("menu-open", {
+  // vytvoříme vlastní událost s daty kliknutého prvku menu
+  let vlastníUdálost = new CustomEvent("otevři-menu", {
     bubbles: true
   });
 
-  // dispatch the custom event asynchronously
-  setTimeout(() => menu.dispatchEvent(customEvent));
+  // asynchronně vyvoláme vlastní událost
+  setTimeout(() => menu.dispatchEvent(vlastníUdálost));
 };
 ```
 
-## Macrotasks and Microtasks
+## Makroúlohy a mikroúlohy
 
-Along with *macrotasks*, described in this chapter, there are *microtasks*, mentioned in the chapter <info:microtask-queue>.
+Kromě *makroúloh*, popsaných v této kapitole, existují také *mikroúlohy*, o nichž jsme se zmínili v kapitole <info:microtask-queue>.
 
-Microtasks come solely from our code. They are usually created by promises: an execution of `.then/catch/finally` handler becomes a microtask. Microtasks are used "under the cover" of `await` as well, as it's another form of promise handling.
+Mikroúlohy pocházejí výhradně z našeho kódu. Obvykle je vytvářejí přísliby: spuštění handleru `.then/catch/finally` se stane mikroúlohou. Mikroúlohy se používají i „pod pláštíkem“ `await`, což je vlastně jen další způsob zpracování příslibů.
 
-There's also a special function `queueMicrotask(func)` that queues `func` for execution in the microtask queue.
+Existuje i speciální funkce `queueMicrotask(funkce)`, která zařadí spuštění `funkce` do fronty mikroúloh.
 
-**Immediately after every *macrotask*, the engine executes all tasks from *microtask* queue, prior to running any other macrotasks or rendering or anything else.**
+**Ihned po každé *makroúloze* motor spustí všechny úlohy z fronty *mikroúloh* ještě před spuštěním dalších makroúloh, vykreslování nebo čehokoli jiného.**
 
-For instance, take a look:
+Podívejme se na příklad:
 
 ```js run
 setTimeout(() => alert("timeout"));
 
 Promise.resolve()
-  .then(() => alert("promise"));
+  .then(() => alert("příslib"));
 
-alert("code");
+alert("kód");
 ```
 
-What's going to be the order here?
+V jakém pořadí se to bude dít?
 
-1. `code` shows first, because it's a regular synchronous call.
-2. `promise` shows second, because `.then` passes through the microtask queue, and runs after the current code.
-3. `timeout` shows last, because it's a macrotask.
+1. Jako první se zobrazí `kód`, protože to je běžné synchronní volání.
+2. Jako druhý se zobrazí `příslib`, protože `.then` projde frontou mikroúloh a spustí se po aktuálním kódu.
+3. Jako poslední se zobrazí `timeout`, protože to je makroúloha.
 
-The richer event loop picture looks like this (order is from top to bottom, that is: the script first, then microtasks, rendering and so on):
+Bohatší obrázek smyčky událostí vypadá takto (pořadí shora dolů, tedy: nejprve skript, pak mikroúlohy, vykreslování a tak dále):
 
 ![](eventLoop-full.svg)
 
-All microtasks are completed before any other event handling or rendering or any other macrotask takes place.
+Všechny mikroúlohy se dokončí dříve, než se uskuteční zpracování dalších handlerů událostí, vykreslování nebo jakákoli jiná makroúloha.
 
-That's important, as it guarantees that the application environment is basically the same (no mouse coordinate changes, no new network data, etc) between microtasks.
+To je důležité, neboť nám to zaručuje, že aplikační prostředí zůstane mezi mikroúlohami v zásadě stejné (nebudou změny v souřadnicích myši, nová data ze sítě atd.).
 
-If we'd like to execute a function asynchronously (after the current code), but before changes are rendered or new events handled, we can schedule it with `queueMicrotask`.
+Jestliže chceme spustit funkci asynchronně (po aktuálním kódu), ale ještě před vykreslením změn nebo zpracování nových událostí, můžeme ji naplánovat voláním `queueMicrotask`.
 
-Here's an example with "counting progress bar", similar to the one shown previously, but `queueMicrotask` is used instead of `setTimeout`. You can see that it renders at the very end. Just like the synchronous code:
+Následuje příklad s „ukazatelem průběhu počítání“, podobný dříve uvedenému, ale místo `setTimeout` použijeme `queueMicrotask`. Vidíte, že k vykreslení dojde až na samotném konci, stejně jako u synchronního kódu:
 
 ```html run
-<div id="progress"></div>
+<div id="průběh"></div>
 
 <script>
   let i = 0;
 
-  function count() {
+  function počítej() {
 
-    // do a piece of the heavy job (*)
+    // provede část těžké práce (*)
     do {
       i++;
-      progress.innerHTML = i;
+      průběh.innerHTML = i;
     } while (i % 1e3 != 0);
 
     if (i < 1e6) {
   *!*
-      queueMicrotask(count);
+      queueMicrotask(počítej);
   */!*
     }
 
   }
 
-  count();
+  počítej();
 </script>
 ```
 
-## Summary
+## Shrnutí
 
-A more detailed event loop algorithm (though still simplified compared to the [specification](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)):
+Podrobnější algoritmus smyčky událostí (ačkoli ve srovnání se [specifikací](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model) stále zjednodušený):
 
-1. Dequeue and run the oldest task from the *macrotask* queue (e.g. "script").
-2. Execute all *microtasks*:
-    - While the microtask queue is not empty:
-        - Dequeue and run the oldest microtask.
-3. Render changes if any.
-4. If the macrotask queue is empty, wait till a macrotask appears.
-5. Go to step 1.
+1. Vyjmi z fronty a spusť nejstarší úlohu z fronty *makroúloh* (např. skript).
+2. Spusť všechny *mikroúlohy*:
+    - Dokud není fronta mikroúloh prázdná:
+        - Vyjmi z fronty a spusť nejstarší mikroúlohu.
+3. Vykresli změny, pokud k nějakým došlo.
+4. Pokud je fronta makroúloh prázdná, vyčkej na příchod nové makroúlohy.
+5. Přejdi k bodu 1.
 
-To schedule a new *macrotask*:
-- Use zero delayed `setTimeout(f)`.
+Chcete-li naplánovat novou *makroúlohu*:
+- Použijte `setTimeout(f)` s nulovou prodlevou.
 
-That may be used to split a big calculation-heavy task into pieces, for the browser to be able to react to user events and show progress between them.
+Tímto způsobem můžete rozdělit velkou, výpočetně náročnou úlohu na části, aby mezi nimi prohlížeč mohl reagovat na uživatelské události a zobrazovat průběh.
 
-Also, used in event handlers to schedule an action after the event is fully handled (bubbling done).
+Používá se to i v handlerech událostí, abychom naplánovali akci až na dobu, kdy bude událost plně zpracována (bublání je dokončeno).
 
-To schedule a new *microtask*
-- Use `queueMicrotask(f)`.
-- Also promise handlers go through the microtask queue.
+Chcete-li naplánovat novou *mikroúlohu*:
+- Použijte `queueMicrotask(f)`.
+- Frontou mikroúloh procházejí také handlery příslibů.
 
-There's no UI or network event handling between microtasks: they run immediately one after another.
+Mezi mikroúlohami nedochází ke zpracování událostí uživatelského rozhraní nebo sítě: spouštějí se okamžitě jedna za druhou.
 
-So one may want to `queueMicrotask` to execute a function asynchronously, but within the environment state.
+Můžeme tedy chtít použít `queueMicrotask`, abychom spustili funkci asynchronně, ale ve stejném stavu prostředí.
 
 ```smart header="Web Workers"
-For long heavy calculations that shouldn't block the event loop, we can use [Web Workers](https://html.spec.whatwg.org/multipage/workers.html).
+Pro dlouhé a těžké výpočty, které by neměly blokovat smyčku událostí, můžeme použít [Web Workers](https://html.spec.whatwg.org/multipage/workers.html).
 
-That's a way to run code in another, parallel thread.
+To je způsob, jak spustit kód v jiném, paralelním vlákně.
 
-Web Workers can exchange messages with the main process, but they have their own variables, and their own event loop.
+Web Workers si mohou vyměňovat zprávy s hlavním procesem, ale mají své vlastní proměnné a svou vlastní smyčku událostí.
 
-Web Workers do not have access to DOM, so they are useful, mainly, for calculations, to use multiple CPU cores simultaneously.
+Web Workers nemají přístup k DOMu, jsou tedy užitečné zejména k výpočtům, abychom využili více jader CPU současně.
 ```
