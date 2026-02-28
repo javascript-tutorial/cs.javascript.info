@@ -22,6 +22,6 @@ document.body.children[1]
 Druhý uzel `<li>` (obsahující Petra):
 
 ```js
-// získáme <ul> a pak získáme jeho poslední elementové dítě
+// získáme <ul> a pak získáme jeho poslední dětský element
 document.body.lastElementChild.lastElementChild
 ```

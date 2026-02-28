@@ -35,7 +35,7 @@ Skript nemůže přistupovat k elementu, který v okamžiku jeho spuštění nee
 
 Konkrétně, jestliže je skript umístěn uvnitř `<head>`, pak `document.body` nebude k dispozici, protože prohlížeč je ještě nenačetl.
 
-V uvedeném příkladu tedy první `alert` zobrazí `null`:
+V následujícím příkladu tedy první `alert` zobrazí `null`:
 
 ```html run
 <html>
@@ -178,6 +178,7 @@ Prosíme, nedělejte to. Cyklus `for..in` iteruje nad všemi enumerovatelnými v
   for (let vlastnost in document.body.childNodes) alert(vlastnost);
 </script>
 </body>
+```
 ````
 
 ## Sourozenci a rodič
@@ -222,7 +223,7 @@ Podívejme se tedy na další navigační odkazy, které berou v úvahu jen *ele
 
 ![](dom-links-elements.svg)
 
-Odkazy jsou podobné těm uvedeným výše, jen se slovem `Element` uprostřed:
+Odkazy jsou podobné výše uvedeným, jen se slovem `Element` uprostřed:
 
 - `children` -- jen ty děti, které jsou elementy. 
 - `firstElementChild`, `lastElementChild` -- první a poslední dětský element.
@@ -284,7 +285,7 @@ Výborným příkladem jsou tabulky, které představují zvlášť důležitý 
 Element **`<table>`** podporuje tyto vlastnosti (navíc k výše uvedeným):
 - `table.rows` -- kolekce elementů `<tr>` tabulky.
 - `table.caption/tHead/tFoot` -- odkazy na elementy `<caption>`, `<thead>`, `<tfoot>`.
-- `table.tBodies` -- kolekce elementů `<tbody>` (podle standardu jich může být více, ale vždy bude nejméně jeden -- i když není ve zdrojovém HTML, prohlížeč jej do DOMu vloží).
+- `table.tBodies` -- kolekce elementů `<tbody>` (podle standardu jich může být více, ale vždy bude nejméně jeden -- i když není ve zdrojovém HTML kódu, prohlížeč jej do DOMu vloží).
 
 Elementy **`<thead>`, `<tfoot>`, `<tbody>`** poskytují vlastnost `rows`:
 - `tbody.rows` -- kolekce `<tr>` uvnitř.

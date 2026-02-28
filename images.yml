@@ -673,3 +673,14 @@ range-example-p-1-3.svg:
       
 range-example-p-2-b-3.svg:
   '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
+  
+dom-links.svg:
+  '(if inside body)': '(je-li uvnitř těla)'
+  
+dom-links-elements.svg:
+  '(if inside body)': '(je-li uvnitř těla)'
+
+dom-class-hierarchy.svg:
+  'Document as a whole': 'Dokument jako celek'
+  '"Hello"': '"Ahoj"'
+  '<!--comment-->': '<!--komentář-->'

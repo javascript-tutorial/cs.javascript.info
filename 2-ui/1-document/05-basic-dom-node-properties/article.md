@@ -221,7 +221,7 @@ V režimu XML jsou velká a malá písmena ponechána beze změny. V současnost
 
 ## innerHTML: obsah
 
-Vlastnost [innerHTML](https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin) umožňuje získat HTML uvnitř elementu jako řetězec.
+Vlastnost [innerHTML](https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin) umožňuje získat HTML kód uvnitř elementu jako řetězec.
 
 Můžeme ji také měnit. Je to tedy jeden z nejsilnějších způsobů, jak měnit stránku.
 
@@ -240,7 +240,7 @@ Následující příklad zobrazí obsah `document.body` a pak jej celý nahradí
 </body>
 ```
 
-Můžeme se pokusit vložit vadný HTML, prohlížeč naše chyby opraví:
+Můžeme se pokusit vložit vadný HTML kód, prohlížeč naše chyby opraví:
 
 ```html run
 <body>
@@ -254,12 +254,12 @@ Můžeme se pokusit vložit vadný HTML, prohlížeč naše chyby opraví:
 ```
 
 ```smart header="Skripty se nespustí"
-Jestliže `innerHTML` vloží do dokumentu značku `<script>`, skript se stane součástí HTML, ale nespustí se.
+Jestliže `innerHTML` vloží do dokumentu značku `<script>`, skript se stane součástí HTML kódu, ale nespustí se.
 ```
 
 ### Pozor: „innerHTML+=“ obsah zcela přepíše
 
-Můžeme přidat HTML do elementu pomocí `elem.innerHTML+="další html"`.
+Můžeme přidat HTML kód do elementu pomocí `elem.innerHTML+="další html"`.
 
 Třeba takto:
 
@@ -287,15 +287,15 @@ Jinými slovy, `innerHTML+=` udělá následující:
 
 **Když je obsah „vynulován“ a od základů přepsán, všechny obrázky a další zdroje budou znovu načteny**.
 
-V uvedeném příkladu `chatDiv` řádek `chatDiv.innerHTML+="Jak se máš?"` znovu vytvoří HTML obsah a znovu načte `smile.gif` (doufejme, že je ve vyrovnávací paměti). Jestliže `chatDiv` obsahuje spoustu dalšího textu a obrázků, bude opakované načtení jasně viditelné.
+V uvedeném příkladu `chatDiv` řádek `chatDiv.innerHTML+="Jak se máš?"` znovu vytvoří HTML obsah a znovu načte `smile.gif` (doufejme, že je v mezipaměti). Jestliže `chatDiv` obsahuje spoustu dalšího textu a obrázků, bude opakované načtení jasně viditelné.
 
-Má to i další vedlejší efekty. Například jestliže návštěvník označil myší existující text, většina prohlížečů po přepsání `innerHTML` výběr zruší. A pokud v něm byl `<input>`, do něhož návštěvník zadal text, bude tento text odstraněn. A podobně.
+Má to i další vedlejší efekty. Například jestliže návštěvník vybral myší existující text, většina prohlížečů po přepsání `innerHTML` výběr zruší. A pokud v něm byl `<input>`, do něhož návštěvník zadal text, bude tento text odstraněn. A podobně.
 
-Naštěstí kromě `innerHTML` existují i jiné způsoby, jak přidat HTML. Brzy je prostudujeme.
+Naštěstí kromě `innerHTML` existují i jiné způsoby, jak přidat HTML kód. Brzy je prostudujeme.
 
-## outerHTML: celý HTML elementu
+## outerHTML: celý HTML kód elementu
 
-Vlastnost `outerHTML` obsahuje celý HTML elementu. Je to jako `innerHTML` plus element samotný.
+Vlastnost `outerHTML` obsahuje celý HTML kód elementu. Je to jako `innerHTML` plus element samotný.
 
 Zde je příklad:
 
@@ -335,16 +335,16 @@ To vypadá opravdu divně, že?
 
 Na řádku `(*)` jsme nahradili `div` za `<p>Nový element</p>`. Ve vnějším dokumentu (DOMu) vidíme místo `<div>` nový obsah. Ale jak vidíme na řádku `(**)`, hodnota staré proměnné `div` se nezměnila!
 
-Přiřazení do `outerHTML` nezmění DOM element (objekt, na který v tomto případě odkazuje proměnná `div`), ale odstraní jej z DOMu a na jeho místo vloží nový HTML.
+Přiřazení do `outerHTML` nezmění DOM element (objekt, na který v tomto případě odkazuje proměnná `div`), ale odstraní jej z DOMu a na jeho místo vloží nový HTML kód.
 
-To, co se tedy stalo při `div.outerHTML=...`, bylo:
+Při `div.outerHTML=...` se tedy stalo následující:
 - `div` byl odstraněn z dokumentu.
-- Na jeho místo byl vložen jiný kousek HTML `<p>Nový element</p>`.
-- `div` má stále svou původní hodnotu. Nový HTML se neuložil do žádné proměnné.
+- Na jeho místo byl vložen jiný kousek HTML kódu `<p>Nový element</p>`.
+- `div` má stále svou původní hodnotu. Nový HTML kód se neuložil do žádné proměnné.
 
-Je tak snadné udělat tady chybu: změnit `div.outerHTML` a pak pokračovat v práci s `div`, jako by v sobě měl nový obsah. Ale tak to není. Něco takového je v pořádku pro `innerHTML`, ale ne pro `outerHTML`.
+Je velmi snadné udělat tady chybu: změnit `div.outerHTML` a pak pokračovat v práci s `div`, jako by v sobě měl nový obsah. Ale tak to není. Něco takového je v pořádku pro `innerHTML`, ale ne pro `outerHTML`.
 
-Můžeme do `elem.outerHTML` zapisovat, ale měli bychom mít na paměti, že tím nezměníme element, do něhož zapisujeme (`elem`). Namísto toho vložíme na jeho místo nový HTML. Odkazy na nové elementy můžeme získat prohledáváním DOMu.
+Můžeme do `elem.outerHTML` zapisovat, ale měli bychom mít na paměti, že tím nezměníme element, do něhož zapisujeme (`elem`). Namísto toho vložíme na jeho místo nový HTML kód. Odkazy na nové elementy můžeme získat prohledáváním DOMu.
 
 ## nodeValue/data: obsah textového uzlu
 
@@ -406,11 +406,11 @@ Jak vidíme, vrátila nám pouhý text. Všechny jeho `<značky>` byly odstraně
 
 V praxi je načítání takového textu zapotřebí jen zřídka.
 
-**Mnohem užitečnější je zápis do `textContent`, protože nám umožňuje „bezpečný“ zápis textu.**
+**Mnohem užitečnější je do `textContent` zapisovat, protože nám umožňuje „bezpečný“ zápis textu.**
 
 Řekněme, že máme libovolný řetězec, například zadaný uživatelem, a chceme jej zobrazit.
 
-- Pomocí `innerHTML` jej vložíme „jako HTML“ se všemi HTML značkami.
+- Pomocí `innerHTML` jej vložíme „jako HTML kód“ se všemi HTML značkami.
 - Pomocí `textContent` jej vložíme „jako text“, se všemi symboly se zachází doslovně.
 
 Porovnejte si tyto dva způsoby:
@@ -430,7 +430,7 @@ Porovnejte si tyto dva způsoby:
 1. První `<div>` obdrží jméno „jako HTML“: ze všech značek se stanou značky, takže jméno vidíme tučně.
 2. Druhý `<div>` obdrží jméno „jako text", takže vidíme doslova `<b>Medvídek Pú!</b>`.
 
-Ve většině případů očekáváme, že uživatel zadá text, a chceme s ním zacházet jako s textem. Nechceme mít na stránce neočekávaný HTML. Přiřazením do `textContent` toho dosáhneme.
+Ve většině případů očekáváme, že uživatel zadá text, a chceme s ním zacházet jako s textem. Nechceme mít na stránce neočekávaný HTML kód. Přiřazením do `textContent` toho dosáhneme.
 
 ## Vlastnost „hidden“
 
@@ -506,7 +506,7 @@ Hlavní vlastnosti DOM uzlů jsou:
 : HTML obsah elementu. Může být měněn.
 
 `outerHTML`
-: Úplný HTML elementu. Operace zápisu do `elem.outerHTML` se nedotkne samotného `elem`, ale místo toho jej ve vnějším kontextu nahradí novým HTML.
+: Úplný HTML kód elementu. Operace zápisu do `elem.outerHTML` se nedotkne samotného `elem`, ale místo toho jej ve vnějším kontextu nahradí novým HTML kódem.
 
 `nodeValue/data`
 : Obsah neelementového uzlu (textového, komentářového). Obě vlastnosti jsou téměř stejné, obvykle používáme `data`. Mohou být měněny.

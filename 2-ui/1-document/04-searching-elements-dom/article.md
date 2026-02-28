@@ -57,7 +57,7 @@ Existuje i globální proměnná pojmenovaná podle `id`, která se na element o
 ```warn header="Prosíme nepřistupujte k elementům přes globální proměnné nazvané podle id"
 Toto chování je popsáno [ve specifikaci](https://html.spec.whatwg.org/multipage/window-object.html#named-access-on-the-window-object), ale je podporováno zejména kvůli kompatibilitě.
 
-Prohlížeč se nám snaží pomoci tak, že míchá dohromady jmenné prostory JS a DOMu. To se hodí pro jednoduché skripty, vložené přímo do HTML, ale obecně to není dobrá věc. Mohou nastat konflikty názvů. Navíc když si někdo čte JS kód a nemá zobrazen HTML, není mu  zřejmé, odkud ona proměnná pochází.
+Prohlížeč se nám snaží pomoci tak, že míchá dohromady jmenné prostory JS a DOMu. To se hodí pro jednoduché skripty, vložené přímo do HTML kódu, ale obecně to není dobrá věc. Mohou nastat konflikty názvů. Navíc když si někdo čte JS kód a nemá zobrazen HTML kód, není mu  zřejmé, odkud ona proměnná pochází.
 
 V tomto tutoriálu používáme přímý odkaz na element pomocí `id` pro stručnost, když je zřejmé, odkud element pochází.
 
@@ -65,7 +65,7 @@ V reálném životě je preferována metoda `document.getElementById`.
 ```
 
 ```smart header="`id` musí být unikátní"
-`id` musí být unikátní. V dokumentu může být pouze jeden element se zadaným `id`.
+`id` musí být unikátní. V dokumentu může být pouze jeden element s daným `id`.
 
 Pokud v něm je více elementů se stejným `id`, pak chování metod, které je využívají, bude nepředvídatelné, např. `document.getElementById` může vrátit náhodně kterýkoli z těchto elementů. Prosíme tedy, dodržujte toto pravidlo a zachovávejte `id` unikátní.
 ```
@@ -100,7 +100,7 @@ Zde najdeme všechny elementy `<li>`, které jsou posledními dětmi:
 </script>
 ```
 
-Je to nepochybně silná metoda, protože můžeme použít jakýkoli CSS selektor.
+Je to opravdu silná metoda, protože můžeme použít jakýkoli CSS selektor.
 
 ```smart header="Můžeme použít i pseudotřídy"
 V CSS selektoru jsou podporovány i pseudotřídy, např. `:hover` nebo `:active`. Například `document.querySelectorAll(':hover')` vrátí kolekci elementů, nad nimiž se právě nachází ukazatel (v pořadí vnoření: od vrchního `<html>` k nejvnořenějšímu elementu).

@@ -24,8 +24,8 @@ setTimeout(() => document.body.style.background = '', 3000); // vrátí ji zpět
 
 Zde jsme použili `style.background`, abychom změnili barvu pozadí `document.body`, ale existuje mnoho dalších vlastností, například:
 
-- `innerHTML` -- HTML obsah uzlu.
-- `offsetWidth` -- šířka uzlu (v pixelech)
+- `innerHTML` -- HTML obsah uzlu,
+- `offsetWidth` -- šířka uzlu (v pixelech),
 - ...a tak dále.
 
 Brzy se naučíme další způsoby, jak manipulovat s DOMem, ale nejprve musíme poznat jeho strukturu.
@@ -216,7 +216,7 @@ Chcete-li vidět strukturu DOMu v reálném čase, zkuste [Live DOM Viewer](http
 
 Dalším způsobem, jak prozkoumávat DOM, je používat prohlížečové vývojářské nástroje. Právě ty používáme při programování.
 
-Abyste tak učinili, otevřete si webovou stránku [elk.html](elk.html), zapněte si prohlížečové vývojářské nástroje a přepněte se na záložku Elements.
+Abyste tak učinili, otevřete si webovou stránku [elk.html](elk.html), zapněte si prohlížečové vývojářské nástroje a přepněte se na záložku Elements (Prvky).
 
 Měla by vypadat přibližně takto:
 
@@ -227,23 +227,23 @@ Vidíte DOM, klikáte na elementy, vidíte jejich detaily a podobně.
 
 Prosíme všimněte si, že struktura DOMu ve vývojářských nástrojích je zjednodušená. Textové uzly jsou zobrazeny pouze jako text. A „prázdné“ textové uzly (obsahující jen mezery) nejsou zobrazeny vůbec. To je dobře, neboť ve většině případů nás zajímají pouze elementové uzly.
 
-Po kliknutí na tlačítko <span class="devtools" style="background-position:-328px -124px"></span> v levém horním rohu si můžeme zvolit uzel z webové stránky pomocí myši (nebo jiného ukazovacího zařízení) a „prozkoumat“ jej (záložka Elements se na něj posune). To funguje skvěle, když máme obrovskou HTML stránku (a odpovídající obrovský DOM) a chceme se podívat na umístění určitého jejího elementu.
+Po kliknutí na tlačítko <span class="devtools" style="background-position:-328px -124px"></span> v levém horním rohu si můžeme zvolit uzel z webové stránky myší (nebo jiným ukazovacím zařízením) a „prozkoumat“ jej (záložka Elements se na něj posune). To funguje skvěle, když máme obrovskou HTML stránku (a odpovídající obrovský DOM) a chceme se podívat na umístění určitého jejího elementu.
 
 Další způsob, jak to udělat, je kliknout pravým tlačítkem na webovou stránku a v kontextovém menu zvolit „Prozkoumat“ („Inspect“).
 
 ![](inspect.svg)
 
 V pravé části nástrojů se nacházejí následující podzáložky:
-- **Styles** -- můžeme vidět CSS aplikované na aktuální element, jedno pravidlo po druhém, včetně vestavěných pravidel (zobrazena šedě). Téměř všechno můžeme na místě editovat, včetně rozměrů a vnějších i vnitřních okrajů boxu.
-- **Computed** -- vidíme CSS aplikované na element podle vlastností: pro každou vlastnost vidíme pravidlo, které ji definuje (včetně CSS dědičnosti a podobně).
-- **Event Listeners** -- vidíme posluchače událostí připojené k DOM elementům (probereme je v příští části tutoriálu).
+- **Styles (Styly)** -- můžeme vidět CSS aplikované na aktuální element, jedno pravidlo po druhém, včetně vestavěných pravidel (šedě zobrazených). Téměř všechno můžeme na místě editovat, včetně rozměrů a vnějších i vnitřních okrajů boxu.
+- **Computed (Vypočteno)** -- vidíme CSS aplikované na element podle vlastností: pro každou vlastnost vidíme pravidlo, které ji definuje (včetně CSS dědičnosti a podobně).
+- **Event Listeners (Posluchače událostí)** -- vidíme posluchače událostí připojené k DOM elementům (probereme je v příští části tutoriálu).
 - ...a tak dále.
 
 Nejlepší způsob, jak je prostudovat, je klikat kolem dokola. Většinu hodnot lze na místě editovat.
 
 ## Interakce s konzolí
 
-Při práci s DOMem na něj můžeme také chtít aplikovat JavaScript. Například můžeme chtít načíst uzel a spustit nějaký kód, který ho modifikuje, abychom viděli výsledek. Následuje několik rad, jak cestovat mezi záložkou Elements a konzolí.
+Při práci s DOMem na něj můžeme také chtít aplikovat JavaScript. Například můžeme chtít načíst uzel a spustit nějaký kód, který ho modifikuje, abychom viděli výsledek. Poskytneme několik rad, jak cestovat mezi záložkou Elements a konzolí.
 
 Pro začátek:
 

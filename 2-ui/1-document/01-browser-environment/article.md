@@ -110,4 +110,4 @@ Kdybyste si chtěli přečíst o nějaké vlastnosti nebo metodě, pěkným zdro
 
 Když chcete něco najít, často se vyplatí použít internetové hledání „WHATWG [pojem]“ nebo „MDN [pojem]“, např. <https://google.com?q=whatwg+localstorage>, <https://google.com?q=mdn+localstorage>.
 
-Nyní přejdeme k učení DOMu, jelikož hlavní roli v UI hraje dokument.
+Nyní přejdeme k učení DOMu, jelikož hlavní roli v uživatelském rozhraní hraje dokument.
