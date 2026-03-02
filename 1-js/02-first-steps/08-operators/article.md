@@ -267,7 +267,11 @@ alert( c ); // 4
 
 Zřetězená přiřazení se vyhodnocují zprava doleva. Nejprve se vyhodnotí výraz `2 + 2` nejvíce vpravo a jeho hodnota se pak přiřadí do proměnných vlevo: `c`, `b` a `a`. Nakonec tedy budou mít všechny proměnné stejnou hodnotu.
 
+<<<<<<< HEAD
 Opět je pro účely čitelnosti lepší rozdělit takový kód do více řádků:
+=======
+Once again, for the purposes of readability it's better to split such code into a few lines:
+>>>>>>> ff804bc19351b72bc5df7766f4b9eb8249a3cb11
 
 ```js
 c = 2 + 2;

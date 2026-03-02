@@ -2,6 +2,7 @@
 Měli byste si všimnout následujícího:
 
 ```js no-beautify
+<<<<<<< HEAD
 function mocnina(x,n)  // <- chybí mezera mezi argumenty
 {  // <- levá složená závorka na zvláštním řádku
   let výsledek=1;   // <- chybějí mezery před a za =
@@ -16,6 +17,22 @@ if (n<=0)  // <- chybějí mezery uvnitř (n <= 0) a nad ním by měl být práz
 {   // <- levá složená závorka na zvláštním řádku
   // níže - dlouhé řádky by měly být rozděleny na více řádků pro lepší čitelnost
   alert(`${n}-tá mocnina není podporována, zadejte prosím celé číslo větší než nula`);
+=======
+function pow(x,n)  // <- no space between arguments
+{  // <- curly brace on a separate line
+  let result=1;   // <- no spaces before or after =
+  for(let i=0;i<n;i++) {result*=x;}   // <- no spaces
+  // the contents of { ... } should be on a new line
+  return result;
+}
+
+let x=prompt("x?",''), n=prompt("n?",'') // <-- technically possible,
+// but better make it 2 lines, also there's no spaces and missing ;
+if (n<=0)  // <- no spaces inside (n <= 0), and should be extra line above it
+{   // <- curly brace on a separate line
+  // below - long lines can be split into multiple lines for improved readability
+  alert(`Power ${n} is not supported, please enter an integer number greater than zero`);
+>>>>>>> ff804bc19351b72bc5df7766f4b9eb8249a3cb11
 }
 else // <- toto může být na jediném řádku: "} else {"
 {
