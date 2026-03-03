@@ -684,3 +684,19 @@ dom-class-hierarchy.svg:
   'Document as a whole': 'Dokument jako celek'
   '"Hello"': '"Ahoj"'
   '<!--comment-->': '<!--komentář-->'
+  
+before-prepend-append-after.svg:
+  '(…nodes or strings)': '(…uzly nebo řetězce)'
+  
+metric-css.svg:
+  'content width:': 'šířka obsahu:'
+  
+metric-offset-width-height.svg:
+  'content width:': 'šířka obsahu:'
+
+metric-client-width-height.svg:
+  'content width:': 'šířka obsahu:'
+
+metric-client-width-nopadding.svg:
+  '= content width': '= šířka obsahu'
+  'CSS width:': 'CSS šířka'

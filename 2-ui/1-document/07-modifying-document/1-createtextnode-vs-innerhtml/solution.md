@@ -1,4 +1,4 @@
-Odpověď: **1 a 3**.
+Odpověď zní: **1 a 3**.
 
 Oba příkazy mají za následek přidání textu `text` „jako text“ do elementu `elem`.
 

@@ -145,7 +145,7 @@ K tomu, abychom nastavili celý styl jedním řetězcem, existuje speciální vl
 <div id="div">Tlačítko</div>
 
 <script>
-  // zde můžeme nastavit speciální vlajky stylu, např. "important"
+  // zde můžeme nastavit speciální přepínače stylu, např. "important"
   div.style.cssText=`color: red !important;
     background-color: yellow;
     width: 100px;

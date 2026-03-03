@@ -43,7 +43,7 @@ Výsledek (strom) by měl vypadat takto:
 
 Zvolte si jeden ze dvou způsobů, jak tento úkol vyřešit:
 
-1. Vytvořte HTML pro strom a přiřaďte jej do `kontejner.innerHTML`.
+1. Vytvořte HTML kód stromu a přiřaďte jej do `kontejner.innerHTML`.
 2. Vytvořte uzly stromu a připojujte je DOM metodami.
 
 Pokud dokážete obojí, bude to vynikající.

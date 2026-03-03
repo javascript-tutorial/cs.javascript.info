@@ -39,7 +39,7 @@ Když prohlížeč nezná šířku a výšku obrázku (z atributů značky nebo 
 
 Hodnota `míč.offsetWidth` tedy bude `0`, dokud se obrázek nenačte. To bude mít v uvedeném kódu za následek špatné souřadnice.
 
-Po prvním načtení si prohlížeč obvykle uloží obrázek do vyrovnávací paměti a při jeho opětovném načtení bude znát velikost okamžitě. Avšak při prvním načtení bude hodnota `míč.offsetWidth` rovna `0`.
+Po prvním načtení si prohlížeč obvykle uloží obrázek do mezipaměti a při jeho opětovném načtení bude znát velikost okamžitě. Avšak při prvním načtení bude hodnota `míč.offsetWidth` rovna `0`.
 
 Měli bychom to opravit přidáním `width/height` do `<img>`:
 

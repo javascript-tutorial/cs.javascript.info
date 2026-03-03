@@ -30,13 +30,13 @@ Existuje mnoho dalších událostí. K detailům některých událostí se dosta
 
 Abychom na události mohli reagovat, můžeme jim přiřadit *handler* -- funkci, která se spustí, když událost nastane.
 
-Handlery jsou způsobem, jak spouštět kód v JavaScriptu při uživatelských akcích.
+Handlery jsou způsobem, jak při uživatelských akcích spouštět JavaScriptový kód.
 
-Je několik způsobů, jak přiřadit handler. Podíváme se na ně od nejjednoduššího.
+Způsobů, jak přiřadit handler, je několik. Podíváme se na ně od nejjednoduššího.
 
 ### HTML atribut
 
-Handler můžeme nastavit v HTML atributem nazvaným `on<událost>`.
+Handler můžeme nastavit v HTML kódu atributem nazvaným `on<událost>`.
 
 Když například chceme přiřadit handler události `click` elementu `input`, můžeme použít `onclick`, například:
 
@@ -128,7 +128,7 @@ Chceme-li handler odstranit, přiřadíme `elem.onclick = null`.
 
 ## Přístup k elementu: this
 
-Hodnota `this` uvnitř handleru je element. Ten, na který byl handler přiřazen.
+Hodnota `this` uvnitř handleru je element. Ten, ke kterému byl handler přiřazen.
 
 V následujícím kódu tlačítko `button` zobrazí svůj obsah pomocí `this.innerHTML`:
 
@@ -138,7 +138,7 @@ V následujícím kódu tlačítko `button` zobrazí svůj obsah pomocí `this.i
 
 ## Možné chyby
 
-Jestliže začínáte pracovat s událostmi, prosíme všimněte si některých drobností.
+Jestliže pracovat s událostmi teprve začínáte, prosíme všimněte si některých drobností.
 
 Můžeme jako handler přiřadit existující funkci:
 
@@ -312,7 +312,7 @@ Abychom mohli událost patřičně zpracovat, chtěli bychom vědět více o tom
 
 Když se událost stane, prohlížeč vytvoří *objekt události*, vloží do něj detaily a předá ho handleru jako argument.
 
-Následuje příklad zjištění souřadnic ukazatele myši z objektu události:
+Následující příklad zjistí souřadnice ukazatele myši z objektu události:
 
 ```html run
 <input type="button" value="Klikni na mě" id="elem">
@@ -340,7 +340,7 @@ Některé vlastnosti objektu `událost`:
 Existují i další vlastnosti. Mnoho z nich závisí na druhu události: události klávesnice mají jednu sadu vlastností, události myši jinou. Prostudujeme je později, až se dostaneme k detailům různých událostí.
 
 ````smart header="Objekt události je dostupný i v HTML handlerech"
-Objekt události můžeme pod názvem `event` použít i v handlerech, které přiřadíme v HTML, například:
+Objekt události můžeme pod názvem `event` použít i v handlerech, které přiřadíme v HTML kódu, například:
 
 ```html autorun height=60
 <input type="button" onclick="*!*alert(event.type)*/!*" value="Druh události">

@@ -29,13 +29,13 @@ alert( window.innerWidth ); // šířka celého okna
 alert( document.documentElement.clientWidth ); // šířka okna minus šířka posuvníku
 ```
 
-Ve většině případů potřebujeme znát šířku *dostupného* okna, abychom mohli něco nakreslit nebo umístit uvnitř posuvníků (pokud tam nějaké jsou), takže bychom měli použít `documentElement.clientHeight/clientWidth`.
+Ve většině případů potřebujeme znát šířku *dostupného* okna, abychom mohli něco nakreslit nebo umístit uvnitř posuvníků (pokud tam jsou), takže bychom měli použít `documentElement.clientHeight/clientWidth`.
 ````
 
 ```warn header="`DOCTYPE` je důležité"
 Prosíme všimněte si, že geometrické vlastnosti na nejvyšší úrovni mohou fungovat trochu jinak, když v HTML kódu není `<!DOCTYPE HTML>`. Může dojít k podivnému chování.
 
-V moderním HTML bychom `DOCTYPE` měli vždy psát.
+V moderním HTML kódu bychom měli `DOCTYPE` vždy psát.
 ```
 
 ## Šířka a výška dokumentu

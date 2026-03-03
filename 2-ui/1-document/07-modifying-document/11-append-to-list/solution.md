@@ -1,5 +1,5 @@
 
-Když potřebujeme někam vložit část HTML, je nejlepší volbou `insertAdjacentHTML`.
+Když potřebujeme někam vložit část HTML kódu, je nejlepší volbou `insertAdjacentHTML`.
   
 Řešení:
 

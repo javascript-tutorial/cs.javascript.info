@@ -1,4 +1,4 @@
-Důvodem této podivnosti je, že HTML v tomto úkolu je nekorektní.
+Důvodem této podivnosti je, že HTML kód v tomto úkolu je nekorektní.
 
 Prohlížeč ho musí automaticky opravit. Uvnitř `<table>` však nesmí být žádný text: podle specifikace jsou povoleny jen značky specifické pro tabulku. Prohlížeč tedy zobrazí `"aaa"` *před* `<table>`.
 

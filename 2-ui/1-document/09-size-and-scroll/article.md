@@ -98,7 +98,7 @@ Tyto dvě vlastnosti jsou nejjednodušší. Poskytují „vnější“ šířku/
 
 Pro náš ukázkový element:
 
-- `offsetWidth = 390` -- vnější šířka, lze vypočítat jako vnitřní CSS šířka (`300px`) plus vnitřní okraje (`2 * 20px`) a ohraničení (`2 * 25px`).
+- `offsetWidth = 390` -- vnější šířka, lze vypočítat jako součet vnitřní CSS šířky (`300px`), vnitřních okrajů (`2 * 20px`) a ohraničení (`2 * 25px`).
 - `offsetHeight = 290` -- vnější výška.
 
 ````smart header="U nezobrazených elementů jsou geometrické vlastnosti nulové nebo null"
@@ -158,7 +158,7 @@ Není tu vodorovný posuvník, takže je to přesně součet toho, co je uvnitř
 
 Nyní `clientWidth` -- šířka obsahu zde není `300px`, ale `284px`, protože `16px` zabírá posuvník. Součet je tedy `284px` plus levý a pravý vnitřní okraj, celkem `324px`.
 
-**Pokud element nemá vnitřní okraje, pak `clientWidth/Height` je přesně šířka a výška obsahu, ležícího uvnitř ohraničení a posuvníku (pokud tam nějaký je).**
+**Pokud element nemá vnitřní okraje, pak `clientWidth/Height` je přesně šířka a výška obsahu, ležícího uvnitř ohraničení a posuvníku (pokud tam je).**
 
 ![](metric-client-width-nopadding.svg)
 
@@ -231,7 +231,7 @@ alert( getComputedStyle(elem).width ); // zobrazí CSS šířku elementu
 Proč bychom místo toho měli používat geometrické vlastnosti? Důvody jsou dva:
 
 1. Za prvé, CSS vlastnosti `width/height` závisejí na jiné vlastnosti: `box-sizing`, která definuje, „co je“ CSS šířka a výška. Změna v `box-sizing` pro účely CSS může takový kód v JavaScriptu rozbít.
-2. Za druhé, CSS vlastnosti `width/height` mohou být `auto`, například u elementu uvedeného přímo v HTML:
+2. Za druhé, CSS vlastnosti `width/height` mohou být `auto`, například u elementu uvedeného přímo v HTML kódu:
 
     ```html run
     <span id="elem">Ahoj!</span>

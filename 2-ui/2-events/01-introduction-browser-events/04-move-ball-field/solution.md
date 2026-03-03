@@ -30,7 +30,7 @@ Zde je obrázek:
 
 Máme `událost.clientX/clientY` -- souřadnice kliknutí vzhledem k oknu.
 
-Abychom získali souřadnici kliknutí `left` vzhledem k hřišti, můžeme odečíst šířku levého okraje hřiště a ohraničení:
+Abychom získali souřadnici kliknutí `levá` vzhledem k hřišti, můžeme odečíst šířku levého okraje hřiště a ohraničení:
 
 ```js
 let levá = událost.clientX - souřadniceHřiště.left - hřiště.clientLeft;
@@ -43,7 +43,7 @@ Abychom míč vycentrovali, musíme jej přesunout o polovinu šířky doleva a 
 Výsledná `levá` tedy bude:
 
 ```js
-let left = událost.clientX - souřadniceHřiště.left - hřiště.clientLeft - míč.offsetWidth/2;
+let levá = událost.clientX - souřadniceHřiště.left - hřiště.clientLeft - míč.offsetWidth/2;
 ```
 
 Vertikální souřadnici vypočítáme stejnou logikou.

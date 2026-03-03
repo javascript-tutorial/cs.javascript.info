@@ -6,7 +6,7 @@ Normálně by takový pás byl široký, ale umístíme kolem něj `<div>` s pev
 
 Aby se seznam zobrazil vodorovně, musíme na `<li>` aplikovat správné CSS vlastnosti, např. `display: inline-block`.
 
-U `<img>` bychom také měli pozměnit `display`, neboť standardně je `inline`. Pod `inline` elementy je rezervován prostor navíc pro „ocásky pod písmeny“, takže ho můžeme odstranit pomocí `display:block`.
+U `<img>` bychom také měli pozměnit `display`, neboť standardně je `inline`. Pod `inline` elementy je rezervován prostor navíc pro „ocásky pod písmeny“, takže můžeme použít `display:block`, abychom ho odstranili.
 
 Abychom provedli rolování, můžeme posunout `<ul>`. To lze udělat mnoha způsoby, například změnou `margin-left` nebo (pro lepší výkon) použít `transform: translateX()`:
 

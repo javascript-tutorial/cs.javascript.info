@@ -21,7 +21,7 @@ for (let odkaz of odkazy) {
 }
 ```
 
-Prosíme všimněte si, že používáme `odkaz.getAttribute('href')` a ne `odkaz.href`, protože potřebujeme hodnotu z HTML.
+Prosíme všimněte si, že používáme `odkaz.getAttribute('href')` a ne `odkaz.href`, protože potřebujeme hodnotu z HTML kódu.
 
 ...Druhý, jednodušší způsob je přidat kontrolu do CSS selektoru:
 

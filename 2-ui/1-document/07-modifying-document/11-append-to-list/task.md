@@ -2,7 +2,7 @@ importance: 5
 
 ---
 
-# Vložte HTML do seznamu
+# Vložte HTML kód do seznamu
 
 Napište kód, který vloží `<li>2</li><li>3</li>` mezi tyto dvě značky `<li>`:
 
