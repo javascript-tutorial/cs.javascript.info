@@ -86,13 +86,13 @@ Všechny události myši obsahují informaci o stisknutých modifikačních klá
 Vlastnosti událostí:
 
 - `shiftKey`: `key:Shift`
-- `altKey`: `key:Alt` (nebo `key:Opt` pro Mac)
+- `altKey`: `key:Alt` (nebo `key:Opt` na Macu)
 - `ctrlKey`: `key:Ctrl`
-- `metaKey`: `key:Cmd` pro Mac
+- `metaKey`: `key:Cmd` na Macu
 
 Jsou `true`, jestliže byla během události stisknuta odpovídající klávesa.
 
-Například následující tlačítko funguje jen při kliknutí spolu se stiskem `key:Alt+Shift`:
+Například následující tlačítko funguje jen při kliknutí spolu se stisknutím `key:Alt+Shift`:
 
 ```html autorun height=60
 <button id="tlačítko">Alt+Shift+Klikněte na mě!</button>
@@ -153,21 +153,21 @@ Přesuňte myš nad vstupní pole, abyste viděli `clientX/clientY` (příklad j
 ```
 ````
 
-## Zákaz označení textu při události mousedown
+## Zákaz výběru textu při události mousedown
 
-Dvojité kliknutí myší má jeden vedlejší efekt, který může být v některých rozhraních rušivý: označuje text.
+Dvojité kliknutí myší má jeden vedlejší efekt, který může být v některých rozhraních rušivý: vybírá text.
 
-Například dvojité kliknutí na následující text jej kromě spuštění našeho handleru označí:
+Například dvojité kliknutí na následující text jej kromě spuštění našeho handleru vybere:
 
 ```html autorun height=50
 <span ondblclick="alert('dblclick')">Dvakrát na mě klikněte</span>
 ```
 
-Rovněž když uživatel stiskne levé tlačítko myši a bez jeho uvolnění myší pohne, vyvolá tím označení, často nechtěné.
+Rovněž když uživatel stiskne levé tlačítko myši a bez jeho uvolnění myší pohne, vyvolá tím výběr, často nechtěný.
 
-Způsobů, jak označení zakázat, existuje víc. Můžete si o nich přečíst v kapitole <info:selection-range>.
+Způsobů, jak výběr zakázat, existuje víc. Můžete si o nich přečíst v kapitole <info:selection-range>.
 
-V tomto konkrétním případě je nejrozumnějším způsobem zakázat akci prohlížeče při události `mousedown`. Tím zakážeme obě tato označení:
+V tomto konkrétním případě je nejrozumnějším způsobem zakázat akci prohlížeče při události `mousedown`. Tím zakážeme oba tyto výběry:
 
 ```html autorun height=50
 Před...
@@ -177,12 +177,12 @@ Před...
 ...Za
 ```
 
-Nyní nebude tučný element při dvojitém kliknutí označen a ani stisknutí levého tlačítka na něm nevyvolá označení.
+Nyní nebude tučný element při dvojitém kliknutí vybrán a ani stisknutí levého tlačítka na něm nevyvolá výběr.
 
-Prosíme všimněte si, že označit text uvnitř je stále možné. Označení by však nemělo začínat na samotném textu, ale před nebo za ním. Tak se to uživatelům obvykle hodí.
+Prosíme všimněte si, že vybrat text uvnitř je stále možné. Výběr by však neměl začínat na samotném textu, ale před nebo za ním. Tak se to uživatelům obvykle hodí.
 
 ````smart header="Zákaz kopírování"
-Jestliže chceme zakázat označení proto, abychom chránili obsah naší stránky před zkopírováním a vložením jinam, můžeme použít jinou událost: `oncopy`.
+Jestliže chceme zakázat výběr proto, abychom chránili obsah naší stránky před zkopírováním a vložením jinam, můžeme použít jinou událost: `oncopy`.
 
 ```html autorun height=80 no-beautify
 <div *!*oncopy="alert('Zákaz kopírování!');return false"*/!*>
@@ -191,7 +191,7 @@ Jestliže chceme zakázat označení proto, abychom chránili obsah naší strá
   Pokud ovšem znáš JS nebo HTML, můžeš i tak všechno získat ze zdrojového kódu stránky.
 </div>
 ```
-Pokud se pokusíte zkopírovat část textu uvnitř `<div>`, nepůjde to, protože standardní akci `oncopy` bylo zabráněno.
+Pokud se pokusíte zkopírovat část textu uvnitř `<div>`, nepůjde to, protože standardní akce `oncopy` byla zakázána.
 
 Samozřejmě uživatel má přístup k HTML kódu stránky a může získat obsah odtamtud, avšak ne každý to umí.
 ````
@@ -207,6 +207,6 @@ Události myši mají následující vlastnosti:
 - Souřadnice vzhledem k oknu: `clientX/clientY`.
 - Souřadnice vzhledem k dokumentu: `pageX/pageY`.
 
-Standardní akce prohlížeče při `mousedown` je označení textu. Pokud se do rozhraní nehodí, měli byste je zakázat.
+Standardní akce prohlížeče při `mousedown` je výběr textu. Pokud se do rozhraní nehodí, měli byste ho zakázat.
 
 V následující kapitole uvidíme další podrobnosti o událostech, které následují po pohybu ukazatele, a o tom, jak sledovat změny elementů pod ním.

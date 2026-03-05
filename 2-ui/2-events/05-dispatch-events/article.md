@@ -8,7 +8,7 @@ Můžeme generovat nejenom úplně nové události, které si vymyslíme pro vla
 
 ## Konstruktor události
 
-Třídy vestavěných událostí tvoří hierarchii, podobně jako třídy DOM elementů. Jejím kořenem je vestavěná třída [Event](https://dom.spec.whatwg.org/#events).
+Třídy vestavěných událostí tvoří hierarchii, podobně jako třídy DOM elementů. Jejím kořenem je vestavěná třída [Event](https://dom.spec.whatwg.org/#events) (událost).
 
 Objekty třídy `Event` můžeme vytvářet následovně:
 
@@ -42,7 +42,7 @@ V následujícím příkladu je v JavaScriptu spuštěna událost `click`. Handl
 </script>
 ```
 
-```smart header="event.isTrusted"
+```smart header="událost.isTrusted"
 Existuje způsob, jak poznat „opravdovou“ uživatelskou událost od události generované skriptem.
 
 Vlastnost `událost.isTrusted` je `true` pro události, které pocházejí od skutečných uživatelských akcí, a `false` pro události generované skriptem.
@@ -82,7 +82,7 @@ Mechanika bublání funguje pro vestavěné (`click`) a vlastní (`ahoj`) událo
 
 ## MouseEvent, KeyboardEvent a jiné
 
-Následuje krátký seznam UI událostí ze [specifikace UI událostí](https://www.w3.org/TR/uievents):
+Následuje krátký seznam událostí uživatelského rozhraní (UI) ze [specifikace UI událostí](https://www.w3.org/TR/uievents):
 
 - `UIEvent`
 - `FocusEvent`
@@ -91,7 +91,7 @@ Následuje krátký seznam UI událostí ze [specifikace UI událostí](https://
 - `KeyboardEvent`
 - ...
 
-Pokud chceme vytvořit takovou událost, měli bychom je používat místo `new Event`, například `new MouseEvent("click")`.
+Pokud chceme vytvořit takovou událost, měli bychom místo `new Event` používat je, například `new MouseEvent("click")`.
 
 Správný konstruktor nám umožňuje specifikovat standardní vlastnosti pro příslušný typ události.
 
@@ -129,7 +129,7 @@ alert(událost.clientX); // undefined, neznámá vlastnost je ignorována!
 
 Technicky bychom to mohli obejít tak, že po vytvoření události přímo přiřadíme `událost.clientX=100`. Je to tedy otázka konvencí a dodržování pravidel. Události generované prohlížečem mají vždy správný typ.
 
-Úplný seznam vlastností různých UI událostí, například [MouseEvent](https://www.w3.org/TR/uievents/#mouseevent), je uveden ve specifikaci.
+Úplný seznam vlastností různých UI událostí je uveden ve specifikaci, například [MouseEvent](https://www.w3.org/TR/uievents/#mouseevent).
 
 ## Vlastní události
 
@@ -162,9 +162,9 @@ Kromě toho třída události popisuje, o „jaký druh události“ jde, a je-l
 
 ## událost.preventDefault()
 
-Mnoho událostí prohlížeče má „standardní akci“, např. navigaci na odkaz, zahájení označení a podobně.
+Mnoho událostí prohlížeče má „standardní akci“, např. navigaci na odkaz, zahájení výběru a podobně.
 
-U nových, vlastních událostí rozhodně žádné standardní akce prohlížeče nejsou, ale kód, který takovou událost vyvolává, může mít vlastní plány, co bude po spuštění události dělat.
+U nových, vlastních událostí samozřejmě žádné standardní akce prohlížeče nejsou, ale kód, který takovou událost vyvolává, může mít vlastní plány, co bude po spuštění události dělat.
 
 Voláním `událost.preventDefault()` může handler události poslat signál, že tyto akce by měly být zrušeny.
 
@@ -244,7 +244,7 @@ Prosíme všimněte si, že vnořená událost `otevři-menu` se zachytává v `
 
 Neplatí to jen pro `dispatchEvent`, jsou i jiné případy. Jestliže handler události volá metody, které spouštějí jiné události, budou také zpracovány synchronně, vnořeny do sebe.
 
-Dejme tomu, že se nám to nelíbí. Chceme, aby byla nejdříve zcela zpracována `onclick`, nezávisle na `otevři-menu` nebo jiných vnořených událostech.
+Řekněme, že se nám to nelíbí. Chceme, aby byla nejdříve zcela zpracována `onclick`, nezávisle na `otevři-menu` nebo jiných vnořených událostech.
 
 Pak můžeme buď umístit `dispatchEvent` (nebo jiné volání spouštějící událost) na konec `onclick`, nebo, což je možná lepší, zabalit je do `setTimeout` s nulovou prodlevou:
 

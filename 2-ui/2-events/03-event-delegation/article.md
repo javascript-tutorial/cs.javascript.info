@@ -1,7 +1,7 @@
 
 # Delegování událostí
 
-Zachytávání a bublání nám umožňuje implementovat jeden z nejsilnějších vzorů zpracování událostí, nazývaný *delegování událostí*.
+Zachytávání a bublání nám umožňuje implementovat jeden z nejsilnějších vzorců zpracování událostí, nazývaný *delegování událostí*.
 
 Myšlenkou je, že když máme spoustu elementů, které se zpracovávají podobným způsobem, pak místo abychom přiřadili handler každému z nich, umístíme jediný handler na jejich společného předka.
 
@@ -172,11 +172,11 @@ Jaké výhody nám tedy zde delegování poskytuje?
 
 Mohli bychom použít i třídy `.akce-ulož`, `.akce-načti`, ale atribut `data-akce` je sémanticky lepší. A můžeme jej použít i v CSS pravidlech.
 
-## Vzor „chování“
+## Vzorec „chování“
 
 Delegování událostí můžeme použít také k přidávání „chování“ do elementů *deklarativně*, se speciálními atributy a třídami.
 
-Tento vzor má dvě části:
+Tento vzorec má dvě části:
 1. Přidáme do elementu vlastní atribut, který bude popisovat jeho chování.
 2. Handler na úrovni dokumentu bude sledovat události, a jestliže událost nastane na elementu s tímto atributem, provede akci.
 
@@ -238,15 +238,15 @@ Ještě jeden příklad chování. Kliknutí na element s atributem `data-přepn
 
 Všimněte si ještě jednou, co jsme udělali. Když nyní chceme přidat elementu funkcionalitu přepínání, nemusíme znát JavaScript -- stačí použít atribut `data-přepni-id`.
 
-To se může opravdu hodit -- není nutné psát JavaScript ke každému takovému elementu. Stačí použít toto chování. Handler na úrovni dokumentu způsobí, že bude fungovat na každém elementu této stránky.
+To se může opravdu hodit -- není nutné psát JavaScriptový kód ke každému takovému elementu. Stačí použít toto chování. Handler na úrovni dokumentu způsobí, že bude fungovat na každém elementu této stránky.
 
 Můžeme i zkombinovat více chování na jednom elementu.
 
-Vzor „chování“ může být alternativou k minifragmentům JavaScriptu.
+Vzorec „chování“ může být alternativou k minifragmentům JavaScriptu.
 
 ## Shrnutí
 
-Delegování událostí je opravdu skvělé! Je to jeden z nejužitečnějších vzorů pro DOM události.
+Delegování událostí je opravdu vynikající! Je to jeden z nejužitečnějších vzorců pro DOM události.
 
 Často se používá k přidání stejného zpracování pro mnoho podobných elementů, ale nejenom k tomu.
 

@@ -1,4 +1,4 @@
-Zde skvěle využijeme vzor delegování událostí.
+Zde skvěle využijeme vzorec delegování událostí.
 
 Ve skutečném životě můžeme místo dotazu poslat na server požadavek na „logování“, který si uloží informace o tom, kam návštěvník odešel. Nebo můžeme načíst obsah a zobrazit jej přímo na stránce (pokud je to dovoleno).
 

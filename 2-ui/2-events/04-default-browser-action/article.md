@@ -6,7 +6,7 @@ Například:
 
 - Kliknutí na odkaz -- vyvolá navigaci na jeho URL.
 - Kliknutí na tlačítko odeslání formuláře -- vyvolá jeho odeslání na server.
-- Stisknutí tlačítka myši nad textem a přesun ukazatele -- označí text.
+- Stisknutí tlačítka myši nad textem a přesun ukazatele -- vybere (označí) text.
 
 Jestliže v JavaScriptu zpracováváme událost, můžeme chtít, aby se příslušná akce prohlížeče nevykonala, protože místo ní chceme implementovat jiné chování.
 
@@ -100,7 +100,7 @@ K čemu to může být potřeba?
 
 Existují události, např. `touchmove` na mobilních zařízeních (když se uživatel posune prstem na obrazovce), které standardně vyvolají rolování, ale v handleru lze toto rolování zakázat voláním `preventDefault()`.
 
-Když tedy prohlížeč detekuje takovou událost, musí nejprve zpracovat všechny handlery, a teprve pokud nikde nebylo voláno `preventDefault`, může provádět rolování. To může způsobit nechtěné prodlevy a „kolísání“ v UI.
+Když tedy prohlížeč detekuje takovou událost, musí nejprve zpracovat všechny handlery, a teprve pokud nikde nebylo voláno `preventDefault`, může provádět rolování. To může způsobit nechtěné prodlevy a „zasekávání“ v UI.
 
 Možnost `passive: true` říká prohlížeči, že handler nebude rolování bránit. Pak prohlížeč provede rolování okamžitě a poskytne maximálně plynulý zážitek, zatímco bude zpracována událost.
 
@@ -200,7 +200,7 @@ Alternativním řešením by bylo v handleru v `document` prověřovat, zda byla
 </script>
 ```
 
-I nyní všechno funguje správně. Fungovalo by to i tehdy, kdybychom měli vnořené elementy a každý z nich obsahoval vlastní kontextové menu. Jen je třeba kontrolovat `událost.defaultPrevented` v každém handleru `contextmenu`.
+I nyní všechno funguje správně. Fungovalo by to i tehdy, kdybychom měli vnořené elementy a každý z nich obsahoval vlastní kontextové menu. Jenom je třeba kontrolovat `událost.defaultPrevented` v každém handleru `contextmenu`.
 
 ```smart header="událost.stopPropagation() a událost.preventDefault()"
 Jak jasně vidíme, `událost.stopPropagation()` a `událost.preventDefault()` (známá také jako `return false`) jsou dvě různé věci a nemají k sobě navzájem žádný vztah.
@@ -218,7 +218,7 @@ Potom by však každá část kódu, která chce kontextové menu, měla tento o
 
 Existuje mnoho standardních akcí prohlížeče:
 
-- `mousedown` -- zahájení označení textu (pohybem myší).
+- `mousedown` -- zahájení výběru textu (pohybem myší).
 - `click` na `<input type="checkbox">` -- zaškrtne/odškrtne tento `input`.
 - `submit` -- tuto událost vyvolá kliknutí na `<input type="submit">` nebo stisknutí `key:Enter` uvnitř formulářového pole, prohlížeč pak formulář odešle.
 - `keydown` -- stisknutí klávesy může vést k přidání znaku do pole nebo jiným akcím.

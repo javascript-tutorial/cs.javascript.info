@@ -7,12 +7,12 @@ Algoritmus vypadá jednoduše:
 
 Jak ale měřit rychlost?
 
-Prvním nápadem může být spustit každých `100ms` funkci, která změří vzdálenost mezi předchozími a nynějšími souřadnicemi. Bude-li malá, bude rychlost nízká.
+Prvním nápadem může být spustit každých `100 ms` funkci, která změří vzdálenost mezi předchozími a současnými souřadnicemi. Bude-li malá, bude rychlost nízká.
 
 Naneštěstí v JavaScriptu není žádný způsob, jak zjistit „aktuální souřadnice myši“. Neexistuje žádná funkce jako `getCurrentMouseCoordinates()`.
 
 Jediný způsob, jak zjistit souřadnice, je naslouchat událostem myši, např. `mousemove`, a zjišťovat souřadnice z objektu události.
 
-Vytvoříme tedy handler pro `mousemove`, aby sledoval souřadnice a pamatoval si je. A pak je jednou za `100ms` budeme porovnávat.
+Vytvoříme tedy handler pro `mousemove`, aby sledoval souřadnice a pamatoval si je. A pak je jednou za `100 ms` budeme porovnávat.
 
 P.S. Prosíme všimněte si, že testy v řešení používají `dispatchEvent`, aby viděly, zda tooltip funguje správně.

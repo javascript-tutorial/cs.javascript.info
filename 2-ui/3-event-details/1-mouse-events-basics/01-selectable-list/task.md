@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Označovací seznam
+# Vybírací seznam
 
-Vytvořte seznam, jehož elementy lze označovat, podobně jako ve správci souborů.
+Vytvořte seznam, jehož elementy lze vybírat, podobně jako ve správci souborů.
 
-- Kliknutí na seznam označí pouze tento element (přidá třídu `.vybrán`) a zruší označení všech ostatních.
-- Pokud je kliknuto se stisknutým `key:Ctrl` (na Macu `key:Cmd`), pak se označení tohoto elementu přepne, ale označení ostatních elementů se nezmění.
+- Kliknutí na seznam vybere pouze tento element (přidá třídu `.vybrán`) a zruší výběr všech ostatních.
+- Pokud je kliknuto se stisknutým `key:Ctrl` (na Macu `key:Cmd`), pak se výběr tohoto elementu přepne, ale výběr ostatních elementů se nezmění.
 
 Demo:
 
@@ -15,4 +15,4 @@ Demo:
 
 P.S. V této úloze můžeme předpokládat, že položky v seznamu jsou pouze textové, neobsahují vnořené značky.
 
-P.P.S. Zakažte standardní označení textu prohlížečem při kliknutí.
+P.P.S. Zakažte standardní výběr textu prohlížečem při kliknutí.

@@ -38,7 +38,7 @@ Na tuto možnost bychom měli pamatovat, když používáme `událost.relatedTar
 
 ## Přeskakování elementů
 
-Událost `mousemove` se spustí, když je ukazatel přesunut. To však neznamená, že tuto událost spustí každý pixel, přes který se přesune.
+Událost `mousemove` se spustí, když je ukazatel přesunut. To však neznamená, že tuto událost spustí každý pixel, přes který se ukazatel přesune.
 
 Prohlížeč si jednou za čas zkontroluje pozici myši, a pokud zjistí, že se změnila, vyvolá události.
 
@@ -68,7 +68,7 @@ Zkuste také přesunout ukazatel na dětský `div` a pak jej přesunout rychle d
 ```
 
 ```smart header="Když se spustila `mouseover`, musí být i `mouseout`"
-Při rychlém pohybu myší mohou být mezilehlé elementy ignorovány, ale jedno víme jistě: jestliže ukazatel „oficiálně“ vstoupil na element (byla generována událost `mouseover`), pak při jeho opuštění vždy získáme `mouseout`.
+Při rychlém pohybu myší mohou být mezilehlé elementy ignorovány, ale jedno víme jistě: jestliže ukazatel „oficiálně“ vstoupil na element (byla generována událost `mouseover`), pak při jeho opuštění vždy obdržíme `mouseout`.
 ```
 
 ## Událost mouseout při opuštění dítěte
@@ -126,7 +126,7 @@ Pokud se při opuštění rodičovského elementu mají provést nějaké akce, 
 
 Abychom se tomu vyhnuli, můžeme v handleru prověřovat `relatedTarget`, a pokud je myš stále uvnitř elementu, budeme takovou událost ignorovat.
 
-Alternativně můžeme použít jiné události: `mouseenter` a `mouseleave`, které nyní probereme a které tento problém nemají.
+Alternativně můžeme použít jiné události: `mouseenter` a `mouseleave`, které nyní probereme. Ty tento problém nemají.
 
 ## Události mouseenter a mouseleave
 
