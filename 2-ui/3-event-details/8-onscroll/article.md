@@ -34,4 +34,4 @@ Jestliže přidáme handler k těmto událostem a v něm zavoláme `událost.pre
 
 Způsobů, jak vyvolat rolování, je mnoho, proto je spolehlivější použít vlastnost `overflow` v CSS.
 
-Následuje několik úloh. které můžete vyřešit nebo se na ně podívat, abyste viděli aplikování `onscroll`.
+Následuje několik úloh, které můžete vyřešit nebo se na ně podívat, abyste viděli, jak se `onscroll` aplikuje.

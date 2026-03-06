@@ -118,7 +118,7 @@ Průběh uživatelských akcí a odpovídajících událostí je následující:
 1) Uživatel se dotkne obrázku, aby začal přetahovat.
     - spustí se událost `pointerdown`
 2) Pak začne pohybovat ukazatelem (a tedy přetahovat obrázek)
-    - spustí se událost `pointermove`, asi několikrát
+    - spustí se událost `pointermove`, zřejmě několikrát
 3) A pak následuje překvapení! Prohlížeč má svou nativní podporu přetahování obrázků, která se spustí a převezme proces přetahování, čímž vygeneruje událost `pointercancel`.
     - Prohlížeč bude nyní zpracovávat přetahování obrázku sám. Uživatel může dokonce přetáhnout obrázek míče mimo prohlížeč, třeba do svého poštovního programu nebo správce souborů.
     - Žádné další události `pointermove` se pro nás nekonají.
@@ -126,7 +126,7 @@ Průběh uživatelských akcí a odpovídajících událostí je následující:
 Problém tedy je v tom, že prohlížeč se „zmocní“ interakce: na začátku procesu „přetahování“ se spustí `pointercancel` a žádné další události `pointermove` se nevygenerují.
 
 ```online
-Následuje příklad přetahování s logováním událostí ukazatele (jen `up/down`, `move` a `cancel`) do `textarea`:
+Následuje demo přetahování s logováním událostí ukazatele (jen `up/down`, `move` a `cancel`) do `textarea`:
 
 [iframe src="ball" height=240 edit]
 ```
@@ -147,7 +147,7 @@ Musíme udělat následující dvě věci:
 Když to uděláme, budou události fungovat tak, jak zamýšlíme. Prohlížeč se nezmocní procesu a nevyvolá `pointercancel`.
 
 ```online
-Následující demo tyto řádky přidá:
+V následujícím demu jsou tyto řádky přidány:
 
 [iframe src="ball-2" height=240 edit]
 

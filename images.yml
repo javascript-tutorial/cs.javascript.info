@@ -700,3 +700,7 @@ metric-client-width-height.svg:
 metric-client-width-nopadding.svg:
   '= content width': '= šířka obsahu'
   'CSS width:': 'CSS šířka'
+  
+ball_shift.svg:
+  'shiftX': 'posunX'
+  'shiftY': 'posunY'
