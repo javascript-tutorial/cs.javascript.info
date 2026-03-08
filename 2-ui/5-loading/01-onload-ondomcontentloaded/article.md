@@ -182,7 +182,7 @@ window.onbeforeunload = function() {
 };
 ```
 
-Chování bylo změněno proto, že někteří autoři webů zneužívali handler této události k zobrazování zavádějících a otravných zpráv. V současnosti tedy staré prohlížeče mohou stále tento řetězec zobrazit jako zprávu, ale kromě toho nelze žádným způsobem změnit zprávu, která se uživateli zobrazí.
+Chování bylo změněno proto, že někteří autoři webů zneužívali handler této události k zobrazování zavádějících a otravných zpráv. V současnosti tedy staré prohlížeče mohou stále tento řetězec zobrazit jako zprávu, ale jinak nelze žádným způsobem změnit zprávu, která se uživateli zobrazí.
 
 ````warn header="Metoda `událost.preventDefault()` z handleru `beforeunload` nefunguje"
 Může to vypadat podivně, ale většina prohlížečů `událost.preventDefault()` ignoruje.
@@ -283,7 +283,7 @@ Obvyklý výstup:
 
 Čísla v hranatých závorkách udávají přibližný čas, kdy se to stane. Události se stejným číslem se stanou přibližně ve stejnou dobu (+- několik milisekund).
 
-- `document.readyState` se změní na `interactive` těsně před `DOMContentLoaded`. Tyto dvě věci ve skutečnosti znamenají totéž.
+- `document.readyState` se změní na `interactive` bezprostředně před `DOMContentLoaded`. Tyto dvě věci ve skutečnosti znamenají totéž.
 - `document.readyState` se změní na `complete`, když jsou načteny všechny zdroje (`iframe` a `img`). Zde vidíme, že se to stane přibližně ve stejnou dobu jako `img.onload` (`img` je poslední zdroj) a `window.onload`. Přepnutí do stavu `complete` znamená totéž jako `window.onload`. Rozdíl je v tom, že `window.onload` se vždy spustí až po všech ostatních handlerech `load`.
 
 

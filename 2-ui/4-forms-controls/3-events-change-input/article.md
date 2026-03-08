@@ -107,7 +107,7 @@ Naproti tomu [navigator.clipboard](https://www.w3.org/TR/clipboard-apis/#h-navig
 
 Události pro změnu dat:
 
-| Událost | Popis | Speciality |
+| Událost | Popis | Zvláštnosti |
 |---------|----------|-------------|
 | `change`| Hodnota byla změněna. | U textových polí se spouští při ztrátě fokusu. |
 | `input` | U textových polí při každé změně. | Na rozdíl od `change` se spouští okamžitě. |

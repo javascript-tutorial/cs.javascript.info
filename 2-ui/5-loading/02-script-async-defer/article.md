@@ -189,8 +189,8 @@ Jsou však mezi nimi i významné rozdíly:
 
 |         | Pořadí | `DOMContentLoaded` |
 |---------|---------|---------|
-| `async` | *Kdo se dřív načte*. Na jejich pořadí v dokumentu nezáleží -- který se načte první, ten se první spustí. |  Nemá vliv. Mohou se načíst a spustit, i když ještě není načten celý dokument. To se stává, když jsou skripty malé nebo jsou v mezipaměti a dokument je dostatečně dlouhý. |
-| `defer` | *Pořadí podle dokumentu* (podle toho, jak jsou uvedeny v dokumentu). |  Spustí se poté, co je dokument načten a zpracován (v případě potřeby čekají), těsně před `DOMContentLoaded`. |
+| `async` | *Kdo se dřív načte*. Na jejich pořadí v dokumentu nezáleží -- ten, který se načte první, se první spustí. |  Nemá vliv. Mohou se načíst a spustit, i když ještě není načten celý dokument. To se stává, když jsou skripty malé nebo jsou v mezipaměti a dokument je dostatečně dlouhý. |
+| `defer` | *Pořadí podle dokumentu* (stejné, v jakém jsou uvedeny v dokumentu). |  Spustí se poté, co je dokument načten a zpracován (v případě potřeby čekají), bezprostředně před `DOMContentLoaded`. |
 
 V praxi se `defer` používá pro skripty, které potřebují celý DOM a/nebo záleží na vzájemném pořadí jejich spuštění.
 

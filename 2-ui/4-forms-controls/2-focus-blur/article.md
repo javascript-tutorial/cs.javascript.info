@@ -109,7 +109,7 @@ Nejlepším receptem je dávat si při používání těchto událostí pozor. C
 
 Mnoho elementů standardně fokus nepodporuje.
 
-Jejich seznam se mezi jednotlivými prohlížeči mírně liší, ale jedno platí vždy: podpora `focus/blur` je zaručena pro elementy, s nimiž může návštěvník interagovat: `<button>`, `<input>`, `<select>`, `<a>` a podobně.
+Jejich seznam se mezi jednotlivými prohlížeči mírně liší, ale jedno platí vždy: podpora `focus/blur` je zaručena u elementů, s nimiž může návštěvník interagovat: `<button>`, `<input>`, `<select>`, `<a>` a podobně.
 
 Naproti tomu elementy, jejichž účelem je něco formátovat, např. `<div>`, `<span>`, `<table>`, standardně nemohou fokus získat. Metoda `elem.focus()` na nich nefunguje a události `focus/blur` se nikdy nespustí.
 
@@ -174,7 +174,7 @@ Uvedený příklad nefunguje, protože když uživatel nastaví fokus na `<input
 
 Má to dvě řešení.
 
-Za prvé, existuje legrační historická vlastnost: `focus/blur` nebublají, ale propadají se dolů ve fázi zachytávání.
+Za prvé, `focus/blur` mají jednu veselou historickou vlastnost: nebublají, ale propadají se dolů ve fázi zachytávání.
 
 Tohle bude fungovat:
 
@@ -221,7 +221,7 @@ Zde je tedy jiná fungující varianta:
 
 Události `focus` a `blur` se spouštějí na elementech, když získávají/ztrácejí fokus.
 
-Mají následující speciality:
+Mají následující zvláštnosti:
 - Nebublají. Můžeme však použít fázi zachytávání nebo události `focusin/focusout`.
 - Většina elementů standardně fokus nepodporuje. Abyste umožnili elementu získávat fokus, použijte `tabindex`.
 

@@ -7,7 +7,7 @@ importance: 5
 Vytvořte funkci `zobrazDotaz(html, callback)`, která zobrazí formulář se zprávou `html`, vstupním polem a tlačítky `OK/STORNO`.
 
 - Uživatel by měl něco napsat do textového pole a stisknout `key:Enter` nebo tlačítko OK, pak bude volána funkce `callback(hodnota)` s hodnotou, kterou zadal.
-- Jinak pokud uživatel stiskne `key:Esc` nebo STORNO, bude volána `callback(null)`.
+- Jinak pokud uživatel stiskne `key:Esc` nebo STORNO, bude voláno `callback(null)`.
 
 V obou případech bude proces vstupu ukončen a formulář se odstraní.
 
