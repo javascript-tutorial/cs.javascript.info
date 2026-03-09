@@ -54,7 +54,7 @@ Zde vezmeme první dítě uzlu `<p>` (což je textový uzel) a specifikujeme poz
 
 ### Výběr elementových uzlů
 
-**Jestliže `uzel` je elementový uzel, pak `pozice` musí být pořadové číslo jeho dítěte.** 
+**Jestliže `uzel` je elementový uzel, pak `pozice` musí být pořadí jeho dítěte.** 
 
 To se hodí pro vytváření rozsahů, které obsahují celé uzly a nezastaví se někde uprostřed jejich textu.
 
@@ -159,7 +159,7 @@ Od <input id="počátek" type="number" value=1> – Do <input id="konec" type="n
 </script>
 ```
 
-Například výběr ve stejném `<p>` od pozice `1` do `4` nám vydá rozsah `<i>italic</i> a <b>bold</b>`:
+Například výběr ve stejném `<p>` od pozice `1` do `4` nám vydá rozsah `<i>italic</i> and <b>bold</b>`:
 
 ![](range-example-p-1-3.svg)
 
@@ -169,7 +169,7 @@ V `setStart` a `setEnd` nemusíme používat tentýž uzel. Rozsah se může tá
 
 ### Výběr většího fragmentu
 
-Vyberme v našem příkladu více textu, například:
+Učiňme v našem příkladu větší výběr, například:
 
 ![](range-example-p-2-b-3.svg)
 
@@ -177,7 +177,7 @@ Už víme, jak na to. Musíme jen nastavit začátek a konec jako relativní poz
 
 Potřebujeme vytvořit rozsah, který:
 - začíná na pozici 2 v prvním dítěti `<p>` (vezme všechna písmena „Ex<b>ample:</b> “ kromě prvních dvou),
-- končí na pozici 2 v prvním dítěti `<b>` (vezme první tři písmena „<b>bol</b>d“ , ale žádné další):
+- končí na pozici 3 v prvním dítěti `<b>` (vezme první tři písmena „<b>bol</b>d“ , ale žádné další):
 
 ```html run
 <p id="p">Example: <i>italic</i> and <b>bold</b></p>
@@ -258,7 +258,7 @@ Pomocí těchto metod můžeme s vybranými uzly provádět v zásadě cokoli.
 Zde je zkušební příklad, abyste je viděli v akci:
 
 ```html run refresh autorun height=260
-Klikáním na tlačítka spouštějte metody na výběru, "resetPříkladu" jej resetuje.
+Klikáním na tlačítka spouštějte metody na výběru, „resetPříkladu“ jej resetuje.
 
 <p id="p">Example: <i>italic</i> and <b>bold</b></p>
 
@@ -364,7 +364,7 @@ Vybrat něco myší je možné oběma směry: „zleva doprava“ nebo „zprava
 
 Jinými slovy, když stisknete tlačítko myši a pak jí posunujete v dokumentu směrem dopředu, pak konec výběru (fokus) bude za začátkem (kotvou).
 
-Například když uživatel začne vybírat myší a jde od „Example“ k „italic“:
+Například když uživatel začne vybírat myší a postupuje od „Example“ k „italic“:
 
 ![](selection-direction-forward.svg)
 
@@ -378,7 +378,7 @@ Například když uživatel začne vybírat myší a jde od „Example“ k „i
 Následující události umožňují sledovat výběr:
 
 - `elem.onselectstart` -- když je výběr *zahájen* specificky na elementu `elem` (nebo uvnitř něj). Například když na něm uživatel stiskne tlačítko myši a začne pohybovat ukazatelem.
-    - Zákaz standardní akce zruší zahájení výběru. Začít výběr tímto elementem tedy přestane být možné, ale element bude stále možné vybrat. Návštěvník bude muset jen zahájit výběr jinde.
+    - Zákaz standardní akce zruší zahájení výběru. Začít výběr tímto elementem tedy přestane být možné, ale element bude stále možné vybrat. Návštěvník bude jen muset zahájit výběr jinde.
 - `document.onselectionchange` -- když je výběr zahájen nebo změněn.
     - Prosíme všimněte si: tento handler lze nastavit jen na `document`, sleduje všechny výběry na něm.
 
@@ -488,7 +488,7 @@ Totéž za použití rozsahů:
 ```smart header="Když něco vybíráte, napřed odstraňte již existující výběr"
 Jestliže v dokumentu již nějaký výběr existuje, napřed jej vyprázdněte voláním `removeAllRanges()` a teprve pak přidávejte rozsahy. Jinak budou všechny prohlížeče kromě Firefoxu nové rozsahy ignorovat.
 
-Výjimkou jsou některé metody pro výběr, které nahrazují existující výběr, například `setBaseAndExtent`.
+Výjimkou jsou některé metody výběru, které nahrazují existující výběr, například `setBaseAndExtent`.
 ```
 
 ## Výběr v ovládacích prvcích formulářů
@@ -665,7 +665,7 @@ K tomu, abychom zakázali něco vybrat, máme tři možnosti:
     </script>
     ```
 
-    Tím se zabrání zahájit výběr na `elem`, ale návštěvník jej může zahájit na jiném elementu a pak rozšířit na `elem`.
+    Tím se zakáže zahájit výběr na `elem`, ale návštěvník jej může zahájit na jiném elementu a pak rozšířit na `elem`.
 
     To se hodí, když je na stejné akci, která spouští výběr (např. `mousedown`), jiný handler události. Tím tedy zakážeme výběr, abychom se vyhnuli konfliktu, ale stále umožníme kopírovat obsah `elem`.
 

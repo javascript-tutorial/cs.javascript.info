@@ -29,8 +29,8 @@ pozorovatel.observe(uzel, konfigurace);
 - `characterData` -- zda sledovat `uzel.data` (textový obsah).
 
 Několik dalších možností:
-- `attributeOldValue` -- pokud je `true`, předá se callbacku stará i nová hodnota atributu (viz níže), v opačném případě pouze nová (potřebuje možnost `attributes`),
-- `characterDataOldValue` -- pokud je `true`, předá se callbacku stará i nová hodnota `uzel.data` (viz níže), v opačném případě pouze nová (potřebuje možnost `characterData`),
+- `attributeOldValue` -- pokud je `true`, předá se callbacku stará i nová hodnota atributu (viz dále), v opačném případě pouze nová (potřebuje možnost `attributes`),
+- `characterDataOldValue` -- pokud je `true`, předá se callbacku stará i nová hodnota `uzel.data` (viz dále), v opačném případě pouze nová (potřebuje možnost `characterData`),
 
 Pak se po každé změně spustí `callback`: změny se předají v prvním argumentu jako seznam objektů třídy [MutationRecord](https://dom.spec.whatwg.org/#mutationrecord) a jako druhý argument se předá sám pozorovatel.
 
@@ -164,7 +164,7 @@ let úryvky = článekElem.querySelectorAll('pre[class*="language-"]');
 
 ...Jenže představme si, že v kódu máme spoustu míst, kde načítáme obsah -- články, kvízy, příspěvky ve fórech atd. Musíme umístit volání zvýrazňovací funkce všude, abychom zvýraznili kód v obsahu po načtení? To není příliš pohodlné.
 
-A co když je obsah načten modulem třetí strany? Máme například fórum, které napsal někdo jiný a které načítá obsah dynamicky, a chtěli bychom do něj přidat zvýrazňování syntaxe. Nikdo není rád, když musí provádět změny ve skriptech třetích stran.
+A co když je obsah načten modulem třetí strany? Máme například fórum napsané někým jiným, které načítá obsah dynamicky, a chtěli bychom do něj přidat zvýrazňování syntaxe. Nikdo není rád, když musí provádět změny ve skriptech třetích stran.
 
 Naštěstí je tady jiná možnost.
 
@@ -261,7 +261,7 @@ Callback se nebude volat pro záznamy, které vrátila metoda `pozorovatel.takeR
 ```smart header="Interakce se sběračem odpadků"
 Pozorovatelé interně používají slabé odkazy na uzly. To znamená, že když je uzel odstraněn z DOMu a stane se nedosažitelným, může být odstraněn sběračem odpadků.
 
-Skutečnost, že DOM uzel je sledován pozorovatelem, nebrání v jeho odstranění sběračem.
+Skutečnost, že DOM uzel je sledován pozorovatelem, nebrání sběrači v jeho odstranění.
 ```
 
 ## Shrnutí

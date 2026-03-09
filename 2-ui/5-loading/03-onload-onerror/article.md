@@ -172,9 +172,9 @@ Přístup na jiný původ má tři úrovně:
 3. **`crossorigin="use-credentials"`** -- přístup povolen, jestliže server pošle zpět hlavičku `Access-Control-Allow-Origin` obsahující náš původ a hlavičku `Access-Control-Allow-Credentials: true`. Prohlížeč posílá na vzdálený server autorizační informace a cookies.
 
 ```smart
-Více informací o přístupu na jiný původ si můžete přečíst v kapitole <info:fetch-crossorigin>. Ta sice popisuje metodu `fetch` pro síťové požadavky, ale její politika je naprosto stejná.
+Další informace o přístupu na jiný původ si můžete přečíst v kapitole <info:fetch-crossorigin>. Ta sice popisuje metodu `fetch` pro síťové požadavky, ale její politika je naprosto stejná.
 
-„Cookies“ a podobné věci jsou momentálně mimo náš rozsah, ale můžete si o nich přečíst v kapitole <info:cookie>.
+„Cookies“ a podobné věci jsou momentálně mimo náš rámec, ale můžete si o nich přečíst v kapitole <info:cookie>.
 ```
 
 V našem případě jsme neměli atribut `crossorigin`, proto byl přístup na jiný původ zakázán. Přidejme ho.
