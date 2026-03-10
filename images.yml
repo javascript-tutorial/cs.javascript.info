@@ -227,7 +227,7 @@ eventLoop-full.svg:
   loop:
     text: 'událostí'
   microtasks: 'mikroúlohy'
-  render: 'renderování'
+  render: 'vykreslování'
 
 eventLoop.svg:
   script: 'skript'

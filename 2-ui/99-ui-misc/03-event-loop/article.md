@@ -259,7 +259,7 @@ alert("kód");
 
 V jakém pořadí se to bude dít?
 
-1. Jako první se zobrazí `kód`, protože to je běžné synchronní volání.
+1. Jako první se zobrazí `kód`, protože to je obvyklé synchronní volání.
 2. Jako druhý se zobrazí `příslib`, protože `.then` projde frontou mikroúloh a spustí se po aktuálním kódu.
 3. Jako poslední se zobrazí `timeout`, protože to je makroúloha.
 
@@ -303,7 +303,7 @@ Následuje příklad s „ukazatelem průběhu počítání“, podobný dříve
 
 ## Shrnutí
 
-Podrobnější algoritmus smyčky událostí (ačkoli ve srovnání se [specifikací](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model) stále zjednodušený):
+Podrobnější algoritmus smyčky událostí (ačkoli oproti [specifikaci](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model) stále zjednodušený):
 
 1. Vyjmi z fronty a spusť nejstarší úlohu z fronty *makroúloh* (např. skript).
 2. Spusť všechny *mikroúlohy*:
