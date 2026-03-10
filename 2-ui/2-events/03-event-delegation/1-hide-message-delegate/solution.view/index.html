@@ -9,30 +9,31 @@
 <body>
 
   <div id="container">
-    <div class="pane">
-      <h3>Horse</h3>
-      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
-      <button class="remove-button">[x]</button>
-    </div>
-    <div class="pane">
-      <h3>Donkey</h3>
-      <p>The donkey or ass (Equus africanus asinus) is a domesticated member of the horse family, Equidae. The wild ancestor of the donkey is the African wild ass, E. africanus. The donkey has been used as a working animal for at least 5000 years.</p>
-      <button class="remove-button">[x]</button>
-    </div>
-    <div class="pane">
-      <h3>Cat</h3>
-      <p>The domestic cat (Latin: Felis catus) is a small, typically furry, carnivorous mammal. They are often called house cats when kept as indoor pets or simply cats when there is no need to distinguish them from other felids and felines. Cats are often valued by humans for companionship and for their ability to hunt vermin.
+    <div class="záložka">
+      <h3>Kůň</h3>
+      <p>Kůň je jedním ze dvou existujících poddruhů Equus ferus. Je to lichokopytník patřící do taxonomické čeledi koňovitých. Kůň se během posledních 45 až 55 milionů let vyvinul z malého vícekopytníka Eohippus do dnešního velkého jednokopytníka.
       </p>
-      <button class="remove-button">[x]</button>
+      <button class="tlačítko-odstranit">[x]</button>
+    </div>
+    <div class="záložka">
+      <h3>Osel</h3>
+      <p>Osel (Equus africanus asinus) je domestikovaný člen čeledi koňovitých (Equidae). Divokým předkem osla je africký divoký osel (E. africanus). Osel se jako pracovní zvíře používá již nejméně 5000 let.
+      <button class="tlačítko-odstranit">[x]</button>
+    </div>
+    <div class="záložka">
+      <h3>Kočka</h3>
+      <p>Kočka domácí (latinsky: Felis catus) je malý, zpravidla chlupatý, masožravý savec. Často se jim říká domácí kočky, pokud jsou chovány jako domácí mazlíčci, nebo prostě kočky, pokud není třeba je odlišovat od jiných kočkovitých šelem. Kočky jsou lidmi často oceňovány pro jejich přítulnost a schopnost lovit škůdce.
+      </p>
+      <button class="tlačítko-odstranit">[x]</button>
     </div>
   </div>
 
   <script>
-    container.onclick = function(event) {
-      if (event.target.className != 'remove-button') return;
+    container.onclick = function(událost) {
+      if (událost.target.className != 'tlačítko-odstranit') return;
 
-      let pane = event.target.closest('.pane');
-      pane.remove();
+      let záložka = událost.target.closest('.záložka');
+      záložka.remove();
     };
   </script>
 

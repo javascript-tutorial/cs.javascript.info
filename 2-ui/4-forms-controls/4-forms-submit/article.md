@@ -1,65 +1,65 @@
-# Forms: event and method submit
+# Formuláře: událost a metoda submit
 
-The `submit` event triggers when the form is submitted, it is usually used to validate the form before sending it to the server or to abort the submission and process it in JavaScript.
+Událost `submit` se spustí, když je formulář odeslán. Obvykle se používá ke kontrole formuláře před jeho odesláním na server nebo ke zrušení odeslání a zpracování formuláře v JavaScriptu.
 
-The method `form.submit()` allows to initiate form sending from JavaScript. We can use it to dynamically create and send our own forms to server.
+Metoda `formulář.submit()` umožňuje vyvolat odeslání formuláře z JavaScriptu. Můžeme ji použít k dynamickému vytvoření a odeslání našich vlastních formulářů na server.
 
-Let's see more details of them.
+Podívejme se na ně podrobněji.
 
-## Event: submit
+## Událost submit
 
-There are two main ways to submit a form:
+Formulář lze odeslat dvěma hlavními způsoby:
 
-1. The first -- to click `<input type="submit">` or `<input type="image">`.
-2. The second -- press `key:Enter` on an input field.
+1. Prvním je kliknutí na `<input type="submit">` nebo `<input type="image">`.
+2. Druhým je stisknutí `key:Enter` na vstupním poli.
 
-Both actions lead to `submit` event on the form. The handler can check the data, and if there are errors, show them and call `event.preventDefault()`, then the form won't be sent to the server.
+Obě akce vyvolají na formuláři událost `submit`. Handler může zkontrolovat data, a pokud v nich jsou chyby, zobrazit je a zavolat `událost.preventDefault()`, aby formulář nebyl odeslán na server.
 
-In the form below:
-1. Go into the text field and press `key:Enter`.
-2. Click `<input type="submit">`.
+V následujícím formuláři:
+1. Vstupte do textového pole a stiskněte `key:Enter`.
+2. Klikněte na `<input type="submit">`.
 
-Both actions show `alert` and the form is not sent anywhere due to `return false`:
+Obě akce zobrazí `alert` a v důsledku `return false` nebude formulář nikam odeslán:
 
 ```html autorun height=60 no-beautify
-<form onsubmit="alert('submit!');return false">
-  First: Enter in the input field <input type="text" value="text"><br>
-  Second: Click "submit": <input type="submit" value="Submit">
+<form onsubmit="alert('odeslat!');return false">
+  První způsob: klávesa Enter ve vstupním poli <input type="text" value="text"><br>
+  Druhý způsob: klikněte na "odeslat": <input type="submit" value="Odeslat">
 </form>
 ```
 
-````smart header="Relation between `submit` and `click`"
-When a form is sent using `key:Enter` on an input field, a `click` event triggers on the `<input type="submit">`.
+````smart header="Vztah mezi `submit` a `click`"
+Když je formulář odeslán stisknutím `key:Enter` na vstupním poli, spustí se událost `click` na `<input type="submit">`.
 
-That's rather funny, because there was no click at all.
+To je docela veselé, protože k žádnému kliknutí nedošlo.
 
-Here's the demo:
+Zde je demo:
 ```html autorun height=60
 <form onsubmit="return false">
- <input type="text" size="30" value="Focus here and press enter">
- <input type="submit" value="Submit" *!*onclick="alert('click')"*/!*>
+ <input type="text" size="30" value="Vstupte sem a stiskněte Enter">
+ <input type="submit" value="Odeslat" *!*onclick="alert('click')"*/!*>
 </form>
 ```
 
 ````
 
-## Method: submit
+## Metoda submit
 
-To submit a form to the server manually, we can call `form.submit()`.
+Chceme-li odeslat formulář na server ručně, můžeme zavolat `formulář.submit()`.
 
-Then the `submit` event is not generated. It is assumed that if the programmer calls `form.submit()`, then the script already did all related processing.
+Pak událost `submit` nebude vygenerována. Předpokládá se, že když programátor volá `formulář.submit()`, skript již zpracoval všechno, co bylo potřeba.
 
-Sometimes that's used to manually create and send a form, like this:
+Tato metoda se někdy používá k ručnímu vytvoření a odeslání formuláře, například:
 
 ```js run
-let form = document.createElement('form');
-form.action = 'https://google.com/search';
-form.method = 'GET';
+let formulář = document.createElement('form');
+formulář.action = 'https://google.com/search';
+formulář.method = 'GET';
 
-form.innerHTML = '<input name="q" value="test">';
+formulář.innerHTML = '<input name="q" value="test">';
 
-// the form must be in the document to submit it
-document.body.append(form);
+// formulář musí být v dokumentu, abychom jej mohli odeslat
+document.body.append(formulář);
 
-form.submit();
+formulář.submit();
 ```

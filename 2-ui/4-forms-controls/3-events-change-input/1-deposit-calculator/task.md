@@ -2,20 +2,20 @@ importance: 5
 
 ---
 
-# Deposit calculator
+# Kalkulátor vkladů
 
-Create an interface that allows to enter a sum of bank deposit and percentage, then calculates how much it will be after given periods of time.
+Vytvořte rozhraní, které umožní vložit výši bankovního vkladu a procentuální úrok. Pak vypočítá, kolik budeme mít po zadaném časovém období.
 
-Here's the demo:
+Zde je demo:
 
 [iframe src="solution" height="350" border="1"]
 
-Any input change should be processed immediately.
+Každá změna ve vstupu by měla být okamžitě zpracována.
 
-The formula is:
+Vzorec je následující:
 ```js
-// initial: the initial money sum
-// interest: e.g. 0.05 means 5% per year
-// years: how many years to wait
-let result = Math.round(initial * (1 + interest) ** years);
+// počátek: počáteční peněžní suma
+// úrok: např. 0.05 znamená 5% ročně
+// roky: kolik let chceme čekat
+let výsledek = Math.round(počátek * (1 + úrok) ** roky);
 ```

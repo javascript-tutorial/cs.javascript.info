@@ -1,124 +1,124 @@
-# Page: DOMContentLoaded, load, beforeunload, unload
+# Stránka: DOMContentLoaded, load, beforeunload, unload
 
-The lifecycle of an HTML page has three important events:
+Životní cyklus HTML stránky obsahuje tři důležité události:
 
-- `DOMContentLoaded` -- the browser fully loaded HTML, and the DOM tree is built, but external resources like pictures `<img>` and stylesheets may not yet have loaded.
-- `load` -- not only HTML is loaded, but also all the external resources: images, styles etc.
-- `beforeunload/unload` -- the user is leaving the page.
+- `DOMContentLoaded` -- prohlížeč načetl celý HTML kód a sestavil DOM strom, ale ještě se nenačetly externí zdroje, např. obrázky `<img>` nebo styly.
+- `load` -- načten je nejen HTML kód, ale i všechny externí zdroje: obrázky, styly atd.
+- `beforeunload/unload` -- uživatel opouští stránku.
 
-Each event may be useful:
+Každá událost může být užitečná:
 
-- `DOMContentLoaded` event -- DOM is ready, so the handler can lookup DOM nodes, initialize the interface.
-- `load` event -- external resources are loaded, so styles are applied, image sizes are known etc.
-- `beforeunload` event -- the user is leaving: we can check if the user saved the changes and ask them whether they really want to leave.
-- `unload` -- the user almost left, but we still can initiate some operations, such as sending out statistics.
+- událost `DOMContentLoaded` -- DOM je připraven, handler tedy může vyhledávat DOM uzly a inicializovat rozhraní.
+- událost `load` -- externí zdroje jsou načteny, takže jsou aplikovány styly, jsou známy velikosti obrázků atd.
+- událost `beforeunload` -- uživatel opouští stránku: můžeme ověřit, zda uživatel uložil změny, a zeptat se ho, zda chce opravdu odejít.
+- událost `unload` -- uživatel již téměř odešel, ale stále můžeme spustit některé operace, například odeslat statistiku.
 
-Let's explore the details of these events.
+Prozkoumejme tyto události podrobně.
 
 ## DOMContentLoaded
 
-The `DOMContentLoaded` event happens on the `document` object.
+Událost `DOMContentLoaded` nastává na objektu `document`.
 
-We must use `addEventListener` to catch it:
+K jejímu zachycení musíme použít `addEventListener`:
 
 ```js
-document.addEventListener("DOMContentLoaded", ready);
-// not "document.onDOMContentLoaded = ..."
+document.addEventListener("DOMContentLoaded", připraven);
+// ne "document.onDOMContentLoaded = ..."
 ```
 
-For instance:
+Příklad:
 
 ```html run height=200 refresh
 <script>
-  function ready() {
-    alert('DOM is ready');
+  function připraven() {
+    alert('DOM je připraven');
 
-    // image is not yet loaded (unless it was cached), so the size is 0x0
-    alert(`Image size: ${img.offsetWidth}x${img.offsetHeight}`);
+    // obrázek ještě není načten (pokud nebyl v mezipaměti), takže velikost bude 0x0
+    alert(`Velikost obrázku: ${obrázek.offsetWidth}x${obrázek.offsetHeight}`);
   }
 
 *!*
-  document.addEventListener("DOMContentLoaded", ready);
+  document.addEventListener("DOMContentLoaded", připraven);
 */!*
 </script>
 
-<img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&cache=0">
+<img id="obrázek" src="https://en.js.cx/clipart/train.gif?speed=1&cache=0">
 ```
 
-In the example, the `DOMContentLoaded` handler runs when the document is loaded, so it can see all the elements, including `<img>` below.
+V tomto příkladu se handler `DOMContentLoaded` spustí, když je dokument načten, takže vidí všechny elementy včetně `<img>` pod sebou.
 
-But it doesn't wait for the image to load. So `alert` shows zero sizes.
+Nečeká však na načtení obrázku, proto `alert` zobrazí nulovou velikost.
 
-At first sight, the `DOMContentLoaded` event is very simple. The DOM tree is ready -- here's the event. There are few peculiarities though.
+Na první pohled je událost `DOMContentLoaded` velmi jednoduchá. DOM strom je připraven -- událost je tady. Má však několik zvláštností.
 
-### DOMContentLoaded and scripts
+### DOMContentLoaded a skripty
 
-When the browser processes an HTML-document and comes across a `<script>` tag, it needs to execute before continuing building the DOM. That's a precaution, as scripts may want to modify DOM, and even `document.write` into it, so `DOMContentLoaded` has to wait.
+Když prohlížeč zpracovává HTML dokument a narazí na značku `<script>`, musí spustit skript dříve, než bude pokračovat ve vytváření DOMu. To je preventivní opatření, jelikož skripty mohou chtít měnit DOM a dokonce do něj zapisovat pomocí `document.write`, takže`DOMContentLoaded` musí počkat.
 
-So DOMContentLoaded definitely happens after such scripts:
+DOMContentLoaded se tedy spustí vždy až po takových skriptech:
 
 ```html run
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    alert("DOM ready!");
+    alert("DOM připraven!");
   });
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"></script>
 
 <script>
-  alert("Library loaded, inline script executed");
+  alert("Knihovna načtena, inline skript spuštěn");
 </script>
 ```
 
-In the example above, we first see "Library loaded...", and then "DOM ready!" (all scripts are executed).
+V uvedeném příkladu vidíme nejprve „Knihovna načtena...“ a až pak „DOM připraven!“ (všechny skripty byly spuštěny).
 
-```warn header="Scripts that don't block DOMContentLoaded"
-There are two exceptions from this rule:
-1. Scripts with the `async` attribute, that we'll cover [a bit later](info:script-async-defer), don't block `DOMContentLoaded`.
-2. Scripts that are generated dynamically with `document.createElement('script')` and then added to the webpage also don't block this event.
+```warn header="Skripty, které neblokují DOMContentLoaded"
+Z tohoto pravidla existují dvě výjimky:
+1. Skripty s atributem `async`, které probereme [o něco později](info:script-async-defer), neblokují `DOMContentLoaded`.
+2. Skripty, které jsou generovány dynamicky voláním `document.createElement('script')` a pak jsou přidány na webovou stránku, tuto událost také neblokují.
 ```
 
-### DOMContentLoaded and styles
+### DOMContentLoaded a styly
 
-External style sheets don't affect DOM, so `DOMContentLoaded` does not wait for them.
+Externí kaskádové styly nemají na DOM žádný vliv, takže `DOMContentLoaded` na ně nečeká.
 
-But there's a pitfall. If we have a script after the style, then that script must wait until the stylesheet loads:
+Je tady však chyták. Jestliže máme skript až za stylem, skript musí počkat, dokud se styl nenačte:
 
 ```html run
 <link type="text/css" rel="stylesheet" href="style.css">
 <script>
-  // the script doesn't execute until the stylesheet is loaded
+  // skript se nespustí, dokud není styl načten
   alert(getComputedStyle(document.body).marginTop);
 </script>
 ```
 
-The reason for this is that the script may want to get coordinates and other style-dependent properties of elements, like in the example above. Naturally, it has to wait for styles to load.
+Důvodem je, že skript může chtít získat souřadnice a jiné vlastnosti elementů závislé na stylu, podobně jako v uvedeném příkladu. Pochopitelně musí počkat, než se styly načtou.
 
-As `DOMContentLoaded` waits for scripts, it now waits for styles before them as well.
+Jelikož `DOMContentLoaded` čeká na skripty, bude nyní čekat i na styly před nimi.
 
-### Built-in browser autofill
+### Automatické vyplňování zabudované v prohlížeči
 
-Firefox, Chrome and Opera autofill forms on `DOMContentLoaded`.
+Firefox, Chrome a Opera při `DOMContentLoaded` automaticky vyplňují formuláře.
 
-For instance, if the page has a form with login and password, and the browser remembered the values, then on `DOMContentLoaded` it may try to autofill them (if approved by the user).
+Například jestliže stránka obsahuje formulář s loginem a heslem a prohlížeč si tyto hodnoty pamatuje, pak se je při `DOMContentLoaded` může pokusit automaticky vyplnit (pokud to uživatel povolil).
 
-So if `DOMContentLoaded` is postponed by long-loading scripts, then autofill also awaits. You probably saw that on some sites (if you use browser autofill) -- the login/password fields don't get autofilled immediately, but there's a delay till the page fully loads. That's actually the delay until the `DOMContentLoaded` event.
+Jestliže je tedy `DOMContentLoaded` zdržena dlouho se načítajícími skripty, automatické vyplňování čeká také. Pravděpodobně jste to už viděli na některých stránkách (používáte-li automatické vyplňování) -- pole s loginem a heslem se nevyplnila hned, ale čekala, než se načte celá stránka. To je právě čekání na událost `DOMContentLoaded`.
 
 
 ## window.onload [#window-onload]
 
-The `load` event on the `window` object triggers when the whole page is loaded including styles, images and other resources. This event is available via the `onload` property.
+Událost `load` na objektu `window` se spustí, když je načtena celá stránka včetně stylů, obrázků a dalších zdrojů. Tato událost je k dispozici ve vlastnosti `onload`.
 
-The example below correctly shows image sizes, because `window.onload` waits for all images:
+Následující příklad zobrazí velikost obrázku správně, protože `window.onload` čeká na načtení všech obrázků:
 
 ```html run height=200 refresh
 <script>
-  window.onload = function() { // can also use window.addEventListener('load', (event) => {
-    alert('Page loaded');
+  window.onload = function() { // můžeme také použít window.addEventListener('load', (událost) => {
+    alert('Stránka načtena');
 
-    // image is loaded at this time
-    alert(`Image size: ${img.offsetWidth}x${img.offsetHeight}`);
+    // v této chvíli je obrázek načten
+    alert(`Velikost obrázku: ${img.offsetWidth}x${img.offsetHeight}`);
   };
 </script>
 
@@ -127,45 +127,44 @@ The example below correctly shows image sizes, because `window.onload` waits for
 
 ## window.onunload
 
-When a visitor leaves the page, the `unload` event triggers on `window`. We can do something there that doesn't involve a delay, like closing related popup windows.
+Když návštěvník opouští stránku, spustí se na `window` událost `unload`. Můžeme v ní udělat něco, co nevyžaduje prodlevu, například zavřít příslušná vyskakovací okna.
 
-The notable exception is sending analytics.
+Pozoruhodnou výjimkou je posílání analytických dat.
 
-Let's say we gather data about how the page is used: mouse clicks, scrolls, viewed page areas, and so on.
+Dejme tomu, že shromažďujeme data o tom, jak je stránka používána: kliknutí myší, rolování, zobrazené oblasti stránky a podobně.
 
-Naturally, `unload` event is when the user leaves us, and we'd like to save the data on our server.
+Když nás uživatel opouští, pochopitelně nastane událost `unload` a my bychom chtěli poslat tato data na server.
 
-There exists a special `navigator.sendBeacon(url, data)` method for such needs, described in the specification <https://w3c.github.io/beacon/>.
+Pro takové potřeby slouží speciální metoda `navigator.sendBeacon(url, data)`, popsaná ve specifikaci <https://w3c.github.io/beacon/>.
 
-It sends the data in background. The transition to another page is not delayed: the browser leaves the page, but still performs `sendBeacon`.
+Tato metoda posílá data na pozadí. Přesun na jinou stránku se nezpozdí: prohlížeč opustí stránku, ale stále provádí `sendBeacon`.
 
-Here's how to use it:
+Používá se následovně:
 ```js
-let analyticsData = { /* object with gathered data */ };
+let analytickáData = { /* objekt s nashromážděnými daty */ };
 
 window.addEventListener("unload", function() {
-  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
+  navigator.sendBeacon("/analytics", JSON.stringify(analytickáData));
 });
 ```
 
-- The request is sent as POST.
-- We can send not only a string, but also forms and other formats, as described in the chapter <info:fetch>, but usually it's a stringified object.
-- The data is limited by 64kb.
+- Požadavek se posílá metodou POST.
+- Můžeme poslat nejenom řetězec, ale i formuláře a jiné formáty, jak je popsáno v kapitole <info:fetch>. Obvykle se však posílá objekt převedený na řetězec.
+- Velikost dat je omezena na 64 KB.
 
-When the `sendBeacon` request is finished, the browser probably has already left the document, so there's no way to get server response (which is usually empty for analytics).
+Když je požadavek `sendBeacon` ukončen, prohlížeč již pravděpodobně opustil dokument, takže nemůžeme žádným způsobem získat odpověď serveru (která bývá pro analytická data obvykle prázdná).
 
-There's also a `keepalive` flag for doing such "after-page-left" requests in  [fetch](info:fetch) method for generic network requests. You can find more information in the chapter <info:fetch-api>.
+Pro provádění podobných požadavků „po opuštění stránky“ v metodě [fetch](info:fetch) existuje v obecných síťových požadavcích také přepínač `keepalive`. Další informace o něm najdete v kapitole <info:fetch-api>.
 
-
-If we want to cancel the transition to another page, we can't do it here. But we can use another event -- `onbeforeunload`.
+Pokud chceme zrušit přechod na jinou stránku, tady to udělat nemůžeme. Můžeme však použít jinou událost -- `onbeforeunload`.
 
 ## window.onbeforeunload [#window.onbeforeunload]
 
-If a visitor initiated navigation away from the page or tries to close the window, the `beforeunload` handler asks for additional confirmation.
+Jestliže uživatel inicioval navigaci pryč z naší stránky nebo se pokouší zavřít okno, handler `beforeunload` se zeptá na dodatečné potvrzení.
 
-If we cancel the event, the browser may ask the visitor if they are sure.
+Pokud tuto událost zrušíme, prohlížeč se může zeptat návštěvníka, zda si je jist.
 
-You can try it by running this code and then reloading the page:
+Můžete si to zkusit spuštěním následujícího kódu a znovunačtením stránky:
 
 ```js run
 window.onbeforeunload = function() {
@@ -173,89 +172,89 @@ window.onbeforeunload = function() {
 };
 ```
 
-For historical reasons, returning a non-empty string also counts as canceling the event. Some time ago browsers used to show it as a message, but as the [modern specification](https://html.spec.whatwg.org/#unloading-documents) says, they shouldn't.
+Z historických důvodů se za zrušení události považuje i vrácení neprázdného řetězce. Před určitou dobou prohlížeče tento řetězec zobrazovaly jako zprávu, ale [moderní specifikace](https://html.spec.whatwg.org/#unloading-documents) uvádí, že by to dělat neměly.
 
-Here's an example:
+Zde je příklad:
 
 ```js run
 window.onbeforeunload = function() {
-  return "There are unsaved changes. Leave now?";
+  return "Na stránce jsou neuložené změny. Chcete ji opustit?";
 };
 ```
 
-The behavior was changed, because some webmasters abused this event handler by showing misleading and annoying messages. So right now old browsers still may show it as a message, but aside of that -- there's no way to customize the message shown to the user.
+Chování bylo změněno proto, že někteří autoři webů zneužívali handler této události k zobrazování zavádějících a otravných zpráv. V současnosti tedy staré prohlížeče mohou stále tento řetězec zobrazit jako zprávu, ale jinak nelze žádným způsobem změnit zprávu, která se uživateli zobrazí.
 
-````warn header="The `event.preventDefault()` doesn't work from a `beforeunload` handler"
-That may sound weird, but most browsers ignore `event.preventDefault()`.
+````warn header="Metoda `událost.preventDefault()` z handleru `beforeunload` nefunguje"
+Může to vypadat podivně, ale většina prohlížečů `událost.preventDefault()` ignoruje.
 
-Which means, following code may not work:
+Což znamená, že následující kód zřejmě nebude fungovat:
 ```js run
-window.addEventListener("beforeunload", (event) => {
-  // doesn't work, so this event handler doesn't do anything
-	event.preventDefault();
+window.addEventListener("beforeunload", (událost) => {
+  // nefunguje, takže tento handler události nic neudělá
+	událost.preventDefault();
 });
 ```
 
-Instead, in such handlers one should set `event.returnValue` to a string to get the result similar to the code above:
+Abychom obdrželi výsledek podobný výše uvedenému kódu, měli bychom místo toho v takových handlerech nastavit `událost.returnValue` na řetězec:
 ```js run
-window.addEventListener("beforeunload", (event) => {
-  // works, same as returning from window.onbeforeunload
-	event.returnValue = "There are unsaved changes. Leave now?";
+window.addEventListener("beforeunload", (událost) => {
+  // funguje, totéž jako vrácení z window.onbeforeunload
+	událost.returnValue = "Na stránce jsou neuložené změny. Chcete ji opustit?";
 });
 ```
 ````
 
 ## readyState
 
-What happens if we set the `DOMContentLoaded` handler after the document is loaded?
+Co se stane, když nastavíme handler `DOMContentLoaded` až po načtení dokumentu?
 
-Naturally, it never runs.
+Pochopitelně se nikdy nespustí.
 
-There are cases when we are not sure whether the document is ready or not. We'd like our function to execute when the DOM is loaded, be it now or later.
+Existují případy, kdy si nejsme jisti, zda je dokument již připraven nebo ne, ale chtěli bychom spustit naši funkci tehdy, když bude DOM načten, ať je to hned nebo později.
 
-The `document.readyState` property tells us about the current loading state.
+Aktuální stav načítání nám sděluje vlastnost `document.readyState`.
 
-There are 3 possible values:
+Má tři možné hodnoty:
 
-- `"loading"` -- the document is loading.
-- `"interactive"` -- the document was fully read.
-- `"complete"` -- the document was fully read and all resources (like images) are loaded too.
+- `"loading"` -- dokument se načítá.
+- `"interactive"` -- dokument je celý načten.
+- `"complete"` -- dokument je celý načten a jsou načteny i všechny jeho zdroje (např. obrázky).
 
-So we can check `document.readyState` and setup a handler or execute the code immediately if it's ready.
+Můžeme tedy zkontrolovat `document.readyState` a nastavit handler nebo spustit kód okamžitě, jakmile dokument bude připraven.
 
-Like this:
+Příklad:
 
 ```js
-function work() { /*...*/ }
+function pracuj() { /*...*/ }
 
 if (document.readyState == 'loading') {
-  // still loading, wait for the event
-  document.addEventListener('DOMContentLoaded', work);
+  // stále se načítá, počkáme na událost
+  document.addEventListener('DOMContentLoaded', pracuj);
 } else {
-  // DOM is ready!
-  work();
+  // DOM je připraven!
+  pracuj();
 }
 ```
 
-There's also the `readystatechange` event that triggers when the state changes, so we can print all these states like this:
+Když se stav změní, spustí se událost nazvaná `readystatechange`, takže si všechny stavy můžeme nechat vypsat, například takto:
 
 ```js run
-// current state
+// aktuální stav
 console.log(document.readyState);
 
-// print state changes
+// vypíšeme změnu stavu
 document.addEventListener('readystatechange', () => console.log(document.readyState));
 ```
 
-The `readystatechange` event is an alternative mechanics of tracking the document loading state, it appeared long ago. Nowadays, it is rarely used.
+Událost `readystatechange` je alternativní mechanikou, jak sledovat stav načítání dokumentu. Objevila se před dlouhou dobou a v současnosti se používá jen málokdy.
 
-Let's see the full events flow for the completeness.
+Pro úplnost se podívejme na celý tok událostí.
 
-Here's a document with `<iframe>`, `<img>` and handlers that log events:
+Zde je dokument s `<iframe>`, `<img>` a handlery, které logují události:
 
 ```html
 <script>
-  log('initial readyState:' + document.readyState);
+  log('počáteční readyState:' + document.readyState);
 
   document.addEventListener('readystatechange', () => log('readyState:' + document.readyState));
   document.addEventListener('DOMContentLoaded', () => log('DOMContentLoaded'));
@@ -271,10 +270,10 @@ Here's a document with `<iframe>`, `<img>` and handlers that log events:
 </script>
 ```
 
-The working example is [in the sandbox](sandbox:readystate).
+Funkční příklad najdete [na pískovišti](sandbox:readystate).
 
-The typical output:
-1. [1] initial readyState:loading
+Obvyklý výstup:
+1. [1] počáteční readyState:loading
 2. [2] readyState:interactive
 3. [2] DOMContentLoaded
 4. [3] iframe onload
@@ -282,23 +281,23 @@ The typical output:
 6. [4] readyState:complete
 7. [4] window onload
 
-The numbers in square brackets denote the approximate time of when it happens. Events labeled with the same digit happen approximately at the same time (+- a few ms).
+Čísla v hranatých závorkách udávají přibližný čas, kdy se to stane. Události se stejným číslem se stanou přibližně ve stejnou dobu (+- několik milisekund).
 
-- `document.readyState` becomes `interactive` right before `DOMContentLoaded`. These two things actually mean the same.
-- `document.readyState` becomes `complete` when all resources (`iframe` and `img`) are loaded. Here we can see that it happens in about the same time as `img.onload` (`img` is the last resource) and `window.onload`. Switching to `complete` state means the same as `window.onload`. The difference is that `window.onload` always works after all other `load` handlers.
+- `document.readyState` se změní na `interactive` bezprostředně před `DOMContentLoaded`. Tyto dvě věci ve skutečnosti znamenají totéž.
+- `document.readyState` se změní na `complete`, když jsou načteny všechny zdroje (`iframe` a `img`). Zde vidíme, že se to stane přibližně ve stejnou dobu jako `img.onload` (`img` je poslední zdroj) a `window.onload`. Přepnutí do stavu `complete` znamená totéž jako `window.onload`. Rozdíl je v tom, že `window.onload` se vždy spustí až po všech ostatních handlerech `load`.
 
 
-## Summary
+## Shrnutí
 
-Page load events:
+Události při načítání stránky:
 
-- The `DOMContentLoaded` event triggers on `document` when the DOM is ready. We can apply JavaScript to elements at this stage.
-  - Script such as `<script>...</script>` or `<script src="..."></script>` block DOMContentLoaded, the browser waits for them to execute.
-  - Images and other resources may also still continue loading.
-- The `load` event on `window` triggers when the page and all resources are loaded. We rarely use it, because there's usually no need to wait for so long.
-- The `beforeunload` event on `window` triggers when the user wants to leave the page. If we cancel the event, browser asks whether the user really wants to leave (e.g we have unsaved changes).
-- The `unload` event on `window` triggers when the user is finally leaving, in the handler we can only do simple things that do not involve delays or asking a user. Because of that limitation, it's rarely used. We can send out a network request with `navigator.sendBeacon`.
-- `document.readyState` is the current state of the document, changes can be tracked in the `readystatechange` event:
-  - `loading` -- the document is loading.
-  - `interactive` -- the document is parsed, happens at about the same time as `DOMContentLoaded`, but before it.
-  - `complete` -- the document and resources are loaded, happens at about the same time as `window.onload`, but before it.
+- Událost `DOMContentLoaded` se spustí na `document`, když je připraven DOM. V této chvíli můžeme na elementy aplikovat JavaScript.
+  - Skripty jako `<script>...</script>` nebo `<script src="..."></script>` událost `DOMContentLoaded` blokují, prohlížeč čeká na jejich spuštění.
+  - Obrázky a další zdroje se mohou stále ještě načítat.
+- Událost `load` na `window` se spustí, když je načtena celá stránka a všechny zdroje. Používáme ji zřídka, jelikož zpravidla nemáme důvod čekat tak dlouho.
+- Událost `beforeunload` na `window` se spustí, když uživatel chce opustit stránku. Pokud ji zrušíme, prohlížeč se zeptá, zda uživatel opravdu chce odejít (např. má neuložené změny).
+- Událost `unload` na `window` se spustí, když uživatel skutečně odchází. V jejím handleru můžeme provádět jen jednoduché věci, které nevyžadují prodlevu nebo dotaz na uživatele. Kvůli tomuto omezení se používá zřídkakdy. Můžeme poslat síťový požadavek voláním `navigator.sendBeacon`.
+- `document.readyState` je aktuální stav dokumentu, jeho změny můžeme sledovat v události `readystatechange`:
+  - `loading` -- dokument se načítá.
+  - `interactive` -- dokument je zpracován, spustí se přibližně současně jako `DOMContentLoaded`, ale před ní.
+  - `complete` -- dokument a jeho zdroje jsou načteny, spustí se přibližně současně jako `window.onload`, ale před ní.

@@ -4,16 +4,16 @@
 <html>
 <body>
 
-  <div data-widget-name="menu">Choose the genre</div>
+  <div data-název-widgetu="menu">Vyberte žánr</div>
 
   <script>
-    // getting it
-    let elem = document.querySelector('[data-widget-name]');
+    // získáme ho
+    let elem = document.querySelector('[data-název-widgetu]');
 
-    // reading the value
-    alert(elem.dataset.widgetName);
-    // or
-    alert(elem.getAttribute('data-widget-name'));
+    // načteme hodnotu
+    alert(elem.dataset.názevWidgetu);
+    // nebo
+    alert(elem.getAttribute('data-název-widgetu'));
   </script>
 </body>
 </html>

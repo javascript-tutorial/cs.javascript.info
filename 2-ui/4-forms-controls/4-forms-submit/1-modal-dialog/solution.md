@@ -1,7 +1,7 @@
-A modal window can be implemented using a half-transparent `<div id="cover-div">` that covers the whole window, like this:
+Modální okno lze implementovat pomocí poloprůhledného `<div id="zakrývající-div">`, který zakrývá celé okno, například:
 
 ```css
-#cover-div {
+#zakrývající-div {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,8 +13,8 @@ A modal window can be implemented using a half-transparent `<div id="cover-div">
 }
 ```
 
-Because the `<div>` covers everything, it gets all clicks, not the page below it.
+Protože tento `<div>` vše překrývá, bude všechna kliknutí dostávat on, ne stránka za ním.
 
-Also we can prevent page scroll by setting `body.style.overflowY='hidden'`.
+Můžeme také zabránit rolování stránky nastavením `body.style.overflowY='hidden'`.
 
-The form should be not in the `<div>`, but next to it, because we don't want it to have `opacity`.
+Formulář by neměl být v tomto `<div>`, ale vedle něj, jelikož nechceme, aby měl `opacity`.

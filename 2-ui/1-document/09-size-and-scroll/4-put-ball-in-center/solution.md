@@ -1,56 +1,56 @@
-The ball has `position:absolute`. It means that its `left/top` coordinates are measured from the nearest positioned element, that is `#field` (because it has `position:relative`).
+Míč má `position:absolute`. To znamená, že jeho souřadnice `left/top` se měří od nejbližšího umístěného elementu, kterým je `#hřiště` (protože má `position:relative`).
 
-The coordinates start from the inner left-upper corner of the field:
+Souřadnice začínají od vnitřního levého horního rohu hřiště:
 
 ![](field.svg)
 
-The inner field width/height is `clientWidth/clientHeight`. So the field center has coordinates `(clientWidth/2, clientHeight/2)`.
+Vnitřní šířka/výška hřiště je obsažena v `clientWidth/clientHeight`. Střed hřiště má tedy souřadnice `(clientWidth/2, clientHeight/2)`.
 
-...But if we set `ball.style.left/top` to such values, then not the ball as a whole, but the left-upper edge of the ball would be in the center:
+...Jestliže však nastavíme `míč.style.left/top` na tyto hodnoty, nebude uprostřed hřiště celý míč, ale jeho levý horní roh:
 
 ```js
-ball.style.left = Math.round(field.clientWidth / 2) + 'px';
-ball.style.top = Math.round(field.clientHeight / 2) + 'px';
+míč.style.left = Math.round(hřiště.clientWidth / 2) + 'px';
+míč.style.top = Math.round(hřiště.clientHeight / 2) + 'px';
 ```
 
-Here's how it looks:
+Vypadá to následovně:
 
 [iframe height=180 src="ball-half"]
 
-To align the ball center with the center of the field, we should move the ball to the half of its width to the left and to the half of its height to the top:
+Abychom umístili střed míče do středu hřiště, měli bychom posunout míč o polovinu jeho šířky doleva a o polovinu jeho výšky nahoru:
 
 ```js
-ball.style.left = Math.round(field.clientWidth / 2 - ball.offsetWidth / 2) + 'px';
-ball.style.top = Math.round(field.clientHeight / 2 - ball.offsetHeight / 2) + 'px';
+míč.style.left = Math.round(hřiště.clientWidth / 2 - míč.offsetWidth / 2) + 'px';
+míč.style.top = Math.round(hřiště.clientHeight / 2 - míč.offsetHeight / 2) + 'px';
 ```
 
-Now the ball is finally centered.
+Nyní je míč konečně uprostřed.
 
-````warn header="Attention: the pitfall!"
+````warn header="Pozor: chyták!"
 
-The code won't work reliably while `<img>` has no width/height:
+Kód nebude správně fungovat, jestliže `<img>` nebude mít žádnou šířku/výšku:
 
 ```html
-<img src="ball.png" id="ball">
+<img src="ball.png" id="míč">
 ```
 ````
 
-When the browser does not know the width/height of an image (from tag attributes or CSS), then it assumes them to equal `0` until the image finishes loading.
+Když prohlížeč nezná šířku a výšku obrázku (z atributů značky nebo z CSS), předpokládá, že jsou rovny `0`, dokud načítání obrázku neskončí.
 
-So the value of `ball.offsetWidth` will be `0` until the image loads. That leads to wrong coordinates in the code above.
+Hodnota `míč.offsetWidth` tedy bude `0`, dokud se obrázek nenačte. To bude mít v uvedeném kódu za následek špatné souřadnice.
 
-After the first load, the browser usually caches the image, and on reloads it will have the size immediately. But on the first load the value of `ball.offsetWidth` is `0`.
+Po prvním načtení si prohlížeč obvykle uloží obrázek do mezipaměti a při jeho opětovném načtení bude znát velikost okamžitě. Avšak při prvním načtení bude hodnota `míč.offsetWidth` rovna `0`.
 
-We should fix that by adding `width/height` to `<img>`:
+Měli bychom to opravit přidáním `width/height` do `<img>`:
 
 ```html
-<img src="ball.png" *!*width="40" height="40"*/!* id="ball">
+<img src="ball.png" *!*width="40" height="40"*/!* id="míč">
 ```
 
-...Or provide the size in CSS:
+...Nebo uvést velikost v CSS:
 
 ```css
-#ball {
+#míč {
   width: 40px;
   height: 40px;
 }

@@ -1,49 +1,49 @@
-The `onscroll` handler should check which images are visible and show them.
+Handler `onscroll` by si měl zkontrolovat, které obrázky jsou vidět, a zobrazit je.
 
-We also want to run it when the page loads, to detect immediately visible images and load them.
+Chceme ho spustit i ve chvíli, kdy se stránka načte, abychom detekovali okamžitě viditelné obrázky a načetli je.
 
-The code should execute when the document is loaded, so that it has access to its content.
+Kód by se měl spustit, až bude dokument načten, aby měl přístup k celému jeho obsahu.
 
-Or put it at the `<body>` bottom:
+Nebo jej umístíme na konec `<body>`:
 
 ```js
-// ...the page content is above...
+// ...obsah stránky je výše...
 
-function isVisible(elem) {
+function jeVidět(elem) {
 
-  let coords = elem.getBoundingClientRect();
+  let souřadnice = elem.getBoundingClientRect();
 
-  let windowHeight = document.documentElement.clientHeight;
+  let výškaOkna = document.documentElement.clientHeight;
 
-  // top elem edge is visible?
-  let topVisible = coords.top > 0 && coords.top < windowHeight;
+  // je vidět vrch elementu?
+  let jeVidětVrch = souřadnice.top > 0 && souřadnice.top < výškaOkna;
 
-  // bottom elem edge is visible?
-  let bottomVisible = coords.bottom < windowHeight && coords.bottom > 0;
+  // je vidět spodek elementu?
+  let jeVidětSpodek = souřadnice.bottom < výškaOkna && souřadnice.bottom > 0;
 
-  return topVisible || bottomVisible;
+  return jeVidětVrch || jeVidětSpodek;
 }
 ```
 
-The `showVisible()` function uses the visibility check, implemented by `isVisible()`, to load visible images:
+Funkce `zobrazViditelné()` použije kontrolu viditelnosti, implementovanou ve funkci `jeVidět()`, a načte viditelné obrázky:
 
 ```js
-function showVisible() {
-  for (let img of document.querySelectorAll('img')) {
-    let realSrc = img.dataset.src;
-    if (!realSrc) continue;
+function zobrazViditelné() {
+  for (let obrázek of document.querySelectorAll('img')) {
+    let skutečnýZdroj = obrázek.dataset.src;
+    if (!skutečnýZdroj) continue;
 
-    if (isVisible(img)) {
-      img.src = realSrc;
-      img.dataset.src = '';
+    if (jeVidět(obrázek)) {
+      obrázek.src = skutečnýZdroj;
+      obrázek.dataset.src = '';
     }
   }
 }
 
 *!*
-showVisible();
-window.onscroll = showVisible;
+zobrazViditelné();
+window.onscroll = zobrazViditelné;
 */!*
 ```
 
-P.S. The solution also has a variant of `isVisible` that "preloads" images that are within 1 page above/below the current document scroll.
+P.S. Řešení obsahuje i variantu funkce `jeVidět`, která „přednahraje“ obrázky, které jsou o jednu stránku nad nebo pod aktuálním rolováním dokumentu.

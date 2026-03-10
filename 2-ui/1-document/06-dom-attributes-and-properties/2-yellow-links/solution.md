@@ -1,36 +1,35 @@
+Nejprve musíme najít všechny externí odkazy.
 
-First, we need to find all external references.
+To lze udělat dvěma způsoby.
 
-There are two ways.
-
-The first is to find all links using `document.querySelectorAll('a')` and then filter out what we need:
+První je najít všechny odkazy pomocí `document.querySelectorAll('a')` a pak vyfiltrovat ty, které potřebujeme:
 
 ```js
-let links = document.querySelectorAll('a');
+let odkazy = document.querySelectorAll('a');
 
-for (let link of links) {
+for (let odkaz of odkazy) {
 *!*
-  let href = link.getAttribute('href');
+  let href = odkaz.getAttribute('href');
 */!*
-  if (!href) continue; // no attribute
+  if (!href) continue; // neobsahuje atribut
 
-  if (!href.includes('://')) continue; // no protocol
+  if (!href.includes('://')) continue; // neobsahuje protokol
 
-  if (href.startsWith('http://internal.com')) continue; // internal
+  if (href.startsWith('http://internal.com')) continue; // interní
 
-  link.style.color = 'orange';
+  odkaz.style.color = 'orange';
 }
 ```
 
-Please note: we use `link.getAttribute('href')`. Not `link.href`, because we need the value from HTML.
+Prosíme všimněte si, že používáme `odkaz.getAttribute('href')` a ne `odkaz.href`, protože potřebujeme hodnotu z HTML kódu.
 
-...Another, simpler way would be to add the checks to CSS selector:
+...Druhý, jednodušší způsob je přidat kontrolu do CSS selektoru:
 
 ```js
-// look for all links that have :// in href
-// but href doesn't start with http://internal.com
-let selector = 'a[href*="://"]:not([href^="http://internal.com"])';
-let links = document.querySelectorAll(selector);
+// najdeme všechny odkazy, které v href obsahují ://
+// ale href nezačíná http://internal.com
+let selektor = 'a[href*="://"]:not([href^="http://internal.com"])';
+let odkaz = document.querySelectorAll(selektor);
 
-links.forEach(link => link.style.color = 'orange');
+odkazy.forEach(odkaz => odkaz.style.color = 'orange');
 ```

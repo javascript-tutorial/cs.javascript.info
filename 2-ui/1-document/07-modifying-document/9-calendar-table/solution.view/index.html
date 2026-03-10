@@ -3,7 +3,7 @@
 
 <head>
   <style>
-    table {
+    tabulka {
       border-collapse: collapse;
     }
 
@@ -24,55 +24,55 @@
 <body>
 
 
-  <div id="calendar"></div>
+  <div id="kalendář"></div>
 
   <script>
-    function createCalendar(elem, year, month) {
+    function vytvořKalendář(elem, rok, měsíc) {
 
-      let mon = month - 1; // months in JS are 0..11, not 1..12
-      let d = new Date(year, mon);
+      let měs = měsíc - 1; // měsíce v JS jsou 0..11, ne 1..12
+      let d = new Date(rok, měs);
 
-      let table = '<table><tr><th>MO</th><th>TU</th><th>WE</th><th>TH</th><th>FR</th><th>SA</th><th>SU</th></tr><tr>';
+      let tabulka = '<table><tr><th>PO</th><th>ÚT</th><th>ST</th><th>ČT</th><th>PÁ</th><th>SO</th><th>NE</th></tr><tr>';
 
-      // spaces for the first row
-      // from Monday till the first day of the month
+      // mezery pro první řádek
+      // od pondělí do prvního dne v měsíci
       // * * * 1  2  3  4
-      for (let i = 0; i < getDay(d); i++) {
-        table += '<td></td>';
+      for (let i = 0; i < vraťDen(d); i++) {
+        tabulka += '<td></td>';
       }
 
-      // <td> with actual dates
-      while (d.getMonth() == mon) {
-        table += '<td>' + d.getDate() + '</td>';
+      // <td> s aktuálními daty
+      while (d.getMonth() == měs) {
+        tabulka += '<td>' + d.getDate() + '</td>';
 
-        if (getDay(d) % 7 == 6) { // sunday, last day of week - newline
-          table += '</tr><tr>';
+        if (vraťDen(d) % 7 == 6) { // neděle, poslední den v týdnu - nový řádek
+          tabulka += '</tr><tr>';
         }
 
         d.setDate(d.getDate() + 1);
       }
 
-      // add spaces after last days of month for the last row
+      // za posledním dnem v měsíci přidáme mezery do posledního řádku
       // 29 30 31 * * * *
-      if (getDay(d) != 0) {
-        for (let i = getDay(d); i < 7; i++) {
-          table += '<td></td>';
+      if (vraťDen(d) != 0) {
+        for (let i = vraťDen(d); i < 7; i++) {
+          tabulka += '<td></td>';
         }
       }
 
-      // close the table
-      table += '</tr></table>';
+      // uzavřeme tabulku
+      tabulka += '</tr></table>';
 
-      elem.innerHTML = table;
+      elem.innerHTML = tabulka;
     }
 
-    function getDay(date) { // get day number from 0 (monday) to 6 (sunday)
-      let day = date.getDay();
-      if (day == 0) day = 7; // make Sunday (0) the last day
-      return day - 1;
+    function vraťDen(datum) { // vrátí číslo dne od 0 (pondělí) do 6 (neděle)
+      let den = datum.getDay();
+      if (den == 0) den = 7; // učiníme neděli (0) posledním dnem
+      return den - 1;
     }
 
-    createCalendar(calendar, 2012, 9);
+    vytvořKalendář(kalendář, 2012, 9);
   </script>
 
 </body>

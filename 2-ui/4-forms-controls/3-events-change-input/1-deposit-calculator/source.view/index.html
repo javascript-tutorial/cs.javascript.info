@@ -23,35 +23,35 @@
 
 <body>
 
-  Deposit calculator.
+  Kalkulátor vkladů.
 
-  <form name="calculator">
+  <form name="kalkulátor">
     <table>
       <tr>
-        <td>Initial deposit</td>
+        <td>Počáteční vklad</td>
         <td>
-          <input name="money" type="number" value="10000" required>
+          <input name="peníze" type="number" value="10000" required>
         </td>
       </tr>
       <tr>
-        <td>How many months?</td>
+        <td>Kolik měsíců?</td>
         <td>
-          <select name="months">
+          <select name="měsíce">
             <option value="3">3 (minimum)</option>
-            <option value="6">6 (half-year)</option>
-            <option value="12" selected>12 (one year)</option>
-            <option value="18">18 (1.5 years)</option>
-            <option value="24">24 (2 years)</option>
-            <option value="30">30 (2.5 years)</option>
-            <option value="36">36 (3 years)</option>
-            <option value="60">60 (5   years)</option>
+            <option value="6">6 (půl roku)</option>
+            <option value="12" selected>12 (jeden rok)</option>
+            <option value="18">18 (1,5 roku)</option>
+            <option value="24">24 (2 roky)</option>
+            <option value="30">30 (2,5 roku)</option>
+            <option value="36">36 (3 roky)</option>
+            <option value="60">60 (5 let)</option>
           </select>
         </td>
       </tr>
       <tr>
-        <td>Interest per year?</td>
+        <td>Roční úrok?</td>
         <td>
-          <input name="interest" type="number" value="5" required>
+          <input name="úrok" type="number" value="5" required>
         </td>
       </tr>
     </table>
@@ -62,26 +62,26 @@
 
   <table id="diagram">
     <tr>
-      <th>Was:</th>
-      <th>Becomes:</th>
+      <th>Původně:</th>
+      <th>Poté:</th>
     </tr>
     <tr>
-      <th id="money-before"></th>
-      <th id="money-after"></th>
+      <th id="peníze-před"></th>
+      <th id="peníze-po"></th>
     </tr>
     <td>
       <div style="background: red;width:40px;height:100px"></div>
     </td>
     <td>
-      <div style="background: green;width:40px;height:0" id="height-after"></div>
+      <div style="background: green;width:40px;height:0" id="sloupec-po"></div>
     </td>
   </table>
 
   <script>
 
-    let form = document.forms.calculator;
+    let formulář = document.forms.kalkulátor;
 
-    // your code
+    // váš kód
   </script>
 
 

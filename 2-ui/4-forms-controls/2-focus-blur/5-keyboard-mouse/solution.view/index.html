@@ -4,13 +4,13 @@
 <head>
   <meta charset="utf-8">
   <style>
-    #mouse {
+    #myš {
       display: inline-block;
       cursor: pointer;
       margin: 0;
     }
 
-    #mouse:focus {
+    #myš:focus {
       outline: 1px dashed black;
     }
   </style>
@@ -18,9 +18,9 @@
 
 <body>
 
-  <p>Click on the mouse and move it with arrow keys.</p>
+  <p>Klikněte na myš a pohybujte s ní šipkovými klávesami.</p>
 
-  <pre id="mouse">
+  <pre id="myš">
  _   _
 (q\_/p)
  /. .\
@@ -34,9 +34,9 @@
 
 
   <script>
-    mouse.tabIndex = 0;
+    myš.tabIndex = 0;
     
-    mouse.onclick = function() {
+    myš.onclick = function() {
       this.style.left = this.getBoundingClientRect().left + 'px';
       this.style.top = this.getBoundingClientRect().top + 'px';
 
@@ -44,7 +44,7 @@
     };
 
 
-    mouse.onkeydown = function(e) {
+    myš.onkeydown = function(e) {
       switch (e.key) {
         case 'ArrowLeft':
           this.style.left = parseInt(this.style.left) - this.offsetWidth + 'px';

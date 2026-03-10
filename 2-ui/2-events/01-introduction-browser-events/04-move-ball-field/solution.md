@@ -1,51 +1,51 @@
 
-First we need to choose a method of positioning the ball.
+Nejprve si musíme vybrat, jakým způsobem umístíme míč.
 
-We can't use `position:fixed` for it, because scrolling the page would move the ball from the field.
+Nemůžeme pro něj použít `position:fixed`, protože při rolování stránky by se míč přemístil ven z hřiště.
 
-So we should use `position:absolute` and, to make the positioning really solid, make `field` itself positioned.
+Měli bychom tedy použít `position:absolute`, a aby bylo umístění skutečně pevné, umístit i samotné `hřiště`.
 
-Then the ball will be positioned relatively to the field:
+Pak bude míč umístěn relativně vzhledem k hřišti:
 
 ```css
-#field {
+#hřiště {
   width: 200px;
   height: 150px;
   position: relative;
 }
 
-#ball {
+#míč {
   position: absolute;
-  left: 0; /* relative to the closest positioned ancestor (field) */
+  left: 0; /* relativně k nejbližšímu umístěnému předkovi (hřiště) */
   top: 0;
-  transition: 1s all; /* CSS animation for left/top makes the ball fly */
+  transition: 1s all; /* CSS animace pro levý/horní roh způsobí, že míč bude létat */
 }
 ```
 
-Next we need to assign the correct `ball.style.left/top`. They contain field-relative coordinates now.
+Nyní musíme přiřadit správné hodnoty vlastnostem `míč.style.left/top`, které nyní obsahují souřadnice relativní vzhledem k hřišti.
 
-Here's the picture:
+Zde je obrázek:
 
 ![](move-ball-coords.svg)
 
-We have `event.clientX/clientY` -- window-relative coordinates of the click.
+Máme `událost.clientX/clientY` -- souřadnice kliknutí vzhledem k oknu.
 
-To get field-relative `left` coordinate of the click, we can substract the field left edge and the border width:
-
-```js
-let left = event.clientX - fieldCoords.left - field.clientLeft;
-```
-
-Normally, `ball.style.left` means the "left edge of the element" (the ball). So if we assign that `left`, then the ball edge, not center, would be under the mouse cursor.
-
-We need to move the ball half-width left and half-height up to make it center.
-
-So the final `left` would be:
+Abychom získali souřadnici kliknutí `levá` vzhledem k hřišti, můžeme odečíst šířku levého okraje hřiště a ohraničení:
 
 ```js
-let left = event.clientX - fieldCoords.left - field.clientLeft - ball.offsetWidth/2;
+let levá = událost.clientX - souřadniceHřiště.left - hřiště.clientLeft;
 ```
 
-The vertical coordinate is calculated using the same logic.
+Normálně `míč.style.left` znamená „levý okraj elementu“ (míče). Kdybychom tedy přiřadili tuto hodnotu `levá`, pak by pod ukazatelem myši byl okraj míče, ne jeho střed.
 
-Please note that the ball width/height must be known at the time we access `ball.offsetWidth`. Should be specified in HTML or CSS.
+Abychom míč vycentrovali, musíme jej přesunout o polovinu šířky doleva a polovinu výšky nahoru.
+
+Výsledná `levá` tedy bude:
+
+```js
+let levá = událost.clientX - souřadniceHřiště.left - hřiště.clientLeft - míč.offsetWidth/2;
+```
+
+Vertikální souřadnici vypočítáme stejnou logikou.
+
+Prosíme všimněte si, že šířka a výška míče musí být známa ve chvíli, kdy přistoupíme k `míč.offsetWidth`. Měla by být uvedena v HTML nebo CSS.

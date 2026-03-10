@@ -2,21 +2,21 @@ importance: 5
 
 ---
 
-# Add an option to select
+# Přidejte možnost volby
 
-There's a `<select>`:
+Máme `<select>`:
 
 ```html
-<select id="genres">
+<select id="žánry">
   <option value="rock">Rock</option>
   <option value="blues" selected>Blues</option>
 </select>
 ```
 
-Use JavaScript to:
+Pomocí JavaScriptu:
 
-1. Show the value and the text of the selected option.
-2. Add an option: `<option value="classic">Classic</option>`.
-3. Make it selected.
+1. Zobrazte hodnotu a text zvolené možnosti.
+2. Přidejte další možnost: `<option value="klasika">Klasika</option>`.
+3. Označte ji jako zvolenou.
 
-Note, if you've done everything right, your alert should show `blues`.
+Všimněte si, že pokud uděláte všechno správně, měl by váš alert zobrazit `blues`.

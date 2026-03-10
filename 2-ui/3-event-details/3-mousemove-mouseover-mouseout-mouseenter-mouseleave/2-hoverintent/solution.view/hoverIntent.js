@@ -1,27 +1,27 @@
 'use strict';
 
-class HoverIntent {
+class Setrvání {
 
   constructor({
-    sensitivity = 0.1, // speed less than 0.1px/ms means "hovering over an element"
-    interval = 100,    // measure mouse speed once per 100ms
+    citlivost = 0.1, // rychlost menší než 0.1px/ms znamená "popojíždění nad elementem"
+    interval = 100,    // budeme měřit rychlost myši jednou za 100ms
     elem,
     over,
     out
   }) {
-    this.sensitivity = sensitivity;
+    this.citlivost = citlivost;
     this.interval = interval;
     this.elem = elem;
     this.over = over;
     this.out = out;
 
-    // make sure "this" is the object in event handlers.
+    // zajistíme, aby „this“ byl objekt v handlerech událostí
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
 
-    // and in time-measuring function (called from setInterval)
-    this.trackSpeed = this.trackSpeed.bind(this);
+    // a ve funkci pro měření času (bude volána ze setInterval)
+    this.rychlostPohybu = this.rychlostPohybu.bind(this);
 
     elem.addEventListener("mouseover", this.onMouseOver);
 
@@ -29,71 +29,71 @@ class HoverIntent {
 
   }
 
-  onMouseOver(event) {
+  onMouseOver(událost) {
 
-    if (this.isOverElement) {
-      // if we're over the element, then ignore the event
-      // we are already measuring the speed
+    if (this.jeNadElementem) {
+      // pokud jsme nad elementem, budeme tuto událost ignorovat,
+      // protože rychlost už měříme
       return;
     }
 
-    this.isOverElement = true;
+    this.jeNadElementem = true;
 
-    // after every mousemove we'll be check the distance
-    // between the previous and the current mouse coordinates
-    // if it's less than sensivity, then the speed is slow
+    // po každém pohybu myši zkontrolujeme vzdálenost
+    // mezi předchozími a aktuálními souřadnicemi ukazatele
+    // pokud je menší než citlivost, pak je rychlost nízká
 
-    this.prevX = event.pageX;
-    this.prevY = event.pageY;
-    this.prevTime = Date.now();
+    this.předchozíX = událost.pageX;
+    this.předchozíY = událost.pageY;
+    this.předchozíČas = Date.now();
 
     elem.addEventListener('mousemove', this.onMouseMove);
-    this.checkSpeedInterval = setInterval(this.trackSpeed, this.interval);
+    this.intervalMěřeníRychlosti = setInterval(this.rychlostPohybu, this.interval);
   }
 
-  onMouseOut(event) {
-    // if left the element
-    if (!event.relatedTarget || !elem.contains(event.relatedTarget)) {
-      this.isOverElement = false;
+  onMouseOut(událost) {
+    // když opustíme element
+    if (!událost.relatedTarget || !elem.contains(událost.relatedTarget)) {
+      this.jeNadElementem = false;
       this.elem.removeEventListener('mousemove', this.onMouseMove);
-      clearInterval(this.checkSpeedInterval);
-      if (this.isHover) {
-        // if there was a stop over the element
-        this.out.call(this.elem, event);
-        this.isHover = false;
+      clearInterval(this.intervalMěřeníRychlosti);
+      if (this.zůstáváNadElementem) {
+        // pokud byla zastávka nad elementem
+        this.out.call(this.elem, událost);
+        this.zůstáváNadElementem = false;
       }
     }
   }
 
-  onMouseMove(event) {
-    this.lastX = event.pageX;
-    this.lastY = event.pageY;
-    this.lastTime = Date.now();
+  onMouseMove(událost) {
+    this.posledníX = událost.pageX;
+    this.posledníY = událost.pageY;
+    this.posledníČas = Date.now();
   }
 
-  trackSpeed() {
+  rychlostPohybu() {
 
-    let speed;
+    let rychlost;
 
-    if (!this.lastTime || this.lastTime == this.prevTime) {
-      // cursor didn't move
-      speed = 0;
+    if (!this.posledníČas || this.posledníČas == this.předchozíČas) {
+      // kurzor se nepohnul
+      rychlost = 0;
     } else {
-      speed = Math.sqrt(
-        Math.pow(this.prevX - this.lastX, 2) +
-        Math.pow(this.prevY - this.lastY, 2)
-      ) / (this.lastTime - this.prevTime);
+      rychlost = Math.sqrt(
+        Math.pow(this.předchozíX - this.posledníX, 2) +
+        Math.pow(this.předchozíY - this.posledníY, 2)
+      ) / (this.posledníČas - this.předchozíČas);
     }
 
-    if (speed < this.sensitivity) {
-      clearInterval(this.checkSpeedInterval);
-      this.isHover = true;
+    if (rychlost < this.citlivost) {
+      clearInterval(this.intervalMěřeníRychlosti);
+      this.zůstáváNadElementem = true;
       this.over.call(this.elem);
     } else {
-      // speed fast, remember new coordinates as the previous ones
-      this.prevX = this.lastX;
-      this.prevY = this.lastY;
-      this.prevTime = this.lastTime;
+      // rychlost je vysoká, zapamatujeme si nové souřadnice jako předchozí
+      this.předchozíX = this.posledníX;
+      this.předchozíY = this.posledníY;
+      this.předchozíČas = this.posledníČas;
     }
   }
 

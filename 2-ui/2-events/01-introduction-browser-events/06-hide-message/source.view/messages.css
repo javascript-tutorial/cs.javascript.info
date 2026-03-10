@@ -14,13 +14,13 @@ p {
   padding: 0 0 .5em;
 }
 
-.pane {
+.záložka {
   background: #edf5e1;
   padding: 10px 20px 10px;
   border-top: solid 2px #c4df9b;
 }
 
-.remove-button {
+.tlačítko-odstranit {
   font-size: 110%;
   color: darkred;
   right: 10px;

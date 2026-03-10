@@ -2,27 +2,27 @@ importance: 5
 
 ---
 
-# Position the note inside (absolute)
+# Umístěte poznámku dovnitř (absolutně)
 
-Extend the previous task <info:task/position-at-absolute>: teach the function  `positionAt(anchor, position, elem)` to insert `elem` inside the `anchor`.
+Rozšiřte předchozí úlohu <info:task/position-at-absolute>: naučte funkci `umístiNa(kotva, pozice, elem)` vložit `elem` dovnitř elementu `kotva`.
 
-New values for `position`:
+Nové hodnoty argumentu `pozice`:
 
-- `top-out`, `right-out`, `bottom-out` -- work the same as before, they insert the `elem` over/right/under `anchor`.
-- `top-in`, `right-in`, `bottom-in` -- insert `elem` inside the `anchor`: stick it to the upper/right/bottom edge.
+- `nahoru-ven`, `doprava-ven`, `dolů-ven` -- fungují stejně jako dříve, vloží `elem` nad/doprava/pod element `kotva`.
+- `nahoru-dovnitř`, `doprava-dovnitř`, `dolů-dovnitř` -- vloží `elem` dovnitř elementu `kotva`: připevní jej k hornímu/pravému/dolnímu okraji.
 
-For instance:
+Příklad:
 
 ```js
-// shows the note above blockquote
-positionAt(blockquote, "top-out", note);
+// zobrazí poznámku nad citátem
+umístiNa(blockquote, "nahoru-ven", poznámka);
 
-// shows the note inside blockquote, at the top
-positionAt(blockquote, "top-in", note);
+// zobrazí poznámku uvnitř citátu nahoře
+umístiNa(blockquote, "nahoru-dovnitř", poznámka);
 ```
 
-The result:
+Výsledek:
 
 [iframe src="solution" height="310" border="1" link]
 
-As the source code, take the solution of the task <info:task/position-at-absolute>.
+Jako zdrojový kód použijte řešení úlohy <info:task/position-at-absolute>.

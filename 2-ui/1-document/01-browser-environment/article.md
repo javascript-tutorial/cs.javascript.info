@@ -1,113 +1,113 @@
-# Browser environment, specs
+# Prostředí prohlížeče a jeho specifikace
 
-The JavaScript language was initially created for web browsers. Since then, it has evolved into a language with many uses and platforms.
+Jazyk JavaScript byl původně vytvořen pro webové prohlížeče. Od té doby se vyvinul v jazyk se širokým využitím na mnoha platformách.
 
-A platform may be a browser, or a web-server or another *host*, or even a "smart" coffee machine if it can run JavaScript. Each of these provides platform-specific functionality. The JavaScript specification calls that a *host environment*.
+Platformou může být prohlížeč, webový server nebo jiný *hostitel*, třeba i „chytrý“ automat na kávu, pokud dokáže spouštět JavaScriptové skripty. Každý z nich poskytuje vlastní specifickou funkcionalitu. Specifikace JavaScriptu ji nazývá *hostitelské prostředí*.
 
-A host environment provides its own objects and functions in addition to the language core. Web browsers give a means to control web pages. Node.js provides server-side features, and so on.
+Hostitelské prostředí poskytuje k jádru jazyka navíc své vlastní objekty a funkce. Webové prohlížeče poskytují způsoby, jak ovládat webové stránky, Node.js poskytuje prvky pro serverovou stranu a tak dále.
 
-Here's a bird's-eye view of what we have when JavaScript runs in a web browser:
+Pohled z ptačí perspektivy nám ukazuje, co máme, když spouštíme JavaScript ve webovém prohlížeči:
 
 ![](windowObjects.svg)
 
-There's a "root" object called `window`. It has two roles:
+Je zde „kořenový“ objekt nazvaný `window`, který má dvě role:
 
-1. First, it is a global object for JavaScript code, as described in the chapter <info:global-object>.
-2. Second, it represents the "browser window" and provides methods to control it.
+1. Za prvé, je to globální objekt pro JavaScriptový kód, jak je popsáno v kapitole <info:global-object>.
+2. Za druhé, představuje „okno prohlížeče“ a poskytuje metody, jak je ovládat.
 
-For instance, we can use it as a global object:
+Můžeme jej například použít jako globální objekt:
 
 ```js run global
-function sayHi() {
-  alert("Hello");
+function řekniAhoj() {
+  alert("Ahoj");
 }
 
-// global functions are methods of the global object:
-window.sayHi();
+// globální funkce jsou metody globálního objektu:
+window.řekniAhoj();
 ```
 
-And we can use it as a browser window, to show the window height:
+A můžeme jej použít jako okno prohlížeče, abychom si zobrazili výšku okna:
 
 ```js run
-alert(window.innerHeight); // inner window height
+alert(window.innerHeight); // výška vnitřního okna
 ```
 
-There are more window-specific methods and properties, which we'll cover later.
+Existují i další metody a vlastnosti specifické pro okna, které probereme později.
 
 ## DOM (Document Object Model)
 
-The Document Object Model, or DOM for short, represents all page content as objects that can be modified.
+Document Object Model, zkráceně DOM, představuje veškerý obsah stránky jako objekty, které mohou být modifikovány.
 
-The `document` object is the main "entry point" to the page. We can change or create anything on the page using it.
+Hlavním „vstupním bodem“ stránky je objekt `document`. S jeho pomocí můžeme na stránce cokoli změnit nebo vytvořit.
 
-For instance:
+Například:
 ```js run
-// change the background color to red
+// změníme barvu pozadí na červenou
 document.body.style.background = "red";
 
-// change it back after 1 second
+// po 1 sekundě ji změníme zpět
 setTimeout(() => document.body.style.background = "", 1000);
 ```
 
-Here, we used `document.body.style`, but there's much, much more. Properties and methods are described in the specification: [DOM Living Standard](https://dom.spec.whatwg.org).
+Tady jsme použili `document.body.style`, ale je toho mnohem, mnohem více. Vlastnosti a metody jsou popsány ve specifikaci: [DOM Living Standard](https://dom.spec.whatwg.org).
 
-```smart header="DOM is not only for browsers"
-The DOM specification explains the structure of a document and provides objects to manipulate it. There are non-browser instruments that use DOM too.
+```smart header="DOM není jen pro prohlížeče"
+Specifikace DOMu vysvětluje strukturu dokumentu a poskytuje objekty, pomocí nichž s ní lze manipulovat. Kromě prohlížečů existují i jiné nástroje, které používají DOM.
 
-For instance, server-side scripts that download HTML pages and process them can also use the DOM. They may support only a part of the specification though.
+Například DOM mohou používat i skripty na straně serveru, které stahují a zpracovávají HTML stránky. Ty však mohou podporovat jen část specifikace.
 ```
 
-```smart header="CSSOM for styling"
-There's also a separate specification, [CSS Object Model (CSSOM)](https://www.w3.org/TR/cssom-1/) for CSS rules and stylesheets, that explains how they are represented as objects, and how to read and write them.
+```smart header="CSSOM pro nastavování stylů"
+Existuje také samostatná specifikace [CSS Object Model (CSSOM)](https://www.w3.org/TR/cssom-1/) pro CSS pravidla a styly, která vysvětluje, jakým způsobem jsou reprezentovány v podobě objektů a jak je lze načítat a ukládat.
 
-The CSSOM is used together with the DOM when we modify style rules for the document. In practice though, the CSSOM is rarely required, because we rarely need to modify CSS rules from JavaScript (usually we just add/remove CSS classes, not modify their CSS rules), but that's also possible.
+Když měníme pravidla stylů v dokumentu, CSSOM se používá společně s DOMem. V praxi je však CSSOM zapotřebí jen zřídka, jelikož málokdy potřebujeme měnit CSS pravidla v JavaScriptu (obvykle jen přidáváme a odebíráme CSS třídy, neměníme jejich CSS pravidla), ale i to je možné provést.
 ```
 
 ## BOM (Browser Object Model)
 
-The Browser Object Model (BOM) represents additional objects provided by the browser (host environment) for working with everything except the document.
+Browser Object Model (BOM) představuje další objekty, které poskytuje prohlížeč (hostitelské prostředí) pro práci se vším ostatním kromě dokumentu.
 
-For instance:
+Například:
 
-- The [navigator](mdn:api/Window/navigator) object provides background information about the browser and the operating system. There are many properties, but the two most widely known are: `navigator.userAgent` -- about the current browser, and `navigator.platform` -- about the platform (can help to differentiate between Windows/Linux/Mac etc).
-- The [location](mdn:api/Window/location) object allows us to read the current URL and can redirect the browser to a new one.
+- Objekt [navigator](mdn:api/Window/navigator) poskytuje informace o prohlížeči a operačním systému. Obsahuje mnoho vlastností, ale dvě nejznámější jsou: `navigator.userAgent` -- o aktuálním prohlížeči, a `navigator.platform` -- o platformě (může pomoci rozlišit Windows/Linux/Mac atd.).
+- Objekt [location](mdn:api/Window/location) nám umožňuje načíst aktuální URL a může přesměrovat prohlížeč na jiné.
 
-Here's how we can use the `location` object:
+Takto můžeme objekt `location` použít:
 
 ```js run
-alert(location.href); // shows current URL
-if (confirm("Go to Wikipedia?")) {
-  location.href = "https://wikipedia.org"; // redirect the browser to another URL
+alert(location.href); // zobrazí aktuální URL
+if (confirm("Přejít na Wikipedii?")) {
+  location.href = "https://cs.wikipedia.org"; // přesměruje prohlížeč na jiné URL
 }
 ```
 
-The functions `alert/confirm/prompt` are also a part of the BOM: they are not directly related to the document, but represent pure browser methods for communicating with the user.
+Součástí BOMu jsou i funkce `alert/confirm/prompt`: ty se nevztahují přímo k dokumentu, ale představují čistě prohlížečové metody pro komunikaci s uživatelem.
 
-```smart header="Specifications"
-The BOM is a part of the general [HTML specification](https://html.spec.whatwg.org).
+```smart header="Specifikace"
+BOM je součástí všeobecné [specifikace HTML](https://html.spec.whatwg.org).
 
-Yes, you heard that right. The HTML spec at <https://html.spec.whatwg.org> is not only about the "HTML language" (tags, attributes), but also covers a bunch of objects, methods, and browser-specific DOM extensions. That's "HTML in broad terms". Also, some parts have additional specs listed at <https://spec.whatwg.org>.
+Ano, čtete správně. Specifikace HTML na <https://html.spec.whatwg.org> není jen o „jazyce HTML“ (značky, atributy), ale pokrývá i hromadu objektů, metod a rozšíření DOMu specifických pro prohlížeče. Je to „HTML v širším slova smyslu“. Navíc některé části mají další specifikace, které jsou uvedeny na <https://spec.whatwg.org>.
 ```
 
-## Summary
+## Shrnutí
 
-Talking about standards, we have:
+Hovoříme-li o standardech, pak máme:
 
-DOM specification
-: Describes the document structure, manipulations, and events, see <https://dom.spec.whatwg.org>.
+Specifikaci DOM
+: Popisuje strukturu dokumentu, manipulaci s ní a události dokumentu, viz <https://dom.spec.whatwg.org>.
 
-CSSOM specification
-: Describes stylesheets and style rules, manipulations with them, and their binding to documents, see <https://www.w3.org/TR/cssom-1/>.
+Specifikaci CSSOM
+: Popisuje styly a jejich pravidla, manipulaci s nimi a jejich vazbu na dokument, viz <https://www.w3.org/TR/cssom-1/>.
 
-HTML specification
-: Describes the HTML language (e.g. tags) and also the BOM (browser object model) -- various browser functions: `setTimeout`, `alert`, `location` and so on, see <https://html.spec.whatwg.org>. It takes the DOM specification and extends it with many additional properties and methods.
+Specifikaci HTML
+: Popisuje jazyk HTML (např. jeho značky) a také BOM (browser object model -- objektový model prohlížeče) -- různé funkce prohlížeče: `setTimeout`, `alert`, `location` a podobně, viz <https://html.spec.whatwg.org>. Přebírá specifikaci DOMu a rozšiřuje ji o mnoho dalších vlastností a metod.
 
-Additionally, some classes are described separately at <https://spec.whatwg.org/>.
+Některé třídy jsou navíc popsány odděleně na <https://spec.whatwg.org/>.
 
-Please note these links, as there's so much to learn that it's impossible to cover everything and remember it all.
+Tyto odkazy si prosím zapamatujte, neboť tady je toho k naučení tolik, že je nemožné to všechno obsáhnout a pamatovat si.
 
-When you'd like to read about a property or a method, the Mozilla manual at <https://developer.mozilla.org/en-US/> is also a nice resource, but the corresponding spec may be better: it's more complex and longer to read, but will make your fundamental knowledge sound and complete.
+Kdybyste si chtěli přečíst o nějaké vlastnosti nebo metodě, pěkným zdrojem je i manuál Mozilly na <https://developer.mozilla.org/en-US/>, ale příslušná specifikace může být lepší: je sice složitější a delší na přečtení, ale poskytne vám solidní a úplné základní znalosti.
 
-To find something, it's often convenient to use an internet search "WHATWG [term]" or "MDN [term]", e.g <https://google.com?q=whatwg+localstorage>, <https://google.com?q=mdn+localstorage>.
+Když chcete něco najít, často se vyplatí použít internetové hledání „WHATWG [pojem]“ nebo „MDN [pojem]“, např. <https://google.com?q=whatwg+localstorage>, <https://google.com?q=mdn+localstorage>.
 
-Now, we'll get down to learning the DOM, because the document plays the central role in the UI.
+Nyní přejdeme k učení DOMu, jelikož hlavní roli v uživatelském rozhraní hraje dokument.

@@ -7,42 +7,42 @@
 
 <body style="height: 200px">
 
-  <p>Drag the ball.</p>
+  <p>Přetáhněte míč.</p>
 
-  <img src="https://js.cx/clipart/ball.svg" style="cursor:pointer" width="40" height="40" id="ball">
+  <img src="https://js.cx/clipart/ball.svg" style="cursor:pointer" width="40" height="40" id="míč">
 
 
   <script>
-    ball.onmousedown = function(event) {
+    míč.onmousedown = function(událost) {
 
-      let shiftX = event.clientX - ball.getBoundingClientRect().left;
-      let shiftY = event.clientY - ball.getBoundingClientRect().top;
+      let posunX = událost.clientX - míč.getBoundingClientRect().left;
+      let posunY = událost.clientY - míč.getBoundingClientRect().top;
 
-      ball.style.position = 'absolute';
-      ball.style.zIndex = 1000;
-      document.body.append(ball);
+      míč.style.position = 'absolute';
+      míč.style.zIndex = 1000;
+      document.body.append(míč);
 
-      moveAt(event.pageX, event.pageY);
+      přesuňNa(událost.pageX, událost.pageY);
 
-      function moveAt(pageX, pageY) {
-        ball.style.left = pageX - shiftX + 'px';
-        ball.style.top = pageY - shiftY + 'px';
+      function přesuňNa(stránkaX, stránkaY) {
+        míč.style.left = stránkaX - posunX + 'px';
+        míč.style.top = stránkaY - posunY + 'px';
       }
 
-      function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
+      function onMouseMove(událost) {
+        přesuňNa(událost.pageX, událost.pageY);
       }
 
       document.addEventListener('mousemove', onMouseMove);
 
-      ball.onmouseup = function() {
+      míč.onmouseup = function() {
         document.removeEventListener('mousemove', onMouseMove);
-        ball.onmouseup = null;
+        míč.onmouseup = null;
       };
 
     };
 
-    ball.ondragstart = function() {
+    míč.ondragstart = function() {
       return false;
     };
   </script>

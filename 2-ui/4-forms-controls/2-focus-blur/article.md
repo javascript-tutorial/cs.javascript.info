@@ -1,144 +1,145 @@
-# Focusing: focus/blur
+# Fokus: focus/blur
 
-An element receives the focus when the user either clicks on it or uses the `key:Tab` key on the keyboard. There's also an `autofocus` HTML attribute that puts the focus onto an element by default when a page loads and other means of getting the focus.
+Element získá fokus tehdy, když na něj uživatel buď klikne, nebo použije klávesu `key:Tab` na klávesnici. Existuje také HTML atribut `autofocus`, který standardně umístí fokus na element, když se stránka načte, a jsou i jiné způsoby získání fokusu.
 
-Focusing on an element generally means: "prepare to accept the data here", so that's the moment when we can run the code to initialize the required functionality.
+Přesun fokusu na element obecně znamená: „připrav se přijímat data“, takže to je chvíle, kdy můžeme spustit kód, abychom inicializovali požadovanou funkcionalitu.
 
-The moment of losing the focus ("blur") can be even more important. That's when a user clicks somewhere else or presses `key:Tab` to go to the next form field, or there are other means as well.
+Ještě důležitější může být okamžik ztráty fokusu („blur“). Ten nastane, když uživatel klikne někam jinam nebo stiskne `key:Tab`, aby se přesunul na další pole ve formuláři. Jsou i jiné způsoby ztráty fokusu.
 
-Losing the focus generally means: "the data has been entered", so we can run the code to check it or even to save it to the server and so on.
+Ztráta fokusu obecně znamená: „data byla zadána“, takže můžeme spustit kód, který je zkontroluje, nebo je dokonce uloží na server a podobně.
 
-There are important peculiarities when working with focus events. We'll do the best to cover them further on.
+Práce s fokusovými událostmi má důležité zvláštnosti. Budeme se je dále snažit co nejlépe vysvětlit.
 
-## Events focus/blur
+## Události focus/blur
 
-The `focus` event is called on focusing, and `blur` -- when the element loses the focus.
+Událost `focus` je volána, když element získá fokus, a `blur`, když jej ztratí.
 
-Let's use them for validation of an input field.
+Využijme je ke kontrole vstupního pole.
 
-In the example below:
+V následujícím příkladu:
 
-- The `blur` handler checks if the field has an email entered, and if not -- shows an error.
-- The `focus` handler hides the error message (on `blur` it will be checked again):
+- Handler `blur` zkontroluje, zda byl do pole zadán e-mail, a pokud ne, zobrazí chybu.
+- Handler `focus` skryje chybovou zprávu (při události `blur` bude kontrola provedena znovu):
 
 ```html run autorun height=60
 <style>
-  .invalid { border-color: red; }
-  #error { color: red }
+  .vadný { border-color: red; }
+  #chyba { color: red }
 </style>
 
-Your email please: <input type="email" id="input">
+Váš e-mail, prosím: <input type="email" id="input">
 
-<div id="error"></div>
+<div id="chyba"></div>
 
 <script>
 *!*input.onblur*/!* = function() {
-  if (!input.value.includes('@')) { // not email
-    input.classList.add('invalid');
-    error.innerHTML = 'Please enter a correct email.'
+  if (!input.value.includes('@')) { // to není e-mail
+    input.classList.add('vadný');
+    chyba.innerHTML = 'Zadejte prosím platný e-mail.'
   }
 };
 
 *!*input.onfocus*/!* = function() {
-  if (this.classList.contains('invalid')) {
-    // remove the "error" indication, because the user wants to re-enter something
-    this.classList.remove('invalid');
-    error.innerHTML = "";
+  if (this.classList.contains('vadný')) {
+    // odstraníme indikaci "chyba", protože uživatel chce znovu něco zadat
+    this.classList.remove('vadný');
+    chyba.innerHTML = "";
   }
 };
 </script>
 ```
 
-Modern HTML allows us to do many validations using input attributes: `required`, `pattern` and so on. And sometimes they are just what we need. JavaScript can be used when we want more flexibility. Also we could automatically send the changed value to the server if it's correct.
+Moderní HTML nám umožňuje provádět mnoho kontrol pomocí vstupních atributů: `required`, `pattern` a podobně. Někdy je to přesně to, co potřebujeme. Chceme-li více flexibility, můžeme použít JavaScript. Můžeme také automaticky odeslat změněnou hodnotu na server, pokud je korektní.
 
 
-## Methods focus/blur
+## Metody focus/blur
 
-Methods `elem.focus()` and `elem.blur()` set/unset the focus on the element.
+Metoda `elem.focus()` nastaví fokus na element, metoda `elem.blur()` odebere fokus z elementu.
 
-For instance, let's make the visitor unable to leave the input if the value is invalid:
+Například zakažme návštěvníkovi opustit vstupní pole, pokud je jeho hodnota neplatná:
 
 ```html run autorun height=80
 <style>
-  .error {
+  .chyba {
     background: red;
   }
 </style>
 
-Your email please: <input type="email" id="input">
-<input type="text" style="width:220px" placeholder="make email invalid and try to focus here">
+Váš e-mail, prosím: <input type="email" id="input">
+<input type="text" style="width:300px" placeholder="zadejte neplatný e-mail a zkuste sem vstoupit">
 
 <script>
   input.onblur = function() {
-    if (!this.value.includes('@')) { // not email
-      // show the error
-      this.classList.add("error");
+    if (!this.value.includes('@')) { // to není e-mail
+      // zobrazí se chyba
+      this.classList.add("chyba");
 *!*
-      // ...and put the focus back
+      // ...a fokus se vrátí zpět
       input.focus();
 */!*
     } else {
-      this.classList.remove("error");
+      this.classList.remove("chyba");
     }
   };
 </script>
 ```
 
-It works in all browsers except Firefox ([bug](https://bugzilla.mozilla.org/show_bug.cgi?id=53579)).
+Funguje to ve všech prohlížečích kromě Firefoxu ([v důsledku chyby](https://bugzilla.mozilla.org/show_bug.cgi?id=53579)).
 
-If we enter something into the input and then try to use `key:Tab` or click away from the `<input>`, then `onblur` returns the focus back.
+Jestliže do vstupního pole něco zadáme a pak se pokusíme použít `key:Tab` nebo klikneme mimo `<input>`, pak `onblur` vrátí fokus zpět.
 
-Please note that we can't "prevent losing focus" by calling `event.preventDefault()` in `onblur`, because `onblur` works *after* the element lost the focus.
+Prosíme všimněte si, že nemůžeme „zakázat ztrátu fokusu“ voláním `událost.preventDefault()` v `onblur`, protože `onblur` se spustí až *poté*, co element ztratil fokus.
 
-In practice though, one should think well, before implementing something like this, because we generally *should show errors* to the user, but *should not prevent their progress* in filling our form. They may want to fill other fields first.
+V praxi bychom si však měli dobře rozmyslet, zda budeme něco takového implementovat, protože obecně *bychom měli uživateli zobrazovat chyby*, ale *neměli bychom mu bránit pokračovat* ve vyplňování formuláře. Může chtít napřed vyplnit ostatní pole.
 
-```warn header="JavaScript-initiated focus loss"
-A focus loss can occur for many reasons.
+```warn header="Ztráta fokusu iniciovaná JavaScriptem"
+Ke ztrátě fokusu může dojít z mnoha důvodů.
 
-One of them is when the visitor clicks somewhere else. But also JavaScript itself may cause it, for instance:
+Jeden z nich je situace, kdy návštěvník klikne někam jinam. Ale ztrátu může způsobit i samotný JavaScript, například:
 
-- An `alert` moves focus to itself, so it causes the focus loss at the element (`blur` event), and when the `alert` is dismissed, the focus comes back (`focus` event).
-- If an element is removed from DOM, then it also causes the focus loss. If it is reinserted later, then the focus doesn't return.
+- `alert` strhne fokus na sebe, takže způsobí ztrátu fokusu na elementu (událost `blur`), a když `alert` zmizí, fokus se vrátí zpět (událost `focus`).
+- Pokud je element odstraněn z DOMu, dojde také ke ztrátě fokusu. Pokud je později znovu vložen, fokus se na něj nevrátí.
 
-These features sometimes cause `focus/blur` handlers to misbehave -- to trigger when they are not needed.
+Tyto vlastnosti mohou někdy způsobit, že se handlery `focus/blur` nechovají správně -- spustí se, když nejsou zapotřebí.
 
-The best recipe is to be careful when using these events. If we want to track user-initiated focus-loss, then we should avoid causing it ourselves.
+Nejlepším receptem je dávat si při používání těchto událostí pozor. Chceme-li sledovat ztrátu fokusu iniciovanou uživatelem, měli bychom se vyhnout tomu, že ji způsobíme sami.
 ```
-## Allow focusing on any element: tabindex
 
-By default, many elements do not support focusing.
+## Povolení fokusu na kterýkoli element: tabindex
 
-The list varies a bit between browsers, but one thing is always correct: `focus/blur` support is guaranteed for elements that a visitor can interact with: `<button>`, `<input>`, `<select>`, `<a>` and so on.
+Mnoho elementů standardně fokus nepodporuje.
 
-On the other hand, elements that exist to format something, such as `<div>`, `<span>`, `<table>` -- are unfocusable by default. The method `elem.focus()` doesn't work on them, and `focus/blur` events are never triggered.
+Jejich seznam se mezi jednotlivými prohlížeči mírně liší, ale jedno platí vždy: podpora `focus/blur` je zaručena u elementů, s nimiž může návštěvník interagovat: `<button>`, `<input>`, `<select>`, `<a>` a podobně.
 
-This can be changed using HTML-attribute `tabindex`.
+Naproti tomu elementy, jejichž účelem je něco formátovat, např. `<div>`, `<span>`, `<table>`, standardně nemohou fokus získat. Metoda `elem.focus()` na nich nefunguje a události `focus/blur` se nikdy nespustí.
 
-Any element becomes focusable if it has `tabindex`. The value of the attribute is the order number of the element when `key:Tab` (or something like that) is used to switch between them.
+To můžeme změnit použitím HTML atributu `tabindex`.
 
-That is: if we have two elements, the first has `tabindex="1"`, and the second has `tabindex="2"`, then pressing `key:Tab` while in the first element -- moves the focus into the second one.
+Každý element, který má `tabindex`, může získat fokus. Hodnotou tohoto atributu je pořadové číslo elementu, když je použita klávesa `key:Tab` (nebo něco podobného) k přepínání mezi elementy.
 
-The switch order is: elements with `tabindex` from `1` and above go first (in the `tabindex` order), and then elements without `tabindex` (e.g. a regular `<input>`).
+To znamená, že máme-li dva elementy, první má `tabindex="1"` a druhý `tabindex="2"`, pak když jsme v prvním elementu a stiskneme `key:Tab`, fokus se přesune na druhý.
 
-Elements without matching `tabindex` are switched in the document source order (the default order).
+Pořadí přepínání je následující: napřed jdou elementy s `tabindex` od `1` a vyšším (v pořadí podle `tabindex`), pak elementy bez `tabindex` (např. obvyklý `<input>`).
 
-There are two special values:
+Elementy bez odpovídajícího `tabindex` se přepínají v pořadí, v jakém jsou ve zdrojovém kódu dokumentu (standardní pořadí).
 
-- `tabindex="0"` puts an element among those without `tabindex`. That is, when we switch elements, elements with `tabindex=0` go after elements with `tabindex ≥ 1`.
+Dvě hodnoty jsou speciální:
 
-    Usually it's used to make an element focusable, but keep the default switching order. To make an element a part of the form on par with `<input>`.
+- `tabindex="0"` umístí element mezi ty, které nemají `tabindex`. To znamená, že když přepínáme mezi elementy, elementy s `tabindex=0` následují až po elementech s `tabindex ≥ 1`.
 
-- `tabindex="-1"` allows only programmatic focusing on an element. The `key:Tab` key ignores such elements, but method `elem.focus()` works.
+    To se obvykle používá k tomu, abychom umožnili elementu získat fokus, ale zachovali standardní pořadí přepínání. Abychom element učinili součástí formuláře na stejné úrovni, jako `<input>`.
 
-For instance, here's a list. Click the first item and press `key:Tab`:
+- `tabindex="-1"` umožňuje nastavit fokus na element pouze programově. Klávesa `key:Tab` takové elementy přeskakuje, ale metoda `elem.focus()` na nich funguje.
+
+Například zde máme seznam. Klikněte na první položku a stiskněte `key:Tab`:
 
 ```html autorun no-beautify
-Click the first item and press Tab. Keep track of the order. Please note that many subsequent Tabs can move the focus out of the iframe in the example.
+Klikněte na první položku a stiskněte Tab. Sledujte pořadí přesunu fokusu. Prosíme všimněte si, že mnoho následujících stisknutí Tab může v tomto příkladu přesunout fokus mimo iframe.
 <ul>
-  <li tabindex="1">One</li>
-  <li tabindex="0">Zero</li>
-  <li tabindex="2">Two</li>
-  <li tabindex="-1">Minus one</li>
+  <li tabindex="1">Jedna</li>
+  <li tabindex="0">Nula</li>
+  <li tabindex="2">Dvě</li>
+  <li tabindex="-1">Minus jedna</li>
 </ul>
 
 <style>
@@ -147,63 +148,63 @@ Click the first item and press Tab. Keep track of the order. Please note that ma
 </style>
 ```
 
-The order is like this: `1 - 2 - 0`. Normally, `<li>` does not support focusing, but `tabindex` full enables it, along with events and styling with `:focus`.
+Pořadí je následující: `1 - 2 - 0`. Běžně `<li>` nepodporuje fokus, ale `tabindex` jej umožní včetně vlastností a nastavení stylů pomocí `:focus`.
 
-```smart header="The property `elem.tabIndex` works too"
-We can add `tabindex` from JavaScript by using the `elem.tabIndex` property. That has the same effect.
+```smart header="Funguje i vlastnost `elem.tabIndex`"
+V JavaScriptu můžeme přidat `tabindex` pomocí vlastnosti `elem.tabIndex`, která má stejný efekt.
 ```
 
-## Delegation: focusin/focusout
+## Delegování: focusin/focusout
 
-Events `focus` and `blur` do not bubble.
+Události `focus` a `blur` nebublají.
 
-For instance, we can't put `onfocus` on the `<form>` to highlight it, like this:
+Nemůžeme například umístit `onfocus` na `<form>`, abychom jej zvýraznili, třeba takto:
 
 ```html autorun height=80
-<!-- on focusing in the form -- add the class -->
+<!-- při fokusu na formulář -- přidáme třídu -->
 <form *!*onfocus="this.className='focused'"*/!*>
-  <input type="text" name="name" value="Name">
-  <input type="text" name="surname" value="Surname">
+  <input type="text" name="jméno" value="Jméno">
+  <input type="text" name="příjmení" value="Příjmení">
 </form>
 
 <style> .focused { outline: 1px solid red; } </style>
 ```
 
-The example above doesn't work, because when user focuses on an `<input>`, the `focus` event triggers on that input only. It doesn't bubble up. So `form.onfocus` never triggers.
+Uvedený příklad nefunguje, protože když uživatel nastaví fokus na `<input>`, událost `focus` se spustí jen na tomto vstupu a neprobublá výš. Proto se `form.onfocus` nikdy nespustí.
 
-There are two solutions.
+Má to dvě řešení.
 
-First, there's a funny historical feature: `focus/blur` do not bubble up, but propagate down on the capturing phase.
+Za prvé, `focus/blur` mají jednu veselou historickou vlastnost: nebublají, ale propadají se dolů ve fázi zachytávání.
 
-This will work:
+Tohle bude fungovat:
 
 ```html autorun height=80
 <form id="form">
-  <input type="text" name="name" value="Name">
-  <input type="text" name="surname" value="Surname">
+  <input type="text" name="jméno" value="Jméno">
+  <input type="text" name="příjmení" value="Příjmení">
 </form>
 
 <style> .focused { outline: 1px solid red; } </style>
 
 <script>
 *!*
-  // put the handler on capturing phase (last argument true)
+  // umístíme handler ve fázi zachytávání (poslední argument je true)
   form.addEventListener("focus", () => form.classList.add('focused'), true);
   form.addEventListener("blur", () => form.classList.remove('focused'), true);
 */!*
 </script>
 ```
 
-Second, there are `focusin` and `focusout` events -- exactly the same as `focus/blur`, but they bubble.
+Za druhé, existují vlastnosti `focusin` a `focusout` -- jsou přesně stejné jako `focus/blur`, ale bublají.
 
-Note that they must be assigned using `elem.addEventListener`, not `on<event>`.
+Všimněte si, že musejí být přiřazeny pomocí `elem.addEventListener`, ne pomocí `on<událost>`.
 
-So here's another working variant:
+Zde je tedy jiná fungující varianta:
 
 ```html autorun height=80
 <form id="form">
-  <input type="text" name="name" value="Name">
-  <input type="text" name="surname" value="Surname">
+  <input type="text" name="jméno" value="Jméno">
+  <input type="text" name="příjmení" value="Příjmení">
 </form>
 
 <style> .focused { outline: 1px solid red; } </style>
@@ -216,12 +217,12 @@ So here's another working variant:
 </script>
 ```
 
-## Summary
+## Shrnutí
 
-Events `focus` and `blur` trigger on an element focusing/losing focus.
+Události `focus` a `blur` se spouštějí na elementech, když získávají/ztrácejí fokus.
 
-Their specials are:
-- They do not bubble. Can use capturing state instead or `focusin/focusout`.
-- Most elements do not support focus by default. Use `tabindex` to make anything focusable.
+Mají následující zvláštnosti:
+- Nebublají. Můžeme však použít fázi zachytávání nebo události `focusin/focusout`.
+- Většina elementů standardně fokus nepodporuje. Abyste umožnili elementu získávat fokus, použijte `tabindex`.
 
-The current focused element is available as `document.activeElement`.
+Element, který má aktuálně fokus, je k dispozici jako `document.activeElement`.

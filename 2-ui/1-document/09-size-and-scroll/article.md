@@ -1,19 +1,19 @@
-# Element size and scrolling
+# Velikost a rolování elementu
 
-There are many JavaScript properties that allow us to read information about element width, height and other geometry features.
+JavaScript obsahuje mnoho vlastností, které nám umožňují načítat informace o šířce, výšce a jiných geometrických vlastnostech elementu.
 
-We often need them when moving or positioning elements in JavaScript.
+Často je potřebujeme, když v JavaScriptu přemisťujeme nebo umisťujeme elementy.
 
-## Sample element
+## Ukázkový element
 
-As a sample element to demonstrate properties we'll use the one given below:
+Jako ukázkový element, na němž budeme tyto vlastnosti předvádět, budeme používat následující element:
 
 ```html no-beautify
-<div id="example">
+<div id="příklad">
   ...Text...
 </div>
 <style>
-  #example {
+  #příklad {
     width: 300px;
     height: 200px;
     border: 25px solid #E8C48F;
@@ -23,169 +23,169 @@ As a sample element to demonstrate properties we'll use the one given below:
 </style>
 ```
 
-It has the border, padding and scrolling. The full set of features. There are no margins, as they are not the part of the element itself, and there are no special properties for them.
+Má ohraničení (border), vnitřní okraje (padding) i rolování (scrolling), tedy celou sadu vlastností. Nejsou v něm vnější okraje (margin), jelikož ty nejsou součástí samotného elementu, a proto pro ně neexistují speciální vlastnosti.
 
-The element looks like this:
+Element vypadá takto:
 
 ![](metric-css.svg)
 
-You can [open the document in the sandbox](sandbox:metric).
+Můžete si [otevřít dokument na pískovišti](sandbox:metric).
 
-```smart header="Mind the scrollbar"
-The picture above demonstrates the most complex case when the element has a scrollbar. Some browsers (not all) reserve the space for it by taking it from the content (labeled as "content width" above).
+```smart header="Nezapomeňte na posuvník"
+Uvedený obrázek zobrazuje nejsložitější případ, kdy element obsahuje posuvník. Některé prohlížeče (ne všechny) si pro něj rezervují místo, které berou z obsahu (na obrázku označeno jako „šířka obsahu“).
 
-So, without scrollbar the content width would be `300px`, but if the scrollbar is `16px` wide (the width may vary between devices and browsers) then only `300 - 16 = 284px` remains, and we should take it into account. That's why examples from this chapter assume that there's a scrollbar. Without it, some calculations are simpler.
+Bez posuvníku by tedy šířka obsahu byla `300px`, ale jestliže je šířka posuvníku `16px` (na různých zařízeních a prohlížečích se šířka může lišit), zbude jen `300 - 16 = 284px`, což bychom měli brát v úvahu. Proto příklady v této kapitole předpokládají, že element obsahuje posuvník. Bez něj jsou některé výpočty jednodušší.
 ```
 
-```smart header="The `padding-bottom` area may be filled with text"
-Usually paddings are shown empty on our illustrations, but if there's a lot of text in the element and it overflows, then browsers show the "overflowing" text at `padding-bottom`, that's normal.
+```smart header="Oblast `padding-bottom` může být zaplněna textem"
+Na našich obrázcích budou vnitřní okraje obvykle zobrazeny prázdné, ale pokud element obsahuje větší množství textu a ten přeteče, prohlížeč běžně zobrazuje „přetékající“ text v dolním vnitřním okraji `padding-bottom`.
 ```
 
-## Geometry
+## Geometrie
 
-Here's the overall picture with geometry properties:
+Následující obrázek obsahuje přehled všech geometrických vlastností:
 
 ![](metric-all.svg)
 
-Values of these properties are technically numbers, but these numbers are "of pixels", so these are pixel measurements.
+Hodnoty těchto vlastností jsou technicky čísla, ale tato čísla jsou „v pixelech“, jsou to tedy pixelové míry.
 
-Let's start exploring the properties starting from the outside of the element.
+Začněme tyto vlastnosti prozkoumávat od vnějšku elementu.
 
 ## offsetParent, offsetLeft/Top
 
-These properties are rarely needed, but still they are the "most outer" geometry properties, so we'll start with them.
+Tyto vlastnosti jsou zapotřebí jen zřídka, ale jsou to ty „nejvíce vnější“ geometrické vlastnosti, proto začneme u nich.
 
-The `offsetParent` is the nearest ancestor that the browser uses for calculating coordinates during rendering.
+Vlastnost `offsetParent` obsahuje nejbližšího předka, kterého prohlížeč používá k výpočtu souřadnic při vykreslování.
 
-That's the nearest ancestor that is one of the following:
+Je to nejbližší předek, který je jedním z následujících:
 
-1. CSS-positioned (`position` is `absolute`, `relative`, `fixed` or `sticky`),  or
-2. `<td>`, `<th>`, or `<table>`,  or
+1. má umístění v CSS (`position` je `absolute`, `relative`, `fixed` nebo `sticky`), nebo
+2. `<td>`, `<th>` nebo `<table>`,  nebo
 3. `<body>`.
 
-Properties `offsetLeft/offsetTop` provide x/y coordinates relative to `offsetParent` upper-left corner.
+Vlastnosti `offsetLeft/offsetTop` poskytují souřadnice x/y vzhledem k levému hornímu rohu předka `offsetParent`.
 
-In the example below the inner `<div>` has `<main>` as `offsetParent` and `offsetLeft/offsetTop` shifts from its upper-left corner (`180`):
+V následujícím příkladu je `offsetParent` vnitřního `<div>` element `<main>` a `offsetLeft/offsetTop` se počítají od jeho levého horního rohu (`180`):
 
 ```html run height=10
-<main style="position: relative" id="main">
+<main style="position: relative" id="hlavní">
   <article>
-    <div id="example" style="position: absolute; left: 180px; top: 180px">...</div>
+    <div id="příklad" style="position: absolute; left: 180px; top: 180px">...</div>
   </article>
 </main>
 <script>
-  alert(example.offsetParent.id); // main
-  alert(example.offsetLeft); // 180 (note: a number, not a string "180px")
-  alert(example.offsetTop); // 180
+  alert(příklad.offsetParent.id); // hlavní
+  alert(příklad.offsetLeft); // 180 (poznámka: je to číslo, ne řetězec "180px")
+  alert(příklad.offsetTop); // 180
 </script>
 ```
 
 ![](metric-offset-parent.svg)
 
-There are several occasions when `offsetParent` is `null`:
+Je několik případů, kdy `offsetParent` je `null`:
 
-1. For not shown elements (`display:none` or not in the document).
-2. For `<body>` and `<html>`.
-3. For elements with `position:fixed`.
+1. U nezobrazených elementů (mají `display:none` nebo nejsou v dokumentu).
+2. U `<body>` a `<html>`.
+3. U elementů obsahujících `position:fixed`.
 
 ## offsetWidth/Height
 
-Now let's move on to the element itself.
+Přejděme nyní k samotnému elementu.
 
-These two properties are the simplest ones. They provide the "outer" width/height of the element. Or, in other words, its full size including borders.
+Tyto dvě vlastnosti jsou nejjednodušší. Poskytují „vnější“ šířku/výšku elementu, nebo jinými slovy jeho úplnou velikost včetně ohraničení.
 
 ![](metric-offset-width-height.svg)
 
-For our sample element:
+Pro náš ukázkový element:
 
-- `offsetWidth = 390` -- the outer width, can be calculated as inner CSS-width (`300px`) plus paddings (`2 * 20px`) and borders (`2 * 25px`).
-- `offsetHeight = 290` -- the outer height.
+- `offsetWidth = 390` -- vnější šířka, lze vypočítat jako součet vnitřní CSS šířky (`300px`), vnitřních okrajů (`2 * 20px`) a ohraničení (`2 * 25px`).
+- `offsetHeight = 290` -- vnější výška.
 
-````smart header="Geometry properties are zero/null for elements that are not displayed"
-Geometry properties are calculated only for displayed elements.
+````smart header="U nezobrazených elementů jsou geometrické vlastnosti nulové nebo null"
+Geometrické vlastnosti se počítají jen pro zobrazené elementy.
 
-If an element (or any of its ancestors) has `display:none` or is not in the document, then all geometry properties are zero (or `null` for `offsetParent`).
+Jestliže element (nebo některý z jeho předků) má `display:none` nebo není v dokumentu, pak jsou všechny jeho geometrické vlastnosti nulové (nebo `null` v případě `offsetParent`).
 
-For example, `offsetParent` is `null`, and `offsetWidth`, `offsetHeight` are `0` when we created an element, but haven't inserted it into the document yet, or it (or its ancestor) has `display:none`.
+Když jsme například vytvořili element, ale ještě jsme ho nevložili do dokumentu anebo tento element nebo některý z jeho předků má `display:none`, pak `offsetParent` je `null` a `offsetWidth`, `offsetHeight` jsou `0`.
 
-We can use this to check if an element is hidden, like this:
+Toho můžeme využít ke zjištění, zda element je skrytý, například takto:
 
 ```js
-function isHidden(elem) {
+function jeSkrytý(elem) {
   return !elem.offsetWidth && !elem.offsetHeight;
 }
 ```
 
-Please note that such `isHidden` returns `true` for elements that are on-screen, but have zero sizes.
+Prosíme všimněte si, že taková funkce `jeSkrytý` vrací `true` i pro elementy, které jsou na obrazovce, ale jejich velikost je nulová.
 ````
 
 ## clientTop/Left
 
-Inside the element we have the borders.
+Uvnitř elementu máme ohraničení.
 
-To measure them, there are properties `clientTop` and `clientLeft`.
+K jeho změření slouží vlastnosti `clientTop` a `clientLeft`.
 
-In our example:
+V našem příkladu:
 
-- `clientLeft = 25` -- left border width
-- `clientTop = 25` -- top border width
+- `clientLeft = 25` -- šířka levého ohraničení
+- `clientTop = 25` -- šířka horního ohraničení
 
 ![](metric-client-left-top.svg)
 
-...But to be precise -- these properties are not border width/height, but rather relative coordinates of the inner side from the outer side.
+...Abychom však byli přesní: tyto vlastnosti neobsahují šířku a výšku ohraničení, ale relativní souřadnice vnitřní části vzhledem k vnější části.
 
-What's the difference?
+Jaký je v tom rozdíl?
 
-It becomes visible when the document is right-to-left (the operating system is in Arabic or Hebrew languages). The scrollbar is then not on the right, but on the left, and then `clientLeft` also includes the scrollbar width.
+Uvidíme jej, když budeme mít dokument čtený zprava doleva (operační systém je v arabském nebo hebrejském jazyce). Posuvník pak není napravo, ale nalevo a `clientLeft` pak zahrnuje i šířku posuvníku.
 
-In that case, `clientLeft` would be not `25`, but with the scrollbar width `25 + 16 = 41`.
+V takovém případě `clientLeft` nebude `25`, ale i se šířkou posuvníku `25 + 16 = 41`.
 
-Here's the example in hebrew:
+Příklad v hebrejštině:
 
 ![](metric-client-left-top-rtl.svg)
 
 ## clientWidth/Height
 
-These properties provide the size of the area inside the element borders.
+Tyto vlastnosti poskytují velikost plochy ležící uvnitř ohraničení elementu.
 
-They include the content width together with paddings, but without the scrollbar:
+Obsahují šířku obsahu společně s vnitřními okraji, ale bez posuvníku:
 
 ![](metric-client-width-height.svg)
 
-On the picture above let's first consider `clientHeight`.
+Na uvedeném obrázku se nejprve věnujme vlastnosti `clientHeight`.
 
-There's no horizontal scrollbar, so it's exactly the sum of what's inside the borders: CSS-height `200px` plus top and bottom paddings (`2 * 20px`) total `240px`.
+Není tu vodorovný posuvník, takže je to přesně součet toho, co je uvnitř ohraničení: výška z CSS `200px` plus horní a dolní vnitřní okraj (`2 * 20px`), celkem `240px`.
 
-Now `clientWidth` -- here the content width is not `300px`, but `284px`, because `16px` are occupied by the scrollbar. So the sum is `284px` plus left and right paddings, total `324px`.
+Nyní `clientWidth` -- šířka obsahu zde není `300px`, ale `284px`, protože `16px` zabírá posuvník. Součet je tedy `284px` plus levý a pravý vnitřní okraj, celkem `324px`.
 
-**If there are no paddings, then `clientWidth/Height` is exactly the content area, inside the borders and the scrollbar (if any).**
+**Pokud element nemá vnitřní okraje, pak `clientWidth/Height` je přesně šířka a výška obsahu, ležícího uvnitř ohraničení a posuvníku (pokud tam je).**
 
 ![](metric-client-width-nopadding.svg)
 
-So when there's no padding we can use `clientWidth/clientHeight` to get the content area size.
+Když tedy nemáme vnitřní okraje, můžeme použitím `clientWidth/clientHeight` zjistit velikost plochy obsahu.
 
 ## scrollWidth/Height
 
-These properties are like `clientWidth/clientHeight`, but they also include the scrolled out (hidden) parts:
+Tyto vlastnosti se podobají `clientWidth/clientHeight`, ale zahrnují i odrolované (skryté) části:
 
 ![](metric-scroll-width-height.svg)
 
-On the picture above:
+Na uvedeném obrázku:
 
-- `scrollHeight = 723` -- is the full inner height of the content area including the scrolled out parts.
-- `scrollWidth = 324` -- is the full inner width, here we have no horizontal scroll, so it equals `clientWidth`.
+- `scrollHeight = 723` -- je celá vnitřní výška plochy obsahu včetně odrolovaných částí.
+- `scrollWidth = 324` -- je celá vnitřní šířka, vodorovné rolování zde nemáme, takže je rovna `clientWidth`.
 
-We can use these properties to expand the element wide to its full width/height.
+Pomocí těchto vlastností můžeme zvětšit element na celou jeho šířku a výšku.
 
-Like this:
+Třeba takto:
 
 ```js
-// expand the element to the full content height
+// zvětšíme element na celou výšku jeho obsahu
 element.style.height = `${element.scrollHeight}px`;
 ```
 
 ```online
-Click the button to expand the element:
+Kliknutím na tlačítko zvětšíte element:
 
 <div id="element" style="width:300px;height:200px; padding: 0;overflow: auto; border:1px solid black;">text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text</div>
 
@@ -194,47 +194,47 @@ Click the button to expand the element:
 
 ## scrollLeft/scrollTop
 
-Properties `scrollLeft/scrollTop` are the width/height of the hidden, scrolled out part of the element.
+Vlastnosti `scrollLeft/scrollTop` jsou šířka/výška skryté, odrolované části elementu.
 
-On the picture below we can see `scrollHeight` and `scrollTop` for a block with a vertical scroll.
+Na následujícím obrázku vidíme `scrollHeight` a `scrollTop` pro blok se svislým rolováním.
 
 ![](metric-scroll-top.svg)
 
-In other words, `scrollTop` is "how much is scrolled up".
+Jinými slovy, `scrollTop` udává, „kolik bylo odrolováno“.
 
-````smart header="`scrollLeft/scrollTop` can be modified"
-Most of the geometry properties here are read-only, but `scrollLeft/scrollTop` can be changed, and the browser will scroll the element.
+````smart header="`scrollLeft/scrollTop` mohou být měněny"
+Většina zde uvedených geometrických vlastností slouží pouze pro čtení, ale `scrollLeft/scrollTop` se dají měnit. Prohlížeč pak bude rolovat elementem.
 
 ```online
-If you click the element below, the code `elem.scrollTop += 10` executes. That makes the element content scroll `10px` down.
+Jestliže kliknete na následující element, spustí se kód `elem.scrollTop += 10`, který způsobí, že obsah elementu odroluje o `10px` dolů.
 
-<div onclick="this.scrollTop+=10" style="cursor:pointer;border:1px solid black;width:100px;height:80px;overflow:auto">Click<br>Me<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
+<div onclick="this.scrollTop+=10" style="cursor:pointer;border:1px solid black;width:100px;height:80px;overflow:auto">Klikněte<br>sem<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
 ```
 
-Setting `scrollTop` to `0` or a big value, such as `1e9` will make the element scroll to the very top/bottom respectively.
+Nastavení `scrollTop` na `0` nebo na obrovskou hodnotu, např. `1e9`, způsobí, že element odroluje až ke svému hornímu nebo dolnímu okraji.
 ````
 
-## Don't take width/height from CSS
+## Nezjišťujte šířku a výšku z CSS
 
-We've just covered geometry properties of DOM elements, that can be used to get widths, heights and calculate distances.
+Právě jsme uvedli geometrické vlastnosti DOM elementů, pomocí nichž můžeme zjišťovat šířky a výšky a vypočítávat vzdálenosti.
 
-But as we know from the chapter <info:styles-and-classes>, we can read CSS-height and width using `getComputedStyle`.
+Jak ale víme z kapitoly <info:styles-and-classes>, můžeme načítat CSS výšku a šířku funkcí `getComputedStyle`.
 
-So why not to read the width of an element with `getComputedStyle`, like this?
+Proč tedy nenačíst šířku elementu funkcí `getComputedStyle`, například takto?
 
 ```js run
 let elem = document.body;
 
-alert( getComputedStyle(elem).width ); // show CSS width for elem
+alert( getComputedStyle(elem).width ); // zobrazí CSS šířku elementu
 ```
 
-Why should we use geometry properties instead? There are two reasons:
+Proč bychom místo toho měli používat geometrické vlastnosti? Důvody jsou dva:
 
-1. First, CSS `width/height` depend on another property: `box-sizing` that defines "what is" CSS width and height. A change in `box-sizing` for CSS purposes may break such JavaScript.
-2. Second, CSS `width/height` may be `auto`, for instance for an inline element:
+1. Za prvé, CSS vlastnosti `width/height` závisejí na jiné vlastnosti: `box-sizing`, která definuje, „co je“ CSS šířka a výška. Změna v `box-sizing` pro účely CSS může takový kód v JavaScriptu rozbít.
+2. Za druhé, CSS vlastnosti `width/height` mohou být `auto`, například u elementu uvedeného přímo v HTML kódu:
 
     ```html run
-    <span id="elem">Hello!</span>
+    <span id="elem">Ahoj!</span>
 
     <script>
     *!*
@@ -242,35 +242,35 @@ Why should we use geometry properties instead? There are two reasons:
     */!*
     </script>
     ```
+    
+    Z pohledu CSS je `width:auto` zcela v pořádku, ale v JavaScriptu potřebujeme přesnou velikost v `px`, abychom ji mohli použít ve výpočtech. Zde nám tedy CSS šířka není k ničemu.
 
-    From the CSS standpoint, `width:auto` is perfectly normal, but in JavaScript we need an exact size in `px` that we can use in calculations. So here CSS width is useless.
+A existuje ještě jeden důvod: posuvník. Někdy kód, který bez posuvníku funguje správně, bude s posuvníkem dělat chyby, protože posuvník v některých prohlížečích zabírá místo z obsahu. Skutečná šířka dostupná pro obsah je tedy *menší* než CSS šířka. Vlastnosti `clientWidth/clientHeight` to berou v úvahu.
 
-And there's one more reason: a scrollbar. Sometimes the code that works fine without a scrollbar becomes buggy with it, because a scrollbar takes the space from the content in some browsers. So the real width available for the content is *less* than CSS width. And `clientWidth/clientHeight` take that into account.
-
-...But with `getComputedStyle(elem).width` the situation is different. Some browsers (e.g. Chrome) return the real inner width, minus the scrollbar, and some of them (e.g. Firefox) -- CSS width (ignore the scrollbar). Such cross-browser differences is the reason not to use `getComputedStyle`, but rather rely on geometry properties.
+...Ale u `getComputedStyle(elem).width` je situace jiná. Některé prohlížeče (např. Chrome) vracejí skutečnou vnitřní šířku, od níž je odečten posuvník, zatímco jiné (např. Firefox) vracejí CSS šířku (a posuvník ignorují). Tyto rozdíly mezi prohlížeči jsou důvodem, proč nepoužívat `getComputedStyle`, ale spolehnout se na geometrické vlastnosti.
 
 ```online
-If your browser reserves the space for a scrollbar (most browsers for Windows do), then you can test it below.
+Pokud si váš prohlížeč vyhrazuje místo pro posuvník (většina prohlížečů pro Windows to dělá), pak si to zde můžete otestovat.
 
 [iframe src="cssWidthScroll" link border=1]
 
-The element with text has CSS `width:300px`.
+Element s textem má CSS `width:300px`.
 
-On a Desktop Windows OS, Firefox, Chrome, Edge all reserve the space for the scrollbar. But  Firefox shows `300px`, while Chrome and Edge show less. That's because Firefox returns the CSS width and other browsers return the "real" width.
+V operačním systému Desktop Windows si Firefox, Chrome i Edge rezervují místo pro posuvník. Ale Firefox zobrazí `300px`, zatímco Chrome a Edge zobrazí méně. Je to proto, že Firefox vrací CSS šířku a ostatní prohlížeče vracejí „skutečnou“ šířku.
 ```
 
-Please note that the described difference is only about reading `getComputedStyle(...).width` from JavaScript, visually everything is correct.
+Prosíme všimněte si, že popsaný rozdíl má význam jen při načítání `getComputedStyle(...).width` v JavaScriptu, vizuálně je všechno v pořádku.
 
-## Summary
+## Shrnutí
 
-Elements have the following geometry properties:
+Elementy obsahují následující geometrické vlastnosti:
 
-- `offsetParent` -- is the nearest positioned ancestor or `td`, `th`, `table`, `body`.
-- `offsetLeft/offsetTop` -- coordinates relative to the upper-left edge of `offsetParent`.
-- `offsetWidth/offsetHeight` -- "outer" width/height of an element including borders.
-- `clientLeft/clientTop` -- the distances from the upper-left outer corner to the upper-left inner (content + padding) corner. For left-to-right OS they are always the widths of left/top borders. For right-to-left OS the vertical scrollbar is on the left so `clientLeft` includes its width too.
-- `clientWidth/clientHeight` -- the width/height of the content including paddings, but without the scrollbar.
-- `scrollWidth/scrollHeight` -- the width/height of the content, just like `clientWidth/clientHeight`, but also include scrolled-out, invisible part of the element.
-- `scrollLeft/scrollTop` -- width/height of the scrolled out upper part of the element, starting from its upper-left corner.
+- `offsetParent` -- je nejbližší umístěný předek nebo `td`, `th`, `table`, `body`.
+- `offsetLeft/offsetTop` -- souřadnice vzhledem k levému hornímu rohu předka `offsetParent`.
+- `offsetWidth/offsetHeight` -- „vnější“ šířka/výška elementu včetně ohraničení.
+- `clientLeft/clientTop` -- vzdálenosti od vnějšího levého/horního okraje k vnitřnímu (obsah + vnitřní okraje) levému/hornímu okraji. V OS čtených zleva doprava to jsou vždy šířky levých/horních ohraničení. V OS čtených zprava doleva je svislý posuvník nalevo, proto `clientLeft` zahrnuje i jeho šířku.
+- `clientWidth/clientHeight` -- šířka/výška obsahu včetně vnitřních okrajů, ale bez posuvníku.
+- `scrollWidth/scrollHeight` -- šířka/výška obsahu, podobně jako `clientWidth/clientHeight`, ale zahrnuje i odrolovanou, neviditelnou část elementu.
+- `scrollLeft/scrollTop` -- šířka/výška odrolované horní části elementu od jeho levého horního rohu.
 
-All properties are read-only except `scrollLeft/scrollTop` that make the browser scroll the element if changed.
+Všechny vlastnosti jsou pouze pro čtení s výjimkou `scrollLeft/scrollTop`, jejichž změna vyvolá rolování elementu.

@@ -1,4 +1,4 @@
-The solution has two parts.
+Řešení se skládá ze dvou částí.
 
-1. Wrap every tree node title into `<span>`. Then we can CSS-style them on `:hover` and handle clicks exactly on text, because `<span>` width is exactly the text width (unlike without it).
-2. Set a handler to the `tree` root node and handle clicks on that `<span>` titles.
+1. Zabalíme titulek každého uzlu stromu do `<span>`. Pak na nich můžeme nastavit CSS styl na `:hover` a zpracovávat kliknutí přímo na text, protože šířka `<span>` je přesně šířka textu (na rozdíl od značky bez něj).
+2. Nastavíme handler kořenovému uzlu `strom` a budeme zpracovávat kliknutí na tyto titulky `<span>`.

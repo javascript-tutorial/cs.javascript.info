@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <style>
-    .selected {
+    .vybrán {
       background: #0f0;
     }
 
@@ -16,44 +16,44 @@
 
 <body>
 
-  Click on a list item to select it.
+  Kliknutím na položku v seznamu ji vyberete.
   <br>
 
   <ul id="ul">
-    <li>Christopher Robin</li>
-    <li>Winnie-the-Pooh</li>
-    <li>Tigger</li>
+    <li>Kryštůfek Robin</li>
+    <li>Medvídek Pú</li>
+    <li>Tygr</li>
     <li>Kanga</li>
-    <li>Rabbit. Just rabbit.</li>
+    <li>Králík. Obyčejný králík.</li>
   </ul>
 
   <script>
-    ul.onclick = function(event) {
-      if (event.target.tagName != "LI") return;
+    ul.onclick = function(událost) {
+      if (událost.target.tagName != "LI") return;
 
-      if (event.ctrlKey || event.metaKey) {
-        toggleSelect(event.target);
+      if (událost.ctrlKey || událost.metaKey) {
+        přepniVýběr(událost.target);
       } else {
-        singleSelect(event.target);
+        vyberPouze(událost.target);
       }
 
     }
 
-    // prevent unneeded selection of list elements on clicks
+    // zákaz nežádoucího označení elementů seznamu při kliknutí
     ul.onmousedown = function() {
       return false;
     };
 
-    function toggleSelect(li) {
-      li.classList.toggle('selected');
+    function přepniVýběr(li) {
+      li.classList.toggle('vybrán');
     }
 
-    function singleSelect(li) {
-      let selected = ul.querySelectorAll('.selected');
-      for(let elem of selected) {
-        elem.classList.remove('selected');
+    function vyberPouze(li) {
+      let vybrán = ul.querySelectorAll('.vybrán');
+      for(let elem of vybrán) {
+        elem.classList.remove('vybrán');
       }
-      li.classList.add('selected');
+      li.classList.add('vybrán');
     }
 
   </script>

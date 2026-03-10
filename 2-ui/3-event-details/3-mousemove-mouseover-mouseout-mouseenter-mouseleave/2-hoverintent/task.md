@@ -2,31 +2,31 @@ importance: 5
 
 ---
 
-# "Smart" tooltip
+# „Chytrý“ tooltip
 
-Write a function that shows a tooltip over an element only if the visitor moves the mouse *to it*, but not *through it*.
+Napište funkci, která zobrazí tooltip nad elementem, jen když návštěvník přesune ukazatel myši *na něj*, ale ne *přes něj*.
 
-In other words, if the visitor moves the mouse to the element and stops there -- show the tooltip. And if they just moved the mouse through, then no need, who wants extra blinking?
+Jinými slovy, jestliže návštěvník přesune ukazatel nad element a zastaví se tam, tooltip se zobrazí. Ale pokud jen přesune myš přes element jinam, pak to není třeba -- kdo by chtěl další blikání?
 
-Technically, we can measure the mouse speed over the element, and if it's slow then we assume that it comes "over the element" and show the tooltip, if it's fast -- then we ignore it.
+Technicky můžeme změřit rychlost ukazatele nad elementem, a pokud je nízká, pak předpokládáme, že ukazatel vstoupil „na element“ a zobrazíme tooltip. Pokud je vysoká, budeme ukazatel ignorovat.
 
-Make a universal object `new HoverIntent(options)` for it.
+Vytvořte k tomu univerzální objekt `new Setrvání(možnosti)`.
 
-Its `options`:
-- `elem` -- element to track.
-- `over` -- a function to call if the mouse came to the element: that is, it moves slowly or stopped over it.
-- `out` -- a function to call when the mouse leaves the element (if `over` was called).
+Jeho `možnosti`:
+- `elem` -- sledovaný element.
+- `over` -- funkce, která bude volána, když ukazatel vstoupí na element, tedy když se nad ním pohybuje pomalu nebo se na něm zastavil.
+- `out` -- funkce, která bude volána, když ukazatel opustí element (pokud byla předtím volána `over`).
 
-An example of using such object for the tooltip:
+Příklad použití takového objektu s tooltipem:
 
 ```js
-// a sample tooltip
+// příklad tooltipu
 let tooltip = document.createElement('div');
 tooltip.className = "tooltip";
 tooltip.innerHTML = "Tooltip";
 
-// the object will track mouse and call over/out
-new HoverIntent({
+// objekt bude sledovat myš a volat over/out
+new Setrvání({
   elem,
   over() {
     tooltip.style.left = elem.getBoundingClientRect().left + 'px';
@@ -39,10 +39,10 @@ new HoverIntent({
 });
 ```
 
-The demo:
+Demo:
 
 [iframe src="solution" height=140]
 
-If you move the mouse over the "clock" fast then nothing happens, and if you do it slow or stop on them, then there will be a tooltip.
+Jestliže pohybujete myší nad „hodinami“ rychle, nic se neděje. Pokud jí pohybujete pomalu nebo se nad nimi zastavíte, zobrazí se tooltip.
 
-Please note: the tooltip doesn't "blink" when the cursor moves between the clock subelements.
+Prosíme všimněte si, že tooltip „neblikne“, když se kurzor přesune mezi podelementy hodin.

@@ -2,19 +2,19 @@ importance: 5
 
 ---
 
-# Place the ball in the field center
+# Umístěte míč doprostřed hřiště
 
-Here's how the source document looks:
+Takto vypadá zdrojový dokument:
 
 [iframe src="source" edit link height=180]
 
-What are coordinates of the field center?
+Jaké jsou souřadnice středu hřiště?
 
-Calculate them and use to place the ball into the center of the green field:
+Vypočtěte je a s jejich pomocí umístěte míč doprostřed zeleného hřiště:
 
 [iframe src="solution" height=180]
 
-- The element should be moved by JavaScript, not CSS.
-- The code should work with any ball size (`10`, `20`, `30` pixels) and any field size, not be bound to the given values.
+- Element by měl být umístěn v JavaScriptu, ne v CSS.
+- Kód by měl fungovat pro jakoukoli velikost míče (`10`, `20`, `30` pixelů) a jakoukoli velikost hřiště, neměl by být vázán na konkrétní hodnoty.
 
-P.S. Sure, centering could be done with CSS, but here we want exactly JavaScript. Further we'll meet other topics and more complex situations when JavaScript must be used. Here we do a "warm-up".
+P.S. Jistě, umístění doprostřed lze udělat i v CSS, ale tady je chceme v JavaScriptu. Později se setkáme s jinými úkoly a složitějšími situacemi, v nichž je nutné použít JavaScript. Tohle je „zahřívací kolo“.

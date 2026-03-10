@@ -2,10 +2,10 @@ importance: 4
 
 ---
 
-# Colored clock with setInterval
+# Barevné hodiny pomocí setInterval
 
-Create a colored clock like here:
+Vytvořte barevné hodiny, jako jsou tyto:
 
 [iframe src="solution" height=60]
 
-Use HTML/CSS for the styling, JavaScript only updates time in elements.
+Styly nastavte pomocí HTML/CSS, JavaScript bude jen aktualizovat čas v elementech.

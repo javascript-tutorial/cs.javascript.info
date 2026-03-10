@@ -1,298 +1,298 @@
-# Form properties and methods
+# Vlastnosti a metody formulářů
 
-Forms and control elements, such as `<input>` have a lot of special properties and events.
+Formuláře a ovládací elementy, např. `<input>`, mají mnoho speciálních vlastností a událostí.
 
-Working with forms will be much more convenient when we learn them.
+Když se je naučíme, práce s formuláři bude mnohem pohodlnější.
 
-## Navigation: form and elements
+## Navigace: formulář a elementy
 
-Document forms are members of the special collection `document.forms`.
+Formuláře v dokumentu jsou prvky speciální kolekce `document.forms`.
 
-That's a so-called *"named collection"*: it's both named and ordered. We can use both the name or the number in the document to get the form.
+Je to tzv. *„jmenná kolekce“*: je současně pojmenovaná a seřazená. Můžeme získat formulář podle jeho názvu i podle jeho pořadí v dokumentu.
 
 ```js no-beautify
-document.forms.my; // the form with name="my"
-document.forms[0]; // the first form in the document
+document.forms.můj; // formulář s name="můj"
+document.forms[0]; // první formulář v dokumentu
 ```
 
-When we have a form, then any element is available in the named collection `form.elements`.
+Když máme formulář, je každý jeho element k dispozici ve jmenné kolekci `formulář.elements`.
 
-For instance:
+Příklad:
 
 ```html run height=40
-<form name="my">
-  <input name="one" value="1">
-  <input name="two" value="2">
+<form name="můj">
+  <input name="jedna" value="1">
+  <input name="dvě" value="2">
 </form>
 
 <script>
-  // get the form
-  let form = document.forms.my; // <form name="my"> element
+  // získáme formulář
+  let form = document.forms.můj; // element <form name="můj">
 
-  // get the element
-  let elem = form.elements.one; // <input name="one"> element
+  // získáme element
+  let elem = form.elements.jedna; // element <input name="jedna">
 
   alert(elem.value); // 1
 </script>
 ```
 
-There may be multiple elements with the same name. This is typical with radio buttons and checkboxes.
+Stejný název může mít více elementů, což je typické pro rádiová tlačítka a checkboxy.
 
-In that case, `form.elements[name]` is a *collection*. For instance:
+V takovém případě je `formulář.elements[název]` *kolekce*. Příklad:
 
 ```html run height=40
 <form>
-  <input type="radio" *!*name="age"*/!* value="10">
-  <input type="radio" *!*name="age"*/!* value="20">
+  <input type="radio" *!*name="věk"*/!* value="10">
+  <input type="radio" *!*name="věk"*/!* value="20">
 </form>
 
 <script>
-let form = document.forms[0];
+let formulář = document.forms[0];
 
-let ageElems = form.elements.age;
+let elementyVěků = formulář.elements.věk;
 
 *!*
-alert(ageElems[0]); // [object HTMLInputElement]
+alert(elementyVěků[0]); // [object HTMLInputElement]
 */!*
 </script>
 ```
 
-These navigation properties do not depend on the tag structure. All control elements, no matter how deep they are in the form, are available in `form.elements`.
+Tyto navigační vlastnosti nezávisejí na struktuře značek. Ve `formulář.elements` jsou k dispozici všechny ovládací elementy, ať jsou ve formuláři jakkoli hluboko.
 
 
-````smart header="Fieldsets as \"subforms\""
-A form may have one or many `<fieldset>` elements inside it. They also have `elements` property that lists form controls inside them.
+````smart header="Sady polí (fieldsety) jako „podformuláře“"
+Formulář může obsahovat jeden nebo více elementů `<fieldset>`. I ty mají vlastnost `elements`, která obsahuje ovládací prvky formulářů uvnitř nich.
 
-For instance:
+Příklad:
 
 ```html run height=80
 <body>
-  <form id="form">
-    <fieldset name="userFields">
+  <form id="formulář">
+    <fieldset name="uživatelskáPole">
       <legend>info</legend>
       <input name="login" type="text">
     </fieldset>
   </form>
 
   <script>
-    alert(form.elements.login); // <input name="login">
+    alert(formulář.elements.login); // <input name="login">
 
 *!*
-    let fieldset = form.elements.userFields;
-    alert(fieldset); // HTMLFieldSetElement
+    let sadaPolí = formulář.elements.uživatelskáPole;
+    alert(sadaPolí); // HTMLFieldSetElement
 
-    // we can get the input by name both from the form and from the fieldset
-    alert(fieldset.elements.login == form.elements.login); // true
+    // můžeme získat vstup podle názvu jak z formuláře, tak ze sady polí
+    alert(sadaPolí.elements.login == formulář.elements.login); // true
 */!*
   </script>
 </body>
 ```
 ````
 
-````warn header="Shorter notation: `form.name`"
-There's a shorter notation: we can access the element as `form[index/name]`.
+````warn header="Kratší notace: `formulář.název`"
+Existuje kratší notace: můžeme k elementu přistupovat pomocí `formulář[index/název]`.
 
-In other words, instead of `form.elements.login` we can write `form.login`.
+Jinými slovy, místo `formulář.elements.login` můžeme psát `formulář.login`.
 
-That also works, but there's a minor issue: if we access an element, and then change its `name`, then it is still available under the old name (as well as under the new one).
+To funguje také, ale má to drobnou nevýhodu: když přistoupíme k elementu a pak změníme jeho název (`name`), bude element stále dostupný pod starým názvem (stejně jako pod novým).
 
-That's easy to see in an example:
+Snadno to uvidíme na příkladu:
 
 ```html run height=40
-<form id="form">
+<form id="formulář">
   <input name="login">
 </form>
 
 <script>
-  alert(form.elements.login == form.login); // true, the same <input>
+  alert(formulář.elements.login == formulář.login); // true, stejný <input>
 
-  form.login.name = "username"; // change the name of the input
+  formulář.login.name = "uživatelskéJméno"; // změníme název vstupního pole
 
-  // form.elements updated the name:
-  alert(form.elements.login); // undefined
-  alert(form.elements.username); // input
+  // formulář.elements aktualizovala název:
+  alert(formulář.elements.login); // undefined
+  alert(formulář.elements.uživatelskéJméno); // input
 
 *!*
-  // form allows both names: the new one and the old one
-  alert(form.username == form.login); // true
+  // formulář umožňuje oba názvy: nový i starý
+  alert(formulář.uživatelskéJméno == formulář.login); // true
 */!*
 </script>
 ```
 
-That's usually not a problem, however, because we rarely change names of form elements.
+Obvykle to však není problém, protože názvy elementů formuláře měníme jen málokdy.
 
 ````
 
-## Backreference: element.form
+## Zpětný odkaz: element.form
 
-For any element, the form is available as `element.form`. So a form references all elements, and elements reference the form.
+V každém elementu je formulář dostupný jako `element.form`. Formulář se tedy odkazuje na všechny elementy a elementy se odkazují na formulář.
 
-Here's the picture:
+Zde je obrázek:
 
 ![](form-navigation.svg)
 
-For instance:
+Příklad:
 
 ```html run height=40
-<form id="form">
+<form id="formulář">
   <input type="text" name="login">
 </form>
 
 <script>
 *!*
-  // form -> element
-  let login = form.login;
+  // formulář -> element
+  let login = formulář.login;
 
-  // element -> form
+  // element -> formulář
   alert(login.form); // HTMLFormElement
 */!*
 </script>
 ```
 
-## Form elements
+## Elementy formulářů
 
-Let's talk about form controls.
+Promluvme si o ovládacích prvcích formulářů.
 
-### input and textarea
+### input a textarea
 
-We can access their value as `input.value` (string) or `input.checked` (boolean) for checkboxes and radio buttons.
+K jejich hodnotám můžeme přistupovat pomocí `input.value` (řetězec) nebo v případě checkboxů a rádiových tlačítek `input.checked` (boolean).
 
-Like this:
+Příklad:
 
 ```js
-input.value = "New value";
-textarea.value = "New text";
+input.value = "Nová hodnota";
+textarea.value = "Nový text";
 
-input.checked = true; // for a checkbox or radio button
+input.checked = true; // pro checkbox nebo rádiové tlačítko
 ```
 
-```warn header="Use `textarea.value`, not `textarea.innerHTML`"
-Please note that even though `<textarea>...</textarea>` holds its value as nested HTML, we should never use `textarea.innerHTML` to access it.
+```warn header="Používejte `textarea.value`, ne `textarea.innerHTML`"
+Prosíme všimněte si, že i když `<textarea>...</textarea>` udržuje svou hodnotu jako vnořený HTML kód, nikdy bychom k ní neměli přistupovat použitím `textarea.innerHTML`.
 
-It stores only the HTML that was initially on the page, not the current value.
+Ukládá si totiž jen HTML kód, který byl na stránce původně, ne aktuální hodnotu.
 ```
 
-### select and option
+### select a option
 
-A `<select>` element has 3 important properties:
+Element `<select>` má tři důležité vlastnosti:
 
-1. `select.options` -- the collection of `<option>` subelements,
-2. `select.value` -- the *value* of the currently selected `<option>`,
-3. `select.selectedIndex` -- the *number* of the currently selected `<option>`.
+1. `select.options` -- kolekce podelementů `<option>`,
+2. `select.value` -- *hodnota* aktuálně zvolené `<option>`,
+3. `select.selectedIndex` -- *číslo* aktuálně zvolené `<option>`.
 
-They provide three different ways of setting a value for a `<select>`:
+Poskytují tři různé způsoby, jak nastavit hodnotu `<select>`:
 
-1. Find the corresponding `<option>` element (e.g. among `select.options`) and set its `option.selected` to `true`.
-2. If we know a new value: set `select.value` to the new value.
-3. If we know the new option number: set `select.selectedIndex` to that number.
+1. Najdeme odpovídací element `<option>` (např. mezi `select.options`) a nastavíme jeho vlastnost `option.selected` na `true`.
+2. Pokud známe novou hodnotu: nastavíme `select.value` na tuto hodnotu.
+3. Pokud známe číslo nově zvolené možnosti: nastavíme `select.selectedIndex` na toto číslo.
 
-Here is an example of all three methods:
+Příklad všech tří metod:
 
 ```html run
 <select id="select">
-  <option value="apple">Apple</option>
-  <option value="pear">Pear</option>
-  <option value="banana">Banana</option>
+  <option value="jablko">Jablko</option>
+  <option value="hruška">Hruška</option>
+  <option value="banán">Banán</option>
 </select>
 
 <script>
-  // all three lines do the same thing
+  // všechny tři řádky udělají totéž
   select.options[2].selected = true; 
   select.selectedIndex = 2;
-  select.value = 'banana';
-  // please note: options start from zero, so index 2 means the 3rd option.
+  select.value = 'banán';
+  // prosíme všimněte si: možnosti se číslují od nuly, takže index 2 znamená 3. možnost.
 </script>
 ```
 
-Unlike most other controls, `<select>` allows to select multiple options at once if it has `multiple` attribute. This attribute is rarely used, though.
+Na rozdíl od většiny ostatních ovládacích prvků `<select>` umožňuje zvolit více možností najednou, pokud má atribut `multiple`. Ten se však používá jen zřídka.
 
-For multiple selected values, use the first way of setting values: add/remove the `selected` property from `<option>` subelements.
+Více zvolených hodnot nastavujte prvním uvedeným způsobem: přidáváním a odstraňováním vlastnosti `selected` na podelementech `<option>`.
 
-Here's an example of how to get selected values from a multi-select:
+Následující příklad ukazuje, jak získat zvolené hodnoty z vícenásobné volby:
 
 ```html run
 <select id="select" *!*multiple*/!*>
   <option value="blues" selected>Blues</option>
   <option value="rock" selected>Rock</option>
-  <option value="classic">Classic</option>
+  <option value="klasika">Klasika</option>
 </select>
 
 <script>
-  // get all selected values from multi-select
-  let selected = Array.from(select.options)
-    .filter(option => option.selected)
-    .map(option => option.value);
+  // získáme všechny hodnoty zvolené vícenásobnou volbou
+  let zvolené = Array.from(select.options)
+    .filter(možnost => možnost.selected)
+    .map(možnost => možnost.value);
 
-  alert(selected); // blues,rock  
+  alert(zvolené); // blues,rock  
 </script>
 ```
 
-The full specification of the `<select>` element is available in the specification <https://html.spec.whatwg.org/multipage/forms.html#the-select-element>.
+Úplná specifikace elementu `<select>` je k dispozici ve specifikaci <https://html.spec.whatwg.org/multipage/forms.html#the-select-element>.
 
 ### new Option
 
-In the [specification](https://html.spec.whatwg.org/multipage/forms.html#the-option-element) there's a nice short syntax to create an `<option>` element:
+Ve [specifikaci](https://html.spec.whatwg.org/multipage/forms.html#the-option-element) je uvedena pěkná krátká syntaxe vytvoření elementu `<option>`:
 
 ```js
-option = new Option(text, value, defaultSelected, selected);
+možnost = new Option(text, hodnota, standardněZvolen, zvolen);
 ```
 
-This syntax is optional. We can use `document.createElement('option')` and set attributes manually. Still, it may be shorter, so here are the parameters:
+Tato syntaxe je nepovinná. Můžeme použít `document.createElement('option')` a nastavit atributy ručně. Může však být kratší, takže její parametry jsou:
 
-- `text` -- the text inside the option,
-- `value` -- the option value,
-- `defaultSelected` -- if `true`, then `selected` HTML-attribute is created,
-- `selected` -- if `true`, then the option is selected.
+- `text` -- text uvnitř možnosti,
+- `hodnota` -- hodnota možnosti,
+- `standardněZvolen` -- pokud je `true`, pak je vytvořen HTML atribut `selected`,
+- `zvolen` -- pokud je `true`, pak je tato možnost zvolena.
 
-The difference between `defaultSelected` and `selected` is that `defaultSelected` sets the HTML-attribute (that we can get using `option.getAttribute('selected')`), while `selected` sets whether the option is selected or not.
+Rozdíl mezi `standardněZvolen` a `zvolen` spočívá v tom, že `standardněZvolen` nastaví HTML atribut (který můžeme získat pomocí `option.getAttribute('selected')`), zatímco `zvolen` nastaví, zda je tato možnost zvolena nebo ne.
 
-In practice, one should usually set _both_ values to `true` or `false`. (Or, simply omit them; both default to `false`.)
+V praxi bychom zpravidla měli _obě_ hodnoty nastavit na `true` nebo na `false` (nebo je jednoduše vynechat; obě jsou standardně `false`).
 
-For instance, here's a new "unselected" option:
+Například zde vytvoříme novou „nezvolenou“ možnost:
 
 ```js
-let option = new Option("Text", "value");
-// creates <option value="value">Text</option>
+let možnost = new Option("Text", "hodnota");
+// vytvoří <option value="hodnota">Text</option>
 ```
 
-The same option, but selected:
+Stejná možnost, ale zvolená:
 
 ```js
-let option = new Option("Text", "value", true, true);
+let možnost = new Option("Text", "hodnota", true, true);
 ```
 
-Option elements have properties:
+Elementy možností mají tyto vlastnosti:
 
 `option.selected`
-: Is the option selected.
+: Zda je možnost zvolena.
 
 `option.index`
-: The number of the option among the others in its `<select>`.
+: Pořadové číslo možnosti mezi ostatními v jejím `<select>`.
 
 `option.text`
-: Text content of the option (seen by the visitor).
+: Textový obsah možnosti (který vidí návštěvník).
 
-## References
+## Odkazy
 
-- Specification: <https://html.spec.whatwg.org/multipage/forms.html>.
+- Specifikace: <https://html.spec.whatwg.org/multipage/forms.html>.
 
-## Summary
+## Shrnutí
 
-Form navigation:
+Navigace ve formuláři:
 
 `document.forms`
-: A form is available as `document.forms[name/index]`.
+: Formulář je k dispozici jako `document.forms[název/index]`.
 
-`form.elements`  
-: Form elements are available as `form.elements[name/index]`, or can use just `form[name/index]`. The `elements` property also works for `<fieldset>`.
+`formulář.elements`  
+: Elementy formuláře jsou k dispozici jako `formulář.elements[název/index]` nebo stačí použít `formulář[název/index]`. Vlastnost `elements` funguje i pro `<fieldset>`.
 
 `element.form`
-: Elements reference their form in the `form` property.
+: Elementy se odkazují na svůj formulář ve vlastnosti `form`.
 
-Value is available as `input.value`, `textarea.value`, `select.value`, etc. (For checkboxes and radio buttons, use `input.checked` to determine whether a value is selected.)
+Hodnota je k dispozici jako `input.value`, `textarea.value`, `select.value` atd. (Pro checkboxy a rádiová tlačítka používejte ke zjištění, zda je tlačítko zaškrtnuto, `input.checked`.)
 
-For `<select>`, one can also get the value by the index `select.selectedIndex` or through the options collection `select.options`.
+Pro `<select>` můžeme zvolenou hodnotu získat také podle indexu `select.selectedIndex` nebo z kolekce možností `select.options`.
 
-These are the basics to start working with forms. We'll meet many examples further in the tutorial.
+To jsou základy k zahájení práce s formuláři. Dále v tomto tutoriálu se setkáme s mnoha příklady.
 
-In the next chapter we'll cover `focus` and `blur` events that may occur on any element, but are mostly handled on forms.
+V následující kapitole probereme události `focus` a `blur`, které mohou nastat na kterémkoli elementu, ale nejčastěji se zpracovávají na formulářích.

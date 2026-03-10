@@ -2,41 +2,41 @@
 <html>
 <body>
 
-  <p>Press "Q" and "W" together (can be in any language).</p>
+  <p>Stiskněte současně „Q“ a „W“ (můžete být v jakémkoli jazyce).</p>
 
   <script>
-    function runOnKeys(func, ...codes) {
-      let pressed = new Set();
+    function spusťNaKlávesy(funkce, ...kódy) {
+      let stisknuté = new Set();
 
-      document.addEventListener('keydown', function(event) {
-        pressed.add(event.code);
+      document.addEventListener('keydown', function(událost) {
+        stisknuté.add(událost.code);
 
-        for (let code of codes) { // are all keys in the set?
-          if (!pressed.has(code)) {
+        for (let kód of kódy) { // jsou v množině všechny klávesy?
+          if (!stisknuté.has(kód)) {
             return;
           }
         }
 
-        // yes, they are
+        // ano, jsou
 
-        // during the alert, if the visitor releases the keys,
-        // JavaScript does not get the "keyup" event
-        // and pressed set will keep assuming that the key is pressed
-        // so, to evade "sticky" keys, we reset the status
-        // if the user wants to run the hotkey again - let them press all keys again
-        pressed.clear();
+        // pokud během alertu návštěvník uvolní klávesy,
+        // JavaScript neobdrží událost „keyup“
+        // a množina stisknuté bude nadále předpokládat, že jsou stisknuté
+        // abychom se tedy vyvarovali „zaseknutých“ kláves, resetujeme stav
+        // bude-li uživatel chtít spustit horké klávesy znovu, necháme ho stisknout je všechny znovu
+        stisknuté.clear();
 
-        func();
+        funkce();
       });
 
-      document.addEventListener('keyup', function(event) {
-        pressed.delete(event.code);
+      document.addEventListener('keyup', function(událost) {
+        stisknuté.delete(událost.code);
       });
 
     }
 
-    runOnKeys(
-      () => alert("Hello!"),
+    spusťNaKlávesy(
+      () => alert("Ahoj!"),
       "KeyQ",
       "KeyW"
     );

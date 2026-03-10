@@ -1,6 +1,6 @@
 
-We can use `mouse.onclick` to handle the click and make the mouse "moveable" with `position:fixed`, then `mouse.onkeydown` to handle arrow keys.
+Můžeme použitím `myš.onclick` zpracovat kliknutí a učinit myš „pohyblivou“ pomocí `position:fixed`, pak v `myš.onkeydown` zpracovávat šipkové klávesy.
 
-The only pitfall is that `keydown` only triggers on elements with focus. So we need to add `tabindex` to the element.  As we're forbidden to change HTML, we can use `mouse.tabIndex` property for that.
+Jediný problém je v tom, že `keydown` se spouští jedině na elementech s fokusem. Musíme tedy do elementu přidat `tabindex`. Jelikož máme zakázáno měnit HTML kód, můžeme k tomu použít vlastnost `myš.tabIndex`.
 
-P.S. We also can replace `mouse.onclick` with `mouse.onfocus`.
+P.S. Můžeme také nahradit `myš.onclick` za `myš.onfocus`.

@@ -1,36 +1,36 @@
-# Pointer events
+# Události ukazatele
 
-Pointer events are a modern way to handle input from a variety of pointing devices, such as a mouse, a pen/stylus, a touchscreen, and so on.
+Události ukazatele jsou moderním způsobem, jak zpracovat vstup z různorodých ukazovacích zařízení, například myš, pero/stylus, doteková obrazovka a podobně.
 
-## The brief history
+## Krátká historie
 
-Let's make a small overview, so that you understand the general picture and the place of Pointer Events among other event types.
+Udělejme si malý přehled, abyste porozuměli obecnému obrazu a místu událostí ukazatele mezi ostatními druhy událostí.
 
-- Long ago, in the past, there were only mouse events.
+- Před dlouhou dobou v minulosti existovaly jen události myši.
 
-    Then touch devices became widespread, phones and tablets in particular. For the existing scripts to work, they generated (and still generate) mouse events. For instance, tapping a touchscreen generates `mousedown`. So touch devices worked well with web pages.
+    Pak se rozšířila doteková zařízení, zvláště mobilní telefony a tablety. Aby na nich fungovaly již existující skripty, generovala (a stále generují) události myši, například dotek na dotekové obrazovce vyvolá `mousedown`. Doteková zařízení tedy s webovými stránkami fungovala dobře.
 
-    But touch devices have more capabilities than a mouse. For example, it's possible to touch multiple points at once ("multi-touch"). Although, mouse events don't have necessary properties to handle such multi-touches.
+    Jenže doteková zařízení mají více možností než myš. Je například možné dotknout se více bodů najednou („multidotek“). Události myši však nemají nezbytné vlastnosti k tomu, aby takové multidoteky zpracovaly.
 
-- So touch events were introduced, such as `touchstart`, `touchend`, `touchmove`, that have touch-specific properties (we don't cover them in detail here, because pointer events are even better).
+- Byly tedy zavedeny dotekové události, např. `touchstart`, `touchend`, `touchmove`, které obsahují vlastnosti specifické pro dotek (nebudeme je tady podrobně probírat, jelikož vlastnosti ukazatele jsou ještě lepší).
 
-    Still, it wasn't enough, as there are many other devices, such as pens, that have their own features. Also, writing code that listens for both touch and mouse events was cumbersome.
+    Stále to však nestačilo, protože existuje mnoho dalších zařízení, např. pera, která mají své vlastní schopnosti. Kromě toho bylo nepohodlné psát kód, který naslouchá jak dotekovým událostem, tak událostem myši.
 
-- To solve these issues, the new standard Pointer Events was introduced. It provides a single set of events for all kinds of pointing devices.
+- K vyřešení těchto problémů byl zaveden nový standard událostí ukazatele, který poskytuje jedinou sadu událostí pro všechny druhy ukazovacích zařízení.
 
-As of now, [Pointer Events Level 2](https://www.w3.org/TR/pointerevents2/) specification is supported in all major browsers, while the newer [Pointer Events Level 3](https://w3c.github.io/pointerevents/) is in the works and is mostly compatible with Pointer Events level 2.
+V současnosti je ve všech významných prohlížečích podporována specifikace [událostí ukazatele 2. úrovně](https://www.w3.org/TR/pointerevents2/), zatímco novější specifikace [událostí ukazatele 3. úrovně](https://w3c.github.io/pointerevents/) je ve vývoji a je s událostmi ukazatele 2. úrovně převážně kompatibilní.
 
-Unless you develop for old browsers, such as Internet Explorer 10, or for Safari 12 or below, there's no point in using mouse or touch events any more -- we can switch to pointer events.
+Pokud nevyvíjíte pro staré prohlížeče, např. Internet Explorer 10, Safari 12 nebo starší, není již nadále důvod používat události myši nebo dotekové události -- můžeme přejít na události ukazatele.
 
-Then your code will work well with both touch and mouse devices.
+Váš kód pak bude správně fungovat s dotekovými zařízeními i s myší.
 
-That said, there are some important peculiarities that one should know in order to use Pointer Events correctly and avoid surprises. We'll make note of them in this article.
+Při tom všem však existují důležité zvláštnosti, které byste měli znát, abyste používali události ukazatele správně a vyhnuli se překvapením. Zmíníme se o nich v tomto článku.
 
-## Pointer event types
+## Typy událostí ukazatele
 
-Pointer events are named similarly to mouse events:
+Události ukazatele se nazývají podobně jako události myši:
 
-| Pointer event | Similar mouse event |
+| Událost ukazatele | Podobná událost myši |
 |---------------|-------------|
 | `pointerdown` | `mousedown` |
 | `pointerup` | `mouseup` |
@@ -43,240 +43,238 @@ Pointer events are named similarly to mouse events:
 | `gotpointercapture` | - |
 | `lostpointercapture` | - |
 
-As we can see, for every `mouse<event>`, there's a `pointer<event>` that plays a similar role. Also there are 3 additional pointer events that don't have a corresponding `mouse...` counterpart, we'll explain them soon.
+Jak vidíme, pro každou `mouse<událost>` existuje `pointer<událost>`, která hraje podobnou roli. Navíc existují tři další události ukazatele, které nemají odpovídající protějšek `mouse...`. Brzy je vysvětlíme.
 
-```smart header="Replacing `mouse<event>` with `pointer<event>` in our code"
-We can replace `mouse<event>` events with `pointer<event>` in our code and expect things to continue working fine with mouse.
+```smart header="Náhrada `mouse<událost>` za `pointer<událost>` v našem kódu"
+V našem kódu můžeme nahradit události `mouse<událost>` událostmi `pointer<událost>` a očekávat, že vše bude s myší fungovat správně.
 
-The support for touch devices will also "magically" improve. Although, we may need to add `touch-action: none` in some places in CSS. We'll cover it below in the section about `pointercancel`.
+Rovněž se „magicky“ zlepší podpora dotekových zařízení, ačkoli na některých místech v CSS budeme asi muset přidat `touch-action: none`. Probereme to dále v podkapitole o `pointercancel`.
 ```
 
-## Pointer event properties
+## Vlastnosti událostí ukazatele
 
-Pointer events have the same properties as mouse events, such as `clientX/Y`, `target`, etc., plus some others:
+Události ukazatele mají tytéž vlastnosti jako události myši, např. `clientX/Y`, `target` atd., plus některé další:
 
-- `pointerId` - the unique identifier of the pointer causing the event.
+- `pointerId` - unikátní identifikátor ukazatele, který vyvolal událost.
 
-    Browser-generated. Allows us to handle multiple pointers, such as a touchscreen with stylus and multi-touch (examples will follow).
-- `pointerType` - the pointing device type. Must be a string, one of: "mouse", "pen" or "touch".
+    Generováno prohlížečem. Umožňuje nám zpracovat více ukazatelů, například dotekovou obrazovku se stylusem a multidotek (příklady budou následovat).
+- `pointerType` - typ ukazovacího zařízení. Musí to být řetězec, a to jeden z následujících: `"mouse"`, `"pen"` nebo `"touch"`.
 
-    We can use this property to react differently on various pointer types.
-- `isPrimary` - is `true` for the primary pointer (the first finger in multi-touch).
+    Tuto vlastnost můžeme použít k tomu, abychom na různé druhy ukazatelů reagovali různě.
+- `isPrimary` - je `true` pro primární ukazatel (první prst při multidoteku).
 
-Some pointer devices measure contact area and pressure, e.g. for a finger on the touchscreen, there are additional properties for that:
+Některá ukazovací zařízení měří plochu a tlak doteku, např. prstu na dotekové obrazovce. Pro ně existují následující vlastnosti:
 
-- `width` - the width of the area where the pointer (e.g. a finger) touches the device. Where unsupported, e.g. for a mouse, it's always `1`.
-- `height` - the height of the area where the pointer touches the device. Where unsupported, it's always `1`.
-- `pressure` - the pressure of the pointer tip, in range from 0 to 1. For devices that don't support pressure must be either `0.5` (pressed) or `0`.
-- `tangentialPressure` - the normalized tangential pressure.
-- `tiltX`, `tiltY`, `twist` - pen-specific properties that describe how the pen is positioned relative to the surface.
+- `width` - šířka plochy, kde se ukazatel (např. prst) dotýká zařízení. Když není podporována, např. u myši, je vždy `1`.
+- `height` - výška plochy, kde se ukazatel dotýká zařízení. Když není podporována, je vždy `1`.
+- `pressure` - tlak doteku ukazatele v rozsahu od 0 do 1. U zařízení, která tlak nepodporují, musí být buď `0.5` (stisknuto), nebo `0`.
+- `tangentialPressure` - normalizovaný tangenciální tlak.
+- `tiltX`, `tiltY`, `twist` - vlastnosti specifické pro pero, které popisují, jak je pero umístěno vzhledem k povrchu.
 
-These properties aren't supported by most devices, so they are rarely used. You can find the details about them in the [specification](https://w3c.github.io/pointerevents/#pointerevent-interface) if needed.
+Většina zařízení tyto vlastnosti nepodporuje, takže se používají jen vzácně. Budete-li je potřebovat, podrobnosti o nich naleznete ve [specifikaci](https://w3c.github.io/pointerevents/#pointerevent-interface).
 
-## Multi-touch
+## Multidotek
 
-One of the things that mouse events totally don't support is multi-touch: a user can touch in several places at once on their phone or tablet, or perform special gestures.
+Jedna z věcí, které události myši vůbec nepodporují, je multidotek: uživatel se může svého telefonu nebo tabletu dotknout na několika místech najednou nebo provádět speciální gesta.
 
-Pointer Events allow handling multi-touch with the help of the `pointerId` and `isPrimary` properties.
+Události ukazatele umožňují zpracování multidoteku pomocí vlastností `pointerId` a `isPrimary`.
 
-Here's what happens when a user touches a touchscreen in one place, then puts another finger somewhere else on it:
+Když se uživatel dotkne dotekové obrazovky na jednom místě a pak na ni položí další prst někde jinde, stane se následující:
 
-1. At the first finger touch:
-    - `pointerdown` with `isPrimary=true` and some `pointerId`.
-2. For the second finger and more fingers (assuming the first one is still touching):
-    - `pointerdown` with `isPrimary=false` and a different `pointerId` for every finger.
+1. Při prvním doteku prstu:
+    - `pointerdown` s `isPrimary=true` a nějakým `pointerId`.
+2. Při druhém a dalších dotecích prstu (za předpokladu, že první prst se stále dotýká):
+    - `pointerdown` s `isPrimary=false` a odlišným `pointerId` pro každý prst.
 
-Please note: the `pointerId` is assigned not to the whole device, but for each touching finger. If we use 5 fingers to simultaneously touch the screen, we have 5 `pointerdown` events, each with their respective coordinates and a different `pointerId`.
+Prosíme všimněte si, že `pointerId` není přiřazeno celému zařízení, ale každému dotýkajícímu se prstu. Jestliže se současně dotkneme obrazovky pěti prsty, dostaneme pět událostí `pointerdown`, každá bude mít své vlastní souřadnice a odlišný `pointerId`.
 
-The events associated with the first finger always have `isPrimary=true`.
+Události spojené s prvním prstem budou mít vždy `isPrimary=true`.
 
-We can track multiple touching fingers using their `pointerId`. When the user moves and then removes a finger, we get `pointermove` and `pointerup` events with the same `pointerId` as we had in `pointerdown`.
+Pomocí `pointerId` můžeme sledovat více dotýkajících se prstů. Když uživatel přesune prst a pak jej zvedne, dostaneme události `pointermove` a `pointerup` se stejným `pointerId`, jaký jsme měli v `pointerdown`.
 
 ```online
-Here's the demo that logs `pointerdown` and `pointerup` events:
+Následující demo loguje události `pointerdown` a `pointerup`:
 
 [iframe src="multitouch" edit height=200]
 
-Please note: you must be using a touchscreen device, such as a phone or a tablet, to actually see the difference in `pointerId/isPrimary`. For single-touch devices, such as a mouse, there'll be always same `pointerId` with `isPrimary=true`, for all pointer events.
+Prosíme všimněte si, že abyste skutečně viděli rozdíl v `pointerId/isPrimary`, musíte používat dotekové zařízení, například mobilní telefon nebo tablet. U jednodotekových zařízení, jakým je myš, budou všechny události ukazatele mít pořád stejné `pointerId` a `isPrimary=true`.
 ```
 
-## Event: pointercancel
+## Událost pointercancel
 
-The `pointercancel` event fires when there's an ongoing pointer interaction, and then something happens that causes it to be aborted, so that no more pointer events are generated.
+Událost `pointercancel` se spustí, když probíhá interakce s ukazatelem a pak se stane něco, co způsobí její ukončení, takže žádné další události ukazatele se nevygenerují.
 
-Such causes are:
-- The pointer device hardware was physically disabled.
-- The device orientation changed (tablet rotated).
-- The browser decided to handle the interaction on its own, considering it a mouse gesture or zoom-and-pan action or something else.
+Takové případy jsou:
+- Dotekové zařízení bylo fyzicky odpojeno.
+- Změnila se orientace zařízení (tablet byl otočen).
+- Prohlížeč se rozhodl, že tuto interakci zpracuje sám, protože ji považuje za gesto myši, akci zoom-and-pan nebo něco jiného.
 
-We'll demonstrate `pointercancel` on a practical example to see how it affects us.
+Předvedeme si `pointercancel` na praktickém příkladu, abychom viděli, jak nás ovlivní.
 
-Let's say we're implementing drag'n'drop for a ball, just as in the beginning of the article <info:mouse-drag-and-drop>.
+Dejme tomu, že implementujeme přetahování míče, podobně jako na začátku článku <info:mouse-drag-and-drop>.
 
-Here is the flow of user actions and the corresponding events:
+Průběh uživatelských akcí a odpovídajících událostí je následující:
 
-1) The user presses on an image, to start dragging
-    - `pointerdown` event fires
-2) Then they start moving the pointer (thus dragging the image)
-    - `pointermove` fires, maybe several times
-3) And then the surprise happens! The browser has native drag'n'drop support for images, that kicks in and takes over the drag'n'drop process, thus generating `pointercancel` event.
-    - The browser now handles drag'n'drop of the image on its own. The user may even drag the ball image out of the browser, into their Mail program or a File Manager.
-    - No more `pointermove` events for us.
+1) Uživatel se dotkne obrázku, aby začal přetahovat.
+    - spustí se událost `pointerdown`
+2) Pak začne pohybovat ukazatelem (a tedy přetahovat obrázek)
+    - spustí se událost `pointermove`, zřejmě několikrát
+3) A pak následuje překvapení! Prohlížeč má svou nativní podporu přetahování obrázků, která se spustí a převezme proces přetahování, čímž vygeneruje událost `pointercancel`.
+    - Prohlížeč bude nyní zpracovávat přetahování obrázku sám. Uživatel může dokonce přetáhnout obrázek míče mimo prohlížeč, třeba do svého poštovního programu nebo správce souborů.
+    - Žádné další události `pointermove` se pro nás nekonají.
 
-So the issue is that the browser "hijacks" the interaction: `pointercancel` fires in the beginning of the "drag-and-drop" process, and no more `pointermove` events are generated.
+Problém tedy je v tom, že prohlížeč se „zmocní“ interakce: na začátku procesu „přetahování“ se spustí `pointercancel` a žádné další události `pointermove` se nevygenerují.
 
 ```online
-Here's the drag'n'drop demo with logging of pointer events (only `up/down`, `move` and `cancel`) in the `textarea`:
+Následuje demo přetahování s logováním událostí ukazatele (jen `up/down`, `move` a `cancel`) do `textarea`:
 
 [iframe src="ball" height=240 edit]
 ```
 
-We'd like to implement the drag'n'drop on our own, so let's tell the browser not to take it over.
+My bychom ovšem chtěli implementovat své vlastní přetahování. Řekněme tedy prohlížeči, aby je nepřebíral.
 
-**Prevent the default browser action to avoid `pointercancel`.**
+**Abyste se vyhnuli `pointercancel`, zakažte standardní akce prohlížeče.**
 
-We need to do two things:
+Musíme udělat následující dvě věci:
 
-1. Prevent native drag'n'drop from happening:
-    - We can do this by setting `ball.ondragstart = () => false`, just as described in the article <info:mouse-drag-and-drop>.
-    - That works well for mouse events.
-2. For touch devices, there are other touch-related browser actions (besides drag'n'drop). To avoid problems with them too:
-    - Prevent them by setting `#ball { touch-action: none }` in CSS.
-    - Then our code will start working on touch devices.
+1. Zakázat aktivaci nativního přetahování:
+    - Můžeme to udělat nastavením `míč.ondragstart = () => false`, tak, jak je popsáno v kapitole <info:mouse-drag-and-drop>.
+    - To funguje správně pro události myši.
+2. Pro doteková zařízení existují i jiné akce prohlížeče týkající se doteku (kromě přetahování). Abychom se vyhnuli problémům i s nimi:
+    - Zakážeme je nastavením `#míč { touch-action: none }` v CSS.
+    - Pak bude náš kód fungovat na dotekových zařízeních.
 
-After we do that, the events will work as intended, the browser won't hijack the process and doesn't emit `pointercancel`.
+Když to uděláme, budou události fungovat tak, jak zamýšlíme. Prohlížeč se nezmocní procesu a nevyvolá `pointercancel`.
 
 ```online
-This demo adds these lines:
+V následujícím demu jsou tyto řádky přidány:
 
 [iframe src="ball-2" height=240 edit]
 
-As you can see, there's no `pointercancel` any more.
+Jak vidíte, další `pointercancel` se nekoná.
 ```
 
-Now we can add the code to actually move the ball, and our drag'n'drop will work for mouse devices and touch devices.
+Nyní můžeme přidat kód, který bude skutečně hýbat míčem, a naše přetahování bude správně fungovat pro myš i pro doteková zařízení.
 
-## Pointer capturing
+## Zachycení ukazatele
 
-Pointer capturing is a special feature of pointer events.
+Zachycení ukazatele je speciální prvek událostí ukazatele.
 
-The idea is very simple, but may seem quite odd at first, as nothing like that exists for any other event type.
+Jeho myšlenka je velmi jednoduchá, ale na první pohled se může zdát trochu zvláštní, jelikož pro události žádného jiného druhu nic podobného neexistuje.
 
-The main method is:
-- `elem.setPointerCapture(pointerId)` -- binds events with the given `pointerId` to `elem`. After the call all pointer events with the same `pointerId` will have `elem` as the target (as if happened on `elem`), no matter where in document they really happened.
+Hlavní metodou je:
+- `elem.setPointerCapture(pointerId)` -- naváže události se zadaným `pointerId` na `elem`. Po tomto volání budou všechny události ukazatele se stejným `pointerId` mít cíl `elem` (jako by se staly na `elem`), bez ohledu na to, kde v dokumentu se opravdu staly.
 
-In other words, `elem.setPointerCapture(pointerId)` retargets all subsequent events with the given `pointerId` to `elem`.
+Jinými slovy, `elem.setPointerCapture(pointerId)` přesměruje všechny následné události se zadaným `pointerId` na `elem`.
 
-The binding is removed:
-- automatically when `pointerup` or `pointercancel` events occur,
-- automatically when `elem` is removed from the document,
-- when `elem.releasePointerCapture(pointerId)` is called.
+Vazba bude odstraněna:
+- automaticky, když nastane událost `pointerup` nebo `pointercancel`,
+- automaticky, když je z dokumentu odstraněn `elem`,
+- když je volána `elem.releasePointerCapture(pointerId)`.
 
-Now what is it good for? It's time to see a real-life example.
+K čemu je to nyní dobré? Nastal čas ukázat příklad ze skutečného života.
 
-**Pointer capturing can be used to simplify drag'n'drop kind of interactions.**
+**Zachycení ukazatele můžeme použít ke zjednodušení přetahování a podobných interakcí.**
 
-Let's recall how one can implement a custom slider, described in the <info:mouse-drag-and-drop>.
+Vzpomeňme si, jak můžeme implementovat vlastní posuvník, popsaný v kapitole <info:mouse-drag-and-drop>.
 
-We can make a `slider` element to represent the strip and the "runner" (`thumb`) inside it:
+Můžeme vytvořit element `posuvník`, který bude představovat pás a „šoupátko“ (`šoupátko`) uvnitř:
 
 ```html
-<div class="slider">
-  <div class="thumb"></div>
+<div class="posuvník">
+  <div class="šoupátko"></div>
 </div>
 ```
 
-With styles, it looks like this:
+S použitím stylů vypadá následovně:
 
 [iframe src="slider-html" height=40 edit]
 
 <p></p>
 
-And here's the working logic, as it was described, after replacing mouse events with similar pointer events:
+Po náhradě událostí myši podobnými událostmi ukazatele je logika fungování následující, jak bylo popsáno:
 
-1. The user presses on the slider `thumb` -- `pointerdown` triggers.
-2. Then they move the pointer -- `pointermove` triggers, and our code moves the `thumb` element along.
-    - ...As the pointer moves, it may leave the slider `thumb` element, go above or below it. The `thumb` should move strictly horizontally, remaining aligned with the pointer.
+1. Uživatel se dotkne šoupátka `šoupátko` -- spustí se `pointerdown`.
+2. Pak uživatel přesune ukazatel -- spustí se `pointermove` a náš kód přesune element `šoupátko`.
+    - ...Když se ukazatel přesunuje, může opustit element `šoupátko` a přesunout se nad nebo pod ně. Pak by se `šoupátko` mělo posunovat výhradně vodorovně a zůstat zarovnané s ukazatelem.
 
-In the mouse event based solution, to track all pointer movements, including when it goes above/below the `thumb`, we had to assign `mousemove` event handler on the whole `document`.
+V řešení založeném na událostech myši jsme pro sledování všech pohybů ukazatele, včetně jeho přemístění nad nebo pod `šoupátko`, museli přiřadit celému `document` handler události `mousemove`.
 
-That's not a cleanest solution, though. One of the problems is that when a user moves the pointer around the document, it may trigger event handlers (such as  `mouseover`) on some other elements, invoke totally unrelated UI functionality, and we don't want that.
+To však není to nejčistší řešení. Jedním z jeho problémů je, že když uživatel posunuje ukazatelem po dokumentu, může spustit handlery událostí (např. `mouseover`) na jiných elementech a vyvolat zcela nesouvisející funkcionalitu UI, což nechceme.
 
-This is the place where `setPointerCapture` comes into play.
+Na tomto místě přichází do hry `setPointerCapture`.
 
-- We can call `thumb.setPointerCapture(event.pointerId)` in `pointerdown` handler,
-- Then future pointer events until `pointerup/cancel` will be retargeted to `thumb`.
-- When `pointerup` happens (dragging complete), the binding is removed automatically, we don't need to care about it.
+- V handleru `pointerdown` můžeme volat `šoupátko.setPointerCapture(událost.pointerId)`.
+- Pak se budoucí události ukazatele až do `pointerup/cancel` přesměrují na `šoupátko`.
+- Když dojde k `pointerup` (přetahování skončí), vazba se automaticky odstraní a my se o ni nemusíme starat.
 
-So, even if the user moves the pointer around the whole document, events handlers will be called on `thumb`. Nevertheless, coordinate properties of the event objects, such as `clientX/clientY` will still be correct - the capturing only affects `target/currentTarget`.
+I když tedy uživatel bude pohybovat ukazatelem po celém dokumentu, handlery událostí se budou volat na `šoupátko`. Přesto budou souřadnicové vlastnosti objektů událostí, např. `clientX/clientY`, stále správně -- zachycení má vliv pouze na `target/currentTarget`.
 
-Here's the essential code:
+Zde je nástin kódu:
 
 ```js
-thumb.onpointerdown = function(event) {
-  // retarget all pointer events (until pointerup) to thumb
-  thumb.setPointerCapture(event.pointerId);
+šoupátko.onpointerdown = function(událost) {
+  // přesměruje všechny události ukazatele (až do pointerup) na šoupátko
+  šoupátko.setPointerCapture(událost.pointerId);
 
-  // start tracking pointer moves
-  thumb.onpointermove = function(event) {
-    // moving the slider: listen on the thumb, as all pointer events are retargeted to it
-    let newLeft = event.clientX - slider.getBoundingClientRect().left;
-    thumb.style.left = newLeft + 'px';
+  // začneme sledovat pohyby ukazatele
+  šoupátko.onpointermove = function(událost) {
+    // pohyb posuvníku: nasloucháme na šoupátku, jelikož všechny události ukazatele jsou přesměrovány na něj
+    let nováLevá = událost.clientX - posuvník.getBoundingClientRect().left;
+    šoupátko.style.left = nováLevá + 'px';
   };
 
-  // on pointer up finish tracking pointer moves
-  thumb.onpointerup = function(event) {
-    thumb.onpointermove = null;
-    thumb.onpointerup = null;
-    // ...also process the "drag end" if needed
+  // při zvednutí ukazatele ukončíme sledování jeho pohybu
+  šoupátko.onpointerup = function(událost) {
+    šoupátko.onpointermove = null;
+    šoupátko.onpointerup = null;
+    // ...také zpracujeme „konec přetahování“, je-li to nutné
   };
 };
 
-// note: no need to call thumb.releasePointerCapture,
-// it happens on pointerup automatically
+// poznámka: nemusíme volat šoupátko.releasePointerCapture,
+// při pointerup k němu dojde automaticky
 ```
 
 ```online
-The full demo:
+Celé demo:
 
 [iframe src="slider" height=100 edit]
 
 <p></p>
 
-In the demo, there's also an additional element with `onmouseover` handler showing the current date.
+V demu je navíc další element s handlerem `onmouseover`, který zobrazuje aktuální datum.
 
-Please note: while you're dragging the thumb, you may hover over this element, and its handler *does not* trigger.
+Prosíme všimněte si, že když přetahujete šoupátko, můžete se nad tento element přesunout a jeho handler se *nespustí*.
 
-So the dragging is now free of side effects, thanks to `setPointerCapture`.
+Přetahování tedy díky `setPointerCapture` nemá žádné vedlejší efekty.
 ```
 
+Nakonec nám tedy zachycení ukazatele dává dvě výhody:
+1. Kód je čistší, neboť již nemusíme přidávat a odstraňovat handlery na celém `document`. Vazba se odstraní automaticky.
+2. Pokud jsou v dokumentu jiné handlery událostí ukazatele, ukazatel je nemůže neúmyslně spustit, když uživatel posunuje posuvníkem.
 
+### Události pro zachycení ukazatele
 
-At the end, pointer capturing gives us two benefits:
-1. The code becomes cleaner as we don't need to add/remove handlers on the whole `document` any more. The binding is released automatically.
-2. If there are other pointer event handlers in the document, they won't be accidentally triggered by the pointer while the user is dragging the slider.
+Pro úplnost se zmíníme ještě o jedné věci.
 
-### Pointer capturing events
+Se zachycením ukazatele jsou spojeny dvě události:
 
-There's one more thing to mention here, for the sake of completeness.
+- `gotpointercapture` se spustí, když element použije `setPointerCapture`, aby umožnil zachycení.
+- `lostpointercapture` se spustí, když je zachycení odstraněno: buď výslovně voláním `releasePointerCapture`, nebo automaticky při `pointerup`/`pointercancel`.
 
-There are two events associated with pointer capturing:
+## Shrnutí
 
-- `gotpointercapture` fires when an element uses `setPointerCapture` to enable capturing.
-- `lostpointercapture` fires when the capture is released: either explicitly with `releasePointerCapture` call, or automatically on `pointerup`/`pointercancel`.
+Události ukazatele nám umožňují zpracovávat události myši, dotekových zařízení a pera současně, stejnou částí kódu.
 
-## Summary
+Události ukazatele rozšiřují události myši. V názvech událostí můžeme nahradit `mouse` za `pointer` a očekávat, že náš kód bude i nadále fungovat pro myš a bude mít lepší podporu zařízení jiných druhů.
 
-Pointer events allow handling mouse, touch and pen events simultaneously, with a single piece of code.
+Při přetahování a složitých dotekových interakcích, kdy se prohlížeč může rozhodnout zmocnit se jich a zpracovávat je sám, nezapomeňte zakázat standardní akce na událostech nastavením `touch-action: none` v CSS pro elementy, kterých se to týká.
 
-Pointer events extend mouse events. We can replace `mouse` with `pointer` in event names and expect our code to continue working for mouse, with better support for other device types.
+Další schopnosti událostí ukazatele jsou:
 
-For drag'n'drops and complex touch interactions that the browser may decide to hijack and handle on its own - remember to cancel the default action on events and set `touch-action: none` in CSS for elements that we engage.
+- Podpora multidoteku pomocí `pointerId` a `isPrimary`.
+- Vlastnosti specifické pro některá zařízení, např. `pressure`, `width/height` a jiné.
+- Zachycení ukazatele: můžeme všechny události ukazatele přesměrovat na specifický element až do `pointerup`/`pointercancel`.
 
-Additional abilities of pointer events are:
-
-- Multi-touch support using `pointerId` and `isPrimary`.
-- Device-specific properties, such as `pressure`, `width/height`, and others.
-- Pointer capturing: we can retarget all pointer events to a specific element until `pointerup`/`pointercancel`.
-
-As of now, pointer events are supported in all major browsers, so we can safely switch to them, especially if IE10- and Safari 12- are not needed. And even with those browsers, there are polyfills that enable the support of pointer events.
+V současnosti jsou události ukazatele podporovány ve všech významných prohlížečích, takže na ně můžete bezpečně přejít, zvláště pokud nepotřebujete IE10- a Safari 12-. A i pro tyto prohlížeče existují polyfilly, které umožňují podporu událostí ukazatele.

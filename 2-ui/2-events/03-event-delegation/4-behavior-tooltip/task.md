@@ -2,37 +2,37 @@ importance: 5
 
 ---
 
-# Tooltip behavior
+# Podpora tooltipu
 
-Create JS-code for the tooltip behavior.
+Vytvořte kód v JavaScriptu pro podporu tooltipu.
 
-When a mouse comes over an element with `data-tooltip`, the tooltip should appear over it, and when it's gone then hide.
+Když ukazatel myši najede nad element obsahující `data-tooltip`, měl by se nad ním objevit tooltip, a když ho opustí, tooltip se skryje.
 
-An example of annotated HTML:
+Příklad HTML s poznámkami:
 ```html
-<button data-tooltip="the tooltip is longer than the element">Short button</button>
-<button data-tooltip="HTML<br>tooltip">One more button</button>
+<button data-tooltip="tento tooltip je delší než element">Krátké tlačítko</button>
+<button data-tooltip="HTML<br>tooltip">Další tlačítko</button>
 ```
 
-Should work like this:
+Mělo by to fungovat následovně:
 
 [iframe src="solution" height=200 border=1]
 
-In this task we assume that all elements with `data-tooltip` have only text inside. No nested tags (yet).
+V této úloze předpokládáme, že uvnitř všech elementů obsahujících `data-tooltip` se nachází pouze text, žádné vnořené značky (zatím).
 
-Details:
+Podrobnosti:
 
-- The distance between the element and the tooltip should be `5px`.
-- The tooltip should be centered relative to the element, if possible.
-- The tooltip should not cross window edges. Normally it should be above the element, but if the element is at the page top and there's no space for the tooltip, then below it.
-- The tooltip content is given in the `data-tooltip` attribute. It can be arbitrary HTML.
+- Vzdálenost mezi elementem a tooltipem by měla být `5px`.
+- Tooltip by měl být centrován vzhledem k elementu, pokud je to možné.
+- Tooltip by neměl překračovat okraje okna. Standardně by se měl zobrazit nad elementem, ale jestliže je element u vrchu stránky a nad ním není pro tooltip místo, pak pod ním.
+- Obsah tooltipu je uveden v atributu `data-tooltip`. Může jím být jakýkoli HTML kód.
 
-You'll need two events here:
-- `mouseover` triggers when a pointer comes over an element.
-- `mouseout` triggers when a pointer leaves an element.
+Budete zde potřebovat dvě události:
+- `mouseover` se spustí, když ukazatel najede nad element.
+- `mouseout` se spustí, když ukazatel opustí element.
 
-Please use event delegation: set up two handlers on `document` to track all "overs" and "outs" from elements with `data-tooltip` and manage tooltips from there.
+Prosíme použijte delegování událostí: nastavte na `document` dva handlery, které budou sledovat všechna „najetí“ a „opuštění“ elementů obsahujících `data-tooltip`, a spravujte tooltipy v nich.
 
-After the behavior is implemented, even people unfamiliar with JavaScript can add annotated elements.
+Po implementaci tohoto chování budou moci přidávat elementy s tooltipy i lidé, kteří JavaScript neznají.
 
-P.S. Only one tooltip may show up at a time.
+P.S. Může se zobrazit pouze jeden tooltip současně.

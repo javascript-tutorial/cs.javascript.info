@@ -1,93 +1,66 @@
 code-style.svg:
-  "A space between parameters":
-    text: "Mezera mezi parametry"
+  "A space between parameters": "Mezera mezi parametry"
   "No space":
     text: "Bez mezer"
-    position: "center"
   "between the function name and parentheses":
-    position: "center"
     text: "mezi názvem funkcí a závorkou"
   "between the parentheses and the parameter":
-    position: "center"
     text: "mezi závorkou a parametrem"
   "Indentation":
-    position: "center"
     text: "Odsazení"
   "2 spaces":
-    position: "center"
     text: "2 mezery"
   "A space ":
-    position: "center"
     text: "Mezera"
   "after for/if/while…":
-    position: "center"
     text: "za for/if/while…"
   "} else { without a line break": "} else { bez konce řádku"
   "Spaces around a nested call":
-    position: "center"
     text: "Mezery kolem vnořeného volání"
   "An empty line":
-    position: "center"
     text: "Prázdný řádek"
   "between logical blocks":
-    position: "center"
     text: "mezi logickými bloky"
   "Lines are not very long": "Řádky nejsou příliš dlouhé"
   "A semicolon ;": "Středník ;"
   "is mandatory": "je povinný"
   "Spaces":
-    position: "center"
     text: "Mezery"
   "around operators":
-    position: "center"
     text: "kolem operátorů"
   "Curly brace {":
-    position: "center"
     text: "Složená závorka {"
   "on the same line, after a space":
-    position: "center"
     text: "na stejném řádku za mezerou"
   "A space":
-    position: "center"
     text: "Mezera"
   "between":
-    position: "center"
     text: "mezi"
   "parameters":
-    position: "center"
     text: "parametry"
   "arguments":
-    position: "center"
     text: "argumenty"
   "A space between arguments":
-    position: "center"
     text: "Mezera mezi argumenty"
 
 try-catch-flow.svg:
   "Begin":
     text: "Začátek"
-    position: "center"
   "No Errors":
     text: "Bez chyb"
-    position: "center"
   "An error occured in the code":
     text: "V kódu nastala chyba"
-    position: "center"
   "// code...": "// kód..."
   "Ignore catch block":
     text: "Ignoruj blok catch"
-    position: "center"
   "Ignore the rest of try":
     text: "Ignoruj zbytek try"
-    position: "center"
   "Execute catch block":
     text: "Vykonej blok catch"
-    position: "center"
 
 recursion-pow.svg:
   "Yes":
     text: "Ano"
-    position: "center"
   "No":
     text: "Ne"
   "recursive call until n==1": "rekurzívní volání až do n==1"
@@ -100,41 +73,27 @@ hello-world-render.svg:
 ifelse_task2.svg:
   "Begin":
     text: "Začátek"
-    position: "center"
   "Other":
     text: "Jiné"
-    position: "center"
   "You don't know?":
     text: "Vy to nevíte?"
-    position: "center"
   "Right!":
     text: "Správně!"
-    position: "center"
-  "What's the":
-    text: "Jaký je"
-    position: "center"
+  "What's the": "Jaký je"
   "“official” name of":
     text: "\"oficiální\" název"
-    position: "center"
-  "JavaScript?":
-    text: "JavaScriptu?"
-    position: "center"
-  "Иначе": ""
+  "JavaScript?": "JavaScriptu?"
 
 ifelse_task.svg:
   "Begin": "Začátek"
   "Canceled":
-    position: "center"
     text: "Zrušeno"
   "Welcome!":
     text: "Vítejte!"
-    position: "center"
   "I don't know you": "Neznám vás"
   "Wrong password":
-    position: "center"
     text: "Chybné heslo"
   "Who's there?":
-    position: "center"
     text: "Kdo je tam?"
   "Password?": "Heslo?"
   "Cancel": "Zrušeno"
@@ -143,27 +102,20 @@ ifelse_task.svg:
   "Other": "Jiné"
 
 chrome-sources-breakpoint.svg:
-  "here's the list":
-    text: "zde je seznam"
-    position: "right"
+  "here's the list": "zde je seznam"
   "breakpoints":
     text: "zarážky"
 
 chrome-sources-debugger-pause.svg:
-  "see the outer call details":
-    text: "viz detaily vnějšího volání"
-    position: "right"
+  "see the outer call details": "viz detaily vnějšího volání"
   "watch expressions":
     text: "sledování výrazů"
-    position: "right"
   "current variables":
     text: "aktuální proměnné"
-    position: "right"
 
 chrome-sources-debugger-trace-1.svg:
   "nested calls":
     text: "vnořená volání"
-    position: "right"
 
 chrome-open-sources.svg:
   open sources: 'Otevřete záložku se zdrojovými soubory'
@@ -171,17 +123,11 @@ chrome-open-sources.svg:
 object-user-empty.svg:
   empty:
     text: prázdný
-    position: "center"
   user: uživatel
-
-garbage-collection-5.svg:
-  unreachables:
-    text: nedosažitelný
 
 array-shift.svg:
   clear:
     text: vymazat
-    position: "center"
   move: posunout
   elements: prvky
   to the left: doleva
@@ -189,15 +135,13 @@ array-shift.svg:
 array-pop.svg:
   clear:
     text: vymazat
-    position: "center"
 
 decorator-makecaching-wrapper.svg:
-  wrapper: 'wrapper'
+  wrapper: 'obal'
   around the function: 'kolem funkce'
 
 xhr-another-domain.svg:
   _defaults:
-    position: "center"
   Browser: 'Prohlížeč'
   Server: 'Server'
   HTTP-request: 'HTTP požadavek'
@@ -208,7 +152,6 @@ xhr-another-domain.svg:
 
 xhr-preflight.svg:
   _defaults:
-    position: "center"
   Browser: 'Prohlížeč'
   Server: 'Server'
   Main HTTP-response: 'Hlavní HTTP odpověď'
@@ -217,20 +160,16 @@ xhr-preflight.svg:
   Main HTTP-request: 'Hlavní HTTP požadavek'
   preflight:
     text: 'předlet'
-    position: 'right'
   if allowed:
     text: 'je-li povoleno'
-    position: 'right'
 
 cors-gmail-messages.svg:
   _defaults:
-    position: "center"
   got the cookie?: 'máme cookie?'
   okay!: 'ok!'
 
 websocket-handshake.svg:
   _defaults:
-    position: "center"
   Browser: 'Prohlížeč'
   Server: 'Server'
   HTTP-request: 'HTTP požadavek'
@@ -241,7 +180,6 @@ websocket-handshake.svg:
 
 long-polling.svg:
   _defaults:
-    position: "center"
   Browser: 'Prohlížeč'
   Server: 'Server'
   request: 'požadavek'
@@ -253,20 +191,17 @@ long-polling.svg:
 
 genYield2-2.svg:
   _defaults:
-    position: "center"
   Generator: 'Generátor'
   Calling code: 'Volající kód'
 
 genYield2.svg:
   _defaults:
-    position: "center"
   Generator: 'Generátor'
   Calling code: 'Volající kód'
   question = "2 + 2 = ?": 'otázka = "2 + 2 = ?"'
 
 promise-handler-variants.svg:
   _defaults:
-    position: "center"
   ...with the result: '...s výsledkem'
   of the new promise...: 'nového příslibu...'
   'the call of .then(handler) always returns a promise:': 'volání .then(handler) vždy vrátí příslib:'
@@ -280,39 +215,33 @@ promise-handler-variants.svg:
 
 promiseQueue.svg:
   '"code finished"': '"konec kódu"'
-  handler enqueued: 'handler ve frontě'
+  handler enqueued: 'handler vložen do fronty'
   queued handler runs: 'spouští se handler z fronty'
   script execution finished: 'výkon skriptu ukončen'
+  'promise.then(handler)': 'příslib.then(handler)'
 
 eventLoop-full.svg:
   script: 'skript'
   event:
-    text: 'událost'
-    position: 'center'
+    text: 'smyčka'
   loop:
-    text: 'cyklus'
-    position: 'center'
+    text: 'událostí'
   microtasks: 'mikroúlohy'
-  render: 'renderování'
+  render: 'vykreslování'
 
 eventLoop.svg:
   script: 'skript'
   event:
-    text: 'událost'
-    position: 'center'
+    text: 'smyčka'
   loop:
-    text: 'cyklus'
-    position: 'center'
+    text: 'událostí'
   macrotask:
-    text: 'makroúloha'
-    position: 'center'
-  queue:
     text: 'fronta'
-    position: 'center'
+  queue:
+    text: 'makroúloh'
 
 cookie-xsrf.svg:
   _defaults:
-    position: "center"
   got the cookie?: 'máme cookie?'
   okay!: 'ok!'
 
@@ -322,7 +251,6 @@ lexical-environment-global-3.svg:
 lexenv-nested-makecounter-5.svg:
   '&lt;empty&gt;':
     text: '&lt;prázdno&gt;'
-    position: 'center'
 
 lexical-environment-global-2.svg:
   execution start: 'začátek výkonu'
@@ -345,10 +273,8 @@ proxy-inherit.svg:
   '_name: &quot;Guest&quot;': '_name: "Host"'
   user (proxied):
     text: 'uživatel (proxy)'
-    position: "center"
   original user:
     text: 'původní uživatel'
-    position: "center"
 
 
 proxy-inherit-admin.svg:
@@ -356,34 +282,36 @@ proxy-inherit-admin.svg:
   '_name: &quot;Admin&quot;': '_name: "Admin"'
   user (proxied):
     text: 'uživatel (proxy)'
-    position: "center"
   original user:
     text: 'původní uživatel'
-    position: "center"
 
 
 selection-firefox.svg:
   selection: 'výběr'
 
 selection-direction-backward.svg:
-  focus: 'zaměření'
+  focus: 'fokus'
   anchor: 'kotva'
+  'mouse move direction': 'směr pohybu myši'
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
 
 selection-direction-forward.svg:
-  focus: 'zaměření'
+  focus: 'fokus'
   anchor: 'kotva'
+  'mouse move direction': 'směr pohybu myši'
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
 
 object-prototype-empty.svg:
   'object': 'objekt'
   'prototype object': 'prototypový objekt'
 
 rabbit-prototype-constructor.svg:
-  'default "prototype"': 'defaultně "prototype"'
+  'default "prototype"': 'standardně "prototype"'
   'Rabbit': 'Králík'
   'rabbit': 'králík'
 
 function-prototype-constructor.svg:
-  'default "prototype"': 'defaultní "prototype"'
+  'default "prototype"': 'standardní "prototype"'
   'Rabbit': 'Králík'
 
 rabbit-animal-independent-animal.svg:
@@ -442,22 +370,14 @@ class-inheritance-rabbit-animal-2.svg:
 
 event-order-bubbling.svg:
   _defaults:
-    position: "center"
   'Most deeply': 'Nejhlouběji'
-  'nested element': 'vnořený prvek'
+  'nested element': 'vnořený element'
     
 proto-animal-rabbit.svg:
   'animal': 'zvíře'
   'rabbit': 'králík'
   'eats: true': 'žere: true'
   'jumps: true': 'skáče: true'
-  
-proto-constructor-animal-rabbit.svg:
-  'Rabbit': 'Králík'
-  'animal': 'zvíře'
-  'eats: true': 'žere: true'
-  'rabbit': 'králík'
-  'name: "White Rabbit"': 'jméno: "Bílý králík"'
   
 native-prototypes-classes.svg:
   'other object methods': 'jiné metody objektů'
@@ -478,7 +398,7 @@ proto-animal-rabbit-chain.svg:
   'walk: function': 'jdi: function'
   'rabbit': 'králík'
   'jumps: true': 'skáče: true'
-  'longEar': 'dlouhouchý'
+  'longEar': 'ušatý'
   'earLength': 'délkaUcha'
   
 proto-animal-rabbit-walk-2.svg:
@@ -506,13 +426,13 @@ this-super-loop.svg:
   'rabbit': 'králík'
   'animal': 'zvíře'
   'eat': 'žer'
-  'longEar': 'dlouhouchý'
+  'longEar': 'ušatý'
   'let rabbit = {': 'let králík = {'
   '  __proto__: animal': '  __proto__: zvíře'
   '  __proto__: rabbit': '  __proto__: králík'
   '  eat() {': '  žer() {'
-  '  this.__proto__.žer.call(this); (*)': '  this.__proto__.eat.call(this); (*)'
-  '  this.__proto__.žer.call(this); (**)': '  this.__proto__.eat.call(this); (**)'
+  '  this.__proto__.eat.call(this); (*)': '  this.__proto__.žer.call(this); (*)'
+  '  this.__proto__.eat.call(this); (**)': '  this.__proto__.žer.call(this); (**)'
   
 super-homeobject-wrong.svg:
   'animal': 'zvíře'
@@ -529,7 +449,21 @@ variable-change.svg:
   '"Hello!"': '"Ahoj!"'
   '"World!"': '"světe!"'
   'message': 'zpráva'
-
+  
+variable-copy-value.svg:
+  '"Hello!"': '"Ahoj!"'
+  'message': 'zpráva'
+  'phrase': 'věta'
+  
+variable-contains-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+   
+variable-copy-reference.svg:
+  'user': 'uživatel'
+  'name': 'jméno'
+  'admin': 'správce'
+  
 rabbit-extends-object.svg:
   'class Rabbit': 'class Králík'
   'class Rabbit extends Object': 'class Králík extends Object'
@@ -592,15 +526,181 @@ object-user-isadmin.svg:
   user: uživatel
   name: jméno
   age: věk
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
   
 object-user-delete.svg:
   user: uživatel
   name: jméno
-  isAdmin: jeAdmin
+  isAdmin: jeSprávce
 
 object-user-props.svg:
   user: uživatel
   name: jméno
   age: věk
   likes birds: má rád ptáky
+  
+memory-user-john.svg:
+  '<global>': '<globální>'
+  user: uživatel
+  'name: "John"': 'jméno: "Jan"'
+  
+memory-user-john-lost.svg:
+  '<global>': '<globální>'
+  'user: null': 'uživatel: null'
+  'name: "John"': 'jméno: "Jan"'
+  
+memory-user-john-admin.svg:
+  '<global>': '<globální>'
+  user: uživatel
+  admin: správce
+  'name: "John"': 'jméno: "Jan"'
+
+family.svg:
+  '<global variable>': '<globální proměnná>'
+  family: rodina
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+  
+family-delete-refs.svg:
+  '<global variable>': '<globální proměnná>'
+  family: rodina
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-father.svg:
+  '<global>': '<globální>'
+  family: rodina
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-father-2.svg:
+  '<global>': '<globální>'
+  family: rodina
+  mother: matka
+  'name: "Ann"': 'jméno: "Anna"'
+
+family-no-family.svg:
+  '<global>': '<globální>'
+  'family: null': 'rodina: null'
+  father: otec
+  mother: matka
+  'name: "John"': 'jméno: "Jan"'
+  wife: manželka
+  husband: manžel
+  'name: "Ann"': 'jméno: "Anna"'
+  
+garbage-collection-1.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-2.svg:
+  '<global>': '<globální>'
+    
+garbage-collection-3.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-4.svg:
+  '<global>': '<globální>'
+  
+garbage-collection-5.svg:
+  '<global>': '<globální>'
+  unreachables: nedosažitelné
+
+promise-then-chain.svg:
+  'resolve(1)': 'splň(1)'
+  
+promise-then-many.svg:
+  'resolve(1)': 'splň(1)'
+
+weakref-finalizationregistry-01.svg:
+  'user': 'uživatel'
+  
+carousel1.svg:
+  'div (container)': 'div (kontejner)'
+carousel2.svg:
+  'div (container)': 'div (kontejner)'
+  
+bagua-bubble.svg:
+  'event.target': 'událost.target'
+  
+move-ball-coords.svg:
+  'event.clientX': 'událost.clientX'
+  'fieldCoords.left': 'souřadniceHřiště.left'
+  'ball.style.left': 'míč.style.left'
+  
+eventflow.svg:
+  'Capture': 'zachytávání'
+  'Phase': 'fáze'
+  'Bubbling': 'bublání'
+  'Target': 'zacílení'
+  
+mouseover-mouseout-over-elems.svg:
+  '#FROM': '#OD'
+  '#TO': '#DO'
+  
+mouseover-mouseout-from-outside.svg:
+  '#TO': '#DO'
+
+mouseover-bubble-nested.svg:
+  '#parent': '#rodič'
+  '#child': '#dítě'
+  
+mouseover-to-child.svg:
+  '#parent': '#rodič'
+  '#child': '#dítě'
+
+ball-shift.svg:
+  'shiftX': 'posunX'
+  'shiftY': 'posunY'
+  
+range-hello-1.svg:
+  '&lt;p&gt;Hello&lt;/p&gt;': '&lt;p&gt;Nazdar&lt;/p&gt;'
+  
+range-example-p-0-1.svg:
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
+    
+range-example-p-1-3.svg:
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
+      
+range-example-p-2-b-3.svg:
+  '&lt;p&gt;Example:&lt;i&gt;italic&lt;/i&gt;and&lt;b&gt;bold&lt;/b&gt;&lt;/p&gt;': '&lt;p&gt;Příklad:&lt;i&gt;kurzíva&lt;/i&gt;a&lt;b&gt;tučné písmo&lt;/b&gt;&lt;/p&gt;'
+  
+dom-links.svg:
+  '(if inside body)': '(je-li uvnitř těla)'
+  
+dom-links-elements.svg:
+  '(if inside body)': '(je-li uvnitř těla)'
+
+dom-class-hierarchy.svg:
+  'Document as a whole': 'Dokument jako celek'
+  '"Hello"': '"Ahoj"'
+  '<!--comment-->': '<!--komentář-->'
+  
+before-prepend-append-after.svg:
+  '(…nodes or strings)': '(…uzly nebo řetězce)'
+  
+metric-css.svg:
+  'content width:': 'šířka obsahu:'
+  
+metric-offset-width-height.svg:
+  'content width:': 'šířka obsahu:'
+
+metric-client-width-height.svg:
+  'content width:': 'šířka obsahu:'
+
+metric-client-width-nopadding.svg:
+  '= content width': '= šířka obsahu'
+  'CSS width:': 'CSS šířka'
+  
+ball_shift.svg:
+  'shiftX': 'posunX'
+  'shiftY': 'posunY'

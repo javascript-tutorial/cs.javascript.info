@@ -1,221 +1,222 @@
-# Moving the mouse: mouseover/out, mouseenter/leave
+# Pohyb myší: mouseover/out, mouseenter/leave
 
-Let's dive into more details about events that happen when the mouse moves between elements.
+Ponořme se nyní do dalších detailů událostí, které nastávají, když se ukazatel myši pohybuje mezi elementy.
 
-## Events mouseover/mouseout, relatedTarget
+## Události mouseover/mouseout, relatedTarget
 
-The `mouseover` event occurs when a mouse pointer comes over an element, and `mouseout` -- when it leaves.
+Událost `mouseover` nastává, když ukazatel myši vstoupí na element, a `mouseout` nastane, když jej opustí.
 
 ![](mouseover-mouseout.svg)
 
-These events are special, because they have property `relatedTarget`. This property complements `target`. When a mouse leaves one element for another, one of them becomes `target`, and the other one - `relatedTarget`.
+Tyto události jsou speciální v tom, že mají vlastnost `relatedTarget`, která doplňuje vlastnost `target`. Když se ukazatel přesune z jednoho elementu na druhý, jeden z nich se stane hodnotou `target` a druhý hodnotou `relatedTarget`.
 
-For `mouseover`:
+Pro `mouseover`:
 
-- `event.target` -- is the element where the mouse came over.
-- `event.relatedTarget` -- is the element from which the mouse came (`relatedTarget` -> `target`).
+- `událost.target` -- je element, na který ukazatel vstoupil.
+- `event.relatedTarget` -- je element, ze kterého ukazatel přišel (`relatedTarget` -> `target`).
 
-For `mouseout` the reverse:
+Pro `mouseout` je to obráceně:
 
-- `event.target` -- is the element that the mouse left.
-- `event.relatedTarget` -- is the new under-the-pointer element, that mouse left for (`target` -> `relatedTarget`).
+- `event.target` -- je element, který ukazatel opustil.
+- `event.relatedTarget` -- je nový element pod ukazatelem, na který ukazatel vstoupil (`target` -> `relatedTarget`).
 
 ```online
-In the example below each face and its features are separate elements. When you move the mouse, you can see mouse events in the text area.
+V následujícím příkladu jsou každá tvář i její jednotlivé prvky samostatné elementy. Když budete pohybovat myší, uvidíte v textové oblasti události myši.
 
-Each event has the information about both `target` and `relatedTarget`:
+Každá událost obsahuje informaci o `target` i o `relatedTarget`:
 
 [codetabs src="mouseoverout" height=280]
 ```
 
-```warn header="`relatedTarget` can be `null`"
-The `relatedTarget` property can be `null`.
+```warn header="`relatedTarget` může být `null`"
+Vlastnost `relatedTarget` může být `null`.
 
-That's normal and just means that the mouse came not from another element, but from out of the window. Or that it left the window.
+To se běžně stává a znamená to jen to, že ukazatel nepřišel z jiného elementu, ale zvnějšku okna, nebo že okno opustil.
 
-We should keep that possibility in mind when using `event.relatedTarget` in our code. If we access `event.relatedTarget.tagName`, then there will be an error.
+Na tuto možnost bychom měli pamatovat, když používáme `událost.relatedTarget` v našem kódu. Přistoupíme-li k `událost.relatedTarget.tagName`, nastane chyba.
 ```
 
-## Skipping elements
+## Přeskakování elementů
 
-The `mousemove` event triggers when the mouse moves. But that doesn't mean that every pixel leads to an event.
+Událost `mousemove` se spustí, když je ukazatel přesunut. To však neznamená, že tuto událost spustí každý pixel, přes který se ukazatel přesune.
 
-The browser checks the mouse position from time to time. And if it notices changes then triggers the events.
+Prohlížeč si jednou za čas zkontroluje pozici myši, a pokud zjistí, že se změnila, vyvolá události.
 
-That means that if the visitor is moving the mouse very fast then some DOM-elements may be skipped:
+To znamená, že když návštěvník pohybuje myší příliš rychle, může některé DOM elementy přeskočit:
 
 ![](mouseover-mouseout-over-elems.svg)
 
-If the mouse moves very fast from `#FROM` to `#TO` elements as painted above, then intermediate `<div>` elements (or some of them) may be skipped. The `mouseout` event may trigger on `#FROM` and then immediately `mouseover` on `#TO`.
+Jestliže se myš pohybuje velmi rychle z elementu `#OD` do elementu `#DO`, jak je zobrazeno výše, může přeskočit mezilehlé elementy `<div>` (nebo některé z nich). Může se spustit událost `mouseout` na `#OD` a hned poté `mouseover` na `#DO`.
 
-That's good for performance, because there may be many intermediate elements. We don't really want to process in and out of each one.
+To zlepšuje výkon, jelikož mezilehlých elementů může být mnoho. Opravdu nechceme zpracovávat vstup na a výstup z každého z nich.
 
-On the other hand, we should keep in mind that the mouse pointer doesn't "visit" all elements along the way. It can "jump".
+Na druhou stranu bychom měli mít na paměti, že ukazatel myši „nenavštíví“ všechny elementy po cestě a může přes ně „skákat“.
 
-In particular, it's possible that the pointer jumps right inside the middle of the page from out of the window. In that case `relatedTarget` is `null`, because it came from "nowhere":
+Konkrétně je možné, že ukazatel skočí zvnějšku okna přímo doprostřed stránky. V takovém případě `relatedTarget` je `null`, protože přichází „odnikud“:
 
 ![](mouseover-mouseout-from-outside.svg)
 
 ```online
-You can check it out "live" on a teststand below.
 
-Its HTML has two nested elements: the `<div id="child">` is inside the `<div id="parent">`. If you move the mouse fast over them, then maybe only the child div triggers events, or maybe the parent one, or maybe there will be no events at all.
+Můžete si to vyzkoušet „naživo“ na testovacím příkladu níže.
 
-Also move the pointer into the child `div`, and then move it out quickly down through the parent one. If the movement is fast enough, then the parent element is ignored. The mouse will cross the parent element without noticing it.
+Jeho HTML kód obsahuje dva vnořené elementy: `<div id="dítě">` se nachází uvnitř `<div id="rodič">`. Pokud nad nimi budete rychle pohybovat myší, možná vyvolá události jen dětský `div`, možná jen rodičovský a možná vůbec žádné události nenastanou.
+
+Zkuste také přesunout ukazatel na dětský `div` a pak jej přesunout rychle dolů přes rodičovský. Bude-li pohyb dostatečně rychlý, bude rodičovský element ignorován. Ukazatel ho přeskočí bez povšimnutí.
 
 [codetabs height=360 src="mouseoverout-fast"]
 ```
 
-```smart header="If `mouseover` triggered, there must be `mouseout`"
-In case of fast mouse movements, intermediate elements may be ignored, but one thing we know for sure: if the pointer "officially" entered an element (`mouseover` event generated), then upon leaving it we always get `mouseout`.
+```smart header="Když se spustila `mouseover`, musí být i `mouseout`"
+Při rychlém pohybu myší mohou být mezilehlé elementy ignorovány, ale jedno víme jistě: jestliže ukazatel „oficiálně“ vstoupil na element (byla generována událost `mouseover`), pak při jeho opuštění vždy obdržíme `mouseout`.
 ```
 
-## Mouseout when leaving for a child
+## Událost mouseout při opuštění dítěte
 
-An important feature of `mouseout` -- it triggers, when the pointer moves from an element to its descendant, e.g. from `#parent` to `#child` in this HTML:
+Důležitou vlastností události `mouseout` je, že se spustí, když se ukazatel přemístí z elementu na jeho potomka, např. v následujícím HTML kódu z `#rodič` na `#dítě`:
 
 ```html
-<div id="parent">
-  <div id="child">...</div>
+<div id="rodič">
+  <div id="dítě">...</div>
 </div>
 ```
 
-If we're on `#parent` and then move the pointer deeper into `#child`, we get `mouseout` on `#parent`!
+Pokud jsme na `#rodič` a přesuneme ukazatel hlouběji na `#dítě`, pak dostaneme `mouseout` na `#rodič`!
 
 ![](mouseover-to-child.svg)
 
-That may seem strange, but can be easily explained.
+Může to vypadat divně, ale má to jednoduché vysvětlení.
 
-**According to the browser logic, the mouse cursor may be only over a *single* element at any time -- the most nested one and top by z-index.**
+**Podle logiky prohlížeče může být ukazatel myši pouze na *jediném* elementu současně -- na tom nejvnořenějším a podle z-indexu vrchním.**
 
-So if it goes to another element (even a descendant), then it leaves the previous one.
+Když se tedy přesune na jiný element (třeba i na potomka), opustí předcházející.
 
-Please note another important detail of event processing.
+Prosíme všimněte si dalšího důležitého detailu zpracování událostí.
 
-The `mouseover` event on a descendant bubbles up. So, if `#parent` has `mouseover` handler, it triggers:
+Událost `mouseover` na potomku bublá. Jestliže tedy `#rodič` má handler `mouseover`, spustí se:
 
 ![](mouseover-bubble-nested.svg)
 
 ```online
-You can see that very well in the example below: `<div id="child">` is inside the `<div id="parent">`. There are `mouseover/out` handlers on `#parent` element that output event details.
+Na následujícím příkladu to vidíte velmi dobře: `<div id="dítě">` je uvnitř `<div id="rodič">`. Na elementu `#rodič` jsou handlery `mouseover/out`, které vypisují detaily událostí.
 
-If you move the mouse from `#parent` to `#child`, you see two events on `#parent`:
-1. `mouseout [target: parent]` (left the parent), then
-2. `mouseover [target: child]` (came to the child, bubbled).
+Když přesunete myš z `#rodič` na `#dítě`, uvidíte na `#rodič` dvě události:
+1. `mouseout [target: rodič]` (opuštění rodiče), pak
+2. `mouseover [target: dítě]` (příchod na dítě, probublala).
 
 [codetabs height=360 src="mouseoverout-child"]
 ```
 
-As shown, when the pointer moves from `#parent` element to `#child`, two handlers trigger on the parent element: `mouseout` and `mouseover`:
+Jak je vidět, když se ukazatel přemístí z elementu `#rodič` na element `#dítě`, spustí se na rodičovském elementu dvě události: `mouseout` a `mouseover`:
 
 ```js
-parent.onmouseout = function(event) {
-  /* event.target: parent element */
+rodič.onmouseout = function(událost) {
+  /* událost.target: rodičovský element */
 };
-parent.onmouseover = function(event) {
-  /* event.target: child element (bubbled) */
+rodič.onmouseover = function(událost) {
+  /* událost.target: dětský element (probublala) */
 };
 ```
 
-**If we don't examine `event.target` inside the handlers, then it may seem that the mouse pointer left `#parent` element, and then immediately came back over it.**
+**Pokud v handlerech neprozkoumáme `událost.target`, může to vypadat tak, že ukazatel myši opustil element `#rodič` a hned pak se na něj vrátil.**
 
-But that's not the case! The pointer is still over the parent, it just moved deeper into the child element.
+To však není tento případ! Ukazatel je neustále na rodiči, jen se přemístil hlouběji na dětský element.
 
-If there are some actions upon leaving the parent element, e.g. an animation runs in `parent.onmouseout`, we usually don't want it when the pointer just goes deeper into `#parent`.
+Pokud se při opuštění rodičovského elementu mají provést nějaké akce, např. v `rodič.onmouseout` se má spustit animace, pak je zpravidla nechceme, když se ukazatel jen přemístí hlouběji dovnitř `#rodič`.
 
-To avoid it, we can check `relatedTarget` in the handler and, if the mouse is still inside the element, then ignore such event.
+Abychom se tomu vyhnuli, můžeme v handleru prověřovat `relatedTarget`, a pokud je myš stále uvnitř elementu, budeme takovou událost ignorovat.
 
-Alternatively we can use other events: `mouseenter` and `mouseleave`, that we'll be covering now, as they don't have such problems.
+Alternativně můžeme použít jiné události: `mouseenter` a `mouseleave`, které nyní probereme. Ty tento problém nemají.
 
-## Events mouseenter and mouseleave
+## Události mouseenter a mouseleave
 
-Events `mouseenter/mouseleave` are like `mouseover/mouseout`. They trigger when the mouse pointer enters/leaves the element.
+Události `mouseenter/mouseleave` se podobají `mouseover/mouseout`. Spustí se, když ukazatel myši vstoupí na/opustí element.
 
-But there are two important differences:
+Jsou mezi nimi však dva důležité rozdíly:
 
-1. Transitions inside the element, to/from descendants, are not counted.
-2. Events `mouseenter/mouseleave` do not bubble.
+1. Přesuny uvnitř elementu, na potomky a z nich, se nepočítají.
+2. Události `mouseenter/mouseleave` nebublají.
 
-These events are extremely simple.
+Tyto události jsou extrémně jednoduché.
 
-When the pointer enters an element -- `mouseenter` triggers. The exact location of the pointer inside the element or its descendants doesn't matter.
+Když ukazatel vstoupí na element, spustí se `mouseenter`. Na přesné poloze ukazatele uvnitř elementu nebo jeho potomků nezáleží.
 
-When the pointer leaves an element -- `mouseleave` triggers.
+Když ukazatel opustí element, spustí se `mouseleave`.
 
 ```online
-This example is similar to the one above, but now the top element has `mouseenter/mouseleave` instead of `mouseover/mouseout`.
+Následující příklad se podobá výše uvedenému, ale vrchní element nyní obsahuje `mouseenter/mouseleave` místo `mouseover/mouseout`.
 
-As you can see, the only generated events are the ones related to moving the pointer in and out of the top element. Nothing happens when the pointer goes to the child and back. Transitions between descendants are ignored
+Jak vidíte, vygenerují se jedině události, které se vztahují k přesunu ukazatele na vrchní element a z něj. Když se ukazatel přemístí na jeho dítě a zpět, nic se nestane. Přesuny mezi potomky jsou ignorovány.
 
 [codetabs height=340 src="mouseleave"]
 ```
 
-## Event delegation
+## Delegování událostí
 
-Events `mouseenter/leave` are very simple and easy to use. But they do not bubble. So we can't use event delegation with them.
+Události `mouseenter/leave` jsou velice jednoduché a snadno se používají, ale nebublají. Nemůžeme tedy na ně použít delegování událostí.
 
-Imagine we want to handle mouse enter/leave for table cells. And there are hundreds of cells.
+Představme si, že chceme zpracovávat vstup myši na buňky tabulky a jejich opuštění. A těch jsou stovky.
 
-The natural solution would be -- to set the handler on `<table>` and process events there. But `mouseenter/leave` don't bubble. So if such event happens on `<td>`, then only a handler on that `<td>` is able to catch it.
+Přirozené řešení by bylo nastavit handler na `<table>` a zpracovávat události v něm. Jenže `mouseenter/leave` nebublají. Když se tedy taková událost stane na `<td>`, dokáže ji zachytit jedině handler na tomto `<td>`.
 
-Handlers for `mouseenter/leave` on `<table>` only trigger when the pointer enters/leaves the table as a whole. It's impossible to get any information about transitions inside it.
+Handlery pro `mouseenter/leave` na `<table>` se spustí jen tehdy, když ukazatel vstoupí na celou tabulku nebo ji opustí. O přesunech uvnitř ní nemůžeme získat žádné informace.
 
-So, let's use `mouseover/mouseout`.
+Použijeme tedy `mouseover/mouseout`.
 
-Let's start with simple handlers that highlight the element under mouse:
+Začněme s jednoduchými handlery, které zvýrazňují element pod ukazatelem:
 
 ```js
-// let's highlight an element under the pointer
-table.onmouseover = function(event) {
-  let target = event.target;
-  target.style.background = 'pink';
+// zvýrazníme element pod ukazatelem
+table.onmouseover = function(událost) {
+  let cíl = událost.target;
+  cíl.style.background = 'pink';
 };
 
-table.onmouseout = function(event) {
-  let target = event.target;
-  target.style.background = '';
+table.onmouseout = function(událost) {
+  let cíl = událost.target;
+  cíl.style.background = '';
 };
 ```
 
 ```online
-Here they are in action. As the mouse travels across the elements of this table, the current one is highlighted:
+Zde je vidíte v akci. Když se myš přesunuje po elementech této tabulky, aktuální element se zvýrazní:
 
 [codetabs height=480 src="mouseenter-mouseleave-delegation"]
 ```
 
-In our case we'd like to handle transitions between table cells `<td>`: entering a cell and leaving it. Other transitions, such as inside the cell or outside of any cells, don't interest us. Let's filter them out.
+V našem případě bychom chtěli zpracovávat přesuny mezi buňkami tabulky `<td>`: vstup na buňku a její opuštění. Jiné přesuny, například uvnitř jedné buňky nebo mimo buňky, nás nezajímají. Odfiltrujme je.
 
-Here's what we can do:
+Můžeme dělat následující:
 
-- Remember the currently highlighted `<td>` in a variable, let's call it `currentElem`.
-- On `mouseover` -- ignore the event if we're still inside the current `<td>`.
-- On `mouseout` -- ignore if we didn't leave the current `<td>`.
+- Zapamatujeme si aktuálně zvýrazněnou `<td>` v proměnné, nazveme ji `aktuálníElem`.
+- Při `mouseover` budeme tuto událost ignorovat, jestliže jsme stále uvnitř aktuální `<td>`.
+- Při `mouseout` ji budeme ignorovat, jestliže neopustíme aktuální `<td>`.
 
-Here's an example of code that accounts for all possible situations:
+Následuje příklad kódu, který počítá se všemi možnými situacemi:
 
 [js src="mouseenter-mouseleave-delegation-2/script.js"]
 
-Once again, the important features are:
-1. It uses event delegation to handle entering/leaving of any `<td>` inside the table. So it relies on `mouseover/out` instead of `mouseenter/leave` that don't bubble and hence allow no delegation.
-2. Extra events, such as moving between descendants of `<td>` are filtered out, so that `onEnter/Leave` runs only if the pointer leaves or enters `<td>` as a whole.
+Opakujeme, že jeho důležité prvky jsou:
+1. Pro zpracování vstupu na/opuštění jakékoli `<td>` v tabulce používá delegování událostí. Je tedy založen na `mouseover/out`, ne na `mouseenter/leave`, která nebublá, a tedy neumožňuje delegování.
+2. Další události, například přesun mezi potomky `<td>`, jsou odfiltrovány, takže funkce `přiPříchodu/přiOdchodu` se spustí jen tehdy, když ukazatel vstoupí na celou `<td>` nebo ji opustí.
 
 ```online
-Here's the full example with all details:
+Zde je celý příklad se všemi detaily:
 
 [codetabs height=460 src="mouseenter-mouseleave-delegation-2"]
 
-Try to move the cursor in and out of table cells and inside them. Fast or slow -- doesn't matter. Only `<td>` as a whole is highlighted, unlike the example before.
+Zkuste si přesunovat ukazatel dovnitř a ven z buněk tabulky a uvnitř nich. Rychle nebo pomalu, na tom nezáleží. Zvýrazní se jen `<td>` jako celek, na rozdíl od výše uvedeného příkladu.
 ```
 
-## Summary
+## Shrnutí
 
-We covered events `mouseover`, `mouseout`, `mousemove`, `mouseenter` and `mouseleave`.
+Probrali jsme události `mouseover`, `mouseout`, `mousemove`, `mouseenter` a `mouseleave`.
 
-These things are good to note:
+Je dobré si zapamatovat následující:
 
-- A fast mouse move may skip intermediate elements.
-- Events `mouseover/out` and `mouseenter/leave` have an additional property: `relatedTarget`. That's the element that we are coming from/to, complementary to `target`.
+- Při rychlém pohybu myší mohou být přeskočeny mezilehlé elementy.
+- Události `mouseover/out` a `mouseenter/leave` mají další vlastnost: `relatedTarget`. To je element, ze kterého přicházíme / na který odcházíme, doplněk k `target`.
 
-Events `mouseover/out` trigger even when we go from the parent element to a child element. The browser assumes that the mouse can be only over one element at one time -- the deepest one.
+Události `mouseover/out` se spustí i tehdy, když se přesuneme z rodičovského elementu na dětský. Prohlížeč předpokládá, že ukazatel může být pouze na jednom elementu současně -- na tom nejhlubším.
 
-Events `mouseenter/leave` are different in that aspect: they only trigger when the mouse comes in and out the element as a whole. Also they do not bubble.
+Události `mouseenter/leave` se v tomto ohledu liší: spustí se jen tehdy, když myš vstoupí na celý element nebo jej opustí. Kromě toho nebublají.

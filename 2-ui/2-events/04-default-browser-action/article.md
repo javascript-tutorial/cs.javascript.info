@@ -1,43 +1,43 @@
-# Browser default actions
+# Standardní akce prohlížeče
 
-Many events automatically lead to certain actions performed by the browser.
+Mnoho událostí automaticky vede k tomu, že prohlížeč vykoná určitou akci.
 
-For instance:
+Například:
 
-- A click on a link - initiates navigation to its URL.
-- A click on a form submit button - initiates its submission to the server.
-- Pressing a mouse button over a text and moving it - selects the text.
+- Kliknutí na odkaz -- vyvolá navigaci na jeho URL.
+- Kliknutí na tlačítko odeslání formuláře -- vyvolá jeho odeslání na server.
+- Stisknutí tlačítka myši nad textem a přesun ukazatele -- vybere (označí) text.
 
-If we handle an event in JavaScript, we may not want the corresponding browser action to happen, and want to implement another behavior instead.
+Jestliže v JavaScriptu zpracováváme událost, můžeme chtít, aby se příslušná akce prohlížeče nevykonala, protože místo ní chceme implementovat jiné chování.
 
-## Preventing browser actions
+## Zákaz akcí prohlížeče
 
-There are two ways to tell the browser we don't want it to act:
+Existují dva způsoby, jak sdělit prohlížeči, že nechceme, aby konal svou akci:
 
-- The main way is to use the `event` object. There's a method `event.preventDefault()`.
-- If the handler is assigned using `on<event>` (not by `addEventListener`), then returning `false` also works the same.
+- Hlavním způsobem je použití objektu `událost`, který obsahuje metodu `událost.preventDefault()`.
+- Jestliže je handler přiřazen prostřednictvím `on<událost>` (ne metodou `addEventListener`), pak bude stejným způsobem fungovat i vrácení `false`.
 
-In this HTML, a click on a link doesn't lead to navigation; the browser doesn't do anything:
+V následujícím HTML kódu kliknutí na odkaz nevyvolá navigaci; prohlížeč neudělá nic:
 
 ```html autorun height=60 no-beautify
-<a href="/" onclick="return false">Click here</a>
-or
-<a href="/" onclick="event.preventDefault()">here</a>
+<a href="/" onclick="return false">Klikněte sem</a>
+nebo
+<a href="/" onclick="event.preventDefault()">sem</a>
 ```
 
-In the next example we'll use this technique to create a JavaScript-powered menu.
+V dalším příkladu pomocí této techniky vytvoříme JavaScriptové menu.
 
-```warn header="Returning `false` from a handler is an exception"
-The value returned by an event handler is usually ignored.
+```warn header="Vrácení `false` z handleru je výjimka"
+Hodnota vrácená handlerem událostí je zpravidla ignorována.
 
-The only exception is `return false` from a handler assigned using `on<event>`.
+Jedinou výjimkou je `return false` z handleru přiřazeného pomocí `on<událost>`.
 
-In all other cases, `return` value is ignored. In particular, there's no sense in returning `true`.
+Ve všech ostatních případech se návratová hodnota ignoruje. Nemá tedy smysl vracet například `true`.
 ```
 
-### Example: the menu
+### Příklad: menu
 
-Consider a site menu, like this:
+Uvažujme menu na stránce, například takto:
 
 ```html
 <ul id="menu" class="menu">
@@ -47,198 +47,198 @@ Consider a site menu, like this:
 </ul>
 ```
 
-Here's how it looks with some CSS:
+Takto bude vypadat s určitým CSS:
 
 [iframe height=70 src="menu" link edit]
 
-Menu items are implemented as HTML-links `<a>`, not buttons `<button>`. There are several reasons to do so, for instance:
+Položky menu jsou implementovány jako HTML odkazy `<a>`, ne jako tlačítka `<button>`. Má to několik důvodů, například:
 
-- Many people like to use "right click" -- "open in a new window". If we use `<button>` or `<span>`, that doesn't work.
-- Search engines follow `<a href="...">` links while indexing.
+- Mnozí lidé rádi používají „kliknutí pravým tlačítkem“ -- „otevření v novém okně“. Pokud bychom použili `<button>` nebo `<span>`, nefungovalo by to.
+- Vyhledávací stroje při indexování následují `<a href="...">`.
 
-So we use `<a>` in the markup. But normally we intend to handle clicks in JavaScript. So we should prevent the default browser action.
+V tomto kódu tedy používáme `<a>`. Chceme však kliknutí zpracovávat v JavaScriptu, takže bychom měli zakázat standardní akci prohlížeče.
 
-Like here:
+Například:
 
 ```js
-menu.onclick = function(event) {
-  if (event.target.nodeName != 'A') return;
+menu.onclick = function(událost) {
+  if (událost.target.nodeName != 'A') return;
 
-  let href = event.target.getAttribute('href');
-  alert( href ); // ...can be loading from the server, UI generation etc
+  let href = událost.target.getAttribute('href');
+  alert( href ); // ...může načítat ze serveru, generovat UI atd.
 
 *!*
-  return false; // prevent browser action (don't go to the URL)
+  return false; // zakáže akci prohlížeče (nepřejde na URL)
 */!*
 };
 ```
 
-If we omit `return false`, then after our code executes the browser will do its "default action" -- navigating to the URL in `href`. And we don't need that here, as we're handling the click by ourselves.
+Kdybychom vypustili `return false`, pak by po provedení našeho kódu prohlížeč vykonal svou „standardní akci“ -- navigaci na URL v `href`. A to tady nepotřebujeme, jelikož kliknutí zpracováváme sami.
 
-By the way, using event delegation here makes our menu very flexible. We can add nested lists and style them using CSS to "slide down".
+Mimochodem, použití delegování událostí zde učiní naše menu velmi flexibilním. Můžeme přidávat vnořené seznamy a pomocí CSS je stylizovat, aby „klouzaly dolů“.
 
-````smart header="Follow-up events"
-Certain events flow one into another. If we prevent the first event, there will be no second.
+````smart header="Následné události"
+Některé události plynou jedna do druhé. Pokud zakážeme první událost, nedojde ke druhé.
 
-For instance, `mousedown` on an `<input>` field leads to focusing in it, and the `focus` event. If we prevent the `mousedown` event, there's no focus.
+Například událost `mousedown` na poli `<input>` vede k zaměření vstupu na pole a k vyvolání události `focus`. Pokud událost `mousedown` zakážeme, k zaměření nedojde.
 
-Try to click on the first `<input>` below -- the `focus` event happens. But if you click the second one, there's no focus.
+Zkuste si kliknout níže na první `<input>` -- událost `focus` nastane. Pokud však kliknete na druhý, zaměření nenastane.
 
 ```html run autorun
-<input value="Focus works" onfocus="this.value=''">
-<input *!*onmousedown="return false"*/!* onfocus="this.value=''" value="Click me">
+<input value="Zaměření funguje" onfocus="this.value=''">
+<input *!*onmousedown="return false"*/!* onfocus="this.value=''" value="Klikni na mě">
 ```
 
-That's because the browser action is canceled on `mousedown`. The focusing is still possible if we use another way to enter the input. For instance, the `key:Tab` key to switch from the 1st input into the 2nd. But not with the mouse click any more.
+Je to tím, že akce prohlížeče je v `mousedown` zrušena. Stále je možné na pole zaměřit vstup, jestliže použijeme jiný způsob, jak do něj vstoupit, například klávesou `key:Tab` se přepneme z prvního vstupu do druhého. Kliknutím myší to však už možné není.
 ````
 
-## The "passive" handler option
+## Možnost handleru „passive“
 
-The optional `passive: true` option of `addEventListener` signals the browser that the handler is not going to call `preventDefault()`.
+Volitelná možnost `passive: true` metody `addEventListener` oznamuje prohlížeči, že handler nebude volat `preventDefault()`.
 
-Why might that be needed?
+K čemu to může být potřeba?
 
-There are some events like `touchmove` on mobile devices (when the user moves their finger across the screen), that cause scrolling by default, but that scrolling can be prevented using `preventDefault()` in the handler.
+Existují události, např. `touchmove` na mobilních zařízeních (když se uživatel posune prstem na obrazovce), které standardně vyvolají rolování, ale v handleru lze toto rolování zakázat voláním `preventDefault()`.
 
-So when the browser detects such event, it has first to process all handlers, and then if `preventDefault` is not called anywhere, it can proceed with scrolling. That may cause unnecessary delays and "jitters" in the UI.
+Když tedy prohlížeč detekuje takovou událost, musí nejprve zpracovat všechny handlery, a teprve pokud nikde nebylo voláno `preventDefault`, může provádět rolování. To může způsobit nechtěné prodlevy a „zasekávání“ v UI.
 
-The `passive: true` options tells the browser that the handler is not going to cancel scrolling. Then browser scrolls immediately providing a maximally fluent experience, and the event is handled by the way.
+Možnost `passive: true` říká prohlížeči, že handler nebude rolování bránit. Pak prohlížeč provede rolování okamžitě a poskytne maximálně plynulý zážitek, zatímco bude zpracována událost.
 
-For some browsers (Firefox, Chrome), `passive` is `true` by default for `touchstart` and `touchmove` events.
+V některých prohlížečích (Firefox, Chrome) je `passive` standardně `true` pro události `touchstart` a `touchmove`.
 
 
-## event.defaultPrevented
+## událost.defaultPrevented
 
-The property `event.defaultPrevented` is `true` if the default action was prevented, and `false` otherwise.
+Vlastnost `událost.defaultPrevented` je `true`, pokud byla standardní akce zakázána, v opačném případě je `false`.
 
-There's an interesting use case for it.
+Má to zajímavý případ použití.
 
-You remember in the chapter <info:bubbling-and-capturing> we talked about `event.stopPropagation()` and why stopping bubbling is bad?
+Vzpomínáte si, jak jsme v kapitole <info:bubbling-and-capturing> hovořili o `událost.stopPropagation()` a o tom, proč je špatné zastavovat bublání?
 
-Sometimes we can use `event.defaultPrevented` instead, to signal other event handlers that the event was handled.
+Někdy místo toho můžeme použít `událost.defaultPrevented`, abychom oznámili ostatním handlerům událostí, že událost byla již zpracována.
 
-Let's see a practical example.
+Podívejme se na praktický příklad.
 
-By default the browser on `contextmenu` event (right mouse click) shows a context menu with standard options. We can prevent it and show our own, like this:
+Standardně prohlížeč na událost `contextmenu` (kliknutí pravým tlačítkem myši) zobrazí kontextové menu se standardními možnostmi. Můžeme to zakázat a zobrazit vlastní menu, například:
 
 ```html autorun height=50 no-beautify run
-<button>Right-click shows browser context menu</button>
+<button>Pravé kliknutí zobrazí kontextové menu prohlížeče</button>
 
-<button *!*oncontextmenu="alert('Draw our menu'); return false"*/!*>
-  Right-click shows our context menu
+<button *!*oncontextmenu="alert('Zobrazíme své menu'); return false"*/!*>
+  Pravé kliknutí zobrazí naše kontextové menu
 </button>
 ```
 
-Now, in addition to that context menu we'd like to implement document-wide context menu.
+Nyní navíc k tomuto kontextovému menu chceme implementovat kontextové menu pro celý dokument.
 
-Upon right click, the closest context menu should show up.
+Po kliknutí pravým tlačítkem by se mělo zobrazit nejbližší kontextové menu.
 
 ```html autorun height=80 no-beautify run
-<p>Right-click here for the document context menu</p>
-<button id="elem">Right-click here for the button context menu</button>
+<p>Pravé kliknutí sem zobrazí kontextové menu dokumentu</p>
+<button id="elem">Pravé kliknutí sem zobrazí kontextové menu tlačítka</button>
 
 <script>
-  elem.oncontextmenu = function(event) {
-    event.preventDefault();
-    alert("Button context menu");
+  elem.oncontextmenu = function(událost) {
+    událost.preventDefault();
+    alert("Kontextové menu tlačítka");
   };
 
-  document.oncontextmenu = function(event) {
-    event.preventDefault();
-    alert("Document context menu");
+  document.oncontextmenu = function(událost) {
+    událost.preventDefault();
+    alert("Kontextové menu dokumentu");
   };
 </script>
 ```
 
-The problem is that when we click on `elem`, we get two menus: the button-level and (the event bubbles up) the document-level menu.
+Problém je v tom, že když klikneme na `elem`, obdržíme dvě menu: pro tlačítko a (událost probublá výše) pro dokument.
 
-How to fix it? One of solutions is to think like: "When we handle right-click in the button handler, let's stop its bubbling" and use `event.stopPropagation()`:
+Jak to opravit? Jedno z řešení je pomyslet si: „Když zpracujeme pravé kliknutí v handleru tlačítka, zastavíme bublání“ a použít `událost.stopPropagation()`:
 
 ```html autorun height=80 no-beautify run
-<p>Right-click for the document menu</p>
-<button id="elem">Right-click for the button menu (fixed with event.stopPropagation)</button>
+<p>Pravým kliknutím zobrazíte menu dokumentu</p>
+<button id="elem">Pravým kliknutím zobrazíte menu tlačítka (ošetřeno pomocí událost.stopPropagation)</button>
 
 <script>
-  elem.oncontextmenu = function(event) {
-    event.preventDefault();
+  elem.oncontextmenu = function(událost) {
+    událost.preventDefault();
 *!*
-    event.stopPropagation();
+    událost.stopPropagation();
 */!*
-    alert("Button context menu");
+    alert("Kontextové menu tlačítka");
   };
 
-  document.oncontextmenu = function(event) {
-    event.preventDefault();
-    alert("Document context menu");
+  document.oncontextmenu = function(událost) {
+    událost.preventDefault();
+    alert("Kontextové menu dokumentu");
   };
 </script>
 ```
 
-Now the button-level menu works as intended. But the price is high. We forever deny access to information about right-clicks for any outer code, including counters that gather statistics and so on. That's quite unwise.
+Nyní menu pro tlačítko funguje tak, jak jsme zamýšleli, ale cena za to je vysoká. Navždy se vzdáváme přístupu k informaci o pravém kliknutí v celém vnějším kódu, včetně počítadel, která shromažďují statistiku a podobně. To není příliš moudré.
 
-An alternative solution would be to check in the `document` handler if the default action was prevented? If it is so, then the event was handled, and we don't need to react on it.
+Alternativním řešením by bylo v handleru v `document` prověřovat, zda byla standardní akce zakázána. Pokud ano, událost byla zpracována a my na ni nemusíme reagovat.
 
 
 ```html autorun height=80 no-beautify run
-<p>Right-click for the document menu (added a check for event.defaultPrevented)</p>
-<button id="elem">Right-click for the button menu</button>
+<p>Pravým kliknutím zobrazíte menu dokumentu (přidána kontrola na událost.defaultPrevented)</p>
+<button id="elem">Pravým kliknutím zobrazíte menu tlačítka</button>
 
 <script>
-  elem.oncontextmenu = function(event) {
-    event.preventDefault();
-    alert("Button context menu");
+  elem.oncontextmenu = function(událost) {
+    událost.preventDefault();
+    alert("Kontextové menu tlačítka");
   };
 
-  document.oncontextmenu = function(event) {
+  document.oncontextmenu = function(událost) {
 *!*
-    if (event.defaultPrevented) return;
+    if (událost.defaultPrevented) return;
 */!*
 
-    event.preventDefault();
-    alert("Document context menu");
+    událost.preventDefault();
+    alert("Kontextové menu dokumentu");
   };
 </script>
 ```
 
-Now everything also works correctly. If we have nested elements, and each of them has a context menu of its own, that would also work. Just make sure to check for `event.defaultPrevented` in each `contextmenu` handler.
+I nyní všechno funguje správně. Fungovalo by to i tehdy, kdybychom měli vnořené elementy a každý z nich obsahoval vlastní kontextové menu. Jenom je třeba kontrolovat `událost.defaultPrevented` v každém handleru `contextmenu`.
 
-```smart header="event.stopPropagation() and event.preventDefault()"
-As we can clearly see, `event.stopPropagation()` and `event.preventDefault()` (also known as `return false`) are two different things. They are not related to each other.
+```smart header="událost.stopPropagation() a událost.preventDefault()"
+Jak jasně vidíme, `událost.stopPropagation()` a `událost.preventDefault()` (známá také jako `return false`) jsou dvě různé věci a nemají k sobě navzájem žádný vztah.
 ```
 
-```smart header="Nested context menus architecture"
-There are also alternative ways to implement nested context menus. One of them is to have a single global object with a handler for `document.oncontextmenu`, and also methods that allow us to store other handlers in it.
+```smart header="Architektura vnořených kontextových menu"
+Jsou i jiné způsoby, jak implementovat vnořená kontextová menu. Jedním z nich je mít jednoduchý globální objekt s handlerem pro `document.oncontextmenu` a také metodami, které nám umožňují uložit do něj jiné handlery.
 
-The object will catch any right-click, look through stored handlers and run the appropriate one.
+Objekt bude zachytávat všechna kliknutí pravým tlačítkem, procházet uloženými handlery a spouštět ten správný.
 
-But then each piece of code that wants a context menu should know about that object and use its help instead of the own `contextmenu` handler.
+Potom by však každá část kódu, která chce kontextové menu, měla tento objekt znát a místo vlastního handleru `contextmenu` používat jeho pomoc.
 ```
 
-## Summary
+## Shrnutí
 
-There are many default browser actions:
+Existuje mnoho standardních akcí prohlížeče:
 
-- `mousedown` -- starts the selection (move the mouse to select).
-- `click` on `<input type="checkbox">` -- checks/unchecks the `input`.
-- `submit` -- clicking an `<input type="submit">` or hitting `key:Enter` inside a form field causes this event to happen, and the browser submits the form after it.
-- `keydown` -- pressing a key may lead to adding a character into a field, or other actions.
-- `contextmenu` -- the event happens on a right-click, the action is to show the browser context menu.
-- ...there are more...
+- `mousedown` -- zahájení výběru textu (pohybem myší).
+- `click` na `<input type="checkbox">` -- zaškrtne/odškrtne tento `input`.
+- `submit` -- tuto událost vyvolá kliknutí na `<input type="submit">` nebo stisknutí `key:Enter` uvnitř formulářového pole, prohlížeč pak formulář odešle.
+- `keydown` -- stisknutí klávesy může vést k přidání znaku do pole nebo jiným akcím.
+- `contextmenu` -- událost se stane při kliknutí pravým tlačítkem, akcí je zobrazení kontextového menu prohlížeče.
+- ...jsou i další...
 
-All the default actions can be prevented if we want to handle the event exclusively by JavaScript.
+Všechny standardní akce je možné zakázat, pokud chceme událost zpracovávat výlučně v JavaScriptu.
 
-To prevent a default action -- use either `event.preventDefault()` or  `return false`. The second method works only for handlers assigned with `on<event>`.
+Abychom zakázali standardní akci, použijeme buď `událost.preventDefault()`, nebo `return false`. Druhý způsob funguje jen pro handlery přiřazené pomocí `on<událost>`.
 
-The `passive: true` option of `addEventListener` tells the browser that the action is not going to be prevented. That's useful for some mobile events, like `touchstart` and `touchmove`, to tell the browser that it should not wait for all handlers to finish before scrolling.
+Možnost `passive: true` metody `addEventListener` oznamuje prohlížeči, že akce nebude zakázána. To je užitečné pro některé mobilní události, např. `touchstart` a `touchmove`, abychom sdělili prohlížeči, že před rolováním nemusí čekat na skončení všech handlerů.
 
-If the default action was prevented, the value of `event.defaultPrevented` becomes `true`, otherwise it's `false`.
+Pokud byla standardní akce zakázána, hodnota `událost.defaultPrevented` se nastaví na `true`, v opačném případě je `false`.
 
-```warn header="Stay semantic, don't abuse"
-Technically, by preventing default actions and adding JavaScript we can customize the behavior of any elements. For instance, we can make a link `<a>` work like a button, and a button `<button>` behave as a link (redirect to another URL or so).
+```warn header="Zachovejte sémantiku"
+Zákazem standardních akcí a přidáním JavaScriptu si technicky můžeme přizpůsobit chování kteréhokoli elementu. Můžeme například způsobit, že odkaz `<a>` bude fungovat jako tlačítko a tlačítko `<button>` se bude chovat jako odkaz (přesměruje na jiné URL a podobně).
 
-But we should generally keep the semantic meaning of HTML elements. For instance, `<a>` should perform navigation, not a button.
+Obecně bychom však měli zachovávat sémantický význam HTML elementů. Například navigaci by mělo provádět `<a>`, ne tlačítko.
 
-Besides being "just a good thing", that makes your HTML better in terms of accessibility.
+Kromě toho, že je to „prostě pěkné“, to zlepší náš HTML kód co do přístupnosti.
 
-Also if we consider the example with `<a>`, then please note: a browser allows us to open such links in a new window (by right-clicking them and other means). And people like that. But if we make a button behave as a link using JavaScript and even look like a link using CSS, then `<a>`-specific browser features still won't work for it.
+Navíc když uvážíme příklad s `<a>`, pak si prosíme všimněte, že prohlížeč nám umožňuje otevírat takové odkazy v novém okně (kliknutím pravým tlačítkem a jinými způsoby). A lidem se to líbí. Ale i když pomocí JavaScriptu přimějeme tlačítko chovat se jako odkaz a dokonce pomocí CSS vypadat jako odkaz, stále na něm nebudou fungovat prvky prohlížeče specifické pro `<a>`.
 ```

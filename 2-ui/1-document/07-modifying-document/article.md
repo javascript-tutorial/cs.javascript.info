@@ -1,18 +1,18 @@
-# Modifying the document
+# Modifikace dokumentu
 
-DOM modification is the key to creating "live" pages.
+Klíčem k vytváření „živých“ stránek je modifikace DOMu.
 
-Here we'll see how to create new elements "on the fly" and modify the existing page content.
+Zde uvidíme, jak vytvářet nové elementy „za běhu“ a jak modifikovat obsah existující stránky.
 
-## Example: show a message
+## Příklad: zobrazení zprávy
 
-Let's demonstrate using an example. We'll add a message on the page that looks nicer than `alert`.
+Předveďme si to na příkladu. Přidáme na stránku zprávu, která bude vypadat lépe než `alert`.
 
-Here's how it will look:
+Bude to vypadat následovně:
 
 ```html autorun height="80"
 <style>
-.alert {
+.upozornění {
   padding: 15px;
   border: 1px solid #d6e9c6;
   border-radius: 4px;
@@ -22,62 +22,62 @@ Here's how it will look:
 </style>
 
 *!*
-<div class="alert">
-  <strong>Hi there!</strong> You've read an important message.
+<div class="upozornění">
+  <strong>Nazdar!</strong> Právě čteš důležitou zprávu.
 </div>
 */!*
 ```
 
-That was the HTML example. Now let's create the same `div` with JavaScript (assuming that the styles are in the HTML/CSS already).
+To byl příklad v HTML. Nyní vytvořme stejný `div` v JavaScriptu (předpokládáme, že styly jsou již definovány v HTML/CSS).
 
-## Creating an element
+## Vytvoření elementu
 
-To create DOM nodes, there are two methods:
+K vytvoření DOM uzlu slouží dvě metody:
 
-`document.createElement(tag)`
-: Creates a new *element node* with the given tag:
+`document.createElement(značka)`
+: Vytvoří nový *elementový uzel* se zadanou značkou:
 
     ```js
     let div = document.createElement('div');
     ```
 
 `document.createTextNode(text)`
-: Creates a new *text node* with the given text:
+: Vytvoří nový *textový uzel* se zadaným textem:
 
     ```js
-    let textNode = document.createTextNode('Here I am');
+    let textovýUzel = document.createTextNode('Tady jsem');
     ```
 
-Most of the time we need to create element nodes, such as the `div` for the message.
+Většinou potřebujeme vytvářet elementové uzly, například `div` pro naši zprávu.
 
-### Creating the message
+### Vytvoření zprávy
 
-Creating the message div takes 3 steps:
+Vytvoření značky `div` pro zprávu se skládá ze tří kroků:
 
 ```js
-// 1. Create <div> element
+// 1. Vytvoříme element <div>
 let div = document.createElement('div');
 
-// 2. Set its class to "alert"
-div.className = "alert";
+// 2. Nastavíme jeho třídu na "upozornění"
+div.className = "upozornění";
 
-// 3. Fill it with the content
-div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
+// 3. Vložíme do něj obsah
+div.innerHTML = "<strong>Nazdar!</strong> Právě čteš důležitou zprávu.";
 ```
 
-We've created the element. But as of now it's only in a variable named `div`, not in the page yet. So we can't see it.
+Vytvořili jsme element. Prozatím se však nachází jen v proměnné jménem `div` a ne na stránce, takže ho nemůžeme vidět.
 
-## Insertion methods
+## Metody pro vkládání
 
-To make the `div` show up, we need to insert it somewhere into `document`. For instance, into `<body>` element, referenced by `document.body`.
+Aby se nám `div` ukázal, musíme ho vložit někam do `document`, například do elementu `<body>`, na který se odkazuje `document.body`.
 
-There's a special method `append` for that: `document.body.append(div)`.
+K tomu slouží speciální metoda `append`: `document.body.append(div)`.
 
-Here's the full code:
+Zde je celý kód:
 
 ```html run height="80"
 <style>
-.alert {
+.upozornění {
   padding: 15px;
   border: 1px solid #d6e9c6;
   border-radius: 4px;
@@ -88,8 +88,8 @@ Here's the full code:
 
 <script>
   let div = document.createElement('div');
-  div.className = "alert";
-  div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
+  div.className = "upozornění";
+  div.innerHTML = "<strong>Nazdar!</strong> Právě čteš důležitou zprávu.";
 
 *!*
   document.body.append(div);
@@ -97,21 +97,21 @@ Here's the full code:
 </script>
 ```
 
-Here we called `append` on `document.body`, but we can call `append` method on any other element, to put another element into it. For instance, we can append something to `<div>` by calling `div.append(anotherElement)`.
+Tady jsme volali `append` na `document.body`, ale metodu `append` můžeme volat i na kterémkoli jiném elementu, abychom do něj vložili další element. Můžeme například něco připojit k `<div>` voláním `div.append(dalšíElement)`.
 
-Here are more insertion methods, they specify different places where to insert:
+Existují i další vkládací metody, které specifikují jiná místa, kam se má vkládat:
 
-- `node.append(...nodes or strings)` -- append nodes or strings *at the end* of `node`,
-- `node.prepend(...nodes or strings)` -- insert nodes or strings *at the beginning* of `node`,
-- `node.before(...nodes or strings)` –- insert nodes or strings *before* `node`,
-- `node.after(...nodes or strings)` –- insert nodes or strings *after* `node`,
-- `node.replaceWith(...nodes or strings)` –- replaces `node` with the given nodes or strings.
+- `uzel.append(...uzly nebo řetězce)` -- připojí uzly nebo řetězce *na konec* uzlu `uzel`,
+- `uzel.prepend(...uzly nebo řetězce)` -- vloží uzly nebo řetězce *na začátek* uzlu `uzel`,
+- `uzel.before(...uzly nebo řetězce)` –- vloží uzly nebo řetězce *před* `uzel`,
+- `uzel.after(...uzly nebo řetězce)` –- vloží uzly nebo řetězce *za* `uzel`,
+- `uzel.replaceWith(...uzly nebo řetězce)` –- nahradí `uzel` zadanými uzly nebo řetězci.
 
-Arguments of these methods are an arbitrary list of DOM nodes to insert, or text strings (that become text nodes automatically).
+Argumenty těchto metod je jakýkoli seznam DOM uzlů, které se mají vložit, nebo textových řetězců (z nich se automaticky vytvoří textové uzly).
 
-Let's see them in action.
+Podívejme se na ně v akci.
 
-Here's an example of using these methods to add items to a list and the text before/after it:
+Následuje příklad, jak pomocí těchto metod přidat prvky do seznamu a text před a za něj:
 
 ```html autorun
 <ol id="ol">
@@ -121,117 +121,117 @@ Here's an example of using these methods to add items to a list and the text bef
 </ol>
 
 <script>
-  ol.before('before'); // insert string "before" before <ol>
-  ol.after('after'); // insert string "after" after <ol>
+  ol.before('před'); // vloží řetězec "před" před <ol>
+  ol.after('za'); // vloží řetězec "za" za <ol>
 
-  let liFirst = document.createElement('li');
-  liFirst.innerHTML = 'prepend';
-  ol.prepend(liFirst); // insert liFirst at the beginning of <ol>
+  let liPrvní = document.createElement('li');
+  liPrvní.innerHTML = 'začátek';
+  ol.prepend(liPrvní); // vloží liPrvní na začátek <ol>
 
-  let liLast = document.createElement('li');
-  liLast.innerHTML = 'append';
-  ol.append(liLast); // insert liLast at the end of <ol>
+  let liPoslední = document.createElement('li');
+  liPoslední.innerHTML = 'konec';
+  ol.append(liPoslední); // vloží liPoslední na konec <ol>
 </script>
 ```
 
-Here's a visual picture of what the methods do:
+Na obrázku je zobrazeno, co tyto metody dělají:
 
 ![](before-prepend-append-after.svg)
 
-So the final list will be:
+Výsledný seznam tedy bude:
 
 ```html
-before
+před
 <ol id="ol">
-  <li>prepend</li>
+  <li>začátek</li>
   <li>0</li>
   <li>1</li>
   <li>2</li>
-  <li>append</li>
+  <li>konec</li>
 </ol>
-after
+za
 ```
 
-As said, these methods can insert multiple nodes and text pieces in a single call.
+Jak bylo uvedeno, tyto metody dokáží vložit více uzlů a částí textu při jednom volání.
 
-For instance, here a string and an element are inserted:
+Například zde se vloží řetězec a element:
 
 ```html run
 <div id="div"></div>
 <script>
-  div.before('<p>Hello</p>', document.createElement('hr'));
+  div.before('<p>Ahoj</p>', document.createElement('hr'));
 </script>
 ```
 
-Please note: the text is inserted "as text", not "as HTML", with proper escaping of characters such as `<`, `>`.
+Prosíme všimněte si, že text se vloží „jako text“, ne „jako HTML“, takže znaky jako `<` a `>` budou příslušným způsobem upraveny.
 
-So the final HTML is:
+Výsledný HTML kód tedy je:
 
 ```html run
 *!*
-&lt;p&gt;Hello&lt;/p&gt;
+&lt;p&gt;Ahoj&lt;/p&gt;
 */!*
 <hr>
 <div id="div"></div>
 ```
 
-In other words, strings are inserted in a safe way, like `elem.textContent` does it.
+Jinými slovy, řetězce se vloží bezpečným způsobem stejně, jak to dělá `elem.textContent`.
 
-So, these methods can only be used to insert DOM nodes or text pieces.
+Tyto metody tedy můžeme použít jedině ke vkládání DOM uzlů a částí textu.
 
-But what if we'd like to insert an HTML string "as html", with all tags and stuff working, in the same manner as `elem.innerHTML` does it?
+Ale co když chceme vložit HTML řetězec „jako html“, aby v něm fungovaly všechny značky a všechno ostatní, stejně, jak to provádí `elem.innerHTML`?
 
 ## insertAdjacentHTML/Text/Element
 
-For that we can use another, pretty versatile method: `elem.insertAdjacentHTML(where, html)`.
+K tomu můžeme použít jinou, víceúčelovou metodu: `elem.insertAdjacentHTML(kam, html)`.
 
-The first parameter is a code word, specifying where to insert relative to `elem`. Must be one of the following:
+Prvním parametrem je kódové slovo, které specifikuje, kam se má vkládat, relativně vůči `elem`. Musí to být jedno z následujících:
 
-- `"beforebegin"` -- insert `html` immediately before `elem`,
-- `"afterbegin"` -- insert `html` into `elem`, at the beginning,
-- `"beforeend"` -- insert `html` into `elem`, at the end,
-- `"afterend"` -- insert `html` immediately after `elem`.
+- `"beforebegin"` -- vloží `html` bezprostředně před `elem`,
+- `"afterbegin"` -- vloží `html` do `elem` na začátek,
+- `"beforeend"` -- vloží `html` do `elem` na konec,
+- `"afterend"` -- vloží `html` bezprostředně za `elem`.
 
-The second parameter is an HTML string, that is inserted "as HTML".
+Druhým parametrem je HTML řetězec, který bude vložen „jako HTML“.
 
-For instance:
+Příklad:
 
 ```html run
 <div id="div"></div>
 <script>
-  div.insertAdjacentHTML('beforebegin', '<p>Hello</p>');
-  div.insertAdjacentHTML('afterend', '<p>Bye</p>');
+  div.insertAdjacentHTML('beforebegin', '<p>Ahoj</p>');
+  div.insertAdjacentHTML('afterend', '<p>Sbohem</p>');
 </script>
 ```
 
-...Would lead to:
+...Vytvoří:
 
 ```html run
-<p>Hello</p>
+<p>Ahoj</p>
 <div id="div"></div>
-<p>Bye</p>
+<p>Sbohem</p>
 ```
 
-That's how we can append arbitrary HTML to the page.
+Tímto způsobem můžeme ke stránce připojit libovolný HTML kód.
 
-Here's the picture of insertion variants:
+Varianty vkládání jsou znázorněny na obrázku:
 
 ![](insert-adjacent.svg)
 
-We can easily notice similarities between this and the previous picture. The insertion points are actually the same, but this method inserts HTML.
+Snadno si všimneme podobností mezi tímto a předchozím obrázkem. Místa pro vkládání jsou ve skutečnosti stejná, ale tato metoda vkládá HTML kód.
 
-The method has two brothers:
+Tato metoda má dvě sesterské metody:
 
-- `elem.insertAdjacentText(where, text)` -- the same syntax, but a string of `text` is inserted "as text" instead of HTML,
-- `elem.insertAdjacentElement(where, elem)` -- the same syntax, but inserts an element.
+- `elem.insertAdjacentText(kam, text)` -- stejná syntaxe, ale řetězec `text` se místo HTML vloží „jako text“,
+- `elem.insertAdjacentElement(kam, elem)` -- stejná syntaxe, ale vloží element.
 
-They exist mainly to make the syntax "uniform". In practice, only `insertAdjacentHTML` is used most of the time. Because for elements and text, we have methods `append/prepend/before/after` -- they are shorter to write and can insert nodes/text pieces.
+Tyto metody existují hlavně proto, aby syntaxe byla „jednotná“. V praxi se většinou používá jen `insertAdjacentHTML`, protože pro elementy a text máme metody `append/prepend/before/after` -- jsou kratší na napsání a umějí vkládat uzly nebo části textu.
 
-So here's an alternative variant of showing a message:
+Zde je tedy alternativní varianta zobrazení zprávy:
 
 ```html run
 <style>
-.alert {
+.upozornění {
   padding: 15px;
   border: 1px solid #d6e9c6;
   border-radius: 4px;
@@ -241,21 +241,21 @@ So here's an alternative variant of showing a message:
 </style>
 
 <script>
-  document.body.insertAdjacentHTML("afterbegin", `<div class="alert">
-    <strong>Hi there!</strong> You've read an important message.
+  document.body.insertAdjacentHTML("afterbegin", `<div class="upozornění">
+    <strong>Nazdar!</strong> Právě čteš důležitou zprávu.
   </div>`);
 </script>
 ```
 
-## Node removal
+## Odstranění uzlu
 
-To remove a node, there's a method `node.remove()`.
+K odstranění uzlu slouží metoda `uzel.remove()`.
 
-Let's make our message disappear after a second:
+Nechme naši zprávu za jednu sekundu zmizet:
 
 ```html run untrusted
 <style>
-.alert {
+.upozornění {
   padding: 15px;
   border: 1px solid #d6e9c6;
   border-radius: 4px;
@@ -266,8 +266,8 @@ Let's make our message disappear after a second:
 
 <script>
   let div = document.createElement('div');
-  div.className = "alert";
-  div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
+  div.className = "upozornění";
+  div.innerHTML = "<strong>Nazdar!</strong> Právě čteš důležitou zprávu.";
 
   document.body.append(div);
 *!*
@@ -276,36 +276,36 @@ Let's make our message disappear after a second:
 </script>
 ```
 
-Please note: if we want to *move* an element to another place -- there's no need to remove it from the old one.
+Prosíme všimněte si, že jestliže chceme *přemístit* element na jiné místo, nemusíme jej z původního místa odstraňovat.
 
-**All insertion methods automatically remove the node from the old place.**
+**Všechny vkládací metody automaticky odstraní uzel z místa, kde se nacházel předtím.**
 
-For instance, let's swap elements:
+Například prohoďme elementy navzájem:
 
 ```html run height=50
-<div id="first">First</div>
-<div id="second">Second</div>
+<div id="první">První</div>
+<div id="druhý">Druhý</div>
 <script>
-  // no need to call remove
-  second.after(first); // take #second and after it insert #first
+  // není třeba volat remove
+  druhý.after(první); // vezme #druhý a za něj vloží #první
 </script>
 ```
 
-## Cloning nodes: cloneNode
+## Klonování uzlů: cloneNode
 
-How to insert one more similar message?
+Jak vložit další podobnou zprávu?
 
-We could make a function and put the code there. But the alternative way would be to *clone* the existing `div` and modify the text inside it (if needed).
+Mohli bychom vytvořit funkci a vložit kód do ní. Alternativním způsobem však je *klonovat* existující `div` a změnit text uvnitř něj (pokud to potřebujeme).
 
-Sometimes when we have a big element, that may be faster and simpler.
+Někdy, když máme velký element, to může být rychlejší a jednodušší.
 
-- The call `elem.cloneNode(true)` creates a "deep" clone of the element -- with all attributes and subelements. If we call `elem.cloneNode(false)`, then the clone is made without child elements.
+- Volání `elem.cloneNode(true)` vytvoří „hluboký“ klon elementu -- se všemi atributy a podelementy. Jestliže zavoláme `elem.cloneNode(false)`, bude klon vytvořen bez dětských elementů.
 
-An example of copying the message:
+Příklad kopírování zprávy:
 
 ```html run height="120"
 <style>
-.alert {
+.upozornění {
   padding: 15px;
   border: 1px solid #d6e9c6;
   border-radius: 4px;
@@ -314,33 +314,33 @@ An example of copying the message:
 }
 </style>
 
-<div class="alert" id="div">
-  <strong>Hi there!</strong> You've read an important message.
+<div class="upozornění" id="div">
+  <strong>Nazdar!</strong> Právě čteš důležitou zprávu.
 </div>
 
 <script>
 *!*
-  let div2 = div.cloneNode(true); // clone the message
-  div2.querySelector('strong').innerHTML = 'Bye there!'; // change the clone
+  let div2 = div.cloneNode(true); // naklonujeme zprávu
+  div2.querySelector('strong').innerHTML = 'Sbohem!'; // změníme klon
 
-  div.after(div2); // show the clone after the existing div
+  div.after(div2); // zobrazíme klon za existujícím <div>
 */!*
 </script>
 ```
 
 ## DocumentFragment [#document-fragment]
 
-`DocumentFragment` is a special DOM node that serves as a wrapper to pass around lists of nodes.
+`DocumentFragment` je speciální DOM uzel, který slouží jako obal pro předávání seznamů uzlů.
 
-We can append other nodes to it, but when we insert it somewhere, then its content is inserted instead.
+Můžeme k němu přidávat další uzly, ale když jej někam vložíme, místo něj se vloží jeho obsah.
 
-For example, `getListContent` below generates a fragment with `<li>` items, that are later inserted into `<ul>`:
+Například následující funkce `vraťObsahSeznamu` vygeneruje fragment s prvky `<li>`, které jsou následně vloženy do `<ul>`:
 
 ```html run
 <ul id="ul"></ul>
 
 <script>
-function getListContent() {
+function vraťObsahSeznamu() {
   let fragment = new DocumentFragment();
 
   for(let i=1; i<=3; i++) {
@@ -353,12 +353,12 @@ function getListContent() {
 }
 
 *!*
-ul.append(getListContent()); // (*)
+ul.append(vraťObsahSeznamu()); // (*)
 */!*
 </script>
 ```
 
-Please note, at the last line `(*)` we append `DocumentFragment`, but it "blends in", so the resulting structure will be:
+Prosíme všimněte si, že na posledním řádku `(*)` jsme připojili `DocumentFragment`, ale ten „vymizí“ a výsledná struktura bude následující:
 
 ```html
 <ul>
@@ -368,194 +368,194 @@ Please note, at the last line `(*)` we append `DocumentFragment`, but it "blends
 </ul>
 ```
 
-`DocumentFragment` is rarely used explicitly. Why append to a special kind of node, if we can return an array of nodes instead? Rewritten example:
+`DocumentFragment` se explicitně používá jen zřídka. Proč bychom měli něco připojovat ke speciálnímu druhu uzlu, když místo něj můžeme vrátit pole uzlů? Přepsaný příklad:
 
 ```html run
 <ul id="ul"></ul>
 
 <script>
-function getListContent() {
-  let result = [];
+function vraťObsahSeznamu() {
+  let výsledek = [];
 
   for(let i=1; i<=3; i++) {
     let li = document.createElement('li');
     li.append(i);
-    result.push(li);
+    výsledek.push(li);
   }
 
-  return result;
+  return výsledek;
 }
 
 *!*
-ul.append(...getListContent()); // append + "..." operator = friends!
+ul.append(...vraťObsahSeznamu()); // append + operátor "..." = přátelé!
 */!*
 </script>
 ```
 
-We mention `DocumentFragment` mainly because there are some concepts on top of it, like [template](info:template-element) element, that we'll cover much later.
+Zmínili jsme `DocumentFragment` hlavně proto, že na něm jsou postaveny určité koncepty, například element [šablony](info:template-element), který probereme mnohem později.
 
-## Old-school insert/remove methods
+## Vkládací a odebírací metody ze staré školy
 
 [old]
 
-There are also "old school" DOM manipulation methods, existing for historical reasons.
+Existují i metody pro manipulaci s DOMem „ze staré školy“, které jsou zachovány z historických důvodů.
 
-These methods come from really ancient times. Nowadays, there's no reason to use them, as modern methods, such as `append`, `prepend`, `before`, `after`, `remove`, `replaceWith`, are more flexible.
+Tyto metody pocházejí z mnohem dřívější doby. V současnosti není důvod je používat, jelikož moderní metody, např. `append`, `prepend`, `before`, `after`, `remove`, `replaceWith`, jsou flexibilnější.
 
-The only reason we list these methods here is that you can find them in many old scripts:
+Jediným důvodem, proč zde tyto metody uvádíme, je, že je můžete najít v mnoha starých skriptech:
 
-`parentElem.appendChild(node)`
-: Appends `node` as the last child of `parentElem`.
+`rodičovskýElement.appendChild(uzel)`
+: Připojí `uzel` jako poslední dítě elementu `rodičovskýElement`.
 
-    The following example adds a new `<li>` to the end of `<ol>`:
+    Následující příklad přidá nový `<li>` na konec `<ol>`:
 
     ```html run height=100
-    <ol id="list">
+    <ol id="seznam">
       <li>0</li>
       <li>1</li>
       <li>2</li>
     </ol>
 
     <script>
-      let newLi = document.createElement('li');
-      newLi.innerHTML = 'Hello, world!';
+      let novýLi = document.createElement('li');
+      novýLi.innerHTML = 'Ahoj, světe!';
 
-      list.appendChild(newLi);
+      seznam.appendChild(novýLi);
     </script>
     ```
 
-`parentElem.insertBefore(node, nextSibling)`
-: Inserts `node` before `nextSibling` into `parentElem`.
+`rodičovskýElement.insertBefore(uzel, dalšíSourozenec)`
+: Vloží `uzel` před uzel `dalšíSourozenec` do elementu `rodičovskýElement`.
 
-    The following code inserts a new list item before the second `<li>`:
+    Následující kód vloží nový prvek seznamu před druhý `<li>`:
 
     ```html run height=100
-    <ol id="list">
+    <ol id="seznam">
       <li>0</li>
       <li>1</li>
       <li>2</li>
     </ol>
     <script>
-      let newLi = document.createElement('li');
-      newLi.innerHTML = 'Hello, world!';
+      let novýLi = document.createElement('li');
+      novýLi.innerHTML = 'Ahoj, světe!';
 
     *!*
-      list.insertBefore(newLi, list.children[1]);
+      seznam.insertBefore(novýLi, seznam.children[1]);
     */!*
     </script>
     ```
-    To insert `newLi` as the first element, we can do it like this:
+    Chceme-li vložit `novýLi` jako první element, můžeme to udělat následovně:
 
     ```js
-    list.insertBefore(newLi, list.firstChild);
+    seznam.insertBefore(novýLi, seznam.firstChild);
     ```
 
-`parentElem.replaceChild(node, oldChild)`
-: Replaces `oldChild` with `node` among children of `parentElem`.
+`rodičovskýElement.replaceChild(uzel, původníDítě)`
+: Nahradí `původníDítě` mezi dětmi elementu `rodičovskýElement` uzlem `uzel`.
 
-`parentElem.removeChild(node)`
-: Removes `node` from `parentElem` (assuming `node` is its child).
+`rodičovskýElement.removeChild(uzel)`
+: Odstraní `uzel` z elementu `rodičovskýElement` (za předpokladu, že `uzel` je jeho dítětem).
 
-    The following example removes first `<li>` from `<ol>`:
+    Následující příklad odstraní první `<li>` z `<ol>`:
 
     ```html run height=100
-    <ol id="list">
+    <ol id="seznam">
       <li>0</li>
       <li>1</li>
       <li>2</li>
     </ol>
 
     <script>
-      let li = list.firstElementChild;
-      list.removeChild(li);
+      let li = seznam.firstElementChild;
+      seznam.removeChild(li);
     </script>
     ```
 
-All these methods return the inserted/removed node. In other words, `parentElem.appendChild(node)` returns `node`. But usually the returned value is not used, we just run the method.
+Všechny tyto metody vracejí vložený nebo odstraněný uzel. Jinými slovy, `rodičovskýElement.appendChild(uzel)` vrátí `uzel`. Návratová hodnota se však obvykle nepoužívá, prostě jen zavoláme metodu.
 
-## A word about "document.write"
+## Pár slov o „document.write“
 
-There's one more, very ancient method of adding something to a web-page: `document.write`.
+Existuje ještě jedna, velice stará metoda pro přidávání na webovou stránku: `document.write`.
 
-The syntax:
-
-```html run
-<p>Somewhere in the page...</p>
-*!*
-<script>
-  document.write('<b>Hello from JS</b>');
-</script>
-*/!*
-<p>The end</p>
-```
-
-The call to `document.write(html)` writes the `html` into page "right here and now". The `html` string can be dynamically generated, so it's kind of flexible. We can use JavaScript to create a full-fledged webpage and write it.
-
-The method comes from times when there was no DOM, no standards... Really old times. It still lives, because there are scripts using it.
-
-In modern scripts we can rarely see it, because of the following important limitation:
-
-**The call to `document.write` only works while the page is loading.**
-
-If we call it afterwards, the existing document content is erased.
-
-For instance:
+Syntaxe:
 
 ```html run
-<p>After one second the contents of this page will be replaced...</p>
+<p>Někde na stránce...</p>
 *!*
 <script>
-  // document.write after 1 second
-  // that's after the page loaded, so it erases the existing content
-  setTimeout(() => document.write('<b>...By this.</b>'), 1000);
+  document.write('<b>Pozdrav od JS</b>');
+</script>
+*/!*
+<p>Konec</p>
+```
+
+Volání `document.write(html)` zapíše `html` na stránku „právě tady a teď“. Řetězec `html` může být dynamicky generován, takže metoda je do určité míry flexibilní. Můžeme v JavaScriptu vytvořit webovou stránku obsahující vše potřebné a zapsat ji.
+
+Tato metoda pochází ještě z doby, kdy neexistoval žádný DOM, žádné standardy... Z opravdu dávné doby. Stále však existuje, protože jsou skripty, které ji využívají.
+
+V moderních skriptech ji vidíme jen zřídka, a to kvůli následujícímu důležitému omezení:
+
+**Volání `document.write` funguje jen tehdy, dokud se stránka načítá.**
+
+Pokud ji zavoláme později, stávající obsah dokumentu bude smazán.
+
+Příklad:
+
+```html run
+<p>Po jedné sekundě bude obsah této stránky nahrazen...</p>
+*!*
+<script>
+  // document.write po 1 sekundě
+  // tedy po načtení této stránky, takže existující obsah se smaže
+  setTimeout(() => document.write('<b>...Tímto.</b>'), 1000);
 </script>
 */!*
 ```
 
-So it's kind of unusable at "after loaded" stage, unlike other DOM methods we covered above.
+Ve stavu „po načtení“ je tedy víceméně nepoužitelná, na rozdíl od ostatních DOM metod, které jsme tady probrali.
 
-That's the downside.
+To je její nevýhoda.
 
-There's an upside also. Technically, when `document.write` is called while the browser is reading ("parsing") incoming HTML, and it writes something, the browser consumes it just as if it were initially there, in the HTML text.
+Má však i výhodu. Technicky, když je `document.write` zavolána a něco zapíše, zatímco prohlížeč načítá („parsuje“) přicházející HTML kód, prohlížeč to zpracuje tak, jako by to bylo v původním HTML kódu.
 
-So it works blazingly fast, because there's *no DOM modification* involved. It writes directly into the page text, while the DOM is not yet built.
+Funguje tedy bleskově rychle, protože se nekoná *žádná modifikace DOMu*. Zapisuje rovnou do textu stránky, dokud ještě DOM není vytvořen.
 
-So if we need to add a lot of text into HTML dynamically, and we're at page loading phase, and the speed matters, it may help. But in practice these requirements rarely come together. And usually we can see this method in scripts just because they are old.
+Pokud tedy potřebujeme dynamicky přidat do HTML velké množství textu, nacházíme se ve fázi načítání stránky a záleží nám na rychlosti, tato metoda nám může pomoci. V praxi však tyto požadavky málokdy přicházejí současně. A ve skriptech tuto metodu vidíme převážně proto, že jsou prostě staré.
 
-## Summary
+## Shrnutí
 
-- Methods to create new nodes:
-    - `document.createElement(tag)` -- creates an element with the given tag,
-    - `document.createTextNode(value)` -- creates a text node (rarely used),
-    - `elem.cloneNode(deep)` -- clones the element, if `deep==true` then with all descendants.  
+- Metody pro vytváření nových uzlů:
+    - `document.createElement(značka)` -- vytvoří element se zadanou značkou,
+    - `document.createTextNode(hodnota)` -- vytvoří textový uzel (používá se málokdy),
+    - `elem.cloneNode(hluboce)` -- naklonuje element, pokud `hluboce==true`, pak se všemi potomky.
 
-- Insertion and removal:
-    - `node.append(...nodes or strings)` -- insert into `node`, at the end,
-    - `node.prepend(...nodes or strings)` -- insert into `node`, at the beginning,
-    - `node.before(...nodes or strings)` –- insert right before `node`,
-    - `node.after(...nodes or strings)` –- insert right after `node`,
-    - `node.replaceWith(...nodes or strings)` –- replace `node`.
-    - `node.remove()` –- remove the `node`.
+- Vkládání a odstraňování:
+    - `uzel.append(...uzly nebo řetězce)` -- vloží do `uzel` na jeho konec,
+    - `uzel.prepend(...uzly nebo řetězce)` -- vloží do `uzel` na jeho začátek,
+    - `uzel.before(...uzly nebo řetězce)` -- vloží bezprostředně před `uzel`,
+    - `uzel.after(...uzly nebo řetězce)` -- vloží bezprostředně za `uzel`,
+    - `uzel.replaceWith(...uzly nebo řetězce)` -- nahradí `uzel`,
+    - `uzel.remove()` -- odstraní `uzel`.
 
-    Text strings are inserted "as text".
+    Textové řetězce se vkládají „jako text“.
 
-- There are also "old school" methods:
-    - `parent.appendChild(node)`
-    - `parent.insertBefore(node, nextSibling)`
-    - `parent.removeChild(node)`
-    - `parent.replaceChild(newElem, node)`
+- Existují i metody „ze staré školy“:
+    - `rodič.appendChild(uzel)`
+    - `rodič.insertBefore(uzel, dalšíSourozenec)`
+    - `rodič.removeChild(uzel)`
+    - `rodič.replaceChild(novýElement, uzel)`
 
-    All these methods return `node`.
+    Všechny tyto metody vracejí `uzel`.
 
-- Given some HTML in `html`, `elem.insertAdjacentHTML(where, html)` inserts it depending on the value of `where`:
-    - `"beforebegin"` -- insert `html` right before `elem`,
-    - `"afterbegin"` -- insert `html` into `elem`, at the beginning,
-    - `"beforeend"` -- insert `html` into `elem`, at the end,
-    - `"afterend"` -- insert `html` right after `elem`.
+- Máme-li nějaký HTML kód v proměnné `html`, pak jej `elem.insertAdjacentHTML(kam, html)` vloží na místo, které závisí na hodnotě `kam`:
+    - `"beforebegin"` -- vloží `html` bezprostředně před `elem`,
+    - `"afterbegin"` -- vloží `html` do `elem` na jeho začátek,
+    - `"beforeend"` -- vloží `html` do `elem` na jeho konec,
+    - `"afterend"` -- vloží `html` bezprostředně za `elem`.
 
-    Also there are similar methods, `elem.insertAdjacentText` and `elem.insertAdjacentElement`, that insert text strings and elements, but they are rarely used.
+    Existují i podobné metody `elem.insertAdjacentText` a `elem.insertAdjacentElement`, které vkládají textové řetězce a elementy, ale používají se jen zřídka.
 
-- To append HTML to the page before it has finished loading:
+- Pro připojení HTML kódu ke stránce, ještě než skončilo její načítání:
     - `document.write(html)`
 
-    After the page is loaded such a call erases the document. Mostly seen in old scripts.
+    Po dokončení načítání stránky toto volání smaže dokument. K vidění převážně ve starých skriptech.

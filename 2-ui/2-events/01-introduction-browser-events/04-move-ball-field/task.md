@@ -2,20 +2,20 @@ importance: 5
 
 ---
 
-# Move the ball across the field
+# Přesuňte míč na hřišti
 
-Move the ball across the field to a click. Like this:
+Přesuňte míč na hřišti na místo, kam bylo kliknuto. Příklad:
 
 [iframe src="solution" height="260" link]
 
-Requirements:
+Požadavky:
 
-- The ball center should come exactly under the pointer on click (if possible without crossing the field edge).
-- CSS-animation is welcome.
-- The ball must not cross field boundaries.
-- When the page is scrolled, nothing should break.
+- Střed míče by se měl po kliknutí umístit přesně pod ukazatel (pokud je to možné, aniž by míč překročil okraj hřiště).
+- CSS animace je vítána.
+- Míč nesmí překročit hranice hřiště.
+- Při rolování stránky by se nemělo nic rozbít.
 
-Notes:
+Poznámky:
 
-- The code should also work with different ball and field sizes, not be bound to any fixed values.
-- Use properties `event.clientX/event.clientY` for click coordinates.
+- Kód by měl fungovat i pro jiné velikosti míče a hřiště, neměl by být vázán na pevné hodnoty.
+- Souřadnice kliknutí zjistěte z vlastností `událost.clientX/událost.clientY`.

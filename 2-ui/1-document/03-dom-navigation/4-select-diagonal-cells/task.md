@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Select all diagonal cells
+# Vyberte všechny diagonální buňky
 
-Write the code to paint all diagonal table cells in red.
+Napište kód, který obarví všechny diagonální buňky v tabulce červeně.
 
-You'll need to get all diagonal `<td>` from the `<table>` and paint them using the code:
+Budete muset načíst všechny diagonální `<td>` z `<table>` a obarvit je tímto kódem:
 
 ```js
-// td should be the reference to the table cell
+// td by měl být odkaz na buňku tabulky
 td.style.backgroundColor = 'red';
 ```
 
-The result should be:
+Výsledek by měl být:
 
 [iframe src="solution" height=180]

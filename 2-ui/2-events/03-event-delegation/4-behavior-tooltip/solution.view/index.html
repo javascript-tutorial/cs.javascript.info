@@ -6,7 +6,7 @@
   <style>
     body {
       height: 2000px;
-      /* make body scrollable, the tooltip should work after the scroll */
+      /* aby tělo bylo rolovatelné, tooltip by měl fungovat i po rolování */
     }
 
     .tooltip {
@@ -28,10 +28,10 @@
   <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
   <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
 
-  <button data-tooltip="the tooltip is longer than the element">Short button</button>
-  <button data-tooltip="HTML<br>tooltip">One more button</button>
+  <button data-tooltip="tento tooltip je delší než element">Krátké tlačítko</button>
+  <button data-tooltip="HTML<br>tooltip">Další tlačítko</button>
 
-  <p>Scroll the page to make buttons appear on the top, check if the tooltips show up correctly.</p>
+  <p>Rolujte stránkou tak, aby se tlačítka ocitla na vrchu, a zkontrolujte, zda se tooltipy zobrazí správně.</p>
 
 
   <script>
@@ -40,25 +40,25 @@
     document.onmouseover = function(event) {
       let target = event.target;
 
-      // if we have tooltip HTML...
+      // máme-li HTML pro tooltip...
       let tooltipHtml = target.dataset.tooltip;
       if (!tooltipHtml) return;
 
-      // ...create the tooltip element
+      // ...vytvoříme element tooltipu
 
       tooltipElem = document.createElement('div');
       tooltipElem.className = 'tooltip';
       tooltipElem.innerHTML = tooltipHtml;
       document.body.append(tooltipElem);
 
-      // position it above the annotated element (top-center)
+      // umístíme ho nad element s tooltipem (nahoru doprostřed)
       let coords = target.getBoundingClientRect();
 
       let left = coords.left + (target.offsetWidth - tooltipElem.offsetWidth) / 2;
-      if (left < 0) left = 0; // don't cross the left window edge
+      if (left < 0) left = 0; // nepřekročíme levý okraj okna
 
       let top = coords.top - tooltipElem.offsetHeight - 5;
-      if (top < 0) { // if crossing the top window edge, show below instead
+      if (top < 0) { // kdybychom překročili horní okraj okna, zobrazíme tooltip dole
         top = coords.top + target.offsetHeight + 5;
       }
 

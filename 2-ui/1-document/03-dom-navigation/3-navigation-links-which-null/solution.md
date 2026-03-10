@@ -1,6 +1,6 @@
-1. Yes, true. The element `elem.lastChild` is always the last one, it has no `nextSibling`.
-2. No, wrong, because `elem.children[0]` is the first child *among elements*. But there may exist non-element nodes before it. So `previousSibling` may be a text node.
+1. Ano, to je pravda. Element `elem.lastChild` je vždy poslední a nemá žádného dalšího sourozence `nextSibling`.
+2. Ne, to není pravda, protože `elem.children[0]` je prvním dítětem *mezi elementy*. Před ním však mohou existovat uzly, které nejsou elementy, takže `previousSibling` může být textový uzel.
 
-Please note: for both cases if there are no children, then there will be an error.
+Prosíme všimněte si, že v obou případech nastane chyba, jestliže element nemá žádné děti.
 
-If there are no children, `elem.lastChild` is `null`, so we can't access `elem.lastChild.nextSibling`. And the collection `elem.children` is empty (like an empty array `[]`).
+Pokud nemá žádné děti, `elem.lastChild` je `null`, takže nemůžeme přistupovat k `elem.lastChild.nextSibling`. A kolekce `elem.children` je prázdná (podobná prázdnému poli `[]`).

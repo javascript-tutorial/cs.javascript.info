@@ -1,1 +1,1 @@
-// Your code
+// Váš kód

@@ -2,35 +2,35 @@ importance: 4
 
 ---
 
-# Load images with a callback
+# Načtení obrázků s callbackem
 
-Normally, images are loaded when they are created. So when we add `<img>` to the page, the user does not see the picture immediately. The browser needs to load it first.
+Za normálních okolností se obrázky načítají, když jsou vytvořeny. Když tedy na stránku přidáme `<img>`, uživatel neuvidí obrázek okamžitě. Prohlížeč jej musí napřed načíst.
 
-To show an image immediately, we can create it "in advance", like this:
+Abychom obrázek zobrazili hned, můžeme jej vytvořit „v předstihu“, například takto:
 
 ```js
-let img = document.createElement('img');
-img.src = 'my.jpg';
+let obrázek = document.createElement('img');
+obrázek.src = 'my.jpg';
 ```
 
-The browser starts loading the image and remembers it in the cache. Later, when the same image appears in the document (no matter how), it shows up immediately.
+Prohlížeč začne načítat obrázek a zapamatuje si ho v mezipaměti. Když se později tentýž obrázek objeví v dokumentu (nezáleží na tom, jak), ukáže se okamžitě.
 
-**Create a function `preloadImages(sources, callback)` that loads all images from the array `sources` and, when ready, runs `callback`.**
+**Vytvořte funkci `načtiObrázkyPředem(zdroje, callback)`, která načte všechny obrázky z pole `zdroje`, a až budou připraveny, spustí `callback`.**
 
-For instance, this will show an `alert` after the images are loaded:
+Například tento kód po načtení obrázků zobrazí `alert`:
 
 ```js
-function loaded() {
-  alert("Images loaded")
+function načteny() {
+  alert("Obrázky načteny")
 }
 
-preloadImages(["1.jpg", "2.jpg", "3.jpg"], loaded);
+načtiObrázkyPředem(["1.jpg", "2.jpg", "3.jpg"], načteny);
 ```
 
-In case of an error, the function should still assume the picture "loaded".
+V případě chyby by funkce stále měla považovat obrázek za „načtený“.
 
-In other words, the `callback` is executed when all images are either loaded or errored out.
+Jinými slovy, `callback` se spustí, až budou všechny obrázky buď načteny, nebo jejich načítání skončí chybou.
 
-The function is useful, for instance, when we plan to show a gallery with many scrollable images, and want to be sure that all images are loaded.
+Tato funkce je užitečná například tehdy, když plánujeme zobrazit galerii s mnoha rolovatelnými obrázky a chceme zajistit, aby všechny obrázky byly načteny.
 
-In the source document you can find links to test images, and also the code to check whether they are loaded or not. It should output `300`.
+Ve zdrojovém dokumentu najdete odkazy na testovací obrázky a také kód, který ověří, zda jsou načteny nebo ne. Měl by vypsat `300`.

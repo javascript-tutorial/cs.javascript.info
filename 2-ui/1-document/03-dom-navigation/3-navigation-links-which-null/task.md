@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# The sibling question
+# Otázka ohledně sourozenců
 
-If `elem` -- is an arbitrary DOM element node...
+Pokud `elem` je jakýkoli elementový uzel DOMu...
 
-- Is it true that `elem.lastChild.nextSibling` is always `null`?
-- Is it true that `elem.children[0].previousSibling` is always `null` ?
+- Je pravda, že `elem.lastChild.nextSibling` je vždy `null`?
+- Je pravda, že `elem.children[0].previousSibling` je vždy `null` ?

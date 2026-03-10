@@ -1,51 +1,51 @@
 'use strict';
 
-// Here's a brief sketch of the class
-// with things that you'll need anyway
-class HoverIntent {
+// Zde je krátký náčrt třídy
+// s věcmi, které budete zaručeně potřebovat
+class Setrvání {
 
   constructor({
-    sensitivity = 0.1, // speed less than 0.1px/ms means "hovering over an element"
-    interval = 100, // measure mouse speed once per 100ms: calculate the distance between previous and next points
+    citlivost = 0.1, // rychlost menší než 0.1px/ms znamená "popojíždění nad elementem"
+    interval = 100, // budeme měřit rychlost myši jednou za 100ms: spočítáme vzdálenost mezi předchozími a nynějšími body
     elem,
     over,
     out
   }) {
-    this.sensitivity = sensitivity;
+    this.citlivost = citlivost;
     this.interval = interval;
     this.elem = elem;
     this.over = over;
     this.out = out;
 
-    // make sure "this" is the object in event handlers.
+    // zajistíme, aby „this“ byl objekt v handlerech událostí.
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
 
-    // assign the handlers
+    // přiřadíme handlery
     elem.addEventListener("mouseover", this.onMouseOver);
     elem.addEventListener("mouseout", this.onMouseOut);
 
-    // continue from this point
+    // od tohoto bodu pokračujte
 
   }
 
-  onMouseOver(event) {
+  onMouseOver(událost) {
     /* ... */
   }
 
-  onMouseOut(event) {
+  onMouseOut(událost) {
     /* ... */
   }
 
-  onMouseMove(event) {
+  onMouseMove(událost) {
     /* ... */
   }
 
 
   destroy() {
-    /* your code to "disable" the functionality, remove all handlers */
-    /* it's needed for the tests to work */
+    /* váš kód pro „zakázání“ této funkcionality, odstraní všechny handlery */
+    /* je nezbytný, aby fungovaly testy */
   }
 
 }

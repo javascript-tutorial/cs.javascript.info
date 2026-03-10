@@ -1,2 +1,2 @@
 
-# Generators, advanced iteration
+# Generátory, pokročilá iterace

@@ -1,4 +1,4 @@
-.arrow {
+.šipka {
   padding: 0;
   background: #ddd;
   border-radius: 15px;
@@ -9,11 +9,11 @@
   display: block;
 }
 
-.arrow:focus {
+.šipka:focus {
   outline: none;
 }
 
-.arrow:hover {
+.šipka:hover {
   background: #ccc;
   cursor: pointer;
 }
@@ -30,9 +30,9 @@ ul {
 ul img {
   width: 130px;
   height: 130px;
-  display: block; /* removes extra space near images */
+  display: block; /* odstraní prostor navíc vedle obrázků */
 }
 
 ul li {
-  display: inline-block; /* removes extra space between list items
+  display: inline-block; /* odstraní prostor navíc mezi prvky seznamu */
 }

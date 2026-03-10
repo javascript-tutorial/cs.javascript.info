@@ -2,17 +2,17 @@ importance: 5
 
 ---
 
-# Selectable list
+# Vybírací seznam
 
-Create a list where elements are selectable, like in file-managers.
+Vytvořte seznam, jehož elementy lze vybírat, podobně jako ve správci souborů.
 
-- A click on a list element selects only that element (adds the class `.selected`), deselects all others.
-- If a click is made with `key:Ctrl` (`key:Cmd` for Mac), then the selection is toggled on the element, but other elements are not modified.
+- Kliknutí na seznam vybere pouze tento element (přidá třídu `.vybrán`) a zruší výběr všech ostatních.
+- Pokud je kliknuto se stisknutým `key:Ctrl` (na Macu `key:Cmd`), pak se výběr tohoto elementu přepne, ale výběr ostatních elementů se nezmění.
 
-The demo:
+Demo:
 
 [iframe border="1" src="solution" height=180]
 
-P.S. For this task we can assume that list items are text-only. No nested tags.
+P.S. V této úloze můžeme předpokládat, že položky v seznamu jsou pouze textové, neobsahují vnořené značky.
 
-P.P.S. Prevent the native browser selection of the text on clicks.
+P.P.S. Zakažte standardní výběr textu prohlížečem při kliknutí.

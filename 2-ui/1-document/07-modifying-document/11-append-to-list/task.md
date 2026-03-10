@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Insert the HTML in the list
+# Vložte HTML kód do seznamu
 
-Write the code to insert `<li>2</li><li>3</li>` between two `<li>` here:
+Napište kód, který vloží `<li>2</li><li>3</li>` mezi tyto dvě značky `<li>`:
 
 ```html
 <ul id="ul">
-  <li id="one">1</li>
-  <li id="two">4</li>
+  <li id="jedna">1</li>
+  <li id="dvě">4</li>
 </ul>
 ```

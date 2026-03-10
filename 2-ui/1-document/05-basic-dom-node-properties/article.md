@@ -1,81 +1,81 @@
-# Node properties: type, tag and contents
+# Vlastnosti uzlů: typ, značka a obsah
 
-Let's get a more in-depth look at DOM nodes.
+Získejme trochu hlubší náhled na DOM uzly.
 
-In this chapter we'll see more into what they are and learn their most used properties.
+V této kapitole se dozvíme víc o tom, jak vypadají, a naučíme se jejich nejpoužívanější vlastnosti.
 
-## DOM node classes
+## Třídy DOM uzlů
 
-Different DOM nodes may have different properties. For instance, an element node corresponding to tag `<a>` has link-related properties, and the one corresponding to `<input>` has input-related properties and so on. Text nodes are not the same as element nodes. But there are also common properties and methods between all of them, because all classes of DOM nodes form a single hierarchy.
+Různé DOM uzly mohou mít různé vlastnosti. Například elementový uzel odpovídající značce `<a>` má vlastnosti týkající se odkazu, uzel odpovídající značce `<input>` má vlastnosti týkající se vstupu a podobně. Textové uzly nejsou stejné jako elementové, ale i mezi nimi všemi existují společné vlastnosti a metody, jelikož všechny třídy DOM uzlů tvoří jednu hierarchii.
 
-Each DOM node belongs to the corresponding built-in class.
+Každý DOM uzel náleží do příslušné vestavěné třídy.
 
-The root of the hierarchy is [EventTarget](https://dom.spec.whatwg.org/#eventtarget), that is inherited by  [Node](https://dom.spec.whatwg.org/#interface-node), and other DOM nodes inherit from it.
+Kořenem hierarchie je třída [EventTarget](https://dom.spec.whatwg.org/#eventtarget). Z ní je zděděna třída [Node](https://dom.spec.whatwg.org/#interface-node) a z ní jsou zděděny ostatní DOM uzly.
 
-Here's the picture, explanations to follow:
+Zde je obrázek, vysvětlení bude následovat:
 
 ![](dom-class-hierarchy.svg)
 
-The classes are:
+Třídy jsou:
 
-- [EventTarget](https://dom.spec.whatwg.org/#eventtarget) -- is the root "abstract" class for everything.
+- [EventTarget](https://dom.spec.whatwg.org/#eventtarget) -- je kořenová „abstraktní“ třída pro všechno.
 
-    Objects of that class are never created. It serves as a base, so that all DOM nodes support so-called "events", we'll study them later.
+    Objekty této třídy nejsou nikdy vytvořeny. Třída slouží jako báze, takže všechny DOM uzly podporují tzv. „události“. Prostudujeme je později.
 
-- [Node](https://dom.spec.whatwg.org/#interface-node) -- is also an "abstract" class, serving as a base  for DOM nodes.
+- [Node](https://dom.spec.whatwg.org/#interface-node) -- je také „abstraktní“ třída, která slouží jako báze pro DOM uzly.
 
-    It provides the core tree functionality: `parentNode`, `nextSibling`, `childNodes` and so on (they are getters). Objects of `Node` class are never created. But there are other classes that inherit from it (and so inherit the `Node` functionality).
+    Poskytuje jádro stromové funkcionality: `parentNode`, `nextSibling`, `childNodes` a podobně (to jsou gettery). Objekty třídy `Node` nejsou nikdy vytvořeny, ale existují další třídy, které jsou z ní zděděny (a tedy dědí funkcionalitu třídy `Node`).
 
-- [Document](https://dom.spec.whatwg.org/#interface-document), for historical reasons often inherited by `HTMLDocument` (though the latest spec doesn't dictate it) -- is a document as a whole.
+- [Document](https://dom.spec.whatwg.org/#interface-document), z historických důvodů je z něj často zděděn `HTMLDocument` (ačkoli nejnovější specifikace to nenařizuje) -- je dokument jako celek.
 
-    The `document` global object belongs exactly to this class. It serves as an entry point to the DOM.
+    Přímo do této třídy patří globální objekt `document`, který slouží jako vstupní bod DOMu.
 
-- [CharacterData](https://dom.spec.whatwg.org/#interface-characterdata) -- an "abstract" class, inherited by:
-    - [Text](https://dom.spec.whatwg.org/#interface-text) -- the class corresponding to a text inside elements, e.g. `Hello` in `<p>Hello</p>`.
-    - [Comment](https://dom.spec.whatwg.org/#interface-comment) -- the class for comments. They are not shown, but each comment becomes a member of DOM.
+- [CharacterData](https://dom.spec.whatwg.org/#interface-characterdata) -- „abstraktní“ třída, z níž jsou zděděny:
+    - [Text](https://dom.spec.whatwg.org/#interface-text) -- třída odpovídající textu uvnitř elementů, např. `Ahoj` v `<p>Ahoj</p>`.
+    - [Comment](https://dom.spec.whatwg.org/#interface-comment) -- třída pro komentáře. Ty se nezobrazují, ale každý komentář se stává prvkem DOMu.
 
-- [Element](https://dom.spec.whatwg.org/#interface-element) -- is the base class for DOM elements.
+- [Element](https://dom.spec.whatwg.org/#interface-element) -- je základní třídou pro DOM elementy.
 
-    It provides element-level navigation like `nextElementSibling`, `children` and searching methods like `getElementsByTagName`, `querySelector`.
+    Poskytuje navigaci na úrovni elementů, např. `nextElementSibling` nebo `children`, a vyhledávací metody, např. `getElementsByTagName`, `querySelector`.
 
-    A browser supports not only HTML, but also XML and SVG. So the `Element` class serves as a base for more specific classes: `SVGElement`, `XMLElement` (we don't need them here) and `HTMLElement`.
+    Prohlížeč podporuje nejen HTML, ale také XML a SVG. Třída `Element` tedy slouží jako báze pro specifičtější třídy: `SVGElement`, `XMLElement` (ty zde nebudeme potřebovat) a `HTMLElement`.
 
-- Finally, [HTMLElement](https://html.spec.whatwg.org/multipage/dom.html#htmlelement) is the basic class for all HTML elements. We'll work with it most of the time.
+- A konečně [HTMLElement](https://html.spec.whatwg.org/multipage/dom.html#htmlelement) je základní třída pro všechny HTML elementy. S ní budeme pracovat většinu času.
 
-    It is inherited by concrete HTML elements:
-    - [HTMLInputElement](https://html.spec.whatwg.org/multipage/forms.html#htmlinputelement) -- the class for `<input>` elements,
-    - [HTMLBodyElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlbodyelement) -- the class for `<body>` elements,
-    - [HTMLAnchorElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlanchorelement) -- the class for `<a>` elements,
-    - ...and so on.
+    Jsou z ní zděděny konkrétní HTML elementy:
+    - [HTMLInputElement](https://html.spec.whatwg.org/multipage/forms.html#htmlinputelement) -- třída pro elementy `<input>`,
+    - [HTMLBodyElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlbodyelement) -- třída pro elementy `<body>`,
+    - [HTMLAnchorElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlanchorelement) -- třída pro elementy `<a>`,
+    - ...a podobně.
 
-There are many other tags with their own classes that may have specific properties and methods, while some elements, such as `<span>`, `<section>`, `<article>` do not have any specific properties, so they are instances of `HTMLElement` class.
+Existuje mnoho dalších značek s vlastními třídami, které mohou mít specifické vlastnosti a metody. Naproti tomu některé elementy, například `<span>`, `<section>` nebo `<article>`, nemají žádné specifické vlastnosti, takže jsou instancemi třídy `HTMLElement`.
 
-So, the full set of properties and methods of a given node comes as the result of the chain of inheritance.
+Celá sada vlastností a metod každého uzlu je tedy výsledkem řetězce dědičností.
 
-For example, let's consider the DOM object for an `<input>` element. It belongs to [HTMLInputElement](https://html.spec.whatwg.org/multipage/forms.html#htmlinputelement) class.
+Uvažujme například DOM objekt pro element `<input>`. Ten patří do třídy [HTMLInputElement](https://html.spec.whatwg.org/multipage/forms.html#htmlinputelement).
 
-It gets properties and methods as a superposition of (listed in inheritance order):
+Jeho vlastnosti a metody jsou sjednocením následujících (vyjmenovány v pořadí dědičnosti):
 
-- `HTMLInputElement` -- this class provides input-specific properties,
-- `HTMLElement` -- it provides common HTML element methods (and getters/setters),
-- `Element` -- provides generic element methods,
-- `Node` -- provides common DOM node properties,
-- `EventTarget` -- gives the support for events (to be covered),
-- ...and finally it inherits from `Object`, so "plain object" methods like `hasOwnProperty` are also available.
+- `HTMLInputElement` -- tato třída poskytuje vlastnosti specifické pro vstup,
+- `HTMLElement` -- poskytuje metody (a gettery/settery) společné pro HTML elementy,
+- `Element` -- poskytuje generické metody elementů,
+- `Node` -- poskytuje vlastnosti společné pro DOM uzly,
+- `EventTarget` -- poskytuje podporu událostí (budou vysvětleny v dalších kapitolách),
+- ...a nakonec je vše zděděno z třídy `Object`, takže k dispozici jsou i metody „planého objektu“, např. `hasOwnProperty`.
 
-To see the DOM node class name, we can recall that an object usually has the `constructor` property. It references the class constructor, and `constructor.name` is its name:
+Chceme-li vidět název třídy DOM uzlu, můžeme si vzpomenout, že objekt zpravidla obsahuje vlastnost `constructor`. Ta se odkazuje na třídní konstruktor a jeho název je v `constructor.name`:
 
 ```js run
 alert( document.body.constructor.name ); // HTMLBodyElement
 ```
 
-...Or we can just `toString` it:
+...Nebo můžeme prostě použít `toString`:
 
 ```js run
 alert( document.body ); // [object HTMLBodyElement]
 ```
 
-We also can use `instanceof` to check the inheritance:
+Můžeme také ověřit dědičnost pomocí `instanceof`:
 
 ```js run
 alert( document.body instanceof HTMLBodyElement ); // true
@@ -85,38 +85,38 @@ alert( document.body instanceof Node ); // true
 alert( document.body instanceof EventTarget ); // true
 ```
 
-As we can see, DOM nodes are regular JavaScript objects. They use prototype-based classes for inheritance.
+Jak vidíme, DOM uzly jsou obvyklé JavaScriptové objekty a k dědičnosti využívají třídy založené na prototypech.
 
-That's also easy to see by outputting an element with `console.dir(elem)` in a browser. There in the console you can see `HTMLElement.prototype`, `Element.prototype` and so on.
+To je dobře vidět i při vypsání elementu v prohlížeči příkazem `console.dir(elem)`. V konzoli pak uvidíte `HTMLElement.prototype`, `Element.prototype` a tak dále.
 
-```smart header="`console.dir(elem)` versus `console.log(elem)`"
-Most browsers support two commands in their developer tools: `console.log` and `console.dir`. They output their arguments to the console. For JavaScript objects these commands usually do the same.
+```smart header="`console.dir(elem)` oproti `console.log(elem)`"
+Většina prohlížečů ve svých vývojářských nástrojích podporuje dva příkazy: `console.log` a `console.dir`. Oba vypíší své argumenty na konzoli. Pro JavaScriptové objekty obvykle oba příkazy zobrazí totéž.
 
-But for DOM elements they are different:
+Pro DOM elementy se však liší:
 
-- `console.log(elem)` shows the element DOM tree.
-- `console.dir(elem)` shows the element as a DOM object, good to explore its properties.
+- `console.log(elem)` zobrazí DOM strom elementu.
+- `console.dir(elem)` zobrazí element jako DOM objekt, což je dobré pro prozkoumání jeho vlastností.
 
-Try it on `document.body`.
+Zkuste si to na `document.body`.
 ```
 
-````smart header="IDL in the spec"
-In the specification, DOM classes aren't described by using JavaScript, but a special [Interface description language](https://en.wikipedia.org/wiki/Interface_description_language) (IDL), that is usually easy to understand.
+````smart header="IDL ve specifikaci"
+Ve specifikaci nejsou DOM třídy popsány v JavaScriptu, ale ve speciálním jazyce pro popis rozhraní nazvaném [Interface description language](https://en.wikipedia.org/wiki/Interface_description_language) (IDL), kterému je obvykle snadné porozumět.
 
-In IDL all properties are prepended with their types. For instance, `DOMString`, `boolean` and so on.
+V IDL je před každou vlastností uveden její typ, například `DOMString`, `boolean` a podobně.
 
-Here's an excerpt from it, with comments:
+Uvádíme úryvek z popisu s komentáři:
 
 ```js
-// Define HTMLInputElement
+// Definice HTMLInputElement
 *!*
-// The colon ":" means that HTMLInputElement inherits from HTMLElement
+// Dvojtečka ":" znamená, že HTMLInputElement je zděděn z HTMLElement
 */!*
 interface HTMLInputElement: HTMLElement {
-  // here go properties and methods of <input> elements
+  // sem přijdou vlastnosti a metody elementů <input>
 
 *!*
-  // "DOMString" means that the value of a property is a string
+  // "DOMString" znamená, že hodnotou vlastnosti je řetězec
 */!*
   attribute DOMString accept;
   attribute DOMString alt;
@@ -124,12 +124,12 @@ interface HTMLInputElement: HTMLElement {
   attribute DOMString value;
 
 *!*
-  // boolean value property (true/false)
+  // vlastnost s booleovskou hodnotou (true/false)
   attribute boolean autofocus;
 */!*
   ...
 *!*
-  // now the method: "void" means that the method returns no value
+  // teď metoda: "void" znamená, že metoda nevrací žádnou hodnotu
 */!*
   void select();
   ...
@@ -137,386 +137,386 @@ interface HTMLInputElement: HTMLElement {
 ```
 ````
 
-## The "nodeType" property
+## Vlastnost „nodeType“
 
-The `nodeType` property provides one more, "old-fashioned" way to get the "type" of a DOM node.
+Vlastnost `nodeType` poskytuje ještě jeden, „staromódní“ způsob, jak získat „typ“ DOM uzlu.
 
-It has a numeric value:
-- `elem.nodeType == 1` for element nodes,
-- `elem.nodeType == 3` for text nodes,
-- `elem.nodeType == 9` for the document object,
-- there are few other values in [the specification](https://dom.spec.whatwg.org/#node).
+Obsahuje číselnou hodnotu:
+- `elem.nodeType == 1` pro elementové uzly,
+- `elem.nodeType == 3` pro textové uzly,
+- `elem.nodeType == 9` pro objekt dokumentu,
+- ve [specifikaci](https://dom.spec.whatwg.org/#node) je uvedeno několik dalších hodnot.
 
-For instance:
+Příklad:
 
 ```html run
 <body>
   <script>
   let elem = document.body;
 
-  // let's examine: what type of node is in elem?
+  // prozkoumejme: jaký druh uzlu je v elem?
   alert(elem.nodeType); // 1 => element
 
-  // and its first child is...
+  // a jeho první dítě je...
   alert(elem.firstChild.nodeType); // 3 => text
 
-  // for the document object, the type is 9
+  // pro objekt document je typ 9
   alert( document.nodeType ); // 9
   </script>
 </body>
 ```
 
-In modern scripts, we can use `instanceof` and other class-based tests to see the node type, but sometimes `nodeType` may be simpler. We can only read `nodeType`, not change it.
+V moderních skriptech můžeme ke zjištění typu uzlu použít `instanceof` a další testy založené na třídách, ale `nodeType` může být někdy jednodušší. Vlastnost `nodeType` můžeme jenom číst, ne měnit.
 
-## Tag: nodeName and tagName
+## Značka: nodeName a tagName
 
-Given a DOM node, we can read its tag name from `nodeName` or `tagName` properties:
+Máme-li DOM uzel, můžeme načíst název jeho značky z vlastností `nodeName` nebo `tagName`:
 
-For instance:
+Příklad:
 
 ```js run
 alert( document.body.nodeName ); // BODY
 alert( document.body.tagName ); // BODY
 ```
 
-Is there any difference between `tagName` and `nodeName`?
+Je nějaký rozdíl mezi `tagName` a `nodeName`?
 
-Sure, the difference is reflected in their names, but is indeed a bit subtle.
+Jistě, rozdíl se odráží v jejich názvech, ale to je samozřejmě příliš jemné.
 
-- The `tagName` property exists only for `Element` nodes.
-- The `nodeName` is defined for any `Node`:
-    - for elements it means the same as `tagName`.
-    - for other node types (text, comment, etc.) it has a string with the node type.
+- Vlastnost `tagName` existuje pouze pro uzly třídy `Element`.
+- Vlastnost `nodeName` je definována pro každý `Node`:
+    - u elementů má stejný význam jako `tagName`.
+    - u uzlů jiných typů (textové, komentářové atd.) obsahuje řetězec s typem uzlu.
 
-In other words, `tagName` is only supported by element nodes (as it originates from `Element` class), while `nodeName` can say something about other node types.
+Jinými slovy, `tagName` je podporována jen v elementových uzlech (protože pochází ze třídy `Element`), zatímco `nodeName` nám může něco říci i o uzlech jiných typů.
 
-For instance, let's compare `tagName` and `nodeName` for the `document` and a comment node:
+Srovnejme například `tagName` a `nodeName` pro `document` a komentářový uzel:
 
 
 ```html run
-<body><!-- comment -->
+<body><!-- komentář -->
 
   <script>
-    // for comment
-    alert( document.body.firstChild.tagName ); // undefined (not an element)
+    // pro komentář
+    alert( document.body.firstChild.tagName ); // undefined (není to element)
     alert( document.body.firstChild.nodeName ); // #comment
 
-    // for document
-    alert( document.tagName ); // undefined (not an element)
+    // pro dokument
+    alert( document.tagName ); // undefined (není to element)
     alert( document.nodeName ); // #document
   </script>
 </body>
 ```
 
-If we only deal with elements, then we can use both `tagName` and `nodeName` - there's no difference.
+Jestliže pracujeme pouze s elementy, můžeme používat `tagName` i `nodeName` - není v tom žádný rozdíl.
 
-```smart header="The tag name is always uppercase except in XML mode"
-The browser has two modes of processing documents: HTML and XML. Usually the HTML-mode is used for webpages. XML-mode is enabled when the browser receives an XML-document with the header: `Content-Type: application/xml+xhtml`.
+```smart header="Název značky je vždy velkými písmeny, nejsme-li v režimu XML"
+Prohlížeč má dva režimy zpracování dokumentů: HTML a XML. Pro webové stránky se obvykle používá režim HTML. Režim XML je povolen, když prohlížeč obdrží XML dokument s hlavičkou: `Content-Type: application/xml+xhtml`.
 
-In HTML mode `tagName/nodeName` is always uppercased: it's `BODY` either for `<body>` or `<BoDy>`.
+V režimu HTML je hodnota `tagName/nodeName` vždy velkými písmeny: bude to `BODY` pro `<body>` i pro `<BoDy>`.
 
-In XML mode the case is kept "as is". Nowadays XML mode is rarely used.
+V režimu XML jsou velká a malá písmena ponechána beze změny. V současnosti se režim XML používá zřídkakdy.
 ```
 
 
-## innerHTML: the contents
+## innerHTML: obsah
 
-The [innerHTML](https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin) property allows to get the HTML inside the element as a string.
+Vlastnost [innerHTML](https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin) umožňuje získat HTML kód uvnitř elementu jako řetězec.
 
-We can also modify it. So it's one of the most powerful ways to change the page.
+Můžeme ji také měnit. Je to tedy jeden z nejsilnějších způsobů, jak měnit stránku.
 
-The example shows the contents of `document.body` and then replaces it completely:
+Následující příklad zobrazí obsah `document.body` a pak jej celý nahradí za jiný:
 
 ```html run
 <body>
-  <p>A paragraph</p>
-  <div>A div</div>
+  <p>Odstavec</p>
+  <div>Div</div>
 
   <script>
-    alert( document.body.innerHTML ); // read the current contents
-    document.body.innerHTML = 'The new BODY!'; // replace it
+    alert( document.body.innerHTML ); // načte aktuální obsah
+    document.body.innerHTML = 'Nové TĚLO!'; // nahradí jej za jiný
   </script>
 
 </body>
 ```
 
-We can try to insert invalid HTML, the browser will fix our errors:
+Můžeme se pokusit vložit vadný HTML kód, prohlížeč naše chyby opraví:
 
 ```html run
 <body>
 
   <script>
-    document.body.innerHTML = '<b>test'; // forgot to close the tag
-    alert( document.body.innerHTML ); // <b>test</b> (fixed)
+    document.body.innerHTML = '<b>test'; // zapomněli jsme uzavřít značku
+    alert( document.body.innerHTML ); // <b>test</b> (opraveno)
   </script>
 
 </body>
 ```
 
-```smart header="Scripts don't execute"
-If `innerHTML` inserts a `<script>` tag into the document -- it becomes a part of HTML, but doesn't execute.
+```smart header="Skripty se nespustí"
+Jestliže `innerHTML` vloží do dokumentu značku `<script>`, skript se stane součástí HTML kódu, ale nespustí se.
 ```
 
-### Beware: "innerHTML+=" does a full overwrite
+### Pozor: „innerHTML+=“ obsah zcela přepíše
 
-We can append HTML to an element by using `elem.innerHTML+="more html"`.
+Můžeme přidat HTML kód do elementu pomocí `elem.innerHTML+="další html"`.
 
-Like this:
+Třeba takto:
 
 ```js
-chatDiv.innerHTML += "<div>Hello<img src='smile.gif'/> !</div>";
-chatDiv.innerHTML += "How goes?";
+chatDiv.innerHTML += "<div>Ahoj<img src='smile.gif'/> !</div>";
+chatDiv.innerHTML += "Jak se máš?";
 ```
 
-But we should be very careful about doing it, because what's going on is *not* an addition, but a full overwrite.
+Při tom bychom si však měli dávat velký pozor, protože to, co se stane, *nebude* přidání obsahu, ale jeho úplné přepsání.
 
-Technically, these two lines do the same:
+Technicky následující dva řádky udělají totéž:
 
 ```js
 elem.innerHTML += "...";
-// is a shorter way to write:
+// je kratší způsob, jak napsat:
 *!*
 elem.innerHTML = elem.innerHTML + "..."
 */!*
 ```
 
-In other words, `innerHTML+=` does this:
+Jinými slovy, `innerHTML+=` udělá následující:
 
-1. The old contents is removed.
-2. The new `innerHTML` is written instead (a concatenation of the old and the new one).
+1. Odstraní starý obsah.
+2. Zapíše místo něj nový obsah `innerHTML` (zřetězení starého a nového obsahu).
 
-**As the content is "zeroed-out" and rewritten from the scratch, all images and other resources will be reloaded**.
+**Když je obsah „vynulován“ a od základů přepsán, všechny obrázky a další zdroje budou znovu načteny**.
 
-In the `chatDiv` example above the line `chatDiv.innerHTML+="How goes?"` re-creates the HTML content and reloads `smile.gif` (hope it's cached). If `chatDiv` has a lot of other text and images, then the reload becomes clearly visible.
+V uvedeném příkladu `chatDiv` řádek `chatDiv.innerHTML+="Jak se máš?"` znovu vytvoří HTML obsah a znovu načte `smile.gif` (doufejme, že je v mezipaměti). Jestliže `chatDiv` obsahuje spoustu dalšího textu a obrázků, bude opakované načtení jasně viditelné.
 
-There are other side-effects as well. For instance, if the existing text was selected with the mouse, then most browsers will remove the selection upon rewriting `innerHTML`. And if there was an `<input>` with a text entered by the visitor, then the text will be removed. And so on.
+Má to i další vedlejší efekty. Například jestliže návštěvník vybral myší existující text, většina prohlížečů po přepsání `innerHTML` výběr zruší. A pokud v něm byl `<input>`, do něhož návštěvník zadal text, bude tento text odstraněn. A podobně.
 
-Luckily, there are other ways to add HTML besides `innerHTML`, and we'll study them soon.
+Naštěstí kromě `innerHTML` existují i jiné způsoby, jak přidat HTML kód. Brzy je prostudujeme.
 
-## outerHTML: full HTML of the element
+## outerHTML: celý HTML kód elementu
 
-The `outerHTML` property contains the full HTML of the element. That's like `innerHTML` plus the element itself.
+Vlastnost `outerHTML` obsahuje celý HTML kód elementu. Je to jako `innerHTML` plus element samotný.
 
-Here's an example:
+Zde je příklad:
 
 ```html run
-<div id="elem">Hello <b>World</b></div>
+<div id="elem">Ahoj <b>světe</b></div>
 
 <script>
-  alert(elem.outerHTML); // <div id="elem">Hello <b>World</b></div>
+  alert(elem.outerHTML); // <div id="elem">Ahoj <b>světe</b></div>
 </script>
 ```
 
-**Beware: unlike `innerHTML`, writing to `outerHTML` does not change the element. Instead, it replaces it in the DOM.**
+**Pozor: na rozdíl od `innerHTML` zápis do `outerHTML` nezmění element, ale místo toho jej v DOMu nahradí novým.**
 
-Yeah, sounds strange, and strange it is, that's why we make a separate note about it here. Take a look.
+Ano, zní to zvláštně a zvláštní to také je, proto tomu zde věnujeme zvláštní poznámku. Podívejte se.
 
-Consider the example:
+Uvažujme tento příklad:
 
 ```html run
-<div>Hello, world!</div>
+<div>Ahoj, světe!</div>
 
 <script>
   let div = document.querySelector('div');
 
 *!*
-  // replace div.outerHTML with <p>...</p>
+  // nahradí div.outerHTML za <p>...</p>
 */!*
-  div.outerHTML = '<p>A new element</p>'; // (*)
+  div.outerHTML = '<p>Nový element</p>'; // (*)
 
 *!*
-  // Wow! 'div' is still the same!
+  // Páni! 'div' je pořád stejný!
 */!*
-  alert(div.outerHTML); // <div>Hello, world!</div> (**)
+  alert(div.outerHTML); // <div>Ahoj, světe!</div> (**)
 </script>
 ```
 
-Looks really odd, right?
+To vypadá opravdu divně, že?
 
-In the line `(*)` we replaced `div` with `<p>A new element</p>`. In the outer document (the DOM) we can see the new content instead of the `<div>`. But, as we can see in line `(**)`, the value of the old `div` variable hasn't changed!
+Na řádku `(*)` jsme nahradili `div` za `<p>Nový element</p>`. Ve vnějším dokumentu (DOMu) vidíme místo `<div>` nový obsah. Ale jak vidíme na řádku `(**)`, hodnota staré proměnné `div` se nezměnila!
 
-The `outerHTML` assignment does not modify the DOM element (the object referenced by, in this case, the variable 'div'), but removes it from the DOM and inserts the new HTML in its place.
+Přiřazení do `outerHTML` nezmění DOM element (objekt, na který v tomto případě odkazuje proměnná `div`), ale odstraní jej z DOMu a na jeho místo vloží nový HTML kód.
 
-So what happened in `div.outerHTML=...` is:
-- `div` was removed from the document.
-- Another piece of HTML `<p>A new element</p>` was inserted in its place.
-- `div` still has its old value. The new HTML wasn't saved to any variable.
+Při `div.outerHTML=...` se tedy stalo následující:
+- `div` byl odstraněn z dokumentu.
+- Na jeho místo byl vložen jiný kousek HTML kódu `<p>Nový element</p>`.
+- `div` má stále svou původní hodnotu. Nový HTML kód se neuložil do žádné proměnné.
 
-It's so easy to make an error here: modify `div.outerHTML` and then continue to work with `div` as if it had the new content in it. But it doesn't. Such thing is correct for `innerHTML`, but not for `outerHTML`.
+Je velmi snadné udělat tady chybu: změnit `div.outerHTML` a pak pokračovat v práci s `div`, jako by v sobě měl nový obsah. Ale tak to není. Něco takového je v pořádku pro `innerHTML`, ale ne pro `outerHTML`.
 
-We can write to `elem.outerHTML`, but should keep in mind that it doesn't change the element we're writing to ('elem'). It puts the new HTML in its place instead. We can get references to the new elements by querying the DOM.
+Můžeme do `elem.outerHTML` zapisovat, ale měli bychom mít na paměti, že tím nezměníme element, do něhož zapisujeme (`elem`). Namísto toho vložíme na jeho místo nový HTML kód. Odkazy na nové elementy můžeme získat prohledáváním DOMu.
 
-## nodeValue/data: text node content
+## nodeValue/data: obsah textového uzlu
 
-The `innerHTML` property is only valid for element nodes.
+Vlastnost `innerHTML` platí jen pro elementové uzly.
 
-Other node types, such as text nodes, have their counterpart: `nodeValue` and `data` properties. These two are almost the same for practical use, there are only minor specification differences. So we'll use `data`, because it's shorter.
+Jiné druhy uzlů, například textové, mají její protějšek: vlastnosti `nodeValue` a `data`. Pro praktické použití jsou obě téměř stejné, jsou mezi nimi jen drobné rozdíly ve specifikaci. Budeme tedy používat `data`, protože je kratší.
 
-An example of reading the content of a text node and a comment:
+Příklad načtení obsahu textového uzlu a komentáře:
 
 ```html run height="50"
 <body>
-  Hello
-  <!-- Comment -->
+  Ahoj
+  <!-- Komentář -->
   <script>
     let text = document.body.firstChild;
 *!*
-    alert(text.data); // Hello
+    alert(text.data); // Ahoj
 */!*
 
-    let comment = text.nextSibling;
+    let komentář = text.nextSibling;
 *!*
-    alert(comment.data); // Comment
+    alert(komentář.data); // Komentář
 */!*
   </script>
 </body>
 ```
 
-For text nodes we can imagine a reason to read or modify them, but why comments?
+U textových uzlů si dokážeme představit důvod, proč je načítáme nebo měníme, ale u komentářů?
 
-Sometimes developers embed information or template instructions into HTML in them, like this:
+Vývojáři do nich někdy vkládají informace nebo instrukce pro šablony v HTML, například:
 
 ```html
-<!-- if isAdmin -->
-  <div>Welcome, Admin!</div>
+<!-- if jeSprávce -->
+  <div>Vítáme vás, pane správce!</div>
 <!-- /if -->
 ```
 
-...Then JavaScript can read it from `data` property and process embedded instructions.
+...Pak JavaScript může číst z jejich vlastnosti `data` a zpracovat vložené instrukce.
 
-## textContent: pure text
+## textContent: čistý text
 
-The `textContent` provides access to the *text* inside the element: only text, minus all `<tags>`.
+Vlastnost `textContent` poskytuje přístup k *textu* uvnitř elementu: obsahuje pouze text, zbavený všech `<značek>`.
 
-For instance:
+Příklad:
 
 ```html run
-<div id="news">
-  <h1>Headline!</h1>
-  <p>Martians attack people!</p>
+<div id="zprávy">
+  <h1>Titulek!</h1>
+  <p>Marťané útočí na lidi!</p>
 </div>
 
 <script>
-  // Headline! Martians attack people!
-  alert(news.textContent);
+  // Titulek! Marťané útočí na lidi!
+  alert(zprávy.textContent);
 </script>
 ```
 
-As we can see, only text is returned, as if all `<tags>` were cut out, but the text in them remained.
+Jak vidíme, vrátila nám pouhý text. Všechny jeho `<značky>` byly odstraněny, ale text z nich zůstal.
 
-In practice, reading such text is rarely needed.
+V praxi je načítání takového textu zapotřebí jen zřídka.
 
-**Writing to `textContent` is much more useful, because it allows to write text the "safe way".**
+**Mnohem užitečnější je do `textContent` zapisovat, protože nám umožňuje „bezpečný“ zápis textu.**
 
-Let's say we have an arbitrary string, for instance entered by a user, and want to show it.
+Řekněme, že máme libovolný řetězec, například zadaný uživatelem, a chceme jej zobrazit.
 
-- With `innerHTML` we'll have it inserted "as HTML", with all HTML tags.
-- With `textContent` we'll have it inserted "as text", all symbols are treated literally.
+- Pomocí `innerHTML` jej vložíme „jako HTML kód“ se všemi HTML značkami.
+- Pomocí `textContent` jej vložíme „jako text“, se všemi symboly se zachází doslovně.
 
-Compare the two:
+Porovnejte si tyto dva způsoby:
 
 ```html run
 <div id="elem1"></div>
 <div id="elem2"></div>
 
 <script>
-  let name = prompt("What's your name?", "<b>Winnie-the-Pooh!</b>");
+  let jméno = prompt("Jak se jmenuješ?", "<b>Medvídek Pú!</b>");
 
-  elem1.innerHTML = name;
-  elem2.textContent = name;
+  elem1.innerHTML = jméno;
+  elem2.textContent = jméno;
 </script>
 ```
 
-1. The first `<div>` gets the name "as HTML": all tags become tags, so we see the bold name.
-2. The second `<div>` gets the name "as text", so we literally see `<b>Winnie-the-Pooh!</b>`.
+1. První `<div>` obdrží jméno „jako HTML“: ze všech značek se stanou značky, takže jméno vidíme tučně.
+2. Druhý `<div>` obdrží jméno „jako text", takže vidíme doslova `<b>Medvídek Pú!</b>`.
 
-In most cases, we expect the text from a user, and want to treat it as text. We don't want unexpected HTML in our site. An assignment to `textContent` does exactly that.
+Ve většině případů očekáváme, že uživatel zadá text, a chceme s ním zacházet jako s textem. Nechceme mít na stránce neočekávaný HTML kód. Přiřazením do `textContent` toho dosáhneme.
 
-## The "hidden" property
+## Vlastnost „hidden“
 
-The "hidden" attribute and the DOM property specifies whether the element is visible or not.
+Atribut `hidden` a stejnojmenná DOM vlastnost specifikuje, zda je element viditelný nebo ne.
 
-We can use it in HTML or assign it using JavaScript, like this:
+Můžeme jej používat v HTML nebo do něj přiřadit hodnotu v JavaScriptu, třeba takto:
 
 ```html run height="80"
-<div>Both divs below are hidden</div>
+<div>Oba následující divy jsou skryté</div>
 
-<div hidden>With the attribute "hidden"</div>
+<div hidden>Pomocí atributu „hidden“</div>
 
-<div id="elem">JavaScript assigned the property "hidden"</div>
+<div id="elem">JavaScript nastavil vlastnost „hidden“</div>
 
 <script>
   elem.hidden = true;
 </script>
 ```
 
-Technically, `hidden` works the same as `style="display:none"`. But it's shorter to write.
+Technicky `hidden` funguje stejně jako `style="display:none"`, ale je kratší na napsání.
 
-Here's a blinking element:
+Zde je blikající element:
 
 
 ```html run height=50
-<div id="elem">A blinking element</div>
+<div id="elem">Blikající element</div>
 
 <script>
   setInterval(() => elem.hidden = !elem.hidden, 1000);
 </script>
 ```
 
-## More properties
+## Další vlastnosti
 
-DOM elements also have additional properties, in particular those that depend on the class:
+DOM elementy mají i další vlastnosti, zejména ty, které závisejí na třídě:
 
-- `value` -- the value for `<input>`, `<select>` and `<textarea>` (`HTMLInputElement`, `HTMLSelectElement`...).
-- `href` -- the "href" for `<a href="...">` (`HTMLAnchorElement`).
-- `id` -- the value of "id" attribute, for all elements (`HTMLElement`).
-- ...and much more...
+- `value` -- hodnota `<input>`, `<select>` a `<textarea>` (`HTMLInputElement`, `HTMLSelectElement`...).
+- `href` -- „href“ pro `<a href="...">` (`HTMLAnchorElement`).
+- `id` -- hodnota atributu „id“, pro všechny elementy (`HTMLElement`).
+- ...a mnoho dalších...
 
-For instance:
+Příklad:
 
 ```html run height="80"
-<input type="text" id="elem" value="value">
+<input type="text" id="elem" value="hodnota">
 
 <script>
   alert(elem.type); // "text"
   alert(elem.id); // "elem"
-  alert(elem.value); // value
+  alert(elem.value); // hodnota
 </script>
 ```
 
-Most standard HTML attributes have the corresponding DOM property, and we can access it like that.
+Většina standardních HTML atributů má odpovídající DOM vlastnost a my k ní můžeme takto přistupovat.
 
-If we want to know the full list of supported properties for a given class, we can find them in the specification. For instance, `HTMLInputElement` is documented at <https://html.spec.whatwg.org/#htmlinputelement>.
+Pokud chcete znát celý seznam podporovaných vlastností v určité třídě, můžete jej najít ve specifikaci. Například `HTMLInputElement` je zdokumentován v <https://html.spec.whatwg.org/#htmlinputelement>.
 
-Or if we'd like to get them fast or are interested in a concrete browser specification -- we can always output the element using `console.dir(elem)` and read the properties. Or explore "DOM properties" in the Elements tab of the browser developer tools.
+Nebo pokud je chceme rychle zjistit nebo nás zajímá specifikace pro konkrétní prohlížeč, můžeme si prvek vždy vypsat pomocí `console.dir(elem)` a vlastnosti si přečíst. Nebo můžeme prozkoumat „Vlastnosti DOMu“ (DOM properties) v záložce Elements v prohlížečových vývojářských nástrojích.
 
-## Summary
+## Shrnutí
 
-Each DOM node belongs to a certain class. The classes form a hierarchy. The full set of properties and methods come as the result of inheritance.
+Každý DOM uzel patří do určité třídy. Tyto třídy tvoří hierarchii. Výsledkem dědičnosti je celá sada vlastností a metod.
 
-Main DOM node properties are:
+Hlavní vlastnosti DOM uzlů jsou:
 
 `nodeType`
-: We can use it to see if a node is a text or an element node. It has a numeric value: `1` for elements,`3` for text nodes, and a few others for other node types. Read-only.
+: Můžeme ji použít ke zjištění, zda uzel je textový nebo elementový. Vlastnost má číselnou hodnotu: `1` pro elementy, `3` pro textové uzly, několik dalších pro jiné typy uzlů. Pouze pro čtení.
 
 `nodeName/tagName`
-: For elements, tag name (uppercased unless XML-mode). For non-element nodes `nodeName` describes what it is. Read-only.
+: U elementů název značky (velkými písmeny, nejsme-li v režimu XML). U jiných uzlů `nodeName` popisuje, co je to za uzel. Pouze pro čtení.
 
 `innerHTML`
-: The HTML content of the element. Can be modified.
+: HTML obsah elementu. Může být měněn.
 
 `outerHTML`
-: The full HTML of the element. A write operation into `elem.outerHTML` does not touch `elem` itself. Instead it gets replaced with the new HTML in the outer context.
+: Úplný HTML kód elementu. Operace zápisu do `elem.outerHTML` se nedotkne samotného `elem`, ale místo toho jej ve vnějším kontextu nahradí novým HTML kódem.
 
 `nodeValue/data`
-: The content of a non-element node (text, comment). These two are almost the same, usually we use `data`. Can be modified.
+: Obsah neelementového uzlu (textového, komentářového). Obě vlastnosti jsou téměř stejné, obvykle používáme `data`. Mohou být měněny.
 
 `textContent`
-: The text inside the element: HTML minus all `<tags>`. Writing into it puts the text inside the element, with all special characters and tags treated exactly as text. Can safely insert user-generated text and protect from unwanted HTML insertions.
+: Text uvnitř elementu: HTML zbavený všech `<značek>`. Zápis do této vlastnosti vloží text do elementu tak, že se všemi speciálními znaky a značkami se bude zacházet jako s textem. Dokáže bezpečně vložit uživatelem vytvořený text a ochránit jej před nechtěnými změnami v HTML.
 
 `hidden`
-: When set to `true`, does the same as CSS `display:none`.
+: Když se nastaví na `true`, udělá totéž jako `display:none` v CSS.
 
-DOM nodes also have other properties depending on their class. For instance, `<input>` elements (`HTMLInputElement`) support `value`, `type`, while `<a>` elements (`HTMLAnchorElement`) support `href` etc. Most standard HTML attributes have a corresponding DOM property.
+DOM uzly obsahují i jiné vlastnosti, které závisejí na jejich třídě. Například elementy `<input>` (`HTMLInputElement`) podporují `value`, `type`, zatímco elementy `<a>` (`HTMLAnchorElement`) podporují `href` a podobně. Většina standardních HTML atributů má odpovídající DOM vlastnost.
 
-However, HTML attributes and DOM properties are not always the same, as we'll see in the next chapter.
+Nicméně HTML atributy a DOM vlastnosti nejsou vždy totožné, jak uvidíme v příští kapitole.

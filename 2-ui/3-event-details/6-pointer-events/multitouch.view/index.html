@@ -12,14 +12,14 @@
   </style>
   
   <div id="area">
-  Multi-touch here
+  Dotkněte se zde vícekrát
   </div>
   <script>
     document.onpointerdown = document.onpointerup = log;
 
-    function log(event) {
+    function log(událost) {
       area.insertAdjacentHTML("beforeend", `
-        <div>${event.type} isPrimary=${event.isPrimary} pointerId=${event.pointerId}</div>
+        <div>${událost.type} isPrimary=${událost.isPrimary} pointerId=${událost.pointerId}</div>
       `)
      area.scrollTop = 1e9;
     }

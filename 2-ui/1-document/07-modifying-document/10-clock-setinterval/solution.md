@@ -1,57 +1,58 @@
-First, let's make HTML/CSS.
 
-Each component of the time would look great in its own `<span>`:
+Nejprve vytvořme HTML/CSS.
+
+Každá komponenta hodin bude vypadat skvěle ve svém vlastním `<span>`:
 
 ```html
-<div id="clock">
-  <span class="hour">hh</span>:<span class="min">mm</span>:<span class="sec">ss</span>
+<div id="hodiny">
+  <span class="hod">hh</span>:<span class="min">mm</span>:<span class="sec">ss</span>
 </div>
 ```
 
-Also we'll need CSS to color them.
+Budeme také potřebovat CSS k jejich obarvení.
 
-The `update` function will refresh the clock, to be called by `setInterval` every second:
+Funkce `aktualizuj` bude aktualizovat hodiny, aby ji funkce `setInterval` mohla každou sekundu volat:
 
 ```js
-function update() {
-  let clock = document.getElementById('clock');
+function aktualizuj() {
+  let hodiny = document.getElementById('hodiny');
 *!*
-  let date = new Date(); // (*)
+  let datum = new Date(); // (*)
 */!*
-  let hours = date.getHours();
-  if (hours < 10) hours = '0' + hours;
-  clock.children[0].innerHTML = hours;
+  let hod = datum.getHours();
+  if (hod < 10) hod = '0' + hod;
+  hodiny.children[0].innerHTML = hod;
 
-  let minutes = date.getMinutes();
-  if (minutes < 10) minutes = '0' + minutes;
-  clock.children[1].innerHTML = minutes;
+  let minuty = datum.getMinutes();
+  if (minuty < 10) minuty = '0' + minuty;
+  hodiny.children[1].innerHTML = minuty;
 
-  let seconds = date.getSeconds();
-  if (seconds < 10) seconds = '0' + seconds;
-  clock.children[2].innerHTML = seconds;
+  let sekundy = datum.getSeconds();
+  if (sekundy < 10) sekundy = '0' + sekundy;
+  hodiny.children[2].innerHTML = sekundy;
 }
 ```
 
-In the line `(*)` we every time check the current date. The calls to `setInterval` are not reliable: they may happen with delays.
+Na řádku `(*)` pokaždé zjistíme aktuální datum, protože volání `setInterval` nejsou spolehlivá: může k nim docházet s prodlevami.
 
-The clock-managing functions:
+Funkce pro správu hodin:
 
 ```js
-let timerId;
+let idČasovače;
 
-function clockStart() { // run the clock  
-  if (!timerId) { // only set a new interval if the clock is not running
-    timerId = setInterval(update, 1000);
+function spusťHodiny() { // spustí hodiny  
+  if (!idČasovače) { // nový interval nastavíme, jen pokud hodiny neběží
+    idČasovače = setInterval(aktualizuj, 1000);
   }
-  update(); // (*)
+  aktualizuj(); // (*)
 }
 
-function clockStop() {
-  clearInterval(timerId);
-  timerId = null; // (**)
+function zastavHodiny() {
+  clearInterval(idČasovače);
+  idČasovače = null; // (**)
 }
 ```
 
-Please note that the call to `update()` is not only scheduled in `clockStart()`, but immediately run in the line `(*)`. Otherwise the visitor would have to wait till the first execution of `setInterval`. And the clock would be empty till then.
+Prosíme všimněte si, že volání `aktualizuj()` není jen nastaveno ve `spusťHodiny()`, ale spustí se okamžitě na řádku `(*)`. Jinak by návštěvník musel čekat do prvního spuštění `setInterval` a hodiny by do té doby byly prázdné.
 
-Also it is important to set a new interval in `clockStart()` only when the clock is not running. Otherways clicking the start button several times would set multiple concurrent intervals. Even worse - we would only keep the `timerID` of the last interval, losing references to all others. Then we wouldn't be able to stop the clock ever again! Note that we need to clear the `timerID` when the clock is stopped in the line `(**)`, so that it can be started again by running `clockStart()`.
+Je také důležité nastavit nový interval ve funkci `spusťHodiny()` jen tehdy, když hodiny neběží. Jinak by několik kliknutí na spouštěcí tlačítko nastavilo více souběžných intervalů. Ještě horší by bylo, že bychom si pamatovali jen `idČasovače` posledního intervalu a ztratili odkazy na všechny ostatní. Pak bychom už nikdy nedokázali hodiny zastavit! Všimněte si, že když jsou na řádku `(**)` hodiny zastaveny, musíme `idČasovače` smazat, abychom mohli hodiny znovu spustit voláním `spusťHodiny()`.

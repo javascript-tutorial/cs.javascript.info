@@ -2,46 +2,46 @@
 <html>
 
 <head>
-  <title>Gallery</title>
+  <title>Galerie</title>
   <link rel="stylesheet" href="gallery.css">
   <meta charset="utf-8">
 </head>
 
 <body>
 
-  <p><img id="largeImg" src="https://en.js.cx/gallery/img1-lg.jpg" alt="Large image"></p>
+  <p><img id="velkýObrázek" src="https://en.js.cx/gallery/img1-lg.jpg" alt="Velký obrázek"></p>
 
-  <ul id="thumbs">
-    <!-- the browser shows a small built-in tooltip on hover with the text from "title" attribute -->
+  <ul id="náhledy">
+    <!-- prohlížeč po najetí ukazatelem zobrazí malý zabudovaný tooltip obsahující text z atributu "title" -->
     <li>
-      <a href="https://en.js.cx/gallery/img2-lg.jpg" title="Image 2"><img src="https://en.js.cx/gallery/img2-thumb.jpg"></a>
+      <a href="https://en.js.cx/gallery/img2-lg.jpg" title="Obrázek 2"><img src="https://en.js.cx/gallery/img2-thumb.jpg"></a>
     </li>
     <li>
-      <a href="https://en.js.cx/gallery/img3-lg.jpg" title="Image 3"><img src="https://en.js.cx/gallery/img3-thumb.jpg"></a>
+      <a href="https://en.js.cx/gallery/img3-lg.jpg" title="Obrázek 3"><img src="https://en.js.cx/gallery/img3-thumb.jpg"></a>
     </li>
     <li>
-      <a href="https://en.js.cx/gallery/img4-lg.jpg" title="Image 4"><img src="https://en.js.cx/gallery/img4-thumb.jpg"></a>
+      <a href="https://en.js.cx/gallery/img4-lg.jpg" title="Obrázek 4"><img src="https://en.js.cx/gallery/img4-thumb.jpg"></a>
     </li>
     <li>
-      <a href="https://en.js.cx/gallery/img5-lg.jpg" title="Image 5"><img src="https://en.js.cx/gallery/img5-thumb.jpg"></a>
+      <a href="https://en.js.cx/gallery/img5-lg.jpg" title="Obrázek 5"><img src="https://en.js.cx/gallery/img5-thumb.jpg"></a>
     </li>
     <li>
-      <a href="https://en.js.cx/gallery/img6-lg.jpg" title="Image 6"><img src="https://en.js.cx/gallery/img6-thumb.jpg"></a>
+      <a href="https://en.js.cx/gallery/img6-lg.jpg" title="Obrázek 6"><img src="https://en.js.cx/gallery/img6-thumb.jpg"></a>
     </li>
   </ul>
 
   <script>
-    thumbs.onclick = function(event) {
-      let thumbnail = event.target.closest('a');
+    náhledy.onclick = function(událost) {
+      let náhled = událost.target.closest('a');
 
-      if (!thumbnail) return;
-      showThumbnail(thumbnail.href, thumbnail.title);
-      event.preventDefault();
+      if (!náhled) return;
+      zobrazNáhled(náhled.href, náhled.title);
+      událost.preventDefault();
     }
 
-    function showThumbnail(href, title) {
-      largeImg.src = href;
-      largeImg.alt = title;
+    function zobrazNáhled(href, titulek) {
+      velkýObrázek.src = href;
+      velkýObrázek.alt = titulek;
     }
   </script>
 

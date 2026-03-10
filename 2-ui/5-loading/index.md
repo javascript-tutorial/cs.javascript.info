@@ -1,2 +1,2 @@
 
-# Document and resource loading
+# Načítání dokumentu a zdrojů

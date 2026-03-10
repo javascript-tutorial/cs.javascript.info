@@ -1,3 +1,3 @@
-# Introduction to Events
+# Úvod do událostí
 
-An introduction to browser events, event properties and handling patterns.
+Úvod do událostí prohlížeče, jejich vlastností a jejich zpracování.

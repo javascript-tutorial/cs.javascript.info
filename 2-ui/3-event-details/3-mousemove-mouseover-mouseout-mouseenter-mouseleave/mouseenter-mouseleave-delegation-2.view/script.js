@@ -1,62 +1,62 @@
-// <td> under the mouse right now (if any)
-let currentElem = null;
+// <td> pod ukazatelem právě teď (pokud nějaká je)
+let aktuálníElem = null;
 
-table.onmouseover = function(event) {
-  // before entering a new element, the mouse always leaves the previous one
-  // if currentElem is set, we didn't leave the previous <td>,
-  // that's a mouseover inside it, ignore the event
-  if (currentElem) return;
+tabulka.onmouseover = function(událost) {
+  // před vstupem na nový element myš vždy opustí předchozí
+  // jestliže aktuálníElem je nastaven, neopustili jsme předchozí <td>,
+  // jde o mouseover uvnitř něj, tuto událost budeme ignorovat
+  if (aktuálníElem) return;
 
-  let target = event.target.closest('td');
+  let cíl = událost.target.closest('td');
 
-  // we moved not into a <td> - ignore
-  if (!target) return;
+  // nepřesunuli jsme se na <td> - ignorovat
+  if (!cíl) return;
 
-  // moved into <td>, but outside of our table (possible in case of nested tables)
-  // ignore
-  if (!table.contains(target)) return;
+  // přesunuli jsme se na <td>, ale mimo naši tabulku (to je možné v případě vnořených tabulek)
+  // ignorovat
+  if (!tabulka.contains(cíl)) return;
 
-  // hooray! we entered a new <td>
-  currentElem = target;
-  onEnter(currentElem);
+  // hurá! vstoupili jsme na novou <td>
+  aktuálníElem = cíl;
+  přiPříchodu(aktuálníElem);
 };
 
 
-table.onmouseout = function(event) {
-  // if we're outside of any <td> now, then ignore the event
-  // that's probably a move inside the table, but out of <td>,
-  // e.g. from <tr> to another <tr>
-  if (!currentElem) return;
+tabulka.onmouseout = function(událost) {
+  // pokud jsme nyní mimo jakoukoli <td>, budeme tuto událost ignorovat
+  // to je pravděpodobně pohyb uvnitř tabulky, ale mimo <td>,
+  // např. z <tr> na jinou <tr>
+  if (!aktuálníElem) return;
 
-  // we're leaving the element – where to? Maybe to a descendant?
-  let relatedTarget = event.relatedTarget;
+  // opouštíme element - kam? Možná na potomka?
+  let cílPohybu = událost.relatedTarget;
 
-  while (relatedTarget) {
-    // go up the parent chain and check – if we're still inside currentElem
-    // then that's an internal transition – ignore it
-    if (relatedTarget == currentElem) return;
+  while (cílPohybu) {
+    // projdeme řetězec rodičů a prověříme to - pokud jsme stále uvnitř aktuálníElem,
+    // je to vnitřní přesun - budeme ho ignorovat
+    if (cílPohybu == aktuálníElem) return;
 
-    relatedTarget = relatedTarget.parentNode;
+    cílPohybu = cílPohybu.parentNode;
   }
 
-  // we left the <td>. really.
-  onLeave(currentElem);
-  currentElem = null;
+  // opravdu jsme opustili <td>
+  přiOdchodu(aktuálníElem);
+  aktuálníElem = null;
 };
 
-// any functions to handle entering/leaving an element
-function onEnter(elem) {
+// veškeré funkce pro zpracování vstupu/opuštění elementu
+function přiPříchodu(elem) {
   elem.style.background = 'pink';
 
-  // show that in textarea
-  text.value += `over -> ${currentElem.tagName}.${currentElem.className}\n`;
+  // zobrazíme to v textarea
+  text.value += `dovnitř -> ${aktuálníElem.tagName}.${aktuálníElem.className}\n`;
   text.scrollTop = 1e6;
 }
 
-function onLeave(elem) {
+function přiOdchodu(elem) {
   elem.style.background = '';
 
-  // show that in textarea
-  text.value += `out <- ${elem.tagName}.${elem.className}\n`;
+  // zobrazíme to v textarea
+  text.value += `ven <- ${elem.tagName}.${elem.className}\n`;
   text.scrollTop = 1e6;
 }

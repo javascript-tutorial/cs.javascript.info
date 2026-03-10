@@ -5,87 +5,87 @@
   <link type="text/css" rel="stylesheet" href="bagua.css">
 
 
-  <table id="bagua-table">
+  <table id="tabulka-pa-kua">
     <tr>
-      <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
+      <th colspan="3">Tabulka <em>Pa-kua</em>: směr, element, barva, význam</th>
     </tr>
     <tr>
-      <td class="nw"><strong>Northwest</strong>
-        <br>Metal
-        <br>Silver
-        <br>Elders
+      <td class="nw"><strong>Severozápad</strong>
+        <br>Kov
+        <br>Stříbrná
+        <br>Stáří
       </td>
-      <td class="n"><strong>North</strong>
-        <br>Water
-        <br>Blue
-        <br>Change
+      <td class="n"><strong>Sever</strong>
+        <br>Voda
+        <br>Modrá
+        <br>Změna
       </td>
-      <td class="ne"><strong>Northeast</strong>
-        <br>Earth
-        <br>Yellow
-        <br>Direction
-      </td>
-    </tr>
-    <tr>
-      <td class="w"><strong>West</strong>
-        <br>Metal
-        <br>Gold
-        <br>Youth
-      </td>
-      <td class="c"><strong>Center</strong>
-        <br>All
-        <br>Purple
-        <br>Harmony
-      </td>
-      <td class="e"><strong>East</strong>
-        <br>Wood
-        <br>Blue
-        <br>Future
+      <td class="ne"><strong>Severovýchod</strong>
+        <br>Země
+        <br>Žlutá
+        <br>Směr
       </td>
     </tr>
     <tr>
-      <td class="sw"><strong>Southwest</strong>
-        <br>Earth
-        <br>Brown
-        <br>Tranquility
+      <td class="w"><strong>Západ</strong>
+        <br>Kov
+        <br>Zlatá
+        <br>Mládí
       </td>
-      <td class="s"><strong>South</strong>
-        <br>Fire
-        <br>Orange
-        <br>Fame
+      <td class="c"><strong>Střed</strong>
+        <br>Všechny
+        <br>Fialová
+        <br>Harmonie
       </td>
-      <td class="se"><strong>Southeast</strong>
-        <br>Wood
-        <br>Green
-        <br>Romance
+      <td class="e"><strong>Východ</strong>
+        <br>Dřevo
+        <br>Modrá
+        <br>Budoucnost
+      </td>
+    </tr>
+    <tr>
+      <td class="sw"><strong>Jihozápad</strong>
+        <br>Země
+        <br>Hnědá
+        <br>Klid
+      </td>
+      <td class="s"><strong>Jih</strong>
+        <br>Oheň
+        <br>Oranžová
+        <br>Sláva
+      </td>
+      <td class="se"><strong>Jihovýchod</strong>
+        <br>Dřevo
+        <br>Zelená
+        <br>Láska
       </td>
     </tr>
 
   </table>
 
   <script>
-    let table = document.getElementById('bagua-table');
+    let tabulka = document.getElementById('tabulka-pa-kua');
 
-    let selectedTd;
+    let zvolenáTd;
 
-    table.onclick = function(event) {
-      let target = event.target;
+    tabulka.onclick = function(událost) {
+      let cíl = událost.target;
 
-      while (target != this) {
-        if (target.tagName == 'TD') {
-          highlight(target);
+      while (cíl != this) {
+        if (cíl.tagName == 'TD') {
+          zvýrazni(cíl);
           return;
         }
-        target = target.parentNode;
+        cíl = cíl.parentNode;
       }
     }
 
-    function highlight(node) {
-      if (selectedTd) {
-        selectedTd.classList.remove('highlight');
+    function zvýrazni(uzel) {
+      if (zvolenáTd) {
+        zvolenáTd.classList.remove('zvýrazni');
       }
-      selectedTd = node;
-      selectedTd.classList.add('highlight');
+      zvolenáTd = uzel;
+      zvolenáTd.classList.add('zvýrazni');
     }
   </script>
 

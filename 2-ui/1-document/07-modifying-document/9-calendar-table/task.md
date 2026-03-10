@@ -2,16 +2,16 @@ importance: 4
 
 ---
 
-# Create a calendar
+# Vytvořte kalendář
 
-Write a function `createCalendar(elem, year, month)`.
+Napište funkci `vytvořKalendář(elem, rok, měsíc)`.
 
-The call should create a calendar for the given year/month and put it inside `elem`.
+Její volání by mělo vytvořit kalendář pro zadaný rok a měsíc a vložit jej do elementu `elem`.
 
-The calendar should be a table, where a week is `<tr>`, and a day is `<td>`. The table top should be `<th>` with weekday names: the first day should be Monday, and so on till Sunday.
+Kalendářem by měla být tabulka, v níž bude týden představovat značka `<tr>` a den značka `<td>`. V záhlaví tabulky by měla být značka `<th>` s názvy dnů v týdnu: prvním dnem by mělo být pondělí a tak dále, až do neděle.
 
-For instance, `createCalendar(cal, 2012, 9)` should generate in element `cal` the following calendar:
+Například `vytvořKalendář(kal, 2012, 9)` by v elementu `kal` mělo vytvořit následující kalendář:
 
 [iframe height=210 src="solution"]
 
-P.S. For this task it's enough to generate the calendar, should not yet be clickable.
+P.S. V této úloze postačí vytvořit kalendář, nemusí reagovat na klikání.

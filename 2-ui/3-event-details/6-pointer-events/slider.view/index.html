@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="style.css">
 
-<div id="slider" class="slider">
-  <div class="thumb"></div>
+<div id="posuvník" class="posuvník">
+  <div class="šoupátko"></div>
 </div>
 
-<p style="border:1px solid gray" onmousemove="this.textContent = new Date()">Mouse over here to see the date</p>
+<p style="border:1px solid gray" onmousemove="this.textContent = new Date()">Když sem najedete myší, uvidíte datum</p>
 
 <script>
-  let thumb = slider.querySelector('.thumb');
-  let shiftX;
+  let šoupátko = posuvník.querySelector('.šoupátko');
+  let posunX;
 
-  function onThumbDown(event) {
-    event.preventDefault(); // prevent selection start (browser action)
+  function uchopeníŠoupátka(událost) {
+    událost.preventDefault(); // zabrání zahájení označování (akce prohlížeče)
 
-    shiftX = event.clientX - thumb.getBoundingClientRect().left;
+    posunX = událost.clientX - šoupátko.getBoundingClientRect().left;
 
-    thumb.setPointerCapture(event.pointerId);
+    šoupátko.setPointerCapture(událost.pointerId);
 
-    thumb.onpointermove = onThumbMove;
+    šoupátko.onpointermove = přesunŠoupátka;
 
-    thumb.onpointerup = event => {
-      // dragging finished, no need to track pointer any more
-      // ...any other "drag end" logic here...
-      thumb.onpointermove = null;
-      thumb.onpointerup = null;
+    šoupátko.onpointerup = událost => {
+      // přetahování skončilo, dál už není nutné ukazatel sledovat
+      // ...a všechna ostatní logika „konce přetahování“ přijde sem...
+      šoupátko.onpointermove = null;
+      šoupátko.onpointerup = null;
     }
   };
 
-  function onThumbMove(event) {
-    let newLeft = event.clientX - shiftX - slider.getBoundingClientRect().left;
+  function přesunŠoupátka(událost) {
+    let nováLevá = událost.clientX - posunX - posuvník.getBoundingClientRect().left;
 
-    // if the pointer is out of slider => adjust left to be within the boundaries
-    if (newLeft < 0) {
-      newLeft = 0;
+    // je-li ukazatel mimo posuvník => zarovnáme doleva, abychom byli uvnitř ohraničení
+    if (nováLevá < 0) {
+      nováLevá = 0;
     }
-    let rightEdge = slider.offsetWidth - thumb.offsetWidth;
-    if (newLeft > rightEdge) {
-      newLeft = rightEdge;
+    let pravýOkraj = posuvník.offsetWidth - šoupátko.offsetWidth;
+    if (nováLevá > pravýOkraj) {
+      nováLevá = pravýOkraj;
     }
 
-    thumb.style.left = newLeft + 'px';
+    šoupátko.style.left = nováLevá + 'px';
   };
 
-  thumb.onpointerdown = onThumbDown;
+  šoupátko.onpointerdown = uchopeníŠoupátka;
 
-  thumb.ondragstart = () => false;
+  šoupátko.ondragstart = () => false;
 
 </script>

@@ -1,138 +1,138 @@
-# Searching: getElement*, querySelector*
+# Hledání: getElement*, querySelector*
 
-DOM navigation properties are great when elements are close to each other. What if they are not? How to get an arbitrary element of the page?
+Navigační vlastnosti DOMu jsou skvělé, když jsou elementy navzájem u sebe. Ale co když nejsou? Jak získáme libovolný element stránky?
 
-There are additional searching methods for that.
+K tomu slouží další vyhledávací metody.
 
-## document.getElementById or just id
+## document.getElementById nebo jen id
 
-If an element has the `id` attribute, we can get the element using the method `document.getElementById(id)`, no matter where it is.
+Jestliže element má atribut `id`, můžeme tento element získat pomocí metody `document.getElementById(id)`, ať se nachází kdekoli.
 
-For instance:
+Příklad:
 
 ```html run
 <div id="elem">
-  <div id="elem-content">Element</div>
+  <div id="elem-obsah">Element</div>
 </div>
 
 <script>
-  // get the element
+  // získáme element
 *!*
   let elem = document.getElementById('elem');
 */!*
 
-  // make its background red
+  // obarvíme jeho pozadí červeně
   elem.style.background = 'red';
 </script>
 ```
 
-Also, there's a global variable named by `id` that references the element:
+Existuje i globální proměnná pojmenovaná podle `id`, která se na element odkazuje:
 
 ```html run
 <div id="*!*elem*/!*">
-  <div id="*!*elem-content*/!*">Element</div>
+  <div id="*!*elem-obsah*/!*">Element</div>
 </div>
 
 <script>
-  // elem is a reference to DOM-element with id="elem"
+  // elem je odkaz na DOM element s id="elem"
   elem.style.background = 'red';
 
-  // id="elem-content" has a hyphen inside, so it can't be a variable name
-  // ...but we can access it using square brackets: window['elem-content']
+  // id="elem-obsah" obsahuje pomlčku, takže to nemůže být název proměnné
+  // ...můžeme však k němu přistupovat pomocí hranatých závorek: window['elem-obsah']
 </script>
 ```
 
-...That's unless we declare a JavaScript variable with the same name, then it takes precedence:
+...To funguje, dokud v JavaScriptu nedeklarujeme proměnnou se stejným názvem, ta má pak přednost:
 
 ```html run untrusted height=0
 <div id="elem"></div>
 
 <script>
-  let elem = 5; // now elem is 5, not a reference to <div id="elem">
+  let elem = 5; // elem je nyní 5, ne odkaz na <div id="elem">
 
   alert(elem); // 5
 </script>
 ```
 
-```warn header="Please don't use id-named global variables to access elements"
-This behavior is described [in the specification](https://html.spec.whatwg.org/multipage/window-object.html#named-access-on-the-window-object), but it is supported mainly for compatibility.
+```warn header="Prosíme nepřistupujte k elementům přes globální proměnné nazvané podle id"
+Toto chování je popsáno [ve specifikaci](https://html.spec.whatwg.org/multipage/window-object.html#named-access-on-the-window-object), ale je podporováno zejména kvůli kompatibilitě.
 
-The browser tries to help us by mixing namespaces of JS and DOM. That's fine for simple scripts, inlined into HTML, but generally isn't a good thing. There may be naming conflicts. Also, when one reads JS code and doesn't have HTML in view, it's not obvious where the variable comes from.
+Prohlížeč se nám snaží pomoci tak, že míchá dohromady jmenné prostory JS a DOMu. To se hodí pro jednoduché skripty, vložené přímo do HTML kódu, ale obecně to není dobrá věc. Mohou nastat konflikty názvů. Navíc když si někdo čte JS kód a nemá zobrazen HTML kód, není mu  zřejmé, odkud ona proměnná pochází.
 
-Here in the tutorial we use `id` to directly reference an element for brevity, when it's obvious where the element comes from.
+V tomto tutoriálu používáme přímý odkaz na element pomocí `id` pro stručnost, když je zřejmé, odkud element pochází.
 
-In real life `document.getElementById` is the preferred method.
+V reálném životě je preferována metoda `document.getElementById`.
 ```
 
-```smart header="The `id` must be unique"
-The `id` must be unique. There can be only one element in the document with the given `id`.
+```smart header="`id` musí být unikátní"
+`id` musí být unikátní. V dokumentu může být pouze jeden element s daným `id`.
 
-If there are multiple elements with the same `id`, then the behavior of methods that use it is unpredictable, e.g. `document.getElementById` may return any of such elements at random. So please stick to the rule and keep `id` unique.
+Pokud v něm je více elementů se stejným `id`, pak chování metod, které je využívají, bude nepředvídatelné, např. `document.getElementById` může vrátit náhodně kterýkoli z těchto elementů. Prosíme tedy, dodržujte toto pravidlo a zachovávejte `id` unikátní.
 ```
 
-```warn header="Only `document.getElementById`, not `anyElem.getElementById`"
-The method `getElementById` can be called only on `document` object. It looks for the given `id` in the whole document.
+```warn header="Jen `document.getElementById`, ne `jakýkoliElement.getElementById`"
+Metoda `getElementById` může být volána jedině na objektu `document`. Hledá zadané `id` v celém dokumentu.
 ```
 
 ## querySelectorAll [#querySelectorAll]
 
-By far, the most versatile method, `elem.querySelectorAll(css)` returns all elements inside `elem` matching the given CSS selector.
+Zdaleka nejpřizpůsobivější metodou je `elem.querySelectorAll(css)`, která vrací všechny elementy uvnitř `elem`, které odpovídají zadanému CSS selektoru.
 
-Here we look for all `<li>` elements that are last children:
+Zde najdeme všechny elementy `<li>`, které jsou posledními dětmi:
 
 ```html run
 <ul>
-  <li>The</li>
+  <li>Tento</li>
   <li>test</li>
 </ul>
 <ul>
-  <li>has</li>
-  <li>passed</li>
+  <li>prošel</li>
+  <li>úspěšně</li>
 </ul>
 <script>
 *!*
-  let elements = document.querySelectorAll('ul > li:last-child');
+  let elementy = document.querySelectorAll('ul > li:last-child');
 */!*
 
-  for (let elem of elements) {
-    alert(elem.innerHTML); // "test", "passed"
+  for (let elem of elementy) {
+    alert(elem.innerHTML); // "test", "úspěšně"
   }
 </script>
 ```
 
-This method is indeed powerful, because any CSS selector can be used.
+Je to opravdu silná metoda, protože můžeme použít jakýkoli CSS selektor.
 
-```smart header="Can use pseudo-classes as well"
-Pseudo-classes in the CSS selector like `:hover` and `:active` are also supported. For instance, `document.querySelectorAll(':hover')` will return the collection with elements that the pointer is over now (in nesting order: from the outermost `<html>` to the most nested one).
+```smart header="Můžeme použít i pseudotřídy"
+V CSS selektoru jsou podporovány i pseudotřídy, např. `:hover` nebo `:active`. Například `document.querySelectorAll(':hover')` vrátí kolekci elementů, nad nimiž se právě nachází ukazatel (v pořadí vnoření: od vrchního `<html>` k nejvnořenějšímu elementu).
 ```
 
 ## querySelector [#querySelector]
 
-The call to `elem.querySelector(css)` returns the first element for the given CSS selector.
+Volání `elem.querySelector(css)` vrátí první element pro zadaný CSS selektor.
 
-In other words, the result is the same as `elem.querySelectorAll(css)[0]`, but the latter is looking for *all* elements and picking one, while `elem.querySelector` just looks for one. So it's faster and also shorter to write.
+Jinými slovy, výsledek je stejný jako `elem.querySelectorAll(css)[0]`, ale tímto postupem najdeme *všechny* elementy a pak vezmeme jeden z nich, zatímco `elem.querySelector` najde pouze jeden. Je tedy rychlejší a navíc kratší na napsání.
 
 ## matches
 
-Previous methods were searching the DOM.
+Předchozí metody prohledávaly DOM.
 
-The [elem.matches(css)](https://dom.spec.whatwg.org/#dom-element-matches) does not look for anything, it merely checks if `elem` matches the given CSS-selector. It returns `true` or `false`.
+Metoda [elem.matches(css)](https://dom.spec.whatwg.org/#dom-element-matches) nic nehledá, ale jen prověří, zda `elem` odpovídá zadanému CSS selektoru. Vrací `true` nebo `false`.
 
-The method comes in handy when we are iterating over elements (like in an array or something) and trying to filter out those that interest us.
+Tato metoda se hodí, když iterujeme nad elementy (třeba v poli nebo v něčem podobném) a snažíme se vyfiltrovat ty, které nás zajímají.
 
-For instance:
+Příklad:
 
 ```html run
 <a href="http://example.com/file.zip">...</a>
 <a href="http://ya.ru">...</a>
 
 <script>
-  // can be any collection instead of document.body.children
+  // místo document.body.children zde může být libovolná kolekce
   for (let elem of document.body.children) {
 *!*
     if (elem.matches('a[href$="zip"]')) {
 */!*
-      alert("The archive reference: " + elem.href );
+      alert("Odkaz na archív: " + elem.href );
     }
   }
 </script>
@@ -140,68 +140,68 @@ For instance:
 
 ## closest
 
-*Ancestors* of an element are: parent, the parent of parent, its parent and so on. The ancestors together form the chain of parents from the element to the top.
+*Předkové* elementu jsou: rodič, jeho rodič, rodič jeho rodiče a tak dále. Předkové společně tvoří řetěz rodičů od elementu až k vrcholu.
 
-The method `elem.closest(css)` looks for the nearest ancestor that matches the CSS-selector. The `elem` itself is also included in the search.
+Metoda `elem.closest(css)` najde nejbližšího předka, který odpovídá zadanému CSS selektoru. Do hledání je zahrnut i samotný element `elem`.
 
-In other words, the method `closest` goes up from the element and checks each of parents. If it matches the selector, then the search stops, and the ancestor is returned.
+Jinými slovy, metoda `closest` postupuje od elementu nahoru a prověří každého z rodičů. Jestliže odpovídá selektoru, hledání se zastaví a onen předek je vrácen.
 
-For instance:
+Příklad:
 
 ```html run
-<h1>Contents</h1>
+<h1>Obsah</h1>
 
-<div class="contents">
-  <ul class="book">
-    <li class="chapter">Chapter 1</li>
-    <li class="chapter">Chapter 2</li>
+<div class="obsah">
+  <ul class="kniha">
+    <li class="kapitola">Kapitola 1</li>
+    <li class="kapitola">Kapitola 2</li>
   </ul>
 </div>
 
 <script>
-  let chapter = document.querySelector('.chapter'); // LI
+  let kapitola = document.querySelector('.kapitola'); // LI
 
-  alert(chapter.closest('.book')); // UL
-  alert(chapter.closest('.contents')); // DIV
+  alert(kapitola.closest('.kniha')); // UL
+  alert(kapitola.closest('.obsah')); // DIV
 
-  alert(chapter.closest('h1')); // null (because h1 is not an ancestor)
+  alert(kapitola.closest('h1')); // null (protože h1 není předek)
 </script>
 ```
 
 ## getElementsBy*
 
-There are also other methods to look for nodes by a tag, class, etc.
+Existují i jiné metody, které hledají uzly podle značky, třídy a podobně.
 
-Today, they are mostly history, as `querySelector` is more powerful and shorter to write.
+V dnešní době jsou již převážně historií, neboť `querySelector` je silnější a kratší na napsání.
 
-So here we cover them mainly for completeness, while you can still find them in the old scripts.
+Uvedeme je tedy zejména pro úplnost, protože ve starších skriptech je stále můžete najít.
 
-- `elem.getElementsByTagName(tag)` looks for elements with the given tag and returns the collection of them. The `tag` parameter can also be a star `"*"` for "any tags".
-- `elem.getElementsByClassName(className)` returns elements that have the given CSS class.
-- `document.getElementsByName(name)` returns elements with the given `name` attribute, document-wide. Very rarely used.
+- `elem.getElementsByTagName(značka)` najde elementy se zadanou značkou a vrátí jejich kolekci. Parametr `značka` může být i hvězdička `"*"`, což znamená „libovolná značka“.
+- `elem.getElementsByClassName(názevTřídy)` vrátí elementy, které mají zadanou CSS třídu.
+- `document.getElementsByName(název)` vrátí všechny elementy z celého dokumentu, jejichž atribut `name` má zadanou hodnotu. Používá se velmi zřídka.
 
-For instance:
+Příklad:
 ```js
-// get all divs in the document
-let divs = document.getElementsByTagName('div');
+// získáme všechny elementy <div> v dokumentu
+let divy = document.getElementsByTagName('div');
 ```
 
-Let's find all `input` tags inside the table:
+Najděme všechny značky `input` uvnitř tabulky:
 
 ```html run height=50
-<table id="table">
+<table id="tabulka">
   <tr>
-    <td>Your age:</td>
+    <td>Váš věk:</td>
 
     <td>
       <label>
-        <input type="radio" name="age" value="young" checked> less than 18
+        <input type="radio" name="věk" value="mladý" checked> méně než 18 let
       </label>
       <label>
-        <input type="radio" name="age" value="mature"> from 18 to 50
+        <input type="radio" name="věk" value="dospělý"> od 18 do 50 let
       </label>
       <label>
-        <input type="radio" name="age" value="senior"> more than 60
+        <input type="radio" name="věk" value="senior"> více než 50 let
       </label>
     </td>
   </tr>
@@ -209,130 +209,129 @@ Let's find all `input` tags inside the table:
 
 <script>
 *!*
-  let inputs = table.getElementsByTagName('input');
+  let vstupy = tabulka.getElementsByTagName('input');
 */!*
 
-  for (let input of inputs) {
-    alert( input.value + ': ' + input.checked );
+  for (let vstup of vstupy) {
+    alert( vstup.value + ': ' + vstup.checked );
   }
 </script>
 ```
 
-```warn header="Don't forget the `\"s\"` letter!"
-Novice developers sometimes forget the letter `"s"`. That is, they try to call `getElementByTagName` instead of <code>getElement<b>s</b>ByTagName</code>.
+```warn header="Nezapomínejte na písmeno `\"s\"`!"
+Začínající vývojáři někdy zapomínají na písmeno `"s"`. Snaží se tedy volat `getElementByTagName` místo <code>getElement<b>s</b>ByTagName</code>.
 
-The `"s"` letter is absent in `getElementById`, because it returns a single element. But `getElementsByTagName` returns a collection of elements, so there's `"s"` inside.
+Písmeno `"s"` chybí v názvu `getElementById`, protože tato metoda vrací jediný element (písmeno „s“ je v angličtině přípona množného čísla podstatných jmen -- pozn. překl.). Avšak `getElementsByTagName` vrací kolekci elementů, takže `"s"` v názvu je.
 ```
 
-````warn header="It returns a collection, not an element!"
-Another widespread novice mistake is to write:
+````warn header="Metoda vrací kolekci, ne jediný element!"
+Další rozšířenou začátečnickou chybou je napsat:
 
 ```js
-// doesn't work
+// to nefunguje
 document.getElementsByTagName('input').value = 5;
 ```
 
-That won't work, because it takes a *collection* of inputs and assigns the value to it rather than to elements inside it.
+To nefunguje, protože tento kód vezme *kolekci* vstupů a přiřadí hodnotu přímo jí, ne elementům uvnitř.
 
-We should either iterate over the collection or get an element by its index, and then assign, like this:
+Měli bychom buď iterovat nad kolekcí, nebo získat element podle jeho indexu a pak přiřazovat, například takto:
 
 ```js
-// should work (if there's an input)
+// to by mělo fungovat (pokud existuje <input>)
 document.getElementsByTagName('input')[0].value = 5;
 ```
 ````
 
-Looking for `.article` elements:
+Najděme elementy třídy `.článek`:
 
 ```html run height=50
-<form name="my-form">
-  <div class="article">Article</div>
-  <div class="long article">Long article</div>
+<form name="můj-formulář">
+  <div class="článek">Článek</div>
+  <div class="dlouhý článek">Dlouhý článek</div>
 </form>
 
 <script>
-  // find by name attribute
-  let form = document.getElementsByName('my-form')[0];
+  // hledání podle atributu name
+  let form = document.getElementsByName('můj-formulář')[0];
 
-  // find by class inside the form
-  let articles = form.getElementsByClassName('article');
-  alert(articles.length); // 2, found two elements with class "article"
+  // hledání uvnitř formuláře podle třídy
+  let články = form.getElementsByClassName('článek');
+  alert(články.length); // 2, našly se dva elementy třídy "článek"
 </script>
 ```
 
-## Live collections
+## Živé kolekce
 
-All methods `"getElementsBy*"` return a *live* collection. Such collections always reflect the current state of the document and "auto-update" when it changes.
+Všechny metody `"getElementsBy*"` vracejí *živou* kolekci. Taková kolekce vždy odráží aktuální stav dokumentu a „automaticky se aktualizuje“, když se dokument změní.
 
-In the example below, there are two scripts.
+Následující příklad obsahuje dva skripty.
 
-1. The first one creates a reference to the collection of `<div>`. As of now, its length is `1`.
-2. The second scripts runs after the browser meets one more `<div>`, so its length is `2`.
+1. První vytvoří odkaz na kolekci elementů `<div>`. Její délka je prozatím `1`.
+2. Druhý se spustí až poté, co prohlížeč narazí na další `<div>`, takže délka kolekce bude `2`.
 
 ```html run
-<div>First div</div>
+<div>První div</div>
 
 <script>
-  let divs = document.getElementsByTagName('div');
-  alert(divs.length); // 1
+  let divy = document.getElementsByTagName('div');
+  alert(divy.length); // 1
 </script>
 
-<div>Second div</div>
+<div>Druhý div</div>
 
 <script>
 *!*
-  alert(divs.length); // 2
+  alert(divy.length); // 2
 */!*
 </script>
 ```
 
-In contrast, `querySelectorAll` returns a *static* collection. It's like a fixed array of elements.
+Naproti tomu `querySelectorAll` vrací *statickou* kolekci, podobnou pevnému poli elementů.
 
-If we use it instead, then both scripts output `1`:
-
+Použijeme-li v uvedeném příkladu tuto metodu, oba skripty vypíší `1`:
 
 ```html run
-<div>First div</div>
+<div>První div</div>
 
 <script>
-  let divs = document.querySelectorAll('div');
-  alert(divs.length); // 1
+  let divy = document.querySelectorAll('div');
+  alert(divy.length); // 1
 </script>
 
-<div>Second div</div>
+<div>Druhý div</div>
 
 <script>
 *!*
-  alert(divs.length); // 1
+  alert(divy.length); // 1
 */!*
 </script>
 ```
 
-Now we can easily see the difference. The static collection did not increase after the appearance of a new `div` in the document.
+Nyní jasně vidíme rozdíl. Statická kolekce se po přidání nového `div` do dokumentu nezvětšila.
 
-## Summary
+## Shrnutí
 
-There are 6 main methods to search for nodes in DOM:
+Pro hledání uzlů v DOMu existuje 6 hlavních metod:
 
 <table>
 <thead>
 <tr>
-<td>Method</td>
-<td>Searches by...</td>
-<td>Can call on an element?</td>
-<td>Live?</td>
+<td>Metoda</td>
+<td>Hledá podle...</td>
+<td>Může být volána na elementu?</td>
+<td>Vrací živou kolekci?</td>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>querySelector</code></td>
-<td>CSS-selector</td>
+<td>CSS selektoru</td>
 <td>✔</td>
 <td>-</td>
 </tr>
 <tr>
 <td><code>querySelectorAll</code></td>
-<td>CSS-selector</td>
+<td>CSS selektoru</td>
 <td>✔</td>
 <td>-</td>
 </tr>
@@ -350,25 +349,25 @@ There are 6 main methods to search for nodes in DOM:
 </tr>
 <tr>
 <td><code>getElementsByTagName</code></td>
-<td>tag or <code>'*'</code></td>
+<td>značky nebo <code>'*'</code></td>
 <td>✔</td>
 <td>✔</td>
 </tr>
 <tr>
 <td><code>getElementsByClassName</code></td>
-<td>class</td>
+<td>třídy</td>
 <td>✔</td>
 <td>✔</td>
 </tr>
 </tbody>
 </table>
 
-By far the most used are `querySelector` and `querySelectorAll`, but `getElement(s)By*` can be sporadically helpful or found in the old scripts.
+Zdaleka nejpoužívanější jsou `querySelector` a `querySelectorAll`, ale občas nám mohou pomoci nebo můžeme najít ve starších skriptech i `getElement(s)By*`.
 
-Besides that:
+Kromě toho:
 
-- There is `elem.matches(css)` to check if `elem` matches the given CSS selector.
-- There is `elem.closest(css)` to look for the nearest ancestor that matches the given CSS-selector. The `elem` itself is also checked.
+- Metoda `elem.matches(css)` prověří, zda `elem` odpovídá zadanému CSS selektoru.
+- Metoda `elem.closest(css)` najde nejbližšího předka, který odpovídá zadanému CSS selektoru. Prověří i samotný `elem`.
 
-And let's mention one more method here to check for the child-parent relationship, as it's sometimes useful:
--  `elemA.contains(elemB)` returns true if `elemB` is inside `elemA` (a descendant of `elemA`) or when `elemA==elemB`.
+A zmiňme ještě jednu metodu, která prověřuje vztah dítě-rodič, protože i ta je někdy užitečná:
+-  `elemA.contains(elemB)` vrátí true, jestliže `elemB` leží uvnitř `elemA` (je potomkem `elemA`) nebo jestliže `elemA==elemB`.

@@ -1,45 +1,45 @@
-# Coordinates
+# Souřadnice
 
-To move elements around we should be familiar with coordinates.
+Abychom mohli přesunovat elementy, měli bychom se seznámit se souřadnicemi.
 
-Most JavaScript methods deal with one of two coordinate systems:
+Většina metod v JavaScriptu pracuje s jednou ze dvou souřadnicových soustav:
 
-1. **Relative to the window** - similar to `position:fixed`, calculated from the window top/left edge.
-    - we'll denote these coordinates as `clientX/clientY`, the reasoning for such name will become clear later, when we study event properties.
-2. **Relative to the document** - similar to `position:absolute` in the document root, calculated from the document top/left edge.
-    - we'll denote them `pageX/pageY`.
+1. **Relativní vzhledem k oknu (okenní)** -- podobné `position:fixed`, počítají se od horního/levého okraje okna.
+    - tyto souřadnice budeme označovat `clientX/clientY`, důvod takového značení nám bude jasný později, až prostudujeme vlastnosti událostí.
+2. **Relativní vzhledem k dokumentu (dokumentové)** -- podobné `position:absolute` v kořenovém dokumentu, počítají se od horního/levého okraje dokumentu.
+    - budeme je označovat `pageX/pageY`.
 
-When the page is scrolled to the very beginning, so that the top/left corner of the window is exactly the document top/left corner, these coordinates equal each other. But after the document shifts, window-relative coordinates of elements change, as elements move across the window, while document-relative coordinates remain the same.
+Když je stránka odrolována na samotný začátek, takže levý horní roh okna se shoduje s levým horním rohem dokumentu, tyto souřadnice se navzájem rovnají. Jakmile se však dokument posune, okenní souřadnice elementů se s pohybem elementů v okně změní, ale dokumentové souřadnice zůstanou stejné.
 
-On this picture we take a point in the document and demonstrate its coordinates before the scroll (left) and after it (right):
+Na následujícím obrázku si vezmeme bod v dokumentu a ukážeme si jeho souřadnice před rolováním (vlevo) a po něm (vpravo):
 
 ![](document-and-window-coordinates-scrolled.svg)
 
-When the document scrolled:
-- `pageY` - document-relative coordinate stayed the same, it's counted from the document top (now scrolled out).
-- `clientY` - window-relative coordinate did change (the arrow became shorter), as the same point became closer to window top.
+Po rolování dokumentu:
+- `pageY` - dokumentová souřadnice zůstala stejná, počítá se od vrchu dokumentu (ten je nyní odrolován).
+- `clientY` - okenní souřadnice se změnila (šipka se zkrátila), protože bod se přiblížil k vrchu okna.
 
-## Element coordinates: getBoundingClientRect
+## Souřadnice elementů: getBoundingClientRect
 
-The method `elem.getBoundingClientRect()` returns window coordinates for a minimal rectangle that encloses `elem` as an object of built-in [DOMRect](https://www.w3.org/TR/geometry-1/#domrect) class.
+Metoda `elem.getBoundingClientRect()` vrací okenní souřadnice nejmenšího možného obdélníku, který obsahuje celý `elem`, jako objekt vestavěné třídy [DOMRect](https://www.w3.org/TR/geometry-1/#domrect).
 
-Main `DOMRect` properties:
+Hlavní vlastnosti třídy `DOMRect`:
 
-- `x/y` -- X/Y-coordinates of the rectangle origin relative to window,
-- `width/height` -- width/height of the rectangle (can be negative).
+- `x/y` -- souřadnice X/Y obdélníku vzhledem k oknu,
+- `width/height` -- šířka/výška obdélníku (může být záporná).
 
-Additionally, there are derived properties:
+Navíc existují i odvozené vlastnosti:
 
-- `top/bottom` -- Y-coordinate for the top/bottom rectangle edge,
-- `left/right` -- X-coordinate for the left/right rectangle edge.
+- `top/bottom` -- souřadnice Y horního/dolního okraje obdélníku,
+- `left/right` -- souřadnice X levého/pravého okraje obdélníku.
 
 ```online
-For instance click this button to see its window coordinates:
+Například kliknutím na následující tlačítko zobrazíte jeho okenní souřadnice:
 
-<p><input id="brTest" type="button" style="max-width: 90vw;" value="Get coordinates using button.getBoundingClientRect() for this button" onclick='showRect(this)'/></p>
+<p><input id="brTest" type="button" style="max-width: 90vw;" value="Zjistit souřadnice tohoto tlačítka pomocí button.getBoundingClientRect()" onclick='zobrazObdélník(this)'/></p>
 
 <script>
-function showRect(elem) {
+function zobrazObdélník(elem) {
   let r = elem.getBoundingClientRect();
   alert(`x:${r.x}
 y:${r.y}
@@ -53,165 +53,165 @@ right:${r.right}
 }
 </script>
 
-If you scroll the page and repeat, you'll notice that as window-relative button position changes, its window coordinates (`y/top/bottom` if you scroll vertically) change as well.
+Jestliže stránkou porolujete a stisknutí zopakujete, všimnete si, že když se změnila pozice tlačítka vzhledem k oknu, změnily se i jeho okenní souřadnice (`y/top/bottom`, pokud rolujete svisle).
 ```
 
-Here's the picture of `elem.getBoundingClientRect()` output:
+Následující obrázek ukazuje výstup metody `elem.getBoundingClientRect()`:
 
 ![](coordinates.svg)
 
-As you can see, `x/y` and `width/height` fully describe the rectangle. Derived properties can be easily calculated from them:
+Jak vidíte, obdélník plně popisují `x/y` a `width/height`. Odvozené vlastnosti z nich lze snadno vypočítat:
 
 - `left = x`
 - `top = y`
 - `right = x + width`
 - `bottom = y + height`
 
-Please note:
+Prosíme všimněte si:
 
-- Coordinates may be decimal fractions, such as `10.5`. That's normal, internally browser uses fractions in calculations. We don't have to round them when setting to `style.left/top`.
-- Coordinates may be negative. For instance, if the page is scrolled so that `elem` is now above the window, then `elem.getBoundingClientRect().top` is negative.
+- Souřadnice mohou být desetinná čísla, např. `10.5`. To se běžně stává, prohlížeč vnitřně počítá s desetinnými čísly. Nemusíme je zaokrouhlovat, když nastavujeme `style.left/top`.
+- Souřadnice mohou být záporné. Když je například stránka odrolována tak, že `elem` je nyní nad oknem, pak `elem.getBoundingClientRect().top` je záporná.
 
-```smart header="Why derived properties are needed? Why does `top/left` exist if there's `x/y`?"
-Mathematically, a rectangle is uniquely defined with its starting point `(x,y)` and the direction vector `(width,height)`. So the additional derived properties are for convenience.
+```smart header="K čemu jsou potřeba odvozené souřadnice? Proč existují `top/left`, když už máme `x/y`?"
+Matematicky je obdélník jednoznačně definován svým počátečním bodem `(x,y)` a směrovým vektorem `(width,height)`. Další odvozené vlastnosti jsou tady pro usnadnění.
 
-Technically it's possible for `width/height` to be negative, that allows for "directed" rectangle, e.g. to represent mouse selection with properly marked start and end.
+Technicky `width/height` mohou být záporné, což umožňuje „orientovaný“ obdélník, například aby reprezentoval výběr myší, který má správně označen začátek a konec.
 
-Negative `width/height` values mean that the rectangle starts at its bottom-right corner and then "grows" left-upwards.
+Záporné hodnoty `width/height` znamenají, že obdélník začíná v pravém dolním rohu a pak „vyrůstá“ doleva a nahoru.
 
-Here's a rectangle with negative `width` and `height` (e.g. `width=-200`, `height=-100`):
+Tento obdélník má zápornou šířku `width` a výšku `height` (např. `width=-200`, `height=-100`):
 
 ![](coordinates-negative.svg)
 
-As you can see, `left/top` do not equal `x/y` in such case.
+Jak vidíte, `left/top` se v takovém případě nerovnají `x/y`.
 
-In practice though, `elem.getBoundingClientRect()` always returns positive width/height, here we mention negative `width/height` only for you to understand why these seemingly duplicate properties are not actually duplicates.
+V praxi však `elem.getBoundingClientRect()` vždy vrací kladnou šířku a výšku. Záporné hodnoty `width/height` zde zmiňujeme jen proto, abyste pochopili, proč tyto zdánlivě duplicitní vlastnosti ve skutečnosti duplicitní nejsou.
 ```
 
-```warn header="Internet Explorer: no support for `x/y`"
-Internet Explorer doesn't support `x/y` properties for historical reasons.
+```warn header="Internet Explorer nepodporuje `x/y`"
+Internet Explorer z historických důvodů nepodporuje `x/y`.
 
-So we can either make a polyfill (add getters in `DomRect.prototype`) or just use `top/left`, as they are always the same as `x/y` for positive `width/height`, in particular in the result of `elem.getBoundingClientRect()`.
+Můžeme tedy buď vytvořit polyfill (přidat gettery do `DomRect.prototype`), nebo jednoduše použít `top/left`, protože ty jsou při kladných hodnotách `width/height`, tedy ve výsledku `elem.getBoundingClientRect()`, vždy stejné jako `x/y`.
 ```
 
-```warn header="Coordinates right/bottom are different from CSS position properties"
-There are obvious similarities between window-relative coordinates and CSS `position:fixed`.
+```warn header="Souřadnice right/bottom se liší od pozičních vlastností CSS"
+Mezi okenními souřadnicemi a `position:fixed` v CSS existují zjevné podobnosti.
 
-But in CSS positioning, `right` property means the distance from the right edge, and `bottom` property means the distance from the bottom edge.
+Ale v umisťování v CSS vlastnost `right` znamená vzdálenost od pravého okraje a vlastnost `bottom` znamená vzdálenost od dolního okraje.
 
-If we just look at the picture above, we can see that in JavaScript it is not so. All window coordinates are counted from the top-left corner, including these ones.
+Podíváme-li se na výše uvedený obrázek, vidíme, že v JavaScriptu tomu tak není. Všechny okenní souřadnice včetně těchto dvou se počítají od levého horního rohu.
 ```
 
 ## elementFromPoint(x, y) [#elementFromPoint]
 
-The call to `document.elementFromPoint(x, y)` returns the most nested element at window coordinates `(x, y)`.
+Volání `document.elementFromPoint(x, y)` vrátí nejvnořenější element na okenních souřadnicích `(x, y)`.
 
-The syntax is:
+Jeho syntaxe je:
 
 ```js
 let elem = document.elementFromPoint(x, y);
 ```
 
-For instance, the code below highlights and outputs the tag of the element that is now in the middle of the window:
+Například následující kód zvýrazní a vypíše značku elementu, který je zrovna přesně uprostřed okna:
 
 ```js run
-let centerX = document.documentElement.clientWidth / 2;
-let centerY = document.documentElement.clientHeight / 2;
+let středX = document.documentElement.clientWidth / 2;
+let středY = document.documentElement.clientHeight / 2;
 
-let elem = document.elementFromPoint(centerX, centerY);
+let elem = document.elementFromPoint(středX, středY);
 
 elem.style.background = "red";
 alert(elem.tagName);
 ```
 
-As it uses window coordinates, the element may be different depending on the current scroll position.
+Protože používá okenní souřadnice, element může být pokaždé jiný v závislosti na aktuální poloze rolování.
 
-````warn header="For out-of-window coordinates the `elementFromPoint` returns `null`"
-The method `document.elementFromPoint(x,y)` only works if `(x,y)` are inside the visible area.
+````warn header="Pro souřadnice mimo okno `elementFromPoint` vrací `null`"
+Metoda `document.elementFromPoint(x,y)` funguje jen tehdy, jsou-li `(x,y)` uvnitř viditelné oblasti.
 
-If any of the coordinates is negative or exceeds the window width/height, then it returns `null`.
+Jestliže je některá z těchto souřadnic záporná nebo překračuje šířku či výšku okna, pak metoda vrátí `null`.
 
-Here's a typical error that may occur if we don't check for it:
+Toto je typická chyba, která může nastat, pokud si to nezkontrolujeme:
 
 ```js
 let elem = document.elementFromPoint(x, y);
-// if the coordinates happen to be out of the window, then elem = null
+// pokud se stane, že souřadnice jsou mimo okno, pak elem = null
 *!*
-elem.style.background = ''; // Error!
+elem.style.background = ''; // Chyba!
 */!*
 ```
 ````
 
-## Using for "fixed" positioning
+## Použití pro umisťování „fixed“
 
-Most of time we need coordinates in order to position something.
+Ve většině případů potřebujeme souřadnice k tomu, abychom něco někam umístili.
 
-To show something near an element, we can use `getBoundingClientRect` to get its coordinates, and then CSS `position` together with `left/top` (or `right/bottom`).
+Abychom něco zobrazili v blízkosti nějakého elementu, můžeme pomocí `getBoundingClientRect` zjistit jeho souřadnice a pak to umístit pomocí CSS atributu `position` společně s `left/top` (nebo `right/bottom`).
 
-For instance, the function `createMessageUnder(elem, html)` below shows the message under `elem`:
+Například následující funkce `vytvořZprávuPod(elem, html)` zobrazí zprávu pod elementem `elem`:
 
 ```js
 let elem = document.getElementById("coords-show-mark");
 
-function createMessageUnder(elem, html) {
-  // create message element
-  let message = document.createElement('div');
-  // better to use a css class for the style here
-  message.style.cssText = "position:fixed; color: red";
+function vytvořZprávuPod(elem, html) {
+  // vytvoření elementu zprávy
+  let zpráva = document.createElement('div');
+  // zde by bylo lepší pro styl použít CSS třídu
+  zpráva.style.cssText = "position:fixed; color: red";
 
 *!*
-  // assign coordinates, don't forget "px"!
-  let coords = elem.getBoundingClientRect();
+  // přiřazení souřadnic, nezapomeňte na "px"!
+  let souřadnice = elem.getBoundingClientRect();
 
-  message.style.left = coords.left + "px";
-  message.style.top = coords.bottom + "px";
+  zpráva.style.left = souřadnice.left + "px";
+  zpráva.style.top = souřadnice.bottom + "px";
 */!*
 
-  message.innerHTML = html;
+  zpráva.innerHTML = html;
 
-  return message;
+  return zpráva;
 }
 
-// Usage:
-// add it for 5 seconds in the document
-let message = createMessageUnder(elem, 'Hello, world!');
-document.body.append(message);
-setTimeout(() => message.remove(), 5000);
+// Použití:
+// přidáme ji do dokumentu na dobu 5 sekund
+let zpráva = vytvořZprávuPod(elem, 'Ahoj, světe!');
+document.body.append(zpráva);
+setTimeout(() => zpráva.remove(), 5000);
 ```
 
 ```online
-Click the button to run it:
+Kliknutím na následující tlačítko ji spustíte:
 
-<button id="coords-show-mark">Button with id="coords-show-mark", the message will appear under it</button>
+<button id="coords-show-mark">Tlačítko s id="coords-show-mark", zpráva se objeví pod ním</button>
 ```
 
-The code can be modified to show the message at the left, right, below, apply CSS animations to "fade it in" and so on. That's easy, as we have all the coordinates and sizes of the element.
+Kód můžeme upravit tak, aby zprávu zobrazil vlevo, vpravo, níže, pomocí CSS animací ji nechal „vyblednout“ a podobně. Když známe souřadnice a velikost elementu, je to snadné.
 
-But note the important detail: when the page is scrolled, the message flows away from the button.
+Všimněte si však důležitého detailu: když je stránka rolována, zpráva se vzdálí od tlačítka.
 
-The reason is obvious: the message element relies on `position:fixed`, so it remains at the same place of the window while the page scrolls away.
+Důvod je zřejmý: element zprávy má `position:fixed`, takže když stránka roluje, zpráva zůstává stále na stejném místě okna.
 
-To change that, we need to use document-based coordinates and `position:absolute`.
+Abychom to změnili, musíme použít dokumentové souřadnice a `position:absolute`.
 
-## Document coordinates [#getCoords]
+## Dokumentové souřadnice [#getCoords]
 
-Document-relative coordinates start from the upper-left corner of the document, not the window.
+Dokumentové souřadnice začínají od levého horního rohu dokumentu, ne okna.
 
-In CSS, window coordinates correspond to `position:fixed`, while document coordinates are similar to `position:absolute` on top.
+V CSS okenní souřadnice odpovídají `position:fixed`, zatímco dokumentové souřadnice se podobají `position:absolute` na vrchu.
 
-We can use `position:absolute` and `top/left` to put something at a certain place of the document, so that it remains there during a page scroll. But we need the right coordinates first.
+Pomocí `position:absolute` a `top/left` můžeme něco umístit na určité místo dokumentu tak, aby to tam při rolování stránky zůstalo. Napřed však potřebujeme správné souřadnice.
 
-There's no standard method to get the document coordinates of an element. But it's easy to write it.
+Pro získání dokumentových souřadnic elementu neexistuje žádná standardní metoda, ale je snadné ji napsat.
 
-The two coordinate systems are connected by the formula:
-- `pageY` = `clientY` + height of the scrolled-out vertical part of the document.
-- `pageX` = `clientX` + width of the scrolled-out horizontal part of the document.
+Obě souřadnicové soustavy jsou propojeny těmito vzorci:
+- `pageY` = `clientY` + výška odrolované svislé části dokumentu.
+- `pageX` = `clientX` + šířka odrolované vodorovné části dokumentu.
 
-The function `getCoords(elem)` will take window coordinates from `elem.getBoundingClientRect()` and add the current scroll to them:
+Funkce `vraťSouřadnice(elem)` vezme okenní souřadnice z `elem.getBoundingClientRect()` a přičte k nim aktuální délku odrolování:
 
 ```js
-// get document coordinates of the element
-function getCoords(elem) {
+// získá dokumentové souřadnice elementu
+function vraťSouřadnice(elem) {
   let box = elem.getBoundingClientRect();
 
   return {
@@ -223,33 +223,33 @@ function getCoords(elem) {
 }
 ```
 
-If in the example above we used it with `position:absolute`, then the message would stay near the element on scroll.
+Pokud ji ve výše uvedeném příkladu použijeme spolu s `position:absolute`, pak zpráva zůstane vedle elementu i při rolování.
 
-The modified `createMessageUnder` function:
+Upravená funkce `vytvořZprávuPod`:
 
 ```js
-function createMessageUnder(elem, html) {
-  let message = document.createElement('div');
-  message.style.cssText = "*!*position:absolute*/!*; color: red";
+function vytvořZprávuPod(elem, html) {
+  let zpráva = document.createElement('div');
+  zpráva.style.cssText = "*!*position:absolute*/!*; color: red";
 
-  let coords = *!*getCoords(elem);*/!*
+  let souřadnice = *!*vraťSouřadnice(elem);*/!*
 
-  message.style.left = coords.left + "px";
-  message.style.top = coords.bottom + "px";
+  zpráva.style.left = souřadnice.left + "px";
+  zpráva.style.top = souřadnice.bottom + "px";
 
-  message.innerHTML = html;
+  zpráva.innerHTML = html;
 
-  return message;
+  return zpráva;
 }
 ```
 
-## Summary
+## Shrnutí
 
-Any point on the page has coordinates:
+Každý bod na stránce má souřadnice:
 
-1. Relative to the window -- `elem.getBoundingClientRect()`.
-2. Relative to the document -- `elem.getBoundingClientRect()` plus the current page scroll.
+1. Relativní vzhledem k oknu (okenní) -- `elem.getBoundingClientRect()`.
+2. Relativní vzhledem k dokumentu (dokumentové) -- `elem.getBoundingClientRect()` plus aktuální délka odrolování stránky.
 
-Window coordinates are great to use with `position:fixed`, and document coordinates do well with `position:absolute`.
+Okenní souřadnice se výborně používají spolu s `position:fixed` a dokumentové souřadnice se dobře hodí k `position:absolute`.
 
-Both coordinate systems have their pros and cons; there are times we need one or the other one, just like CSS `position` `absolute` and `fixed`.
+Obě souřadnicové soustavy mají své výhody a nevýhody; někdy potřebujeme jednu, jindy zase druhou, stejně jako CSS atribut `position` `absolute` a `fixed`.

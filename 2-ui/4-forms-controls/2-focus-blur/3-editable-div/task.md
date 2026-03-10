@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Editable div
+# Editovatelný div
 
-Create a `<div>` that turns into `<textarea>` when clicked.
+Vytvořte `<div>`, který se po kliknutí změní na `<textarea>`.
 
-The textarea allows to edit the HTML in the `<div>`.
+Tato textová plocha umožní editovat HTML kód obsažený v `<div>`.
 
-When the user presses `key:Enter` or it loses focus, the `<textarea>` turns back into `<div>`, and its content becomes HTML in `<div>`.
+Když uživatel stiskne `key:Enter` nebo `<textarea>` ztratí fokus, změní se zpět na `<div>` a její obsah se stane HTML kódem v tomto `<div>`.
 
 [demo src="solution"]

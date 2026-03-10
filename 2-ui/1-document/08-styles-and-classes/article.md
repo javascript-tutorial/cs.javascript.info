@@ -1,92 +1,92 @@
-# Styles and classes
+# Styly a třídy
 
-Before we get into JavaScript's ways of dealing with styles and classes -- here's an important rule. Hopefully it's obvious enough, but we still have to mention it.
+Než se ponoříme do způsobu, jakým JavaScript pracuje se styly a třídami, uvedeme důležité pravidlo. Doufáme, že je dostatečně známé, ale přesto je musíme uvést.
 
-There are generally two ways to style an element:
+Existují v zásadě dva způsoby, jak nastavit styl elementu:
 
-1. Create a class in CSS and add it: `<div class="...">`
-2. Write properties directly into `style`: `<div style="...">`.
+1. Vytvořit třídu v CSS a přiřadit ji elementu: `<div class="...">`
+2. Zapsat vlastnosti přímo do atributu `style`: `<div style="...">`.
 
-JavaScript can modify both classes and `style` properties.
+JavaScript umí modifikovat jak třídy, tak vlastnosti `style`.
 
-We should always prefer CSS classes to `style`. The latter should only be used if classes "can't handle it".
+Vždy bychom měli dávat přednost CSS třídám před atributem `style`. Ten bychom měli používat jen v případech, kdy to třídy „nezvládnou“.
 
-For example, `style` is acceptable if we calculate coordinates of an element dynamically and want to set them from JavaScript, like this:
+Například `style` je přijatelný, pokud dynamicky spočítáme souřadnice elementu a chceme je nastavit z JavaScriptu, například takto:
 
 ```js
-let top = /* complex calculations */;
-let left = /* complex calculations */;
+let shora = /* složité výpočty */;
+let zleva = /* složité výpočty */;
 
-elem.style.left = left; // e.g '123px', calculated at run-time
-elem.style.top = top; // e.g '456px'
+elem.style.left = zleva; // např. '123px', vypočteno za běhu
+elem.style.top = shora; // např. '456px'
 ```
 
-For other cases, like making the text red, adding a background icon -- describe that in CSS and then add the class (JavaScript can do that). That's more flexible and easier to support.
+V jiných případech, například pro obarvení textu červeně nebo přidání ikony na pozadí, popište vše v CSS a pak přidejte třídu (JavaScript to umí). Je to flexibilnější a podpora je snadnější.
 
-## className and classList
+## className a classList
 
-Changing a class is one of the most often used actions in scripts.
+Změna třídy je jednou z nejčastěji používaných akcí ve skriptech.
 
-In the ancient time, there was a limitation in JavaScript: a reserved word like `"class"` could not be an object property. That limitation does not exist now, but at that time it was impossible to have a `"class"` property, like `elem.class`.
+V dřívějších dobách platilo v JavaScriptu omezení: rezervované slovo, např. `"class"`, nemůže být vlastností objektu. Toto omezení již neexistuje, ale v oné době nebylo možné mít vlastnost s názvem `"class"`, např. `elem.class`.
 
-So for classes the similar-looking property `"className"` was introduced: the `elem.className` corresponds to the `"class"` attribute.
+Pro třídy tedy byla zavedena podobná vlastnost `"className"`: `elem.className` odpovídá atributu `"class"`.
 
-For instance:
+Příklad:
 
 ```html run
-<body class="main page">
+<body class="hlavní strana">
   <script>
-    alert(document.body.className); // main page
+    alert(document.body.className); // hlavní strana
   </script>
 </body>
 ```
 
-If we assign something to `elem.className`, it replaces the whole string of classes. Sometimes that's what we need, but often we want to add/remove a single class.
+Jestliže do `elem.className` něco přiřadíme, nahradíme tím celý řetězec tříd. Někdy je to právě to, co potřebujeme, ale často chceme přidat nebo odebrat jedinou třídu.
 
-There's another property for that: `elem.classList`.
+K tomu slouží jiná vlastnost: `elem.classList`.
 
-The `elem.classList` is a special object with methods to `add/remove/toggle` a single class.
+`elem.classList` je speciální objekt s metodami `add/remove/toggle` pro přidání, odstranění a přepnutí jediné třídy.
 
-For instance:
+Příklad:
 
 ```html run
-<body class="main page">
+<body class="hlavní strana">
   <script>
 *!*
-    // add a class
-    document.body.classList.add('article');
+    // přidáme třídu
+    document.body.classList.add('článek');
 */!*
 
-    alert(document.body.className); // main page article
+    alert(document.body.className); // hlavní strana článek
   </script>
 </body>
 ```
 
-So we can operate both on the full class string using `className` or on individual classes using `classList`. What we choose depends on our needs.
+Můžeme tedy pracovat jak s celým řetězcem tříd pomocí `className`, tak s jednotlivými třídami pomocí `classList`. Záleží na našich potřebách, co si vybereme.
 
-Methods of `classList`:
+Metody objektu `classList`:
 
-- `elem.classList.add/remove("class")` -- adds/removes the class.
-- `elem.classList.toggle("class")` -- adds the class if it doesn't exist, otherwise removes it.
-- `elem.classList.contains("class")` -- checks for the given class, returns `true/false`.
+- `elem.classList.add/remove("třída")` -- přidá/odstraní třídu.
+- `elem.classList.toggle("třída")` -- pokud třída není v seznamu, přidá ji, jinak ji odstraní.
+- `elem.classList.contains("třída")` -- ověří, zda zadaná třída je v seznamu, vrátí `true/false`.
 
-Besides, `classList` is iterable, so we can list all classes with `for..of`, like this:
+Kromě toho `classList` je iterovatelný, takže si můžeme vypsat všechny třídy cyklem `for..of`, například:
 
 ```html run
-<body class="main page">
+<body class="hlavní strana">
   <script>
-    for (let name of document.body.classList) {
-      alert(name); // main, and then page
+    for (let název of document.body.classList) {
+      alert(název); // hlavní, pak strana
     }
   </script>
 </body>
 ```
 
-## Element style
+## Styl elementu
 
-The property `elem.style` is an object that corresponds to what's written in the `"style"` attribute. Setting `elem.style.width="100px"` works the same as if we had in the attribute `style` a string `width:100px`.
+Vlastnost `elem.style` je objekt, který odpovídá tomu, co je zapsáno do atributu `"style"`. Nastavení `elem.style.width="100px"` funguje stejně, jako kdybychom měli v atributu `style` řetězec `width:100px`.
 
-For multi-word property the camelCase is used:
+U víceslovných vlastností se používá velbloudíNotace:
 
 ```js no-beautify
 background-color  => elem.style.backgroundColor
@@ -94,16 +94,16 @@ z-index           => elem.style.zIndex
 border-left-width => elem.style.borderLeftWidth
 ```
 
-For instance:
+Příklad:
 
 ```js run
-document.body.style.backgroundColor = prompt('background color?', 'green');
+document.body.style.backgroundColor = prompt('barva pozadí?', 'green');
 ```
 
-````smart header="Prefixed properties"
-Browser-prefixed properties like `-moz-border-radius`, `-webkit-border-radius` also follow the same rule: a dash means upper case.
+````smart header="Vlastnosti s prefixem"
+Stejné pravidlo dodržují i vlastnosti s prefixem prohlížeče, např. `-moz-border-radius`, `-webkit-border-radius`: pomlčka znamená velké písmeno.
 
-For instance:
+Příklad:
 
 ```js
 button.style.MozBorderRadius = '5px';
@@ -111,41 +111,41 @@ button.style.WebkitBorderRadius = '5px';
 ```
 ````
 
-## Resetting the style property
+## Resetování vlastnosti style
 
-Sometimes we want to assign a style property, and later remove it.
+Někdy chceme do vlastnosti `style` něco přiřadit a později to odstranit.
 
-For instance, to hide an element, we can set `elem.style.display = "none"`.
+Například můžeme nastavit `elem.style.display = "none"`, abychom skryli element.
 
-Then later we may want to remove the `style.display` as if it were not set. Instead of `delete elem.style.display` we should assign an empty string to it: `elem.style.display = ""`.
-
-```js run
-// if we run this code, the <body> will blink
-document.body.style.display = "none"; // hide
-
-setTimeout(() => document.body.style.display = "", 1000); // back to normal
-```
-
-If we set `style.display` to an empty string, then the browser applies CSS classes and its built-in styles normally, as if there were no such `style.display` property at all.
-
-Also there is a special method for that, `elem.style.removeProperty('style property')`. So, We can remove a property like this:
+Později můžeme chtít `style.display` odstranit, jako by vůbec nebyla nastavena. Místo mazání `delete elem.style.display` bychom do ní měli přiřadit prázdný řetězec: `elem.style.display = ""`.
 
 ```js run
-document.body.style.background = 'red'; //set background to red
+// spustíme-li tento kód, <body> blikne
+document.body.style.display = "none"; // schovat
 
-setTimeout(() => document.body.style.removeProperty('background'), 1000); // remove background after 1 second
+setTimeout(() => document.body.style.display = "", 1000); // zpět do normálu
 ```
 
-````smart header="Full rewrite with `style.cssText`"
-Normally, we use `style.*` to assign individual style properties. We can't set the full style like `div.style="color: red; width: 100px"`, because `div.style` is an object, and it's read-only.
+Jestliže nastavíme `style.display` na prázdný řetězec, prohlížeč aplikuje CSS třídy a jejich zabudované styly běžným způsobem, jako by vlastnost `style.display` vůbec neexistovala.
 
-To set the full style as a string, there's a special property `style.cssText`:
+K tomu existuje i speciální metoda, `elem.style.removeProperty('vlastnost stylu')`. Můžeme tedy odstranit vlastnost následovně:
+
+```js run
+document.body.style.background = 'red'; // nastavíme červené pozadí
+
+setTimeout(() => document.body.style.removeProperty('background'), 1000); // za 1 sekundu pozadí odstraníme
+```
+
+````smart header="Úplné přepsání pomocí `style.cssText`"
+K nastavení jednotlivých vlastností stylu používáme běžně `style.*`. Nemůžeme nastavit celý styl způsobem `div.style="color: red; width: 100px"`, protože `div.style` je objekt a slouží pouze pro čtení.
+
+K tomu, abychom nastavili celý styl jedním řetězcem, existuje speciální vlastnost `style.cssText`:
 
 ```html run
-<div id="div">Button</div>
+<div id="div">Tlačítko</div>
 
 <script>
-  // we can set special style flags like "important" here
+  // zde můžeme nastavit speciální přepínače stylu, např. "important"
   div.style.cssText=`color: red !important;
     background-color: yellow;
     width: 100px;
@@ -156,27 +156,27 @@ To set the full style as a string, there's a special property `style.cssText`:
 </script>
 ```
 
-This property is rarely used, because such assignment removes all existing styles: it does not add, but replaces them. May occasionally delete something needed. But we can safely use it for new elements, when we know we won't delete an existing style.
+Tato vlastnost se používá jen zřídka, neboť takové přiřazení odstraní všechny existující styly: nepřidává nové styly, ale nahrazuje existující. Občas může smazat něco, co potřebujeme. Můžeme ji však bezpečně používat pro nové elementy, u nichž víme, že jim nesmažeme existující styl.
 
-The same can be accomplished by setting an attribute: `div.setAttribute('style', 'color: red...')`.
+Téhož můžeme dosáhnout nastavením atributu: `div.setAttribute('style', 'color: red...')`.
 ````
 
-## Mind the units
+## Nezapomínejte na jednotky
 
-Don't forget to add CSS units to values.
+Nezapomínejte přidávat k hodnotám CSS jednotky.
 
-For instance, we should not set `elem.style.top` to `10`, but rather to `10px`. Otherwise it wouldn't work:
+Například `elem.style.top` bychom neměli nastavovat na `10`, ale na `10px`. Jinak to nebude fungovat:
 
 ```html run height=100
 <body>
   <script>
   *!*
-    // doesn't work!
+    // nefunguje to!
     document.body.style.margin = 20;
-    alert(document.body.style.margin); // '' (empty string, the assignment is ignored)
+    alert(document.body.style.margin); // '' (prázdný řetězec, přiřazení je ignorováno)
   */!*
 
-    // now add the CSS unit (px) - and it works
+    // nyní přidáme CSS jednotku (px) - a už to funguje
     document.body.style.margin = '20px';
     alert(document.body.style.margin); // 20px
 
@@ -186,19 +186,19 @@ For instance, we should not set `elem.style.top` to `10`, but rather to `10px`. 
 </body>
 ```
 
-Please note: the browser "unpacks" the property `style.margin` in the last lines and infers `style.marginLeft` and `style.marginTop` from it.
+Prosíme všimněte si, že na posledních řádcích prohlížeč „rozbalí“ vlastnost `style.margin` a odvodí z ní `style.marginLeft` a `style.marginTop`.
 
-## Computed styles: getComputedStyle
+## Vypočítané vlastnosti: getComputedStyle
 
-So, modifying a style is easy. But how to *read* it?
+Změnit styl je tedy jednoduché. Ale jak jej *načíst*?
 
-For instance, we want to know the size, margins, the color of an element. How to do it?
+Chceme například znát velikost, okraje nebo barvu elementu. Jak to udělat?
 
-**The `style` property operates only on the value of the `"style"` attribute, without any CSS cascade.**
+**Vlastnost `style` pracuje jen s hodnotou atributu `"style"` bez jakékoli CSS kaskády.**
 
-So we can't read anything that comes from CSS classes using `elem.style`.
+Pomocí `elem.style` tedy nejsme schopni načíst nic, co pochází z CSS tříd.
 
-For instance, here `style` doesn't see the margin:
+Například zde `style` nevidí vnější okraj (margin):
 
 ```html run height=60 no-beautify
 <head>
@@ -206,35 +206,35 @@ For instance, here `style` doesn't see the margin:
 </head>
 <body>
 
-  The red text
+  Červený text
   <script>
 *!*
-    alert(document.body.style.color); // empty
-    alert(document.body.style.marginTop); // empty
+    alert(document.body.style.color); // prázdný
+    alert(document.body.style.marginTop); // prázdný
 */!*
   </script>
 </body>
 ```
 
-...But what if we need, say, to increase the margin by `20px`? We would want the current value of it.
+...Ale co když chceme třeba zvětšit vnější okraj o `20px`? Chtěli bychom znát jeho aktuální hodnotu.
 
-There's another method for that: `getComputedStyle`.
+K tomu slouží jiná metoda: `getComputedStyle`.
 
-The syntax is:
+Její syntaxe je:
 
 ```js
 getComputedStyle(element, [pseudo])
 ```
 
 element
-: Element to read the value for.
+: Element, jehož hodnota má být načtena.
 
 pseudo
-: A pseudo-element if required, for instance `::before`. An empty string or no argument means the element itself.
+: Pseudoelement, pokud je vyžadován, například `::before`. Prázdný řetězec nebo žádný argument znamená samotný element.
 
-The result is an object with styles, like `elem.style`, but now with respect to all CSS classes.
+Výsledkem je objekt obsahující styly, podobný `elem.style`, ale tentokrát s ohledem na všechny CSS třídy.
 
-For instance:
+Například:
 
 ```html run height=100
 <head>
@@ -243,55 +243,55 @@ For instance:
 <body>
 
   <script>
-    let computedStyle = getComputedStyle(document.body);
+    let vypočítanýStyl = getComputedStyle(document.body);
 
-    // now we can read the margin and the color from it
+    // nyní z něj můžeme načíst vnější okraj a barvu
 
-    alert( computedStyle.marginTop ); // 5px
-    alert( computedStyle.color ); // rgb(255, 0, 0)
+    alert( vypočítanýStyl.marginTop ); // 5px
+    alert( vypočítanýStyl.color ); // rgb(255, 0, 0)
   </script>
 
 </body>
 ```
 
-```smart header="Computed and resolved values"
-There are two concepts in [CSS](https://drafts.csswg.org/cssom/#resolved-values):
+```smart header="Vypočítané a vyhodnocené hodnoty"
+V [CSS](https://drafts.csswg.org/cssom/#resolved-values) jsou dva koncepty:
 
-1. A *computed* style value is the value after all CSS rules and CSS inheritance is applied, as the result of the CSS cascade. It can look like `height:1em` or `font-size:125%`.
-2. A *resolved* style value is the one finally applied to the element. Values like `1em` or `125%` are relative. The browser takes the computed value and makes all units fixed and absolute, for instance: `height:20px` or `font-size:16px`. For geometry properties resolved values may have a floating point, like `width:50.5px`.
+1. *Vypočítaná* (computed) hodnota stylu je hodnota získaná po aplikaci všech CSS pravidel a CSS dědičnosti, tedy výsledek CSS kaskády. Může vypadat jako `height:1em` nebo `font-size:125%`.
+2. *Vyhodnocená* (resolved) hodnota stylu je ta, která se nakonec aplikuje na element. Hodnoty jako `1em` nebo `125%` jsou relativní. Prohlížeč vezme vypočítanou hodnotu a změní všechny jednotky na pevné a absolutní, například  `height:20px` nebo `font-size:16px`. Vyhodnocené hodnoty geometrických vlastností mohou mít pohyblivou čárku, například `width:50.5px`.
 
-A long time ago `getComputedStyle` was created to get computed values, but it turned out that resolved values are much more convenient, and the standard changed.
+Metoda `getComputedStyle` vznikla před dlouhou dobou, aby vracela vypočítané hodnoty, ale ukázalo se, že vyhodnocené hodnoty jsou mnohem vhodnější, a tak se standard změnil.
 
-So nowadays `getComputedStyle` actually returns the resolved value of the property, usually in `px` for geometry.
+V současnosti tedy `getComputedStyle` ve skutečnosti vrací vyhodnocenou hodnotu vlastnosti, pro geometrii obvykle v `px`.
 ```
 
-````warn header="`getComputedStyle` requires the full property name"
-We should always ask for the exact property that we want, like `paddingLeft` or `marginTop` or `borderTopWidth`. Otherwise the correct result is not guaranteed.
+````warn header="`getComputedStyle` vyžaduje celý název vlastnosti"
+Vždy bychom se měli ptát na přesnou vlastnost, kterou chceme znát, například `paddingLeft`, `marginTop` nebo `borderTopWidth`. Jinak nemáme zaručen správný výsledek.
 
-For instance, if there are properties `paddingLeft/paddingTop`, then what should we get for `getComputedStyle(elem).padding`? Nothing, or maybe a "generated" value from known paddings? There's no standard rule here.
+Například pokud existují vlastnosti `paddingLeft/paddingTop`, co bychom pak měli obdržet pro `getComputedStyle(elem).padding`? Nic, nebo snad „vygenerovanou“ hodnotu ze známých vnitřních okrajů (paddingů)? Žádné standardní pravidlo zde neexistuje.
 ````
 
-```smart header="Styles applied to `:visited` links are hidden!"
-Visited links may be colored using `:visited` CSS pseudoclass.
+```smart header="Styly aplikované na odkazy `:visited` jsou skryté!"
+Navštívené odkazy mohou být obarveny pomocí CSS pseudotřídy `:visited`.
 
-But `getComputedStyle` does not give access to that color, because otherwise an arbitrary page could find out whether the user visited a link by creating it on the page and checking the styles.
+Ale `getComputedStyle` přístup k této barvě neposkytuje, neboť jinak by libovolná stránka mohla zjistit, zda uživatel navštívil nějaký odkaz, tak, že si ho vytvoří a zjistí jeho styly.
 
-JavaScript may not see the styles applied by `:visited`. And also, there's a limitation in CSS that forbids applying geometry-changing styles in `:visited`. That's to guarantee that there's no side way for an evil page to test if a link was visited and hence to break the privacy.
+JavaScript nesmí vidět styly aplikované pomocí `:visited`. Rovněž CSS obsahuje omezení, které zakazuje ve `:visited` aplikovat styly měnící geometrii. Tím je zaručeno, že neexistuje žádný vedlejší způsob, jak by zlá stránka mohla zjistit, zda byl nějaký odkaz navštíven, a tím porušit soukromí.
 ```
 
-## Summary
+## Shrnutí
 
-To manage classes, there are two DOM properties:
+Ke správě tříd slouží dvě vlastnosti DOMu:
 
-- `className` -- the string value, good to manage the whole set of classes.
-- `classList` -- the object with methods `add/remove/toggle/contains`, good for individual classes.
+- `className` -- řetězcová hodnota, hodí se pro správu celé sady tříd.
+- `classList` -- objekt s metodami `add/remove/toggle/contains`, hodí se pro jednotlivé třídy.
 
-To change the styles:
+Ke změně stylu:
 
-- The `style` property is an object with camelCased styles. Reading and writing to it has the same meaning as modifying individual properties in the `"style"` attribute. To see how to apply `important` and other rare stuff -- there's a list of methods at [MDN](mdn:api/CSSStyleDeclaration).
+- Vlastnost `style` je objekt, který obsahuje styly zapsané velbloudíNotací. Čtení a zápis do něj má stejný význam jako modifikace jednotlivých vlastností v atributu `"style"`. Chcete-li vidět, jak se aplikuje `important` a jiné vzácně používané vlastnosti, [MDN](mdn:api/CSSStyleDeclaration) obsahuje seznam metod.
 
-- The `style.cssText` property corresponds to the whole `"style"` attribute, the full string of styles.
+- Vlastnost `style.cssText` odpovídá celému atributu `"style"`, úplnému řetězci stylů.
 
-To read the resolved styles (with respect to all classes, after all CSS is applied and final values are calculated):
+K načtení vyhodnocených stylů (s ohledem na všechny třídy po aplikaci všech CSS a výpočtu finálních hodnot):
 
-- The `getComputedStyle(elem, [pseudo])` returns the style-like object with them. Read-only.
+- Metoda `getComputedStyle(elem, [pseudo])` vrací objekt podobný stylu, který je obsahuje. Je pouze pro čtení.

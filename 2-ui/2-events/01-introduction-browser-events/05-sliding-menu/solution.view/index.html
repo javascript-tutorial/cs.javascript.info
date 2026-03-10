@@ -11,22 +11,22 @@
       display: none;
     }
 
-    .menu .title {
+    .menu .titulek {
       font-size: 18px;
       cursor: pointer;
     }
 
-    .menu .title::before {
+    .menu .titulek::before {
       content: '▶ ';
       font-size: 80%;
       color: green;
     }
 
-    .menu.open .title::before {
+    .menu.otevřeno .titulek::before {
       content: '▼ ';
     }
 
-    .menu.open ul {
+    .menu.otevřeno ul {
       display: block;
     }
   </style>
@@ -34,22 +34,22 @@
 
 <body>
 
-  <div id="sweeties" class="menu">
-    <span class="title">Sweeties (click me)!</span>
+  <div id="sladkosti" class="menu">
+    <span class="titulek">Sladkosti (klikni na mě)!</span>
     <ul>
-      <li>Cake</li>
-      <li>Donut</li>
-      <li>Honey</li>
+      <li>Koláč</li>
+      <li>Kobliha</li>
+      <li>Med</li>
     </ul>
 
   </div>
 
   <script>
-    let menuElem = document.getElementById('sweeties');
-    let titleElem = menuElem.querySelector('.title');
+    let menuElem = document.getElementById('sladkosti');
+    let titulekElem = menuElem.querySelector('.titulek');
 
-    titleElem.onclick = function() {
-      menuElem.classList.toggle('open');
+    titulekElem.onclick = function() {
+      menuElem.classList.toggle('otevřeno');
     };
   </script>
 

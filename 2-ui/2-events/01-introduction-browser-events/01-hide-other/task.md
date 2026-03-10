@@ -2,10 +2,10 @@ importance: 5
 
 ---
 
-# Hide on click
+# Schování po kliknutí
 
-Add JavaScript to the `button` to make `<div id="text">` disappear when we click it.
+Přidejte k tlačítku kód v JavaScriptu, který způsobí, že když na tlačítko kliknete, zmizí `<div id="text">`.
 
-The demo:
+Demo:
 
 [iframe border=1 src="solution" height=80]

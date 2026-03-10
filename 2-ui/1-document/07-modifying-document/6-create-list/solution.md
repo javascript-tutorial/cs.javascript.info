@@ -1,1 +1,1 @@
-Please note the usage of `textContent` to assign the `<li>` content.
+Prosíme, všimněte si, že k přiřazení obsahu `<li>` je použit `textContent`.

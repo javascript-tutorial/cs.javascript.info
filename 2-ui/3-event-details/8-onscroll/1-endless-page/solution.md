@@ -1,64 +1,64 @@
-The core of the solution is a function that adds more dates to the page (or loads more stuff in real-life) while we're at the page end.
+Jádrem řešení je funkce, která přidá na stránku další data (nebo v reálném životě načte další obsah), když jsme na konci stránky.
 
-We can call it immediately and add as a `window.onscroll` handler.
+Můžeme ji okamžitě zavolat a přidat jako handler `window.onscroll`.
 
-The most important question is: "How do we detect that the page is scrolled to bottom?"
+Nejdůležitější otázka zní: „Jak zjistíme, že stránka je odrolována na konec?“
 
-Let's use window-relative coordinates.
+Použijeme souřadnice relativní vzhledem k oknu.
 
-The document is represented (and contained) within `<html>` tag, that is `document.documentElement`.
+Dokument je reprezentován (a obsažen) uvnitř značky `<html>`, což je `document.documentElement`.
 
-We can get window-relative coordinates of the whole document as `document.documentElement.getBoundingClientRect()`, the `bottom` property will be window-relative coordinate of the document bottom.
+Souřadnice celého dokumentu vzhledem k oknu můžeme získat voláním `document.documentElement.getBoundingClientRect()`, vlastnost `bottom` pak bude souřadnice dolního konce dokumentu vzhledem k oknu.
 
-For instance, if the height of the whole HTML document is `2000px`, then:
+Pokud je například výška celého HTML dokumentu `2000px`, pak:
 
 ```js
-// when we're on the top of the page
-// window-relative top = 0
+// když jsme na vrchu stránky
+// top vzhledem k oknu = 0
 document.documentElement.getBoundingClientRect().top = 0
 
-// window-relative bottom = 2000
-// the document is long, so that is probably far beyond the window bottom
+// bottom vzhledem k oknu = 2000
+// dokument je dlouhý, takže to bude pravděpodobně daleko za dolním okrajem okna
 document.documentElement.getBoundingClientRect().bottom = 2000
 ```
 
-If we scroll `500px` below, then:
+Pokud odrolujeme o `500px` dolů, pak:
 
 ```js
-// document top is above the window 500px
+// vrch dokumentu je 500px nad oknem
 document.documentElement.getBoundingClientRect().top = -500
-// document bottom is 500px closer
+// spodek dokumentu je o 500px blíž
 document.documentElement.getBoundingClientRect().bottom = 1500
 ```
 
-When we scroll till the end, assuming that the window height is `600px`:
+Když dorolujeme až na konec za předpokladu, že výška okna je `600px`:
 
 
 ```js
-// document top is above the window 1400px
+// vrch dokumentu je 1400px nad oknem
 document.documentElement.getBoundingClientRect().top = -1400
-// document bottom is below the window 600px
+// spodek dokumentu je 600px pod oknem
 document.documentElement.getBoundingClientRect().bottom = 600
 ```
 
-Please note that the `bottom` can't be `0`, because it never reaches the window top. The lowest limit of the `bottom` coordinate is the window height (we assumed it to be `600`), we can't scroll it any more up.
+Prosíme všimněte si, že `bottom` nemůže být `0`, protože spodek nikdy nedosáhne vrchu okna. Nejnižší možná hodnota souřadnice `bottom` je výška okna (předpokládáme, že je to `600`), výš už rolovat nemůžeme.
 
-We can obtain the window height as `document.documentElement.clientHeight`.
+Výšku okna můžeme získat jako `document.documentElement.clientHeight`.
 
-For our task, we need to know when the document bottom is not no more than `100px` away from it (that is: `600-700px`, if the height is `600`).
+V naší úloze potřebujeme vědět, kdy od ní není spodek dokumentu vzdálen více než `100px` (tedy `600-700px`, je-li výška `600`).
 
-So here's the function:
+Funkce je tedy následující:
 
 ```js
-function populate() {
+function přidejDatum() {
   while(true) {
-    // document bottom
-    let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+    // spodek dokumentu
+    let spodekVzhledemKOknu = document.documentElement.getBoundingClientRect().bottom;
 
-    // if the user hasn't scrolled far enough (>100px to the end)
-    if (windowRelativeBottom > document.documentElement.clientHeight + 100) break;
+    // pokud uživatel nedoroloval dost daleko (>100px do konce)
+    if (spodekVzhledemKOknu > document.documentElement.clientHeight + 100) break;
     
-    // let's add more data
+    // přidáme další data
     document.body.insertAdjacentHTML("beforeend", `<p>Date: ${new Date()}</p>`);
   }
 }

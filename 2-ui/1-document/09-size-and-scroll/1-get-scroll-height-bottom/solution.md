@@ -1,7 +1,7 @@
-The solution is:
+Řešení je:
 
 ```js
 let scrollBottom = elem.scrollHeight - elem.scrollTop - elem.clientHeight;
 ```
 
-In other words: (full height) minus (scrolled out top part) minus (visible part) -- that's exactly the scrolled out bottom part.
+Jinými slovy: (úplná výška) minus (odrolovaná horní část) minus (viditelná část) -- to je přesně odrolovaná dolní část.

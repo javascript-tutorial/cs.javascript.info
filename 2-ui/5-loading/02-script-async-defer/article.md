@@ -1,205 +1,205 @@
 
-# Scripts: async, defer
+# Skripty: async, defer
 
-In modern websites, scripts are often "heavier" than HTML: their download size is larger, and processing time is also longer.
+Skripty na moderních webových stránkách jsou často „objemnější“ než HTML kód: jejich velikost při stahování je větší a čas zpracování je také delší.
 
-When the browser loads HTML and comes across a `<script>...</script>` tag, it can't continue building the DOM. It must execute the script right now. The same happens for external scripts `<script src="..."></script>`: the browser must wait for the script to download, execute the downloaded script, and only then can it process the rest of the page.
+Když prohlížeč načítá HTML kód a narazí na značku `<script>...</script>`, nemůže pokračovat v sestavování DOMu, ale musí okamžitě spustit skript. Pro externí skripty `<script src="..."></script>` platí totéž: prohlížeč musí počkat, než se skript načte, spustit načtený skript a teprve pak může zpracovat zbytek stránky.
 
-That leads to two important issues:
+To vede ke dvěma důležitým obtížím:
 
-1. Scripts can't see DOM elements below them, so they can't add handlers etc.
-2. If there's a bulky script at the top of the page, it "blocks the page". Users can't see the page content till it downloads and runs:
+1. Skripty nevidí DOM elementy, které se nacházejí pod nimi, takže k nim nemohou přidávat handlery a podobně.
+2. Pokud je na začátku stránky objemný skript, „zablokuje stránku“. Uživatelé neuvidí obsah stránky, dokud se skript nenačte a nespustí:
 
 ```html run height=100
-<p>...content before script...</p>
+<p>...obsah před skriptem...</p>
 
 <script src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
 
-<!-- This isn't visible until the script loads -->
-<p>...content after script...</p>
+<!-- Toto není vidět, dokud se skript nenačte -->
+<p>...obsah za skriptem...</p>
 ```
 
-There are some workarounds to that. For instance, we can put a script at the bottom of the page. Then it can see elements above it, and it doesn't block the page content from showing:
+Dá se to obejít několika způsoby. Můžeme například umístit skript na konec stránky. Pak uvidí elementy nad sebou a nezablokuje zobrazení obsahu stránky:
 
 ```html
 <body>
-  ...all content is above the script...
+  ...veškerý obsah je před skriptem...
 
   <script src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
 </body>
 ```
 
-But this solution is far from perfect. For example, the browser notices the script (and can start downloading it) only after it downloaded the full HTML document. For long HTML documents, that may be a noticeable delay.
+Toto řešení má však k dokonalosti daleko. Prohlížeč si například všimne skriptu (a může ho začít načítat) až po načtení celého HTML dokumentu. U dlouhých HTML dokumentů to může způsobit znatelnou prodlevu.
 
-Such things are invisible for people using very fast connections, but many people in the world still have slow internet speeds and use a far-from-perfect mobile internet connection.
+Lidé s velmi rychlým připojením takové věci nevidí, ale na světě je stále mnoho lidí, kteří mají nízkou rychlost internetu a používají nedokonalé mobilní připojení.
 
-Luckily, there are two `<script>` attributes that solve the problem for us: `defer` and `async`.
+Naštěstí značka `<script>` má dva atributy, které nám tento problém vyřeší: `defer` a `async`.
 
 ## defer
 
-The `defer` attribute tells the browser not to wait for the script. Instead, the browser will continue to process the HTML, build DOM. The script loads "in the background", and then runs when the DOM is fully built.
+Atribut `defer` říká prohlížeči, že nemá na skript čekat. Prohlížeč bude místo čekání pokračovat ve zpracovávání HTML kódu a sestavování DOMu. Skript se načte „na pozadí“ a spustí se, až bude celý DOM sestaven.
 
-Here's the same example as above, but with `defer`:
+Následující příklad je stejný jako výše uvedený, ale obsahuje `defer`:
 
 ```html run height=100
-<p>...content before script...</p>
+<p>...obsah před skriptem...</p>
 
 <script defer src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
 
-<!-- visible immediately -->
-<p>...content after script...</p>
+<!-- viditelné okamžitě -->
+<p>...obsah za skriptem...</p>
 ```
 
-In other words:
+Jinými slovy:
 
-- Scripts with `defer` never block the page.
-- Scripts with `defer` always execute when the DOM is ready (but before `DOMContentLoaded` event).
+- Skripty obsahující `defer` stránku nikdy nezablokují.
+- Skripty obsahující `defer` se vždy spustí, až je DOM připraven (ale před událostí `DOMContentLoaded`).
 
-The following example demonstrates the second part:
+Druhou část předvádí následující příklad:
 
 ```html run height=100
-<p>...content before scripts...</p>
+<p>...obsah před skripty...</p>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => alert("DOM ready after defer!"));
+  document.addEventListener('DOMContentLoaded', () => alert("DOM připraven po odložení!"));
 </script>
 
 <script defer src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
 
-<p>...content after scripts...</p>
+<p>...obsah za skripty...</p>
 ```
 
-1. The page content shows up immediately.
-2. `DOMContentLoaded` event handler waits for the deferred script. It only triggers when the script is downloaded and executed.
+1. Obsah stránky se zobrazí okamžitě.
+2. Handler události `DOMContentLoaded` čeká na odložený skript (obsahující `defer`). Spustí se až poté, co bude skript načten a vykonán.
 
-**Deferred scripts keep their relative order, just like regular scripts.**
+**Vzájemné pořadí odložených skriptů zůstane zachováno, stejně jako u běžných skriptů.**
 
-Let's say, we have two deferred scripts: the `long.js` and then `small.js`:
+Dejme tomu, že máme dva odložené skripty: `long.js` (dlouhý) a `small.js` (krátký):
 
 ```html
 <script defer src="https://javascript.info/article/script-async-defer/long.js"></script>
 <script defer src="https://javascript.info/article/script-async-defer/small.js"></script>
 ```
 
-Browsers scan the page for scripts and download them in parallel, to improve performance. So in the example above both scripts download in parallel. The `small.js` probably finishes first.
+Prohlížeče hledají skripty na stránce a pro zlepšení výkonu je načítají paralelně. V uvedeném příkladu se tedy oba skripty budou načítat současně. Jako první zřejmě skončí `small.js`.
 
-...But the `defer` attribute, besides telling the browser "not to block", ensures that the relative order is kept. So even though `small.js` loads first, it still waits and runs after `long.js` executes.
+...Ale atribut `defer` kromě toho, že řekne prohlížeči, aby se „nezablokoval“, zajistí dodržení jejich vzájemného pořadí. I když se tedy jako první načte `small.js`, bude čekat a spustí se až po spuštění `long.js`.
 
-That may be important for cases when we need to load a JavaScript library and then a script that depends on it.
+Může to být důležité v případech, kdy potřebujeme načíst JavaScriptovou knihovnu a pak skript, který je na ní závislý.
 
-```smart header="The `defer` attribute is only for external scripts"
-The `defer` attribute is ignored if the `<script>` tag has no `src`.
+```smart header="Atribut `defer` funguje jen pro externí skripty"
+Pokud značka `<script>` neobsahuje `src`, atribut `defer` je ignorován.
 ```
 
 ## async
 
-The `async` attribute is somewhat like `defer`. It also makes the script non-blocking. But it has important differences in the behavior.
+Atribut `async` je podobný `defer`. I on způsobí, že skript nezablokuje načítání stránky. V jejich chování jsou však důležité rozdíly.
 
-The `async` attribute means that a script is completely independent:
+Atribut `async` znamená, že skript je úplně nezávislý:
 
-- The browser doesn't block on `async` scripts (like `defer`).
-- Other scripts don't wait for `async` scripts, and `async` scripts don't wait for them.
-- `DOMContentLoaded` and async scripts don't wait for each other:
-    - `DOMContentLoaded` may happen both before an async script (if an async script finishes loading after the page is complete)
-    - ...or after an async script (if an async script is short or was in HTTP-cache)
+- Prohlížeč se na asynchronních skriptech (s `async`) nezablokuje (stejně jako u `defer`).
+- Ostatní skripty nečekají na skripty s `async` a skripty s `async` nečekají na ně.
+- `DOMContentLoaded` a asynchronní skripty nečekají na sebe navzájem:
+    - `DOMContentLoaded` může nastat před asynchronním skriptem (jestliže načítání asynchronního skriptu skončí až po dokončení stránky)
+    - ...nebo po asynchronním skriptu (jestliže byl asynchronní skript krátký nebo byl v HTTP mezipaměti).
 
-In other words, `async` scripts load in the background and run when ready. The DOM and other scripts don't wait for them, and they don't wait for anything. A fully independent script that runs when loaded. As simple, as it can get, right?
+Jinými slovy, skripty s `async` se načítají v pozadí a spustí se, jakmile jsou připraveny. DOM a ostatní skripty na ně nečekají a ony samy nečekají na nic. Naprosto nezávislý skript, který se spustí, jakmile je načten. Jednoduché, jak to jen může být, že?
 
-Here's an example similar to what we've seen with `defer`: two scripts `long.js` and `small.js`, but now with `async` instead of `defer`.
+Následující příklad se podobá tomu, co jsme viděli s `defer`: dva skripty `long.js` a `small.js`, ale nyní obsahují `async` místo `defer`.
 
-They don't wait for each other. Whatever loads first (probably `small.js`) -- runs first:
+Nebudou čekat na sebe navzájem. Ten, který se načte jako první (pravděpodobně `small.js`), se jako první spustí:
 
 ```html run height=100
-<p>...content before scripts...</p>
+<p>...obsah před skripty...</p>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => alert("DOM ready!"));
+  document.addEventListener('DOMContentLoaded', () => alert("DOM je připraven!"));
 </script>
 
 <script async src="https://javascript.info/article/script-async-defer/long.js"></script>
 <script async src="https://javascript.info/article/script-async-defer/small.js"></script>
 
-<p>...content after scripts...</p>
+<p>...obsah za skripty...</p>
 ```
 
-- The page content shows up immediately: `async` doesn't block it.
-- `DOMContentLoaded` may happen both before and after `async`, no guarantees here.
-- A smaller script `small.js` goes second, but probably loads before `long.js`, so `small.js` runs first. Although, it might be that `long.js` loads first, if cached, then it runs first. In other words, async scripts run in the "load-first" order.
+- Obsah stránky se okamžitě zobrazí: `async` jej neblokuje.
+- `DOMContentLoaded` může nastat před i po `async`, nemáme tady žádnou záruku.
+- Menší skript `small.js` je uveden jako druhý, ale načte se pravděpodobně dříve než `long.js`, takže `small.js` se spustí jako první. Ale může to být i tak, že se jako první načte `long.js`, je-li v mezipaměti, a pak se jako první spustí on. Jinými slovy, asynchronní skripty se spustí v pořadí „kdo se dřív načte“.
 
-Async scripts are great when we integrate an independent third-party script into the page: counters, ads and so on, as they don't depend on our scripts, and our scripts shouldn't wait for them:
+Asynchronní skripty se skvěle hodí, když integrujeme na stránku nezávislý skript třetí strany: počítadla, reklamy a podobně, jelikož ty nezávisejí na našich skriptech a naše skripty by na ně neměly čekat:
 
 ```html
-<!-- Google Analytics is usually added like this -->
+<!-- takto se obvykle přidává Google Analytics -->
 <script async src="https://google-analytics.com/analytics.js"></script>
 ```
 
-```smart header="The `async` attribute is only for external scripts"
-Just like `defer`, the `async` attribute is ignored if the `<script>` tag has no `src`.
+```smart header="Atribut `async` funguje jen pro externí skripty"
+Stejně jako `defer`, i atribut `async` je ignorován, jestliže značka `<script>` neobsahuje `src`.
 ```
 
-## Dynamic scripts
+## Dynamické skripty
 
-There's one more important way of adding a script to the page.
+Je ještě jeden důležitý způsob, jak přidat skript na stránku.
 
-We can create a script and append it to the document dynamically using JavaScript:
+Můžeme vytvořit skript a připojit jej k dokumentu dynamicky v JavaScriptu:
 
 ```js run
-let script = document.createElement('script');
-script.src = "/article/script-async-defer/long.js";
-document.body.append(script); // (*)
+let skript = document.createElement('script');
+skript.src = "/article/script-async-defer/long.js";
+document.body.append(skript); // (*)
 ```
 
-The script starts loading as soon as it's appended to the document `(*)`.
+Skript se začne načítat hned, jakmile je připojen k dokumentu `(*)`.
 
-**Dynamic scripts behave as "async" by default.**
+**Dynamické skripty se standardně chovají jako „asynchronní“.**
 
-That is:
-- They don't wait for anything, nothing waits for them.
-- The script that loads first -- runs first ("load-first" order).
+To znamená:
+- Na nic nečekají a nic nečeká na ně.
+- Skript, který se načte první, se první spustí (pořadí „kdo se dřív načte“).
 
-This can be changed if we explicitly set `script.async=false`. Then scripts will be executed in the document order, just like `defer`.
+Můžeme to změnit, když explicitně nastavíme `skript.async=false`. Pak budou skripty spuštěny v pořadí podle dokumentu, stejně jako u `defer`.
 
-In this example, `loadScript(src)` function adds a script and also sets `async` to `false`.
+V následujícím příkladu funkce `načtiSkript(src)` načte skript a také nastaví `async` na `false`.
 
-So `long.js` always runs first (as it's added first):
+Proto se `long.js` spustí vždy jako první (jelikož byl jako první přidán):
 
 ```js run
-function loadScript(src) {
-  let script = document.createElement('script');
-  script.src = src;
-  script.async = false;
-  document.body.append(script);
+function načtiSkript(src) {
+  let skript = document.createElement('script');
+  skript.src = src;
+  skript.async = false;
+  document.body.append(skript);
 }
 
-// long.js runs first because of async=false
-loadScript("/article/script-async-defer/long.js");
-loadScript("/article/script-async-defer/small.js");
+// long.js se spustí jako první kvůli async=false
+načtiSkript("/article/script-async-defer/long.js");
+načtiSkript("/article/script-async-defer/small.js");
 ```
 
-Without `script.async=false`, scripts would execute in default, load-first order (the `small.js` probably first).
+Bez `skript.async=false` by se skripty spustily standardně v pořadí, v jakém byly načteny (první zřejmě `small.js`).
 
-Again, as with the `defer`, the order matters if we'd like to load a library and then another script that depends on it.
+Opět, stejně jako u `defer`, záleží na pořadí, jestliže chceme načíst knihovnu a pak jiný skript, který na ní závisí.
 
 
-## Summary
+## Shrnutí
 
-Both `async` and `defer` have one common thing: downloading of such scripts doesn't block page rendering. So the user can read page content and get acquainted with the page immediately.
+Atributy `async` a `defer` mají jedno společné: načítání takových skriptů neblokuje vykreslování stránky. Uživatel si tedy může ihned přečíst obsah stránky a seznámit se s ní.
 
-But there are also essential differences between them:
+Jsou však mezi nimi i významné rozdíly:
 
-|         | Order | `DOMContentLoaded` |
+|         | Pořadí | `DOMContentLoaded` |
 |---------|---------|---------|
-| `async` | *Load-first order*. Their document order doesn't matter -- which loads first runs first |  Irrelevant. May load and execute while the document has not yet been fully downloaded. That happens if scripts are small or cached, and the document is long enough. |
-| `defer` | *Document order* (as they go in the document). |  Execute after the document is loaded and parsed (they wait if needed), right before `DOMContentLoaded`. |
+| `async` | *Kdo se dřív načte*. Na jejich pořadí v dokumentu nezáleží -- ten, který se načte první, se první spustí. |  Nemá vliv. Mohou se načíst a spustit, i když ještě není načten celý dokument. To se stává, když jsou skripty malé nebo jsou v mezipaměti a dokument je dostatečně dlouhý. |
+| `defer` | *Pořadí podle dokumentu* (stejné, v jakém jsou uvedeny v dokumentu). |  Spustí se poté, co je dokument načten a zpracován (v případě potřeby čekají), bezprostředně před `DOMContentLoaded`. |
 
-In practice, `defer` is used for scripts that need the whole DOM and/or their relative execution order is important.
+V praxi se `defer` používá pro skripty, které potřebují celý DOM a/nebo záleží na vzájemném pořadí jejich spuštění.
 
-And  `async` is used for independent scripts, like counters or ads. And their relative execution order does not matter.
+A `async` se používá pro nezávislé skripty, například počítadla nebo reklamy, na jejichž vzájemném pořadí spuštění nezáleží.
 
-```warn header="Page without scripts should be usable"
-Please note: if you're using `defer` or `async`, then user will see the page *before* the script loads.
+```warn header="Stránka bez skriptů by měla být použitelná"
+Prosíme všimněte si, že jestliže použijete `defer` nebo `async`, pak uživatel uvidí stránku ještě *předtím*, než se skript načte.
 
-In such case, some graphical components are probably not initialized yet.
+V takovém případě nebudou některé grafické komponenty pravděpodobně ještě inicializovány.
 
-Don't forget to put "loading" indication and disable buttons that aren't functional yet. Let the user clearly see what he can do on the page, and what's still getting ready.
+Nezapomeňte přidat oznámení „načítá se“ a zakázat tlačítka, která ještě nefungují, aby uživatel jasně viděl, co už může na stránce dělat a co se teprve připravuje.
 ```

@@ -1,200 +1,200 @@
 
-# Mutation observer
+# Pozorovatel změn
 
-`MutationObserver` is a built-in object that observes a DOM element and fires a callback when it detects a change.
+Objekt třídy `MutationObserver` je zabudovaný objekt, který pozoruje DOM element a spustí callback, když detekuje změnu.
 
-We'll first take a look at the syntax, and then explore a real-world use case, to see where such thing may be useful.
+Nejprve se podíváme na syntaxi a pak prozkoumáme případy použití z reálného světa, abychom viděli, kdy se něco takového může hodit.
 
-## Syntax
+## Syntaxe
 
-`MutationObserver` is easy to use.
+Používání `MutationObserver` je snadné.
 
-First, we create an observer with a callback-function:
-
-```js
-let observer = new MutationObserver(callback);
-```
-
-And then attach it to a DOM node:
+Napřed vytvoříme pozorovatele s callbackovou funkcí:
 
 ```js
-observer.observe(node, config);
+let pozorovatel = new MutationObserver(callback);
 ```
 
-`config` is an object with boolean options "what kind of changes to react on":
-- `childList` -- changes in the direct children of `node`,
-- `subtree` -- in all descendants of `node`,
-- `attributes` -- attributes of `node`,
-- `attributeFilter` -- an array of attribute names, to observe only selected ones.
-- `characterData` -- whether to observe `node.data` (text content),
+A pak jej připojíme k DOM uzlu:
 
-Few other options:
-- `attributeOldValue` -- if `true`, pass both the old and the new value of attribute to callback (see below), otherwise only the new one (needs `attributes` option),
-- `characterDataOldValue` -- if `true`, pass both the old and the new value of `node.data` to callback (see below), otherwise only the new one (needs `characterData` option).
+```js
+pozorovatel.observe(uzel, konfigurace);
+```
 
-Then after any changes, the `callback` is executed: changes are passed in the first argument as a list of [MutationRecord](https://dom.spec.whatwg.org/#mutationrecord) objects, and the observer itself as the second argument.
+`konfigurace` je objekt s booleovskými možnostmi „na které druhy změn reagovat“:
+- `childList` -- změny v přímých dětech uzlu `uzel`,
+- `subtree` -- ve všech potomcích uzlu `uzel`,
+- `attributes` -- v atributech uzlu `uzel`,
+- `attributeFilter` -- pole názvů atributů, abychom mohli sledovat jen vybrané,
+- `characterData` -- zda sledovat `uzel.data` (textový obsah).
 
-[MutationRecord](https://dom.spec.whatwg.org/#mutationrecord) objects have properties:
+Několik dalších možností:
+- `attributeOldValue` -- pokud je `true`, předá se callbacku stará i nová hodnota atributu (viz dále), v opačném případě pouze nová (potřebuje možnost `attributes`),
+- `characterDataOldValue` -- pokud je `true`, předá se callbacku stará i nová hodnota `uzel.data` (viz dále), v opačném případě pouze nová (potřebuje možnost `characterData`),
 
-- `type` -- mutation type, one of
-    - `"attributes"`: attribute modified
-    - `"characterData"`: data modified, used for text nodes,
-    - `"childList"`: child elements added/removed,
-- `target` -- where the change occurred: an element for `"attributes"`, or text node for `"characterData"`, or an element for a `"childList"` mutation,
-- `addedNodes/removedNodes`  -- nodes that were added/removed,
-- `previousSibling/nextSibling` -- the previous and next sibling to added/removed nodes,
-- `attributeName/attributeNamespace` -- the name/namespace (for XML) of the changed attribute,
-- `oldValue` -- the previous value, only for attribute or text changes, if the corresponding option is set `attributeOldValue`/`characterDataOldValue`.
+Pak se po každé změně spustí `callback`: změny se předají v prvním argumentu jako seznam objektů třídy [MutationRecord](https://dom.spec.whatwg.org/#mutationrecord) a jako druhý argument se předá sám pozorovatel.
 
-For example, here's a `<div>` with a `contentEditable` attribute. That attribute allows us to focus on it and edit.
+Objekty třídy [MutationRecord](https://dom.spec.whatwg.org/#mutationrecord) mají následující vlastnosti:
+
+- `type` -- typ změny, jeden z následujících:
+    - `"attributes"`: změna atributu,
+    - `"characterData"`: změna dat, používá se u textových uzlů,
+    - `"childList"`: přidány/odstraněny dětské elementy,
+- `target` -- kde ke změně došlo: u změny `"attributes"` element, u změny `"characterData"` textový uzel, u změny `"childList"` element,
+- `addedNodes/removedNodes` -- uzly, které byly přidány/odstraněny,
+- `previousSibling/nextSibling` -- předchozí a následující sourozenec přidaných/odstraněných uzlů,
+- `attributeName/attributeNamespace` -- název/jmenný prostor (pro XML) změněného atributu,
+- `oldValue` -- původní hodnota, jen u změn atributů a textu, pokud je nastavena příslušná možnost `attributeOldValue`/`characterDataOldValue`.
+
+Například zde máme `<div>` s atributem `contentEditable`. Tento atribut nám umožňuje na něj vstoupit a editovat ho.
 
 ```html run
-<div contentEditable id="elem">Click and <b>edit</b>, please</div>
+<div contentEditable id="elem">Klikněte sem a <b>editujte</b>, prosím</div>
 
 <script>
-let observer = new MutationObserver(mutationRecords => {
-  console.log(mutationRecords); // console.log(the changes)
+let pozorovatel = new MutationObserver(záznamyZměn => {
+  console.log(záznamyZměn); // console.log(změny)
 });
 
-// observe everything except attributes
-observer.observe(elem, {
-  childList: true, // observe direct children
-  subtree: true, // and lower descendants too
-  characterDataOldValue: true // pass old data to callback
+// sleduje všechno kromě atributů
+pozorovatel.observe(elem, {
+  childList: true, // sleduje přímé děti
+  subtree: true, // i nižší potomky
+  characterDataOldValue: true // předává callbacku stará data
 });
 </script>
 ```
 
-If we run this code in the browser, then focus on the given `<div>` and change the text inside `<b>edit</b>`, `console.log` will show one mutation:
+Spustíme-li tento kód v prohlížeči, vstoupíme do příslušného `<div>` a změníme text uvnitř `<b>editujte</b>`, `console.log` nám zobrazí jednu změnu:
 
 ```js
-mutationRecords = [{
+záznamyZměn = [{
   type: "characterData",
   oldValue: "edit",
-  target: <text node>,
-  // other properties empty
+  target: <textový uzel>,
+  // ostatní vlastnosti jsou prázdné
 }];
 ```
 
-If we make more complex editing operations, e.g. remove the `<b>edit</b>`, the mutation event may contain multiple mutation records:
+Pokud učiníme složitější editační operace, např. odstraníme `<b>editujte</b>`, událost změny může obsahovat více záznamů o změnách:
 
 ```js
-mutationRecords = [{
+záznamyZměn = [{
   type: "childList",
   target: <div#elem>,
   removedNodes: [<b>],
-  nextSibling: <text node>,
-  previousSibling: <text node>
-  // other properties empty
+  nextSibling: <textový uzel>,
+  previousSibling: <textový uzel>
+  // ostatní vlastnosti jsou prázdné
 }, {
   type: "characterData"
-  target: <text node>
-  // ...mutation details depend on how the browser handles such removal
-  // it may coalesce two adjacent text nodes "edit " and ", please" into one node
-  // or it may leave them separate text nodes
+  target: <textový uzel>
+  // ...detaily změny závisejí na tom, jak prohlížeč takové odstranění zpracuje
+  // může spojit dva sousední textové uzly „editujte“ a „, prosím“ do jednoho uzlu
+  // nebo je může ponechat jako dva samostatné uzly
 }];
 ```
 
-So, `MutationObserver` allows to react on any changes within DOM subtree.
+`MutationObserver` tedy umožňuje reagovat na jakékoli změny uvnitř DOM podstromu.
 
-## Usage for integration
+## Použití pro integraci
 
-When such thing may be useful?
+Kdy se taková věc může hodit?
 
-Imagine the situation when you need to add a third-party script that contains useful functionality, but also does something unwanted, e.g. shows ads `<div class="ads">Unwanted ads</div>`.
+Představme si situaci, kdy potřebujeme přidat skript třetí strany, který obsahuje užitečnou funkcionalitu, ale také provádí něco nechtěného, např. zobrazuje reklamy `<div class="reklamy">Nechtěné reklamy</div>`.
 
-Naturally, the third-party script provides no mechanisms to remove it.
+Skript třetí strany pochopitelně neposkytuje žádný mechanismus, jak je odstranit.
 
-Using `MutationObserver`, we can detect when the unwanted element appears in our DOM and remove it.
+Použitím `MutationObserver` můžeme detekovat, kdy se nechtěný element objeví v našem DOMu, a odstranit ho.
 
-There are other situations when a third-party script adds something into our document, and we'd like to detect, when it happens, to adapt our page, dynamically resize something etc.
+Existují i jiné situace, kdy skript třetí strany něco přidává do našeho dokumentu a my bychom chtěli detekovat, kdy se to stane, abychom tomu přizpůsobili stránku, něčemu dynamicky změnili velikost a podobně.
 
-`MutationObserver` allows to implement this.
+`MutationObserver` nám to umožňuje implementovat.
 
-## Usage for architecture
+## Použití pro architekturu
 
-There are also situations when `MutationObserver` is good from architectural standpoint.
+Existují i situace, v nichž se `MutationObserver` hodí z architektonického hlediska.
 
-Let's say we're making a website about programming. Naturally, articles and other materials may contain source code snippets.
+Řekněme, že vytváříme webové stránky o programování. Články a jiné materiály pochopitelně mohou obsahovat úryvky zdrojového kódu.
 
-Such snippet in an HTML markup looks like this:
+Takový úryvek v HTML vypadá následovně:
 
 ```html
 ...
 <pre class="language-javascript"><code>
-  // here's the code
-  let hello = "world";
+  // zde je kód
+  let ahoj = "světe";
 </code></pre>
 ...
 ```
 
-For better readability and at the same time, to beautify it, we'll be using a JavaScript syntax highlighting library on our site, like [Prism.js](https://prismjs.com/). To get syntax highlighting for above snippet in Prism, `Prism.highlightElem(pre)` is called, which examines the contents of such `pre` elements and adds special tags and styles for colored syntax highlighting into those elements, similar to what you see in examples here, on this page.
+Pro lepší čitelnost a současně pro zkrášlení budeme na našich stránkách používat JavaScriptovou knihovnu pro zvýraznění syntaxe, např. [Prism.js](https://prismjs.com/). Abychom pro uvedený úryvek kódu zajistili zvýraznění syntaxe touto knihovnou, voláme funkci `Prism.highlightElem(pre)`, která prozkoumá obsah takových elementů `pre` a přidá do nich speciální značky a styly pro barevné zvýraznění syntaxe podobně, jak vidíte v příkladech zde na této stránce.
 
-When exactly should we run that highlighting method? Well, we can do it on `DOMContentLoaded` event, or put the script at the bottom of the page. The moment our DOM is ready, we can search for elements `pre[class*="language"]` and call `Prism.highlightElem` on them:
+Kdy přesně bychom měli spustit tuto zvýrazňovací metodu? Můžeme to udělat v události `DOMContentLoaded` nebo umístit skript na konec stránky. V té chvíli je náš DOM připraven a my můžeme najít elementy `pre[class*="language"]` a zavolat na nich `Prism.highlightElem`:
 
 ```js
-// highlight all code snippets on the page
+// zvýrazní všechny úryvky kódu na stránce
 document.querySelectorAll('pre[class*="language"]').forEach(Prism.highlightElem);
 ```
 
-Everything's simple so far, right? We find code snippets in HTML and highlight them.
+Dosud je všechno jednoduché, že? Najdeme v HTML kódu úryvky kódu a zvýrazníme je.
 
-Now let's go on. Let's say we're going to dynamically fetch materials from a server. We'll study methods for that [later in the tutorial](info:fetch). For now it only matters that we fetch an HTML article from a webserver and display it on demand:
+Teď pojďme dál. Řekněme, že chceme dynamicky přidávat materiály ze serveru. Metody, jak na to, prostudujeme [později v tomto tutoriálu](info:fetch). Prozatím je podstatné jen to, že na požádání stáhneme HTML článek z webového serveru a zobrazíme jej:
 
 ```js
-let article = /* fetch new content from server */
-articleElem.innerHTML = article;
+let článek = /* stáhneme nový obsah ze serveru */
+článekElem.innerHTML = článek;
 ```
 
-The new `article` HTML may contain code snippets. We need to call `Prism.highlightElem` on them, otherwise they won't get highlighted.
+Nový HTML `článek` může obsahovat úryvky kódu. Musíme na ně volat `Prism.highlightElem`, jinak nebudou zvýrazněny.
 
-**Where and when to call `Prism.highlightElem` for a dynamically loaded article?**
+**Kdy a kde volat `Prism.highlightElem` pro dynamicky načtený článek?**
 
-We could append that call to the code that loads an article, like this:
+Můžeme toto volání připojit ke kódu, který načte článek, například takto:
 
 ```js
-let article = /* fetch new content from server */
-articleElem.innerHTML = article;
+let článek = /* stáhneme nový obsah ze serveru */
+článekElem.innerHTML = článek;
 
 *!*
-let snippets = articleElem.querySelectorAll('pre[class*="language-"]');
-snippets.forEach(Prism.highlightElem);
+let úryvky = článekElem.querySelectorAll('pre[class*="language-"]');
+úryvky.forEach(Prism.highlightElem);
 */!*
 ```
 
-...But, imagine if we have many places in the code where we load our content - articles, quizzes, forum posts, etc. Do we need to put the highlighting call everywhere, to highlight the code in content after loading? That's not very convenient.
+...Jenže představme si, že v kódu máme spoustu míst, kde načítáme obsah -- články, kvízy, příspěvky ve fórech atd. Musíme umístit volání zvýrazňovací funkce všude, abychom zvýraznili kód v obsahu po načtení? To není příliš pohodlné.
 
-And what if the content is loaded by a third-party module? For example, we have a forum written by someone else, that loads content dynamically, and we'd like to add syntax highlighting to it. No one likes patching third-party scripts.
+A co když je obsah načten modulem třetí strany? Máme například fórum napsané někým jiným, které načítá obsah dynamicky, a chtěli bychom do něj přidat zvýrazňování syntaxe. Nikdo není rád, když musí provádět změny ve skriptech třetích stran.
 
-Luckily, there's another option.
+Naštěstí je tady jiná možnost.
 
-We can use `MutationObserver` to automatically detect when code snippets are inserted into the page and highlight them.
+Můžeme pomocí `MutationObserver` automaticky detekovat, kdy jsou úryvky kódu vloženy na stránku, a zvýraznit je.
 
-So we'll handle the highlighting functionality in one place, relieving us from the need to integrate it.
+Tím budeme zpracovávat funkcionalitu zvýrazňování na jediném místě a nebudeme mít potřebu ji integrovat.
 
-### Dynamic highlight demo
+### Demo dynamického zvýrazňování
 
-Here's the working example.
+Uvedeme funkční příklad.
 
-If you run this code, it starts observing the element below and highlighting any code snippets that appear there:
+Spustíte-li tento kód, začne sledovat element pod sebou a zvýrazní všechny úryvky kódu, které se v něm objeví:
 
 ```js run
-let observer = new MutationObserver(mutations => {
+let pozorovatel = new MutationObserver(změny => {
 
-  for(let mutation of mutations) {
-    // examine new nodes, is there anything to highlight?
+  for(let změna of změny) {
+    // prozkoumáme nové uzly, je tady něco ke zvýraznění?
 
-    for(let node of mutation.addedNodes) {
-      // we track only elements, skip other nodes (e.g. text nodes)
-      if (!(node instanceof HTMLElement)) continue;
+    for(let uzel of změna.addedNodes) {
+      // sledujeme jen elementy, ostatní uzly (např. textové) přeskakujeme
+      if (!(uzel instanceof HTMLElement)) continue;
 
-      // check the inserted element for being a code snippet
-      if (node.matches('pre[class*="language-"]')) {
-        Prism.highlightElement(node);
+      // ověříme, zda vložený element je úryvek kódu
+      if (uzel.matches('pre[class*="language-"]')) {
+        Prism.highlightElement(uzel);
       }
 
-      // or maybe there's a code snippet somewhere in its subtree?
-      for(let elem of node.querySelectorAll('pre[class*="language-"]')) {
+      // nebo je úryvek kódu někde v jeho podstromu?
+      for(let elem of uzel.querySelectorAll('pre[class*="language-"]')) {
         Prism.highlightElement(elem);
       }
     }
@@ -202,72 +202,72 @@ let observer = new MutationObserver(mutations => {
 
 });
 
-let demoElem = document.getElementById('highlight-demo');
+let demoElem = document.getElementById('demo-zvýraznění');
 
-observer.observe(demoElem, {childList: true, subtree: true});
+pozorovatel.observe(demoElem, {childList: true, subtree: true});
 ```
 
-Here, below, there's an HTML-element and JavaScript that dynamically fills it using `innerHTML`.
+Níže je uveden HTML element a JavaScript, který jej dynamicky vyplní pomocí `innerHTML`.
 
-Please run the previous code (above, observes that element), and then the code below. You'll see how `MutationObserver` detects and highlights the snippet.
+Prosíme, spusťte si předcházející kód (výše, sleduje element) a pak níže uvedený kód. Uvidíte, jak `MutationObserver` detekuje a zvýrazní úryvek.
 
-<p id="highlight-demo" style="border: 1px solid #ddd">A demo-element with <code>id="highlight-demo"</code>, run the code above to observe it.</p>
+<p id="demo-zvýraznění" style="border: 1px solid #ddd">Demo element s <code>id="demo-zvýraznění"</code>, výše uvedený kód jej po spuštění bude sledovat.</p>
 
-The following code populates its `innerHTML`, that causes the `MutationObserver` to react and highlight its contents:
+Následující kód vyplní jeho `innerHTML`, což způsobí, že `MutationObserver` zareaguje a zvýrazní jeho obsah:
 
 ```js run
-let demoElem = document.getElementById('highlight-demo');
+let demoElem = document.getElementById('demo-zvýraznění');
 
-// dynamically insert content with code snippets
-demoElem.innerHTML = `A code snippet is below:
-  <pre class="language-javascript"><code> let hello = "world!"; </code></pre>
-  <div>Another one:</div>
+// dynamicky vloží obsah s úryvky kódu
+demoElem.innerHTML = `Následuje úryvek kódu:
+  <pre class="language-javascript"><code> let ahoj = "světe!"; </code></pre>
+  <div>Další:</div>
   <div>
     <pre class="language-css"><code>.class { margin: 5px; } </code></pre>
   </div>
 `;
 ```
 
-Now we have `MutationObserver` that can track all highlighting in observed elements or the whole `document`. We can add/remove code snippets in HTML without thinking about it.
+Nyní máme `MutationObserver`, který může zajišťovat veškeré zvýrazňování ve sledovaných elementech nebo v celém `document`. Můžeme přidávat a odstraňovat úryvky kódu v HTML, aniž bychom na to museli myslet.
 
-## Additional methods
+## Další metody
 
-There's a method to stop observing the node:
+K zastavení sledování uzlu slouží následující metoda:
 
-- `observer.disconnect()` -- stops the observation.
+- `pozorovatel.disconnect()` -- zastaví sledování.
 
-When we stop the observing, it might be possible that some changes were not yet processed by the observer. In such cases, we use
+Když zastavíme sledování, může se stát, že pozorovatel ještě nezpracoval některé změny. V takových případech použijeme
 
-- `observer.takeRecords()` -- gets a list of unprocessed mutation records - those that happened, but the callback has not handled them.
+- `pozorovatel.takeRecords()` -- vrátí seznam nezpracovaných záznamů změn -- ty, které se udály, ale callback je nezpracoval.
 
-These methods can be used together, like this:
+Tyto metody můžeme použít společně, například:
 
 ```js
-// get a list of unprocessed mutations
-// should be called before disconnecting,
-// if you care about possibly unhandled recent mutations
-let mutationRecords = observer.takeRecords();
+// získáme seznam nezpracovaných změn
+// mělo by být voláno před odpojením,
+// pokud vás zajímají možné nezpracované nedávné změny
+let záznamyZměn = pozorovatel.takeRecords();
 
-// stop tracking changes
-observer.disconnect();
+// zastavíme sledování změn
+pozorovatel.disconnect();
 ...
 ```
 
 
-```smart header="Records returned by `observer.takeRecords()` are removed from the processing queue"
-The callback won't be called for records, returned by `observer.takeRecords()`.
+```smart header="Záznamy vrácené metodou `pozorovatel.takeRecords()` budou odstraněny z fronty zpracování"
+Callback se nebude volat pro záznamy, které vrátila metoda `pozorovatel.takeRecords()`.
 ```
 
-```smart header="Garbage collection interaction"
-Observers use weak references to nodes internally. That is, if a node is removed from the DOM, and becomes unreachable, then it can be garbage collected.
+```smart header="Interakce se sběračem odpadků"
+Pozorovatelé interně používají slabé odkazy na uzly. To znamená, že když je uzel odstraněn z DOMu a stane se nedosažitelným, může být odstraněn sběračem odpadků.
 
-The mere fact that a DOM node is observed doesn't prevent the garbage collection.
+Skutečnost, že DOM uzel je sledován pozorovatelem, nebrání sběrači v jeho odstranění.
 ```
 
-## Summary  
+## Shrnutí
 
-`MutationObserver` can react to changes in DOM - attributes, text content and adding/removing elements.
+`MutationObserver` umí reagovat na změny v DOMu -- změny atributů, textového obsahu a přidávání i odebírání elementů.
 
-We can use it to track changes introduced by other parts of our code, as well as to integrate with third-party scripts.
+Můžeme jej použít ke sledování změn, které provádějí jiné části našeho kódu, ale i pro integraci se skripty třetích stran.
 
-`MutationObserver` can track any changes. The config "what to observe" options are used for optimizations, not to spend resources on unneeded callback invocations.
+`MutationObserver` může sledovat jakékoli změny. Pro optimalizaci se používají konfigurační možnosti „co sledovat“, abychom neplýtvali zdroji na nepotřebné vyvolávání callbacku.

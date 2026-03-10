@@ -1,114 +1,114 @@
-# Events: change, input, cut, copy, paste
+# Události change, input, cut, copy, paste
 
-Let's cover various events that accompany data updates.
+Probereme různé události, které doprovázejí aktualizaci dat.
 
-## Event: change
+## Událost change
 
-The `change` event triggers when the element has finished changing.
+Událost `change` se spustí, když je dokončena změna elementu.
 
-For text inputs that means that the event occurs when it loses focus.
+U textových vstupů to znamená, že událost nastane, když element ztratí fokus.
 
-For instance, while we are typing in the text field below -- there's no event. But when we move the focus somewhere else, for instance, click on a button -- there will be a `change` event:
+Například dokud píšeme do následujícího textového pole, událost nenastane. Jakmile však přesuneme fokus jinam, například klikneme na tlačítko, událost `change` se vyvolá:
 
 ```html autorun height=40 run
 <input type="text" onchange="alert(this.value)">
-<input type="button" value="Button">
+<input type="button" value="Tlačítko">
 ```
 
-For other elements: `select`, `input type=checkbox/radio` it triggers right after the selection changes:
+Pro jiné elementy: `select`, `input type=checkbox/radio` se spustí hned po změně volby:
 
 ```html autorun height=40 run
 <select onchange="alert(this.value)">
-  <option value="">Select something</option>
-  <option value="1">Option 1</option>
-  <option value="2">Option 2</option>
-  <option value="3">Option 3</option>
+  <option value="">Zvolte něco</option>
+  <option value="1">Možnost 1</option>
+  <option value="2">Možnost 2</option>
+  <option value="3">Možnost 3</option>
 </select>
 ```
 
 
-## Event: input
+## Událost input
 
-The `input` event triggers every time after a value is modified by the user.
+Událost `input` se spustí pokaždé, když uživatel změní hodnotu.
 
-Unlike keyboard events, it triggers on any value change, even those that does not involve keyboard actions: pasting with a mouse or using speech recognition to dictate the text.
+Na rozdíl od událostí klávesnice se spustí při každé změně hodnoty, i když nebyla provedena klávesnicí: při vkládání pomocí myši nebo při diktování textu pomocí rozpoznávání řeči.
 
-For instance:
+Příklad:
 
 ```html autorun height=40 run
-<input type="text" id="input"> oninput: <span id="result"></span>
+<input type="text" id="input"> oninput: <span id="výsledek"></span>
 <script>
   input.oninput = function() {
-    result.innerHTML = input.value;
+    výsledek.innerHTML = input.value;
   };
 </script>
 ```
 
-If we want to handle every modification of an `<input>` then this event is the best choice.
+Pokud chceme zpracovávat každou změnu hodnoty v `<input>`, pak je tato událost nejlepší možností.
 
-On the other hand, `input` event doesn't trigger on keyboard input and other actions that do not involve value change, e.g. pressing arrow keys `key:⇦` `key:⇨` while in the input.
+Na druhou stranu, událost `input` se nespustí při vstupu z klávesnice a jiných akcích, které nezpůsobí změnu hodnoty, např. při stisknutí šipkových kláves `key:⇦` `key:⇨`, když jsme ve vstupním poli.
 
-```smart header="Can't prevent anything in `oninput`"
-The `input` event occurs after the value is modified.
+```smart header="V `oninput` nelze nic zakázat"
+Událost `input` se spustí až poté, co byla hodnota změněna.
 
-So we can't use `event.preventDefault()` there -- it's just too late, there would be no effect.
+Nemůžeme v ní tedy použít `událost.preventDefault()` -- je už pozdě, nemělo by to žádný efekt.
 ```
 
-## Events: cut, copy, paste
+## Události cut, copy, paste
 
-These events occur on cutting/copying/pasting a value.
+Tyto události nastávají při vyjmutí/zkopírování/vložení hodnoty.
 
-They belong to [ClipboardEvent](https://www.w3.org/TR/clipboard-apis/#clipboard-event-interfaces) class and provide access to the data that is cut/copied/pasted.
+Patří do třídy [ClipboardEvent](https://www.w3.org/TR/clipboard-apis/#clipboard-event-interfaces) a poskytují přístup k datům, která jsou vyjmuta/zkopírována/vložena.
 
-We also can use `event.preventDefault()` to abort the action, then nothing gets copied/pasted.
+Můžeme také tuto akci zrušit voláním `událost.preventDefault()`, pak se nic nezkopíruje/nevloží.
 
-For instance, the code below prevents all `cut/copy/paste` events and shows the text we're trying to cut/copy/paste:
+Například následující kód zakáže všechny události `cut/copy/paste` a zobrazí text, který se pokoušíme vyjmout/zkopírovat/vložit:
 
 ```html autorun height=40 run
-<input type="text" id="input">
+<input type="text" id="vstup">
 <script>
-  input.onpaste = function(event) {
-    alert("paste: " + event.clipboardData.getData('text/plain'));
-    event.preventDefault();
+  vstup.onpaste = function(událost) {
+    alert("paste: " + událost.clipboardData.getData('text/plain'));
+    událost.preventDefault();
   };
 
-  input.oncut = input.oncopy = function(event) {
-    alert(event.type + '-' + document.getSelection());
-    event.preventDefault();
+  vstup.oncut = vstup.oncopy = function(událost) {
+    alert(událost.type + '-' + document.getSelection());
+    událost.preventDefault();
   };
 </script>
 ```
 
-Please note: inside `cut` and `copy` event handlers a call to  `event.clipboardData.getData(...)` returns an empty string. That's because technically the data isn't in the clipboard yet. If we use `event.preventDefault()` it won't be copied at all.
+Prosíme všimněte si, že volání `událost.clipboardData.getData(...)` uvnitř handlerů událostí `cut` a `copy` vrátí prázdný řetězec. Je to tím, že data ještě technicky nejsou ve schránce. Jestliže použijeme `událost.preventDefault()`, nebudou vůbec zkopírována.
 
-So the example above uses `document.getSelection()` to get the selected text. You can find more details about document selection in the article <info:selection-range>.
+Uvedený příklad tedy k získání označeného textu používá `document.getSelection()`. Podrobnosti o výběru textu v dokumentu najdete v kapitole <info:selection-range>.
 
-It's possible to copy/paste not just text, but everything. For instance, we can copy a file in the OS file manager, and paste it.
+Je možné zkopírovat/vložit nejenom text, ale cokoli. Můžeme například zkopírovat a vložit soubor ze správce souborů v operačním systému.
 
-That's because `clipboardData` implements `DataTransfer` interface, commonly used for drag'n'drop and copy/pasting. It's a bit beyond our scope now, but you can find its methods in the [DataTransfer specification](https://html.spec.whatwg.org/multipage/dnd.html#the-datatransfer-interface).
+Je to tím, že `clipboardData` implementuje rozhraní `DataTransfer`, běžně používané pro přetahování a kopírování/vkládání. Je to už trochu mimo náš rámec, ale jeho metody naleznete ve [specifikaci DataTransferu](https://html.spec.whatwg.org/multipage/dnd.html#the-datatransfer-interface).
 
-Also, there's an additional asynchronous API of accessing the clipboard: `navigator.clipboard`. More about it in the specification [Clipboard API and events](https://www.w3.org/TR/clipboard-apis/), [not supported by Firefox](https://caniuse.com/async-clipboard).
+Kromě toho existuje další asynchronní API pro přístup ke schránce: `navigator.clipboard`. Více o něm naleznete ve specifikaci [API a události schránky](https://www.w3.org/TR/clipboard-apis/), [není podporováno ve Firefoxu](https://caniuse.com/async-clipboard).
 
-### Safety restrictions
+### Bezpečnostní omezení
 
-The clipboard is a "global" OS-level thing. A user may switch between various applications, copy/paste different things, and a browser page shouldn't see all that.
+Schránka je „globální“ záležitost na úrovni operačního systému. Uživatel se může přepínat mezi různými aplikacemi a kopírovat/vkládat rozličné věci, ale stránka v prohlížeči by je neměla vidět.
 
-So most browsers allow seamless read/write access to the clipboard only in the scope of certain user actions, such as copying/pasting etc.
+Většina prohlížečů tedy umožňuje plynulé čtení a zápis do schránky jedině v rámci určitých uživatelských akcí, například kopírování/vkládání.
 
-It's forbidden to generate "custom" clipboard events with `dispatchEvent` in all browsers except Firefox. And even if we manage to dispatch such event, the specification clearly states that such "synthetic" events must not provide access to the clipboard.
+Ve všech prohlížečích kromě Firefoxu je zakázáno generovat „vlastní“ události schránky pomocí `dispatchEvent`. A i když dokážeme takovou událost vyvolat, specifikace jasně uvádí, že takové „syntetické“ události nesmějí poskytovat přístup do schránky.
 
-Even if someone decides to save `event.clipboardData` in an event handler, and then access it later -- it won't work.
+I kdyby se někdo rozhodl v handleru události uložit `událost.clipboardData` a později k nim přistoupit, nebude to fungovat.
 
-To reiterate, [event.clipboardData](https://www.w3.org/TR/clipboard-apis/#clipboardevent-clipboarddata) works solely in the context of user-initiated event handlers.
+Abychom to zopakovali, [událost.clipboardData](https://www.w3.org/TR/clipboard-apis/#clipboardevent-clipboarddata) funguje výhradně v kontextu uživatelem vyvolaných handlerů událostí.
 
-On the other hand, [navigator.clipboard](https://www.w3.org/TR/clipboard-apis/#h-navigator-clipboard) is the more recent API, meant for use in any context. It asks for user permission, if needed.
+Naproti tomu [navigator.clipboard](https://www.w3.org/TR/clipboard-apis/#h-navigator-clipboard) je novější API, určené k použití v jakémkoli kontextu, a pokud je třeba, zeptá se uživatele na svolení.
 
-## Summary
+## Shrnutí
 
-Data change events:
+Události pro změnu dat:
 
-| Event | Description | Specials |
+| Událost | Popis | Zvláštnosti |
 |---------|----------|-------------|
-| `change`| A value was changed. | For text inputs triggers on focus loss. |
-| `input` | For text inputs on every change. | Triggers immediately unlike `change`. |
-| `cut/copy/paste` | Cut/copy/paste actions. | The action can be prevented. The `event.clipboardData` property gives access to the clipboard. All browsers except Firefox also support `navigator.clipboard`. |
+| `change`| Hodnota byla změněna. | U textových polí se spouští při ztrátě fokusu. |
+| `input` | U textových polí při každé změně. | Na rozdíl od `change` se spouští okamžitě. |
+| `cut/copy/paste` | Akce vyjmutí/zkopírování/vložení. | Tuto akci lze zakázat. Vlastnost `událost.clipboardData` poskytuje přístup do schránky. Všechny prohlížeče kromě Firefoxu navíc podporují `navigator.clipboard`. |

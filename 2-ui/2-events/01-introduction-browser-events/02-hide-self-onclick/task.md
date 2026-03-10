@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Hide self
+# Schování sebe sama
 
-Create a button that hides itself on click.
+Vytvořte tlačítko, které se po kliknutí ukryje.
 
 ```online
-Like this:
-<input type="button" onclick="this.hidden=true" value="Click to hide">
+Příklad:
+<input type="button" onclick="this.hidden=true" value="Kliknutím se ukryje">
 ```

@@ -2,17 +2,17 @@ importance: 4
 
 ---
 
-# Search for elements
+# Hledání elementů
 
-Here's the document with the table and form.
+Zde je dokument s tabulkou a formulářem.
 
-How to find?...
+Jak najdeme?...
 
-1. The table with `id="age-table"`.
-2. All `label` elements inside that table (there should be 3 of them).
-3. The first `td` in that table (with the word "Age").
-4. The `form` with `name="search"`.
-5. The first `input` in that form.
-6. The last `input` in that form.
+1. Tabulku s `id="tabulka-věků"`.
+2. Všechny elementy `label` uvnitř této tabulky (měly by tam být 3).
+3. První `td` v této tabulce (se slovem „Věk“).
+4. `form` s `name="hledání"`.
+5. První `input` v tomto formuláři.
+6. Poslední `input` v tomto formuláři.
 
-Open the page [table.html](table.html) in a separate window and make use of browser tools for that.
+Otevřete si stránku [table.html](table.html) v samostatném okně a využijte k tomu prohlížečové nástroje.

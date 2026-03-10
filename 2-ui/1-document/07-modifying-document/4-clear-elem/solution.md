@@ -1,32 +1,32 @@
 
-First, let's see how *not* to do it:
+Nejprve se podíváme, jak to *nedělat*:
 
 ```js
-function clear(elem) {
+function vyčisti(elem) {
   for (let i=0; i < elem.childNodes.length; i++) {
       elem.childNodes[i].remove();
   }
 }
 ```
 
-That won't work, because the call to `remove()` shifts the collection `elem.childNodes`, so elements start from the index `0` every time. But `i` increases, and some elements will be skipped.
+To nebude fungovat, protože volání `remove()` posune prvky v kolekci `elem.childNodes`, takže elementy budou pokaždé začínat od indexu `0`. Avšak `i` se zvýší a některé elementy tedy budou přeskočeny.
 
-The `for..of` loop also does the same.
+Cyklus `for..of` dělá totéž.
 
-The right variant could be:
+Správná varianta může být:
 
 ```js
-function clear(elem) {
+function vyčisti(elem) {
   while (elem.firstChild) {
     elem.firstChild.remove();
   }
 }
 ```
 
-And also there's a simpler way to do the same:
+A existuje i jednodušší způsob, jak udělat totéž:
 
 ```js
-function clear(elem) {
+function vyčisti(elem) {
   elem.innerHTML = '';
 }
 ```

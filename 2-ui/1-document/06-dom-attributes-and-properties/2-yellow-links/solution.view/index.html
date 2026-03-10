@@ -2,7 +2,7 @@
 <html>
 <body>
 
-  <a name="list">The list:</a>
+  <a name="seznam">Seznam:</a>
   <ul>
     <li><a href="http://google.com">http://google.com</a></li>
     <li><a href="/tutorial">/tutorial.html</a></li>
@@ -13,10 +13,10 @@
   </ul>
 
   <script>
-    let selector = 'a[href*="://"]:not([href^="http://internal.com"])';
-    let links = document.querySelectorAll(selector);
+    let selektor = 'a[href*="://"]:not([href^="http://internal.com"])';
+    let odkazy = document.querySelectorAll(selektor);
 
-    links.forEach(link => link.style.color = 'orange');
+    odkazy.forEach(odkaz => odkaz.style.color = 'orange');
   </script>
 
 </body>

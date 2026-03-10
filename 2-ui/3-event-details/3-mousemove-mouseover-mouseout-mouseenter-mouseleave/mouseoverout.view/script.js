@@ -1,21 +1,21 @@
-container.onmouseover = container.onmouseout = handler;
+kontejner.onmouseover = kontejner.onmouseout = handler;
 
-function handler(event) {
+function handler(událost) {
 
   function str(el) {
     if (!el) return "null"
     return el.className || el.tagName;
   }
 
-  log.value += event.type + ':  ' +
-    'target=' + str(event.target) +
-    ',  relatedTarget=' + str(event.relatedTarget) + "\n";
+  log.value += událost.type + ':  ' +
+    'target=' + str(událost.target) +
+    ',  relatedTarget=' + str(událost.relatedTarget) + "\n";
   log.scrollTop = log.scrollHeight;
 
-  if (event.type == 'mouseover') {
-    event.target.style.background = 'pink'
+  if (událost.type == 'mouseover') {
+    událost.target.style.background = 'pink'
   }
-  if (event.type == 'mouseout') {
-    event.target.style.background = ''
+  if (událost.type == 'mouseout') {
+    událost.target.style.background = ''
   }
 }

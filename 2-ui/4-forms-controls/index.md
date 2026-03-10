@@ -1,3 +1,3 @@
-# Forms, controls
+# Formuláře a ovládací prvky
 
-Special properties and events for forms `<form>` and controls: `<input>`, `<select>` and other.
+Speciální vlastnosti a události pro formuláře `<form>` a ovládací prvky: `<input>`, `<select>` a jiné.

@@ -2,15 +2,15 @@ importance: 5
 
 ---
 
-# Catch links in the element
+# Zachytávejte odkazy v elementu
 
-Make all links inside the element with `id="contents"` ask the user if they really want to leave. And if they don't then don't follow.
+Zajistěte, aby se všechny odkazy v elementu obsahujícím `id="obsah"` zeptaly uživatele, zda opravdu chce odejít. Pokud nebude chtít, prohlížeč na ně nepřejde.
 
-Like this:
+Příklad:
 
 [iframe height=100 border=1 src="solution"]
 
-Details:
+Podrobnosti:
 
-- HTML inside the element may be loaded or regenerated dynamically at any time, so we can't find all links and put handlers on them. Use event delegation.
-- The content may have nested tags. Inside links too, like `<a href=".."><i>...</i></a>`.
+- HTML kód uvnitř elementu může být kdykoli načten nebo dynamicky generován, nemůžeme tedy najít všechny odkazy a umístit na ně handlery. Použijte delegování událostí.
+- Obsah může obsahovat vnořené značky, a to i uvnitř odkazů, např. `<a href=".."><i>...</i></a>`.

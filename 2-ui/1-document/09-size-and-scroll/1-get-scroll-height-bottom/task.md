@@ -2,10 +2,10 @@ importance: 5
 
 ---
 
-# What's the scroll from the bottom?
+# Jaká je velikost odrolování zdola?
 
-The `elem.scrollTop` property is the size of the scrolled out part from the top. How to get the size of the bottom scroll (let's call it `scrollBottom`)?
+Vlastnost `elem.scrollTop` obsahuje velikost odrolované části shora. Jak získat velikost odrolované části zdola (nazvěme ji `scrollBottom`)?
 
-Write the code that works for an arbitrary `elem`.
+Napište kód tak, aby fungoval pro jakýkoli `elem`.
 
-P.S. Please check your code: if there's no scroll or the element is fully scrolled down, then it should return `0`.
+P.S. Prosíme, zkontrolujte si svůj kód: pokud element neobsahuje rolování nebo je odrolován úplně dolů, měl by vrátit `0`.

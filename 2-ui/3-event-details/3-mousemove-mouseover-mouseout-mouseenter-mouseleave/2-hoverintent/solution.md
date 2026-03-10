@@ -1,18 +1,18 @@
 
-The algorithm looks simple:
-1. Put `onmouseover/out` handlers on the element. Also can use `onmouseenter/leave` here, but they are less universal, won't work if we introduce delegation.
-2. When a mouse cursor entered the element, start measuring the speed on `mousemove`.
-3. If the speed is slow, then run `over`.
-4. When we're going out of the element, and `over` was executed, run `out`.
+Algoritmus vypadá jednoduše:
+1. Umístíme na element handlery `onmouseover/out`. Můžeme zde použít i `onmouseenter/leave`, ale ty jsou méně univerzální a kdybychom zavedli delegování, nefungovaly by.
+2. Když na element vstoupí ukazatel myši, začneme měřit rychlost v `mousemove`.
+3. Pokud je rychlost nízká, spustíme `over`.
+4. Když opustíme element a bylo spuštěno `over`, spustíme `out`.
 
-But how to measure the speed?
+Jak ale měřit rychlost?
 
-The first idea can be: run a function every `100ms` and measure the distance between previous and new coordinates. If it's small, then the speed is small.
+Prvním nápadem může být spustit každých `100 ms` funkci, která změří vzdálenost mezi předchozími a současnými souřadnicemi. Bude-li malá, bude rychlost nízká.
 
-Unfortunately, there's no way to get "current mouse coordinates" in JavaScript. There's no function like `getCurrentMouseCoordinates()`.
+Naneštěstí v JavaScriptu není žádný způsob, jak zjistit „aktuální souřadnice myši“. Neexistuje žádná funkce jako `getCurrentMouseCoordinates()`.
 
-The only way to get coordinates is to listen for mouse events, like `mousemove`, and take coordinates from the event object.
+Jediný způsob, jak zjistit souřadnice, je naslouchat událostem myši, např. `mousemove`, a zjišťovat souřadnice z objektu události.
 
-So let's set a handler on `mousemove` to track coordinates and remember them. And then compare them, once per `100ms`.
+Vytvoříme tedy handler pro `mousemove`, aby sledoval souřadnice a pamatoval si je. A pak je jednou za `100 ms` budeme porovnávat.
 
-P.S. Please note: the solution tests use `dispatchEvent` to see if the tooltip works right.
+P.S. Prosíme všimněte si, že testy v řešení používají `dispatchEvent`, aby viděly, zda tooltip funguje správně.

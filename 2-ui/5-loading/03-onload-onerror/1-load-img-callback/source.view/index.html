@@ -6,37 +6,37 @@
 <body>
 
   <script>
-    function preloadImages(sources, callback) {
-      /* your code */
+    function načtiObrázkyPředem(zdroje, callback) {
+      /* váš kód */
     }
 
-    // ---------- The test ----------
+    // ---------- Test ----------
 
-    let sources = [
+    let zdroje = [
       "https://en.js.cx/images-load/1.jpg",
       "https://en.js.cx/images-load/2.jpg",
       "https://en.js.cx/images-load/3.jpg"
     ];
 
-    // add random characters to prevent browser caching
-    for (let i = 0; i < sources.length; i++) {
-      sources[i] += '?' + Math.random();
+    // přidáme náhodné znaky, abychom zabránili prohlížeči v cachování
+    for (let i = 0; i < zdroje.length; i++) {
+      zdroje[i] += '?' + Math.random();
     }
 
-    // for each image,
-    // let's create another img with the same src and check that we have its width immediately
-    function testLoaded() {
-      let widthSum = 0;
-      for (let i = 0; i < sources.length; i++) {
-        let img = document.createElement('img');
-        img.src = sources[i];
-        widthSum += img.width;
+    // pro každý obrázek
+    // vytvoříme další img se stejným src a okamžitě zkontrolujeme, zda máme jeho šířku
+    function testNačtení() {
+      let součetŠířek = 0;
+      for (let i = 0; i < zdroje.length; i++) {
+        let obrázek = document.createElement('img');
+        obrázek.src = zdroje[i];
+        součetŠířek += obrázek.width;
       }
-      alert(widthSum);
+      alert(součetŠířek);
     }
 
-    // every image is 100x100, the total width should be 300
-    preloadImages(sources, testLoaded);
+    // každý obrázek je 100x100, celková šířka by měla být 300
+    načtiObrázkyPředem(zdroje, testNačtení);
   </script>
 
 </body>

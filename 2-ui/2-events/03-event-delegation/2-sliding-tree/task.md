@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Tree menu
+# Stromové menu
 
-Create a tree that shows/hides node children on click:
+Vytvořte strom, který bude na kliknutí zobrazovat a skrývat dětské uzly:
 
 [iframe border=1 src="solution"]
 
-Requirements:
+Požadavky:
 
-- Only one event handler (use delegation)
-- A click outside the node title (on an empty space) should not do anything.
+- Pouze jeden handler událostí (použijte delegování).
+- Kliknutí mimo titulek uzlu (na prázdné místo) by nemělo nic dělat.

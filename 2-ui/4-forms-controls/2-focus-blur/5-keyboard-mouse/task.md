@@ -2,12 +2,12 @@ importance: 4
 
 ---
 
-# Keyboard-driven mouse
+# Myš řízená klávesnicí
 
-Focus on the mouse. Then use arrow keys to move it:
+Nastavte fokus na myš. Pak s ní pohybujte šipkovými klávesami:
 
 [demo src="solution"]
 
-P.S. Don't put event handlers anywhere except the `#mouse` element.
+P.S. Nevkládejte handlery událostí jinam než na element `#myš`.
 
-P.P.S. Don't modify HTML/CSS, the approach should be generic and work with any element.
+P.P.S. Neměňte HTML/CSS, přístup by měl být obecný a fungovat s jakýmkoli elementem.

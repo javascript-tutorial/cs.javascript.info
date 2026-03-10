@@ -2,19 +2,19 @@ importance: 5
 
 ---
 
-# Drag superheroes around the field
+# Přetahujte superhrdiny po hřišti
 
-This task can help you to check understanding of several aspects of Drag'n'Drop and DOM.
+Tato úloha vám pomůže ověřit si, zda jste porozuměli některým aspektům přetahování a DOMu.
 
-Make all elements with class `draggable` -- draggable. Like a ball in the chapter.
+Učiňte všechny elementy s třídou `přetahovatelný` přetahovatelnými, stejně jako míč v článku.
 
-Requirements:
+Požadavky:
 
-- Use event delegation to track drag start: a single event handler on `document` for `mousedown`.
-- If elements are dragged to top/bottom window edges -- the page scrolls up/down to allow further dragging.
-- There is no horizontal scroll (this makes the task a bit simpler, adding it is easy).
-- Draggable elements or their parts should never leave the window, even after swift mouse moves.
+- Pro sledování začátku přetahování použijte delegování událostí: jediný handler událostí na `document` pro `mousedown`.
+- Když jsou elementy přetahovány k hornímu nebo dolnímu okraji okna, stránka roluje nahoru nebo dolů, aby umožnila další přetažení.
+- Není zde vodorovné rolování (aby byla úloha trochu jednodušší, je snadné ho pak přidat).
+- Přetahovatelné elementy nebo jejich části by nikdy neměly opustit okno, ani při rychlém pohybu myší.
 
-The demo is too big to fit it here, so here's the link.
+Demo je příliš velké a nevejde se sem, proto dáváme jen odkaz.
 
 [demo src="solution"]

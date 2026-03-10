@@ -1,33 +1,33 @@
 
-We can see which class it belongs by outputting it, like:
+K jaké třídě patří, můžeme zjistit tak, že si ho zobrazíme, třeba:
 
 ```js run
 alert(document); // [object HTMLDocument]
 ```
 
-Or:
+Nebo:
 
 ```js run
 alert(document.constructor.name); // HTMLDocument
 ```
 
-So, `document` is an instance of `HTMLDocument` class.
+Objekt `document` je tedy instancí třídy `HTMLDocument`.
 
-What's its place in the hierarchy?
+Jaké je jeho místo v hierarchii?
 
-Yeah, we could browse the specification, but it would be faster to figure out manually.
+Ano, můžeme si projít specifikaci, ale rychlejší bude zjistit to ručně.
 
-Let's traverse the prototype chain via `__proto__`.
+Projděme řetězec prototypů použitím `__proto__`.
 
-As we know, methods of a class are in the `prototype` of the constructor. For instance, `HTMLDocument.prototype` has methods for documents.
+Jak víme, metody třídy jsou ve vlastnosti konstruktoru `prototype`. Například `HTMLDocument.prototype` obsahuje metody pro dokumenty.
 
-Also, there's a reference to the constructor function inside the `prototype`:
+Uvnitř `prototype` je také odkaz na konstruktor:
 
 ```js run
 alert(HTMLDocument.prototype.constructor === HTMLDocument); // true
 ```
 
-To get a name of the class as a string, we can use `constructor.name`. Let's do it for the whole `document` prototype chain, till class `Node`:
+Abychom získali název třídy jako řetězec, můžeme použít `constructor.name`. Udělejme to pro celý prototypový řetězec objektu `document` až po třídu `Node`:
 
 ```js run
 alert(HTMLDocument.prototype.constructor.name); // HTMLDocument
@@ -35,6 +35,6 @@ alert(HTMLDocument.prototype.__proto__.constructor.name); // Document
 alert(HTMLDocument.prototype.__proto__.__proto__.constructor.name); // Node
 ```
 
-That's the hierarchy.
+To je jeho hierarchie.
 
-We also could examine the object using `console.dir(document)` and see these names by opening `__proto__`. The console takes them from `constructor` internally.
+Můžeme tento objekt prozkoumat i pomocí `console.dir(document)` a podívat se na názvy otevřením `__proto__`. Konzole je interně přebírá z `constructor`.

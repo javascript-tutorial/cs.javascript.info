@@ -1,4 +1,4 @@
-.slider {
+.posuvník {
   border-radius: 5px;
   background: #E0E0E0;
   background: linear-gradient(left top, #E0E0E0, #EEEEEE);
@@ -7,7 +7,7 @@
   margin: 5px;
 }
 
-.thumb {
+.šoupátko {
   touch-action: none;
   width: 10px;
   height: 25px;

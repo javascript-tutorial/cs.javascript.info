@@ -1,32 +1,32 @@
 <!DOCTYPE HTML>
 <html>
 <body>
-  <form name="search">
-    <label>Search the site:
-      <input type="text" name="search">
+  <form name="hledání">
+    <label>Prohledávání stránky:
+      <input type="text" name="hledání">
     </label>
-    <input type="submit" value="Search!">
+    <input type="submit" value="Hledej!">
   </form>
 
   <hr>
 
   <form name="search-person">
-    Search the visitors:
-    <table id="age-table">
+    Hledání návštěvníků:
+    <table id="tabulka-věků">
       <tr>
-        <td>Age:</td>
-        <td id="age-list">
+        <td>Věk:</td>
+        <td id="seznam-věků">
           <label>
-            <input type="radio" name="age" value="young">less than 18</label>
+            <input type="radio" name="věk" value="mladý">méně než 18 let</label>
           <label>
-            <input type="radio" name="age" value="mature">18-50</label>
+            <input type="radio" name="věk" value="dospělý">18-50 let</label>
           <label>
-            <input type="radio" name="age" value="senior">more than 50</label>
+            <input type="radio" name="věk" value="senior">více než 50 let</label>
         </td>
       </tr>
 
       <tr>
-        <td>Additionally:</td>
+        <td>Navíc:</td>
         <td>
           <input type="text" name="info[0]">
           <input type="text" name="info[1]">
@@ -36,7 +36,7 @@
 
     </table>
 
-    <input type="submit" value="Search!">
+    <input type="submit" value="Hledej!">
   </form>
 </body>
 </html>

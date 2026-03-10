@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Count descendants
+# Spočítejte potomky
 
-There's a tree structured as nested `ul/li`.
+Máme strom, strukturovaný jako vnořené značky `ul/li`.
 
-Write the code that for each `<li>` shows:
+Napište kód, který pro každou `<li>` zobrazí:
 
-1. What's the text inside it (without the subtree)
-2. The number of nested `<li>` -- all descendants, including the deeply nested ones.
+1. Jaký text je uvnitř ní (bez podstromu)
+2. Počet vnořených `<li>` -- všech potomků, včetně těch hlouběji zanořených.
 
 [demo src="solution"]

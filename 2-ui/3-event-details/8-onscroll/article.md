@@ -1,37 +1,37 @@
-# Scrolling
+# Rolování
 
-The `scroll` event allows reacting to a page or element scrolling. There are quite a few good things we can do here.
+Na rolování stránky nebo elementu nám umožňuje reagovat událost `scroll`. Můžeme s ní provádět některé opravdu pěkné věci.
 
-For instance:
-- Show/hide additional controls or information depending on where in the document the user is.
-- Load more data when the user scrolls down till the end of the page.
+Například:
+- Zobrazit nebo skrýt další ovládací prvky nebo informace podle toho, kde v dokumentu se uživatel nachází.
+- Načíst další data, když uživatel doroluje na konec stránky.
 
-Here's a small function to show the current scroll:
+Následující malá funkce zobrazuje aktuální délku rolování:
 
 ```js autorun
 window.addEventListener('scroll', function() {
-  document.getElementById('showScroll').innerHTML = window.pageYOffset + 'px';
+  document.getElementById('ukažRolování').innerHTML = window.pageYOffset + 'px';
 });
 ```
 
 ```online
-In action:
+V akci:
 
-Current scroll = <b id="showScroll">scroll the window</b>
+Aktuální rolování = <b id="ukažRolování">rolování okna</b>
 ```
 
-The `scroll` event works both on the `window` and on scrollable elements.
+Událost `scroll` funguje dobře na `window` i na rolovatelných elementech.
 
-## Prevent scrolling
+## Zákaz rolování
 
-How do we make something unscrollable?
+Jak zakážeme, aby něco mohlo být rolováno?
 
-We can't prevent scrolling by using `event.preventDefault()` in `onscroll` listener, because it triggers *after* the scroll has already happened.
+Nemůžeme zakázat rolování voláním `událost.preventDefault()` v posluchači `onscroll`, protože ten se spustí až *poté*, co k rolování skutečně dojde.
 
-But we can prevent scrolling by `event.preventDefault()` on an event that causes the scroll, for instance `keydown` event for `key:pageUp` and `key:pageDown`.
+Můžeme však zakázat rolování voláním `událost.preventDefault()` na události, která rolování způsobila, například na události `keydown` pro `key:pageUp` a `key:pageDown`.
 
-If we add an event handler to these events and `event.preventDefault()` in it, then the scroll won't start.
+Jestliže přidáme handler k těmto událostem a v něm zavoláme `událost.preventDefault()`, rolování se nespustí.
 
-There are many ways to initiate a scroll, so it's more reliable to use CSS, `overflow` property.
+Způsobů, jak vyvolat rolování, je mnoho, proto je spolehlivější použít vlastnost `overflow` v CSS.
 
-Here are few tasks that you can solve or look through to see applications of `onscroll`.
+Následuje několik úloh, které můžete vyřešit nebo se na ně podívat, abyste viděli, jak se `onscroll` aplikuje.

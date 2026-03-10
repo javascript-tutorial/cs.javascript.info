@@ -1,200 +1,200 @@
-# Keyboard: keydown and keyup
+# Klávesnice: keydown a keyup
 
-Before we get to keyboard, please note that on modern devices there are other ways to "input something". For instance, people use speech recognition (especially on mobile devices) or copy/paste with the mouse.
+Než přejdeme ke klávesnici, prosíme všimněte si, že na moderních zařízeních jsou i jiné způsoby, jak „něco zadat“. Lidé například používají rozpoznávání řeči (zvláště na mobilních zařízeních) nebo kopírování/vložení pomocí myši.
 
-So if we want to track any input into an `<input>` field, then keyboard events are not enough. There's another event named `input` to track changes of an `<input>` field, by any means. And it may be a better choice for such task. We'll cover it later in the chapter <info:events-change-input>.
+Chceme-li tedy sledovat veškerý vstup do pole `<input>`, události klávesnice nám nestačí. Existuje jiná událost nazvaná `input`, která sleduje změny v poli `<input>` provedené jakýmkoli způsobem. Pro takovou úlohu může být vhodnější. Probereme ji později v kapitole <info:events-change-input>.
 
-Keyboard events should be used when we want to handle keyboard actions (virtual keyboard also counts). For instance, to react on arrow keys `key:Up` and `key:Down` or hotkeys (including combinations of keys).
+Události klávesnice bychom měli používat, když chceme zpracovávat akce klávesnice (počítá se i virtuální klávesnice), například reagovat na šipkové klávesy `key:Up` a `key:Down` nebo na horké klávesy (včetně kombinací kláves).
 
 
-## Teststand [#keyboard-test-stand]
+## Zkušební příklad [#keyboard-test-stand]
 
 ```offline
-To better understand keyboard events, you can use the [teststand](sandbox:keyboard-dump).
+K lepšímu porozumění událostem klávesnice můžete použít [zkušební příklad](sandbox:keyboard-dump).
 ```
 
 ```online
-To better understand keyboard events, you can use the teststand below.
+K lepšímu porozumění událostem klávesnice můžete použít následující zkušební příklad.
 
-Try different key combinations in the text field.
+Vyzkoušejte si v textovém poli různé kombinace kláves.
 
 [codetabs src="keyboard-dump" height=480]
 ```
 
 
-## Keydown and keyup
+## Keydown a keyup
 
-The `keydown` events happens when a key is pressed down, and then `keyup` -- when it's released.
+Událost `keydown` nastává, když je klávesa stisknuta, a `keyup` pak nastává, když je uvolněna.
 
-### event.code and event.key
+### událost.code a událost.key
 
-The `key` property of the event object allows to get the character, while the `code` property of the event object allows to get the "physical key code".
+Vlastnost `key` objektu události nám umožňuje získat znak, zatímco vlastnost `code` tohoto objektu nám umožňuje získat „fyzický kód klávesy“.
 
-For instance, the same key `key:Z` can be pressed with or without `key:Shift`. That gives us two different characters: lowercase `z` and uppercase `Z`.
+Například tutéž klávesu `key:Z` můžeme stisknout s klávesou `key:Shift` nebo bez ní. Získáme tak dva různé znaky: malé `z` a velké `Z`.
 
-The `event.key` is exactly the character, and it will be different. But `event.code` is the same:
+Vlastnost `událost.key` obsahuje právě tento znak, který může být odlišný. Ale `událost.code` je stejná:
 
-| Key          | `event.key` | `event.code` |
+| Klávesa         | `událost.key` | `událost.code` |
 |--------------|-------------|--------------|
-| `key:Z`      |`z` (lowercase)         |`KeyZ`        |
-| `key:Shift+Z`|`Z` (uppercase)          |`KeyZ`        |
+| `key:Z`      |`z` (malé)         |`KeyZ`        |
+| `key:Shift+Z`|`Z` (velké)          |`KeyZ`        |
 
 
-If a user works with different languages, then switching to another language would make a totally different character instead of `"Z"`. That will become the value of `event.key`, while `event.code` is always the same: `"KeyZ"`.
+Jestliže uživatel pracuje s různými jazyky, pak přepnutí do jiného jazyka může vyprodukovat úplně jiný znak než `"Z"`. Ten se stane hodnotou vlastnosti `událost.key`, zatímco `událost.code` bude pořád stejná: `"KeyZ"`.
 
-```smart header="\"KeyZ\" and other key codes"
-Every key has the code that depends on its location on the keyboard. Key codes described in the [UI Events code specification](https://www.w3.org/TR/uievents-code/).
+```smart header="„KeyZ“ a jiné kódy kláves"
+Každá klávesa má svůj kód, který závisí na jejím umístění na klávesnici. Kódy kláves jsou uvedeny ve [specifikaci kódů událostí UI](https://www.w3.org/TR/uievents-code/).
 
-For instance:
-- Letter keys have codes `"Key<letter>"`: `"KeyA"`, `"KeyB"` etc.
-- Digit keys have codes: `"Digit<number>"`: `"Digit0"`, `"Digit1"` etc.
-- Special keys are coded by their names: `"Enter"`, `"Backspace"`, `"Tab"` etc.
+Příklady:
+- Klávesy s písmeny mají kódy `"Key<písmeno>"`: `"KeyA"`, `"KeyB"` atd.
+- Klávesy s číslicemi mají kódy `"Digit<číslice>"`: `"Digit0"`, `"Digit1"` atd.
+- Speciální klávesy mají kódy podle svých názvů: `"Enter"`, `"Backspace"`, `"Tab"` atd.
 
-There are several widespread keyboard layouts, and the specification gives key codes for each of them.
+Na světě je rozšířeno několik rozložení klávesnic a specifikace uvádí kódy kláves pro každé z nich.
 
-Read the [alphanumeric section of the spec](https://www.w3.org/TR/uievents-code/#key-alphanumeric-section) for more codes, or just press a key in the [teststand](#keyboard-test-stand) above.
+Pro další kódy si přečtěte [alfanumerickou část specifikace](https://www.w3.org/TR/uievents-code/#key-alphanumeric-section) nebo jen stiskněte klávesu ve výše uvedeném [zkušebním příkladu](#keyboard-test-stand).
 ```
 
-```warn header="Case matters: `\"KeyZ\"`, not `\"keyZ\"`"
-Seems obvious, but people still make mistakes.
+```warn header="Rozlišují se malá a velká písmena: `\"KeyZ\"`, ne `\"keyZ\"`"
+Zdá se to být samozřejmé, ale lidé v tom stále dělají chyby.
 
-Please evade mistypes: it's `KeyZ`, not `keyZ`. The check like `event.code=="keyZ"` won't work: the first letter of `"Key"` must be uppercase.
+Prosíme vyhněte se překlepům: je to `KeyZ`, ne `keyZ`. Podmínka jako `event.code=="keyZ"` nebude fungovat: první písmeno `"Key"` musí být velké.
 ```
 
-What if a key does not give any character? For instance, `key:Shift` or `key:F1` or others. For those keys, `event.key` is approximately the same as `event.code`:
+Co když klávesa nevydává žádný znak, například `key:Shift`, `key:F1` nebo jiné? U těchto kláves je `událost.key` přibližně totéž jako `událost.code`:
 
-| Key          | `event.key` | `event.code` |
+| Klávesa          | `událost.key` | `událost.code` |
 |--------------|-------------|--------------|
 | `key:F1`      |`F1`          |`F1`        |
 | `key:Backspace`      |`Backspace`          |`Backspace`        |
-| `key:Shift`|`Shift`          |`ShiftRight` or `ShiftLeft`        |
+| `key:Shift`|`Shift`          |`ShiftRight` nebo `ShiftLeft`        |
 
-Please note that `event.code` specifies exactly which key is pressed. For instance, most keyboards have two `key:Shift` keys: on the left and on the right side. The `event.code` tells us exactly which one was pressed, and `event.key` is responsible for the "meaning" of the key: what it is (a "Shift").
+Prosíme všimněte si, že `událost.code` přesně specifikuje klávesu, která byla stisknuta. Například většina klávesnic má dvě klávesy `key:Shift`: na levé a na pravé straně. Vlastnost `událost.code` nám přesně říká, která z nich byla stisknuta, zatímco `událost.key` zodpovídá za její význam: jaká klávesa to je („Shift“).
 
-Let's say, we want to handle a hotkey: `key:Ctrl+Z` (or `key:Cmd+Z` for Mac). Most text editors hook the "Undo" action on it. We can set a listener on `keydown` and check which key is pressed.
+Řekněme, že chceme zpracovat horkou klávesu: `key:Ctrl+Z` (nebo `key:Cmd+Z` na Macu). Většina textových editorů k ní váže akci „Zpět“. Můžeme nastavit posluchače na `keydown` a prověřovat, která klávesa byla stisknuta.
 
-There's a dilemma here: in such a listener, should we check the value of `event.key` or `event.code`?
+Máme tady dilema: měli bychom v takovém posluchači ověřovat hodnotu `událost.key`, nebo `událost.code`?
 
-On one hand, the value of `event.key` is a character, it changes depending on the language. If the visitor has several languages in OS and switches between them, the same key gives different characters. So it makes sense to check `event.code`, it's always the same.
+Na jednu stranu hodnota `událost.key` je znak, který se mění v závislosti na jazyku. Jestliže návštěvník má v operačním systému několik jazyků a přepíná mezi nimi, stejná klávesa vydá různé znaky. Dává tedy smysl ověřovat `událost.code`, která je vždy stejná.
 
-Like this:
+Příklad:
 
 ```js run
-document.addEventListener('keydown', function(event) {
-  if (event.code == 'KeyZ' && (event.ctrlKey || event.metaKey)) {
-    alert('Undo!')
+document.addEventListener('keydown', function(událost) {
+  if (událost.code == 'KeyZ' && (událost.ctrlKey || událost.metaKey)) {
+    alert('Zpět!')
   }
 });
 ```
 
-On the other hand, there's a problem with `event.code`. For different keyboard layouts, the same key may have different characters.
+Na druhou stranu je s `událost.code` problém. Na různých rozloženích klávesnice může stejná klávesa obsahovat různé znaky.
 
-For example, here are US layout ("QWERTY") and German layout ("QWERTZ") under it (from Wikipedia):
+Například zde vidíme americké rozložení („QWERTY“) a pod ním německé rozložení („QWERTZ“) (převzato z Wikipedie):
 
 ![](us-layout.svg)
 
 ![](german-layout.svg)
 
-For the same key, US layout has "Z", while German layout has "Y" (letters are swapped).
+Na stejné klávese má americké rozložení „Z“, zatímco německé „Y“ (tato písmena jsou prohozena).
 
-Literally, `event.code` will equal `KeyZ` for people with German layout when they press `key:Y`.
+Doslova tedy `událost.code` bude pro osoby s německou klávesnicí rovna `KeyZ`, když stisknou `key:Y`.
 
-If we check `event.code == 'KeyZ'` in our code, then for people with German layout such test will pass when they press `key:Y`.
+Jestliže budeme v našem kódu prověřovat `událost.code == 'KeyZ'`, pak lidé s německým rozložením takovým testem projdou, když stisknou `key:Y`.
 
-That sounds really odd, but so it is. The [specification](https://www.w3.org/TR/uievents-code/#table-key-code-alphanumeric-writing-system) explicitly mentions such behavior.
+Zní to opravdu divně, ale je to tak. [Specifikace](https://www.w3.org/TR/uievents-code/#table-key-code-alphanumeric-writing-system) se o takovém chování výslovně zmiňuje.
 
-So, `event.code` may match a wrong character for unexpected layout. Same letters in different layouts may map to different physical keys, leading to different codes. Luckily, that happens only with several codes, e.g. `keyA`, `keyQ`, `keyZ` (as we've seen), and doesn't happen with special keys such as `Shift`. You can find the list in the [specification](https://www.w3.org/TR/uievents-code/#table-key-code-alphanumeric-writing-system).
+`událost.code` tedy může na neočekávaném rozložení odpovídat nesprávnému znaku. Stejná písmena se na různých rozloženích mohou mapovat na různé fyzické klávesy, což vede k různým kódům. Naštěstí se to stává jen u několika kódů, např. `keyA`, `keyQ`, `keyZ` (jak jsme viděli), a nedochází k tomu u speciálních kláves jako `Shift`. Seznam najdete ve [specifikaci](https://www.w3.org/TR/uievents-code/#table-key-code-alphanumeric-writing-system).
 
-To reliably track layout-dependent characters, `event.key` may be a better way.
+Chceme-li spolehlivě sledovat znaky závislé na jazyku, může být lepším způsobem `událost.key`.
 
-On the other hand, `event.code` has the benefit of staying always the same, bound to the physical key location. So hotkeys that rely on it work well even in case of a language switch.
+Na druhou stranu `událost.code` má tu výhodu, že zůstává vždy stejná, vázaná na fyzické umístění klávesy. Horké klávesy, které se na ni spoléhají, budou tedy správně fungovat i po změně jazyka.
 
-Do we want to handle layout-dependant keys? Then `event.key` is the way to go.
+Chceme zpracovávat klávesy závislé na rozložení? Pak je správnou cestou `událost.key`.
 
-Or we want a hotkey to work even after a language switch? Then `event.code` may be better.
+Nebo chceme horkou klávesu, která bude fungovat i po změně jazyka? Pak může být lepší `událost.code`.
 
-## Auto-repeat
+## Automatické opakování
 
-If a key is being pressed for a long enough time, it starts to "auto-repeat": the `keydown` triggers again and again, and then when it's released we finally get `keyup`. So it's kind of normal to have many `keydown` and a single `keyup`.
+Jestliže je klávesa stisknuta dostatečně dlouho, začne se „automaticky opakovat“: `keydown` se spouští znovu a znovu, a teprve až bude klávesa uvolněna, dostaneme `keyup`. Je tedy zcela normální, že se vyvolá několikrát `keydown` a jednou `keyup`.
 
-For events triggered by auto-repeat, the event object has `event.repeat` property set to `true`.
+U událostí vyvolaných automatickým opakováním má objekt události vlastnost `událost.repeat` nastavenou na `true`.
 
 
-## Default actions
+## Standardní akce
 
-Default actions vary, as there are many possible things that may be initiated by the keyboard.
+Standardní akce se různí, jelikož akcí, které mohou být vyvolány klávesnicí, je mnoho.
 
-For instance:
+Příklady:
 
-- A character appears on the screen (the most obvious outcome).
-- A character is deleted (`key:Delete` key).
-- The page is scrolled (`key:PageDown` key).
-- The browser opens the "Save Page" dialog (`key:Ctrl+S`)
--  ...and so on.
+- Na obrazovce se objeví znak (nejčastější výstup).
+- Znak je smazán (klávesa `key:Delete`).
+- Stránka roluje (klávesa `key:PageDown`).
+- Prohlížeč otevře dialog „Uložit stránku“ (`key:Ctrl+S`).
+-  ...a podobně.
 
-Preventing the default action on `keydown` can cancel most of them, with the exception of OS-based special keys. For instance, on Windows `key:Alt+F4` closes the current browser window. And there's no way to stop it by preventing the default action in JavaScript.
+Zákaz standardních akcí v události `keydown` dokáže zrušit většinu z nich. Výjimkou jsou speciální klávesy založené na operačním systému, například `key:Alt+F4` ve Windows zavře aktuální okno prohlížeče. A v JavaScriptu není žádný způsob, jak tomu zabránit zákazem standardních akcí.
 
-For instance, the `<input>` below expects a phone number, so it does not accept keys except digits, `+`, `()` or `-`:
-
-```html autorun height=60 run
-<script>
-function checkPhoneKey(key) {
-  return (key >= '0' && key <= '9') || ['+','(',')','-'].includes(key);
-}
-</script>
-<input *!*onkeydown="return checkPhoneKey(event.key)"*/!* placeholder="Phone, please" type="tel">
-```
-
-The `onkeydown` handler here uses `checkPhoneKey` to check for the key pressed. If it's valid (from `0..9` or one of `+-()`), then it returns `true`, otherwise `false`.
-
-As we know, the `false` value returned from the event handler, assigned using a DOM property or an attribute, such as above, prevents the default action, so nothing appears in the `<input>` for keys that don't pass the test. (The `true` value returned doesn't affect anything, only returning `false` matters)
-
-Please note that special keys, such as `key:Backspace`, `key:Left`, `key:Right`, do not work in the input. That's a side effect of the strict filter `checkPhoneKey`. These keys make it return `false`.
-
-Let's relax the filter a little bit by allowing arrow keys `key:Left`, `key:Right` and `key:Delete`, `key:Backspace`:
+Například následující `<input>` očekává telefonní číslo, takže nepřijímá jiné klávesy než číslice, `+`, `()` a `-`:
 
 ```html autorun height=60 run
 <script>
-function checkPhoneKey(key) {
-  return (key >= '0' && key <= '9') ||
-    ['+','(',')','-',*!*'ArrowLeft','ArrowRight','Delete','Backspace'*/!*].includes(key);
+function ověřKlávesuTelČísla(klávesa) {
+  return (klávesa >= '0' && klávesa <= '9') || ['+','(',')','-'].includes(klávesa);
 }
 </script>
-<input onkeydown="return checkPhoneKey(event.key)" placeholder="Phone, please" type="tel">
+<input *!*onkeydown="return ověřKlávesuTelČísla(event.key)"*/!* placeholder="Telefon, prosím" type="tel">
 ```
 
-Now arrows and deletion works well.
+Handler `onkeydown` zde používá funkci `ověřKlávesuTelČísla` k prověření stisknuté klávesy. Pokud je platná (v rozsahu `0..9` nebo jedna z `+-()`), pak vrátí `true`, jinak vrátí `false`.
 
-Even though we have the key filter, one still can enter anything using a mouse and right-click + Paste. Mobile devices provide other means to enter values. So the filter is not 100% reliable.
+Jak víme, hodnota `false` vrácená z handleru události přiřazeného pomocí DOM vlastnosti nebo atributu, tak jako výše uvedený handler, zakáže standardní akci, takže se v `<input>` po stisknutí kláves, které tímto testem neprojdou, nic neobjeví. (Návratová hodnota `true` nic neovlivní, význam má pouze vracení `false`.)
 
-The alternative approach would be to track the `oninput` event -- it triggers *after* any modification. There we can check the new `input.value` and modify it/highlight the `<input>` when it's invalid. Or we can use both event handlers together.
+Prosíme všimněte si, že ve vstupu nefungují speciální klávesy, např. `key:Backspace`, `key:Left`, `key:Right`. To je vedlejším efektem striktního filtru `ověřKlávesuTelČísla`. Tyto klávesy způsobí, že filtr vrátí `false`.
 
-## Legacy
+Trochu tento filtr zjemníme povolením šipkových kláves `key:Left`, `key:Right` a `key:Delete`, `key:Backspace`:
 
-In the past, there was a `keypress` event, and also `keyCode`, `charCode`, `which` properties of the event object.
+```html autorun height=60 run
+<script>
+function ověřKlávesuTelČísla(klávesa) {
+  return (klávesa >= '0' && klávesa <= '9') ||
+    ['+','(',')','-',*!*'ArrowLeft','ArrowRight','Delete','Backspace'*/!*].includes(klávesa);
+}
+</script>
+<input onkeydown="return ověřKlávesuTelČísla(event.key)" placeholder="Telefon, prosím" type="tel">
+```
 
-There were so many browser incompatibilities while working with them, that developers of the specification had no way, other than deprecating all of them and creating new, modern events (described above in this chapter). The old code still works, as browsers keep supporting them, but there's totally no need to use those any more.
+Teď šipky a mazání fungují správně.
 
-## Mobile Keyboards
+I když máme filtr na klávesy, uživatel stále může zadat cokoli pomocí pravého tlačítka myši a funkce Vložit. Mobilní zařízení poskytují i jiné způsoby, jak vkládat hodnoty. Filtr tedy není spolehlivý na 100%.
 
-When using virtual/mobile keyboards, formally known as IME (Input-Method Editor), the W3C standard states that a KeyboardEvent's [`e.keyCode` should be `229`](https://www.w3.org/TR/uievents/#determine-keydown-keyup-keyCode) and [`e.key` should be `"Unidentified"`](https://www.w3.org/TR/uievents-key/#key-attr-values).
+Alternativním přístupem je sledovat událost `oninput` -- ta se spouští *po* každé modifikaci. Pak můžeme prověřovat novou hodnotu `input.value`, a bude-li neplatná, upravit ji nebo zvýraznit `<input>`. Nebo můžeme použít oba handlery společně.
 
-While some of these keyboards might still use the right values for `e.key`, `e.code`, `e.keyCode`... when pressing certain keys such as arrows or backspace, there's no guarantee, so your keyboard logic might not always work on mobile devices.
+## Minulost
 
-## Summary
+V minulosti existovala událost `keypress` a také vlastnosti objektu události `keyCode`, `charCode`, `which`.
 
-Pressing a key always generates a keyboard event, be it symbol keys or special keys like `key:Shift` or `key:Ctrl` and so on. The only exception is `key:Fn` key that sometimes presents on a laptop keyboard. There's no keyboard event for it, because it's often implemented on lower level than OS.
+Při práci s nimi se objevilo tolik nekompatibilit mezi prohlížeči, že vývojáři specifikace neměli jinou možnost, než je všechny prohlásit za zastaralé a vytvořit nové, moderní události (ty, které jsme popsali v této kapitole). Starý kód stále funguje, jelikož je prohlížeče neustále podporují, ale v dnešní době není žádný důvod je používat.
 
-Keyboard events:
+## Mobilní klávesnice
 
-- `keydown` -- on pressing the key (auto-repeats if the key is pressed for long),
-- `keyup` -- on releasing the key.
+Když používáme virtuální nebo mobilní klávesnici, formálně známou jako IME (Input-Method Editor), W3C standard uvádí, že vlastnost `e.keyCode` objektu KeyboardEvent [by měla být `229`](https://www.w3.org/TR/uievents/#determine-keydown-keyup-keyCode) a [`e.key` by měla být `"Unidentified"`](https://www.w3.org/TR/uievents-key/#key-attr-values).
 
-Main keyboard event properties:
+Ačkoli některé tyto klávesnice mohou stále používat správné hodnoty `e.key`, `e.code`, `e.keyCode`..., když stiskneme některé klávesy, například šipky nebo Backspace, není to zaručeno. Vaše logika ovládání klávesnice tedy nemusí na mobilních zařízeních vždy fungovat.
 
-- `code` -- the "key code" (`"KeyA"`, `"ArrowLeft"` and so on), specific to the physical location of the key on keyboard.
-- `key` -- the character (`"A"`, `"a"` and so on), for non-character keys, such as `key:Esc`, usually has the same value  as `code`.
+## Shrnutí
 
-In the past, keyboard events were sometimes used to track user input in form fields. That's not reliable, because the input can come from various sources. We have `input` and `change` events to handle any input (covered later in the chapter <info:events-change-input>). They trigger after any kind of input, including copy-pasting or speech recognition.
+Stisknutí klávesy vždy vygeneruje událost klávesnice, ať je to klávesa symbolu nebo speciální klávesa typu `key:Shift` nebo `key:Ctrl` a podobně. Jedinou výjimkou je klávesa `key:Fn`, která se někdy vyskytuje na klávesnicích laptopů. Pro tuto klávesu se nevyvolá událost klávesnice, jelikož její ovládání je často implementováno na nižší úrovni než v operačním systému.
 
-We should use keyboard events when we really want keyboard. For example, to react on hotkeys or special keys.
+Události klávesnice:
+
+- `keydown` -- při stisku klávesy (je-li klávesa stisknuta dlouho, automaticky se opakuje),
+- `keyup` -- při uvolnění klávesy.
+
+Hlavní vlastnosti událostí klávesnice:
+
+- `code` -- „kód klávesy“ (`"KeyA"`, `"ArrowLeft"` a podobně), specifický pro fyzické umístění klávesy na klávesnici.
+- `key` -- znak (`"A"`, `"a"` a podobně), u neznakových kláves, např. `key:Esc`, má zpravidla stejnou hodnotu jako `code`.
+
+V minulosti se události klávesnice někdy používaly ke sledování uživatelského vstupu do formulářových polí. To není spolehlivé, jelikož vstup může pocházet z různých zdrojů. Ke zpracování jakéhokoli vstupu máme události `input` a `change` (budou vysvětleny později v kapitole <info:events-change-input>), které se spustí při vstupu jakéhokoli druhu, včetně kopírování a vložení nebo rozpoznávání řeči.
+
+Události klávesnice bychom měli používat tehdy, když klávesnici skutečně požadujeme, například pro reakci na horké nebo speciální klávesy.

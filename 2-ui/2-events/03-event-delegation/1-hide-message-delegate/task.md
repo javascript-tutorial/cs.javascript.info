@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Hide messages with delegation
+# Skryjte zprávy pomocí delegování
 
-There's a list of messages with removal buttons `[x]`. Make the buttons work.
+Máme seznam zpráv s tlačítky pro odstranění `[x]`. Zajistěte, aby tlačítka fungovala.
 
-Like this:
+Takto:
 
 [iframe src="solution" height=420]
 
-P.S. Should be only one event listener on the container, use event delegation.
+P.S. Na kontejneru by měl být jen jeden posluchač událostí. Použijte delegování událostí.

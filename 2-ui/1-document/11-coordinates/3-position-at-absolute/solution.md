@@ -1,4 +1,4 @@
-The solution is actually pretty simple:
+Řešení je ve skutečnosti velice jednoduché:
 
-- Use `position:absolute` in CSS instead of `position:fixed` for `.note`.
-- Use the function [getCoords()](info:coordinates#getCoords) from the chapter <info:coordinates> to get document-relative coordinates.
+- V CSS pro `.poznámka` použijeme `position:absolute` místo `position:fixed`.
+- Ke zjištění dokumentových souřadnic použijeme funkci [getCoords()](info:coordinates#getCoords) z kapitoly <info:coordinates>.
