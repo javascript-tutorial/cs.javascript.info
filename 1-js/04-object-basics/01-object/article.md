@@ -5,7 +5,11 @@ Jak víme z kapitoly <info:types>, JavaScript obsahuje osm datových typů. Sedm
 
 Naproti tomu objekty se používají k uložení kolekcí různých dat pod klíči a složitějších entit. V JavaScriptu objekty pronikají do téměř všech aspektů jazyka. Musíme jim tedy porozumět předtím, než půjdeme do hloubky v něčem jiném.
 
+<<<<<<< HEAD
 Objekt můžeme vytvořit pomocí složených závorek `{…}` obsahujících nepovinný seznam *vlastností*. Vlastnost je dvojice „klíč: hodnota“, v níž `klíč` je řetězec (nazývá se také „název vlastnosti“) a `hodnota` může být cokoli.
+=======
+An object can be created with curly braces `{…}` with an optional list of *properties*. A property is a "key: value" pair, where `key` is a string (also called a "property name"), and `value` can be anything.
+>>>>>>> 52c1e61915bc8970a950a3f59bd845827e49b4bf
 
 Objekt si můžeme představit jako skříň s označenými spisy. Každý kousek dat je uložen podle klíče ve svém spisu. Je pak lehké najít spis podle jeho názvu nebo spis přidat či odstranit.
 
@@ -20,7 +24,11 @@ let uživatel = {};  // syntaxe „objektový literál“
 
 ![](object-user-empty.svg)
 
+<<<<<<< HEAD
 Obvykle se používají složené závorky `{...}`. Tato deklarace se nazývá *objektový literál*.
+=======
+Usually, the curly braces `{...}` are used. That declaration is called an *object literal*.
+>>>>>>> 52c1e61915bc8970a950a3f59bd845827e49b4bf
 
 ## Literály a vlastnosti
 
