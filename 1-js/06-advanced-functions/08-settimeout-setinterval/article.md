@@ -217,11 +217,7 @@ A zde je obrázek pro vnořený `setTimeout`:
 
 ![](settimeout-interval.svg)
 
-<<<<<<< HEAD
-**Vnořený `setTimeout` zaručuje pevnou prodlevu (zde 100 ms).**
-=======
-**The nested `setTimeout` ensures a minimum delay (100ms here) between the end of one call and the beginning of the subsequent one.**
->>>>>>> 52c1e61915bc8970a950a3f59bd845827e49b4bf
+**Vnořený `setTimeout` zaručuje pevnou prodlevu (zde 100 ms) před koncem jednoho volání a začátkem následujícího.**
 
 Je to proto, že nové volání je naplánováno na konci předchozího.
 
