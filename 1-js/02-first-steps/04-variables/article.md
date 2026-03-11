@@ -172,11 +172,7 @@ let uživatelskéJméno;
 let test123;
 ```
 
-<<<<<<< HEAD
 Když název obsahuje více slov, obvykle se používá tzv. [velbloudí notace](https://cs.wikipedia.org/wiki/CamelCase). To znamená, že slova následují hned za sebou a každé kromě prvního začíná velkým písmenem: `můjVelmiDlouhýNázev`.
-=======
-When the name contains multiple words, [camelCase](https://en.wikipedia.org/wiki/CamelCase) is commonly used. That is: words go one after another, with each word except the first starting with a capital letter: `myVeryLongName`.
->>>>>>> 52c1e61915bc8970a950a3f59bd845827e49b4bf
 
 Zajímavé je, že v názvech je možné používat i znak dolaru `'$'` a podtržítko `'_'`. Jsou to obyčejné symboly bez zvláštního významu, podobně jako písmena.
 
