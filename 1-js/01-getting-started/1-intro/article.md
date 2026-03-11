@@ -72,8 +72,13 @@ Příklady takových omezení:
 
 	Tento postup se nazývá „politika stejného původu“. Je možné ji obejít tak, že *obě stránky* musí souhlasit s výměnou dat a musí obsahovat speciální JavaScriptový kód, který to umožňuje. V tomto tutoriálu to budeme probírat.
 
+<<<<<<< HEAD
 	Toto omezení je zde opět pro bezpečnost uživatele. Stránka z `http://anysite.com`, kterou uživatel otevřel, nesmí mít možnost přistupovat k jiné záložce prohlížeče s URL například `http://gmail.com` a krást odtamtud informace.
 - JavaScript může jednoduše komunikovat po síti se serverem, z něhož přišla aktuální stránka, ale jeho schopnost získávat data z jiných sídel/domén je značně omezená. Přestože je to možné, vyžaduje to výslovný souhlas (uvedený v HTTP hlavičce) vzdálené strany. I to je bezpečnostní omezení.
+=======
+    This limitation is, again, for the user's safety. A page from `http://anysite.com` which a user has opened must not be able to access another browser tab with the URL `http://gmail.com`, for example, and steal information from there.
+- JavaScript can easily communicate over the net to the server where the current page came from. But its ability to receive data from other sites/domains is severely limited. Though possible, it requires explicit agreement (expressed in HTTP headers) from the remote side. Once again, that's a safety limitation.
+>>>>>>> 52c1e61915bc8970a950a3f59bd845827e49b4bf
 
 ![](limitations.svg)
 

@@ -80,8 +80,13 @@ To funguje, protože vnitřně se destrukturační přiřazení vykonává itera
 ````
 
 
+<<<<<<< HEAD
 ````smart header="Na levé straně můžeme přiřazovat do čehokoli"
 Na levé straně můžeme používat cokoli, do čeho lze přiřazovat.
+=======
+````smart header="Assign to anything on the left-side"
+We can use any "assignables" on the left side.
+>>>>>>> 52c1e61915bc8970a950a3f59bd845827e49b4bf
 
 Například vlastnost objektu:
 ```js run
