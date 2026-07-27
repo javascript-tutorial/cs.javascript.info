@@ -128,6 +128,7 @@ Takový úryvek v HTML vypadá následovně:
 ...
 ```
 
+<<<<<<< HEAD
 Pro lepší čitelnost a současně pro zkrášlení budeme na našich stránkách používat JavaScriptovou knihovnu pro zvýraznění syntaxe, např. [Prism.js](https://prismjs.com/). Abychom pro uvedený úryvek kódu zajistili zvýraznění syntaxe touto knihovnou, voláme funkci `Prism.highlightElem(pre)`, která prozkoumá obsah takových elementů `pre` a přidá do nich speciální značky a styly pro barevné zvýraznění syntaxe podobně, jak vidíte v příkladech zde na této stránce.
 
 Kdy přesně bychom měli spustit tuto zvýrazňovací metodu? Můžeme to udělat v události `DOMContentLoaded` nebo umístit skript na konec stránky. V té chvíli je náš DOM připraven a my můžeme najít elementy `pre[class*="language"]` a zavolat na nich `Prism.highlightElem`:
@@ -135,6 +136,15 @@ Kdy přesně bychom měli spustit tuto zvýrazňovací metodu? Můžeme to uděl
 ```js
 // zvýrazní všechny úryvky kódu na stránce
 document.querySelectorAll('pre[class*="language"]').forEach(Prism.highlightElem);
+=======
+For better readability and at the same time, to beautify it, we'll be using a JavaScript syntax highlighting library on our site, like [Prism.js](https://prismjs.com/). To get syntax highlighting for above snippet in Prism, `Prism.highlightElement(pre)` is called, which examines the contents of such `pre` elements and adds special tags and styles for colored syntax highlighting into those elements, similar to what you see in examples here, on this page.
+
+When exactly should we run that highlighting method? Well, we can do it on `DOMContentLoaded` event, or put the script at the bottom of the page. The moment our DOM is ready, we can search for elements `pre[class*="language"]` and call `Prism.highlightElement` on them:
+
+```js
+// highlight all code snippets on the page
+document.querySelectorAll('pre[class*="language"]').forEach(elem => Prism.highlightElement(elem));
+>>>>>>> 20208769e528337949e946f526534d61d38bac47
 ```
 
 Dosud je všechno jednoduché, že? Najdeme v HTML kódu úryvky kódu a zvýrazníme je.
@@ -146,9 +156,15 @@ let článek = /* stáhneme nový obsah ze serveru */
 článekElem.innerHTML = článek;
 ```
 
+<<<<<<< HEAD
 Nový HTML `článek` může obsahovat úryvky kódu. Musíme na ně volat `Prism.highlightElem`, jinak nebudou zvýrazněny.
 
 **Kdy a kde volat `Prism.highlightElem` pro dynamicky načtený článek?**
+=======
+The new `article` HTML may contain code snippets. We need to call `Prism.highlightElement` on them, otherwise they won't get highlighted.
+
+**Where and when to call `Prism.highlightElement` for a dynamically loaded article?**
+>>>>>>> 20208769e528337949e946f526534d61d38bac47
 
 Můžeme toto volání připojit ke kódu, který načte článek, například takto:
 
@@ -157,8 +173,13 @@ let článek = /* stáhneme nový obsah ze serveru */
 článekElem.innerHTML = článek;
 
 *!*
+<<<<<<< HEAD
 let úryvky = článekElem.querySelectorAll('pre[class*="language-"]');
 úryvky.forEach(Prism.highlightElem);
+=======
+let snippets = articleElem.querySelectorAll('pre[class*="language-"]');
+snippets.forEach(elem => Prism.highlightElement(elem));
+>>>>>>> 20208769e528337949e946f526534d61d38bac47
 */!*
 ```
 
