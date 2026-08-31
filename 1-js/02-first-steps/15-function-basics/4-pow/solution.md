@@ -10,8 +10,8 @@ function mocnina(x, n) {
   return výsledek;
 }
 
-let x = prompt("x?", '');
-let n = prompt("n?", '');
+let x = +prompt("x?", '');
+let n = +prompt("n?", '');
 
 if (n < 1) {
   alert(`${n}-tá mocnina není podporována, zadejte kladné celé číslo`);
