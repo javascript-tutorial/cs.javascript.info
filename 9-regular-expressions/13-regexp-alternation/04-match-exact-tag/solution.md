@@ -1,16 +1,16 @@
 
-The pattern start is obvious: `pattern:<style`.
+Začátek vzoru je zřejmý: `pattern:<style`.
 
-...But then we can't simply write `pattern:<style.*?>`, because `match:<styler>` would match it.
+...Pak ale nemůžeme jednoduše napsat `pattern:<style.*?>`, protože tomu by odpovídalo i `match:<styler>`.
 
-We need either a space after `match:<style` and then optionally something else or the ending `match:>`.
+Potřebujeme buď mezeru za `match:<style` a pak nepovinně něco dalšího, nebo koncové `match:>`.
 
-In the regexp language: `pattern:<style(>|\s.*?>)`.
+V jazyce regulárních výrazů: `pattern:<style(>|\s.*?>)`.
 
-In action:
+V akci:
 
 ```js run
-let regexp = /<style(>|\s.*?>)/g;
+let rv = /<style(>|\s.*?>)/g;
 
-alert( '<style> <styler> <style test="...">'.match(regexp) ); // <style>, <style test="...">
+alert( '<style> <styler> <style test="...">'.match(rv) ); // <style>, <style test="...">
 ```

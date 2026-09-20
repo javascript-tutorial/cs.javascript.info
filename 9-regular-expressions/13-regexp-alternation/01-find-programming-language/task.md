@@ -1,11 +1,11 @@
-# Find programming languages
+# Najděte programovací jazyky
 
-There are many programming languages, for instance Java, JavaScript, PHP, C, C++.
+Existuje mnoho programovacích jazyků, například Java, JavaScript, PHP, C, C++.
 
-Create a regexp that finds them in the string `subject:Java JavaScript PHP C++ C`:
+Vytvořte regulární výraz, který je najde v řetězci `subject:Java JavaScript PHP C++ C`:
 
 ```js
-let regexp = /your regexp/g;
+let rv = /váš RV/g;
 
-alert("Java JavaScript PHP C++ C".match(regexp)); // Java JavaScript PHP C++ C
+alert("Java JavaScript PHP C++ C".match(rv)); // Java JavaScript PHP C++ C
 ```

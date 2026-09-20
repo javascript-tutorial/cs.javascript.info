@@ -1,438 +1,435 @@
 # Cookies, document.cookie
 
-Cookies are small strings of data that are stored directly in the browser. They are a part of the HTTP protocol, defined by the [RFC 6265](https://tools.ietf.org/html/rfc6265) specification.
+Cookies (někdy „sušenky“) jsou malé datové řetězce, které jsou uloženy přímo v prohlížeči. Jsou součástí protokolu HTTP a jsou definovány ve specifikaci [RFC 6265](https://tools.ietf.org/html/rfc6265).
 
-Cookies are usually set by a web server using the response `Set-Cookie` HTTP header. Then, the browser automatically adds them to (almost) every request to the same domain using the `Cookie` HTTP header.
+Cookies obvykle nastavuje webový server v HTTP hlavičce odpovědi `Set-Cookie`. Pak je prohlížeč automaticky přidává do (téměř) každého požadavku na stejnou doménu do HTTP hlavičky `Cookie`.
 
-One of the most widespread use cases is authentication:
+Jedním z nejrozšířenějších případů jejich použití je autentifikace:
 
-1. Upon sign-in, the server uses the `Set-Cookie` HTTP header in the response to set a cookie with a unique "session identifier".
-2. Next time the request is sent to the same domain, the browser sends the cookie over the net using the `Cookie` HTTP header.
-3. So the server knows who made the request.
+1. Po přihlášení server pošle v odpovědi HTTP hlavičku `Set-Cookie`, v níž nastaví cookie s „unikátním identifikátorem přihlášení“.
+2. Když bude příště poslán požadavek na stejnou doménu, prohlížeč pošle po síti tuto cookie v HTTP hlavičce `Cookie`.
+3. Tak se server dozví, kdo učinil požadavek.
 
-We can also access cookies from the browser, using `document.cookie` property.
+Ke cookies můžeme přistupovat i z prohlížeče, a to pomocí vlastnosti `document.cookie`.
 
-There are many tricky things about cookies and their attributes. In this chapter, we'll cover them in detail.
+Cookies a jejich atributy s sebou přinášejí mnoho záludností. V této kapitole je podrobně probereme.
 
-## Reading from document.cookie
+## Načítání z document.cookie
 
 ```online
-Does your browser store any cookies from this site? Let's see:
+Ukládá si váš prohlížeč nějaké cookies z tohoto sídla? Podívejme se:
 ```
 
 ```offline
-Assuming you're on a website, it's possible to see the cookies from it, like this:
+Jestliže jste na webovém sídle, je možné si zobrazit cookies odtamtud následovně:
 ```
 
 ```js run
-// At javascript.info, we use Google Analytics for statistics,
-// so there should be some cookies
-alert( document.cookie ); // cookie1=value1; cookie2=value2;...
+// Na javascript.info používáme Google Analytics pro statistiku,
+// takže by tam nějaké cookies měly být
+alert( document.cookie ); // cookie1=hodnota1; cookie2=hodnota2;...
 ```
 
+Hodnota `document.cookie` se skládá z dvojic `název=hodnota`, oddělených `; `. Každá z nich představuje samostatnou cookie.
 
-The value of `document.cookie` consists of `name=value` pairs, delimited by `; `. Each one is a separate cookie.
+Chceme-li najít konkrétní cookie, můžeme rozdělit `document.cookie` podle `; ` a pak najít správný název. Můžeme k tomu použít regulární výraz nebo funkce polí.
 
-To find a particular cookie, we can split `document.cookie` by `; `, and then find the right name. We can use either a regular expression or array functions to do that.
+Ponecháváme to čtenáři jako cvičení. Na konci této kapitoly najdete několik pomocných funkcí, které vám pomohou manipulovat s cookies.
 
-We leave it as an exercise for the reader. Also, at the end of the chapter, you'll find helper functions to manipulate cookies.
+## Zápis do document.cookie
 
-## Writing to document.cookie
+Do `document.cookie` můžeme zapisovat. Není to však datová vlastnost, nýbrž [přístupová vlastnost (getter/setter)](info:property-accessors). Přiřazení do ní se zpracovává speciálním způsobem.
 
-We can write to `document.cookie`. But it's not a data property, it's an [accessor (getter/setter)](info:property-accessors). An assignment to it is treated specially.
+**Operace zápisu do `document.cookie` změní jen cookie, která je v ní uvedena, a ostatní cookies ponechá nezměněné.**
 
-**A write operation to `document.cookie` updates only the cookie mentioned in it and doesn't touch other cookies.**
-
-For instance, this call sets a cookie with the name `user` and value `John`:
+Například následující volání nastaví cookie s názvem `uživatel` a hodnotou `Jan`:
 
 ```js run
-document.cookie = "user=John"; // update only cookie named 'user'
-alert(document.cookie); // show all cookies
+document.cookie = "uživatel=Jan"; // změní jen cookie s názvem 'uživatel'
+alert(document.cookie); // zobrazí všechny cookies
 ```
 
-If you run it, you will likely see multiple cookies. That's because the `document.cookie=` operation does not overwrite all cookies. It only sets the mentioned cookie `user`.
+Když si jej spustíte, uvidíte pravděpodobně několik cookies. Je to tím, že operace `document.cookie=` nepřepíše všechny cookies, ale jen nastaví uvedenou cookie `uživatel`.
 
-Technically, name and value can have any characters. To keep the valid formatting, they should be escaped using a built-in `encodeURIComponent` function:
+Technicky mohou název a hodnota obsahovat jakékoli znaky. Aby bylo zachováno platné formátování, měly by být zakódovány vestavěnou funkcí `encodeURIComponent`:
 
 ```js run
-// special characters (spaces) need encoding
-let name = "my name";
-let value = "John Smith"
+// speciální znaky (mezery) musejí být zakódovány
+let název = "muj nazev";
+let hodnota = "Jan Novak";
 
-// encodes the cookie as my%20name=John%20Smith
-document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+// zakóduje cookie jako muj%20nazev=Jan%20Novak
+document.cookie = encodeURIComponent(název) + '=' + encodeURIComponent(hodnota);
 
-alert(document.cookie); // ...; my%20name=John%20Smith
+alert(document.cookie); // ...; muj%20nazev=Jan%20Novak
 ```
 
 
-```warn header="Limitations"
-There are a few limitations:
-- You can only set/update a single cookie at a time using `document.cookie`.
-- The `name=value` pair, after `encodeURIComponent`, should not exceed 4KB. So we can't store anything huge in a cookie.
-- The total number of cookies per domain is limited to around 20+, the exact limit depends on the browser.
+```warn header="Omezení"
+Je tady několik omezení:
+- Pomocí `document.cookie` můžeme nastavit nebo změnit pouze jednu cookie současně.
+- Dvojice `název=hodnota` by po zakódování funkcí `encodeURIComponent` neměla překročit 4 KB. Do cookie tedy nemůžeme uložit nic velkého.
+- Celkový počet cookies na jednu doménu je omezen přibližně na 20 nebo více, přesný limit závisí na prohlížeči.
 ```
 
-Cookies have several attributes, many of which are important and should be set.
+Cookies mají několik atributů. Mnoho z nich je důležitých a měli bychom je nastavit.
 
-The attributes are listed after `key=value`, delimited by `;`, like this:
+Atributy jsou vyjmenovány po `klíč=hodnota` a jsou odděleny `;`, například:
 
 ```js run
-document.cookie = "user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT"
+document.cookie = "uživatel=Jan; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT"
 ```
 
 ## domain
 
 - **`domain=site.com`**
 
-A domain defines where the cookie is accessible. In practice though, there are limitations. We can't set any domain.
+Atribut `domain` definuje, kde je cookie dostupná. V praxi však existují určitá omezení a nemůžeme nastavit jakoukoli doménu.
 
-**There's no way to let a cookie be accessible from another 2nd-level domain, so `other.com` will never receive a cookie set at `site.com`.**
+**Není žádný způsob, jak učinit cookie dostupnou z jiné domény druhého řádu, takže `other.com` nikdy nezíská cookie nastavenou na `site.com`.**
 
-It's a safety restriction, to allow us to store sensitive data in cookies that should be available only on one site.
+To je bezpečnostní omezení, které nám umožňuje ukládat do cookies důvěrná data, která by měla být dostupná jen na jednom sídle.
 
-By default, a cookie is accessible only at the domain that set it.
+Standardně je cookie dostupná jen na doméně, která ji nastavila.
 
-Please note, by default, a cookie is not shared with a subdomain, such as `forum.site.com`.
-
-```js
-// if we set a cookie at site.com website...
-document.cookie = "user=John"
-
-// ...we won't see it at forum.site.com
-alert(document.cookie); // no user
-```
-
-...But this can be changed. If we'd like to allow subdomains like `forum.site.com` to get a cookie set at `site.com`, that's possible.
-
-For that to happen, when setting a cookie at `site.com`, we should explicitly set the `domain` attribute to the root domain: `domain=site.com`. Then all subdomains will see such a cookie.
-
-For example:
+Prosíme všimněte si, že standardně není cookie sdílena se subdoménou, například `forum.site.com`.
 
 ```js
-// at site.com
-// make the cookie accessible on any subdomain *.site.com:
-document.cookie = "user=John; *!*domain=site.com*/!*"
+// pokud nastavíme cookie na webovém sídle site.com...
+document.cookie = "uživatel=Jan"
 
-// later
-
-// at forum.site.com
-alert(document.cookie); // has cookie user=John
+// ...neuvidíme ji na forum.site.com
+alert(document.cookie); // uživatel není
 ```
 
-```warn header="Legacy syntax"
-Historically, `domain=.site.com` (with a dot before `site.com`) used to work the same way, allowing access to the cookie from subdomains. Leading dots in domain names are now ignored, but some browsers may decline to set the cookie containing such dots.
+...To však můžeme změnit. Jestliže chceme umožnit subdoménám jako `forum.site.com` získávat cookie nastavenou na `site.com`, můžeme to provést.
+
+Aby k tomu došlo, měli bychom při nastavování cookie na `site.com` explicitně nastavit atribut `domain` na kořenovou doménu: `domain=site.com`. Pak tuto cookie uvidí všechny subdomény.
+
+Příklad:
+
+```js
+// na site.com
+// zpřístupníme tuto cookie na jakékoli subdoméně *.site.com:
+document.cookie = "uživatel=Jan; *!*domain=site.com*/!*"
+
+// později
+
+// na forum.site.com
+alert(document.cookie); // obsahuje cookie uživatel=Jan
 ```
 
-To summarize, the `domain` attribute allows to make a cookie accessible at subdomains.
+```warn header="Zastaralá syntaxe"
+V historii fungovalo stejným způsobem i `domain=.site.com` (s tečkou před `site.com`), i to umožňovalo přístup ke cookie ze subdomén. Nyní se tečky na začátku názvů domén ignorují, ale některé prohlížeče mohou odmítnout nastavit cookie, která tyto tečky obsahuje.
+```
+
+Když to shrneme, atribut `domain` umožňuje zpřístupnit cookie na subdoménách.
 
 ## path
 
 - **`path=/mypath`**
 
-The URL path prefix must be absolute. It makes the cookie accessible for pages under that path. By default, it's the current path.
+Prefix URL cesty musí být absolutní. Tento atribut zpřístupňuje cookie stránkám pod touto cestou. Standardně je to aktuální cesta.
 
-If a cookie is set with `path=/admin`, it's visible on pages `/admin` and `/admin/something`, but not at `/home`, `/home/admin` or `/`.
+Pokud je cookie nastavena s atributem `path=/admin`, bude viditelná na stránkách `/admin` a `/admin/something`, ale ne na `/home`, `/home/admin` nebo `/`.
 
-Usually, we should set `path` to the root: `path=/` to make the cookie accessible from all website pages. If this attribute is not set the default is calculated using [this method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#path_default_value).
+Obvykle bychom měli nastavit `path` na kořenový adresář: `path=/`, aby byla cookie dostupná ze všech stránek na tomto sídle. Pokud tento atribut není nastaven, je standardně vypočítáván [touto metodou](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#path_default_value).
 
 ## expires, max-age
 
-By default, if a cookie doesn't have one of these attributes, it disappears when the browser/tab is closed. Such cookies are called "session cookies"
+Standardně, jestliže cookie neobsahuje jeden z těchto atributů, zmizí při zavření prohlížeče nebo záložky. Takové cookies se nazývají „session cookies“.
 
-To let cookies survive a browser close, we can set either the `expires` or `max-age` attribute. `max-Age` has precedence if both are set.
+Aby cookies zůstala naživu i po zavření prohlížeče, můžeme nastavit atribut `expires` nebo `max-age`. Pokud nastavíme oba, má přednost `max-age`.
 
 - **`expires=Tue, 19 Jan 2038 03:14:07 GMT`**
 
-The cookie expiration date defines the time when the browser will automatically delete it (according to the browser's time zone).
+Datum expirace cookie definuje čas, kdy ji prohlížeč automaticky smaže (podle časového pásma prohlížeče).
 
-The date must be exactly in this format, in the GMT timezone. We can use `date.toUTCString` to get it. For instance, we can set the cookie to expire in 1 day:
+Datum musí být přesně v tomto formátu v časovém pásmu GMT (Greenwichský střední čas). Můžeme jej získat metodou `datum.toUTCString`. Například můžeme nastavit cookie, aby expirovala za 1 den:
 
 ```js
-// +1 day from now
-let date = new Date(Date.now() + 86400e3);
-date = date.toUTCString();
-document.cookie = "user=John; expires=" + date;
+// +1 den od nynějška
+let datum = new Date(Date.now() + 86400e3);
+datum = datum.toUTCString();
+document.cookie = "uživatel=Jan; expires=" + datum;
 ```
 
-If we set `expires` to a date in the past, the cookie is deleted.
+Pokud nastavíme `expires` na datum v minulosti, bude cookie smazána.
 
 -  **`max-age=3600`**
 
-It's an alternative to `expires` and specifies the cookie's expiration in seconds from the current moment.
+Tento atribut je alternativou k `expires` a specifikuje expiraci cookie v sekundách od tohoto okamžiku.
 
-If set to zero or a negative value, the cookie is deleted:
+Pokud jej nastavíme na nulu nebo zápornou hodnotu, cookie bude smazána:
 
 ```js
-// cookie will die in +1 hour from now
-document.cookie = "user=John; max-age=3600";
+// cookie bude odstraněna za +1 hodinu od nynějška
+document.cookie = "uživatel=Jan; max-age=3600";
 
-// delete cookie (let it expire right now)
-document.cookie = "user=John; max-age=0";
+// smažeme cookie (necháme ji expirovat právě teď)
+document.cookie = "uživatel=Jan; max-age=0";
 ```
 
 ## secure
 
 - **`secure`**
 
-The cookie should be transferred only over HTTPS.
+Tato cookie může být přenesena pouze v HTTPS.
 
-**By default, if we set a cookie at `http://site.com`, then it also appears at `https://site.com` and vice versa.**
+**Standardně, jestliže nastavíme cookie na `http://site.com`, objeví se i na `https://site.com` a naopak.**
 
-That is, cookies are domain-based, they do not distinguish between the protocols.
+Je to proto, že cookies jsou založeny na doméně a nerozlišují mezi protokoly.
 
-With this attribute, if a cookie is set by `https://site.com`, then it doesn't appear when the same site is accessed by HTTP, as `http://site.com`. So if a cookie has sensitive content that should never be sent over unencrypted HTTP, the `secure` flag is the right thing.
+S tímto atributem platí, že jestliže je cookie nastavena na `https://site.com`, neobjeví se při přístupu na stejné sídlo přes HTTP jako `http://site.com`. Má-li tedy cookie citlivý obsah, který by nikdy neměl být odeslán přes nezašifrovaný HTTP, je přepínač `secure` ta správná věc.
 
 ```js
-// assuming we're on https:// now
-// set the cookie to be secure (only accessible over HTTPS)
-document.cookie = "user=John; secure";
+// předpokládáme, že nyní jsme na https://
+// nastavíme cookie jako bezpečnou (dostupnou jen přes HTTPS)
+document.cookie = "uživatel=Jan; secure";
 ```
 
 ## samesite
 
-This is another security attribute `samesite`. It's designed to protect from so-called XSRF (cross-site request forgery) attacks.
+Dalším bezpečnostním atributem je `samesite`, který je navržen k ochraně před tzv. XSRF (cross-site request forgery) útoky.
 
-To understand how it works and when it's useful, let's take a look at XSRF attacks.
+Abychom pochopili, jak funguje a kdy je užitečný, podívejme se na XSRF útoky.
 
-### XSRF attack
+### XSRF útok
 
-Imagine, you are logged into the site `bank.com`. That is: you have an authentication cookie from that site. Your browser sends it to `bank.com` with every request so that it recognizes you and performs all sensitive financial operations.
+Představte si, že se připojíte na sídlo `bank.com`. To znamená: máte z tohoto sídla autentifikační cookie. Váš prohlížeč ji posílá na `bank.com` s každým požadavkem, takže vás sídlo rozezná a provede všechny citlivé finanční operace.
 
-Now, while browsing the web in another window, you accidentally come to another site `evil.com`. That site has JavaScript code that submits a form `<form action="https://bank.com/pay">` to `bank.com` with fields that initiate a transaction to the hacker's account.
+Když si nyní prohlížíte web v jiném okně, náhodou se dostanete na jinou stránku `evil.com`. Tato stránka obsahuje kód v JavaScriptu, který odešle na `bank.com` formulář `<form action="https://bank.com/pay">` s poli, která spustí transakci z vašeho konta na hackerovo.
 
-The browser sends cookies every time you visit the site `bank.com`, even if the form was submitted from `evil.com`. So the bank recognizes you and performs the payment.
+Prohlížeč posílá cookies pokaždé, když navštívíte sídlo `bank.com`, i když byl formulář odeslán z `evil.com`. Banka vás tedy rozezná a provede platbu.
 
 ![](cookie-xsrf.svg)
 
-This is a so-called "Cross-Site Request Forgery" (in short, XSRF) attack.
+Tento útok se nazývá „Cross-Site Request Forgery“ („padělání požadavků z jiného sídla“, zkráceně XSRF).
 
-Real banks are protected from it of course. All forms generated by `bank.com` have a special field, a so-called "XSRF protection token", that an evil page can't generate or extract from a remote page. It can submit a form there, but can't get the data back. The site `bank.com` checks for such a token in every form it receives.
+Skutečné banky jsou před ním samozřejmě chráněny. Všechny formuláře generované sídlem `bank.com` obsahují speciální pole, tzv. „XSRF ochranný token“, který zlá stránka nedokáže generovat nebo vytáhnout ze vzdálené stránky. Může tam poslat formulář, ale nemůže získat data zpět. Sídlo `bank.com` kontroluje tento token v každém formuláři, který přijme.
 
-Such a protection takes time to implement though. We need to ensure that every form has the required token field, and we must also check all requests.
+Implementace takové ochrany ovšem zabere nějaký čas. Musíme zajistit, aby požadované pole s tokenem obsahoval každý formulář, a musíme také kontrolovat všechny požadavky.
 
-### Use cookie samesite attribute
+### Používání cookie atributu samesite
 
-The cookie `samesite` attribute provides another way to protect from such attacks, that (in theory) should not require "xsrf protection tokens".
+Cookie atribut `samesite` poskytuje jiný způsob ochrany před takovými útoky, který by (teoreticky) neměl vyžadovat „XSRF ochranné tokeny“.
 
-It has two possible values:
+Má dvě možné hodnoty:
 
 - **`samesite=strict`**
 
-A cookie with `samesite=strict` is never sent if the user comes from outside the same site.
+Cookie s atributem `samesite=strict` nebude nikdy odeslána, pokud uživatel přichází odjinud než ze stejného sídla.
 
-In other words, whether a user follows a link from their email, submits a form from `evil.com`, or does any operation that originates from another domain, the cookie is not sent.
+Jinými slovy, kdykoli uživatel následuje odkaz ze svého emailu, odesílá formulář z `evil.com` nebo provádí jakoukoli operaci pocházející z jiné domény, cookie se neodešle.
 
-If authentication cookies have the `samesite=strict` attribute, then an XSRF attack has no chance of succeeding, because a submission from `evil.com` comes without cookies. So `bank.com` will not recognize the user and will not proceed with the payment.
+Jestliže autentifikační cookies mají atribut `samesite=strict`, XSRF útok nemá šanci na úspěch, protože požadavek odeslaný z `evil.com` přijde bez cookies. Sídlo `bank.com` tedy uživatele nepozná a platbu neprovede.
 
-The protection is quite reliable. Only operations that come from `bank.com` will send the `samesite=strict` cookie, e.g. a form submission from another page at `bank.com`.
+Tato ochrana je poměrně spolehlivá. Cookie s atributem `samesite=strict` odešlou jen operace přicházející z `bank.com`, např. odeslání formuláře z jiné stránky na `bank.com`.
 
-Although, there's a small inconvenience.
+Má však určitou nevýhodu.
 
-When a user follows a legitimate link to `bank.com`, like from their notes, they'll be surprised that `bank.com` does not recognize them. Indeed, `samesite=strict` cookies are not sent in that case.
+Když uživatel následuje legitimní odkaz na `bank.com`, například ze svých poznámek, bude překvapen, že ho `bank.com` nepozná. Cookies se `samesite=strict` se v takovém případě samozřejmě neodešlou.
 
-We could work around that by using two cookies: one for "general recognition", only to say: "Hello, John", and the other one for data-changing operations with `samesite=strict`. Then, a person coming from outside of the site will see a welcome, but payments must be initiated from the bank's website, for the second cookie to be sent.
+To můžeme překonat použitím dvou cookies: jedné pro „obecné rozpoznávání“, jen aby řekla: „Ahoj, Jane“, a druhé, která bude mít `samesite=strict`, pro operace měnící data. Pak osoba přicházející odjinud spatří uvítání, ale platby musejí být spuštěny z webového sídla banky, aby byla odeslána druhá cookie.
 
-- **`samesite=lax` (same as `samesite` without value)**
+- **`samesite=lax` (totéž jako `samesite` bez hodnoty)**
 
-A more relaxed approach that also protects from XSRF and doesn't break the user experience.
+Toto je uvolněnější přístup, který také chrání před XSRF a navíc nenaruší uživatelovo pohodlí.
 
-Lax mode, just like `strict`, forbids the browser to send cookies when coming from outside the site, but adds an exception.
+Režim `lax` zakazuje prohlížeči odesílat cookies při příchodu z jiného sídla, podobně jako `strict`, ale s jednou výjimkou.
 
-A `samesite=lax` cookie is sent if both of these conditions are true:
-1. The HTTP method is "safe" (e.g. GET, but not POST).
+Cookie se `samesite=lax` je odeslána, jestliže jsou splněny obě tyto podmínky:
+1. HTTP metoda je „bezpečná“ (např. GET, ale ne POST).
 
-    The full list of safe HTTP methods is in the [RFC7231 specification](https://tools.ietf.org/html/rfc7231#section-4.2.1). These are the methods that should be used for reading, but not writing the data. They must not perform any data-changing operations. Following a link is always GET, the safe method.
+    Celý seznam bezpečných HTTP metod se nachází ve [specifikaci RFC 7231](https://tools.ietf.org/html/rfc7231#section-4.2.1). Jsou to metody, které by se měly používat ke čtení, ale ne k zápisu dat. Nesmějí provádět žádné operace, které mění data. Následování odkazu je vždy GET, tedy bezpečná metoda.
 
-2. The operation performs a top-level navigation (changes URL in the browser address bar).
+2. Operace provádí navigaci na nejvyšší úrovni (mění URL v adresové liště prohlížeče).
 
-    This is usually true, but if the navigation is performed in an `<iframe>`, then it is not top-level. Additionally, JavaScript methods for network requests do not perform any navigation.
+    Zpravidla tomu tak je, ale jestliže je navigace prováděna v `<iframe>`, není to na nejvyšší úrovni. Navíc metody JavaScriptu pro síťové požadavky žádnou navigaci neprovádějí.
 
-So, what `samesite=lax` does, is to allow the most common "go to URL" operation to have cookies. E.g. opening a website link from notes that satisfy these conditions.
+Atribut `samesite=lax` tedy dělá to, že umožňuje, aby nejběžnější operace „jdi na URL“ měla cookies. Například otevření odkazu na webové sídlo z poznámek, které tyto podmínky splňují.
 
-But anything more complicated, like a network request from another site or a form submission, loses cookies.
+Ale cokoli složitějšího, například síťový požadavek z jiného sídla nebo odeslání formuláře, cookies ztratí.
 
-If that's fine for you, then adding `samesite=lax` will probably not break the user experience and add protection.
+Pokud vám to vyhovuje, přidáním `samesite=lax` pravděpodobně nepokazíte uživatelovo pohodlí a zajistíte ochranu.
 
-Overall, `samesite` is a great attribute.
+Celkově je `samesite` vynikající atribut.
 
-There's a drawback:
+Má však nevýhodu:
 
-- `samesite` is ignored (not supported) by very old browsers, the year 2017 or so.
+- `samesite` je ignorován (není podporován) velmi starými prohlížeči, zhruba z roku 2017 a staršími.
 
-**So if we solely rely on `samesite` to provide protection, then old browsers will be vulnerable.**
+**Jestliže se tedy s ochranou spolehneme výhradně na `samesite`, staré prohlížeče budou zranitelné.**
 
-But we can use `samesite` together with other protection measures, like xsrf tokens, to add a layer of defence and then, in the future, when old browsers die out, we'll probably be able to drop xsrf tokens.
+Můžeme však použít `samesite` společně s jinými ochrannými prvky, například XSRF tokeny, abychom přidali ochrannou vrstvu a v budoucnu, až staré prohlížeče vymizí, budeme pravděpodobně moci XSRF tokeny zrušit.
 
 ## httpOnly
 
-This attribute has nothing to do with JavaScript, but we have to mention it for completeness.
+Tento atribut nemá nic společného s JavaScriptem, ale pro úplnost jej musíme uvést.
 
-The web server uses the `Set-Cookie` header to set a cookie. Also, it may set the `httpOnly` attribute.
+Webový server používá k nastavení cookie hlavičku `Set-Cookie`. Může také nastavit atribut `httpOnly`.
 
-This attribute forbids any JavaScript access to the cookie. We can't see such a cookie or manipulate it using `document.cookie`.
+Tento atribut zakazuje JavaScriptu jakýkoli přístup k této cookie. Takovou cookie neuvidíme a nemůžeme s ní manipulovat pomocí `document.cookie`.
 
-This is used as a precautionary measure, to protect from certain attacks when a hacker injects his own JavaScript code into a page and waits for a user to visit that page. That shouldn't be possible at all, hackers should not be able to inject their code into our site, but there may be bugs that let them do it.
+Používá se jako předběžné opatření k ochraně před útoky, při nichž hacker vloží na stránku svůj vlastní JavaScriptový kód a čeká, až uživatel tuto stránku navštíví. To by nemělo být vůbec možné, hackeři by neměli být schopni vložit svůj kód na naši stránku, ale mohou existovat chyby, které jim to dovolí.
 
+Normálně, když se něco takového stane a uživatel navštíví webovou stránku s hackerovým JavaScriptovým kódem, tento kód se spustí a získá přístup k `document.cookie` s uživatelskými cookies, které obsahují autentifikační informace. To je špatné.
 
-Normally, if such a thing happens, and a user visits a web-page with a hacker's JavaScript code, then that code executes and gains access to `document.cookie` with user cookies containing authentication information. That's bad.
+Jestliže však cookie je `httpOnly`, pak ji `document.cookie` nevidí, takže je chráněna.
 
-But if a cookie is `httpOnly`, then `document.cookie` doesn't see it, so it is protected.
+## Dodatek: Funkce pro cookies
 
-## Appendix: Cookie functions
+Následuje malá sada funkcí pro práci s cookies, které jsou pohodlnější než ruční modifikace `document.cookie`.
 
-Here's a small set of functions to work with cookies, more convenient than a manual modification of `document.cookie`.
+Pro práci s cookies existuje mnoho knihoven, tyto funkce tedy slouží pro demonstrativní účely. Jsou však plně funkční.
 
-There exist many cookie libraries for that, so these are for demo purposes. Fully working though.
+### getCookie(název)
 
-### getCookie(name)
+Nejkratším způsobem, jak přistupovat ke cookie, je použít [regulární výraz](info:regular-expressions).
 
-The shortest way to access a cookie is to use a [regular expression](info:regular-expressions).
-
-The function `getCookie(name)` returns the cookie with the given `name`:
+Funkce `getCookie(název)` vrací cookie s názvem `název`:
 
 ```js
-// returns the cookie with the given name,
-// or undefined if not found
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
+// vrací cookie se zadaným názvem
+// nebo undefined, pokud není nalezena
+function getCookie(název) {
+  let shoda = document.cookie.match(new RegExp(
     "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
   ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+  return shoda ? decodeURIComponent(shoda[1]) : undefined;
 }
 ```
 
-Here `new RegExp` is generated dynamically, to match `; name=<value>`.
+Zde je `new RegExp` generován dynamicky, aby hledal `; název=<hodnota>`.
 
-Please note that a cookie value is encoded, so `getCookie` uses a built-in `decodeURIComponent` function to decode it.
+Prosíme všimněte si, že hodnota cookie je zakódována, proto `getCookie` používá k jejímu rozkódování zabudovanou funkci `decodeURIComponent`.
 
-### setCookie(name, value, attributes)
+### setCookie(název, hodnota, atributy)
 
-Sets the cookie's `name` to the given `value` with `path=/` by default (can be modified to add other defaults):
+Nastaví cookie s názvem `název` na hodnotu `hodnota` se standardní `path=/` (lze modifikovat přidáním standardních hodnot dalších atributů):
 
 ```js run
-function setCookie(name, value, attributes = {}) {
+function setCookie(název, hodnota, atributy = {}) {
 
-  attributes = {
+  atributy = {
     path: '/',
-    // add other defaults here if necessary
-    ...attributes
+    // v případě potřeby sem přidejte standardní hodnoty dalších atributů
+    ...atributy
   };
 
-  if (attributes.expires instanceof Date) {
-    attributes.expires = attributes.expires.toUTCString();
+  if (atributy.expires instanceof Date) {
+    atributy.expires = atributy.expires.toUTCString();
   }
 
-  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+  let změněnáCookie = encodeURIComponent(název) + "=" + encodeURIComponent(hodnota);
 
-  for (let attributeKey in attributes) {
-    updatedCookie += "; " + attributeKey;
-    let attributeValue = attributes[attributeKey];
-    if (attributeValue !== true) {
-      updatedCookie += "=" + attributeValue;
+  for (let klíčAtributu in atributy) {
+    změněnáCookie += "; " + klíčAtributu;
+    let hodnotaAtributu = atributy[klíčAtributu];
+    if (hodnotaAtributu !== true) {
+      změněnáCookie += "=" + hodnotaAtributu;
     }
   }
 
-  document.cookie = updatedCookie;
+  document.cookie = změněnáCookie;
 }
 
-// Example of use:
-setCookie('user', 'John', {secure: true, 'max-age': 3600});
+// Příklad použití:
+setCookie('uživatel', 'Jan', {secure: true, 'max-age': 3600});
 ```
 
-### deleteCookie(name)
+### deleteCookie(název)
 
-To delete a cookie, we can call it with a negative expiration date:
+Cookie můžeme smazat tak, že jí nastavíme záporný čas expirace:
 
 ```js
-function deleteCookie(name) {
-  setCookie(name, "", {
+function deleteCookie(název) {
+  setCookie(název, "", {
     'max-age': -1
   })
 }
 ```
 
-```warn header="Updating or deleting must use same path and domain"
-Please note: when we update or delete a cookie, we should use exactly the same path and domain attributes as when we set it.
+```warn header="Při změně nebo mazání musíme používat stejnou cestu a doménu"
+Prosíme všimněte si, že když měníme nebo mažeme cookie, měli bychom používat přesně stejné atributy `path` a `domain` jako při jejím nastavení.
 ```
 
-Together: [cookie.js](cookie.js).
+Všechno dohromady: [cookie.js](cookie.js).
 
 
-## Appendix: Third-party cookies
+## Dodatek: Cookies třetích stran
 
-A cookie is called "third-party" if it's placed by a domain other than the page the user is visiting.
+Cookie se nazývá „cookie třetí strany“, pokud je uložena jinou doménou než doménou stránky, kterou uživatel navštívil.
 
-For instance:
-1. A page at `site.com` loads a banner from another site: `<img src="https://ads.com/banner.png">`.
-2. Along with the banner, the remote server at `ads.com` may set the `Set-Cookie` header with a cookie like `id=1234`. Such a cookie originates from the `ads.com` domain, and will only be visible at `ads.com`:
+Například:
+1. Stránka na `site.com` načte banner z jiné stránky: `<img src="https://ads.com/banner.png">`.
+2. Společně s tímto bannerem může vzdálený server na `ads.com` nastavit hlavičku `Set-Cookie` s cookie např. `id=1234`. Tato cookie pochází z domény `ads.com` a bude viditelná jedině na doméně `ads.com`:
 
     ![](cookie-third-party.svg)
 
-3. Next time when `ads.com` is accessed, the remote server gets the `id` cookie and recognizes the user:
+3. Při dalším přístupu na `ads.com` vzdálený server získá cookie `id` a pozná uživatele:
 
     ![](cookie-third-party-2.svg)
 
-4. What's even more important is, when the user moves from `site.com` to another site `other.com`, which also has a banner, then `ads.com` gets the cookie, as it belongs to `ads.com`, thus recognizing the visitor and tracking him as he moves between sites:
+4. Ještě důležitější je, že když se uživatel přesune ze `site.com` na jiné sídlo `other.com`, které také obsahuje banner, pak `ads.com` tuto cookie rovněž získá, protože patří `ads.com`, takže pozná návštěvníka a bude sledovat jeho přesun mezi sídly:
 
     ![](cookie-third-party-3.svg)
 
 
-Third-party cookies are traditionally used for tracking and ads services, due to their nature. They are bound to the originating domain, so `ads.com` can track the same user between different sites, if they all access it.
+Cookies třetích stran se kvůli své povaze tradičně používají pro sledovací a reklamní služby. Jsou vázány k doméně svého původu, takže `ads.com` může sledovat stejného uživatele mezi různými sídly, pokud k ní tato sídla přistupují.
 
-Naturally, some people don't like being tracked, so browsers allow them to disable such cookies.
+Některým lidem se pochopitelně nelíbí, když je někdo sleduje, takže prohlížeče umožňují takové cookies zakázat.
 
-Also, some modern browsers employ special policies for such cookies:
-- Safari does not allow third-party cookies at all.
-- Firefox comes with a "black list" of third-party domains where it blocks third-party cookies.
+Navíc některé moderní prohlížeče uplatňují pro takové cookies speciální politiku:
+- Safari cookies třetích stran vůbec neumožňuje.
+- Firefox má „černý seznam“ domén třetích stran, jejichž cookies třetích stran blokuje.
 
 
 ```smart
-If we load a script from a third-party domain, like `<script src="https://google-analytics.com/analytics.js">`, and that script uses `document.cookie` to set a cookie, then such cookie is not third-party.
+Jestliže načteme skript z domény třetí strany, např. `<script src="https://google-analytics.com/analytics.js">`, a tento skript nastaví cookie pomocí `document.cookie`, pak taková cookie není cookie třetí strany.
 
-If a script sets a cookie, then no matter where the script came from -- the cookie belongs to the domain of the current webpage.
+Když skript nastaví cookie, nezáleží na tom, odkud skript pochází -- tato cookie bude patřit doméně aktuální webové stránky.
 ```
 
-## Appendix: GDPR
+## Dodatek: GDPR
 
-This topic is not related to JavaScript at all, it is just something to keep in mind when setting cookies.
+Toto téma nemá nic společného s JavaScriptem, je to jen něco, co musíme mít při nastavování cookies na paměti.
 
-There's a legislation in Europe called GDPR, that enforces a set of rules for websites to respect the users' privacy. One of these rules is to require explicit permission for tracking cookies from the user.
+V Evropě platí legislativa nazvaná GDPR, která nařizuje sadu pravidel pro webové stránky, aby respektovaly soukromí uživatelů. Jedním z nich je vyžadovat od uživatele výslovné povolení pro sledovací cookies.
 
-Please note, that's only about tracking/identifying/authorizing cookies.
+Prosíme všimněte si, že to platí jen pro sledovací/identifikační/autorizační cookies.
 
-So, if we set a cookie that just saves some information, but neither tracks nor identifies the user, then we are free to do it.
+Pokud tedy nastavujeme cookie, která jen ukládá nějakou informaci, ale nesleduje ani neidentifikuje uživatele, můžeme to svobodně udělat.
 
-But if we are going to set a cookie with an authentication session or a tracking ID, then a user must allow that.
+Jestliže však chceme nastavit cookie s autentifikací přihlášení nebo sledovacím ID, uživatel to musí povolit.
 
-Websites generally have two variants of complying with GDPR. You are likely to have seen them both on the web:
+Webové stránky obecně přistupují ke GDPR dvěma způsoby. Pravděpodobně jste už oba viděli na webu:
 
-1. If a website wants to set tracking cookies only for authenticated users.
+1. Pokud webové sídlo chce ukládat sledovací cookies jen pro autentifikované uživatele.
 
-    To do so, the registration form should have a checkbox like "accept the privacy policy" (that describes how cookies are used), the user must check it, and then the website is free to set auth cookies.
+    Aby to mohlo dělat, registrační formulář by měl obsahovat checkbox např. „souhlasím s politikou ohledně soukromí“ (která popisuje, jak se cookies používají), uživatel jej musí zaškrtnout a pak webové sídlo může svobodně nastavovat autentifikační cookies.
 
-2. If a website wants to set tracking cookies for everyone.
+2. Pokud webové sídlo chce ukládat sledovací cookies pro všechny.
 
-    To do so legally, a website shows a modal "splash screen" for newcomers and requires them to agree to the cookies. Then the website can set them and let people see the content. That can be disturbing for new visitors though. No one likes to see such "must-click" modal splash screens instead of the content. But GDPR requires an explicit agreement.
+    Aby to webové sídlo mohlo legálně provádět, zobrazí nově příchozím uživatelům modální „vyskakovací okno“ a vyžaduje od nich souhlas s používáním cookies. Pak je webové sídlo může nastavovat a nechat uživatele prohlížet si jeho obsah. Pro nové návštěvníky to ovšem může být otravné. Nikomu se nelíbí, když místo obsahu stránek vidí vyskakovací okno, na které musí kliknout. Ale GDPR vyžaduje výslovný souhlas.
+
+GDPR se týká nejen cookies, ale i jiných záležitostí ohledně ochrany soukromí. To je však mimo naše téma.
 
 
-GDPR is not only about cookies, it is about other privacy-related issues too, but that is beyond our scope.
+## Shrnutí
 
+Přístup k cookies poskytuje `document.cookie`.
+- Operace zápisu mění jen cookie, která je v ní uvedena.
+- Název a hodnota musí být zakódovány.
+- Velikost jedné cookie nesmí přesáhnout 4 KB. Počet povolených cookies v jedné doméně je přibližně 20 a více (závisí na prohlížeči).
 
-## Summary
+Atributy cookie:
+- `path=/`, standardně aktuální cesta, učiní cookie viditelnou jen pod uvedenou cestou.
+- `domain=site.com`, standardně je cookie viditelná jen na aktuální doméně. Pokud je doména explicitně nastavena, bude cookie viditelná i na subdoménách.
+- `expires` nebo `max-age` nastaví čas expirace cookie. Nejsou-li uvedeny, cookie bude odstraněna při zavření prohlížeče.
+- `secure` způsobí, že cookie se bude posílat jen přes HTTPS.
+- `samesite` zakáže prohlížeči posílat cookie v požadavcích, které přicházejí odjinud než z tohoto sídla. Pomáhá chránit před XSRF útoky.
 
-`document.cookie` provides access to cookies.
-- Write operations modify only the cookie mentioned in it.
-- Name/value must be encoded.
-- One cookie may not exceed 4KB in size. The number of cookies allowed on a domain is around 20+ (varies by browser).
-
-Cookie attributes:
-- `path=/`, by default current path, makes the cookie visible only under that path.
-- `domain=site.com`, by default a cookie is visible on the current domain only. If the domain is set explicitly, the cookie becomes visible on subdomains.
-- `expires` or `max-age` sets the cookie expiration time. Without them, the cookie dies when the browser is closed.
-- `secure` makes the cookie HTTPS-only.
-- `samesite` forbids the browser to send the cookie with requests coming from outside the site. This helps to prevent XSRF attacks.
-
-Additionally:
-- The browser may forbid third-party cookies, e.g. Safari does that by default. There is also work in progress to implement this in Chrome.
-- When setting a tracking cookie for EU citizens, GDPR requires to ask for permission.
+Navíc:
+- Prohlížeč může zakázat cookies třetích stran, např. Safari to standardně dělá. Probíhají také práce na implementaci tohoto chování v Chrome.
+- Když nastavujete sledovací cookie pro občany EU, GDPR vyžaduje jejich svolení.

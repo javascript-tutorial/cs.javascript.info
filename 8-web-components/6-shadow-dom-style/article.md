@@ -1,21 +1,21 @@
-# Shadow DOM styling
+# Nastavení stylů stínového DOMu
 
-Shadow DOM may include both `<style>` and `<link rel="stylesheet" href="…">` tags. In the latter case, stylesheets are HTTP-cached, so they are not redownloaded for multiple components that use same template.
+Stínový DOM může obsahovat značky `<style>` i `<link rel="stylesheet" href="…">`. Ve druhém případě se styly ukládají do HTTP mezipaměti, takže se pro další komponenty používající stejnou šablonu nebudou znovu stahovat.
 
-As a general rule, local styles work only inside the shadow tree, and document styles work outside of it. But there are few exceptions.
+Platí obecné pravidlo, že lokální styly fungují jedině uvnitř stínového stromu a dokumentové styly mimo něj. Existuje však několik výjimek.
 
 ## :host
 
-The `:host` selector allows to select the shadow host (the element containing the shadow tree).
+Selektor `:host` nám umožňuje vybrat stínového hostitele (element obsahující stínový strom).
 
-For instance, we're making `<custom-dialog>` element that should be centered. For that we need to style the `<custom-dialog>` element itself.
+Například vytváříme element `<vlastni-dialog>`, který by měl být vycentrován. K tomu potřebujeme nastavit styl samotného elementu `<vlastni-dialog>`.
 
-That's exactly what `:host` does:
+Přesně tohle provádí `:host`:
 
 ```html run autorun="no-epub" untrusted height=80
-<template id="tmpl">
+<template id="šablona">
   <style>
-    /* the style will be applied from inside to the custom-dialog element */
+    /* tento styl bude aplikován zevnitř na element vlastni-dialog */
     :host {
       position: fixed;
       left: 50%;
@@ -30,50 +30,49 @@ That's exactly what `:host` does:
 </template>
 
 <script>
-customElements.define('custom-dialog', class extends HTMLElement {
+customElements.define('vlastni-dialog', class extends HTMLElement {
   connectedCallback() {
-    this.attachShadow({mode: 'open'}).append(tmpl.content.cloneNode(true));
+    this.attachShadow({mode: 'open'}).append(šablona.content.cloneNode(true));
   }
 });
 </script>
 
-<custom-dialog>
-  Hello!
-</custom-dialog>
+<vlastni-dialog>
+  Ahoj!
+</vlastni-dialog>
 ```
 
-## Cascading
+## Kaskády
 
-The shadow host (`<custom-dialog>` itself) resides in the light DOM, so it's affected by document CSS rules.
+Stínový hostitel (samotný `<vlastni-dialog>`) přebývá ve světlém DOMu, takže na něj působí dokumentová pravidla CSS.
 
-If there's a property styled both in `:host` locally, and in the document, then the document style takes precedence.
+Pokud má nějaká vlastnost nastaven styl současně lokálně v `:host` a v dokumentu, pak má přednost dokumentový styl.
 
-For instance, if in the document we had:
+Kdybychom například v dokumentu měli:
 ```html
 <style>
-custom-dialog {
+vlastni-dialog {
   padding: 0;
 }
 </style>
 ```
-...Then the `<custom-dialog>` would be without padding.
+...Pak by `<vlastni-dialog>` neměl vnitřní okraj.
 
-It's very convenient, as we can setup "default" component styles in its `:host` rule, and then easily override them in the document.
+To je velmi praktické, neboť můžeme nastavit „standardní“ styly komponenty v jejím pravidle `:host` a pak je v dokumentu snadno přepsat.
 
-The exception is when a local property is labelled `!important`, for such properties, local styles take precedence.
+Výjimkou je lokální vlastnost, která je označena jako `!important`. U takových vlastností mají přednost lokální styly.
 
+## :host(selektor)
 
-## :host(selector)
+Totéž jako `:host`, ale aplikuje se jen tehdy, když stínový hostitel odpovídá selektoru `selektor`.
 
-Same as `:host`, but applied only if the shadow host matches the `selector`.
-
-For example, we'd like to center the `<custom-dialog>` only if it has `centered` attribute:
+Například chceme centrovat `<vlastni-dialog>` jen tehdy, má-li atribut `centrovan`:
 
 ```html run autorun="no-epub" untrusted height=80
-<template id="tmpl">
+<template id="šablona">
   <style>
 *!*
-    :host([centered]) {
+    :host([centrovan]) {
 */!*
       position: fixed;
       left: 50%;
@@ -92,34 +91,34 @@ For example, we'd like to center the `<custom-dialog>` only if it has `centered`
 </template>
 
 <script>
-customElements.define('custom-dialog', class extends HTMLElement {
+customElements.define('vlastni-dialog', class extends HTMLElement {
   connectedCallback() {
-    this.attachShadow({mode: 'open'}).append(tmpl.content.cloneNode(true));
+    this.attachShadow({mode: 'open'}).append(šablona.content.cloneNode(true));
   }
 });
 </script>
 
 
-<custom-dialog centered>
-  Centered!
-</custom-dialog>
+<vlastni-dialog centrovan>
+  Centrován!
+</vlastni-dialog>
 
-<custom-dialog>
-  Not centered.
-</custom-dialog>
+<vlastni-dialog>
+  Necentrován.
+</vlastni-dialog>
 ```
 
-Now the additional centering styles are only applied to the first dialog: `<custom-dialog centered>`.
+Nyní se přidané centrovací styly aplikují jen na první dialog: `<vlastni-dialog centrovan   >`.
 
-To summarize, we can use `:host`-family of selectors to style the main element of the component. These styles (unless `!important`) can be overridden by the document.
+Když to shrneme, pro nastavení stylů hlavního elementu komponenty můžeme použít rodinu selektorů `:host`. Tyto styly (pokud nemají `!important`) mohou být v dokumentu přepsány.
 
-## Styling slotted content
+## Nastavení stylů obsahu ve slotu
 
-Now let's consider the situation with slots.
+Uvažujme nyní situaci se sloty.
 
-Slotted elements come from light DOM, so they use document styles. Local styles do not affect slotted content.
+Elementy ve slotech pocházejí ze světlého DOMu, využívají tedy dokumentové styly. Lokální styly nemají na obsah ve slotech žádný vliv.
 
-In the example below, slotted `<span>` is bold, as per document style, but does not take `background` from the local style:
+V následujícím příkladu má `<span>` ve slotu tučné písmo, jak je uvedeno v dokumentovém stylu, ale nepřebírá `background` z lokálního stylu:
 ```html run autorun="no-epub" untrusted height=80
 <style>
 *!*
@@ -127,12 +126,12 @@ In the example below, slotted `<span>` is bold, as per document style, but does 
 */!*
 </style>
 
-<user-card>
-  <div slot="username">*!*<span>John Smith</span>*/!*</div>
-</user-card>
+<karta-uzivatele>
+  <div slot="uživatel">*!*<span>Jan Novák</span>*/!*</div>
+</karta-uzivatele>
 
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
@@ -141,59 +140,59 @@ customElements.define('user-card', class extends HTMLElement {
       span { background: red; }
 */!*
       </style>
-      Name: <slot name="username"></slot>
+      Jméno: <slot name="uživatel"></slot>
     `;
   }
 });
 </script>
 ```
 
-The result is bold, but not red.
+Výsledek má tučné písmo, ale není červený.
 
-If we'd like to style slotted elements in our component, there are two choices.
+Jestliže chceme nastavit styly elementů ve slotech v naší komponentě, máme dvě možnosti.
 
-First, we can style the `<slot>` itself and rely on CSS inheritance:
+První je, že můžeme nastavit styly samotnému `<slot>` a spolehnout se na CSS dědičnost:
 
 ```html run autorun="no-epub" untrusted height=80
-<user-card>
-  <div slot="username">*!*<span>John Smith</span>*/!*</div>
-</user-card>
+<karta-uzivatele>
+  <div slot="uživatel">*!*<span>Jan Novák</span>*/!*</div>
+</karta-uzivatele>
 
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
       <style>
 *!*
-      slot[name="username"] { font-weight: bold; }
+      slot[name="uživatel"] { font-weight: bold; }
 */!*
       </style>
-      Name: <slot name="username"></slot>
+      Jméno: <slot name="uživatel"></slot>
     `;
   }
 });
 </script>
 ```
 
-Here `<p>John Smith</p>` becomes bold, because CSS inheritance is in effect between the `<slot>` and its contents. But in CSS itself not all properties are inherited.
+Zde `<p>Jan Novák</p>` bude tučné, protože mezi `<slot>` a jeho obsahem působí CSS dědičnost. Ale v samotném CSS se nedědí všechny vlastnosti.
 
-Another option is to use `::slotted(selector)` pseudo-class. It matches elements based on two conditions:
+Druhá možnost je použít pseudotřídu `::slotted(selektor)`, která vybírá elementy podle dvou podmínek:
 
-1. That's a slotted element, that comes from the light DOM. Slot name doesn't matter. Just any slotted element, but only the element itself, not its children.
-2. The element matches the `selector`.
+1. Je to element ve slotu, který pochází ze světlého DOMu. Na názvu slotu nezáleží. Bere se každý element ve slotu, ale jen samotný element, ne jeho děti.
+2. Element odpovídá selektoru `selektor`.
 
-In our example, `::slotted(div)` selects exactly `<div slot="username">`, but not its children:
+V našem příkladu `::slotted(div)` vybere přímo `<div slot="uživatel">`, ale ne jeho děti:
 
 ```html run autorun="no-epub" untrusted height=80
-<user-card>
-  <div slot="username">
-    <div>John Smith</div>
+<karta-uzivatele>
+  <div slot="uživatel">
+    <div>Jan Novák</div>
   </div>
-</user-card>
+</karta-uzivatele>
 
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
@@ -202,118 +201,118 @@ customElements.define('user-card', class extends HTMLElement {
       ::slotted(div) { border: 1px solid red; }
 */!*
       </style>
-      Name: <slot name="username"></slot>
+      Jméno: <slot name="uživatel"></slot>
     `;
   }
 });
 </script>
 ```
 
-Please note, `::slotted` selector can't descend any further into the slot. These selectors are invalid:
+Prosíme všimněte si, že selektor `::slotted` nemůže klesat hlouběji do slotu. Tyto selektory jsou nesprávné:
 
 ```css
 ::slotted(div span) {
-  /* our slotted <div> does not match this */
+  /* náš <div> ve slotu tomu nebude odpovídat */
 }
 
 ::slotted(div) p {
-  /* can't go inside light DOM */
+  /* nemůže jít dovnitř světlého DOMu */
 }
 ```
 
-Also, `::slotted` can only be used in CSS. We can't use it in `querySelector`.
+Navíc `::slotted` můžeme použít jedině v CSS. Nemůžeme ji použít v `querySelector`.
 
-## CSS hooks with custom properties
+## Spojení CSS s volitelnými vlastnostmi
 
-How do we style internal elements of a component from the main document?
+Jak můžeme nastavit styl vnitřních elementů komponenty z hlavního dokumentu?
 
-Selectors like `:host` apply rules to `<custom-dialog>` element or `<user-card>`, but how to style shadow DOM elements inside them?
+Selektory jako `:host` aplikují pravidla na element `<vlastni-dialog>` nebo `<karta-uzivatele>`, ale jak nastavit styly elementů stínového DOMu uvnitř nich?
 
-There's no selector that can directly affect shadow DOM styles from the document. But just as we expose methods to interact with our component, we can expose CSS variables (custom CSS properties) to style it.
+Neexistuje žádný selektor, který by působil z dokumentu přímo na styly stínového DOMu. Avšak stejně jako zveřejňujeme metody, pomocí nichž lze interagovat s naší komponentou, můžeme zveřejnit CSS proměnné (volitelné CSS vlastnosti), aby jí bylo možné nastavit styly.
 
-**Custom CSS properties exist on all levels, both in light and shadow.**
+**Volitelné CSS vlastnosti existují na všech úrovních, ve světlém i ve stínovém DOMu.**
 
-For example, in shadow DOM we can use `--user-card-field-color` CSS variable to  style fields, and the outer document can set its value:
+Například ve stínovém DOMu můžeme k nastavení stylů polí použít CSS proměnnou `--barva-pole-karty-uzivatele` a vnější dokument může nastavit její hodnotu:
 
 ```html
 <style>
-  .field {
-    color: var(--user-card-field-color, black);
-    /* if --user-card-field-color is not defined, use black color */
+  .pole {
+    color: var(--barva-pole-karty-uzivatele, black);
+    /* pokud není --barva-pole-karty-uzivatele definována, použijeme černou barvu */
   }
 </style>
-<div class="field">Name: <slot name="username"></slot></div>
-<div class="field">Birthday: <slot name="birthday"></slot></div>
+<div class="pole">Jméno: <slot name="uživatel"></slot></div>
+<div class="pole">Datum narození: <slot name="narození"></slot></div>
 ```
 
-Then, we can declare this property in the outer document for `<user-card>`:
+Pak můžeme tuto vlastnost deklarovat ve vnějším dokumentu pro `<karta-uzivatele>`:
 
 ```css
-user-card {
-  --user-card-field-color: green;
+karta-uzivatele {
+  --barva-pole-karty-uzivatele: green;
 }
 ```
 
-Custom CSS properties pierce through shadow DOM, they are visible everywhere, so the inner `.field` rule will make use of it.
+Volitelné CSS vlastnosti pronikají až do stínového DOMu a jsou viditelné všude, takže vnitřní pravidlo `.pole` je bude využívat.
 
-Here's the full example:
+Zde je celý příklad:
 
 ```html run autorun="no-epub" untrusted height=80
 <style>
 *!*
-  user-card {
-    --user-card-field-color: green;
+  karta-uzivatele {
+    --barva-pole-karty-uzivatele: green;
   }
 */!*
 </style>
 
-<template id="tmpl">
+<template id="šablona">
   <style>
 *!*
-    .field {
-      color: var(--user-card-field-color, black);
+    .pole {
+      color: var(--barva-pole-karty-uzivatele, black);
     }
 */!*
   </style>
-  <div class="field">Name: <slot name="username"></slot></div>
-  <div class="field">Birthday: <slot name="birthday"></slot></div>
+  <div class="pole">Jméno: <slot name="uživatel"></slot></div>
+  <div class="pole">Datum narození: <slot name="narození"></slot></div>
 </template>
 
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
-    this.shadowRoot.append(document.getElementById('tmpl').content.cloneNode(true));
+    this.shadowRoot.append(document.getElementById('šablona').content.cloneNode(true));
   }
 });
 </script>
 
-<user-card>
-  <span slot="username">John Smith</span>
-  <span slot="birthday">01.01.2001</span>
-</user-card>
+<karta-uzivatele>
+  <span slot="uživatel">Jan Novák</span>
+  <span slot="narození">01.01.2001</span>
+</karta-uzivatele>
 ```
 
 
 
-## Summary
+## Shrnutí
 
-Shadow DOM can include styles, such as `<style>` or `<link rel="stylesheet">`.
+Stínový DOM může obsahovat styly, například `<style>` nebo `<link rel="stylesheet">`.
 
-Local styles can affect:
-- shadow tree,
-- shadow host with `:host` and `:host()` pseudoclasses,
-- slotted elements (coming from light DOM), `::slotted(selector)` allows to select  slotted elements themselves, but not their children.
+Lokální styly mohou ovlivňovat:
+- stínový strom,
+- stínového hostitele pomocí pseudotříd `:host` a `:host()`,
+- elementy ve slotech (pocházející ze světlého DOMu), `::slotted(selektor)` umožňuje vybrat samotné elementy ve slotech, ale ne jejich děti.
 
-Document styles can affect:
-- shadow host (as it lives in the outer document)
-- slotted elements and their contents (as that's also in the outer document)
+Dokumentové styly mohou ovlivňovat:
+- stínového hostitele (protože přebývá ve vnějším dokumentu),
+- elementy ve slotech a jejich obsah (protože ten je také ve vnějším dokumentu).
 
-When CSS properties conflict, normally document styles have precedence, unless the property is labelled as `!important`. Then local styles have precedence.
+Když se CSS vlastnosti dostanou do konfliktu, mají přednost styly z dokumentu, pokud vlastnost není označena jako `!important`. Pak mají přednost lokální styly.
 
-CSS custom properties pierce through shadow DOM. They are used as "hooks" to style the component:
+Volitelné CSS vlastnosti pronikají do stínového DOMu. Používají se jako „háky“, kterými lze nastavit styly komponenty:
 
-1. The component uses a custom CSS property to style key elements, such as `var(--component-name-title, <default value>)`.
-2. Component author publishes these properties for developers, they are same important as other public component methods.
-3. When a developer wants to style a title, they assign `--component-name-title` CSS property for the shadow host or above.
-4. Profit!
+1. Komponenta používá volitelnou CSS vlastnost k nastavení stylů klíčových elementů, například `var(--titulek-nazvu-komponenty, <standardní hodnota>)`.
+2. Autor komponenty publikuje tyto vlastnosti pro vývojáře. Jsou stejně důležité jako ostatní veřejné metody komponenty.
+3. Když chce vývojář nastavit styl titulku, přiřadí hodnotu do CSS vlastnosti `--titulek-nazvu-komponenty` stínového hostitele nebo výše.
+4. Spokojenost na obou stranách!

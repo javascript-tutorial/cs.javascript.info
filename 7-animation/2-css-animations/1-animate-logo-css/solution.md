@@ -1,17 +1,17 @@
 
-CSS to animate both `width` and `height`:
+CSS pro animaci `width` a `height` současně:
 ```css
-/* original class */
+/* původní třída */
 
-#flyjet {
+#letadlo {
   transition: all 3s;
 }
 
-/* JS adds .growing */
-#flyjet.growing {
+/* JS přidává .zvětšování */
+#letadlo.zvětšování {
   width: 400px;
   height: 240px;
 }
 ```
 
-Please note that `transitionend` triggers two times -- once for every property. So if we don't perform an additional check then the message would show up 2 times.
+Prosíme všimněte si, že událost `transitionend` se spustí dvakrát -- pro každou vlastnost jednou. Kdybychom tedy neprovedli další kontrolu, zpráva by se zobrazila dvakrát. 

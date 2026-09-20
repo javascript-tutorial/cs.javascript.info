@@ -8,31 +8,31 @@
 
 <body>
 
-  <img src="https://js.cx/clipart/boat.png" id="boat">
+  <img src="https://js.cx/clipart/boat.png" id="loď">
 
   <script>
-    boat.onclick = function() {
+    loď.onclick = function() {
 
-      this.onclick = null; // only the first click should start the animation
+      this.onclick = null; // animaci by mělo spustit jen první kliknutí
 
-      let times = 1;
+      let kolikrát = 1;
 
-      function go() {
-        if (times % 2) {
-          boat.classList.remove('back');
-          boat.style.marginLeft = 100 * times + 200 + 'px';
+      function spusť() {
+        if (kolikrát % 2) {
+          loď.classList.remove('zpět');
+          loď.style.marginLeft = 100 * kolikrát + 200 + 'px';
         } else {
-          boat.classList.add('back');
-          boat.style.marginLeft = 100 * times - 200 + 'px';
+          loď.classList.add('zpět');
+          loď.style.marginLeft = 100 * kolikrát - 200 + 'px';
         }
 
       }
 
-      go();
+      spusť();
 
-      boat.addEventListener('transitionend', function() {
-        times++;
-        go();
+      loď.addEventListener('transitionend', function() {
+        kolikrát++;
+        spusť();
       });
     }
   </script>

@@ -1,3 +1,3 @@
-stripe.onclick = function() {
-  stripe.classList.add('animate');
+pás.onclick = function() {
+  pás.classList.add('animace');
 };

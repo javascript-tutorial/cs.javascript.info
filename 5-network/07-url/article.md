@@ -1,28 +1,28 @@
 
-# URL objects
+# Objekty URL
 
-The built-in [URL](https://url.spec.whatwg.org/#api) class provides a convenient interface for creating and parsing URLs.
+Zabudovaná třída [URL](https://url.spec.whatwg.org/#api) poskytuje vhodné rozhraní pro vytváření a parsování URL adres.
 
-There are no networking methods that require exactly a `URL` object, strings are good enough. So technically we don't have to use `URL`. But sometimes it can be really helpful.
+Žádná metoda pro práci se sítí nevyžaduje přímo `URL` objekt, všem postačují řetězce. Technicky tedy nemusíme `URL` používat. Někdy však může být opravdu nápomocná.
 
-## Creating a URL
+## Vytvoření URL
 
-The syntax to create a new `URL` object:
+Syntaxe pro vytvoření nového `URL` objektu je následující:
 
 ```js
-new URL(url, [base])
+new URL(url, [báze])
 ```
 
-- **`url`** -- the full URL or only path (if base is set, see below),
-- **`base`** -- an optional base URL: if set and `url` argument has only path, then the URL is generated relative to `base`.
+- **`url`** -- úplná URL nebo cesta (pokud je nastavena báze, viz níže),
+- **`báze`** -- nepovinná bázová URL: pokud je nastavena a argument `url` obsahuje pouze cestu, pak se URL vygeneruje relativně vůči `báze`.
 
-For example:
+Příklad:
 
 ```js
 let url = new URL('https://javascript.info/profile/admin');
 ```
 
-These two URLs are same:
+Tyto dvě URL jsou stejné:
 
 ```js run
 let url1 = new URL('https://javascript.info/profile/admin');
@@ -32,16 +32,16 @@ alert(url1); // https://javascript.info/profile/admin
 alert(url2); // https://javascript.info/profile/admin
 ```
 
-We can easily create a new URL based on the path relative to an existing URL:
+Můžeme snadno vytvořit novou URL z relativní cesty vzhledem k existující URL:
 
 ```js run
 let url = new URL('https://javascript.info/profile/admin');
-let newUrl = new URL('tester', url);
+let nováURL = new URL('tester', url);
 
-alert(newUrl); // https://javascript.info/profile/tester
+alert(nováURL); // https://javascript.info/profile/tester
 ```
 
-The `URL` object immediately allows us to access its components, so it's a nice way to parse the url, e.g.:
+Objekt `URL` nám umožňuje okamžitě přistupovat ke svým komponentám, takže je to pěkný způsob, jak parsovat URL, například:
 
 ```js run
 let url = new URL('https://javascript.info/url');
@@ -51,79 +51,79 @@ alert(url.host);     // javascript.info
 alert(url.pathname); // /url
 ```
 
-Here's the cheatsheet for URL components:
+Zde je přehled komponent URL:
 
 ![](url-object.svg)
 
-- `href` is the full url, same as `url.toString()`
-- `protocol` ends with the colon character `:`
-- `search` - a string of parameters, starts with the question mark `?`
-- `hash` starts with the hash character `#`
-- there may be also `user` and `password` properties if HTTP authentication is present: `http://login:password@site.com` (not painted above, rarely used).
+- `href` je úplná URL, totéž jako `url.toString()`
+- `protocol` končí dvojtečkou `:`
+- `search` - řetězec parametrů, začíná otazníkem `?`
+- `hash` začíná znakem hashe `#`
+- pokud je přítomna HTTP autentifikace, mohou tam být i vlastnosti `user` (uživatel) a `password` (heslo): `http://login:password@site.com` (v přehledu nezobrazeno, používá se zřídka).
 
 
-```smart header="We can pass `URL` objects to networking (and most other) methods instead of a string"
-We can use a `URL` object in `fetch` or `XMLHttpRequest`, almost everywhere where a URL-string is expected.
+```smart header="Objekty `URL` můžeme předávat do síťových (a většiny jiných) metod místo řetězců"
+Objekt `URL` můžeme používat ve `fetch` nebo `XMLHttpRequest`, téměř všude, kde je očekáván řetězec s URL.
 
-Generally, the `URL` object can be passed to any method instead of a string, as most methods will perform the string conversion, that turns a `URL` object into a string with full URL.
+Obecně může být objekt `URL` předán do libovolné metody místo řetězce. Většina metod provádí konverzi na řetězec, která převede objekt `URL` na řetězec s úplnou URL.
 ```
 
-## SearchParams "?..."
+## SearchParams „?...“
 
-Let's say we want to create a url with given search params, for instance, `https://google.com/search?query=JavaScript`.
+Dejme tomu, že chceme vytvořit URL se zadanými vyhledávacími parametry, například `https://google.com/search?query=JavaScript`.
 
-We can provide them in the URL string:
+Můžeme je poskytnout v řetězci URL:
 
 ```js
 new URL('https://google.com/search?query=JavaScript')
 ```
 
-...But parameters need to be encoded if they contain spaces, non-latin letters, etc (more about that below).
+...Parametry však musejí být zakódovány, jestliže obsahují mezery, nelatinská písmena a podobně (podrobnosti dále).
 
-So there's a URL property for that: `url.searchParams`, an object of type [URLSearchParams](https://url.spec.whatwg.org/#urlsearchparams).
+K tomu slouží URL vlastnost: `url.searchParams`, objekt typu [URLSearchParams](https://url.spec.whatwg.org/#urlsearchparams).
 
-It provides convenient methods for search parameters:
+Ten poskytuje vhodné metody pro vyhledávací parametry:
 
-- **`append(name, value)`** -- add the parameter by `name`,
-- **`delete(name)`** -- remove the parameter by `name`,
-- **`get(name)`** -- get the parameter by `name`,
-- **`getAll(name)`** -- get all parameters with the same `name` (that's possible, e.g. `?user=John&user=Pete`),
-- **`has(name)`** -- check for the existence of the parameter by `name`,
-- **`set(name, value)`** -- set/replace the parameter,
-- **`sort()`** -- sort parameters by name, rarely needed,
-- ...and it's also iterable, similar to `Map`.
+- **`append(název, hodnota)`** -- přidá parametr s názvem `název`,
+- **`delete(název)`** -- odstraní parametr s názvem `název`,
+- **`get(název)`** -- vrátí parametr s názvem `název`,
+- **`getAll(název)`** -- vrátí všechny parametry s názvem `název` (to je dovoleno, např. `?uživatel=Jan&uživatel=Petr`),
+- **`has(název)`** -- ověří existenci parametru s názvem `název`,
+- **`set(název, hodnota)`** -- nastaví nebo nahradí parametr s názvem `název`,
+- **`sort()`** -- seřadí parametry podle názvů, potřebná jen zřídka,
+- ...a je také iterovatelný, podobně jako `Map`.
 
-An example with parameters that contain spaces and punctuation marks:
+Příklad s parametry, které obsahují mezery a interpunkční znaménka:
 
 ```js run
 let url = new URL('https://google.com/search');
 
-url.searchParams.set('q', 'test me!'); // added parameter with a space and !
+url.searchParams.set('q', 'otestuj mne!'); // přidán parametr s mezerou a vykřičníkem !
 
-alert(url); // https://google.com/search?q=test+me%21
+alert(url); // https://google.com/search?q=otestuj+mne%21
 
-url.searchParams.set('tbs', 'qdr:y'); // added parameter with a colon :
+url.searchParams.set('tbs', 'qdr:y'); // přidán parametr s dvojtečkou :
 
-// parameters are automatically encoded
-alert(url); // https://google.com/search?q=test+me%21&tbs=qdr%3Ay
+// parametry se automaticky zakódují
+alert(url); // https://google.com/search?q=otestuj+mne%21&tbs=qdr%3Ay
 
-// iterate over search parameters (decoded)
-for(let [name, value] of url.searchParams) {
-  alert(`${name}=${value}`); // q=test me!, then tbs=qdr:y
+// iterace nad vyhledávacími parametry (dekódovanými)
+for(let [název, hodnota] of url.searchParams) {
+  alert(`${název}=${hodnota}`); // q=otestuj mne!, pak tbs=qdr:y
 }
 ```
 
 
-## Encoding
+## Kódování
 
-There's a standard [RFC3986](https://tools.ietf.org/html/rfc3986) that defines which characters are allowed in URLs and which are not.
+Znaky, které jsou v URL povoleny a které ne, definuje standard [RFC3986](https://tools.ietf.org/html/rfc3986).
 
-Those that are not allowed, must be encoded, for instance non-latin letters and spaces - replaced with their UTF-8 codes, prefixed by `%`, such as `%20` (a space can be encoded by `+`, for historical reasons, but that's an exception).
+Ty, které nejsou povoleny, například nelatinská písmena a mezery, musejí být zakódovány -- nahrazeny svými UTF-8 kódy s předponou `%`, např. `%20` (mezeru lze z historických důvodů zakódovat jako `+`, ale to je výjimka).
 
-The good news is that `URL` objects handle all that automatically. We just supply all parameters unencoded, and then convert the `URL` to string:
+Dobrá zpráva je, že objekty `URL` to automaticky ošetřují. Stačí předat všechny parametry nezakódované a pak převést `URL` na řetězec:
 
 ```js run
-// using some cyrillic characters for this example
+// v tomto příkladu použijeme některé znaky z kyrilice
 
 let url = new URL('https://ru.wikipedia.org/wiki/Тест');
 
@@ -131,87 +131,87 @@ url.searchParams.set('key', 'ъ');
 alert(url); //https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%81%D1%82?key=%D1%8A
 ```
 
-As you can see, both `Тест` in the url path and `ъ` in the parameter are encoded.
+Jak vidíte, byly zakódovány `Тест` v URL cestě i `ъ` v parametru.
 
-The URL became longer, because each cyrillic letter is represented with two bytes in UTF-8, so there are two `%..` entities.
+URL se prodloužila, neboť každé písmeno kyrilice je v UTF-8 reprezentováno dvěma byty, a tak pro ně byly vytvořeny dvě entity `%..`.
 
-### Encoding strings
+### Kódování řetězců
 
-In old times, before `URL` objects appeared, people used strings for URLs.
+V dřívějších dobách, než se objevily objekty `URL`, lidé používali pro URL řetězce.
 
-As of now, `URL` objects are often more convenient, but strings can still be used as well. In many cases using a string makes the code shorter.
+V současnosti jsou objekty `URL` často vhodnější, ale stále je možné používat i řetězce. V mnoha případech při použití řetězců dostaneme kratší kód.
 
-If we use a string though, we need to encode/decode special characters manually.
+Pokud však používáme řetězce, musíme speciální znaky zakódovat a dekódovat ručně.
 
-There are built-in functions for that:
+K tomu slouží zabudované funkce:
 
-- [encodeURI](mdn:/JavaScript/Reference/Global_Objects/encodeURI) - encodes URL as a whole.
-- [decodeURI](mdn:/JavaScript/Reference/Global_Objects/decodeURI) - decodes it back.
-- [encodeURIComponent](mdn:/JavaScript/Reference/Global_Objects/encodeURIComponent) - encodes a URL component, such as a search parameter, or a hash, or a pathname.
-- [decodeURIComponent](mdn:/JavaScript/Reference/Global_Objects/decodeURIComponent) - decodes it back.
+- [encodeURI](mdn:/JavaScript/Reference/Global_Objects/encodeURI) - zakóduje URL jako celek.
+- [decodeURI](mdn:/JavaScript/Reference/Global_Objects/decodeURI) - dekóduje ji zpět.
+- [encodeURIComponent](mdn:/JavaScript/Reference/Global_Objects/encodeURIComponent) - zakóduje URL komponentu, např. vyhledávací parametr, kontrolní součet nebo cestu.
+- [decodeURIComponent](mdn:/JavaScript/Reference/Global_Objects/decodeURIComponent) - dekóduje ji zpět.
 
-A natural question is: "What's the difference between `encodeURIComponent` and `encodeURI`? When we should use either?"
+Naskýtá se přirozená otázka: „Jaký je rozdíl mezi `encodeURIComponent` a `encodeURI`? Kdy bychom měli kterou z nich použít?"
 
-That's easy to understand if we look at the URL, that's split into components in the picture above:
+Snadno tomu porozumíme, když se podíváme na URL, která je rozdělena na komponenty ve výše uvedeném obrázku:
 
 ```
 https://site.com:8080/path/page?p1=v1&p2=v2#hash
 ```
 
-As we can see, characters such as `:`, `?`, `=`, `&`, `#` are allowed in URL.
+Jak vidíme, znaky jako `:`, `?`, `=`, `&`, `#` jsou v URL povoleny.
 
-...On the other hand, if we look at a single URL component, such as a search parameter, these characters must be encoded, not to break the formatting.
+...Naproti tomu když se podíváme na samostatnou URL komponentu, např. vyhledávací parametr, tyto znaky musejí být zakódovány, aby se nerozbilo formátování.
 
-- `encodeURI` encodes only characters that are totally forbidden in URL.
-- `encodeURIComponent` encodes same characters, and, in addition to them, characters `#`, `$`, `&`, `+`, `,`, `/`, `:`, `;`, `=`, `?` and `@`.
+- `encodeURI` zakóduje pouze znaky, které jsou v URL zcela zakázány.
+- `encodeURIComponent` zakóduje tytéž znaky a navíc ještě znaky `#`, `$`, `&`, `+`, `,`, `/`, `:`, `;`, `=`, `?` a `@`.
 
-So, for a whole URL we can use `encodeURI`:
+Pro celou URL tedy můžeme použít `encodeURI`:
 
 ```js run
-// using cyrillic characters in url path
+// použijeme v URL cestě znaky z kyrilice
 let url = encodeURI('http://site.com/привет');
 
 alert(url); // http://site.com/%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82
 ```
 
-...While for URL parameters we should use `encodeURIComponent` instead:
+...Zatímco pro URL parametry bychom místo ní měli použít `encodeURIComponent`:
 
 ```js run
-let music = encodeURIComponent('Rock&Roll');
+let hudba = encodeURIComponent('Rock&Roll');
 
-let url = `https://google.com/search?q=${music}`;
+let url = `https://google.com/search?q=${hudba}`;
 alert(url); // https://google.com/search?q=Rock%26Roll
 ```
 
-Compare it with `encodeURI`:
+Srovnejte si to s `encodeURI`:
 
 ```js run
-let music = encodeURI('Rock&Roll');
+let hudba = encodeURI('Rock&Roll');
 
-let url = `https://google.com/search?q=${music}`;
+let url = `https://google.com/search?q=${hudba}`;
 alert(url); // https://google.com/search?q=Rock&Roll
 ```
 
-As we can see, `encodeURI` does not encode `&`, as this is a legit character in URL as a whole.
+Jak vidíme, `encodeURI` nezakódovala `&`, protože to je v celé URL legitimní znak.
 
-But we should encode `&` inside a search parameter, otherwise, we get `q=Rock&Roll` - that is actually `q=Rock` plus some obscure parameter `Roll`. Not as intended.
+Uvnitř vyhledávacího parametru bychom však měli `&` zakódovat, jinak dostaneme `q=Rock&Roll` - což je ve skutečnosti `q=Rock` plus nějaký obskurní parametr `Roll`. To není to, co jsme zamýšleli.
 
-So we should use only `encodeURIComponent` for each search parameter, to correctly insert it in the URL string. The safest is to encode both name and value, unless we're absolutely sure that it has only allowed characters.
+Pro každý vyhledávací parametr bychom tedy měli používat jen `encodeURIComponent`, aby jej do URL řetězce vložila korektně. Nejbezpečnějším způsobem je zakódovat název i hodnotu, pokud si nejsme absolutně jisti, že obsahují výhradně povolené znaky.
 
-````smart header="Encoding difference compared to `URL`"
-Classes [URL](https://url.spec.whatwg.org/#url-class) and [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams) are based on the latest URI specification: [RFC3986](https://tools.ietf.org/html/rfc3986), while `encode*` functions are based on the obsolete version [RFC2396](https://www.ietf.org/rfc/rfc2396.txt).
+````smart header="Rozdíl v kódování oproti `URL`"
+Třídy [URL](https://url.spec.whatwg.org/#url-class) a [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams) jsou založeny na nejnovější specifikaci URI: [RFC3986](https://tools.ietf.org/html/rfc3986), zatímco funkce `encode*` jsou založeny na zastaralé verzi [RFC2396](https://www.ietf.org/rfc/rfc2396.txt).
 
-There are a few differences, e.g. IPv6 addresses are encoded differently:
+Je mezi nimi několik rozdílů, např. IPv6 adresy se zakódují odlišně:
 
 ```js run
-// valid url with IPv6 address
+// platná URL s IPv6 adresou
 let url = 'http://[2607:f8b0:4005:802::1007]/';
 
 alert(encodeURI(url)); // http://%5B2607:f8b0:4005:802::1007%5D/
 alert(new URL(url)); // http://[2607:f8b0:4005:802::1007]/
 ```
 
-As we can see, `encodeURI` replaced square brackets `[...]`, that's not correct, the reason is: IPv6 urls did not exist at the time of RFC2396 (August 1998).
+Jak vidíme, `encodeURI` nahradila hranaté závorky `[...]`, což není korektní. Důvodem je, že IPv6 URL v době vzniku RFC2396 (srpen 1998) ještě neexistovaly.
 
-Such cases are rare, `encode*` functions work well most of the time.
+Takové případy jsou však vzácné, většinou funkce `encode*` fungují správně.
 ````

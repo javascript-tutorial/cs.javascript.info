@@ -1,32 +1,32 @@
-class LiveTimer extends HTMLElement {
+class ŽivéHodiny extends HTMLElement {
 
-  render() {
+  vykresli() {
     this.innerHTML = `
-    <time-formatted hour="numeric" minute="numeric" second="numeric">
-    </time-formatted>
+    <formatovany-cas hodiny="numeric" minuty="numeric" sekundy="numeric">
+    </formatovany-cas>
     `;
 
-    this.timerElem = this.firstElementChild;
+    this.elemČasovače = this.firstElementChild;
   }
 
   connectedCallback() { // (2)
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
+    if (!this.vykreslen) {
+      this.vykresli();
+      this.vykreslen = true;
     }
-    this.timer = setInterval(() => this.update(), 1000);
+    this.časovač = setInterval(() => this.update(), 1000);
   }
 
   update() {
-    this.date = new Date();
-    this.timerElem.setAttribute('datetime', this.date);
-    this.dispatchEvent(new CustomEvent('tick', { detail: this.date }));
+    this.datum = new Date();
+    this.elemČasovače.setAttribute('datumčas', this.datum);
+    this.dispatchEvent(new CustomEvent('tik', { detail: this.datum }));
   }
 
   disconnectedCallback() {
-    clearInterval(this.timer); // important to let the element be garbage-collected
+    clearInterval(this.časovač); // důležité, aby element mohl být odstraněn sběračem odpadků
   }
 
 }
 
-customElements.define("live-timer", LiveTimer);
+customElements.define("zive-hodiny", ŽivéHodiny);

@@ -1,455 +1,456 @@
-# JavaScript animations
+# Animace v JavaScriptu
 
-JavaScript animations can handle things that CSS can't.
+Animace v JavaScriptu mohou zvládnout věci, které CSS nedokáže.
 
-For instance, moving along a complex path, with a timing function different from Bezier curves, or an animation on a canvas.
+Například pohyb po složité cestě s časovací funkcí, která je jiná než Bézierova křivka, nebo animaci na plátně.
 
-## Using setInterval
+## Použití setInterval
 
-An animation can be implemented as a sequence of frames -- usually small changes to HTML/CSS properties.
+Animaci je možné implementovat jako posloupnost snímků -- obvykle malých změn HTML/CSS vlastností.
 
-For instance, changing `style.left` from `0px` to `100px` moves the element. And if we increase it in `setInterval`, changing by `2px` with a tiny delay, like 50 times per second, then it looks smooth. That's the same principle as in the cinema: 24 frames per second is enough to make it look smooth.
+Například při měnění `style.left` z `0px` na `100px` se bude posunovat element. A pokud jej zvětšíme v `setInterval` a budeme jej zvyšovat o `2px` s malými prodlevami, třeba 50krát za sekundu, pak to bude vypadat plynule. Je to stejný princip jako v kině: 24 snímků za sekundu stačí, aby film vypadal plynule.
 
-The pseudo-code can look like this:
-
-```js
-let timer = setInterval(function() {
-  if (animation complete) clearInterval(timer);
-  else increase style.left by 2px
-}, 20); // change by 2px every 20ms, about 50 frames per second
-```
-
-More complete example of the animation:
+Pseudokód může vypadat následovně:
 
 ```js
-let start = Date.now(); // remember start time
-
-let timer = setInterval(function() {
-  // how much time passed from the start?
-  let timePassed = Date.now() - start;
-
-  if (timePassed >= 2000) {
-    clearInterval(timer); // finish the animation after 2 seconds
-    return;
-  }
-
-  // draw the animation at the moment timePassed
-  draw(timePassed);
-
-}, 20);
-
-// as timePassed goes from 0 to 2000
-// left gets values from 0px to 400px
-function draw(timePassed) {
-  train.style.left = timePassed / 5 + 'px';
-}
+let časovač = setInterval(function() {
+  if (animace je kompletní) clearInterval(časovač);
+  else zvyš style.left o 2px
+}, 20); // změna o 2px každých 20 ms, přibližně 50 snímků za sekundu
 ```
 
-Click for the demo:
+Úplnější příklad animace:
+
+```js
+    let začátek = Date.now(); // pamatujeme si čas začátku
+
+    let časovač = setInterval(function() {
+      // kolik času uplynulo od začátku?
+      let uplynulýČas = Date.now() - začátek;
+
+      if (uplynulýČas >= 2000) {
+        clearInterval(časovač); // po 2 sekundách ukončíme animaci
+        return;
+      }
+
+      // vykreslíme animaci v okamžiku uplynulýČas
+      vykresli(uplynulýČas);
+
+    }, 20);
+
+    // když uplynulýČas postupuje od 0 do 2000
+    // left nabývá hodnot od 0px do 400px
+    function vykresli(uplynulýČas) {
+      vláček.style.left = uplynulýČas / 5 + 'px';
+    }
+```
+
+Pro ukázku klikněte sem:
 
 [codetabs height=200 src="move"]
 
-## Using requestAnimationFrame
+## Použití requestAnimationFrame
 
-Let's imagine we have several animations running simultaneously.
+Představme si, že máme několik animací, které probíhají současně.
 
-If we run them separately, then even though each one has `setInterval(..., 20)`, then the browser would have to repaint much more often than every `20ms`.
+Pokud spustíme každou zvlášť, pak i když každá bude mít `setInterval(..., 20)`, prohlížeč bude muset překreslovat mnohem častěji než každých `20 ms`.
 
-That's because they have different starting time, so "every 20ms" differs between different animations. The intervals are not aligned. So we'll have several independent runs within `20ms`.
+Je to tím, že každá má jiný počáteční čas, takže „každých 20 ms“ se mezi různými animacemi liší. Intervaly nejsou sjednocené. Budeme tedy mít několik nezávislých běhů každých `20 ms`.
 
-In other words, this:
+Jinými slovy, toto:
 
 ```js
 setInterval(function() {
-  animate1();
-  animate2();
-  animate3();
+  animace1();
+  animace2();
+  animace3();
 }, 20)
 ```
 
-...Is lighter than three independent calls:
+...je lehčí než tři nezávislá volání:
 
 ```js
-setInterval(animate1, 20); // independent animations
-setInterval(animate2, 20); // in different places of the script
-setInterval(animate3, 20);
+setInterval(animace1, 20); // nezávislé animace
+setInterval(animace2, 20); // na různých místech skriptu
+setInterval(animace3, 20);
 ```
 
-These several independent redraws should be grouped together, to make the redraw easier for the browser and hence load less CPU load and look smoother.
+Těchto několik nezávislých překreslení by mělo být seskupeno dohromady, abychom prohlížeči ulehčili překreslování. Tím budeme méně zatěžovat CPU a animace bude plynulejší.
 
-There's one more thing to keep in mind. Sometimes CPU is overloaded, or there are other reasons to redraw less often (like when the browser tab is hidden), so we really shouldn't run it every `20ms`.
+Ještě jednu věc bychom měli mít na paměti. Někdy je CPU přetížená nebo existují jiné důvody, proč překreslovat méně často (například když je záložka prohlížeče skrytá), takže ve skutečnosti bychom neměli spouštět animaci každých `20 ms`.
 
-But how do we know about that in JavaScript? There's a specification [Animation timing](https://www.w3.org/TR/animation-timing/) that provides the function `requestAnimationFrame`. It addresses all these issues and even more.
+Jak se o tom však dozvíme v JavaScriptu? Existuje specifikace [Časování animací](https://www.w3.org/TR/animation-timing/), která poskytuje funkci `requestAnimationFrame`. Ta řeší všechny tyto i další problémy.
 
-The syntax:
+Syntaxe:
 ```js
-let requestId = requestAnimationFrame(callback)
+let idPožadavku = requestAnimationFrame(callback)
 ```
 
-That schedules the `callback` function to run in the closest time when the browser wants to do animation.
+Tím se naplánuje spuštění funkce `callback` v nejbližším okamžiku, kdy prohlížeč bude chtít provádět animaci.
 
-If we do changes in elements in `callback` then they will be grouped together with other `requestAnimationFrame` callbacks and with CSS animations. So there will be one geometry recalculation and repaint instead of many.
+Pokud ve funkci `callback` provedeme změny v elementech, budou seskupeny dohromady s jinými callbacky `requestAnimationFrame` a s CSS animacemi. Místo mnoha přepočtů geometrie a překreslování se tedy provede pouze jeden.
 
-The returned value `requestId` can be used to cancel the call:
+Návratovou hodnotu `idPožadavku` můžeme použít ke zrušení volání:
 ```js
-// cancel the scheduled execution of callback
-cancelAnimationFrame(requestId);
+// zrušíme naplánované provedení callbacku
+cancelAnimationFrame(idPožadavku);
 ```
 
-The `callback` gets one argument -- the time passed from the beginning of the page load in milliseconds. This time can also be obtained by calling [performance.now()](mdn:api/Performance/now).
+Funkce `callback` má jeden argument -- čas v milisekundách uplynulý od začátku načítání stránky. Tento čas můžeme získat i voláním [performance.now()](mdn:api/Performance/now).
 
-Usually `callback` runs very soon, unless the CPU is overloaded or the laptop battery is almost discharged, or there's another reason.
+Obvykle se `callback` spouští velmi brzy, pokud není CPU přetížena, baterie laptopu není téměř vybitá nebo není jiný důvod k jeho nespuštění.
 
-The code below shows the time between first 10 runs for `requestAnimationFrame`. Usually it's 10-20ms:
+Následující kód zobrazuje čas mezi prvními 10 spuštěními `requestAnimationFrame`. Obvykle je to 10-20 ms:
 
 ```html run height=40 refresh
 <script>
-  let prev = performance.now();
-  let times = 0;
+  let předchozí = performance.now();
+  let kolikrát = 0;
 
-  requestAnimationFrame(function measure(time) {
-    document.body.insertAdjacentHTML("beforeEnd", Math.floor(time - prev) + " ");
-    prev = time;
+  requestAnimationFrame(function měř(čas) {
+    document.body.insertAdjacentHTML("beforeEnd", Math.floor(čas - předchozí) + " ");
+    předchozí = čas;
 
-    if (times++ < 10) requestAnimationFrame(measure);
+    if (kolikrát++ < 10) requestAnimationFrame(měř);
   })
 </script>
 ```
 
-## Structured animation
+## Strukturovaná animace
 
-Now we can make a more universal animation function based on `requestAnimationFrame`:
+Nyní můžeme vytvořit univerzálnější animační funkci, založenou na `requestAnimationFrame`:
 
 ```js
-function animate({timing, draw, duration}) {
+function animace({časování, vykreslení, trvání}) {
 
-  let start = performance.now();
+  let začátek = performance.now();
 
-  requestAnimationFrame(function animate(time) {
-    // timeFraction goes from 0 to 1
-    let timeFraction = (time - start) / duration;
-    if (timeFraction > 1) timeFraction = 1;
+  requestAnimationFrame(function animace(čas) {
+    // poměrČasu jde od 0 do 1
+    let poměrČasu = (čas - začátek) / trvání;
+    if (poměrČasu > 1) poměrČasu = 1;
 
-    // calculate the current animation state
-    let progress = timing(timeFraction)
+    // vypočítáme aktuální stav animace
+    let postup = časování(poměrČasu)
 
-    draw(progress); // draw it
+    vykreslení(postup); // vykreslíme ho
 
-    if (timeFraction < 1) {
-      requestAnimationFrame(animate);
+    if (poměrČasu < 1) {
+      requestAnimationFrame(animace);
     }
 
   });
 }
 ```
 
-Function `animate` accepts 3 parameters that essentially describes the animation:
+Funkce `animace` přijímá 3 parametry, které v zásadě popisují celou animaci:
 
-`duration`
-: Total time of animation. Like, `1000`.
+`trvání`
+: Celkový čas animace, například `1000`.
 
-`timing(timeFraction)`
-: Timing function, like CSS-property `transition-timing-function` that gets the fraction of time that passed (`0` at start, `1` at the end) and returns the animation completion (like `y` on the Bezier curve).
+`časování(poměrČasu)`
+: Časovací funkce, podobná CSS vlastnosti `transition-timing-function`, která obdrží poměr uplynulého času (`0` na začátku, `1` na konci) a vrátí míru dokončení animace (podobně jako `y` na Bézierově křivce).
 
-    For instance, a linear function means that the animation goes on uniformly with the same speed:
+    Například lineární funkce znamená, že animace pokračuje rovnoměrně stále stejnou rychlostí:
 
     ```js
-    function linear(timeFraction) {
-      return timeFraction;
+    function lineární(poměrČasu) {
+      return poměrČasu;
     }
     ```
 
-    Its graph:
+    Její graf:
+    
     ![](linear.svg)
 
-    That's just like `transition-timing-function: linear`. There are more interesting variants shown below.
+    Je to jako `transition-timing-function: linear`. Dále uvedeme zajímavější varianty.
 
-`draw(progress)`
-: The function that takes the animation completion state and draws it. The value `progress=0` denotes the beginning animation state, and `progress=1` -- the end state.
+`vykreslení(postup)`
+: Funkce, která obdrží stav dokončení animace a vykreslí jej. Hodnota `postup=0` popisuje počáteční stav animace, `postup=1` koncový stav.
 
-    This is that function that actually draws out the animation.
+    Tato funkce zajistí skutečné vykreslení animace.
 
-    It can move the element:
+    Může přesunovat element:
     ```js
-    function draw(progress) {
-      train.style.left = progress + 'px';
+    function vykresli(postup) {
+      vláček.style.left = postup + 'px';
     }
     ```
 
-    ...Or do anything else, we can animate anything, in any way.
+    ...Nebo provádět cokoli jiného, můžeme animovat cokoli jakýmkoli způsobem.
 
+Animujme pomocí naší funkce šířku elementu `width` od `0` do `100%`.
 
-Let's animate the element `width` from `0` to `100%` using our function.
-
-Click on the element for the demo:
+Pro ukázku klikněte na element:
 
 [codetabs height=60 src="width"]
 
-The code for it:
+Kód animace:
 
 ```js
-animate({
-  duration: 1000,
-  timing(timeFraction) {
-    return timeFraction;
+animace({
+  trvání: 1000,
+  časování(poměrČasu) {
+    return poměrČasu;
   },
-  draw(progress) {
-    elem.style.width = progress * 100 + '%';
+  vykreslení(postup) {
+    elem.style.width = postup * 100 + '%';
   }
 });
 ```
 
-Unlike CSS animation, we can make any timing function and any drawing function here. The timing function is not limited by Bezier curves. And `draw` can go beyond properties, create new elements for like fireworks animation or something.
+Na rozdíl od CSS animací zde můžeme vytvořit jakoukoli časovací a jakoukoli vykreslovací funkci. Časovací funkce se neomezuje na Bézierovy křivky. A `vykreslení` může zacházet za vlastnosti, vytvořit nové elementy pro animaci ve stylu ohňostroje nebo cokoli jiného.
 
-## Timing functions
+## Časovací funkce
 
-We saw the simplest, linear timing function above.
+Výše jsme viděli nejjednodušší, lineární časovací funkci.
 
-Let's see more of them. We'll try movement animations with different timing functions to see how they work.
+Podívejme se na jiné. Vyzkoušíme animace pohybu s různými časovacími funkcemi, abychom viděli, jak fungují.
 
-### Power of n
+### Umocnění na n-tou
 
-If we want to speed up the animation, we can use `progress` in the power `n`.
+Jestliže chceme animaci urychlit, můžeme použít `postup` umocněný na `n`-tou.
 
-For instance, a parabolic curve:
+Například parabolickou křivku:
 
 ```js
-function quad(timeFraction) {
-  return Math.pow(timeFraction, 2)
+function naDruhou(poměrČasu) {
+  return Math.pow(poměrČasu, 2)
 }
 ```
 
-The graph:
+Graf:
 
 ![](quad.svg)
 
-See in action (click to activate):
+Prohlédněte si ji v akci (kliknutím ji aktivujete):
 
 [iframe height=40 src="quad" link]
 
-...Or the cubic curve or even greater `n`. Increasing the power makes it speed up faster.
+...Nebo kubickou křivku nebo ještě větší `n`. Zvýšení exponentu způsobí větší urychlení.
 
-Here's the graph for `progress` in the power `5`:
+Zde je graf pro `postup` na `5`-tou:
 
 ![](quint.svg)
 
-In action:
+V akci:
 
 [iframe height=40 src="quint" link]
 
-### The arc
+### Oblouk
 
-Function:
+Funkce:
 
 ```js
-function circ(timeFraction) {
-  return 1 - Math.sin(Math.acos(timeFraction));
+function kruh(poměrČasu) {
+  return 1 - Math.sin(Math.acos(poměrČasu));
 }
 ```
 
-The graph:
+Graf:
 
 ![](circ.svg)
 
 [iframe height=40 src="circ" link]
 
-### Back: bow shooting
+### Zpět: výstřel z luku
 
-This function does the "bow shooting". First we "pull the bowstring", and then "shoot".
+Následující funkce provádí „výstřel z luku“. Nejprve „natáhneme tětivu“ a pak „vystřelíme“.
 
-Unlike previous functions, it depends on an additional parameter `x`, the "elasticity coefficient". The distance of "bowstring pulling" is defined by it.
+Na rozdíl od předchozích funkcí závisí na dalším parametru `x`, „koeficientu pružnosti“. Je jím definována délka „natažení tětivy“.
 
-The code:
+Kód:
 
 ```js
-function back(x, timeFraction) {
-  return Math.pow(timeFraction, 2) * ((x + 1) * timeFraction - x)
+function zpět(x, poměrČasu) {
+  return Math.pow(poměrČasu, 2) * ((x + 1) * poměrČasu - x)
 }
 ```
 
-**The graph for `x = 1.5`:**
+**Graf pro `x = 1.5`:**
 
 ![](back.svg)
 
-For animation we use it with a specific value of `x`. Example for `x = 1.5`:
+Pro animaci ji použijeme se specifickou hodnotou `x`. Příklad pro `x = 1.5`:
 
 [iframe height=40 src="back" link]
 
-### Bounce
+### Skákání
 
-Imagine we are dropping a ball. It falls down, then bounces back a few times and stops.
+Představme si, že upustíme míč. Dopadne na zem, několikrát odskočí a pak se zastaví.
 
-The `bounce` function does the same, but in the reverse order: "bouncing" starts immediately. It uses few special coefficients for that:
+Funkce `skákání` provádí totéž, ale v obráceném pořadí: „skákání“ začne okamžitě. Používá k tomu několik speciálních koeficientů:
 
 ```js
-function bounce(timeFraction) {
+function skákání(poměrČasu) {
   for (let a = 0, b = 1; 1; a += b, b /= 2) {
-    if (timeFraction >= (7 - 4 * a) / 11) {
-      return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+    if (poměrČasu >= (7 - 4 * a) / 11) {
+      return -Math.pow((11 - 6 * a - 11 * poměrČasu) / 4, 2) + Math.pow(b, 2)
     }
   }
 }
 ```
 
-In action:
+V akci:
 
 [iframe height=40 src="bounce" link]
 
-### Elastic animation
+### Elastická animace
 
-One more "elastic" function that accepts an additional parameter `x` for the "initial range".
+Další „elastická“ funkce, která přijímá další parametr `x` jako „úvodní rozsah“:
 
 ```js
-function elastic(x, timeFraction) {
-  return Math.pow(2, 10 * (timeFraction - 1)) * Math.cos(20 * Math.PI * x / 3 * timeFraction)
+function elastická(x, poměrČasu) {
+  return Math.pow(2, 10 * (poměrČasu - 1)) * Math.cos(20 * Math.PI * x / 3 * poměrČasu)
 }
 ```
 
-**The graph for `x=1.5`:**
+**Graf pro `x=1.5`:**
+
 ![](elastic.svg)
 
-In action for `x=1.5`:
+V akci pro `x=1.5`:
 
 [iframe height=40 src="elastic" link]
 
-## Reversal: ease*
+## Opak: ease*
 
-So we have a collection of timing functions. Their direct application is called "easeIn".
+Máme tedy sadu časovacích funkcí. Jejich přímá aplikace se nazývá „easeIn“.
 
-Sometimes we need to show the animation in the reverse order. That's done with the "easeOut" transform.
+Někdy potřebujeme zobrazit animaci v obráceném pořadí. To provedeme pomocí transformace „easeOut“.
 
 ### easeOut
 
-In the "easeOut" mode the `timing` function is put into a wrapper `timingEaseOut`:
+V režimu „easeOut“ je funkce `časování` umístěna do obalu `časováníEaseOut`:
 
 ```js
-timingEaseOut(timeFraction) = 1 - timing(1 - timeFraction)
+časováníEaseOut(poměrČasu) = 1 - časování(1 - poměrČasu)
 ```
 
-In other words, we have a "transform" function `makeEaseOut` that takes a "regular" timing function and returns the wrapper around it:
+Jinými slovy, máme „transformační“ funkci `vytvořEaseOut`, která vezme „obyčejnou“ časovací funkci a vrátí obal kolem ní:
 
 ```js
-// accepts a timing function, returns the transformed variant
-function makeEaseOut(timing) {
-  return function(timeFraction) {
-    return 1 - timing(1 - timeFraction);
+// přijímá časovací funkci, vrací transformovanou variantu
+function vytvořEaseOut(časování) {
+  return function(poměrČasu) {
+    return 1 - časování(1 - poměrČasu);
   }
 }
 ```
 
-For instance, we can take the `bounce` function described above and apply it:
+Můžeme například vzít výše uvedenou funkci `skákání` a aplikovat ji:
 
 ```js
-let bounceEaseOut = makeEaseOut(bounce);
+let skákáníEaseOut = vytvořEaseOut(skákání);
 ```
 
-Then the bounce will be not in the beginning, but at the end of the animation. Looks even better:
+Pak skákání nebude na začátku, ale na konci animace. Vypadá to ještě lépe:
 
 [codetabs src="bounce-easeout"]
 
-Here we can see how the transform changes the behavior of the function:
+Zde vidíme, jak transformace mění chování funkce:
 
 ![](bounce-inout.svg)
 
-If there's an animation effect in the beginning, like bouncing -- it will be shown at the end.
+Pokud je nějaký efekt, například skákání, na začátku animace, zobrazí se na konci.
 
-In the graph above the <span style="color:#EE6B47">regular bounce</span> has the red color, and the <span style="color:#62C0DC">easeOut bounce</span> is blue.
+V uvedeném grafu má <span style="color:#EE6B47">obvyklé skákání</span> červenou barvu a <span style="color:#62C0DC">skákání easeOut</span> modrou.
 
-- Regular bounce -- the object bounces at the bottom, then at the end sharply jumps to the top.
-- After `easeOut` -- it first jumps to the top, then bounces there.
+- Obvyklé skákání -- objekt skáče na spodku, pak nakonec ostře vyskočí na vrch.
+- Po `easeOut` -- nejprve skočí na vrch, pak skáče tam.
 
 ### easeInOut
 
-We also can show the effect both in the beginning and the end of the animation. The transform is called "easeInOut".
+Můžeme také zobrazit efekt jak na začátku, tak na konci animace. Tato transformace se nazývá „easeInOut“.
 
-Given the timing function, we calculate the animation state like this:
+Ze zadané časovací funkce vypočítáme stav animace následovně:
 
 ```js
-if (timeFraction <= 0.5) { // first half of the animation
-  return timing(2 * timeFraction) / 2;
-} else { // second half of the animation
-  return (2 - timing(2 * (1 - timeFraction))) / 2;
+if (poměrČasu <= 0.5) { // první polovina animace
+  return časování(2 * poměrČasu) / 2;
+} else { // druhá polovina animace
+  return (2 - časování(2 * (1 - poměrČasu))) / 2;
 }
 ```
 
-The wrapper code:
+Kód obalu:
 
 ```js
-function makeEaseInOut(timing) {
-  return function(timeFraction) {
-    if (timeFraction < .5)
-      return timing(2 * timeFraction) / 2;
+function vytvořEaseInOut(časování) {
+  return function(poměrČasu) {
+    if (poměrČasu < .5)
+      return časování(2 * poměrČasu) / 2;
     else
-      return (2 - timing(2 * (1 - timeFraction))) / 2;
+      return (2 - časování(2 * (1 - poměrČasu))) / 2;
   }
 }
 
-bounceEaseInOut = makeEaseInOut(bounce);
+skákáníEaseInOut = vytvořEaseInOut(skákání);
 ```
 
-In action, `bounceEaseInOut`:
+V akci, `skákáníEaseInOut`:
 
 [codetabs src="bounce-easeinout"]
 
-The "easeInOut" transform joins two graphs into one: `easeIn` (regular) for the first half of the animation and `easeOut` (reversed) -- for the second part.
+Transformace „easeInOut“ spojuje dva grafy do jednoho: `easeIn` (obvyklé) pro první polovinu animace a `easeOut` (obrácené) pro druhou polovinu.
 
-The effect is clearly seen if we compare the graphs of `easeIn`, `easeOut` and `easeInOut` of the `circ` timing function:
+Efekt jasně uvidíme, když si porovnáme grafy `easeIn`, `easeOut` a `easeInOut` časovací funkce `kruh`:
 
 ![](circ-ease.svg)
 
-- <span style="color:#EE6B47">Red</span> is the regular variant of `circ` (`easeIn`).
-- <span style="color:#8DB173">Green</span> -- `easeOut`.
-- <span style="color:#62C0DC">Blue</span> -- `easeInOut`.
+- <span style="color:#EE6B47">Červená</span> je obvyklá varianta funkce `kruh` (`easeIn`).
+- <span style="color:#8DB173">Zelená</span> -- `easeOut`.
+- <span style="color:#62C0DC">Modrá</span> -- `easeInOut`.
 
-As we can see, the graph of the first half of the animation is the scaled down `easeIn`, and the second half is the scaled down `easeOut`. As a result, the animation starts and finishes with the same effect.
+Jak vidíme, graf první poloviny animace je zmenšený `easeIn` a druhé poloviny zmenšený `easeOut`. Výsledkem je, že animace začne a skončí stejným efektem.
 
-## More interesting "draw"
+## Zajímavější vykreslování
 
-Instead of moving the element we can do something else. All we need is to write the proper `draw`.
+Místo přesunutí elementu můžeme udělat něco jiného. Stačí napsat vhodnou funkci `vykreslení`.
 
-Here's the animated "bouncing" text typing:
+Zde je animované „skákající“ psaní textu:
 
 [codetabs src="text"]
 
-## Summary
+## Shrnutí
 
-For animations that CSS can't handle well, or those that need tight control, JavaScript can help. JavaScript animations should be implemented via `requestAnimationFrame`. That built-in method allows to setup a callback function to run when the browser will be preparing a repaint. Usually that's very soon, but the exact time depends on the browser.
+JavaScript může pomoci s animacemi, které CSS nedokáže správně zvládnout nebo které potřebují hlubší kontrolu. Animace v JavaScriptu by měly být implementovány funkcí `requestAnimationFrame`. Tato zabudovaná metoda umožňuje nastavit callbackovou funkci, která se spustí, až bude prohlížeč připravovat překreslení. Obvykle k tomu dochází velmi brzy, ale přesný čas závisí na prohlížeči.
 
-When a page is in the background, there are no repaints at all, so the callback won't run: the animation will be suspended and won't consume resources. That's great.
+Když je stránka na pozadí, nedochází k žádným překreslením, takže callback se nespustí: animace bude pozastavena a nebude spotřebovávat zdroje. To je výborné.
 
-Here's the helper `animate` function to setup most animations:
+Následující pomocná funkce `animace` slouží k nastavení většiny animací:
 
 ```js
-function animate({timing, draw, duration}) {
+function animace({časování, vykreslení, trvání}) {
 
-  let start = performance.now();
+  let začátek = performance.now();
 
-  requestAnimationFrame(function animate(time) {
-    // timeFraction goes from 0 to 1
-    let timeFraction = (time - start) / duration;
-    if (timeFraction > 1) timeFraction = 1;
+  requestAnimationFrame(function animace(čas) {
+    // poměrČasu jde od 0 do 1
+    let poměrČasu = (čas - začátek) / trvání;
+    if (poměrČasu > 1) poměrČasu = 1;
 
-    // calculate the current animation state
-    let progress = timing(timeFraction);
+    // vypočítáme aktuální stav animace
+    let postup = časování(poměrČasu);
 
-    draw(progress); // draw it
+    vykreslení(postup); // vykreslíme ho
 
-    if (timeFraction < 1) {
-      requestAnimationFrame(animate);
+    if (poměrČasu < 1) {
+      requestAnimationFrame(animace);
     }
 
   });
 }
 ```
 
-Options:
+Její volby:
 
-- `duration` -- the total animation time in ms.
-- `timing` -- the function to calculate animation progress. Gets a time fraction from 0 to 1, returns the animation progress, usually from 0 to 1.
-- `draw` -- the function to draw the animation.
+- `trvání` -- celkový čas animace v milisekundách.
+- `časování` -- funkce počítající postup animace. Obdrží poměr času od 0 do 1 a vrátí postup animace, obvykle také od 0 do 1.
+- `vykreslení` -- funkce vykreslující animaci.
 
-Surely we could improve it, add more bells and whistles, but JavaScript animations are not applied on a daily basis. They are used to do something interesting and non-standard. So you'd want to add the features that you need when you need them.
+Samozřejmě bychom ji mohli vylepšit a přidat další vychytávky, ale animace v JavaScriptu se nepoužívají každý den. Používají se k provedení něčeho zajímavého a nestandardního. Další vlastnosti tedy budete chtít přidat až ve chvíli, kdy je budete potřebovat.
 
-JavaScript animations can use any timing function. We covered a lot of examples and transformations to make them even more versatile. Unlike CSS, we are not limited to Bezier curves here.
+Animace v JavaScriptu mohou využívat jakoukoli časovací funkci. Uvedli jsme mnoho příkladů a transformací, abychom je učinili ještě všestrannějšími. Na rozdíl od CSS se zde nemusíme omezovat na Bézierovy křivky.
 
-The same is true about `draw`: we can animate anything, not just CSS properties.
+Totéž platí pro `vykreslení`: můžeme animovat cokoli, nejenom CSS vlastnosti.

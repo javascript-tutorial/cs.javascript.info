@@ -1,23 +1,23 @@
 
-Opening tag is `pattern:\[(b|url|quote)]`.
+Otevírací značka je `pattern:\[(b|url|quote)]`.
 
-Then to find everything till the closing tag -- let's use the pattern `pattern:.*?` with flag `pattern:s` to match any character including the newline and then add a backreference to the closing tag.
+Abychom pak našli vše až do uzavírací značky, použijeme vzor `pattern:.*?` s příznakem `pattern:s`, aby našel každý znak včetně nového řádku, a pak přidáme zpětný odkaz na uzavírací značku.
 
-The full pattern: `pattern:\[(b|url|quote)\].*?\[/\1]`.
+Celý vzor: `pattern:\[(b|url|quote)\].*?\[/\1]`.
 
-In action:
+V akci:
 
 ```js run
-let regexp = /\[(b|url|quote)].*?\[\/\1]/gs;
+let rv = /\[(b|url|quote)].*?\[\/\1]/gs;
 
-let str = `
-  [b]hello![/b]
+let řetězec = `
+  [b]ahoj![/b]
   [quote]
     [url]http://google.com[/url]
   [/quote]
 `;
 
-alert( str.match(regexp) ); // [b]hello![/b],[quote][url]http://google.com[/url][/quote]
+alert( řetězec.match(rv) ); // [b]ahoj![/b],[quote][url]http://google.com[/url][/quote]
 ```
 
-Please note that besides escaping `pattern:[`, we had to escape a slash for the closing tag `pattern:[\/\1]`, because normally the slash closes the pattern.
+Prosíme všimněte si, že jsme museli uvést únikový znak nejen před `pattern:[`, ale i před lomítkem uzavírací značky `pattern:[\/\1]`, protože lomítko normálně uzavírá vzor.

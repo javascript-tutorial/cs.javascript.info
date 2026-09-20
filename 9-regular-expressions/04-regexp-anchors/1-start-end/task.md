@@ -1,3 +1,3 @@
-# Regexp ^$
+# Regulární výraz ^$
 
-Which string matches the pattern `pattern:^$`?
+Jaký řetězec odpovídá vzoru `pattern:^$`?

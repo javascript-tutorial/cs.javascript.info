@@ -1,36 +1,36 @@
-In order to insert after the `<body>` tag, we must first find it. We can use the regular expression pattern `pattern:<body.*?>` for that.
+Abychom něco vložili za značku `<body>`, musíme ji napřed najít. Můžeme k tomu použít vzor regulárního výrazu `pattern:<body.*?>`.
 
-In this task, we don't need to modify the `<body>` tag. We only need to add the text after it.
+V této úloze nemusíme měnit značku `<body>`. Potřebujeme jen vložit text za ni.
 
-Here's how we can do it:
-
-```js run
-let str = '...<body style="...">...';
-str = str.replace(/<body.*?>/, '$&<h1>Hello</h1>');
-
-alert(str); // ...<body style="..."><h1>Hello</h1>...
-```
-
-In the replacement string `$&` means the match itself, that is, the part of the source text that corresponds to `pattern:<body.*?>`. It gets replaced by itself plus `<h1>Hello</h1>`.
-
-An alternative is to use lookbehind:
+Můžeme to udělat následovně:
 
 ```js run
-let str = '...<body style="...">...';
-str = str.replace(/(?<=<body.*?>)/, `<h1>Hello</h1>`);
+let řetězec = '...<body style="...">...';
+řetězec = řetězec.replace(/<body.*?>/, '$&<h1>Ahoj</h1>');
 
-alert(str); // ...<body style="..."><h1>Hello</h1>...
+alert(řetězec); // ...<body style="..."><h1>Ahoj</h1>...
 ```
 
-As you can see, there's only lookbehind part in this regexp.
+V nahrazovacím řetězci `$&` znamená samotnou shodu, tedy část zdrojového textu, která odpovídá `pattern:<body.*?>`. Bude nahrazena sama sebou plus `<h1>Ahoj</h1>`.
 
-It works like this:
-- At every position in the text.
-- Check if it's preceded by `pattern:<body.*?>`.
-- If it's so, then we have the match.
+Alternativou je použít zpětné nahlédnutí:
 
-The tag `pattern:<body.*?>` won't be returned. The result of this regexp is literally an empty string, but it matches only at positions preceded by `pattern:<body.*?>`.
+```js run
+let řetězec = '...<body style="...">...';
+řetězec = řetězec.replace(/(?<=<body.*?>)/, `<h1>Ahoj</h1>`);
 
-So it replaces the "empty line", preceded by `pattern:<body.*?>`, with `<h1>Hello</h1>`. That's the insertion after `<body>`.
+alert(řetězec); // ...<body style="..."><h1>Ahoj</h1>...
+```
 
-P.S. Regexp flags, such as `pattern:s` and `pattern:i` can also be useful: `pattern:/<body.*?>/si`. The `pattern:s` flag makes the dot `pattern:.` match a newline character, and `pattern:i` flag makes `pattern:<body>` also match `match:<BODY>` case-insensitively.
+Jak vidíte, tento regulární výraz obsahuje pouze nahlížecí část.
+
+Funguje následovně:
+- Na každé pozici v textu.
+- Ověří, zda jí předchází `pattern:<body.*?>`.
+- Pokud ano, máme shodu.
+
+Značka `pattern:<body.*?>` nebude vrácena. Výsledkem tohoto RV je doslova prázdný řetězec, ale shoda se najde jen na pozicích, před kterými se nachází `pattern:<body.*?>`.
+
+Nahrazuje tedy „prázdný řádek“, jemuž předchází `pattern:<body.*?>`, za `<h1>Ahoj</h1>`. To je vložení za `<body>`.
+
+P.S. Užitečné mohou být i příznaky RV, konkrétně `pattern:s` nebo `pattern:i`: `pattern:/<body.*?>/si`. Příznak `pattern:s` způsobí, že tečka `pattern:.` najde znak nového řádku, a příznak `pattern:i` způsobí, že `pattern:<body>` najde i `match:<BODY>` bez ohledu na malá a velká písmena.

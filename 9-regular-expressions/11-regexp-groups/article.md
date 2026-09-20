@@ -1,31 +1,31 @@
-# Capturing groups
+# Zachytávací skupiny
 
-A part of a pattern can be enclosed in parentheses `pattern:(...)`. This is called a "capturing group".
+Část vzoru můžeme uzavřít do závorek `pattern:(...)`. Tato část se pak nazývá „zachytávací skupina“.
 
-That has two effects:
+Má dva efekty:
 
-1. It allows to get a part of the match as a separate item in the result array.
-2. If we put a quantifier after the parentheses, it applies to the parentheses as a whole.
+1. Umožňuje nám získat část shody jako samostatný prvek pole výsledků.
+2. Jestliže za závorky umístíme kvantifikátor, aplikuje se na závorky jako na celek.
 
-## Examples
+## Příklady
 
-Let's see how parentheses work in examples.
+Na příkladech se podívejme, jak závorky fungují.
 
-### Example: gogogo
+### Příklad: gogogo
 
-Without parentheses, the pattern `pattern:go+` means `subject:g` character, followed by `subject:o` repeated one or more times. For instance, `match:goooo` or `match:gooooooooo`.
+Vzor `pattern:go+` bez závorek znamená znak `subject:g`, po němž následuje jednou nebo vícekrát opakované `subject:o`, například `match:goooo` nebo `match:gooooooooo`.
 
-Parentheses group characters together, so `pattern:(go)+` means `match:go`, `match:gogo`, `match:gogogo` and so on.
+Závorky seskupují znaky dohromady, takže `pattern:(go)+` znamená `match:go`, `match:gogo`, `match:gogogo` a tak dále.
 
 ```js run
-alert( 'Gogogo now!'.match(/(go)+/ig) ); // "Gogogo"
+alert( 'Gogogo teď!'.match(/(go)+/ig) ); // "Gogogo"
 ```
 
-### Example: domain
+### Příklad: doména
 
-Let's make something more complex -- a regular expression to search for a website domain.
+Vytvořme něco složitějšího -- regulární výraz pro hledání domény webového sídla.
 
-For example:
+Příklad:
 
 ```
 mail.com
@@ -33,332 +33,332 @@ users.mail.com
 smith.users.mail.com
 ```
 
-As we can see, a domain consists of repeated words, a dot after each one except the last one.
+Jak vidíme, doména se skládá z opakovaných slov a po každém z nich kromě posledního následuje tečka.
 
-In regular expressions that's `pattern:(\w+\.)+\w+`:
-
-```js run
-let regexp = /(\w+\.)+\w+/g;
-
-alert( "site.com my.site.com".match(regexp) ); // site.com,my.site.com
-```
-
-The search works, but the pattern can't match a domain with a hyphen, e.g. `my-site.com`, because the hyphen does not belong to class `pattern:\w`.
-
-We can fix it by replacing `pattern:\w` with `pattern:[\w-]` in every word except the last one: `pattern:([\w-]+\.)+\w+`.
-
-### Example: email
-
-The previous example can be extended. We can create a regular expression for emails based on it.
-
-The email format is: `name@domain`. Any word can be the name, hyphens and dots are allowed. In regular expressions that's `pattern:[-.\w]+`.
-
-The pattern:
+V regulárních výrazech to je `pattern:(\w+\.)+\w+`:
 
 ```js run
-let regexp = /[-.\w]+@([\w-]+\.)+[\w-]+/g;
+let rv = /(\w+\.)+\w+/g;
 
-alert("my@mail.com @ his@site.com.uk".match(regexp)); // my@mail.com, his@site.com.uk
+alert( "site.com my.site.com".match(rv) ); // site.com,my.site.com
 ```
 
-That regexp is not perfect, but mostly works and helps to fix accidental mistypes. The only truly reliable check for an email can only be done by sending a letter.
+Hledání funguje, ale vzor nenajde doménu s pomlčkou, např. `my-site.com`, protože pomlčka nepatří do třídy `pattern:\w`.
 
-## Parentheses contents in the match
+Můžeme to opravit nahrazením `pattern:\w` za `pattern:[\w-]` v každém slově kromě posledního: `pattern:([\w-]+\.)+\w+`.
 
-Parentheses are numbered from left to right. The search engine memorizes the content matched by each of them and allows to get it in the result.
+### Příklad: e-mail
 
-The method `str.match(regexp)`, if `regexp` has no flag `g`, looks for the first match and returns it as an array:
+Předchozí příklad můžeme rozšířit. Můžeme na jeho základě vytvořit regulární výraz pro e-maily.
 
-1. At index `0`: the full match.
-2. At index `1`: the contents of the first parentheses.
-3. At index `2`: the contents of the second parentheses.
-4. ...and so on...
+Formát e-mailu je: `jméno@doména`. Jméno může být libovolné slovo, jsou povoleny i pomlčky a tečky. V regulárních výrazech to je `pattern:[-.\w]+`.
 
-For instance, we'd like to find HTML tags `pattern:<.*?>`, and process them. It would be convenient to have tag content (what's inside the angles), in a separate variable.
-
-Let's wrap the inner content into parentheses, like this: `pattern:<(.*?)>`.
-
-Now we'll get both the tag as a whole `match:<h1>` and its contents `match:h1` in the resulting array:
+Vzor:
 
 ```js run
-let str = '<h1>Hello, world!</h1>';
+let rv = /[-.\w]+@([\w-]+\.)+[\w-]+/g;
 
-let tag = str.match(/<(.*?)>/);
-
-alert( tag[0] ); // <h1>
-alert( tag[1] ); // h1
+alert("my@mail.com @ his@site.com.uk".match(rv)); // my@mail.com, his@site.com.uk
 ```
 
-### Nested groups
+Tento regulární výraz není dokonalý, ale většinou funguje a pomáhá opravovat neúmyslné překlepy. Jediná skutečně spolehlivá kontrola e-mailu je poslat na něj zprávu.
 
-Parentheses can be nested. In this case the numbering also goes from left to right.
+## Obsah závorek ve shodě
 
-For instance, when searching a tag in `subject:<span class="my">` we may be interested in:
+Závorky jsou číslovány zleva doprava. Vyhledávací motor si pamatuje obsah každé z nich v nalezené shodě a umožňuje ho načíst ve výsledku.
 
-1. The tag content as a whole: `match:span class="my"`.
-2. The tag name: `match:span`.
-3. The tag attributes: `match:class="my"`.
+Metoda `řetězec.match(rv)`, pokud `rv` nemá příznak `g`, najde první shodu a vrátí ji jako pole:
 
-Let's add parentheses for them: `pattern:<(([a-z]+)\s*([^>]*))>`.
+1. Na indexu `0`: celá shoda.
+2. Na indexu `1`: obsah prvních závorek.
+3. Na indexu `2`: obsah druhých závorek.
+4. ...a tak dále...
 
-Here's how they are numbered (left to right, by the opening paren):
+Například chceme najít HTML značky `pattern:<.*?>` a zpracovat je. Bylo by vhodné mít obsah značky (to, co je v lomených závorkách) v samostatné proměnné.
+
+Uzavřeme vnitřní obsah do závorek: `pattern:<(.*?)>`.
+
+Nyní ve výsledném poli získáme jak značku jako celek `match:<h1>`, tak její obsah `match:h1`:
+
+```js run
+let řetězec = '<h1>Ahoj, světe!</h1>';
+
+let značka = řetězec.match(/<(.*?)>/);
+
+alert( značka[0] ); // <h1>
+alert( značka[1] ); // h1
+```
+
+### Vnořené skupiny
+
+Závorky mohou být vnořené. I v takovém případě se číslují zleva doprava.
+
+Například když hledáme značku ve `subject:<span class="moje">`, může nás zajímat:
+
+1. Obsah značky jako celek: `match:span class="moje"`.
+2. Název značky: `match:span`.
+3. Atributy značky: `match:class="moje"`.
+
+Přidejme pro ně závorky: `pattern:<(([a-z]+)\s*([^>]*))>`.
+
+Budou očíslovány následovně (zleva doprava podle otevírací závorky):
 
 ![](regexp-nested-groups-pattern.svg)
 
-In action:
+V akci:
 
 ```js run
-let str = '<span class="my">';
+let řetězec = '<span class="moje">';
 
-let regexp = /<(([a-z]+)\s*([^>]*))>/;
+let rv = /<(([a-z]+)\s*([^>]*))>/;
 
-let result = str.match(regexp);
-alert(result[0]); // <span class="my">
-alert(result[1]); // span class="my"
-alert(result[2]); // span
-alert(result[3]); // class="my"
+let výsledek = řetězec.match(rv);
+alert(výsledek[0]); // <span class="moje">
+alert(výsledek[1]); // span class="moje"
+alert(výsledek[2]); // span
+alert(výsledek[3]); // class="moje"
 ```
 
-The zero index of `result` always holds the full match.
+Nulový index pole `výsledek` obsahuje vždy celou shodu.
 
-Then groups, numbered from left to right by an opening paren. The first group is returned as `result[1]`. Here it encloses the whole tag content.
+Pak následují skupiny, očíslované zleva doprava podle otevírací závorky. První skupina je vrácena ve `výsledek[1]`. V tomto případě obsahuje celý obsah značky.
 
-Then in `result[2]` goes the group from the second opening paren `pattern:([a-z]+)` - tag name, then in `result[3]` the tag: `pattern:([^>]*)`.
+Pak `výsledek[2]` obsahuje skupinu ze druhé otevírací závorky `pattern:([a-z]+)` - název značky, pak `výsledek[3]` obsahuje značku: `pattern:([^>]*)`.
 
-The contents of every group in the string:
+Obsah každé skupiny v řetězci:
 
 ![](regexp-nested-groups-matches.svg)
 
-### Optional groups
+### Nepovinné skupiny
 
-Even if a group is optional and doesn't exist in the match (e.g. has the quantifier `pattern:(...)?`), the corresponding `result` array item is present and equals `undefined`.
+I když je skupina nepovinná a ve shodě se nevyskytuje (např. má kvantifikátor `pattern:(...)?`), odpovídající prvek pole `výsledek` bude přítomen a bude se rovnat `undefined`.
 
-For instance, let's consider the regexp `pattern:a(z)?(c)?`. It looks for `"a"` optionally followed by `"z"` optionally followed by `"c"`.
+Uvažujme například regulární výraz `pattern:a(z)?(c)?`. Hledá `"a"`, po němž může následovat `"z"`, po němž může následovat `"c"`.
 
-If we run it on the string with a single letter `subject:a`, then the result is:
-
-```js run
-let match = 'a'.match(/a(z)?(c)?/);
-
-alert( match.length ); // 3
-alert( match[0] ); // a (whole match)
-alert( match[1] ); // undefined
-alert( match[2] ); // undefined
-```
-
-The array has the length of `3`, but all groups are empty.
-
-And here's a more complex match for the string `subject:ac`:
+Pokud jej spustíme na řetězci obsahujícím jediné písmeno `subject:a`, výsledek bude:
 
 ```js run
-let match = 'ac'.match(/a(z)?(c)?/)
+let shoda = 'a'.match(/a(z)?(c)?/);
 
-alert( match.length ); // 3
-alert( match[0] ); // ac (whole match)
-alert( match[1] ); // undefined, because there's nothing for (z)?
-alert( match[2] ); // c
+alert( shoda.length ); // 3
+alert( shoda[0] ); // a (celá shoda)
+alert( shoda[1] ); // undefined
+alert( shoda[2] ); // undefined
 ```
 
-The array length is permanent: `3`. But there's nothing for the group `pattern:(z)?`, so the result is `["ac", undefined, "c"]`.
+Pole má délku `3`, ale všechny skupiny jsou prázdné.
 
-## Searching for all matches with groups: matchAll
-
-```warn header="`matchAll` is a new method, polyfill may be needed"
-The method `matchAll` is not supported in old browsers.
-
-A polyfill may be required, such as <https://github.com/ljharb/String.prototype.matchAll>.
-```
-
-When we search for all matches (flag `pattern:g`), the `match` method does not return contents for groups.
-
-For example, let's find all tags in a string:
+A zde je složitější shoda pro řetězec `subject:ac`:
 
 ```js run
-let str = '<h1> <h2>';
+let shoda = 'ac'.match(/a(z)?(c)?/)
 
-let tags = str.match(/<(.*?)>/g);
-
-alert( tags ); // <h1>,<h2>
+alert( shoda.length ); // 3
+alert( shoda[0] ); // ac (celá shoda)
+alert( shoda[1] ); // undefined, protože pro (z)? tam nic není
+alert( shoda[2] ); // c
 ```
 
-The result is an array of matches, but without details about each of them. But in practice we usually need contents of capturing groups in the result.
+Délka pole je stále stejná: `3`. Pro skupinu `pattern:(z)?` tam však nic není, takže výsledek je `["ac", undefined, "c"]`.
 
-To get them, we should search using the method `str.matchAll(regexp)`.
+## Hledání všech shod se skupinami: matchAll
 
-It was added to JavaScript language long after `match`, as its "new and improved version".
+```warn header="`matchAll` je nová metoda, možná bude zapotřebí polyfill"
+Metoda `matchAll` není podporována ve starých prohlížečích.
 
-Just like `match`, it looks for matches, but there are 3 differences:
-
-1. It returns not an array, but an iterable object.
-2. When the flag `pattern:g` is present, it returns every match as an array with groups.
-3. If there are no matches, it returns not `null`, but an empty iterable object.
-
-For instance:
-
-```js run
-let results = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
-
-// results - is not an array, but an iterable object
-alert(results); // [object RegExp String Iterator]
-
-alert(results[0]); // undefined (*)
-
-results = Array.from(results); // let's turn it into array
-
-alert(results[0]); // <h1>,h1 (1st tag)
-alert(results[1]); // <h2>,h2 (2nd tag)
+Může být zapotřebí polyfill, například <https://github.com/ljharb/String.prototype.matchAll>.
 ```
 
-As we can see, the first difference is very important, as demonstrated in the line `(*)`. We can't get the match as `results[0]`, because that object is a pseudoarray. We can turn it into a real `Array` using `Array.from`. There are more details about pseudoarrays and iterables in the article <info:iterable>.
+Když hledáme všechny shody (příznak `pattern:g`), metoda `match` nevrací obsahy skupin.
 
-There's no need for `Array.from` if we're looping over results:
+Najděme například všechny značky v řetězci:
 
 ```js run
-let results = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
+let řetězec = '<h1> <h2>';
 
-for(let result of results) {
-  alert(result);
-  // first alert: <h1>,h1
-  // second: <h2>,h2
+let značky = řetězec.match(/<(.*?)>/g);
+
+alert( značky ); // <h1>,<h2>
+```
+
+Výsledkem je pole shod, ale bez detailů o každé z nich. V praxi však zpravidla ve výsledku potřebujeme obsahy zachytávacích skupin.
+ 
+Abychom je získali, měli bychom hledat metodou `řetězec.matchAll(rv)`.
+
+Byla do JavaScriptu přidána až dlouho po `match` jako její „nová a vylepšená verze“.
+
+Hledá shody stejně jako `match`, ale jsou tady 3 rozdíly:
+
+1. Nevrací pole, ale iterovatelný objekt.
+2. Pokud je uveden příznak `pattern:g`, vrací každou shodu jako pole se skupinami.
+3. Nejsou-li žádné shody, nevrací `null`, ale prázdný iterovatelný objekt.
+
+Příklad:
+
+```js run
+let výsledky = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
+
+// výsledky není pole, ale iterovatelný objekt
+alert(výsledky); // [object RegExp String Iterator]
+
+alert(výsledky[0]); // undefined (*)
+
+výsledky = Array.from(výsledky); // změníme ho na pole
+
+alert(výsledky[0]); // <h1>,h1 (1. značka)
+alert(výsledky[1]); // <h2>,h2 (2. značka)
+```
+
+Jak vidíme, první rozdíl je velmi důležitý, jak je ukázáno na řádku `(*)`. Nemůžeme načíst shodu jako `výsledky[0]`, protože tento objekt je pseudopole. Můžeme z něj udělat opravdové `Array` pomocí `Array.from`. Další podrobnosti o pseudopolích a iterovatelných objektech naleznete v článku <info:iterable>.
+
+Pokud výsledky procházíme v cyklu, není `Array.from` nutné:
+
+```js run
+let výsledky = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
+
+for(let výsledek of výsledky) {
+  alert(výsledek);
+  // první alert: <h1>,h1
+  // druhý: <h2>,h2
 }
 ```
 
-...Or using destructuring:
+...Nebo při použití destrukturace:
 
 ```js
-let [tag1, tag2] = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
+let [značka1, značka2] = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
 ```
 
-Every match, returned by `matchAll`, has the same format as returned by `match` without flag `pattern:g`: it's an array with additional properties `index` (match index in the string) and `input` (source string):
+Každá shoda, vrácená metodou `matchAll`, má stejný formát, jako by ji vrátila metoda `match` bez příznaku `pattern:g`: je to pole s dalšími vlastnostmi `index` (index shody v řetězci) a `input` (zdrojový řetězec):
 
 ```js run
-let results = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
+let výsledky = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
 
-let [tag1, tag2] = results;
+let [značka1, značka2] = výsledky;
 
-alert( tag1[0] ); // <h1>
-alert( tag1[1] ); // h1
-alert( tag1.index ); // 0
-alert( tag1.input ); // <h1> <h2>
+alert( značka1[0] ); // <h1>
+alert( značka1[1] ); // h1
+alert( značka1.index ); // 0
+alert( značka1.input ); // <h1> <h2>
 ```
 
-```smart header="Why is a result of `matchAll` an iterable object, not an array?"
-Why is the method designed like that? The reason is simple - for the optimization.
+```smart header="Proč je výsledkem `matchAll` iterovatelný objekt a ne pole?"
+Proč je tato metoda navržena zrovna takto? Důvod je jednoduchý -- kvůli optimalizaci.
 
-The call to `matchAll` does not perform the search. Instead, it returns an iterable object, without the results initially. The search is performed each time we iterate over it, e.g. in the loop.
+Volání `matchAll` neprovádí hledání. Místo toho vrátí iterovatelný objekt, zpočátku bez výsledků. Hledání je prováděno pokaždé, kdy nad ním iterujeme, např. v cyklu.
 
-So, there will be found as many results as needed, not more.
+Bude tedy nalezeno tolik výsledků, kolik potřebujeme, ne více.
 
-E.g. there are potentially 100 matches in the text, but in a `for..of` loop we found 5 of them, then decided it's enough and made a `break`. Then the engine won't spend time finding other 95 matches.
+Například v textu může být 100 shod, ale v cyklu `for..of` nalezneme 5 z nich a pak se rozhodneme, že to stačí, a zavoláme `break`. Motor pak nebude ztrácet čas hledáním dalších 95 shod.
 ```
 
-## Named groups
+## Pojmenované skupiny
 
-Remembering groups by their numbers is hard. For simple patterns it's doable, but for more complex ones counting parentheses is inconvenient. We have a much better option: give names to parentheses.
+Pamatovat si skupiny podle čísel je těžké. U jednoduchých vzorů to dokážeme, ale u složitějších je počítání závorek nepraktické. Máme mnohem lepší možnost: pojmenovat závorky.
 
-That's done by putting `pattern:?<name>` immediately after the opening paren.
+Učiníme to uvedením `pattern:?<jméno>` hned za otevírací závorkou.
 
-For example, let's look for a date in the format "year-month-day":
+Hledejme například datum ve formátu „rok-měsíc-den“:
 
 ```js run
 *!*
-let dateRegexp = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/;
+let rvDatum = /(?<rok>[0-9]{4})-(?<měsíc>[0-9]{2})-(?<den>[0-9]{2})/;
 */!*
-let str = "2019-04-30";
+let řetězec = "2019-04-30";
 
-let groups = str.match(dateRegexp).groups;
+let skupiny = řetězec.match(rvDatum).groups;
 
-alert(groups.year); // 2019
-alert(groups.month); // 04
-alert(groups.day); // 30
+alert(skupiny.rok); // 2019
+alert(skupiny.měsíc); // 04
+alert(skupiny.den); // 30
 ```
 
-As you can see, the groups reside in the `.groups` property of the match.
+Jak vidíte, skupiny se nacházejí ve vlastnosti shody `.groups`.
 
-To look for all dates, we can add flag `pattern:g`.
+Chceme-li najít všechna data, můžeme přidat příznak `pattern:g`.
 
-We'll also need `matchAll` to obtain full matches, together with groups:
+Potřebujeme také `matchAll` k získání celých shod společně se skupinami:
 
 ```js run
-let dateRegexp = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g;
+let rvDatum = /(?<rok>[0-9]{4})-(?<měsíc>[0-9]{2})-(?<den>[0-9]{2})/g;
 
-let str = "2019-10-30 2020-01-01";
+let řetězec = "2019-10-30 2020-01-01";
 
-let results = str.matchAll(dateRegexp);
+let výsledky = řetězec.matchAll(rvDatum);
 
-for(let result of results) {
-  let {year, month, day} = result.groups;
+for(let výsledek of výsledky) {
+  let {rok, měsíc, den} = výsledek.groups;
 
-  alert(`${day}.${month}.${year}`);
-  // first alert: 30.10.2019
-  // second: 01.01.2020
+  alert(`${den}.${měsíc}.${rok}`);
+  // první alert: 30.10.2019
+  // druhý: 01.01.2020
 }
 ```
 
-## Capturing groups in replacement
+## Zachytávací skupiny při nahrazování
 
-Method `str.replace(regexp, replacement)` that replaces all matches with `regexp` in `str` allows to use parentheses contents in the `replacement` string. That's done using `pattern:$n`, where `pattern:n` is the group number.
+Metoda `řetězec.replace(rv, náhrada)`, která nahrazuje všechny shody s regulárním výrazem `rv` v řetězci `řetězec`, umožňuje použít obsah závorek v řetězci `náhrada`. To se provádí pomocí `pattern:$n`, kde `pattern:n` je číslo skupiny.
 
-For example,
+Příklad:
 
 ```js run
-let str = "John Bull";
-let regexp = /(\w+) (\w+)/;
+let řetězec = "Jan Novak";
+let rv = /(\w+) (\w+)/;
 
-alert( str.replace(regexp, '$2, $1') ); // Bull, John
+alert( řetězec.replace(rv, '$2, $1') ); // Novak, Jan
 ```
 
-For named parentheses the reference will be `pattern:$<name>`.
+Odkaz na pojmenované závorky bude `pattern:$<jméno>`.
 
-For example, let's reformat dates from "year-month-day" to "day.month.year":
+Například přeformátujme data z formátu „rok-měsíc-den“ na „den.měsíc.rok“:
 
 ```js run
-let regexp = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g;
+let rv = /(?<rok>[0-9]{4})-(?<měsíc>[0-9]{2})-(?<den>[0-9]{2})/g;
 
-let str = "2019-10-30, 2020-01-01";
+let řetězec = "2019-10-30, 2020-01-01";
 
-alert( str.replace(regexp, '$<day>.$<month>.$<year>') );
+alert( řetězec.replace(rv, '$<den>.$<měsíc>.$<rok>') );
 // 30.10.2019, 01.01.2020
 ```
 
-## Non-capturing groups with ?:
+## Nezachytávací skupiny s ?:
 
-Sometimes we need parentheses to correctly apply a quantifier, but we don't want their contents in results.
+Někdy potřebujeme závorky k tomu, abychom správně aplikovali kvantifikátor, ale jejich obsah nechceme mít ve výsledcích.
 
-A group may be excluded by adding `pattern:?:` in the beginning.
+Skupinu můžeme vyloučit z výsledků uvedením `pattern:?:` na jejím začátku.
 
-For instance, if we want to find `pattern:(go)+`, but don't want the parentheses contents (`go`) as a separate array item, we can write: `pattern:(?:go)+`.
+Například když chceme najít `pattern:(go)+`, ale nechceme mít obsah závorek (`go`) jako samostatný prvek pole, můžeme napsat: `pattern:(?:go)+`.
 
-In the example below we only get the name `match:John` as a separate member of the match:
+V následujícím příkladu získáme jako samostatný prvek shody jedině jméno `match:Jan`:
 
 ```js run
-let str = "Gogogo John!";
+let řetězec = "Gogogo Jan!";
 
 *!*
-// ?: excludes 'go' from capturing
-let regexp = /(?:go)+ (\w+)/i;
+// ?: vyloučí 'go' ze zachytávání
+let rv = /(?:go)+ (\w+)/i;
 */!*
 
-let result = str.match(regexp);
+let výsledek = řetězec.match(rv);
 
-alert( result[0] ); // Gogogo John (full match)
-alert( result[1] ); // John
-alert( result.length ); // 2 (no more items in the array)
+alert( výsledek[0] ); // Gogogo Jan (celá shoda)
+alert( výsledek[1] ); // Jan
+alert( výsledek.length ); // 2 (pole neobsahuje další prvky)
 ```
 
-## Summary
+## Shrnutí
 
-Parentheses group together a part of the regular expression, so that the quantifier applies to it as a whole.
+Závorky seskupují dohromady část regulárního výrazu, takže kvantifikátor se na ně aplikuje jako na celek.
 
-Parentheses groups are numbered left-to-right, and can optionally be named with  `(?<name>...)`.
+Závorkové skupiny jsou očíslovány zleva doprava a mohou být pojmenovány pomocí `(?<jméno>...)`.
 
-The content, matched by a group, can be obtained in the results:
+Obsah, kterému odpovídá skupina, můžeme získat ve výsledcích:
 
-- The method `str.match` returns capturing groups only without flag `pattern:g`.
-- The method `str.matchAll` always returns capturing groups.
+- Metoda `řetězec.match` vrací zachytávací skupiny jen bez příznaku `pattern:g`.
+- Metoda `řetězec.matchAll` vrací zachytávací skupiny vždy.
 
-If the parentheses have no name, then their contents is available in the match array by its number. Named parentheses are also available in the property `groups`.
+Pokud závorky nemají jméno, je jejich obsah dostupný v poli shod podle jejich čísla. Pojmenované závorky jsou k dispozici i ve vlastnosti `groups`.
 
-We can also use parentheses contents in the replacement string in `str.replace`: by the number `$n` or the name `$<name>`.
+Obsah závorek můžeme použít i v nahrazovacím řetězci v metodě `řetězec.replace`: podle čísla `$n` nebo jména `$<jméno>`.
 
-A group may be excluded from numbering by adding `pattern:?:` in its start. That's used when we need to apply a quantifier to the whole group, but don't want it as a separate item in the results array. We also can't reference such parentheses in the replacement string.
+Skupinu můžeme vyloučit z číslování uvedením `pattern:?:` na jejím začátku. To používáme, když potřebujeme aplikovat kvantifikátor na celou skupinu, ale nechceme ji jako samostatný prvek v poli výsledků. Na takové závorky se také nemůžeme odkazovat v nahrazovacím řetězci.

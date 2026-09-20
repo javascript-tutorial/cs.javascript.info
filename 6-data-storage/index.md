@@ -1,2 +1,2 @@
 
-# Storing data in the browser
+# Ukládání dat v prohlížeči

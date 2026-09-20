@@ -8,15 +8,15 @@
 <body>
 
   <form id="form">
-    <input type="text" placeholder="Enter message" name="message">
-    <input type="submit" value="Click to send">
+    <input type="text" placeholder="Zadejte zprávu" name="zpráva">
+    <input type="submit" value="Kliknutím ji odešlete">
   </form>
 
   <iframe src="iframe.html" id="iframe" style="display:block;height:60px"></iframe>
 
   <script>
     form.onsubmit = function() {
-      iframe.contentWindow.postMessage(this.message.value, '*');
+      iframe.contentWindow.postMessage(this.zpráva.value, '*');
       return false;
     };
   </script>

@@ -1,9 +1,9 @@
 
-Solution:
+Řešení:
 
 ```js run
-let regexp = /\.{3,}/g;
-alert( "Hello!... How goes?.....".match(regexp) ); // ..., .....
+let rv = /\.{3,}/g;
+alert( "Ahoj!... Jak se máš?.....".match(rv) ); // ..., .....
 ```
 
-Please note that the dot is a special character, so we have to escape it and insert as `\.`.
+Prosíme všimněte si, že tečka je speciální znak, takže před ni musíme vložit únikový znak: `\.`.

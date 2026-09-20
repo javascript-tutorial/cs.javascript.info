@@ -1,4 +1,4 @@
 
-Please note:
-1. We clear `setInterval` timer when the element is removed from the document. That's important, otherwise it continues ticking even if not needed any more. And the browser can't clear the memory from this element and referenced by it.
-2. We can access current date as `elem.date` property. All class methods and properties are naturally element methods and properties.
+Prosíme všimněte si:
+1. Když je element odstraněn z dokumentu, smažeme časovač `setInterval`. To je důležité, jinak by tikal dál, i když by už nebyl zapotřebí. A prohlížeč by ho nemohl odstranit z paměti a vyčistit paměť, na kterou se odkazuje.
+2. K aktuálnímu datu můžeme přistupovat ve vlastnosti `elem.datum`. Všechny třídní metody a vlastnosti jsou samozřejmě metody a vlastnosti elementu.

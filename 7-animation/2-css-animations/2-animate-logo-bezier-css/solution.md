@@ -1,7 +1,7 @@
-We need to choose the right Bezier curve for that animation. It should have `y>1` somewhere for the plane to "jump out".
+Musíme zvolit správnou Bézierovu křivku pro tuto animaci. Měla by někde mít `y>1`, aby letadlo „poskočilo“.
 
-For instance, we can take both control points with `y>1`, like: `cubic-bezier(0.25, 1.5, 0.75, 1.5)`.
+Můžeme například vzít oba řídící body s `y>1`, třeba: `cubic-bezier(0.25, 1.5, 0.75, 1.5)`.
 
-The graph:
+Graf:
 
 ![](bezier-up.svg)

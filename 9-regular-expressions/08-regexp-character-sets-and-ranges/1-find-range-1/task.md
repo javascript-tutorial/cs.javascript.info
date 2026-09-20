@@ -1,5 +1,5 @@
 # Java[^script]
 
-We have a regexp `pattern:/Java[^script]/`.
+Máme regulární výraz `pattern:/Java[^script]/`.
 
-Does it match anything in the string `subject:Java`? In the string `subject:JavaScript`?
+Najde shodu v řetězci `subject:Java`? A v řetězci `subject:JavaScript`?

@@ -1,177 +1,177 @@
-# Patterns and flags
+# Vzory a příznaky
 
-Regular expressions are patterns that provide a powerful way to search and replace in text.
+Regulární výrazy jsou vzory, které poskytují mocný způsob, jak hledat a nahrazovat části textu.
 
-In JavaScript, they are available via the [RegExp](mdn:js/RegExp) object, as well as being integrated in methods of strings.
+V JavaScriptu jsou k dispozici pomocí objektu [RegExp](mdn:js/RegExp) a jsou také integrovány do metod řetězců.
 
-## Regular Expressions
+## Regulární výrazy
 
-A regular expression (also "regexp", or just "reg") consists of a *pattern* and optional *flags*.
+Regulární výraz (RV, „regular expression“, „regexp“ nebo jen „reg“) se skládá z *vzoru* a nepovinných *příznaků* (neboli *vlajek*).
 
-There are two syntaxes that can be used to create a regular expression object.
+K vytvoření objektu regulárního výrazu můžeme použít dvě syntaxe.
 
-The "long" syntax:
-
-```js
-regexp = new RegExp("pattern", "flags");
-```
-
-And the "short" one, using slashes `"/"`:
+„Dlouhá“ syntaxe:
 
 ```js
-regexp = /pattern/; // no flags
-regexp = /pattern/gmi; // with flags g,m and i (to be covered soon)
+rv = new RegExp("vzor", "příznaky");
 ```
 
-Slashes `pattern:/.../` tell JavaScript that we are creating a regular expression. They play the same role as quotes for strings.
-
-In both cases `regexp` becomes an instance of the built-in `RegExp` class.
-
-The main difference between these two syntaxes is that pattern using slashes `/.../` does not allow for expressions to be inserted (like string template literals with `${...}`). They are fully static.
-
-Slashes are used when we know the regular expression at the code writing time -- and that's the most common situation. While `new RegExp` is more often used when we need to create a regexp "on the fly" from a dynamically generated string. For instance:
+A „krátká“ syntaxe pomocí lomítek `"/"`:
 
 ```js
-let tag = prompt("What tag do you want to find?", "h2");
-
-let regexp = new RegExp(`<${tag}>`); // same as /<h2>/ if answered "h2" in the prompt above
+rv = /vzor/; // bez příznaků
+rv = /vzor/gmi; // s příznaky g, m, i (budou vysvětleny dále)
 ```
 
-## Flags
+Lomítka `pattern:/.../` říkají JavaScriptu, že vytváříme regulární výraz. Hrají stejnou roli jako uvozovky u řetězců.
 
-Regular expressions may have flags that affect the search.
+V obou případech se `rv` stane instancí zabudované třídy `RegExp`.
 
-There are only 6 of them in JavaScript:
+Hlavní rozdíl mezi těmito dvěma syntaxemi spočívá v tom, že vzor uvnitř lomítek `/.../` neumožňuje vkládání výrazů (jako šablonové literály řetězců v `${...}`). Je zcela statický.
+
+Lomítka používáme tehdy, když známe regulární výraz již při psaní kódu -- a to je nejběžnější situace. Naproti tomu `new RegExp` se častěji používá, když potřebujeme vytvořit regulární výraz „za běhu“ z dynamicky generovaného řetězce. Příklad:
+
+```js
+let značka = prompt("Kterou značku chcete najít?", "h2");
+
+let rv = new RegExp(`<${značka}>`); // totéž jako /<h2>/, pokud odpověď na tuto otázku byla "h2"
+```
+
+## Příznaky
+
+Regulární výrazy mohou obsahovat příznaky, které ovlivňují hledání.
+
+V JavaScriptu je jich pouze 6:
 
 `pattern:i`
-: With this flag the search is case-insensitive: no difference between `A` and `a` (see the example below).
+: S tímto příznakem se při hledání nerozlišují malá a velká písmena: není rozdíl mezi `A` a `a` (viz příklad níže).
 
 `pattern:g`
-: With this flag the search looks for all matches, without it -- only the first match is returned.
+: S tímto příznakem se najdou všechny shody, bez něj bude vrácena jenom první shoda.
 
 `pattern:m`
-: Multiline mode (covered in the chapter <info:regexp-multiline-mode>).
+: Víceřádkový režim (bude vysvětlen v kapitole <info:regexp-multiline-mode>).
 
 `pattern:s`
-: Enables "dotall" mode, that allows a dot `pattern:.` to match newline character `\n` (covered in the chapter <info:regexp-character-classes>).
+: Umožňuje „všetečkový“ („dotall“) režim, v němž tečce `pattern:.` může odpovídat znak nového řádku `\n` (bude vysvětlen v kapitole <info:regexp-character-classes>).
 
 `pattern:u`
-: Enables full Unicode support. The flag enables correct processing of surrogate pairs. More about that in the chapter <info:regexp-unicode>.
+: Umožňuje plnou podporu Unicode. Tento příznak umožňuje správné zpracování zástupných párů. Více se o tom dozvíte v kapitole <info:regexp-unicode>.
 
 `pattern:y`
-: "Sticky" mode: searching at the exact position in the text  (covered in the chapter <info:regexp-sticky>)
+: „Lepkavý“ („sticky“) režim: hledání na přesně dané pozici v textu (bude vysvětlen v kapitole <info:regexp-sticky>).
 
-```smart header="Colors"
-From here on the color scheme is:
+```smart header="Barvy"
+Dále budeme používat následující barevné schéma:
 
-- regexp -- `pattern:red`
-- string (where we search) -- `subject:blue`
-- result -- `match:green`
+- regulární výraz -- `pattern:červený`
+- řetězec (v němž hledáme) -- `subject:modrý`
+- výsledek -- `match:zelený`
 ```
 
-## Searching: str.match
+## Hledání: řetězec.match
 
-As mentioned previously, regular expressions are integrated with string methods.
+Jak jsme již zmínili, regulární výrazy jsou integrovány s řetězcovými metodami.
 
-The method `str.match(regexp)` finds all matches of `regexp` in the string `str`.
+Metoda `řetězec.match(rv)` nalezne v řetězci `řetězec` všechny shody s `rv`.
 
-It has 3 working modes:
+Má tři režimy práce:
 
-1. If the regular expression has flag `pattern:g`, it returns an array of all matches:
+1. Pokud regulární výraz má příznak `pattern:g`, vrátí pole se všemi shodami:
     ```js run
-    let str = "We will, we will rock you";
+    let řetězec = "Prší, prší, jen se leje";
 
-    alert( str.match(/we/gi) ); // We,we (an array of 2 substrings that match)
+    alert( řetězec.match(/prší/gi) ); // Prší,prší (pole 2 podřetězců, které se shodují)
     ```
-    Please note that both `match:We` and `match:we` are found, because flag `pattern:i` makes the regular expression case-insensitive.
+    Prosíme všimněte si, že jsou nalezeny `match:Prší` i `match:prší`, protože příznak `pattern:i` způsobí, že regulární výraz nerozlišuje malá a velká písmena.
 
-2. If there's no such flag it returns only the first match in the form of an array, with the full match at index `0` and some additional details in properties:
+2. Pokud tento příznak není nastaven, vrátí se jen první shoda ve formě pole, které obsahuje celou shodu na indexu `0` a některé další podrobnosti ve svých vlastnostech:
     ```js run
-    let str = "We will, we will rock you";
+    let řetězec = "Prší, prší, jen se leje";
 
-    let result = str.match(/we/i); // without flag g
+    let výsledek = řetězec.match(/prší/i); // bez příznaku g
 
-    alert( result[0] );     // We (1st match)
-    alert( result.length ); // 1
+    alert( výsledek[0] );     // Prší (1. shoda)
+    alert( výsledek.length ); // 1
 
-    // Details:
-    alert( result.index );  // 0 (position of the match)
-    alert( result.input );  // We will, we will rock you (source string)
+    // Podrobnosti:
+    alert( výsledek.index );  // 0 (pozice shody)
+    alert( výsledek.input );  // Prší, prší, jen se leje (zdrojový řetězec)
     ```
-    The array may have other indexes, besides `0` if a part of the regular expression is enclosed in parentheses. We'll cover that in the chapter  <info:regexp-groups>.
+    Pokud je část regulárního výrazu uzavřena do závorek, může pole obsahovat i jiné indexy než `0`. Probereme to v kapitole <info:regexp-groups>.
 
-3. And, finally, if there are no matches, `null` is returned (doesn't matter if there's flag `pattern:g` or not).
+3. A konečně, jestliže nebyla nalezena žádná shoda, vrátí se `null` (nezáleží na tom, zda je nastaven příznak `pattern:g`).
 
-    This a very important nuance. If there are no matches, we don't receive an empty array, but instead receive `null`. Forgetting about that may lead to errors, e.g.:
+    To je velmi důležitý detail. Pokud nejsou nalezeny žádné shody, neobdržíme prázdné pole, ale obdržíme `null`. Když na to zapomeneme, můžeme dělat chyby, například:
 
     ```js run
-    let matches = "JavaScript".match(/HTML/); // = null
+    let shody = "JavaScript".match(/HTML/); // = null
 
-    if (!matches.length) { // Error: Cannot read property 'length' of null
-      alert("Error in the line above");
+    if (!shody.length) { // Error: Cannot read property 'length' of null
+      alert("Chyba na výše uvedeném řádku");
     }
     ```
 
-    If we'd like the result to always be an array, we can write it this way:
+    Kdybychom chtěli, aby výsledkem bylo vždy pole, můžeme to zapsat následovně:
 
     ```js run
-    let matches = "JavaScript".match(/HTML/)*!* || []*/!*;
+    let shody = "JavaScript".match(/HTML/)*!* || []*/!*;
 
-    if (!matches.length) {
-      alert("No matches"); // now it works
+    if (!shody.length) {
+      alert("Žádná shoda"); // teď to funguje
     }
     ```
 
-## Replacing: str.replace
+## Nahrazování: řetězec.replace
 
-The method `str.replace(regexp, replacement)` replaces matches found using `regexp` in string `str` with `replacement` (all matches if there's flag `pattern:g`, otherwise, only the first one).
+Metoda `řetězec.replace(rv, náhrada)` nahradí v řetězci `řetězec` shody nalezené regulárním výrazem `rv` za řetězec `náhrada` (pokud je uveden příznak `pattern:g`, nahradí všechny shody, jinak pouze první).
 
-For instance:
+Příklad:
 
 ```js run
-// no flag g
-alert( "We will, we will".replace(/we/i, "I") ); // I will, we will
+// bez příznaku g
+alert( "Prší, prší".replace(/prší/i, "sněží") ); // sněží, prší
 
-// with flag g
-alert( "We will, we will".replace(/we/ig, "I") ); // I will, I will
+// s příznakem g
+alert( "Prší, prší".replace(/prší/ig, "sněží") ); // sněží, sněží
 ```
 
-The second argument is the `replacement` string. We can use special character combinations in it to insert fragments of the match:
+Druhým argumentem je řetězec `náhrada`. V něm můžeme použít kombinace speciálních znaků, abychom vložili části shody:
 
-| Symbols | Action in the replacement string |
+| Symboly | Akce v nahrazovacím řetězci |
 |--------|--------|
-|`$&`|inserts the whole match|
-|<code>$&#096;</code>|inserts a part of the string before the match|
-|`$'`|inserts a part of the string after the match|
-|`$n`|if `n` is a 1-2 digit number, then it inserts the contents of n-th parentheses, more about it in the chapter <info:regexp-groups>|
-|`$<name>`|inserts the contents of the parentheses with the given `name`, more about it in the chapter <info:regexp-groups>|
-|`$$`|inserts character `$` |
+|`$&`|vloží celou shodu|
+|<code>$&#096;</code>|vloží část řetězce před shodou|
+|`$'`|vloží část řetězce za shodou|
+|`$n`|pokud `n` je 1-2ciferné číslo, vloží obsah n-tých závorek, podrobněji o tom v kapitole <info:regexp-groups>|
+|`$<jméno>`|vloží obsah závorek se jménem `jméno`, podrobněji o tom v kapitole <info:regexp-groups>|
+|`$$`|vloží znak `$` |
 
-An example with `pattern:$&`:
-
-```js run
-alert( "I love HTML".replace(/HTML/, "$& and JavaScript") ); // I love HTML and JavaScript
-```
-
-## Testing: regexp.test
-
-The method `regexp.test(str)` looks for at least one match, if found, returns `true`, otherwise `false`.
+Příklad s `pattern:$&`:
 
 ```js run
-let str = "I love JavaScript";
-let regexp = /LOVE/i;
-
-alert( regexp.test(str) ); // true
+alert( "Mám rád HTML".replace(/HTML/, "$& a JavaScript") ); // Mám rád HTML a JavaScript
 ```
 
-Later in this chapter we'll study more regular expressions, walk through more examples, and also meet other methods.
+## Testování: rv.test
 
-Full information about the methods is given in the article <info:regexp-methods>.
+Metoda `rv.test(řetězec)` hledá alespoň jednu shodu. Pokud ji najde, vrátí `true`, jinak vrátí `false`.
 
-## Summary
+```js run
+let řetězec = "Mám rád JavaScript";
+let rv = /RÁD/i;
 
-- A regular expression consists of a pattern and optional flags: `pattern:g`, `pattern:i`, `pattern:m`, `pattern:u`, `pattern:s`, `pattern:y`.
-- Without flags and special symbols  (that we'll study later), the search by a regexp is the same as a substring search.
-- The method `str.match(regexp)` looks for matches: all of them if there's `pattern:g` flag, otherwise, only the first one.
-- The method `str.replace(regexp, replacement)` replaces matches found using `regexp` with `replacement`: all of them if there's `pattern:g` flag, otherwise only the first one.
-- The method `regexp.test(str)` returns `true` if there's at least one match, otherwise, it returns `false`.
+alert( rv.test(řetězec) ); // true
+```
+
+Později v této kapitole prostudujeme další regulární výrazy, projdeme další příklady a setkáme se i s dalšími metodami.
+
+Všechny informace o metodách uvádíme v článku <info:regexp-methods>.
+
+## Shrnutí
+
+- Regulární výraz se skládá ze vzoru a nepovinných příznaků: `pattern:g`, `pattern:i`, `pattern:m`, `pattern:u`, `pattern:s`, `pattern:y`.
+- Bez příznaků a speciálních symbolů (které prostudujeme později) je hledání podle RV stejné jako hledání podřetězce.
+- Metoda `řetězec.match(rv)` hledá shody: pokud je nastaven příznak `pattern:g`, najde všechny, jinak najde pouze první.
+- Metoda `řetězec.replace(rv, náhrada)` nahradí shody nalezené podle `rv` řetězcem `náhrada`: pokud je nastaven příznak `pattern:g`, nahradí všechny, jinak nahradí pouze první.
+- Metoda `rv.test(řetězec)` vrátí `true`, pokud je nalezena aspoň jedna shoda, jinak vrátí `false`.

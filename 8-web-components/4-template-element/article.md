@@ -1,24 +1,24 @@
 
-# Template element
+# Element šablony
 
-A built-in `<template>` element serves as a storage for HTML markup templates. The browser ignores its contents, only checks for syntax validity, but we can access and use it in JavaScript, to create other elements.
+Zabudovaný element `<template>` slouží jako úložiště šablon HTML kódu. Prohlížeč ignoruje jeho obsah a zkontroluje jen správnost syntaxe, ale v JavaScriptu k němu můžeme přistupovat a používat ho k vytvoření dalších elementů.
 
-In theory, we could create any invisible element somewhere in HTML for HTML markup storage purposes. What's special about `<template>`?
+Teoreticky můžeme pro účely uložení HTML kódu vytvořit někde v HTML jakýkoli neviditelný element. Co je na `<template>` zvláštního?
 
-First, its content can be any valid HTML, even if it normally requires a proper enclosing tag.
+Především jeho obsahem může být libovolný HTML, i když by normálně vyžadoval příslušnou uzavírací značku.
 
-For example, we can put there a table row `<tr>`:
+Například do něj můžeme vložit řádek tabulky `<tr>`:
 ```html
 <template>
   <tr>
-    <td>Contents</td>
+    <td>Obsah</td>
   </tr>
 </template>
 ```
 
-Usually, if we try to put `<tr>` inside, say, a `<div>`, the browser detects the invalid DOM structure and "fixes" it, adds `<table>` around. That's not what we want. On the other hand, `<template>` keeps exactly what we place there.
+Zpravidla když se pokusíme vložit `<tr>` třeba dovnitř `<div>`, prohlížeč detekuje vadnou strukturu DOMu a „opraví“ ji tak, že kolem ní přidá `<table>`. To není to, co chceme. Naproti tomu `<template>` uchovává přesně to, co tam umístíme.
 
-We can put styles and scripts into `<template>` as well:
+Do `<template>` můžeme ukládat i styly a skripty:
 
 ```html
 <template>
@@ -26,91 +26,91 @@ We can put styles and scripts into `<template>` as well:
     p { font-weight: bold; }
   </style>
   <script>
-    alert("Hello");
+    alert("Ahoj");
   </script>
 </template>
 ```
 
-The browser considers `<template>` content "out of the document": styles are not applied, scripts are not executed, `<video autoplay>` is not run, etc.
+Prohlížeč zachází s obsahem `<template>`, jako by byl „mimo dokument“: styly se neaplikují, skripty se nespustí, `<video autoplay>` se nepřehraje a podobně.
 
-The content becomes live (styles apply, scripts run etc) when we insert it into the document.
+Obsah ožije (styly se aplikují, skripty se spustí atd.), až když jej vložíme do dokumentu.
 
-## Inserting template
+## Vložení šablony
 
-The template content is available in its `content` property as a [DocumentFragment](info:modifying-document#document-fragment) -- a special type of DOM node.
+Obsah šablony je k dispozici v její vlastnosti `content` jako [DocumentFragment](info:modifying-document#document-fragment) -- zvláštní typ DOM uzlu.
 
-We can treat it as any other DOM node, except one special property: when we insert it somewhere, its children are inserted instead.
+Můžeme s ním zacházet jako s kterýmkoli jiným DOM uzlem až na jednu speciální vlastnost: když ho někam vložíme, namísto něj se vloží jeho děti.
 
-For example:
+Příklad:
 
 ```html run
-<template id="tmpl">
+<template id="šablona">
   <script>
-    alert("Hello");
+    alert("Ahoj");
   </script>
-  <div class="message">Hello, world!</div>
+  <div class="zpráva">Ahoj, světe!</div>
 </template>
 
 <script>
   let elem = document.createElement('div');
 
 *!*
-  // Clone the template content to reuse it multiple times
-  elem.append(tmpl.content.cloneNode(true));
+  // Naklonujeme obsah šablony, abychom ho mohli použít vícekrát
+  elem.append(šablona.content.cloneNode(true));
 */!*
 
   document.body.append(elem);
-  // Now the script from <template> runs
+  // Nyní se skript z <template> spustí
 </script>
 ```
 
-Let's rewrite a Shadow DOM example from the previous chapter using `<template>`:
+Přepišme příklad stínového DOMu z minulé kapitoly pomocí `<template>`:
 
 ```html run untrusted autorun="no-epub" height=60
-<template id="tmpl">
+<template id="šablona">
   <style> p { font-weight: bold; } </style>
-  <p id="message"></p>
+  <p id="zpráva"></p>
 </template>
 
-<div id="elem">Click me</div>
+<div id="elem">Klikněte na mě</div>
 
 <script>
   elem.onclick = function() {
     elem.attachShadow({mode: 'open'});
 
 *!*
-    elem.shadowRoot.append(tmpl.content.cloneNode(true)); // (*)
+    elem.shadowRoot.append(šablona.content.cloneNode(true)); // (*)
 */!*
 
-    elem.shadowRoot.getElementById('message').innerHTML = "Hello from the shadows!";
+    elem.shadowRoot.getElementById('zpráva').innerHTML = "Ahoj ze stínu!";
   };
 </script>
 ```
 
-In the line `(*)` when we clone and insert `tmpl.content`, as its `DocumentFragment`, its children (`<style>`, `<p>`) are inserted instead.
+Když na řádku `(*)` naklonujeme a vložíme `šablona.content`, vloží se namísto něj jeho děti (`<style>`, `<p>`), protože je to `DocumentFragment`.
 
-They form the shadow DOM:
+Budou tvořit stínový DOM:
 
 ```html
 <div id="elem">
   #shadow-root
     <style> p { font-weight: bold; } </style>
-    <p id="message"></p>
+    <p id="zpráva"></p>
 </div>
 ```
 
-## Summary
+## Shrnutí
 
-To summarize:
+Když to shrneme:
 
-- `<template>` content can be any syntactically correct HTML.
-- `<template>` content is considered "out of the document", so it doesn't affect anything.
-- We can access `template.content` from JavaScript, clone it to reuse in a new component.
+- Obsahem `<template>` může být jakýkoli syntakticky správný HTML.
+- S obsahem `<template>` se zachází, jako by byl „mimo dokument“, takže nic neovlivní.
+- V JavaScriptu můžeme přistupovat k obsahu šablony `šablona.content` a naklonovat ho, abychom ho mohli použít v nové komponentě.
 
-The `<template>` tag is quite unique, because:
+Značka `<template>` je poměrně unikátní, neboť:
 
-- The browser checks HTML syntax inside it (as opposed to using a template string inside a script).
-- ...But still allows use of any top-level HTML tags, even those that don't make sense without proper wrappers (e.g. `<tr>`).
-- The content becomes interactive: scripts run, `<video autoplay>` plays etc, when inserted into the document.
+- Prohlížeč kontroluje syntaxi HTML uvnitř ní (na rozdíl od řetězce se šablonou uvnitř skriptu).
+- ...Stále však umožňuje použít libovolné HTML značky nejvyšší úrovně, včetně těch, které bez příslušných obklopujících značek nedávají smysl (např. `<tr>`).
+- Obsah se stane interaktivním, až bude vložen do dokumentu: skripty se spustí, `<video autoplay>` se začne přehrávat atd.
 
-The `<template>` element does not feature any iteration mechanisms, data binding or variable substitutions, but we can implement those on top of it.
+Element `<template>` neobsahuje žádné iterační mechanismy, datové vazby nebo substituce proměnných, ale můžeme si je na něm implementovat.

@@ -1,15 +1,15 @@
-# Find HTML tags
+# Najděte HTML značky
 
-Create a regular expression to find all (opening and closing) HTML tags with their attributes.
+Vytvořte regulární výraz, který najde všechny (otevírací i uzavírací) HTML značky i s jejich atributy.
 
-An example of use:
+Příklad použití:
 
 ```js run
-let regexp = /your regexp/g;
+let rv = /váš RV/g;
 
-let str = '<> <a href="/"> <input type="radio" checked> <b>';
+let řetězec = '<> <a href="/"> <input type="radio" checked> <b>';
 
-alert( str.match(regexp) ); // '<a href="/">', '<input type="radio" checked>', '<b>'
+alert( řetězec.match(rv) ); // '<a href="/">', '<input type="radio" checked>', '<b>'
 ```
 
-Here we assume that tag attributes may not contain `<` and `>` (inside quotes too), that simplifies things a bit.
+Zde předpokládáme, že atributy značky nesmějí obsahovat `<` a `>` (ani v uvozovkách), což úlohu trochu zjednoduší.

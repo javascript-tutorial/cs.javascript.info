@@ -1,13 +1,13 @@
-# Find the full tag
+# Najděte celou značku
 
-Write a regexp to find the tag `<style...>`. It should match the full tag: it may have no attributes  `<style>` or have several of them `<style type="..." id="...">`.
+Napište regulární výraz, který najde značku `<style...>`. Měl by najít celou značku: nemusí mít žádné atributy `<style>` nebo jich může mít několik `<style type="..." id="...">`.
 
-...But the regexp should not match `<styler>`!
+...Tento RV by však neměl najít `<styler>`!
 
-For instance:
+Příklad:
 
 ```js
-let regexp = /your regexp/g;
+let rv = /váš RV/g;
 
-alert( '<style> <styler> <style test="...">'.match(regexp) ); // <style>, <style test="...">
+alert( '<style> <styler> <style test="...">'.match(rv) ); // <style>, <style test="...">
 ```

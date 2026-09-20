@@ -1,25 +1,25 @@
-# Find bbtag pairs
+# Najděte dvojice BB-značek
 
-A "bb-tag" looks like `[tag]...[/tag]`, where `tag` is one of: `b`, `url` or `quote`.
+„BB-značka“ vypadá jako `[značka]...[/značka]`, kde `značka` je jedna z následujících: `b`, `url` nebo `quote`.
 
-For instance:
+Například:
 ```
 [b]text[/b]
 [url]http://google.com[/url]
 ```
 
-BB-tags can be nested. But a tag can't be nested into itself, for instance:
+BB-značky lze vnořit do sebe. Značka však nemůže být vnořena do stejné značky, například:
 
 ```
-Normal:
+Běžné:
 [url] [b]http://google.com[/b] [/url]
 [quote] [b]text[/b] [/quote]
 
-Can't happen:
+Nemůže se stát:
 [b][b]text[/b][/b]
 ```
 
-Tags can contain line breaks, that's normal:
+Značky mohou obsahovat konce řádků, to se běžně stává:
 
 ```
 [quote]
@@ -27,22 +27,22 @@ Tags can contain line breaks, that's normal:
 [/quote]
 ```
 
-Create a regexp to find all BB-tags with their contents.
+Vytvořte regulární výraz, který najde všechny BB-značky i s jejich obsahem.
 
-For instance:
+Například:
 
 ```js
-let regexp = /your regexp/flags;
+let rv = /váš RV/příznaky;
 
-let str = "..[url]http://google.com[/url]..";
-alert( str.match(regexp) ); // [url]http://google.com[/url]
+let řetězec = "..[url]http://google.com[/url]..";
+alert( řetězec.match(rv) ); // [url]http://google.com[/url]
 ```
 
-If tags are nested, then we need the outer tag (if we want we can continue the search in its content):
+Pokud jsou značky vnořené, potřebujeme vnější značku (pokud chceme, můžeme pokračovat v hledání v jejím obsahu):
 
 ```js
-let regexp = /your regexp/flags;
+let rv = /váš RV/příznaky;
 
-let str = "..[url][b]http://google.com[/b][/url]..";
-alert( str.match(regexp) ); // [url][b]http://google.com[/b][/url]
+let řetězec = "..[url][b]http://google.com[/b][/url]..";
+alert( řetězec.match(rv) ); // [url][b]http://google.com[/b][/url]
 ```

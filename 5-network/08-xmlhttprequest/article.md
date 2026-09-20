@@ -1,160 +1,160 @@
 # XMLHttpRequest
 
-`XMLHttpRequest` is a built-in browser object that allows to make HTTP requests in JavaScript.
+`XMLHttpRequest` je zabudovaný prohlížečový objekt, který umožňuje v JavaScriptu vytvářet HTTP požadavky.
 
-Despite having the word "XML" in its name, it can operate on any data, not only in XML format. We can upload/download files, track progress and much more.
+Přestože má v názvu slovo „XML“, může pracovat s libovolnými daty, nejenom s formátem XML. Můžeme odesílat a stahovat soubory, sledovat průběh a mnoho dalšího.
 
-Right now, there's another, more modern method `fetch`, that somewhat deprecates `XMLHttpRequest`.
+V současnosti existuje jiná, modernější metoda `fetch`, která `XMLHttpRequest` poněkud odsouvá do pozadí.
 
-In modern web-development `XMLHttpRequest` is used for three reasons:
+Při vývoji moderních webů se `XMLHttpRequest` používá ze tří důvodů:
 
-1. Historical reasons: we need to support existing scripts with `XMLHttpRequest`.
-2. We need to support old browsers, and don't want polyfills (e.g. to keep scripts tiny).
-3. We need something that `fetch` can't do yet, e.g. to track upload progress.
+1. Historické důvody: potřebujeme podporovat již existující skripty obsahující `XMLHttpRequest`.
+2. Musíme podporovat staré prohlížeče a nechceme používat polyfilly (např. aby skripty zůstaly krátké).
+3. Potřebujeme něco, co `fetch` zatím neumí, např. sledovat průběh odesílání.
 
-Does that sound familiar? If yes, then all right, go on with `XMLHttpRequest`. Otherwise, please head on to <info:fetch>.
+Zdá se vám to povědomé? Pokud ano, je to v pořádku a můžete pokračovat k `XMLHttpRequest`. Jinak prosíme přejděte k <info:fetch>.
 
-## The basics
+## Základy
 
-XMLHttpRequest has two modes of operation: synchronous and asynchronous.
+XMLHttpRequest má dva režimy práce: synchronní a asynchronní.
 
-Let's see the asynchronous first, as it's used in the majority of cases.
+Nejprve se podíváme na asynchronní, který se používá ve většině případů.
 
-To do the request, we need 3 steps:
+K provedení požadavku musíme učinit čtyři kroky:
 
-1. Create `XMLHttpRequest`:
+1. Vytvoříme `XMLHttpRequest`:
     ```js
     let xhr = new XMLHttpRequest();
     ```
-    The constructor has no arguments.
+    Konstruktor nemá žádné argumenty.
 
-2. Initialize it, usually right after `new XMLHttpRequest`:
+2. Inicializujeme ho, zpravidla hned po `new XMLHttpRequest`:
     ```js
-    xhr.open(method, URL, [async, user, password])
+    xhr.open(metoda, URL, [async, uživatel, heslo])
+    ```
+    
+    Tato metoda specifikuje hlavní parametry požadavku:
+
+    - `metoda` -- HTTP metoda. Obvykle `"GET"` nebo `"POST"`.
+    - `URL` -- požadovaná URL, řetězec, může to být i objekt [URL](info:url).
+    - `async` -- pokud je výslovně nastaven na `false`, bude požadavek synchronní, probereme to zanedlouho.
+    - `uživatel`, `heslo` -- uživatelské jméno a heslo pro základní HTTP autentifikaci (pokud jsou potřeba).
+
+    Prosíme všimněte si, že volání `open` přes svůj název neotevírá spojení, ale jen konfiguruje požadavek. Síťová aktivita začíná teprve voláním `send`.
+
+3. Pošleme požadavek.
+
+    ```js
+    xhr.send([tělo])
     ```
 
-    This method specifies the main parameters of the request:
+    Tato metoda otevírá spojení a posílá požadavek na server. Nepovinný parametr `tělo` obsahuje tělo požadavku.
 
-    - `method` -- HTTP-method. Usually `"GET"` or `"POST"`.
-    - `URL` -- the URL to request, a string, can be [URL](info:url) object.
-    - `async` -- if explicitly set to `false`, then the request is synchronous, we'll cover that a bit later.
-    - `user`, `password` -- login and password for basic HTTP auth (if required).
+    Některé metody požadavků, např. `GET`, nemají žádné tělo. Jiné metody, např. `POST`, používají `tělo` k odeslání dat na server. Příklady uvidíme později.
 
-    Please note that `open` call, contrary to its name, does not open the connection. It only configures the request, but the network activity only starts with the call of `send`.
+4. Nasloucháme událostem `xhr`, abychom získali odpověď.
 
-3. Send it out.
-
-    ```js
-    xhr.send([body])
-    ```
-
-    This method opens the connection and sends the request to server. The optional `body` parameter contains the request body.
-
-    Some request methods like `GET` do not have a body. And some of them like `POST` use `body` to send the data to the server. We'll see examples of that later.
-
-4. Listen to `xhr` events for response.
-
-    These three events are the most widely used:
-    - `load` -- when the request is complete (even if HTTP status is like 400 or 500), and the response is fully downloaded.
-    - `error` -- when the request couldn't be made, e.g. network down or invalid URL.
-    - `progress` -- triggers periodically while the response is being downloaded, reports how much has been downloaded.
+    Nejčastěji se používají tyto tři události:
+    - `load` -- když je požadavek dokončen (i když HTTP status je např. 400 nebo 500) a celá odpověď je přijata.
+    - `error` -- když se požadavek nepodařilo provést, např. kvůli nefunkční síti nebo špatné URL.
+    - `progress` -- spouští se periodicky během stahování odpovědi, oznamuje, kolik bylo staženo.
 
     ```js
     xhr.onload = function() {
-      alert(`Loaded: ${xhr.status} ${xhr.response}`);
+      alert(`Načteno: ${xhr.status} ${xhr.response}`);
     };
 
-    xhr.onerror = function() { // only triggers if the request couldn't be made at all
-      alert(`Network Error`);
+    xhr.onerror = function() { // spustí se jen tehdy, když se požadavek vůbec nepovedlo provést
+      alert(`Chyba sítě`);
     };
 
-    xhr.onprogress = function(event) { // triggers periodically
-      // event.loaded - how many bytes downloaded
-      // event.lengthComputable = true if the server sent Content-Length header
-      // event.total - total number of bytes (if lengthComputable)
-      alert(`Received ${event.loaded} of ${event.total}`);
+    xhr.onprogress = function(událost) { // spouští se periodicky
+      // událost.loaded - kolik bytů bylo staženo
+      // událost.lengthComputable = true, pokud server poslal hlavičku Content-Length
+      // událost.total - celkový počet bytů (je-li lengthComputable)
+      alert(`Získáno ${událost.loaded} z ${událost.total}`);
     };
     ```
 
-Here's a full example. The code below loads the URL at `/article/xmlhttprequest/example/load` from the server and prints the progress:
+Následuje celý příklad. Uvedený kód načítá z URL na `/article/xmlhttprequest/example/load` ze serveru a vypisuje průběh:
 
 ```js run
-// 1. Create a new XMLHttpRequest object
+// 1. Vytvoříme nový objekt XMLHttpRequest
 let xhr = new XMLHttpRequest();
 
-// 2. Configure it: GET-request for the URL /article/.../load
+// 2. Nakonfigurujeme ho: požadavek GET na URL /article/.../load
 xhr.open('GET', '/article/xmlhttprequest/example/load');
 
-// 3. Send the request over the network
+// 3. Pošleme požadavek po síti
 xhr.send();
 
-// 4. This will be called after the response is received
+// 4. Toto bude voláno po přijetí odpovědi
 xhr.onload = function() {
-  if (xhr.status != 200) { // analyze HTTP status of the response
-    alert(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-  } else { // show the result
-    alert(`Done, got ${xhr.response.length} bytes`); // response is the server response
+  if (xhr.status != 200) { // analýza HTTP statusu odpovědi
+    alert(`Chyba ${xhr.status}: ${xhr.statusText}`); // např. 404: Not Found
+  } else { // zobrazení odpovědi
+    alert(`Hotovo, přijato ${xhr.response.length} bytů`); // response je odpověď serveru
   }
 };
 
-xhr.onprogress = function(event) {
-  if (event.lengthComputable) {
-    alert(`Received ${event.loaded} of ${event.total} bytes`);
+xhr.onprogress = function(událost) {
+  if (událost.lengthComputable) {
+    alert(`Přijato ${událost.loaded} z ${událost.total} bytů`);
   } else {
-    alert(`Received ${event.loaded} bytes`); // no Content-Length
+    alert(`Přijato ${událost.loaded} bytů`); // není Content-Length
   }
 
 };
 
 xhr.onerror = function() {
-  alert("Request failed");
+  alert("Požadavek neuspěl");
 };
 ```
 
-Once the server has responded, we can receive the result in the following `xhr` properties:
+Jakmile server odpoví, můžeme získat výsledek z následujících vlastností `xhr`:
 
 `status`
-: HTTP status code (a number): `200`, `404`, `403` and so on, can be `0` in case of a non-HTTP failure.
+: Kód HTTP statusu (číslo): `200`, `404`, `403` a podobně, v případě selhání mimo HTTP může být `0`.
 
 `statusText`
-: HTTP status message (a string): usually `OK` for `200`, `Not Found` for `404`, `Forbidden` for `403` and so on.
+: Zpráva HTTP statusu (řetězec): obvykle `OK` pro `200`, `Not Found` pro `404`, `Forbidden` pro `403` a podobně.
 
-`response` (old scripts may use `responseText`)
-: The server response body.
+`response` (staré skripty mohou používat `responseText`)
+: Tělo odpovědi serveru.
 
-We can also specify a timeout using the corresponding property:
+Můžeme také specifikovat časový limit pomocí vlastnosti `timeout`:
 
 ```js
-xhr.timeout = 10000; // timeout in ms, 10 seconds
+xhr.timeout = 10000; // časový limit v ms, 10 sekund
 ```
 
-If the request does not succeed within the given time, it gets canceled and `timeout` event triggers.
+Jestliže požadavek během stanovené doby neuspěje, bude zrušen a vyvolá se událost `timeout`.
 
-````smart header="URL search parameters"
-To add parameters to URL, like `?name=value`, and ensure the proper encoding, we can use [URL](info:url) object:
+````smart header="Vyhledávací parametry URL"
+K přidání parametrů do URL, např. `?název=hodnota`, a zajištění správného kódování můžeme použít objekt [URL](info:url):
 
 ```js
 let url = new URL('https://google.com/search');
-url.searchParams.set('q', 'test me!');
+url.searchParams.set('q', 'otestuj mne!');
 
-// the parameter 'q' is encoded
-xhr.open('GET', url); // https://google.com/search?q=test+me%21
+// parametr 'q' je zakódován
+xhr.open('GET', url); // https://google.com/search?q=otestuj+mne%21
 ```
 
 ````
 
-## Response Type
+## Typ odpovědi
 
-We can use `xhr.responseType` property to set the response format:
+K nastavení formátu odpovědi můžeme použít vlastnost `xhr.responseType`:
 
-- `""` (default) -- get as string,
-- `"text"` -- get as string,
-- `"arraybuffer"` -- get as `ArrayBuffer` (for binary data, see chapter <info:arraybuffer-binary-arrays>),
-- `"blob"` -- get as `Blob` (for binary data, see chapter <info:blob>),
-- `"document"` -- get as XML document (can use XPath and other XML methods) or HTML document (based on the MIME type of the received data),
-- `"json"` -- get as JSON (parsed automatically).
+- `""` (standardně) -- získáme ji jako řetězec,
+- `"text"` -- získáme ji jako řetězec,
+- `"arraybuffer"` -- získáme ji jako `ArrayBuffer` (pro binární data, viz kapitolu <info:arraybuffer-binary-arrays>),
+- `"blob"` -- získáme ji jako `Blob` (pro binární data, viz kapitolu <info:blob>),
+- `"document"` -- získáme ji jako XML dokument (můžeme používat XPath a jiné metody XML) nebo HTML dokument (podle MIME typu přijatých dat),
+- `"json"` -- získáme ji jako JSON (automaticky se rozparsuje).
 
-For example, let's get the response as JSON:
+Získejme například odpověď jako JSON:
 
 ```js run
 let xhr = new XMLHttpRequest();
@@ -167,67 +167,67 @@ xhr.responseType = 'json';
 
 xhr.send();
 
-// the response is {"message": "Hello, world!"}
+// odpověď je {"message": "Hello, world!"}
 xhr.onload = function() {
-  let responseObj = xhr.response;
-  alert(responseObj.message); // Hello, world!
+  let objOdpovědi = xhr.response;
+  alert(objOdpovědi.message); // Hello, world!
 };
 ```
 
 ```smart
-In the old scripts you may also find `xhr.responseText` and even `xhr.responseXML` properties.
+Ve starých skriptech můžete najít i vlastnosti `xhr.responseText` a dokonce `xhr.responseXML`.
 
-They exist for historical reasons, to get either a string or XML document. Nowadays, we should set the format in `xhr.responseType` and get `xhr.response` as demonstrated above.
+Ty existují z historických důvodů, abychom získali řetězec anebo XML dokument. V současnosti bychom měli nastavit formát v `xhr.responseType` a načíst `xhr.response`, jak je ukázáno výše.
 ```
 
-## Ready states
+## Stavy připravenosti
 
-`XMLHttpRequest` changes between states as it progresses. The current state is accessible as  `xhr.readyState`.
+`XMLHttpRequest` během zpracování požadavku mění svůj stav. Jeho aktuální stav je k dispozici v `xhr.readyState`.
 
-All states, as in [the specification](https://xhr.spec.whatwg.org/#states):
+Všechny stavy podle [specifikace](https://xhr.spec.whatwg.org/#states):
 
 ```js
-UNSENT = 0; // initial state
-OPENED = 1; // open called
-HEADERS_RECEIVED = 2; // response headers received
-LOADING = 3; // response is loading (a data packet is received)
-DONE = 4; // request complete
+UNSENT = 0; // úvodní stav
+OPENED = 1; // voláno open
+HEADERS_RECEIVED = 2; // přijaty hlavičky odpovědi
+LOADING = 3; // odpověď se načítá (byl přijat datový paket)
+DONE = 4; // odpověď kompletní
 ```
 
-An `XMLHttpRequest` object travels them in the order `0` -> `1` -> `2` -> `3` -> ... -> `3` -> `4`. State `3` repeats every time a data packet is received over the network.
+Objekt `XMLHttpRequest` mezi nimi přechází v pořadí `0` -> `1` -> `2` -> `3` -> ... -> `3` -> `4`. Stav `3` se opakuje pokaždé, když je ze sítě přijat datový paket.
 
-We can track them using `readystatechange` event:
+Můžeme je sledovat pomocí události `readystatechange`:
 
 ```js
 xhr.onreadystatechange = function() {
   if (xhr.readyState == 3) {
-    // loading
+    // načítání
   }
   if (xhr.readyState == 4) {
-    // request finished
+    // požadavek hotov
   }
 };
 ```
 
-You can find `readystatechange` listeners in really old code, it's there for historical reasons, as there was a time when there were no `load` and other events. Nowadays, `load/error/progress` handlers deprecate it.
+Posluchače události `readystatechange` najdete v zastaralém kódu. Jsou tam z historických důvodů, jelikož v dřívější době neexistovala `load` a jiné události. V dnešní době je vytlačují handlery `load/error/progress`.
 
-## Aborting request
+## Zrušení požadavku
 
-We can terminate the request at any time. The call to `xhr.abort()` does that:
+Požadavek můžeme kdykoli zrušit voláním `xhr.abort()`:
 
 ```js
-xhr.abort(); // terminate the request
+xhr.abort(); // zruší požadavek
 ```
 
-That triggers `abort` event, and `xhr.status` becomes `0`.
+Tím se vyvolá událost `abort` a `xhr.status` se nastaví na `0`.
 
-## Synchronous requests
+## Synchronní požadavky
 
-If in the `open` method the third parameter `async` is set to `false`, the request is made synchronously.
+Pokud je v metodě `open` třetí parametr `async` nastaven na `false`, požadavek se provede synchronně.
 
-In other words, JavaScript execution pauses at `send()` and resumes when the response is received. Somewhat like `alert` or `prompt` commands.
+Jinými slovy, běh JavaScriptu se při `send()` pozastaví a obnoví se až po přijetí odpovědi. Podobá se to příkazům `alert` nebo `prompt`.
 
-Here's the rewritten example, the 3rd parameter of `open` is `false`:
+Následuje přepsaný příklad, v němž je třetí parametr `open` nastaven na `false`:
 
 ```js
 let xhr = new XMLHttpRequest();
@@ -237,72 +237,72 @@ xhr.open('GET', '/article/xmlhttprequest/hello.txt', *!*false*/!*);
 try {
   xhr.send();
   if (xhr.status != 200) {
-    alert(`Error ${xhr.status}: ${xhr.statusText}`);
+    alert(`Chyba ${xhr.status}: ${xhr.statusText}`);
   } else {
     alert(xhr.response);
   }
-} catch(err) { // instead of onerror
-  alert("Request failed");
+} catch(err) { // místo onerror
+  alert("Požadavek neuspěl");
 }
 ```
 
-It might look good, but synchronous calls are used rarely, because they block in-page JavaScript till the loading is complete. In some browsers it becomes impossible to scroll. If a synchronous call takes too much time, the browser may suggest to close the "hanging" webpage.
+Možná to vypadá dobře, ale synchronní volání se používají jen vzácně, protože blokují JavaScript na stránce, dokud načítání neskončí. V některých prohlížečích přitom není možné rolovat. Jestliže synchronní volání trvá příliš dlouho, prohlížeč může navrhnout zavření „zaseknuté“ stránky.
 
-Many advanced capabilities of `XMLHttpRequest`, like requesting from another domain or specifying a timeout, are unavailable for synchronous requests. Also, as you can see, no progress indication.
+Pro synchronní požadavky není k dispozici množství pokročilých vlastností `XMLHttpRequest`, například požadavek na jinou doménu nebo nastavení časového limitu. Navíc, jak vidíte, nemůžeme sledovat průběh načítání.
 
-Because of all that, synchronous requests are used very sparingly, almost never. We won't talk about them any more.
+Kvůli tomu všemu se synchronní požadavky používají jen velmi zřídka, téměř vůbec. Nebudeme o nich nadále hovořit.
 
-## HTTP-headers
+## HTTP hlavičky
 
-`XMLHttpRequest` allows both to send custom headers and read headers from the response.
+`XMLHttpRequest` umožňuje posílat vlastní hlavičky i číst hlavičky odpovědi.
 
-There are 3 methods for HTTP-headers:
+Pro HTTP hlavičky existují tři metody:
 
-`setRequestHeader(name, value)`
-: Sets the request header with the given `name` and `value`.
+`setRequestHeader(název, hodnota)`
+: Nastaví hlavičku požadavku s názvem `název` na hodnotu `hodnota`.
 
-    For instance:
+    Příklad:
 
     ```js
     xhr.setRequestHeader('Content-Type', 'application/json');
     ```
 
-    ```warn header="Headers limitations"
-    Several headers are managed exclusively by the browser, e.g. `Referer` and `Host`.
-    The full list is [in the specification](https://xhr.spec.whatwg.org/#the-setrequestheader()-method).
+    ```warn header="Omezení hlaviček"
+    Některé hlavičky, např. `Referer` a `Host`, jsou spravovány výlučně prohlížečem.
+    Jejich úplný seznam najdete ve [specifikaci](https://xhr.spec.whatwg.org/#the-setrequestheader()-method).
 
-    `XMLHttpRequest` is not allowed to change them, for the sake of user safety and correctness of the request.
+    Z důvodů bezpečnosti uživatele a korektnosti požadavku nemá `XMLHttpRequest` dovoleno je měnit.
     ```
 
-    ````warn header="Can't remove a header"
-    Another peculiarity of `XMLHttpRequest` is that one can't undo `setRequestHeader`.
+    ````warn header="Nemůžeme odstranit hlavičku"
+    Další zvláštností `XMLHttpRequest` je, že nemůžeme `setRequestHeader` zrušit.
 
-    Once the header is set, it's set. Additional calls add information to the header, don't overwrite it.
+    Jakmile je hlavička nastavena, je nastavena. Další volání přidají do hlavičky informace, nepřepíší ji.
 
-    For instance:
+    Příklad:
 
     ```js
     xhr.setRequestHeader('X-Auth', '123');
     xhr.setRequestHeader('X-Auth', '456');
 
-    // the header will be:
+    // hlavička bude:
     // X-Auth: 123, 456
     ```
     ````
 
-`getResponseHeader(name)`
-: Gets the response header with the given `name` (except `Set-Cookie` and `Set-Cookie2`).
+`getResponseHeader(název)`
+: Vrátí hlavičku odpovědi s názvem `název` (kromě `Set-Cookie` a `Set-Cookie2`).
 
-    For instance:
+    Příklad:
 
     ```js
     xhr.getResponseHeader('Content-Type')
     ```
 
 `getAllResponseHeaders()`
-: Returns all response headers, except `Set-Cookie` and `Set-Cookie2`.
+: Vrátí všechny hlavičky odpovědi kromě `Set-Cookie` a `Set-Cookie2`.
 
-    Headers are returned as a single line, e.g.:
+    Každá hlavička je vrácena na samostatném řádku, například:
 
     ```http
     Cache-Control: max-age=31536000
@@ -311,57 +311,57 @@ There are 3 methods for HTTP-headers:
     Date: Sat, 08 Sep 2012 16:53:16 GMT
     ```
 
-    The line break between headers is always `"\r\n"` (doesn't depend on OS), so we can easily split it into individual headers. The separator between the name and the value is always a colon followed by a space `": "`. That's fixed in the specification.
+    Konce řádků mezi hlavičkami jsou vždy `"\r\n"` (nezávisle na OS), takže můžeme řetězec snadno rozdělit na jednotlivé hlavičky. Oddělovač mezi názvem a hodnotou hlavičky je vždy dvojtečka následovaná mezerou `": "`. To je pevně dáno ve specifikaci.
 
-    So, if we want to get an object with name/value pairs, we need to throw in a bit JS.
+    Jestliže tedy chceme získat objekt obsahující dvojice název/hodnota, musíme přidat krátký kód v JS.
 
-    Like this (assuming that if two headers have the same name, then the latter one overwrites the former one):
+    Například takto (předpokládáme, že pokud dvě hlavičky mají stejný název, pak druhá přepíše tu první):
 
     ```js
-    let headers = xhr
+    let hlavičky = xhr
       .getAllResponseHeaders()
       .split('\r\n')
-      .reduce((result, current) => {
-        let [name, value] = current.split(': ');
-        result[name] = value;
-        return result;
+      .reduce((výsledek, aktuální) => {
+        let [název, hodnota] = aktuální.split(': ');
+        výsledek[název] = hodnota;
+        return výsledek;
       }, {});
 
-    // headers['Content-Type'] = 'image/png'
+    // hlavičky['Content-Type'] = 'image/png'
     ```
 
 ## POST, FormData
 
-To make a POST request, we can use the built-in [FormData](mdn:api/FormData) object.
+K vytvoření požadavku POST můžeme použít zabudovaný objekt [FormData](mdn:api/FormData).
 
-The syntax:
+Syntaxe:
 
 ```js
-let formData = new FormData([form]); // creates an object, optionally fill from <form>
-formData.append(name, value); // appends a field
+let formData = new FormData([form]); // vytvoří objekt, může ho vyplnit z <form>
+formData.append(název, hodnota); // přidá pole
 ```
 
-We create it, optionally fill from a form, `append` more fields if needed, and then:
+Vytvoříme ho, můžeme ho vyplnit z formuláře, v případě potřeby přidáme další pole pomocí `append` a pak:
 
-1. `xhr.open('POST', ...)` – use `POST` method.
-2. `xhr.send(formData)` to submit the form to the server.
+1. `xhr.open('POST', ...)` – použijeme metodu `POST`.
+2. `xhr.send(formData)` odešle formulář na server.
 
-For instance:
+Příklad:
 
 ```html run refresh
-<form name="person">
-  <input name="name" value="John">
-  <input name="surname" value="Smith">
+<form name="osoba">
+  <input name="name" value="Jan">
+  <input name="surname" value="Novák">
 </form>
 
 <script>
-  // pre-fill FormData from the form
+  // předvyplní FormData z formuláře
   let formData = new FormData(document.forms.person);
 
-  // add one more field
-  formData.append("middle", "Lee");
+  // přidá jedno další pole
+  formData.append("middle", "Leoš");
 
-  // send it out
+  // odešle data
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "/article/xmlhttprequest/post/user");
   xhr.send(formData);
@@ -370,18 +370,18 @@ For instance:
 </script>
 ```
 
-The form is sent with `multipart/form-data` encoding.
+Formulář bude poslán v kódování `multipart/form-data`.
 
-Or, if we like JSON more, then `JSON.stringify` and send as a string.
+Pokud bychom raději chtěli JSON, zavoláme `JSON.stringify` a pošleme ho jako řetězec.
 
-Just don't forget to set the header `Content-Type: application/json`, many server-side frameworks automatically decode JSON with it:
+Jen nesmíme zapomenout nastavit hlavičku `Content-Type: application/json`, mnoho programů na serverové straně při ní automaticky dekóduje JSON:
 
 ```js
 let xhr = new XMLHttpRequest();
 
 let json = JSON.stringify({
-  name: "John",
-  surname: "Smith"
+  jméno: "Jan",
+  příjmení: "Novák"
 });
 
 xhr.open("POST", '/submit')
@@ -390,80 +390,80 @@ xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 xhr.send(json);
 ```
 
-The `.send(body)` method is pretty omnivore. It can send almost any `body`, including `Blob` and `BufferSource` objects.
+Metoda `.send(tělo)` je značně všestranná. Dokáže poslat téměř jakékoli `tělo`, včetně objektů `Blob` a `BufferSource`.
 
-## Upload progress
+## Průběh odesílání
 
-The `progress` event triggers only on the downloading stage.
+Událost `progress` se spouští jedině ve fázi stahování.
 
-That is: if we `POST` something, `XMLHttpRequest` first uploads our data (the request body), then downloads the response.
+To znamená, že když něco posíláme metodou `POST`, `XMLHttpRequest` nejprve odešle naše data (tělo požadavku) a pak stáhne odpověď.
 
-If we're uploading something big, then we're surely more interested in tracking the upload progress. But `xhr.onprogress` doesn't help here.
+Jestliže odesíláme něco velkého, bezpochyby nás více zajímá sledování průběhu odesílání. Ale tady nám `xhr.onprogress` nepomůže.
 
-There's another object, without methods, exclusively to track upload events: `xhr.upload`.
+Existuje jiný objekt bez metod, určený ke sledování událostí při odesílání: `xhr.upload`.
 
-It generates events, similar to `xhr`, but `xhr.upload` triggers them solely on uploading:
+Generuje podobné události jako `xhr`, ale `xhr.upload` je spouští výhradně při odesílání:
 
-- `loadstart` -- upload started.
-- `progress` -- triggers periodically during the upload.
-- `abort` -- upload aborted.
-- `error` -- non-HTTP error.
-- `load` -- upload finished successfully.
-- `timeout` -- upload timed out (if `timeout` property is set).
-- `loadend` -- upload finished with either success or error.
+- `loadstart` -- odesílání začalo.
+- `progress` -- spouští se periodicky během odesílání.
+- `abort` -- odesílání zrušeno.
+- `error` -- chyba mimo HTTP.
+- `load` -- odesílání úspěšně dokončeno.
+- `timeout` -- vypršel časový limit odesílání (je-li nastavena vlastnost `timeout`).
+- `loadend` -- odesílání skončilo, ať už úspěšně nebo s chybou.
 
-Example of handlers:
+Příklad handlerů:
 
 ```js
-xhr.upload.onprogress = function(event) {
-  alert(`Uploaded ${event.loaded} of ${event.total} bytes`);
+xhr.upload.onprogress = function(událost) {
+  alert(`Odesláno ${událost.loaded} z ${událost.total} bytů`);
 };
 
 xhr.upload.onload = function() {
-  alert(`Upload finished successfully.`);
+  alert(`Odeslání úspěšně dokončeno.`);
 };
 
 xhr.upload.onerror = function() {
-  alert(`Error during the upload: ${xhr.status}`);
+  alert(`Chyba při odesílání: ${xhr.status}`);
 };
 ```
 
-Here's a real-life example: file upload with progress indication:
+Následuje příklad z reálného života: odeslání souboru se zobrazováním průběhu:
 
 ```html run
 <input type="file" onchange="upload(this.files[0])">
 
 <script>
-function upload(file) {
+function upload(soubor) {
   let xhr = new XMLHttpRequest();
 
-  // track upload progress
+  // sledujeme průběh odesílání
 *!*
-  xhr.upload.onprogress = function(event) {
-    console.log(`Uploaded ${event.loaded} of ${event.total}`);
+  xhr.upload.onprogress = function(událost) {
+    console.log(`Odesláno ${událost.loaded} z ${událost.total}`);
   };
 */!*
 
-  // track completion: both successful or not
+  // konec sledování: úspěch nebo chyba
   xhr.onloadend = function() {
     if (xhr.status == 200) {
-      console.log("success");
+      console.log("úspěch");
     } else {
-      console.log("error " + this.status);
+      console.log("chyba " + this.status);
     }
   };
 
   xhr.open("POST", "/article/xmlhttprequest/post/upload");
-  xhr.send(file);
+  xhr.send(soubor);
 }
 </script>
 ```
 
-## Cross-origin requests
+## Požadavky na jiný původ
 
-`XMLHttpRequest` can make cross-origin requests, using the same CORS policy as [fetch](info:fetch-crossorigin).
+`XMLHttpRequest` dokáže vytvářet požadavky na jiný původ. Používá stejnou politiku CORS jako [fetch](info:fetch-crossorigin).
 
-Just like `fetch`, it doesn't send cookies and HTTP-authorization to another origin by default. To enable them, set `xhr.withCredentials` to `true`:
+Stejně jako `fetch` standardně neposílá na jiný původ cookies a HTTP autorizaci. Povolíme to tak, že nastavíme `xhr.withCredentials` na `true`:
 
 ```js
 let xhr = new XMLHttpRequest();
@@ -471,16 +471,16 @@ let xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 */!*
 
-xhr.open('POST', 'http://anywhere.com/request');
+xhr.open('POST', 'http://kdekoli.com/request');
 ...
 ```
 
-See the chapter <info:fetch-crossorigin> for details about cross-origin headers.
+Podrobnosti o hlavičkách jiného původu naleznete v kapitole <info:fetch-crossorigin>.
 
 
-## Summary
+## Shrnutí
 
-Typical code of the GET-request with `XMLHttpRequest`:
+Typický kód požadavku GET s `XMLHttpRequest`:
 
 ```js
 let xhr = new XMLHttpRequest();
@@ -490,39 +490,39 @@ xhr.open('GET', '/my/url');
 xhr.send();
 
 xhr.onload = function() {
-  if (xhr.status != 200) { // HTTP error?
-    // handle error
-    alert( 'Error: ' + xhr.status);
+  if (xhr.status != 200) { // HTTP chyba?
+    // zpracování chyby
+    alert( 'Chyba: ' + xhr.status);
     return;
   }
 
-  // get the response from xhr.response
+  // získáme odpověď z xhr.response
 };
 
-xhr.onprogress = function(event) {
-  // report progress
-  alert(`Loaded ${event.loaded} of ${event.total}`);
+xhr.onprogress = function(událost) {
+  // oznámíme průběh
+  alert(`Načteno ${událost.loaded} z ${událost.total}`);
 };
 
 xhr.onerror = function() {
-  // handle non-HTTP error (e.g. network down)
+  // zpracování chyby mimo HTTP (např. nedostupné sítě)
 };
 ```
 
-There are actually more events, the [modern specification](https://xhr.spec.whatwg.org/#events) lists them (in the lifecycle order):
+Událostí existuje ve skutečnosti více, jejich seznam uvádí [moderní specifikace](https://xhr.spec.whatwg.org/#events) (v pořadí, v jakém se objeví):
 
-- `loadstart` -- the request has started.
-- `progress` -- a data packet of the response has arrived, the whole response body at the moment is in `response`.
-- `abort` -- the request was canceled by the call `xhr.abort()`.
-- `error` -- connection error has occurred, e.g. wrong domain name. Doesn't happen for HTTP-errors like 404.
-- `load` -- the request has finished successfully.
-- `timeout` -- the request was canceled due to timeout (only happens if it was set).
-- `loadend` -- triggers after `load`, `error`, `timeout` or `abort`.
+- `loadstart` -- požadavek začal.
+- `progress` -- byl přijat datový paket odpovědi, celé dosud přijaté tělo odpovědi je v `response`.
+- `abort` -- požadavek byl zrušen voláním `xhr.abort()`.
+- `error` -- nastala chyba spojení, např. špatný název domény. Pro HTTP chyby, např. 404, se nevyvolává.
+- `load` -- požadavek byl úspěšně dokončen.
+- `timeout` -- požadavek byl zrušen kvůli vypršení časového limitu (stane se jen tehdy, když byl limit nastaven).
+- `loadend` -- spustí se po `load`, `error`, `timeout` nebo `abort`.
 
-The `error`, `abort`, `timeout`, and `load` events are mutually exclusive. Only one of them may happen.
+Události `error`, `abort`, `timeout` a `load` se vzájemně vylučují. Může nastat pouze jedna z nich.
 
-The most used events are load completion (`load`), load failure (`error`), or we can use a single `loadend` handler and check the properties of the request object `xhr` to see what happened.
+Nejčastěji se používají události dokončení načítání (`load`), selhání načítání (`error`), nebo můžeme použít jediný handler `loadend` a ověřovat v něm vlastnosti objektu požadavku `xhr`, abychom viděli, co se stalo.
 
-We've already seen another event: `readystatechange`. Historically, it appeared long ago, before the specification settled. Nowadays, there's no need to use it, we can replace it with newer events, but it can often be found in older scripts.
+Už jsme viděli i jinou událost: `readystatechange`. Historicky se objevila před dlouhou dobou, než se ustálila specifikace. V dnešní době není nutné ji používat, můžeme ji nahradit novějšími událostmi, ale ve starších skriptech ji často můžeme najít.
 
-If we need to track uploading specifically, then we should listen to same events on `xhr.upload` object.
+Pokud potřebujeme sledovat specificky odesílání, měli bychom naslouchat stejným událostem na objektu `xhr.upload`.

@@ -1,34 +1,34 @@
-class TimeFormatted extends HTMLElement {
+class FormátovanýČas extends HTMLElement {
 
-  render() {
-    let date = new Date(this.getAttribute('datetime') || Date.now());
+  vykresli() {
+    let datum = new Date(this.getAttribute('datumčas') || Date.now());
 
     this.innerHTML = new Intl.DateTimeFormat("default", {
-      year: this.getAttribute('year') || undefined,
-      month: this.getAttribute('month') || undefined,
-      day: this.getAttribute('day') || undefined,
-      hour: this.getAttribute('hour') || undefined,
-      minute: this.getAttribute('minute') || undefined,
-      second: this.getAttribute('second') || undefined,
-      timeZoneName: this.getAttribute('time-zone-name') || undefined,
-    }).format(date);
+      year: this.getAttribute('rok') || undefined,
+      month: this.getAttribute('měsíc') || undefined,
+      day: this.getAttribute('den') || undefined,
+      hour: this.getAttribute('hodiny') || undefined,
+      minute: this.getAttribute('minuty') || undefined,
+      second: this.getAttribute('sekundy') || undefined,
+      timeZoneName: this.getAttribute('časové-pásmo') || undefined,
+    }).format(datum);
   }
 
   connectedCallback() {
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
+    if (!this.vykreslen) {
+      this.vykresli();
+      this.vykreslen = true;
     }
   }
 
   static get observedAttributes() {
-    return ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'time-zone-name'];
+    return ['datumčas', 'rok', 'měsíc', 'den', 'hodiny', 'minuty', 'sekundy', 'časové-pásmo'];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) { 
-    this.render();
+  attributeChangedCallback(název, původníHodnota, nováHodnota) { 
+    this.vykresli();
   }
 
 }
 
-customElements.define("time-formatted", TimeFormatted);
+customElements.define("formatovany-cas", FormátovanýČas);

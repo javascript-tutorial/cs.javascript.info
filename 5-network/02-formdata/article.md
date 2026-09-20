@@ -1,31 +1,31 @@
 
 # FormData
 
-This chapter is about sending HTML forms: with or without files, with additional fields and so on.
+Tato kapitola pojednává o odesílání HTML formulářů: se soubory nebo bez nich, s dodatečnými poli a podobně.
 
-[FormData](https://xhr.spec.whatwg.org/#interface-formdata) objects can help with that. As you might have guessed, it's the object to represent HTML form data.
+Mohou nám s tím pomoci objekty třídy [FormData](https://xhr.spec.whatwg.org/#interface-formdata). Jak jste možná uhádli, tento objekt reprezentuje data HTML formuláře.
 
-The constructor is:
+Jeho konstruktor je následující:
 ```js
 let formData = new FormData([form]);
 ```
 
-If HTML `form` element is provided, it automatically captures its fields.
+Pokud je uveden HTML element `form`, objekt automaticky načte jeho pole.
 
-The special thing about `FormData` is that network methods, such as `fetch`, can accept a `FormData` object as a body. It's encoded and sent out with `Content-Type: multipart/form-data`.
+Zvláštností na `FormData` je, že síťové metody, např. `fetch`, mohou přijímat objekt `FormData` jako tělo požadavku. Bude zakódován a odeslán s `Content-Type: multipart/form-data`.
 
-From the server point of view, that looks like a usual form submission.
+Z pohledu serveru to vypadá jako obvyklé odeslání formuláře.
 
-## Sending a simple form
+## Poslání jednoduchého formuláře
 
-Let's send a simple form first.
+Nejprve pošleme jednoduchý formulář.
 
-As you can see, that's almost one-liner:
+Jak vidíte, je to skoro na jeden řádek:
 
 ```html run autorun
 <form id="formElem">
-  <input type="text" name="name" value="John">
-  <input type="text" name="surname" value="Smith">
+  <input type="text" name="jméno" value="Jan">
+  <input type="text" name="příjmení" value="Novák">
   <input type="submit">
 </form>
 
@@ -33,62 +33,62 @@ As you can see, that's almost one-liner:
   formElem.onsubmit = async (e) => {
     e.preventDefault();
 
-    let response = await fetch('/article/formdata/post/user', {
+    let odpověď = await fetch('/article/formdata/post/user', {
       method: 'POST',
 *!*
       body: new FormData(formElem)
 */!*
     });
 
-    let result = await response.json();
+    let výsledek = await odpověď.json();
 
-    alert(result.message);
+    alert(výsledek.message);
   };
 </script>
 ```
 
-In this example, the server code is not presented, as it's beyond our scope. The server accepts the POST request and replies "User saved".
+Serverový kód není v tomto příkladu uveden, protože je mimo náš rámec. Server přijme požadavek POST a odpoví „User saved“ („Uživatel uložen“).
 
-## FormData Methods
+## Metody třídy FormData
 
-We can modify fields in `FormData` with methods:
+Pole ve `FormData` můžeme měnit pomocí těchto metod:
 
-- `formData.append(name, value)` - add a form field with the given `name` and `value`,
-- `formData.append(name, blob, fileName)` - add a field as if it were `<input type="file">`, the third argument `fileName` sets file name (not form field name), as it were a name of the file in user's filesystem,
-- `formData.delete(name)` - remove the field with the given `name`,
-- `formData.get(name)` - get the value of the field with the given `name`,
-- `formData.has(name)` - if there exists a field with the given `name`, returns `true`, otherwise `false`
+- `formData.append(název, hodnota)` - přidá do formuláře pole s názvem `název` a hodnotou `hodnota`,
+- `formData.append(název, blob, názevSouboru)` - přidá pole, jako by to bylo `<input type="file">`, třetí argument `názevSouboru` nastaví název souboru (ne název formulářového pole), jako by to byl název souboru z uživatelova souborového systému,
+- `formData.delete(název)` - odstraní pole s názvem `název`,
+- `formData.get(název)` - vrátí hodnotu pole s názvem `název`,
+- `formData.has(název)` - pokud existuje pole s názvem `název`, vrátí `true`, jinak vrátí `false`.
 
-A form is technically allowed to have many fields with the same `name`, so multiple calls to `append` add more same-named fields.
+Technicky formulář smí obsahovat více polí se stejným názvem, takže několik volání `append` přidá několik polí se stejným názvem.
 
-There's also method `set`, with the same syntax as `append`. The difference is that `.set` removes all fields with the given `name`, and then appends a new field. So it makes sure there's only one field with such `name`, the rest is just like `append`:
+Existuje i metoda `set`, která má stejnou syntaxi jako `append`, ale rozdíl spočívá v tom, že `.set` odstraní všechna pole s názvem `název` a pak přidá nové pole. Tím zajistí, že ve formuláři bude jen jedno pole s názvem `název`. Všechno ostatní je jako u `append`:
 
-- `formData.set(name, value)`,
-- `formData.set(name, blob, fileName)`.
+- `formData.set(název, hodnota)`,
+- `formData.set(název, blob, názevSouboru)`.
 
-Also we can iterate over formData fields using `for..of` loop:
+Můžeme také iterovat nad poli ve `formData` pomocí cyklu `for..of`:
 
 ```js run
 let formData = new FormData();
-formData.append('key1', 'value1');
-formData.append('key2', 'value2');
+formData.append('klíč1', 'hodnota1');
+formData.append('klíč2', 'hodnota2');
 
-// List key/value pairs
-for(let [name, value] of formData) {
-  alert(`${name} = ${value}`); // key1 = value1, then key2 = value2
+// Seznam dvojic klíč/hodnota
+for(let [název, hodnota] of formData) {
+  alert(`${název} = ${hodnota}`); // klíč1 = hodnota1, pak klíč2 = hodnota2
 }
 ```
 
-## Sending a form with a file
+## Poslání formuláře se souborem
 
-The form is always sent as `Content-Type: multipart/form-data`, this encoding allows to send files. So, `<input type="file">` fields are sent also, similar to a usual form submission.
+Formulář se vždy posílá jako `Content-Type: multipart/form-data`. Toto kódování umožňuje posílat soubory. Posílají se tedy i pole `<input type="file">`, podobně jako při obvyklém odeslání formuláře.
 
-Here's an example with such form:
+Následující příklad obsahuje takový formulář:
 
 ```html run autorun
 <form id="formElem">
-  <input type="text" name="firstName" value="John">
-  Picture: <input type="file" name="picture" accept="image/*">
+  <input type="text" name="křestníJméno" value="Jan">
+  Obrázek: <input type="file" name="obrázek" accept="image/*">
   <input type="submit">
 </form>
 
@@ -96,35 +96,35 @@ Here's an example with such form:
   formElem.onsubmit = async (e) => {
     e.preventDefault();
 
-    let response = await fetch('/article/formdata/post/user-avatar', {
+    let odpověď = await fetch('/article/formdata/post/user-avatar', {
       method: 'POST',
 *!*
       body: new FormData(formElem)
 */!*
     });
 
-    let result = await response.json();
+    let výsledek = await odpověď.json();
 
-    alert(result.message);
+    alert(výsledek.message);
   };
 </script>
 ```
 
-## Sending a form with Blob data
+## Posílání formuláře s daty blobu
 
-As we've seen in the chapter <info:fetch>, it's easy to send dynamically generated binary data e.g. an image, as `Blob`. We can supply it directly as `fetch` parameter `body`.
+Jak jsme viděli v kapitole <info:fetch>, je snadné poslat dynamicky generovaná binární data, např. obrázek, jako `Blob`. Můžeme jej předat přímo jako parametr `body` metody `fetch`.
 
-In practice though, it's often convenient to send an image not separately, but as a part of the form, with additional fields, such as "name" and other metadata.
+V praxi je však často vhodnější neposílat obrázek odděleně, ale jako součást formuláře s dalšími poli, například s názvem nebo jinými metadaty.
 
-Also, servers are usually more suited to accept multipart-encoded forms, rather than raw binary data.
+Navíc servery jsou obvykle lépe navrženy pro příjem formulářů zakódovaných v `multipart` než planých binárních dat.
 
-This example submits an image from `<canvas>`, along with some other fields, as a form, using `FormData`:
+Tento příklad posílá pomocí `FormData` obrázek z `<canvas>` spolu s některými dalšími poli jako formulář:
 
 ```html run autorun height="90"
 <body style="margin:0">
   <canvas id="canvasElem" width="100" height="80" style="border:1px solid"></canvas>
 
-  <input type="button" value="Submit" onclick="submit()">
+  <input type="button" value="Odeslat" onclick="odešli()">
 
   <script>
     canvasElem.onmousemove = function(e) {
@@ -133,57 +133,57 @@ This example submits an image from `<canvas>`, along with some other fields, as 
       ctx.stroke();
     };
 
-    async function submit() {
-      let imageBlob = await new Promise(resolve => canvasElem.toBlob(resolve, 'image/png'));
+    async function odešli() {
+      let blobObrázku = await new Promise(splň => canvasElem.toBlob(splň, 'image/png'));
 
 *!*
       let formData = new FormData();
-      formData.append("firstName", "John");
-      formData.append("image", imageBlob, "image.png");
+      formData.append("firstName", "Jan");
+      formData.append("image", blobObrázku, "image.png");
 */!*    
 
-      let response = await fetch('/article/formdata/post/image-form', {
+      let odpověď = await fetch('/article/formdata/post/image-form', {
         method: 'POST',
         body: formData
       });
-      let result = await response.json();
-      alert(result.message);
+      let výsledek = await odpověď.json();
+      alert(výsledek.message);
     }
 
   </script>
 </body>
 ```
 
-Please note how the image `Blob` is added:
+Prosíme všimněte si, jak se přidává obrázek `Blob`:
 
 ```js
-formData.append("image", imageBlob, "image.png");
+formData.append("image", blobObrázku, "image.png");
 ```
 
-That's same as if there were `<input type="file" name="image">` in the form, and the visitor submitted a file named `"image.png"` (3rd argument) with the data `imageBlob` (2nd argument) from their filesystem.
+Je to totéž, jako by ve formuláři byl `<input type="file" name="image">` a návštěvník poslal ze svého souborového systému soubor s názvem `"image.png"` (3. argument) a daty `blobObrázku` (2. argument).
 
-The server reads form data and the file, as if it were a regular form submission.
+Server načte data formuláře a soubor stejně, jako při obvyklém odeslání formuláře.
 
-## Summary
+## Shrnutí
 
-[FormData](https://xhr.spec.whatwg.org/#interface-formdata) objects are used to capture HTML form and submit it using `fetch` or another network method.
+Objekty [FormData](https://xhr.spec.whatwg.org/#interface-formdata) se používají k načtení HTML formuláře a jeho odeslání metodou `fetch` nebo jinou síťovou metodou.
 
-We can either create `new FormData(form)` from an HTML form, or create an object without a form at all, and then append fields with methods:
+Můžeme buď vytvořit `new FormData(form)` z HTML formuláře, nebo vytvořit objekt úplně bez formuláře a pak do něj přidávat pole následujícími metodami:
 
-- `formData.append(name, value)`
-- `formData.append(name, blob, fileName)`
-- `formData.set(name, value)`
-- `formData.set(name, blob, fileName)`
+- `formData.append(název, hodnota)`
+- `formData.append(název, blob, názevSouboru)`
+- `formData.set(název, hodnota)`
+- `formData.set(název, blob, názevSouboru)`
 
-Let's note two peculiarities here:
+Všimněme si zde dvou zvláštností:
 
-1. The `set` method removes fields with the same name, `append` doesn't. That's the only difference between them.
-2. To send a file, 3-argument syntax is needed, the last argument is a file name, that normally is taken from user filesystem for `<input type="file">`.
+1. Metoda `set` odstraní pole se stejným názvem, metoda `append` ne. To je jediný rozdíl mezi nimi.
+2. K odeslání souboru potřebujeme tříargumentovou syntaxi. Poslední argument je název souboru, který se v `<input type="file">` zpravidla bere z uživatelova souborového systému.
 
-Other methods are:
+Další metody jsou:
 
-- `formData.delete(name)`
-- `formData.get(name)`
-- `formData.has(name)`
+- `formData.delete(název)`
+- `formData.get(název)`
+- `formData.has(název)`
 
-That's it!
+A je to!

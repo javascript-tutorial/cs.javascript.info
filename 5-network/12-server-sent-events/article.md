@@ -1,111 +1,111 @@
 # Server Sent Events
 
-The [Server-Sent Events](https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface) specification describes a built-in class `EventSource`, that keeps connection with the server and allows to receive events from it.
+Specifikace [Server-Sent Events (Události poslané serverem)](https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface) popisuje zabudovanou třídu `EventSource`, která udržuje spojení se serverem a umožňuje z něj přijímat události.
 
-Similar to `WebSocket`, the connection is persistent.
+Spojení je trvalé, podobně jako u `WebSocket`.
 
-But there are several important differences:
+Je tady však několik důležitých rozdílů:
 
 | `WebSocket` | `EventSource` |
 |-------------|---------------|
-| Bi-directional: both client and server can exchange messages | One-directional: only server sends data |
-| Binary and text data | Only text |
-| WebSocket protocol | Regular HTTP |
+| Obousměrné: klient i server si mohou vyměňovat zprávy | Jednosměrné: data posílá pouze server |
+| Binární i textová data | Pouze text |
+| Protokol WebSocket | Obvyklý HTTP |
 
-`EventSource` is a less-powerful way of communicating with the server than `WebSocket`.
+`EventSource` představuje slabší způsob komunikace se serverem než `WebSocket`.
 
-Why should one ever use it?
+Proč by ho tedy někdo měl používat?
 
-The main reason: it's simpler. In many applications, the power of `WebSocket` is a little bit too much.
+Hlavním důvodem je, že je jednodušší. Pro mnoho aplikací je `WebSocket` příliš silný.
 
-We need to receive a stream of data from server: maybe chat messages or market prices, or whatever. That's what `EventSource` is good at. Also it supports auto-reconnect, something  we need to implement manually with `WebSocket`. Besides, it's a plain old HTTP, not a new protocol.
+Když potřebujeme přijímat tok dat ze serveru, třeba zprávy z chatu, ceny z burzy nebo cokoli jiného, hodí se k tomu `EventSource`. Navíc podporuje obnovu spojení, což při použití `WebSocket` musíme implementovat ručně. Kromě toho je to starý planý HTTP, není to nový protokol.
 
-## Getting messages
+## Příjem zpráv
 
-To start receiving messages, we just need to create `new EventSource(url)`.
+Abychom začali přijímat zprávy, stačí nám vytvořit `new EventSource(url)`.
 
-The browser will connect to `url` and keep the connection open, waiting for events.
+Prohlížeč se připojí k `url`, bude udržovat spojení otevřené a čekat na události.
 
-The server should respond with status 200 and the header `Content-Type: text/event-stream`, then keep the connection and write messages into it in the special format, like this:
+Server by měl odpovědět statusem 200 a hlavičkou `Content-Type: text/event-stream`, pak udržovat spojení a zapisovat do něj zprávy ve speciálním formátu, například:
 
 ```
-data: Message 1
+data: Zpráva 1
 
-data: Message 2
+data: Zpráva 2
 
-data: Message 3
-data: of two lines
+data: Zpráva 3
+data: dvouřádková
 ```
 
-- A message text goes after `data:`, the space after the colon is optional.
-- Messages are delimited with double line breaks `\n\n`.
-- To send a line break `\n`, we can immediately send one more `data:` (3rd message above).
+- Text zprávy následuje po `data:`, mezera za dvojtečkou není povinná.
+- Zprávy jsou oddělovány dvěma konci řádků za sebou `\n\n`.
+- Když chceme poslat konec řádku `\n`, můžeme okamžitě poslat další `data:` (viz 3. zpráva v příkladu).
 
-In practice, complex messages are usually sent JSON-encoded. Line-breaks are encoded as `\n` within them, so multiline `data:` messages are not necessary.
+V praxi se složité zprávy obvykle posílají zakódované do JSONu a konce řádků se v nich kódují jako `\n`, takže víceřádkové zprávy `data:` nejsou zapotřebí.
 
-For instance:
+Příklad:
 
 ```js
-data: {"user":"John","message":"First line*!*\n*/!* Second line"}
+data: {"uživatel":"Jan","zpráva":"První řádek*!*\n*/!* Druhý řádek"}
 ```
 
-...So we can assume that one `data:` holds exactly one message.
+...Můžeme tedy předpokládat, že jedna `data:` obsahují právě jednu zprávu.
 
-For each such message, the `message` event is generated:
+Pro každou takovou zprávu se vygeneruje událost `message`:
 
 ```js
 let eventSource = new EventSource("/events/subscribe");
 
-eventSource.onmessage = function(event) {
-  console.log("New message", event.data);
-  // will log 3 times for the data stream above
+eventSource.onmessage = function(událost) {
+  console.log("Nová zpráva", událost.data);
+  // pro tok dat uvedený v příkladu bude logovat 3krát
 };
 
-// or eventSource.addEventListener('message', ...)
+// nebo eventSource.addEventListener('message', ...)
 ```
 
-### Cross-origin requests
+### Požadavky jiného původu
 
-`EventSource` supports cross-origin requests, like `fetch` and any other networking methods. We can use any URL:
+`EventSource` podporuje požadavky jiného původu, stejně jako `fetch` a ostatní metody pro práci se sítí. Můžeme použít jakoukoli URL:
 
 ```js
-let source = new EventSource("https://another-site.com/events");
+let zdroj = new EventSource("https://another-site.com/events");
 ```
 
-The remote server will get the `Origin` header and must respond with `Access-Control-Allow-Origin` to proceed.
+Vzdálený server obdrží hlavičku `Origin` a musí odpovědět hlavičkou `Access-Control-Allow-Origin`, aby bylo možné pokračovat.
 
-To pass credentials, we should set the additional option `withCredentials`, like this:
+Když chceme předat přihlašovací údaje, měli bychom nastavit volbu `withCredentials`, například:
 
 ```js
-let source = new EventSource("https://another-site.com/events", {
+let zdroj = new EventSource("https://another-site.com/events", {
   withCredentials: true
 });
 ```
 
-Please see the chapter <info:fetch-crossorigin> for more details about cross-origin headers.
+Podrobnosti o hlavičkách jiného původu najdete v kapitole <info:fetch-crossorigin>.
 
 
-## Reconnection
+## Obnova spojení
 
-Upon creation, `new EventSource` connects to the server, and if the connection is broken -- reconnects.
+Po vytvoření se `new EventSource` připojí k serveru. Pokud bude spojení přerušeno, připojí se znovu.
 
-That's very convenient, as we don't have to care about it.
+To je velmi praktické, protože se o to nemusíme starat.
 
-There's a small delay between reconnections, a few seconds by default.
+Mezi opětovnými připojeními nastává krátká prodleva, standardně několik sekund.
 
-The server can set the recommended delay using `retry:` in response (in milliseconds):
+Server může nastavit doporučenou prodlevu řádkem `retry:` v odpovědi (v milisekundách):
 
 ```js
 retry: 15000
-data: Hello, I set the reconnection delay to 15 seconds
+data: Ahoj, nastavuji prodlevu obnovy spojení na 15 sekund
 ```
 
-The `retry:` may come both together with some data, or as a standalone message.
+Řádek `retry:` může přijít společně s daty nebo jako samostatná zpráva.
 
-The browser should wait that many milliseconds before reconnecting. Or longer, e.g. if the browser knows (from OS) that there's no network connection at the moment, it may wait until the connection appears, and then retry.
+Prohlížeč by měl před obnovou spojení počkat uvedený čas v milisekundách. Může počkat i déle, např. pokud ví (od operačního systému), že momentálně není síťové připojení dostupné, může počkat, než se objeví, a pak se zkusit připojit.
 
-- If the server wants the browser to stop reconnecting, it should respond with HTTP status 204.
-- If the browser wants to close the connection, it should call `eventSource.close()`:
+- Pokud server chce, aby prohlížeč přestal obnovovat spojení, měl by odpovědět HTTP statusem 204.
+- Pokud prohlížeč chce uzavřít spojení, měl by volat `eventSource.close()`:
 
 ```js
 let eventSource = new EventSource(...);
@@ -113,159 +113,159 @@ let eventSource = new EventSource(...);
 eventSource.close();
 ```
 
-Also, there will be no reconnection if the response has an incorrect `Content-Type` or its HTTP status differs from 301, 307, 200 and 204. In such cases the `"error"` event will be emitted, and the browser won't reconnect.
+K obnově připojení navíc nedojde tehdy, pokud odpověď obsahuje nekorektní `Content-Type` nebo obsahuje jiný HTTP status než 301, 307, 200 nebo 204. V takových případech bude vyvolána událost `"error"` a prohlížeč se znovu nepřipojí.
 
 ```smart
-When a connection is finally closed, there's no way to "reopen" it. If we'd like to connect again, just create a new `EventSource`.
+Když je spojení definitivně uzavřeno, není možné je nijak „znovuotevřít“. Jestliže se chceme připojit znovu, musíme vytvořit nový `EventSource`.
 ```
 
-## Message id
+## Identifikátor zprávy
 
-When a connection breaks due to network problems, either side can't be sure which messages were received, and which weren't.
+Když se spojení přeruší kvůli problémům v síti, žádná ze stran nemůže s jistotou vědět, které zprávy byly přijaty a které ne.
 
-To correctly resume the connection, each message should have an `id` field, like this:
+Abychom mohli spojení korektně obnovit, měla by každá zpráva obsahovat pole `id`, například:
 
 ```
-data: Message 1
+data: Zpráva 1
 id: 1
 
-data: Message 2
+data: Zpráva 2
 id: 2
 
-data: Message 3
-data: of two lines
+data: Zpráva 3
+data: dvouřádková
 id: 3
 ```
 
-When a message with `id:` is received, the browser:
+Když je přijata zpráva obsahující `id:`, prohlížeč:
 
-- Sets the property `eventSource.lastEventId` to its value.
-- Upon reconnection sends the header `Last-Event-ID` with that `id`, so that the server may re-send following messages.
+- Nastaví vlastnost `eventSource.lastEventId` na hodnotu tohoto `id`.
+- Po opětovném připojení pošle hlavičku `Last-Event-ID` s tímto `id`, aby server mohl znovu poslat následující zprávy.
 
-```smart header="Put `id:` after `data:`"
-Please note: the `id` is appended below message `data` by the server, to ensure that `lastEventId` is updated after the message is received.
+```smart header="Vkládejte `id:` až za `data:`"
+Prosíme všimněte si, že server připojuje `id` až za `data` zprávy, aby zajistil, že `lastEventId` bude aktualizováno až po přijetí zprávy.
 ```
 
-## Connection status: readyState
+## Stav spojení: readyState
 
-The `EventSource` object has `readyState` property, that has one of three values:
+Objekt `EventSource` obsahuje vlastnost `readyState`, která nabývá jedné ze tří hodnot:
 
 ```js no-beautify
-EventSource.CONNECTING = 0; // connecting or reconnecting
-EventSource.OPEN = 1;       // connected
-EventSource.CLOSED = 2;     // connection closed
+EventSource.CONNECTING = 0; // probíhá připojení nebo obnova připojení
+EventSource.OPEN = 1;       // připojeno
+EventSource.CLOSED = 2;     // spojení uzavřeno
 ```
 
-When an object is created, or the connection is down, it's always `EventSource.CONNECTING` (equals `0`).
+Když je objekt vytvořen nebo se spojení přeruší, stav je vždy `EventSource.CONNECTING` (roven `0`).
 
-We can query this property to know the state of `EventSource`.
+Z této vlastnosti můžeme zjistit stav `EventSource`.
 
-## Event types
+## Druhy událostí
 
-By default `EventSource` object generates three events:
+Objekt `EventSource` standardně generuje tři události:
 
-- `message` -- a message received, available as `event.data`.
-- `open` -- the connection is open.
-- `error` -- the connection could not be established, e.g. the server returned HTTP 500 status.
+- `message` -- zpráva přijata, k dispozici v `event.data`.
+- `open` -- spojení otevřeno.
+- `error` -- spojení nemůže být vytvořeno, např. server vrátil HTTP status 500.
 
-The server may specify another type of event with `event: ...` at the event start.
+Server může specifikovat další druhy událostí na začátku události v řádku `event: ...`.
 
-For example:
+Příklad:
 
 ```
 event: join
 data: Bob
 
-data: Hello
+data: Ahoj
 
 event: leave
 data: Bob
 ```
 
-To handle custom events, we must use `addEventListener`, not `onmessage`:
+Pro zpracování vlastních událostí musíme použít `addEventListener`, ne `onmessage`:
 
 ```js
-eventSource.addEventListener('join', event => {
-  alert(`Joined ${event.data}`);
+eventSource.addEventListener('join', událost => {
+  alert(`Připojil se ${událost.data}`);
 });
 
-eventSource.addEventListener('message', event => {
-  alert(`Said: ${event.data}`);
+eventSource.addEventListener('message', událost => {
+  alert(`Řekl: ${událost.data}`);
 });
 
-eventSource.addEventListener('leave', event => {
-  alert(`Left ${event.data}`);
+eventSource.addEventListener('leave', událost => {
+  alert(`Odešel ${událost.data}`);
 });
 ```
 
-## Full example
+## Celý příklad
 
-Here's the server that sends messages with `1`, `2`, `3`, then `bye` and breaks the connection.
+Následující server pošle zprávy obsahující `1`, `2`, `3`, pak `bye` a přeruší spojení.
 
-Then the browser automatically reconnects.
+Prohlížeč se pak automaticky znovu připojí.
 
 [codetabs src="eventsource"]
 
-## Summary
+## Shrnutí
 
-`EventSource` object automatically establishes a persistent connection and allows the server to send messages over it.
+Objekt `EventSource` automaticky zavede stálé spojení a umožní serveru posílat po něm zprávy.
 
-It offers:
-- Automatic reconnect, with tunable `retry` timeout.
-- Message ids to resume events, the last received identifier is sent in `Last-Event-ID` header upon reconnection.
-- The current state is in the `readyState` property.
+Nabízí:
+- Automatickou obnovu spojení s nastavitelnou prodlevou `retry`.
+- Identifikátory zpráv pro události obnovy spojení. Poslední přijatý identifikátor se po obnově spojení pošle v hlavičce `Last-Event-ID`.
+- Aktuální stav se nachází ve vlastnosti `readyState`.
 
-That makes `EventSource` a viable alternative to `WebSocket`, as the latter is more low-level and lacks such built-in features (though they can be implemented).
+To činí z `EventSource` životaschopnou alternativu k `WebSocket`, který je nižší úrovně a tyto zabudované vlastnosti postrádá (ačkoli je můžeme implementovat).
 
-In many real-life applications, the power of `EventSource` is just enough.
+Pro mnoho aplikací z reálného života jsou schopnosti `EventSource` dostatečné.
 
-Supported in all modern browsers (not IE).
+Je podporován ve všech moderních prohlížečích (ne v IE).
 
-The syntax is:
+Jeho syntaxe je:
 
 ```js
-let source = new EventSource(url, [credentials]);
+let zdroj = new EventSource(url, [přihlašovacíÚdaje]);
 ```
 
-The second argument has only one possible option: `{ withCredentials: true }`, it allows sending cross-origin credentials.
+Druhý argument má jen jednu volbu: `{ withCredentials: true }`, která umožňuje posílat přihlašovací údaje na jiný původ.
 
-Overall cross-origin security is same as for `fetch` and other network methods.
+Celkově je zabezpečení pro jiný původ stejné jako u `fetch` a jiných síťových metod.
 
-### Properties of an `EventSource` object
+### Vlastnosti objektu `EventSource`
 
 `readyState`
-: The current connection state: either `EventSource.CONNECTING (=0)`, `EventSource.OPEN (=1)` or `EventSource.CLOSED (=2)`.
+: Aktuální stav spojení: `EventSource.CONNECTING (=0)`, `EventSource.OPEN (=1)` nebo `EventSource.CLOSED (=2)`.
 
 `lastEventId`
-: The last received `id`. Upon reconnection the browser sends it in the header `Last-Event-ID`.
+: Poslední přijaté `id`. Po obnově spojení je prohlížeč pošle v hlavičce `Last-Event-ID`.
 
-### Methods
+### Metody
 
 `close()`
-: Closes the connection.
+: Uzavře spojení.
 
-### Events
+### Události
 
 `message`
-: Message received, the data is in `event.data`.
+: Zpráva přijata, data jsou v `událost.data`.
 
 `open`
-: The connection is established.
+: Spojení je zavedeno.
 
 `error`
-: In case of an error, including both lost connection (will auto-reconnect) and fatal errors. We can check `readyState` to see if the reconnection is being attempted.
+: Nastává v případě chyby, a to jak při ztrátě spojení (bude obnoveno), tak při kritických chybách. Kontrolou `readyState` můžeme zjistit, zda dochází k obnově spojení.
 
-The server may set a custom event name in `event:`. Such events should be handled using `addEventListener`, not `on<event>`.
+Server může nastavit vlastní název události v řádku `event:`. Takové události bychom měli zpracovávat pomocí `addEventListener`, ne `on<událost>`.
 
-### Server response format
+### Formát odpovědi serveru
 
-The server sends messages, delimited by `\n\n`.
+Server posílá zprávy oddělené `\n\n`.
 
-A message may have following fields:
+Zpráva může obsahovat následující pole:
 
-- `data:` -- message body, a sequence of multiple `data` is interpreted as a single message, with `\n` between the parts.
-- `id:` -- renews `lastEventId`, sent in `Last-Event-ID` on reconnect.
-- `retry:` -- recommends a retry delay for reconnections in ms. There's no way to set it from JavaScript.
-- `event:` -- event name, must precede `data:`.
+- `data:` -- tělo zprávy, posloupnost více `data` se interpretuje jako jedna zpráva s částmi oddělenými `\n`.
+- `id:` -- aktualizuje `lastEventId`, při obnově spojení se posílá v `Last-Event-ID`.
+- `retry:` -- doporučuje délku prodlevy v milisekundách před pokusem o obnovu spojení. V JavaScriptu ji nelze nijak nastavit.
+- `event:` -- název události, musí být před `data:`.
 
-A message may include one or more fields in any order, but `id:` usually goes the last.
+Zpráva může obsahovat jedno nebo více polí v libovolném pořadí, ale `id:` je zpravidla poslední.

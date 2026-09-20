@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Why do we need Origin?
+# K čemu potřebujeme Origin?
 
-As you probably know, there's HTTP-header `Referer`, that usually contains an url of the page which initiated a network request.
+Jak pravděpodobně víte, existuje HTTP hlavička `Referer`, která obvykle obsahuje URL stránky, která vyvolala síťový požadavek.
 
-For instance, when fetching `http://google.com` from `http://javascript.info/some/url`, the headers look like this:
+Například když stahujeme `http://google.com` z `http://javascript.info/some/url`, hlavičky vypadají následovně:
 
 ```
 Accept: */*
@@ -20,9 +20,9 @@ Referer: http://javascript.info/some/url
 */!*
 ```
 
-As you can see, both `Referer` and `Origin` are present.
+Jak vidíte, je přítomen jak `Referer`, tak `Origin`.
 
-The questions:
+Otázky zní:
 
-1. Why `Origin` is needed, if `Referer` has even more information?
-2. Is it possible that there's no `Referer` or `Origin`, or is it incorrect?
+1. K čemu je nutný `Origin`, když `Referer` obsahuje ještě více informací?
+2. Je možné, aby v požadavku nebyl žádný `Referer` nebo `Origin`, nebo to není korektní?

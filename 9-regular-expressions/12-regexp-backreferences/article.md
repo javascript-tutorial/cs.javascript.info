@@ -1,72 +1,72 @@
-# Backreferences in pattern: \N and \k<name>
+# Zpětné odkazy ve vzoru: \N a \k<jméno>
 
-We can use the contents of capturing groups `pattern:(...)` not only in the result or in the replacement string, but also in the pattern itself.
+Obsah zachytávacích skupin `pattern:(...)` můžeme používat nejen ve výsledku nebo v nahrazovacím řetězci, ale i v samotném vzoru.
 
-## Backreference by number: \N
+## Zpětný odkaz podle čísla: \N
 
-A group can be referenced in the pattern using `pattern:\N`, where `N` is the group number.
+Na skupinu se ve vzoru můžeme odkazovat pomocí `pattern:\N`, kde `N` je číslo skupiny.
 
-To make clear why that's helpful, let's consider a task.
+Abychom ujasnili, k čemu je to užitečné, uvažujme úlohu.
 
-We need to find quoted strings: either single-quoted `subject:'...'` or a double-quoted `subject:"..."` -- both variants should match.
+Potřebujeme najít řetězce v uvozovkách: buď v jednoduchých `subject:'...'`, nebo ve dvojitých `subject:"..."` -- obě varianty by měly vykázat shodu.
 
-How to find them?
+Jak je najdeme?
 
-We can put both kinds of quotes in the square brackets: `pattern:['"](.*?)['"]`, but it would find strings with mixed quotes, like `match:"...'` and `match:'..."`. That would lead to incorrect matches when one quote appears inside other ones, like in the string `subject:"She's the one!"`:
+Můžeme vložit oba druhy uvozovek do hranatých závorek: `pattern:['"](.*?)['"]`, ale to by našlo řetězce se smíšenými uvozovkami, např. `match:"...'` a `match:'..."`. To by vedlo k nesprávným shodám, když se jedny uvozovky ocitnou uvnitř druhých, například v řetězci `subject:"První mušketýr je d'Artagnan!"`:
 
 ```js run
-let str = `He said: "She's the one!".`;
+let řetězec = `Řekl: "První mušketýr je d'Artagnan!"`;
 
-let regexp = /['"](.*?)['"]/g;
+let rv = /['"](.*?)['"]/g;
 
-// The result is not what we'd like to have
-alert( str.match(regexp) ); // "She'
+// Výsledkem není to, co bychom chtěli
+alert( řetězec.match(rv) ); // "První mušketýr je d'
 ```
 
-As we can see, the pattern found an opening quote `match:"`, then the text is consumed till the other quote `match:'`, that closes the match.
+Jak vidíme, vzor našel otevírací uvozovky `match:"` a pak spotřeboval text až do dalších uvozovek `match:'`, které shodu uzavírají.
 
-To make sure that the pattern looks for the closing quote exactly the same as the opening one, we can wrap it into a capturing group and backreference it: `pattern:(['"])(.*?)\1`.
+Abychom zajistili, že vzor bude hledat přesně stejné uzavírací uvozovky jako otevírací, můžeme jej vložit do zachytávací skupiny a zpětně se na ni odkázat: `pattern:(['"])(.*?)\1`.
 
-Here's the correct code:
+Zde je správný kód:
 
 ```js run
-let str = `He said: "She's the one!".`;
+let řetězec = `Řekl: "První mušketýr je d'Artagnan!"`;
 
 *!*
-let regexp = /(['"])(.*?)\1/g;
+let rv = /(['"])(.*?)\1/g;
 */!*
 
-alert( str.match(regexp) ); // "She's the one!"
+alert( řetězec.match(rv) ); // "První mušketýr je d'Artagnan!"
 ```
 
-Now it works! The regular expression engine finds the first quote `pattern:(['"])` and memorizes its content. That's the first capturing group.
+Teď to funguje! Motor regulárních výrazů našel první uvozovky `pattern:(['"])` a zapamatoval si jejich obsah. To je první zachytávací skupina.
 
-Further in the pattern `pattern:\1` means "find the same text as in the first group", exactly the same quote in our case.
+Dále ve vzoru `pattern:\1` znamená „najít stejný text jako v první skupině“, v našem případě přesně stejné uvozovky.
 
-Similar to that, `pattern:\2` would mean the contents of the second group, `pattern:\3` - the 3rd group, and so on.
+Podobně by `pattern:\2` znamenalo obsah druhé skupiny, `pattern:\3` obsah třetí skupiny a tak dále.
 
 ```smart
-If we use `?:` in the group, then we can't reference it. Groups that are excluded from capturing `(?:...)` are not memorized by the engine.
+Pokud ve skupině použijeme `?:`, nemůžeme se na ni odkazovat. Skupiny, které jsou vyloučeny ze zachytávání `(?:...)`, si motor nepamatuje.
 ```
 
-```warn header="Don't mess up: in the pattern `pattern:\1`, in the replacement: `pattern:$1`"
-In the replacement string we use a dollar sign: `pattern:$1`, while in the pattern - a backslash `pattern:\1`.
+```warn header="Nepleťte si to: ve vzoru `pattern:\1`, v nahrazovacím řetězci `pattern:$1`"
+V nahrazovacím řetězci používáme znak dolaru: `pattern:$1`, ale ve vzoru zpětné lomítko: `pattern:\1`.
 ```
 
-## Backreference by name: `\k<name>`
+## Zpětný odkaz podle jména: `\k<jméno>`
 
-If a regexp has many parentheses, it's convenient to give them names.
+Jestliže regulární výraz obsahuje mnoho závorek, je vhodné je pojmenovat.
 
-To reference a named group we can use `pattern:\k<name>`.
+K odkazu na pojmenovanou skupinu můžeme použít `pattern:\k<jméno>`.
 
-In the example below the group with quotes is named `pattern:?<quote>`, so the backreference is `pattern:\k<quote>`:
+V následujícím příkladu se skupina s uvozovkami jmenuje `pattern:?<citát>`, takže zpětný odkaz je `pattern:\k<citát>`:
 
 ```js run
-let str = `He said: "She's the one!".`;
+let řetězec = `Řekl: "První mušketýr je d'Artagnan!"`;
 
 *!*
-let regexp = /(?<quote>['"])(.*?)\k<quote>/g;
+let rv = /(?<citát>['"])(.*?)\k<citát>/g;
 */!*
 
-alert( str.match(regexp) ); // "She's the one!"
+alert( řetězec.match(rv) ); // "První mušketýr je d'Artagnan!"
 ```

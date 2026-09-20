@@ -1,26 +1,26 @@
-# Parse an expression
+# Parsujte výraz
 
-An arithmetical expression consists of 2 numbers and an operator between them, for instance:
+Aritmetický výraz se skládá ze 2 čísel a operátoru mezi nimi, například:
 
 - `1 + 2`
 - `1.2 * 3.4`
 - `-3 / -6`
 - `-2 - 2`
 
-The operator is one of: `"+"`, `"-"`, `"*"` or `"/"`.
+Operátor je jeden z následujících: `"+"`, `"-"`, `"*"` nebo `"/"`.
 
-There may be extra spaces at the beginning, at the end or between the parts.
+Na začátku, na konci i mezi jednotlivými částmi mohou být dodatečné mezery.
 
-Create a function `parse(expr)` that takes an expression and returns an array of 3 items:
+Vytvořte funkci `parsuj(výraz)`, která vezme výraz a vrátí pole 3 prvků:
 
-1. The first number.
-2. The operator.
-3. The second number.
+1. První číslo.
+2. Operátor.
+3. Druhé číslo.
 
-For example:
+Příklad:
 
 ```js
-let [a, op, b] = parse("1.2 * 3.4");
+let [a, op, b] = parsuj("1.2 * 3.4");
 
 alert(a); // 1.2
 alert(op); // *

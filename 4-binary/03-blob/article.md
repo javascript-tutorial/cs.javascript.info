@@ -1,266 +1,264 @@
 # Blob
 
-`ArrayBuffer` and views are a part of ECMA standard, a part of JavaScript.
+`ArrayBuffer` a náhledy jsou součásti standardu ECMA, součásti JavaScriptu.
 
-In the browser, there are additional higher-level objects, described in [File API](https://www.w3.org/TR/FileAPI/), in particular `Blob`.
+V prohlížeči jsou i další objekty vyšší úrovně, popsané ve specifikaci [souborového API](https://www.w3.org/TR/FileAPI/), konkrétně `Blob`.
 
-`Blob` consists of an optional string `type` (a MIME-type usually), plus `blobParts` -- a sequence of other `Blob` objects, strings and `BufferSource`.
+`Blob` se skládá z nepovinného řetězce `type` (zpravidla MIME typ) a z `blobParts` -- posloupnost jiných objektů `Blob`, řetězců a objektů `BufferSource`.
 
 ![](blob.svg)
 
-The constructor syntax is:
+Syntaxe konstruktoru je:
 
 ```js
-new Blob(blobParts, options);
+new Blob(blobParts, volby);
 ```
 
-- **`blobParts`** is an array of `Blob`/`BufferSource`/`String` values.
-- **`options`** optional object:
-  - **`type`** -- `Blob` type, usually MIME-type, e.g. `image/png`,
-  - **`endings`** -- whether to transform end-of-line to make the `Blob` correspond to current OS newlines (`\r\n` or `\n`). By default `"transparent"` (do nothing), but also can be `"native"` (transform).
+- **`blobParts`** je pole hodnot `Blob`/`BufferSource`/`String`.
+- **`volby`** je nepovinný objekt:
+  - **`type`** -- typ blobu, zpravidla MIME typ, např. `image/png`,
+  - **`endings`** -- zda převádět znaky konce řádku v `Blob` tak, aby odpovídaly koncům řádků v aktuálním OS (`\r\n` nebo `\n`). Standardně `"transparent"` (nedělá nic), ale může být i `"native"` (převádí).
 
-For example:
+Příklad:
 
 ```js
-// create Blob from a string
+// vytvoříme Blob z řetězce
 let blob = new Blob(["<html>…</html>"], {type: 'text/html'});
-// please note: the first argument must be an array [...]
+// všimněte si: první argument musí být pole [...]
 ```
 
 ```js
-// create Blob from a typed array and strings
-let hello = new Uint8Array([72, 101, 108, 108, 111]); // "Hello" in binary form
+// vytvoříme Blob z typového pole a řetězců
+let ahoj = new Uint8Array([65, 104, 111, 106]); // "Ahoj" v binárním tvaru
 
-let blob = new Blob([hello, ' ', 'world'], {type: 'text/plain'});
+let blob = new Blob([ahoj, ' ', 'světe'], {type: 'text/plain'});
 ```
 
-
-We can extract `Blob` slices with:
+Části blobu můžeme získat pomocí:
 
 ```js
-blob.slice([byteStart], [byteEnd], [contentType]);
+blob.slice([počátečníByte], [koncovýByte], [typObsahu]);
 ```
 
-- **`byteStart`** -- the starting byte, by default 0.
-- **`byteEnd`** -- the last byte (exclusive, by default till the end).
-- **`contentType`** -- the `type` of the new blob, by default the same as the source.
+- **`počátečníByte`** -- počáteční byte, standardně 0.
+- **`koncovýByte`** -- poslední byte (nebude zahrnut, standardně až do konce).
+- **`typObsahu`** -- `type` nového blobu, standardně stejný jako ve zdroji.
 
-The arguments are similar to `array.slice`, negative numbers are allowed too.
+Argumenty se podobají argumentům `pole.slice`, jsou povoleny i záporné hodnoty.
 
-```smart header="`Blob` objects are immutable"
-We can't change data directly in a `Blob`, but we can slice parts of a `Blob`, create new `Blob` objects from them, mix them into a new `Blob` and so on.
+```smart header="Objekty `Blob` jsou neměnné"
+V objektech `Blob` nemůžeme přímo měnit data, ale můžeme z nich extrahovat jejich části, vytvářet z nich nové objekty `Blob`, smíchávat je do nového objektu `Blob` a podobně.
 
-This behavior is similar to JavaScript strings: we can't change a character in a string, but we can make a new corrected string.
+Toto chování se podobá JavaScriptovým řetězcům: nemůžeme změnit znak v řetězci, ale můžeme vytvořit nový, opravený řetězec.
 ```
 
-## Blob as URL
+## Blob jako URL
 
-A Blob can be easily used as a URL for `<a>`, `<img>` or other tags, to show its contents.
+Blob můžeme snadno použít jako URL pro `<a>`, `<img>` nebo jiné značky, abychom zobrazili jeho obsah.
 
-Thanks to `type`, we can also download/upload `Blob` objects, and the `type` naturally becomes `Content-Type` in network requests.
+Díky vlastnosti `type` můžeme také `Blob` objekty stahovat nebo je nahrávat jinam. Z jejich `type` se pak přirozeně stane `Content-Type` v síťových požadavcích.
 
-Let's start with a simple example. By clicking on a link you download a dynamically-generated `Blob` with `hello world` contents as a file:
+Začneme jednoduchým příkladem. Kliknutím na odkaz si stáhnete dynamicky generovaný `Blob` s obsahem `Ahoj, světe!` jako soubor:
 
 ```html run
-<!-- download attribute forces the browser to download instead of navigating -->
-<a download="hello.txt" href='#' id="link">Download</a>
+<!-- atribut download donutí prohlížeč soubor stáhnout a nepřecházet na něj -->
+<a download="hello.txt" href='#' id="odkaz">Stáhnout</a>
 
 <script>
-let blob = new Blob(["Hello, world!"], {type: 'text/plain'});
+let blob = new Blob(["Ahoj, světe!"], {type: 'text/plain'});
 
-link.href = URL.createObjectURL(blob);
+odkaz.href = URL.createObjectURL(blob);
 </script>
 ```
 
-We can also create a link dynamically in JavaScript and simulate a click by `link.click()`, then download starts automatically.
+Můžeme také vytvořit odkaz dynamicky v JavaScriptu a simulovat kliknutí na něj voláním `odkaz.click()`. Pak se stahování automaticky spustí.
 
-Here's the similar code that causes user to download the dynamically created `Blob`, without any HTML:
+Následuje podobný kód, který přiměje uživatele stáhnout dynamicky vytvořený `Blob` bez jakéhokoli HTML:
 
 ```js run
-let link = document.createElement('a');
-link.download = 'hello.txt';
+let odkaz = document.createElement('a');
+odkaz.download = 'hello.txt';
 
-let blob = new Blob(['Hello, world!'], {type: 'text/plain'});
+let blob = new Blob(['Ahoj, světe!'], {type: 'text/plain'});
 
-link.href = URL.createObjectURL(blob);
+odkaz.href = URL.createObjectURL(blob);
 
-link.click();
+odkaz.click();
 
-URL.revokeObjectURL(link.href);
+URL.revokeObjectURL(odkaz.href);
 ```
 
-`URL.createObjectURL` takes a `Blob` and creates a unique URL for it, in the form `blob:<origin>/<uuid>`.
+`URL.createObjectURL` vezme `Blob` a vytvoří pro něj unikátní URL ve tvaru `blob:<původ>/<uuid>`.
 
-That's what the value of `link.href` looks like:
+Hodnota `odkaz.href` vypadá následovně:
 
 ```
 blob:https://javascript.info/1e67e00e-860d-40a5-89ae-6ab0cbee6273
 ```
 
-For each URL generated by `URL.createObjectURL` the browser stores a URL -> `Blob` mapping internally. So such URLs are short, but allow to access the `Blob`.
+Pro každé URL generované voláním `URL.createObjectURL` si prohlížeč vnitřně uloží mapování URL -> `Blob`. Taková URL jsou tedy krátká, ale umožňují přístup k blobu.
 
-A generated URL (and hence the link with it) is only valid within the current document, while it's open. And it allows to reference the `Blob` in `<img>`, `<a>`, basically any other object that expects a URL.
+Vygenerované URL (a tedy i odkaz s ním) je platné jedině uvnitř aktuálního dokumentu, dokud je otevřený. A umožňuje odkazovat se na `Blob` v `<img>`, `<a>`, v zásadě v kterémkoli jiném objektu, který očekává URL.
 
-There's a side effect though. While there's a mapping for a `Blob`, the `Blob` itself resides in the memory. The browser can't free it.
+Má to však vedlejší efekt. Dokud existuje mapování pro `Blob`, samotný `Blob` přetrvává v paměti. Prohlížeč jej nemůže uvolnit.
 
-The mapping is automatically cleared on document unload, so `Blob` objects are freed then. But if an app is long-living, then that doesn't happen soon.
+Když je dokument zavřen, mapování se automaticky odstraní, takže objekty `Blob` jsou poté uvolněny. Jestliže však aplikace běží dlouhou dobu, nestane se to hned tak brzy.
 
-**So if we create a URL, that `Blob` will hang in memory, even if not needed any more.**
+**Když tedy vytvoříme URL, tento `Blob` zůstane viset v paměti, i když už není zapotřebí.**
 
-`URL.revokeObjectURL(url)` removes the reference from the internal mapping, thus allowing the `Blob` to be deleted (if there are no other references), and the memory to be freed.
+`URL.revokeObjectURL(url)` odstraní odkaz z vnitřního mapování, čímž umožní, aby byl `Blob` smazán (pokud na něj není žádný jiný odkaz) a paměť uvolněna.
 
-In the last example, we intend the `Blob` to be used only once, for instant downloading, so we call `URL.revokeObjectURL(link.href)` immediately.
+V posledním uvedeném příkladu jsme zamýšleli použít `Blob` pouze jednou, pro okamžité stažení, proto okamžitě voláme `URL.revokeObjectURL(odkaz.href)`.
 
-In the previous example with the clickable HTML-link, we don't call `URL.revokeObjectURL(link.href)`, because that would make the `Blob` url invalid. After the revocation, as the mapping is removed, the URL doesn't work any more.
+V předchozím příkladu s HTML odkazem, na který lze kliknout, však `URL.revokeObjectURL(odkaz.href)` nevoláme, protože tím bychom URL blobu zneplatnili. Po jeho zrušení a odstranění mapování již URL nefunguje.
 
-## Blob to base64
+## Blob na base64
 
-An alternative to `URL.createObjectURL` is to convert a `Blob` into a base64-encoded string.
+Alternativou k `URL.createObjectURL` je převedení objektu `Blob` na řetězec zakódovaný do base64.
 
-That encoding represents binary data as a string of ultra-safe "readable" characters with ASCII-codes from 0 to 64. And what's more important -- we can use this encoding in "data-urls".
+Toto kódování reprezentuje binární data jako řetězec ultrabezpečných „čitelných“ znaků s ASCII kódy od 0 do 64. A co je ještě důležitější, toto kódování můžeme používat v „datových URL“.
 
-A [data url](mdn:/http/Data_URIs) has the form `data:[<mediatype>][;base64],<data>`. We can use such urls everywhere, on par with "regular" urls.
+[Datové URL](mdn:/http/Data_URIs) má tvar `data:[<mediatype>][;base64],<data>`. Taková URL můžeme používat všude, kde můžeme používat „běžná“ URL.
 
-For instance, here's a smiley:
+Například zde je smajlík:
 
 ```html
 <img src="data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7">
 ```
 
-The browser will decode the string and show the image: <img src="data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7">
+Prohlížeč dekóduje řetězec a zobrazí obrázek: <img src="data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7">
 
+K převedení objektu `Blob` na base64 použijeme zabudovaný objekt `FileReader`, který může načítat data z blobů v mnoha formátech. Podrobněji to probereme v [příští kapitole](info:file).
 
-To transform a `Blob` into base64, we'll use the built-in `FileReader` object. It can read data from Blobs in multiple formats. In the [next chapter](info:file) we'll cover it more in-depth.
-
-Here's the demo of downloading a blob, now via base-64:
+Následuje demo stahování blobu, nyní pomocí base64:
 
 ```js run
-let link = document.createElement('a');
-link.download = 'hello.txt';
+let odkaz = document.createElement('a');
+odkaz.download = 'hello.txt';
 
-let blob = new Blob(['Hello, world!'], {type: 'text/plain'});
+let blob = new Blob(['Ahoj, světe!'], {type: 'text/plain'});
 
 *!*
 let reader = new FileReader();
-reader.readAsDataURL(blob); // converts the blob to base64 and calls onload
+reader.readAsDataURL(blob); // převede blob na base64 a volá onload
 */!*
 
 reader.onload = function() {
-  link.href = reader.result; // data url
-  link.click();
+  odkaz.href = reader.result; // datové URL
+  odkaz.click();
 };
 ```
 
-Both ways of making a URL of a `Blob` are usable. But usually `URL.createObjectURL(blob)` is simpler and faster.
+Oba způsoby vytvoření URL pro `Blob` jsou použitelné, ale `URL.createObjectURL(blob)` je obvykle jednodušší a rychlejší.
 
-```compare title-plus="URL.createObjectURL(blob)" title-minus="Blob to data url"
-+ We need to revoke them if care about memory.
-+ Direct access to blob, no "encoding/decoding"
-- No need to revoke anything.
-- Performance and memory losses on big `Blob` objects for encoding.
+```compare title-plus="URL.createObjectURL(blob)" title-minus="Datové URL z blobu"
++ Pokud se staráme o paměť, musíme je odstranit.
++ Přímý přístup do blobu bez „kódování/dekódování“.
+- Není třeba nic odstraňovat.
+- Na velkých objektech `Blob` dochází kvůli kódování ke spotřebě výkonu a paměti.
 ```
 
-## Image to blob
+## Převod obrázku na blob
 
-We can create a `Blob` of an image, an image part, or even make a page screenshot. That's handy to upload it somewhere.
+Můžeme vytvořit `Blob` z obrázku, části obrázku nebo dokonce můžeme vytvořit screenshot stránky. To se hodí, když jej chceme někam nahrát.
 
-Image operations are done via `<canvas>` element:
+Operace s obrázky provádíme pomocí elementu `<canvas>`:
 
-1. Draw an image (or its part) on canvas using [canvas.drawImage](mdn:/api/CanvasRenderingContext2D/drawImage).
-2. Call canvas method [.toBlob(callback, format, quality)](mdn:/api/HTMLCanvasElement/toBlob) that creates a `Blob` and runs `callback` with it when done.
+1. Nakreslíme obrázek (nebo jeho část) na plátno voláním [canvas.drawImage](mdn:/api/CanvasRenderingContext2D/drawImage).
+2. Voláme metodu plátna [.toBlob(callback, format, quality)](mdn:/api/HTMLCanvasElement/toBlob), která vytvoří `Blob`, a až bude hotový, spustí na něm `callback`.
 
-In the example below, an image is just copied, but we could cut from it, or transform it on canvas prior to making a blob:
+V následujícím příkladu je obrázek jen zkopírován, ale před vytvořením blobu můžeme také vyjmout jeho část nebo jej na plátně nějak transformovat:
 
 ```js run
-// take any image
-let img = document.querySelector('img');
+// vezmeme libovolný obrázek
+let obrázek = document.querySelector('img');
 
-// make <canvas> of the same size
-let canvas = document.createElement('canvas');
-canvas.width = img.clientWidth;
-canvas.height = img.clientHeight;
+// vytvoříme <canvas> stejné velikosti
+let plátno = document.createElement('canvas');
+plátno.width = obrázek.clientWidth;
+plátno.height = obrázek.clientHeight;
 
-let context = canvas.getContext('2d');
+let kontext = plátno.getContext('2d');
 
-// copy image to it (this method allows to cut image)
-context.drawImage(img, 0, 0);
-// we can context.rotate(), and do many other things on canvas
+// zkopírujeme do něj obrázek (tato metoda umožňuje vyjmout jeho část)
+kontext.drawImage(obrázek, 0, 0);
+// na plátně můžeme volat kontext.rotate() a provádět mnoho dalších věcí
 
-// toBlob is async operation, callback is called when done
-canvas.toBlob(function(blob) {
-  // blob ready, download it
-  let link = document.createElement('a');
-  link.download = 'example.png';
+// toBlob je asynchronní operace, po jejím dokončení se volá callback
+plátno.toBlob(function(blob) {
+  // blob je připraven, stáhneme ho
+  let odkaz = document.createElement('a');
+  odkaz.download = 'example.png';
 
-  link.href = URL.createObjectURL(blob);
-  link.click();
+  odkaz.href = URL.createObjectURL(blob);
+  odkaz.click();
 
-  // delete the internal blob reference, to let the browser clear memory from it
-  URL.revokeObjectURL(link.href);
+  // smažeme vnitřní odkaz na blob, aby ho prohlížeč mohl uvolnit z paměti
+  URL.revokeObjectURL(odkaz.href);
 }, 'image/png');
 ```
 
-If we prefer `async/await` instead of callbacks:
+Pokud před callbacky dáváme přednost `async/await`:
 ```js
-let blob = await new Promise(resolve => canvasElem.toBlob(resolve, 'image/png'));
+let blob = await new Promise(splň => plátno.toBlob(splň, 'image/png'));
 ```
 
-For screenshotting a page, we can use a library such as <https://github.com/niklasvh/html2canvas>. What it does is just walks the page and draws it on `<canvas>`. Then we can get a `Blob` of it the same way as above.
+Pro vytvoření screenshotu stránky můžeme použít knihovnu jako <https://github.com/niklasvh/html2canvas>, která provádí to, že prostě jen projde stránku a vykreslí ji na `<canvas>`. Pak můžeme získat její `Blob` stejným způsobem jako výše.
 
-## From Blob to ArrayBuffer
+## Od Blobu k ArrayBufferu
 
-The `Blob` constructor allows to create a blob from almost anything, including any `BufferSource`.
+Konstruktor `Blob` umožňuje vytvořit blob téměř z čehokoli, včetně jakéhokoli `BufferSource`.
 
-But if we need to perform low-level processing, we can get the lowest-level `ArrayBuffer` from `blob.arrayBuffer()`:
+Pokud však potřebujeme provádět zpracování na nižší úrovni, můžeme získat `ArrayBuffer` nejnižší úrovně voláním `blob.arrayBuffer()`:
 
 ```js
-// get arrayBuffer from blob
-const bufferPromise = await blob.arrayBuffer();
+// získáme arrayBuffer z blobu
+const příslibBufferu = await blob.arrayBuffer();
 
-// or
-blob.arrayBuffer().then(buffer => /* process the ArrayBuffer */);
+// nebo
+blob.arrayBuffer().then(buffer => /* zpracování ArrayBufferu */);
 ```
 
-## From Blob to stream
+## Od Blobu k proudu
 
-When we read and write to a blob of more than `2 GB`, the use of `arrayBuffer` becomes more memory intensive for us. At this point, we can directly convert the blob to a stream.
+Když načítáme a zapisujeme do blobu více než `2 GB` dat, bude pro nás používání `arrayBuffer` paměťově náročnější. V této chvíli můžeme převést blob přímo na proud.
 
-A stream is a special object that allows to read from it (or write into it) portion by portion. It's outside of our scope here, but here's an example, and you can read more at <https://developer.mozilla.org/en-US/docs/Web/API/Streams_API>. Streams are convenient for data that is suitable for processing piece-by-piece.
+Proud (stream) je speciální objekt, ze kterého můžeme číst (nebo do něj zapisovat) po částech. Zde je to mimo náš rámec, ale bude následovat příklad a více se o tom můžete dočíst v <https://developer.mozilla.org/en-US/docs/Web/API/Streams_API>. Proudy se hodí pro data, která je vhodné zpracovávat po jednotlivých částech.
 
-The `Blob` interface's `stream()` method returns a `ReadableStream` which upon reading returns the data contained within the `Blob`.
+Metoda `stream()` rozhraní `Blob` vrací proud `ReadableStream`, který při čtení vrací data obsažená v tomto blobu.
 
-Then we can read from it, like this:
+Pak z něj můžeme číst následovně:
 
 ```js
-// get readableStream from blob
+// získáme readableStream z blobu
 const readableStream = blob.stream();
 const stream = readableStream.getReader();
 
 while (true) {
-  // for each iteration: value is the next blob fragment
+  // pro každou iteraci: value (hodnota) je další fragment blobu
   let { done, value } = await stream.read();
   if (done) {
-    // no more data in the stream
-    console.log('all blob processed.');
+    // v proudu již nejsou další data
+    console.log('celý blob zpracován.');
     break;
   }
 
-   // do something with the data portion we've just read from the blob
+  // provedeme něco s částí dat, kterou jsme právě načetli z blobu
   console.log(value);
 }
 ```
 
-## Summary
+## Shrnutí
 
-While `ArrayBuffer`, `Uint8Array` and other `BufferSource` are "binary data", a [Blob](https://www.w3.org/TR/FileAPI/#dfn-Blob) represents "binary data with type".
+Zatímco `ArrayBuffer`, `Uint8Array` a jiné objekty `BufferSource` jsou „binární data“, [Blob](https://www.w3.org/TR/FileAPI/#dfn-Blob) reprezentuje „binární data spolu s typem“.
 
-That makes Blobs convenient for upload/download operations, that are so common in the browser.
+Díky tomu jsou bloby vhodné pro operace stahování a nahrávání, které se v prohlížeči používají velice často.
 
-Methods that perform web-requests, such as [XMLHttpRequest](info:xmlhttprequest), [fetch](info:fetch) and so on, can work with `Blob` natively, as well as with other binary types.
+Metody, které provádějí webové požadavky, např. [XMLHttpRequest](info:xmlhttprequest), [fetch](info:fetch) a tak dále, mohou s `Blob` přirozeně pracovat stejně jako s jinými binárními typy.
 
-We can easily convert between `Blob` and low-level binary data types:
+Mezi `Blob` a binárními datovými typy nižší úrovně můžeme snadno převádět:
 
-- We can make a `Blob` from a typed array using `new Blob(...)` constructor.
-- We can get back `ArrayBuffer` from a Blob using `blob.arrayBuffer()`, and then create a view over it for low-level binary processing.
+- Můžeme vytvořit `Blob` z typového pole konstruktorem `new Blob(...)`.
+- Z blobu můžeme získat zpět `ArrayBuffer` voláním `blob.arrayBuffer()` a pak na něm vytvořit náhled pro binární zpracování na nižší úrovni.
 
-Conversion streams are very useful when we need to handle large blob. You can easily create a `ReadableStream` from a blob. The `Blob` interface's `stream()` method returns a `ReadableStream` which upon reading returns the data contained within the blob.
+Když potřebujeme pracovat s velkým blobem, jsou velmi užitečné konverzní proudy. Z blobu můžeme snadno vytvořit `ReadableStream`. Metoda `stream()` rozhraní `Blob` vrátí `ReadableStream`, který při čtení vrací data obsažená v blobu.

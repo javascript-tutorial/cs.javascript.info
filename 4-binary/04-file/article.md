@@ -1,96 +1,96 @@
-# File and FileReader
+# File a FileReader
 
-A [File](https://www.w3.org/TR/FileAPI/#dfn-file) object inherits from `Blob` and is extended with filesystem-related capabilities.
+Objekt třídy [File](https://www.w3.org/TR/FileAPI/#dfn-file) je zděděn z `Blob` a je rozšířen o schopnosti týkající se souborového systému.
 
-There are two ways to obtain it.
+Je možné ho získat dvěma způsoby.
 
-First, there's a constructor, similar to `Blob`:
+Prvním je konstruktor, podobně jako `Blob`:
 
 ```js
-new File(fileParts, fileName, [options])
+new File(částiSouboru, názevSouboru, [volby])
 ```
 
-- **`fileParts`** -- is an array of Blob/BufferSource/String values.
-- **`fileName`** -- file name string.
-- **`options`** -- optional object:
-    - **`lastModified`** -- the timestamp (integer date) of last modification.
+- **`částiSouboru`** -- je pole hodnot Blob/BufferSource/String.
+- **`názevSouboru`** -- řetězec s názvem souboru.
+- **`volby`** -- nepovinný objekt:
+    - **`lastModified`** -- časové razítko (celočíselné datum) poslední změny.
 
-Second, more often we get a file from `<input type="file">` or drag'n'drop or other browser interfaces. In that case, the file gets this information from OS.
+Druhým, častějším způsobem je získání souboru z `<input type="file">`, přetažení nebo jiného prohlížečového rozhraní. V takovém případě soubor získá tyto informace z operačního systému.
 
-As `File` inherits from `Blob`, `File` objects have the same properties, plus:
-- `name` -- the file name,
-- `lastModified` -- the timestamp of last modification.
+Jelikož `File` je zděděn z `Blob`, objekty `File` mají stejné vlastnosti jako `Blob` a navíc:
+- `name` -- název souboru,
+- `lastModified` -- časové razítko poslední změny.
 
-That's how we can get a `File` object from `<input type="file">`:
+Tímto způsobem můžeme získat objekt `File` z `<input type="file">`:
 
 ```html run
-<input type="file" onchange="showFile(this)">
+<input type="file" onchange="zobrazSoubor(this)">
 
 <script>
-function showFile(input) {
-  let file = input.files[0];
+function zobrazSoubor(vstup) {
+  let soubor = vstup.files[0];
 
-  alert(`File name: ${file.name}`); // e.g my.png
-  alert(`Last modified: ${file.lastModified}`); // e.g 1552830408824
+  alert(`Název souboru: ${soubor.name}`); // např. my.png
+  alert(`Naposledy změněn: ${soubor.lastModified}`); // např. 1552830408824
 }
 </script>
 ```
 
 ```smart
-The input may select multiple files, so `input.files` is an array-like object with them. Here we have only one file, so we just take `input.files[0]`.
+Ve vstupu je možné vybrat více souborů, proto `vstup.files` je objekt podobný poli, který je obsahuje. Zde máme pouze jeden soubor, takže prostě vezmeme `vstup.files[0]`.
 ```
 
 ## FileReader
 
-[FileReader](https://www.w3.org/TR/FileAPI/#dfn-filereader) is an object with the sole purpose of reading data from `Blob` (and hence `File` too) objects.
+[FileReader](https://www.w3.org/TR/FileAPI/#dfn-filereader) je objekt, jehož jediným smyslem je načítat data z objektů `Blob` (a tedy i `File`).
 
-It delivers the data using events, as reading from disk may take time.
+Data doručuje pomocí událostí, neboť načítání z disku může nějaký čas trvat.
 
-The constructor:
+Konstruktor:
 
 ```js
-let reader = new FileReader(); // no arguments
+let reader = new FileReader(); // bez argumentů
 ```
 
-The main methods:
+Hlavní metody:
 
-- **`readAsArrayBuffer(blob)`** -- read the data in binary format `ArrayBuffer`.
-- **`readAsText(blob, [encoding])`** -- read the data as a text string with the given encoding (`utf-8` by default).
-- **`readAsDataURL(blob)`** -- read the binary data and encode it as base64 data url.
-- **`abort()`** -- cancel the operation.
+- **`readAsArrayBuffer(blob)`** -- načte data v binárním formátu `ArrayBuffer`.
+- **`readAsText(blob, [kódování])`** -- načte data jako textový řetězec se zadaným kódováním (standardně `utf-8`).
+- **`readAsDataURL(blob)`** -- načte binární data a zakóduje je do datového URL v base64.
+- **`abort()`** -- zruší prováděnou operaci.
 
-The choice of `read*` method depends on which format we prefer, how we're going to use the data.
+Volba metody `read*` závisí na tom, kterému formátu dáváme přednost a jak chceme tato data použít.
 
-- `readAsArrayBuffer` -- for binary files, to do low-level binary operations. For high-level operations, like slicing, `File` inherits from `Blob`, so we can call them directly, without reading.
-- `readAsText` -- for text files, when we'd like to get a string.
-- `readAsDataURL` -- when we'd like to use this data in `src` for `img` or another tag. There's an alternative to reading a file for that, as discussed in chapter <info:blob>: `URL.createObjectURL(file)`.
+- `readAsArrayBuffer` -- pro binární soubory, pro provádění operací nízké úrovně. Operace vysoké úrovně, např. vyjímání části dat, jsou ve `File` zděděny z `Blob`, takže je můžeme volat rovnou bez načítání.
+- `readAsText` -- pro textové soubory, když chceme získat řetězec.
+- `readAsDataURL` -- kdybychom chtěli použít data v `src` značky `img` nebo jiné. Pro tento účel existuje alternativa k načítání souboru, kterou jsme probrali v kapitole <info:blob>: `URL.createObjectURL(soubor)`.
 
-As the reading proceeds, there are events:
-- `loadstart` -- loading started.
-- `progress` -- occurs during reading.
-- `load` -- no errors, reading complete.
-- `abort` -- `abort()` called.
-- `error` -- error has occurred.
-- `loadend` -- reading finished with either success or failure.
+Když načítání probíhá, nastávají tyto události:
+- `loadstart` -- načítání začalo.
+- `progress` -- nastává během načítání.
+- `load` -- načítání skončilo bez chyb.
+- `abort` -- voláno `abort()`.
+- `error` -- nastala chyba.
+- `loadend` -- načítání skončilo, ať už úspěšně nebo s chybou.
 
-When the reading is finished, we can access the result as:
-- `reader.result` is the result (if successful)
-- `reader.error` is the error (if failed).
+Když načítání skončilo, můžeme přistupovat k výsledku následovně:
+- `reader.result` je výsledek (pokud skončilo úspěšně),
+- `reader.error` je chyba (pokud selhalo).
 
-The most widely used events are for sure `load` and `error`.
+Nejčastěji používanými událostmi jsou bezpochyby `load` a `error`.
 
-Here's an example of reading a file:
+Příklad načítání souboru:
 
 ```html run
-<input type="file" onchange="readFile(this)">
+<input type="file" onchange="načtiSoubor(this)">
 
 <script>
-function readFile(input) {
-  let file = input.files[0];
+function načtiSoubor(vstup) {
+  let soubor = vstup.files[0];
 
   let reader = new FileReader();
 
-  reader.readAsText(file);
+  reader.readAsText(soubor);
 
   reader.onload = function() {
     console.log(reader.result);
@@ -104,35 +104,35 @@ function readFile(input) {
 </script>
 ```
 
-```smart header="`FileReader` for blobs"
-As mentioned in the chapter <info:blob>, `FileReader` can read not just files, but any blobs.
+```smart header="`FileReader` pro bloby"
+Jak jsme zmínili v kapitole <info:blob>, `FileReader` umí načítat nejen soubory, ale všechny bloby.
 
-We can use it to convert a blob to another format:
-- `readAsArrayBuffer(blob)` -- to `ArrayBuffer`,
-- `readAsText(blob, [encoding])` -- to string (an alternative to `TextDecoder`),
-- `readAsDataURL(blob)` -- to base64 data url.
+S jeho pomocí můžeme převést blob na jiný formát:
+- `readAsArrayBuffer(blob)` -- na `ArrayBuffer`,
+- `readAsText(blob, [kódování])` -- na řetězec (alternativa k `TextDecoder`),
+- `readAsDataURL(blob)` -- na datové URL v base64.
 ```
 
 
-```smart header="`FileReaderSync` is available inside Web Workers"
-For Web Workers, there also exists a synchronous variant of `FileReader`, called [FileReaderSync](https://www.w3.org/TR/FileAPI/#FileReaderSync).
+```smart header="Ve Web Workers je k dispozici i `FileReaderSync`"
+Pro Web Workers existuje i synchronní varianta `FileReader`, nazvaná [FileReaderSync](https://www.w3.org/TR/FileAPI/#FileReaderSync).
 
-Its reading methods `read*` do not generate events, but rather return a result, as regular functions do.
+Jeho načítací metody `read*` negenerují události, ale vracejí výsledek, stejně jako běžné funkce.
 
-That's only inside a Web Worker though, because delays in synchronous calls, that are possible while reading from files, in Web Workers are less important. They do not affect the page.
+To je však možné jen uvnitř Web Workeru, protože prodlevy v synchronních voláních, které mohou při načítání ze souborů nastat, nejsou ve Web Workers tak důležité. Nemají vliv na stránku.
 ```
 
-## Summary
+## Shrnutí
 
-`File` objects inherit from `Blob`.
+Objekty `File` jsou zděděny z `Blob`.
 
-In addition to `Blob` methods and properties, `File` objects also have `name` and `lastModified` properties, plus the internal ability to read from filesystem. We usually get `File` objects from user input, like `<input>` or Drag'n'Drop events (`ondragend`).
+Kromě metod a vlastností `Blob` mají objekty `File` i vlastnosti `name` a `lastModified` a vnitřní schopnost číst ze souborového systému. Objekty `File` zpravidla získáváme z uživatelského vstupu, například `<input>` nebo událostí přetažení (`ondragend`).
 
-`FileReader` objects can read from a file or a blob, in one of three formats:
-- String (`readAsText`).
+Objekty `FileReader` umějí číst ze souboru nebo blobu, a to v jednom ze tří formátů:
+- Řetězec (`readAsText`).
 - `ArrayBuffer` (`readAsArrayBuffer`).
-- Data url, base-64 encoded (`readAsDataURL`).
+- Datové URL, zakódované pomocí base64 (`readAsDataURL`).
 
-In many cases though, we don't have to read the file contents. Just as we did with blobs, we can create a short url with `URL.createObjectURL(file)` and assign it to `<a>` or `<img>`. This way the file can be downloaded or shown up as an image, as a part of canvas etc.
+V mnoha případech však nemusíme načíst obsah souboru. Můžeme vytvořit krátké URL voláním `URL.createObjectURL(soubor)` a přiřadit je do `<a>` nebo `<img>`, stejně jako jsme to dělali s bloby. Tímto způsobem můžeme stáhnout soubor nebo jej zobrazit jako obrázek, jako součást plátna a podobně.
 
-And if we're going to send a `File` over a network, that's also easy: network API like `XMLHttpRequest` or `fetch` natively accepts `File` objects.
+A pokud chceme poslat `File` po síti, je to také snadné: síťová API, např. `XMLHttpRequest` nebo `fetch`, přirozeně přijímají objekty `File`.

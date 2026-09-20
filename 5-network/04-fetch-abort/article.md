@@ -1,60 +1,60 @@
 
-# Fetch: Abort
+# Fetch: zrušení stahování
 
-As we know, `fetch` returns a promise. And JavaScript generally has no concept of "aborting" a promise. So how can we cancel an ongoing `fetch`? E.g. if the user actions on our site indicate that the `fetch` isn't needed any more.
+Jak víme, metoda `fetch` vrací příslib. A JavaScript obecně nemá žádný koncept „odvolání“ příslibu. Jak tedy můžeme zastavit probíhající `fetch`? Například pokud uživatelské akce na naší stránce naznačují, že tento `fetch` již nebude zapotřebí.
 
-There's a special built-in object for such purposes: `AbortController`. It can be used to abort not only `fetch`, but other asynchronous tasks as well.
+K tomuto účelu slouží speciální zabudovaný objekt: `AbortController`. Můžeme jej použít nejen k zastavení `fetch`, ale i jiných asynchronních úloh.
 
-The usage is very straightforward:
+Jeho použití je velmi přímočaré:
 
-## The AbortController object
+## Objekt AbortController
 
-Create a controller:
+Vytvoříme controller:
 
 ```js
 let controller = new AbortController();
 ```
 
-A controller is an extremely simple object.
+Controller je extrémně jednoduchý objekt.
 
-- It has a single method `abort()`,
-- And a single property `signal` that allows to set event listeners on it.
+- Obsahuje jedinou metodu `abort()`
+- a jedinou vlastnost `signal`, která umožňuje na něm nastavovat posluchače událostí.
 
-When `abort()` is called:
-- `controller.signal` emits the `"abort"` event.
-- `controller.signal.aborted` property becomes `true`.
+Když je `abort()` volána:
+- `controller.signal` vyvolá událost `"abort"`.
+- Vlastnost `controller.signal.aborted` se nastaví na `true`.
 
-Generally, we have two parties in the process:
-1. The one that performs a cancelable operation, it sets a listener on `controller.signal`.
-2. The one that cancels: it calls `controller.abort()` when needed.
+Obecně máme v tomto procesu dvě části:
+1. Ta, která provádí zrušitelnou operaci, nastaví posluchače událostí na `controller.signal`.
+2. Ta, která ruší: když je potřeba, volá `controller.abort()`.
 
-Here's the full example (without `fetch` yet):
+Následuje úplný příklad (zatím bez `fetch`):
 
 ```js run
 let controller = new AbortController();
 let signal = controller.signal;
 
-// The party that performs a cancelable operation
-// gets the "signal" object
-// and sets the listener to trigger when controller.abort() is called
-signal.addEventListener('abort', () => alert("abort!"));
+// Strana, která provádí zrušitelnou operaci,
+// obdrží objekt „signal“
+// a nastaví posluchače, který se spustí, když bude volána controller.abort()
+signal.addEventListener('abort', () => alert("zastaveno!"));
 
-// The other party, that cancels (at any point later):
-controller.abort(); // abort!
+// Druhá strana, která provede zastavení (kdykoli později):
+controller.abort(); // zastaveno!
 
-// The event triggers and signal.aborted becomes true
+// Událost se spustí a signal.aborted se nastaví na true
 alert(signal.aborted); // true
 ```
 
-As we can see, `AbortController` is just a mean to pass `abort` events when `abort()` is called on it.
+Jak vidíme, `AbortController` je jen způsob, jak předávat událost `abort`, když je na něm volán `abort()`.
 
-We could implement the same kind of event listening in our code on our own, without the `AbortController` object.
+Stejný způsob naslouchání událostem si můžeme v našem kódu implementovat i sami, bez objektu `AbortController`.
 
-But what's valuable is that `fetch` knows how to work with the `AbortController` object. It's integrated in it.
+Na něm však je cenné to, že metoda `fetch` umí s objektem `AbortController` pracovat. Je do ní integrován.
 
-## Using with fetch
+## Použití s metodou fetch
 
-To be able to cancel `fetch`, pass the `signal` property of an `AbortController` as a `fetch` option:
+Abychom mohli zastavit `fetch`, předáme vlastnost `signal` objektu `AbortController` do voleb metody `fetch`:
 
 ```js
 let controller = new AbortController();
@@ -63,86 +63,86 @@ fetch(url, {
 });
 ```
 
-The `fetch` method knows how to work with `AbortController`. It will listen to `abort` events on `signal`.
+Metoda `fetch` umí s objektem `AbortController` pracovat. Naslouchá událostem `abort` na `signal`.
 
-Now, to abort, call `controller.abort()`:
+Když ji nyní chceme zastavit, zavoláme `controller.abort()`:
 
 ```js
 controller.abort();
 ```
 
-We're done: `fetch` gets the event from `signal` and aborts the request.
+Jsme hotovi: `fetch` obdrží událost od `signal` a požadavek zastaví.
 
-When a fetch is aborted, its promise rejects with an error `AbortError`, so we should handle it, e.g. in `try..catch`.
+Když je stahování zastaveno, příslib bude zamítnut s chybou `AbortError`. Měli bychom ji tedy zpracovat, např. v bloku `try..catch`.
 
-Here's the full example with `fetch` aborted after 1 second:
+V následujícím příkladu se `fetch` zastaví po 1 sekundě:
 
 ```js run async
-// abort in 1 second
+// zastavení po 1 sekundě
 let controller = new AbortController();
 setTimeout(() => controller.abort(), 1000);
 
 try {
-  let response = await fetch('/article/fetch-abort/demo/hang', {
+  let odpověď = await fetch('/article/fetch-abort/demo/hang', {
     signal: controller.signal
   });
 } catch(err) {
-  if (err.name == 'AbortError') { // handle abort()
-    alert("Aborted!");
+  if (err.name == 'AbortError') { // ošetříme abort()
+    alert("Zastaveno!");
   } else {
     throw err;
   }
 }
 ```
 
-## AbortController is scalable
+## AbortController je rozšiřitelný
 
-`AbortController` is scalable. It allows to cancel multiple fetches at once.
+`AbortController` je rozšiřitelný. Umožňuje zastavit více stahování najednou.
 
-Here's a sketch of code that fetches many `urls` in parallel, and uses a single controller to abort them all:
+Následující nástin kódu stahuje z mnoha adres v poli `poleURL` současně a používá jediný controller, který všechna stahování zastaví:
 
 ```js
-let urls = [...]; // a list of urls to fetch in parallel
+let poleURL = [...]; // seznam URL, z nichž se má paralelně stahovat
 
 let controller = new AbortController();
 
-// an array of fetch promises
-let fetchJobs = urls.map(url => fetch(url, {
+// pole příslibů fetch
+let poleStahování = poleURL.map(url => fetch(url, {
   signal: controller.signal
 }));
 
-let results = await Promise.all(fetchJobs);
+let výsledky = await Promise.all(poleStahování);
 
-// if controller.abort() is called from anywhere,
-// it aborts all fetches
+// pokud je odkudkoli volána controller.abort(),
+// všechna stahování se zastaví
 ```
 
-If we have our own asynchronous tasks, different from `fetch`, we can use a single `AbortController` to stop those, together with fetches.
+Jestliže máme naše vlastní asynchronní úlohy, jiné než `fetch`, můžeme je všechny zastavit jediným objektem `AbortController` společně s metodami `fetch`.
 
-We just need to listen to its `abort` event in our tasks:
+Jen musíme v našich úlohách naslouchat jeho události `abort`:
 
 ```js
-let urls = [...];
+let poleURL = [...];
 let controller = new AbortController();
 
-let ourJob = new Promise((resolve, reject) => { // our task
+let našeČinnost = new Promise((splň, zamítni) => { // naše úloha
   ...
-  controller.signal.addEventListener('abort', reject);
+  controller.signal.addEventListener('abort', zamítni);
 });
 
-let fetchJobs = urls.map(url => fetch(url, { // fetches
+let poleStahování = poleURL.map(url => fetch(url, { // stahování
   signal: controller.signal
 }));
 
-// Wait for fetches and our task in parallel
-let results = await Promise.all([...fetchJobs, ourJob]);
+// Čekáme na stahování a naši úlohu současně
+let výsledky = await Promise.all([...poleStahování, našeČinnost]);
 
-// if controller.abort() is called from anywhere,
-// it aborts all fetches and ourJob
+// pokud je odkudkoli volána controller.abort(),
+// zastaví se všechna stahování i našeČinnost
 ```
 
-## Summary
+## Shrnutí
 
-- `AbortController` is a simple object that generates an `abort` event on its `signal` property when the `abort()` method is called (and also sets `signal.aborted` to `true`).
-- `fetch` integrates with it: we pass the `signal` property as the option, and then `fetch` listens to it, so it's possible to abort the `fetch`.
-- We can use `AbortController` in our code. The "call `abort()`" -> "listen to `abort` event" interaction is simple and universal. We can use it even without `fetch`.
+- `AbortController` je jednoduchý objekt, který generuje událost `abort` na své vlastnosti `signal`, když je volána metoda `abort()` (a také nastaví `signal.aborted` na `true`).
+- Metoda `fetch` je s ním integrována: předáme jí vlastnost `signal` jako její volbu a pak mu `fetch` naslouchá, je tedy možné `fetch` zastavit.
+- Můžeme použít `AbortController` v našem kódu. Interakce „volání `abort()`“ -> „nasloucháme události `abort`“ je jednoduchá a univerzální. Můžeme ji použít i bez `fetch`.

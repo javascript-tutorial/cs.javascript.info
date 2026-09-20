@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-#  How to find an ellipsis "..." ?
+#  Jak najít výpustku "..." ?
 
-Create a regexp to find ellipsis: 3 (or more?) dots in a row.
+Vytvořte regulární výraz, který najde výpustku: 3 (nebo více?) teček za sebou.
 
-Check it:
+Otestujte si ho:
 
 ```js
-let regexp = /your regexp/g;
-alert( "Hello!... How goes?.....".match(regexp) ); // ..., .....
+let rv = /váš RV/g;
+alert( "Ahoj!... Jak se máš?.....".match(rv) ); // ..., .....
 ```

@@ -1,83 +1,83 @@
-# Catastrophic backtracking
+# Katastrofický zpětný průchod
 
-Some regular expressions are looking simple, but can execute a veeeeeery long time, and even "hang" the JavaScript engine.
+Některé regulární výrazy vypadají jednoduše, ale mohou běžet velmi, velmi dlouhou dobu a dokonce způsobit „zamrznutí“ motoru JavaScriptu.
 
-Sooner or later most developers occasionally face such behavior. The typical symptom -- a regular expression works fine sometimes, but for certain strings it "hangs", consuming 100% of CPU.
+Většina vývojářů se s tímto chováním dříve nebo později setká. Jeho typickým symptomem je, že regulární výraz někdy funguje dobře, ale na určitých řetězcích se „zasekne“ a spotřebuje 100% CPU.
 
-In such case a web-browser suggests to kill the script and reload the page. Not a good thing for sure.
+V takovém případě webový prohlížeč navrhne zastavit skript a obnovit stránku. To zcela jistě není dobrá věc.
 
-For server-side JavaScript such a regexp may hang the server process, that's even worse. So we definitely should take a look at it.
+V JavaScriptu na serverové straně může takový RV zablokovat serverový proces, což je ještě horší. Proto bychom se na to rozhodně měli podívat.
 
-## Example
+## Příklad
 
-Let's say we have a string, and we'd like to check if it consists of words `pattern:\w+` with an optional space `pattern:\s?` after each.
+Řekněme, že máme řetězec a chceme zkontrolovat, zda se skládá ze slov `pattern:\w+` s možnou mezerou `pattern:\s?` za každým z nich.
 
-An obvious way to construct a regexp would be to take a word followed by an optional space `pattern:\w+\s?` and then repeat it with `*`.
+Očividný způsob, jak vytvořit regulární výraz, by byl vzít slovo následované nepovinnou mezerou `pattern:\w+\s?` a pak je opakovat pomocí `*`.
 
-That leads us to the regexp `pattern:^(\w+\s?)*$`, it specifies zero or more such words, that start at the beginning `pattern:^` and finish at the end `pattern:$` of the line.
+To vede k regulárnímu výrazu `pattern:^(\w+\s?)*$`. Specifikuje žádné nebo více takových slov, začíná na začátku řádku `pattern:^` a končí na jeho konci `pattern:$`.
 
-In action:
-
-```js run
-let regexp = /^(\w+\s?)*$/;
-
-alert( regexp.test("A good string") ); // true
-alert( regexp.test("Bad characters: $@#") ); // false
-```
-
-The regexp seems to work. The result is correct. Although, on certain strings it takes a lot of time. So long that JavaScript engine "hangs" with 100% CPU consumption.
-
-If you run the example below, you probably won't see anything, as JavaScript will just "hang". A web-browser will stop reacting on events, the UI will stop working (most browsers allow only scrolling). After some time it will suggest to reload the page. So be careful with this:
+V akci:
 
 ```js run
-let regexp = /^(\w+\s?)*$/;
-let str = "An input string that takes a long time or even makes this regexp hang!";
+let rv = /^(\w+\s?)*$/;
 
-// will take a very long time
-alert( regexp.test(str) );
+alert( rv.test("Dobry retezec") ); // true
+alert( rv.test("Spatne znaky: $@#") ); // false
 ```
 
-To be fair, let's note that some regular expression engines can handle such a search effectively, for example V8 engine version starting from 8.8 can do that (so Google Chrome 88 doesn't hang here), while Firefox browser does hang. 
+Vypadá to, že tento RV funguje. Výsledek je správný. Ale na některých řetězcích trvá velmi dlouhou dobu. Tak dlouho, že motor JavaScriptu „zamrzne“ a spotřebuje 100% výkonu CPU.
 
-## Simplified example
-
-What's the matter? Why does the regular expression hang?
-
-To understand that, let's simplify the example: remove spaces `pattern:\s?`. Then it becomes `pattern:^(\w+)*$`.
-
-And, to make things more obvious, let's replace `pattern:\w` with `pattern:\d`. The resulting regular expression still hangs, for instance:
+Jestliže si spustíte následující příklad, neuvidíte pravděpodobně nic, protože JavaScript prostě „zamrzne“. Webový prohlížeč přestane reagovat na události, UI přestane fungovat (většina prohlížečů umožní jen rolování) a po nějaké době navrhne obnovení stránky. Takže s tím buďte opatrní:
 
 ```js run
-let regexp = /^(\d+)*$/;
+let rv = /^(\w+\s?)*$/;
+let řetězec = "Tento vstupni retezec trva velmi dlouhou dobu nebo dokonce zpusobi zamrznuti tohoto regularniho vyrazu!";
 
-let str = "012345678901234567890123456789z";
-
-// will take a very long time (careful!)
-alert( regexp.test(str) );
+// bude trvat velmi dlouho
+alert( rv.test(řetězec) );
 ```
 
-So what's wrong with the regexp?
+Poctivě dodejme, že některé motory regulárních výrazů dokáží takové hledání zvládnout efektivně, umí to například motor V8 od verze 8.8 (takže Google Chrome 88 zde nezamrzne), zatímco Firefox zamrzne.
 
-First, one may notice that the regexp `pattern:(\d+)*` is a little bit strange. The quantifier `pattern:*` looks extraneous. If we want a number, we can use `pattern:\d+`.
+## Zjednodušený příklad
 
-Indeed, the regexp is artificial; we got it by simplifying the previous example. But the reason why it is slow is the same. So let's understand it, and then the previous example will become obvious.
+Proč se tak děje? Proč tento regulární výraz zamrzne?
 
-What happens during the search of `pattern:^(\d+)*$` in the line `subject:123456789z` (shortened a bit for clarity, please note a non-digit character `subject:z` at the end, it's important), why does it take so long?
+Abychom to pochopili, zjednodušme příklad: odstraníme mezery `pattern:\s?`. Pak se z výrazu stane `pattern:^(\w+)*$`.
 
-Here's what the regexp engine does:
+A aby to bylo ještě zřejmější, nahradíme `pattern:\w` za `pattern:\d`. Výsledný regulární výraz stále zamrzne, například:
 
-1. First, the regexp engine tries to find the content of the parentheses: the number `pattern:\d+`. The plus `pattern:+` is greedy by default, so it consumes all digits:
+```js run
+let rv = /^(\d+)*$/;
+
+let řetězec = "012345678901234567890123456789z";
+
+// bude trvat velmi dlouho (opatrně!)
+alert( rv.test(řetězec) );
+```
+
+Co je tedy na tomto RV špatně?
+
+Nejprve si můžeme všimnout, že regulární výraz `pattern:(\d+)*` je poněkud zvláštní. Kvantifikátor `pattern:*` vypadá nadbytečný. Jestliže chceme číslo, můžeme použít `pattern:\d+`.
+
+Jistě, tento RV je uměle vytvořený; získali jsme ho zjednodušením předchozího příkladu. Avšak důvod, proč je pomalý, je stejný. Když ho pochopíme, předchozí příklad nám začne být jasný.
+
+Co se stane během hledání `pattern:^(\d+)*$` na řádku `subject:123456789z` (pro přehlednost trochu zjednodušeno, prosíme všimněte si nečíslicového znaku `subject:z` na konci, je důležitý), proč to trvá tak dlouho?
+
+Motor regulárních výrazů provádí následující:
+
+1. Nejprve se pokusí najít obsah závorek: číslo `pattern:\d+`. Plus `pattern:+` je standardně hltavé, takže pohltí všechny číslice:
 
     ```
     \d+.......
     (123456789)z
     ```
 
-    After all digits are consumed, `pattern:\d+` is considered found (as `match:123456789`).
+    Po pohlcení všech číslic se vzor `pattern:\d+` považuje za nalezený (jako `match:123456789`).
 
-    Then the star quantifier `pattern:(\d+)*` applies. But there are no more digits in the text, so the star doesn't give anything.
+    Pak se aplikuje hvězdičkový kvantifikátor `pattern:(\d+)*`. V textu však nejsou žádné další číslice, takže hvězdička nic nevydá.
 
-    The next character in the pattern is the string end `pattern:$`. But in the text we have `subject:z` instead, so there's no match:
+    Další znak ve vzoru je konec řetězce `pattern:$`. V textu však místo něj máme `subject:z`, takže shoda nenastane:
 
     ```
                X
@@ -85,16 +85,16 @@ Here's what the regexp engine does:
     (123456789)z
     ```
 
-2. As there's no match, the greedy quantifier `pattern:+` decreases the count of repetitions, backtracks one character back.
+2. Protože nedošlo ke shodě, hltavý kvantifikátor `pattern:+` sníží počet opakování a zpětně se vrátí o jeden znak.
 
-    Now `pattern:\d+` takes all digits except the last one (`match:12345678`):
+    Nyní `pattern:\d+` vezme všechny číslice kromě poslední (`match:12345678`):
     ```
     \d+.......
     (12345678)9z
     ```
-3. Then the engine tries to continue the search from the next position (right after `match:12345678`).
+3. Motor se pokusí pokračovat v hledání od další pozice (hned za `match:12345678`).
 
-    The star `pattern:(\d+)*` can be applied -- it gives one more match of `pattern:\d+`, the number `match:9`:
+    Může být aplikována hvězdička `pattern:(\d+)*` -- vrátí jednu další shodu s `pattern:\d+`, číslo `match:9`:
 
     ```
 
@@ -102,7 +102,7 @@ Here's what the regexp engine does:
     (12345678)(9)z
     ```
 
-    The engine tries to match `pattern:$` again, but fails, because it meets `subject:z` instead:
+    Motor se pokusí znovu najít `pattern:$`, ale neuspěje, protože místo něj narazí na `subject:z`:
 
     ```
                  X
@@ -111,11 +111,11 @@ Here's what the regexp engine does:
     ```
 
 
-4. There's no match, so the engine will continue backtracking, decreasing the number of repetitions. Backtracking generally works like this: the last greedy quantifier decreases the number of repetitions until it reaches the minimum. Then the previous greedy quantifier decreases, and so on.
+4. Ke shodě nedojde, takže motor bude pokračovat ve zpětném průchodu a sníží počet opakování. Zpětný průchod tak obecně funguje: poslední hltavý kvantifikátor snižuje počet opakování, dokud nedosáhne minima. Pak se sníží předchozí hltavý kvantifikátor a tak dále.
 
-    All possible combinations are attempted. Here are their examples.
+    Prověří se všechny možné kombinace. Zde jsou jejich příklady.
 
-    The first number `pattern:\d+` has 7 digits, and then a number of 2 digits:
+    První číslo `pattern:\d+` má 7 číslic, pak je číslo ze 2 číslic:
 
     ```
                  X
@@ -123,7 +123,7 @@ Here's what the regexp engine does:
     (1234567)(89)z
     ```
 
-    The first number has 7 digits, and then two numbers of 1 digit each:
+    První číslo má 7 číslic, pak jsou 2 čísla po 1 číslici:
 
     ```
                    X
@@ -131,7 +131,7 @@ Here's what the regexp engine does:
     (1234567)(8)(9)z
     ```
 
-    The first number has 6 digits, and then a number of 3 digits:
+    První číslo má 6 číslic, pak je číslo ze 3 číslic:
 
     ```
                  X
@@ -139,7 +139,7 @@ Here's what the regexp engine does:
     (123456)(789)z
     ```
 
-    The first number has 6 digits, and then 2 numbers:
+    První číslo má 6 číslic, pak jsou 2 čísla:
 
     ```
                    X
@@ -147,88 +147,88 @@ Here's what the regexp engine does:
     (123456)(78)(9)z
     ```
 
-    ...And so on.
+    ...A tak dále.
 
 
-There are many ways to split a sequence of digits `123456789` into numbers. To be precise, there are <code>2<sup>n</sup>-1</code>, where `n` is the length of the sequence.
+Je mnoho způsobů, jak rozdělit posloupnost číslic `123456789` na čísla. Abychom byli přesní, je jich <code>2<sup>n</sup>-1</code>, kde `n` je délka posloupnosti.
 
-- For `123456789` we have `n=9`, that gives 511 combinations.
-- For a longer sequence with `n=20` there are about one million (1048575) combinations.
-- For `n=30` - a thousand times more (1073741823 combinations).
+- Pro `123456789` máme `n=9`, což dává 511 kombinací.
+- Pro delší posloupnost s `n=20` existuje přibližně milión (1 048 575) kombinací.
+- Pro `n=30` je jich tisíckrát více (1 073 741 823 kombinací).
 
-Trying each of them is exactly the reason why the search takes so long.
+Právě testování každé z nich je důvod, proč hledání trvá tak dlouho.
 
-## Back to words and strings
+## Zpátky ke slovům a řetězcům
 
-The similar thing happens in our first example, when we look for words by pattern `pattern:^(\w+\s?)*$` in the string `subject:An input that hangs!`.
+Něco podobného se stane v našem prvním příkladu, kde hledáme slova podle vzoru `pattern:^(\w+\s?)*$` v řetězci `subject:Tento vstup zamrzne!`.
 
-The reason is that a word can be represented as one `pattern:\w+` or many:
+Důvodem je, že slovo může být reprezentováno jako jedno nebo mnoho `pattern:\w+`:
 
 ```
-(input)
-(inpu)(t)
-(inp)(u)(t)
-(in)(p)(ut)
+(vstup)
+(vstu)(p)
+(vst)(u)(p)
+(vs)(t)(up)
 ...
 ```
 
-For a human, it's obvious that there may be no match, because the string ends with an exclamation sign `!`, but the regular expression expects a wordly character `pattern:\w` or a space `pattern:\s` at the end. But the engine doesn't know that.
+Člověku je hned zřejmé, že tady nemůže nastat shoda, protože řetězec končí vykřičníkem `!`, zatímco regulární výraz na konci očekává slovní znak `pattern:\w` nebo mezeru `pattern:\s`. Motor to však neví.
 
-It tries all combinations of how the regexp `pattern:(\w+\s?)*` can "consume" the string, including variants with spaces `pattern:(\w+\s)*` and without them `pattern:(\w+)*` (because spaces `pattern:\s?` are optional). As there are many such combinations (we've seen it with digits), the search takes a lot of time.
+Zkouší všechny kombinace, jakými může RV `pattern:(\w+\s?)*` „pohltit“ řetězec, včetně variant s mezerami `pattern:(\w+\s)*` a bez nich `pattern:(\w+)*` (protože mezery `pattern:\s?` jsou nepovinné). Protože těchto kombinací je velké množství (jak jsme viděli u číslic), hledání zabere dlouhou dobu.
 
-What to do?
+Co s tím můžeme dělat?
 
-Should we turn on the lazy mode?
+Měli bychom se přepnout do liknavého režimu?
 
-Unfortunately, that won't help: if we replace `pattern:\w+` with `pattern:\w+?`, the regexp will still hang. The order of combinations will change, but not their total count.
+Naneštěstí to nepomůže: jestliže nahradíme `pattern:\w+` za `pattern:\w+?`, RV stále zamrzne. Změní se pořadí testovaných kombinací, ale ne jejich celkový počet.
 
-Some regular expression engines have tricky tests and finite automations that allow to avoid going through all combinations or make it much faster, but most engines don't, and it doesn't always help.
+Některé motory regulárních výrazů mají chytré testy a konečné automaty, které umožňují vyhnout se procházení všech kombinací nebo je značně urychlí, ale většina motorů je nemá a navíc to nepomůže vždy.
 
-## How to fix?
+## Jak to opravit?
 
-There are two main approaches to fixing the problem.
+Tento problém se dá řešit dvěma hlavními způsoby.
 
-The first is to lower the number of possible combinations.
+První je snížit počet možných kombinací.
 
-Let's make the space non-optional by rewriting the regular expression as `pattern:^(\w+\s)*\w*$` - we'll look for any number of words followed by a space `pattern:(\w+\s)*`, and then (optionally) a final word `pattern:\w*`.
+Učiníme mezeru povinnou přepsáním regulárního výrazu na `pattern:^(\w+\s)*\w*$` - budeme hledat jakýkoli počet slov následovaných mezerou  `pattern:(\w+\s)*` a pak (nepovinně) poslední slovo `pattern:\w*`.
 
-This regexp is equivalent to the previous one (matches the same) and works well:
+Tento regulární výraz je ekvivalentní předchozímu (najde stejné shody) a funguje dobře:
 
 ```js run
-let regexp = /^(\w+\s)*\w*$/;
-let str = "An input string that takes a long time or even makes this regex hang!";
+let rv = /^(\w+\s)*\w*$/;
+let řetězec = "Tento vstupni retezec trva velmi dlouhou dobu nebo dokonce zpusobi zamrznuti tohoto regularniho vyrazu!";
 
-alert( regexp.test(str) ); // false
+alert( rv.test(řetězec) ); // false
 ```
 
-Why did the problem disappear?
+Proč problém zmizel?
 
-That's because now the space is mandatory.
+Je to tím, že mezera je nyní povinná.
 
-The previous regexp, if we omit the space, becomes `pattern:(\w+)*`, leading to many combinations of `\w+` within a single word
+Když z předchozího RV vypustíme mezeru, změní se na `pattern:(\w+)*`, což vede k mnoha kombinacím `\w+` uvnitř jednoho slova.
 
-So `subject:input` could be matched as two repetitions of `pattern:\w+`, like this:
+Takže `subject:vstup` může odpovídat dvěma opakováním `pattern:\w+`, například:
 
 ```
 \w+  \w+
-(inp)(ut)
+(vst)(up)
 ```
 
-The new pattern is different: `pattern:(\w+\s)*` specifies repetitions of words followed by a space! The `subject:input` string can't be matched as two repetitions of `pattern:\w+\s`, because the space is mandatory.
+Nový vzor je jiný: `pattern:(\w+\s)*` specifikuje opakování slov následovaných mezerou! Řetězec `subject:vstup` nemůže být nalezen jako dvě opakování `pattern:\w+\s`, protože mezera je povinná.
 
-The time needed to try a lot of (actually most of) combinations is now saved.
+Ušetří se čas potřebný k otestování mnoha (ve skutečnosti většiny) kombinací.
 
-## Preventing backtracking
+## Zákaz zpětného průchodu
 
-It's not always convenient to rewrite a regexp though. In the example above it was easy, but it's not always obvious how to do it.
+Ne vždy je však vhodné přepsat regulární výraz. V uvedeném příkladu to bylo snadné, ale není vždy zřejmé, jak to udělat.
 
-Besides, a rewritten regexp is usually more complex, and that's not good. Regexps are complex enough without extra efforts.
+Kromě toho je přepsaný RV obvykle složitější, což není dobré. Regulární výrazy jsou už tak dost složité i bez dalšího úsilí.
 
-Luckily, there's an alternative approach. We can forbid backtracking for the quantifier.
+Naštěstí existuje alternativní přístup. Můžeme zakázat kvantifikátoru zpětný průchod.
 
-The root of the problem is that the regexp engine tries many combinations that are obviously wrong for a human.
+Jádro problému spočívá v tom, že motor regulárních výrazů zkouší mnoho kombinací, které jsou pro člověka očividně špatné.
 
-E.g. in the regexp `pattern:(\d+)*$` it's obvious for a human, that `pattern:+` shouldn't backtrack. If we replace one `pattern:\d+` with two separate `pattern:\d+\d+`, nothing changes:
+Například v RV `pattern:(\d+)*$` je člověku hned zřejmé, že `pattern:+` by neměl zpětně procházet. Jestliže nahradíme jeden `pattern:\d+` dvěma samostatnými `pattern:\d+\d+`, nic se nezmění:
 
 ```
 \d+........
@@ -238,81 +238,81 @@ E.g. in the regexp `pattern:(\d+)*$` it's obvious for a human, that `pattern:+` 
 (1234)(56789)!
 ```
 
-And in the original example `pattern:^(\w+\s?)*$` we may want to forbid backtracking in `pattern:\w+`. That is: `pattern:\w+` should match a whole word, with the maximal possible length. There's no need to lower the repetitions count in `pattern:\w+` or to split it into two words `pattern:\w+\w+` and so on.
+A v původním příkladu `pattern:^(\w+\s?)*$` můžeme chtít zakázat zpětný průchod v `pattern:\w+`. To znamená: `pattern:\w+` by měl najít celé slovo o maximální možné délce. Není nutné snižovat ve `pattern:\w+` počet opakování nebo ho dělit na dvě slova `pattern:\w+\w+` a podobně.
 
-Modern regular expression engines support possessive quantifiers for that. Regular quantifiers become possessive if we add `pattern:+` after them. That is, we use `pattern:\d++` instead of `pattern:\d+` to stop `pattern:+` from backtracking.
+Moderní motory regulárních výrazů podporují pro tento účel posesivní (possessive) kvantifikátory. Běžný kvantifikátor se stane posesivním, jestliže za něj přidáme `pattern:+`. To znamená, že abychom zabránili `pattern:+` ve zpětném průchodu, použijeme  `pattern:\d++` namísto `pattern:\d+`.
 
-Possessive quantifiers are in fact simpler than "regular" ones. They just match as many as they can, without any backtracking. The search process without backtracking is simpler.
+Posesivní kvantifikátory jsou ve skutečnosti jednodušší než „obyčejné“. Najdou prostě tolik, kolik mohou, bez jakéhokoli zpětného průchodu. Proces hledání bez zpětného průchodu je jednodušší.
 
-There are also so-called "atomic capturing groups" - a way to disable backtracking inside parentheses.
+Existují i tzv. „atomické zachytávací skupiny“ -- způsob, jak zakázat zpětný průchod v závorkách.
 
-...But the bad news is that, unfortunately, in JavaScript they are not supported.
+...Špatná zpráva však je, že v JavaScriptu nejsou podporovány.
 
-We can emulate them though using a "lookahead transform".
+Můžeme je však emulovat pomocí „transformace dopředným nahlédnutím“.
 
-### Lookahead to the rescue!
+### Dopředné nahlédnutí nás zachrání!
 
-So we've come to real advanced topics. We'd like a quantifier, such as `pattern:+` not to backtrack, because sometimes backtracking makes no sense.
+Narazili jsme tedy na opravdu pokročilé téma. Chtěli bychom, aby kvantifikátor, např. `pattern:+`, neprováděl zpětný průchod, protože někdy to nemá smysl.
 
-The pattern to take as many repetitions of `pattern:\w` as possible without backtracking is: `pattern:(?=(\w+))\1`. Of course, we could take another pattern instead of `pattern:\w`.
+Vzor, který najde co nejvíce opakování `pattern:\w` bez zpětného průchodu, je: `pattern:(?=(\w+))\1`. Místo `pattern:\w` můžeme samozřejmě použít jakýkoli jiný vzor.
 
-That may seem odd, but it's actually a very simple transform.
+Může to vypadat divně, ale ve skutečnosti je to velmi jednoduchá transformace.
 
-Let's decipher it:
+Rozšifrujme to:
 
-- Lookahead `pattern:?=` looks forward for the longest word `pattern:\w+` starting at the current position.
-- The contents of parentheses with `pattern:?=...` isn't memorized by the engine, so wrap `pattern:\w+` into parentheses. Then the engine will memorize their contents
-- ...And allow us to reference it in the pattern as `pattern:\1`.
+- Dopředné nahlédnutí `pattern:?=` se podívá dopředu na nejdelší možné slovo `pattern:\w+`, které začíná na aktuální pozici.
+- Obsah závorek s `pattern:?=...` si motor nezapamatuje, takže uzavřeme `pattern:\w+` do závorek. Motor si pak jejich obsah zapamatuje.
+- ...A umožní nám se na něj odkázat ve vzoru pomocí `pattern:\1`.
 
-That is: we look ahead - and if there's a word `pattern:\w+`, then match it as `pattern:\1`.
+To znamená: podíváme se dopředu -- a pokud tam je slovo `pattern:\w+`, budeme je hledat pomocí `pattern:\1`.
 
-Why? That's because the lookahead finds a word `pattern:\w+` as a whole and we capture it into the pattern with `pattern:\1`. So we essentially implemented a possessive plus `pattern:+` quantifier. It captures only the whole word `pattern:\w+`, not a part of it.
+Proč? Je to proto, že dopředné nahlédnutí najde slovo `pattern:\w+` jako celek a my je zachytíme do vzoru pomocí `pattern:\1`. V zásadě jsme tedy implementovali posesivní kvantifikátor plus `pattern:+`. Zachytí pouze celé slovo `pattern:\w+`, ne jeho část.
 
-For instance, in the word `subject:JavaScript` it may not only match `match:Java`, but leave out `match:Script` to match the rest of the pattern.
+Například ve slově `subject:JavaScript` nemůže najít pouze `match:Java` a nechat `match:Script` zbytku vzoru.
 
-Here's the comparison of two patterns:
+Porovnejme tyto dva vzory:
 
 ```js run
 alert( "JavaScript".match(/\w+Script/)); // JavaScript
 alert( "JavaScript".match(/(?=(\w+))\1Script/)); // null
 ```
 
-1. In the first variant `pattern:\w+` first captures the whole word `subject:JavaScript` but then `pattern:+` backtracks character by character, to try to match the rest of the pattern, until it finally succeeds (when `pattern:\w+` matches `match:Java`).
-2. In the second variant `pattern:(?=(\w+))` looks ahead and finds the word  `subject:JavaScript`, that is included into the pattern as a whole by `pattern:\1`, so there remains no way to find `subject:Script` after it.
+1. V první variantě `pattern:\w+` napřed zachytí celé slovo `subject:JavaScript`, ale pak `pattern:+` zpětně prochází znak po znaku, aby našel shodu se zbytkem vzoru, dokud nakonec neuspěje (když `pattern:\w+` najde `match:Java`).
+2. Ve druhé variantě se `pattern:(?=(\w+))` dívá dopředu a najde slovo `subject:JavaScript`, které zahrne do vzoru jako celek pomocí `pattern:\1`, takže nezbude žádný způsob, jak najít `subject:Script` za ním.
 
-We can put a more complex regular expression into `pattern:(?=(\w+))\1` instead of `pattern:\w`, when we need to forbid backtracking for `pattern:+` after it.
+Místo `pattern:\w` můžeme do `pattern:(?=(\w+))\1` uvést složitější regulární výraz, když potřebujeme zakázat zpětný průchod kvantifikátoru `pattern:+` za ním.
 
 ```smart
-There's more about the relation between possessive quantifiers and lookahead in articles [Regex: Emulate Atomic Grouping (and Possessive Quantifiers) with LookAhead](https://instanceof.me/post/52245507631/regex-emulate-atomic-grouping-with-lookahead) and [Mimicking Atomic Groups](https://blog.stevenlevithan.com/archives/mimic-atomic-groups).
+O vztahu mezi posesivními kvantifikátory a dopředným nahlédnutím najdete další informace v článcích [Regex: Emulate Atomic Grouping (and Possessive Quantifiers) with LookAhead](https://instanceof.me/post/52245507631/regex-emulate-atomic-grouping-with-lookahead) a [Mimicking Atomic Groups](https://blog.stevenlevithan.com/archives/mimic-atomic-groups).
 ```
 
-Let's rewrite the first example using lookahead to prevent backtracking:
+Přepišme první příklad pomocí dopředného nahlédnutí, abychom zakázali zpětný průchod:
 
 ```js run
-let regexp = /^((?=(\w+))\2\s?)*$/;
+let rv = /^((?=(\w+))\2\s?)*$/;
 
-alert( regexp.test("A good string") ); // true
+alert( rv.test("Dobry retezec") ); // true
 
-let str = "An input string that takes a long time or even makes this regex hang!";
+let řetězec = "Tento vstupni retezec trva velmi dlouhou dobu nebo dokonce zpusobi zamrznuti tohoto regularniho vyrazu!";
 
-alert( regexp.test(str) ); // false, works and fast!
+alert( rv.test(řetězec) ); // false, funguje a rychle!
 ```
 
-Here `pattern:\2` is used instead of `pattern:\1`, because there are additional outer parentheses. To avoid messing up with the numbers, we can give the parentheses a name, e.g. `pattern:(?<word>\w+)`.
+Zde jsme místo `pattern:\1` použili `pattern:\2`, protože tady jsou další vnější závorky. Abychom se vyhnuli manipulaci s čísly, můžeme závorky pojmenovat, např.  `pattern:(?<slovo>\w+)`.
 
 ```js run
-// parentheses are named ?<word>, referenced as \k<word>
-let regexp = /^((?=(?<word>\w+))\k<word>\s?)*$/;
+// závorky mají jméno ?<slovo>, odkazuje se na ně \k<slovo>
+let rv = /^((?=(?<slovo>\w+))\k<slovo>\s?)*$/;
 
-let str = "An input string that takes a long time or even makes this regex hang!";
+let řetězec = "Tento vstupni retezec trva velmi dlouhou dobu nebo dokonce zpusobi zamrznuti tohoto regularniho vyrazu!";
 
-alert( regexp.test(str) ); // false
+alert( rv.test(řetězec) ); // false
 
-alert( regexp.test("A correct string") ); // true
+alert( rv.test("Dobry retezec") ); // true
 ```
 
-The problem described in this article is called "catastrophic backtracking".
+Problém popsaný v tomto článku se nazývá „katastrofický zpětný průchod“ („catastrophic backtracking“).
 
-We covered two ways how to solve it:
-- Rewrite the regexp to lower the possible combinations count.
-- Prevent backtracking.
+Uvedli jsme dva způsoby, jak jej řešit:
+- Přepsat regulární výraz tak, aby se snížil počet možných kombinací.
+- Zakázat zpětný průchod.

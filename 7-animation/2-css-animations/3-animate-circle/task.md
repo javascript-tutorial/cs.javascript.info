@@ -2,15 +2,15 @@ importance: 5
 
 ---
 
-# Animated circle
+# Animovaný kruh
 
-Create a function `showCircle(cx, cy, radius)` that shows an animated growing circle.
+Vytvořte funkci `zobrazKruh(cx, cy, poloměr)`, která zobrazí animovaný zvětšující se kruh.
 
-- `cx,cy` are window-relative coordinates of the center of the circle,
-- `radius` is the radius of the circle.
+- `cx,cy` jsou okenní souřadnice středu kruhu,
+- `radius` je poloměr kruhu.
 
-Click the button below to see how it should look like:
+Po kliknutí na následující tlačítko uvidíte, jak to má vypadat:
 
 [iframe src="solution" height=260]
 
-The source document has an example of a circle with right styles, so the task is precisely to do the animation right.
+Zdrojový dokument obsahuje příklad kruhu se správnými styly, takže úkolem je výhradně vytvořit správnou animaci.

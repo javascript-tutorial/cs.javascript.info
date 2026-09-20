@@ -1,19 +1,19 @@
-To bounce we can use CSS property `top` and `position:absolute` for the ball inside the field with `position:relative`.
+Pro skákání můžeme využít CSS vlastnost `top` a `position:absolute` pro míč uvnitř hřiště s `position:relative`.
 
-The bottom coordinate of the field is `field.clientHeight`. The CSS `top` property refers to the upper edge of the ball. So it should go from `0` till `field.clientHeight - ball.clientHeight`, that's the final lowest position of the upper edge of the ball.
+Dolní souřadnice hřiště je `hřiště.clientHeight`. CSS vlastnost `top` se odkazuje na horní okraj míče, takže by měla probíhat od `0` do `hřiště.clientHeight - míč.clientHeight`, což je konečná nejnižší pozice horního okraje míče.
 
-To get the "bouncing" effect we can use the timing function `bounce` in `easeOut` mode.
+Pro efekt „skákání“ můžeme použít časovací funkci `skákání` v režimu `easeOut`.
 
-Here's the final code for the animation:
+Zde je konečný kód animace:
 
 ```js
-let to = field.clientHeight - ball.clientHeight;
+let kam = hřiště.clientHeight - míč.clientHeight;
 
 animate({
   duration: 2000,
-  timing: makeEaseOut(bounce),
-  draw(progress) {
-    ball.style.top = to * progress + 'px'
+  timing: vytvořEaseOut(skákání),
+  draw(postup) {
+    míč.style.top = kam * postup + 'px'
   }
 });
 ```

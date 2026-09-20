@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   <style>
-    .message-ball {
+    .zpráva-kruh {
       font-size: 20px;
       line-height: 200px;
       text-align: center;
     }
-    .circle {
+    .kruh {
       transition-property: width, height;
       transition-duration: 2s;
       position: fixed;
@@ -22,29 +22,29 @@
 
 <body>
 
-  <button onclick="go()">Click me</button>
+  <button onclick="spusť()">Klikněte na mě</button>
 
   <script>
 
-  function go() {
-    showCircle(150, 150, 100, div => {
-      div.classList.add('message-ball');
-      div.append("Hello, world!");
+  function spusť() {
+    zobrazKruh(150, 150, 100, div => {
+      div.classList.add('zpráva-kruh');
+      div.append("Ahoj, světe!");
     });
   }
 
-  function showCircle(cx, cy, radius, callback) {
+  function zobrazKruh(cx, cy, poloměr, callback) {
     let div = document.createElement('div');
     div.style.width = 0;
     div.style.height = 0;
     div.style.left = cx + 'px';
     div.style.top = cy + 'px';
-    div.className = 'circle';
+    div.className = 'kruh';
     document.body.append(div);
 
     setTimeout(() => {
-      div.style.width = radius * 2 + 'px';
-      div.style.height = radius * 2 + 'px';
+      div.style.width = poloměr * 2 + 'px';
+      div.style.height = poloměr * 2 + 'px';
 
       div.addEventListener('transitionend', function handler() {
         div.removeEventListener('transitionend', handler);

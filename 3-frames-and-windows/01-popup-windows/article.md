@@ -1,258 +1,257 @@
-# Popups and window methods
+# Vyskakovací okna a metody oken
 
-A popup window is one of the oldest methods to show additional document to user.
+Vyskakovací okno (popup) je jeden z nejstarších způsobů, jak zobrazit uživateli další dokument.
 
-Basically, you just run:
+V zásadě jenom zavoláte:
 ```js
 window.open('https://javascript.info/')
 ```
 
-...And it will open a new window with given URL. Most modern browsers are configured to open url in new tabs instead of separate windows.
+...A tím se otevře nové okno se zadanou URL. Většina moderních prohlížečů je konfigurována tak, aby otevřela URL v nové záložce a ne v samostatném okně.
 
-Popups exist from really ancient times. The initial idea was to show another content without closing the main window. As of now, there are other ways to do that: we can load content dynamically with [fetch](info:fetch) and show it in a dynamically generated `<div>`. So, popups is not something we use everyday.
+Vyskakovací okna existují už opravdu dlouhou dobu. Původní myšlenkou bylo zobrazit další obsah bez nutnosti zavřít hlavní okno. V současnosti jsou jiné způsoby, jak to udělat: můžeme načíst obsah dynamicky pomocí [fetch](info:fetch) a zobrazit jej v dynamicky generovaném `<div>`. Vyskakovací okna tedy nejsou něco, co bychom používali každý den.
 
-Also, popups are tricky on mobile devices, that don't show multiple windows simultaneously.
+Vyskakovací okna jsou navíc problematická na mobilních zařízeních, která nezobrazují více oken současně.
 
-Still, there are tasks where popups are still used, e.g. for OAuth authorization (login with Google/Facebook/...), because:
+Stále však existují úlohy, v nichž se vyskakovací okna dosud používají, např. pro autorizaci OAuth (přihlášení s Googlem/Facebookem/...), protože:
 
-1. A popup is a separate window which has its own independent JavaScript environment. So opening a popup from a third-party, non-trusted site is safe.
-2. It's very easy to open a popup.
-3. A popup can navigate (change URL) and send messages to the opener window.
+1. Vyskakovací okno je oddělené okno, které má své vlastní nezávislé JavaScriptové prostředí. Otevření vyskakovacího okna od třetí strany z neprověřené stránky je tedy bezpečné.
+2. Otevřít vyskakovací okno je velmi jednoduché.
+3. Ve vyskakovacím okně je možné navigovat (měnit URL) a posílat zprávy oknu, které je otevřelo.
 
-## Popup blocking
+## Blokování vyskakovacích oken
 
-In the past, evil sites abused popups a lot. A bad page could open tons of popup windows with ads. So now most browsers try to block popups and protect the user.
+V minulosti zlomyslné stránky vyskakovací okna hojně zneužívaly. Špatná stránka mohla otevřít hromadu vyskakovacích oken s reklamami. Nyní se tedy většina prohlížečů snaží chránit uživatele a vyskakovací okna blokovat.
 
-**Most browsers block popups if they are called outside of user-triggered event handlers like `onclick`.**
+**Většina prohlížečů blokuje vyskakovací okna, pokud jsou volána jinde než v uživatelsky spuštěných handlerech událostí, například `onclick`.**
 
-For example:
+Příklad:
 ```js
-// popup blocked
+// vyskakovací okno blokováno
 window.open('https://javascript.info');
 
-// popup allowed
+// vyskakovací okno povoleno
 button.onclick = () => {
   window.open('https://javascript.info');
 };
 ```
 
-This way users are somewhat protected from unwanted popups, but the functionality is not disabled totally.
+Tímto způsobem jsou uživatelé do určité míry chráněni před nechtěnými vyskakovacími okny, ale přitom tato funkcionalita není zcela potlačena.
 
 ## window.open
 
-The syntax to open a popup is: `window.open(url, name, params)`:
+Syntaxe pro otevření vyskakovacího okna je: `window.open(url, název, parametry)`:
 
 url
-: An URL to load into the new window.
+: URL k načtení do nového okna.
 
-name
-: A name of the new window. Each window has a `window.name`, and here we can specify which window to use for the popup. If there's already a window with such name -- the given URL opens in it, otherwise a new window is opened.
+název
+: Název nového okna. Každé okno má název ve vlastnosti `window.name` a zde můžeme specifikovat, které okno máme použít. Pokud už existuje okno s uvedeným názvem, zadané URL se otevře v něm. V opačném případě se otevře nové okno.
 
-params
-: The configuration string for the new window. It contains settings, delimited by a comma. There must be no spaces in params, for instance: `width=200,height=100`.
+parametry
+: Konfigurační řetězec pro nové okno. Obsahuje nastavení, oddělená čárkou. V parametrech nesmějí být mezery, například: `width=200,height=100`.
 
-Settings for `params`:
+Nastavení v `parametry`:
 
-- Position:
-  - `left/top` (numeric) -- coordinates of the window top-left corner on the screen. There is a limitation: a new window cannot be positioned offscreen.
-  - `width/height` (numeric) -- width and height of a new window. There is a limit on minimal width/height, so it's impossible to create an invisible window.
-- Window features:
-  - `menubar` (yes/no) -- shows or hides the browser menu on the new window.
-  - `toolbar` (yes/no) -- shows or hides the browser navigation bar (back, forward, reload etc) on the new window.
-  - `location` (yes/no) -- shows or hides the URL field in the new window. FF and IE don't allow to hide it by default.
-  - `status` (yes/no) -- shows or hides the status bar. Again, most browsers force it to show.
-  - `resizable` (yes/no) -- allows to disable the resize for the new window. Not recommended.
-  - `scrollbars` (yes/no) -- allows to disable the scrollbars for the new window. Not recommended.
+- Umístění:
+  - `left/top` (čísla) -- souřadnice levého horního rohu okna na obrazovce. Je tady omezení: nové okno nemůže být umístěno mimo obrazovku.
+  - `width/height` (čísla) -- šířka a výška nového okna. Minimální šířka a výška je omezena, takže není možné vytvořit neviditelné okno.
+- Vlastnosti okna:
+  - `menubar` (yes/no) -- zobrazí nebo skryje v novém okně menu prohlížeče.
+  - `toolbar` (yes/no) -- zobrazí nebo skryje v novém okně navigační lištu prohlížeče (tlačítka Zpět, Dopředu, Aktualizovat atd.).
+  - `location` (yes/no) -- zobrazí nebo skryje v novém okně pole s URL. FF a IE je standardně neumožňují skrýt.
+  - `status` (yes/no) -- zobrazí nebo skryje stavovou lištu. I tu většina prohlížečů vždy zobrazí.
+  - `resizable` (yes/no) -- umožňuje zakázat změnu velikosti nového okna. Nedoporučuje se používat.
+  - `scrollbars` (yes/no) -- umožňuje zakázat posuvníky v novém okně. Nedoporučuje se používat.
 
+Existuje i několik méně podporovaných vlastností specifických pro jednotlivé prohlížeče, které se obvykle nepoužívají. Příklady naleznete na <a href="https://developer.mozilla.org/en/DOM/window.open">window.open v MDN</a>.
 
-There is also a number of less supported browser-specific features, which are usually not used. Check <a href="https://developer.mozilla.org/en/DOM/window.open">window.open in MDN</a> for examples.
+## Příklad: minimalistické okno
 
-## Example: a minimalistic window
-
-Let's open a window with minimal set of features, just to see which of them browser allows to disable:
+Otevřeme okno s minimální sadou vlastností, jen abychom viděli, které z nich prohlížeč umožňuje zakázat:
 
 ```js run
-let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+let parametry = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=0,height=0,left=-1000,top=-1000`;
 
-open('/', 'test', params);
+open('/', 'test', parametry);
 ```
 
-Here most "window features" are disabled and window is positioned offscreen. Run it and see what really happens. Most browsers "fix" odd things like zero `width/height` and offscreen `left/top`. For instance, Chrome open such a window with full width/height, so that it occupies the full screen.
+Zde je většina „vlastností okna“ zakázána a okno je umístěno mimo obrazovku. Spusťte si tento příklad a uvidíte, co se doopravdy stane. Většina prohlížečů „opraví“ podivnosti jako nulovou `width/height` a `left/top` mimo obrazovku. Například Chrome otevře takové okno v plné šířce a výšce, takže bude roztaženo přes celou obrazovku.
 
-Let's add normal positioning options and reasonable `width`, `height`, `left`, `top` coordinates:
+Přidejme normální možnosti pro umístění a rozumné souřadnice `width`, `height`, `left`, `top`:
 
 ```js run
-let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+let parametry = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=600,height=300,left=100,top=100`;
 
-open('/', 'test', params);
+open('/', 'test', parametry);
 ```
 
-Most browsers show the example above as required.
+Většina prohlížečů zobrazí uvedený příklad tak, jak požadujeme.
 
-Rules for omitted settings:
+Pravidla pro neuvedená nastavení:
 
-- If there is no 3rd argument in the `open` call, or it is empty, then the default window parameters are used.
-- If there is a string of params, but some `yes/no` features are omitted, then the omitted features assumed to have `no` value. So if you specify params, make sure you explicitly set all required features to yes.
-- If there is no `left/top` in params, then the browser tries to open a new window near the last opened window.
-- If there is no `width/height`, then the new window will be the same size as the last opened.
+- Pokud ve volání `open` není uveden 3. argument nebo je prázdný, pak se použijí standardní okenní parametry.
+- Pokud v něm je řetězec parametrů, ale nejsou uvedeny některé vlastnosti typu `yes/no`, pak se předpokládá, že neuvedené vlastnosti mají hodnotu `no`. Když tedy specifikujete parametry, ujistěte se, že jste všechny požadované vlastnosti výslovně nastavili na `yes`.
+- Pokud není uvedeno `left/top`, pak se prohlížeč pokusí otevřít nové okno poblíž naposledy otevřeného okna.
+- Pokud není uvedeno `width/height`, pak bude nové okno mít stejnou velikost jako poslední otevřené.
 
-## Accessing popup from window
+## Přístup do vyskakovacího okna z hlavního okna
 
-The `open` call returns a reference to the new window. It can be used to manipulate its properties, change location and even more.
+Volání `open` vrátí odkaz na nové okno, který můžeme použít k manipulaci s jeho vlastnostmi, změně umístění a dalším věcem.
 
-In this example, we generate popup content from JavaScript:
+V tomto příkladu generujeme obsah vyskakovacího okna v JavaScriptu:
 
 ```js
-let newWin = window.open("about:blank", "hello", "width=200,height=200");
+let novéOkno = window.open("about:blank", "ahoj", "width=200,height=200");
 
-newWin.document.write("Hello, world!");
+novéOkno.document.write("Ahoj, světe!");
 ```
 
-And here we modify the contents after loading:
+A zde změníme obsah po načtení:
 
 ```js run
-let newWindow = open('/', 'example', 'width=300,height=300')
-newWindow.focus();
+let novéOkno = open('/', 'příklad', 'width=300,height=300')
+novéOkno.focus();
 
-alert(newWindow.location.href); // (*) about:blank, loading hasn't started yet
+alert(novéOkno.location.href); // (*) about:blank, načítání ještě nezačalo
 
-newWindow.onload = function() {
-  let html = `<div style="font-size:30px">Welcome!</div>`;
+novéOkno.onload = function() {
+  let html = `<div style="font-size:30px">Vítejte!</div>`;
 *!*
-  newWindow.document.body.insertAdjacentHTML('afterbegin', html);
+  novéOkno.document.body.insertAdjacentHTML('afterbegin', html);
 */!*
 };
 ```
 
-Please note: immediately after `window.open`, the new window isn't loaded yet. That's demonstrated by `alert` in line `(*)`. So we wait for `onload` to modify it. We could also use `DOMContentLoaded` handler for `newWin.document`.
+Prosíme všimněte si, že nové okno není načteno okamžitě po `window.open`. To ukazuje `alert` na řádku `(*)`. S jeho modifikací tedy počkáme na `onload`. Můžeme také použít handler `DOMContentLoaded` pro `novéOkno.document`.
 
-```warn header="Same origin policy"
-Windows may freely access content of each other only if they come from the same origin (the same protocol://domain:port).
+```warn header="Politika stejného původu"
+Okna mohou navzájem volně přistupovat ke svým obsahům jen tehdy, pokud pocházejí ze stejného původu (stejný protokol://doména:port).
 
-Otherwise, e.g. if the main window is from `site.com`, and the popup from `gmail.com`, that's impossible for user safety reasons. For the details, see chapter <info:cross-window-communication>.
+V jiných případech, např. pokud hlavní okno je ze `site.com` a vyskakovací z `gmail.com`, to z důvodu bezpečnosti uživatele není možné. Podrobnosti najdete v kapitole <info:cross-window-communication>.
 ```
 
-## Accessing window from popup
+## Přístup do hlavního okna z vyskakovacího okna
 
-A popup may access the "opener" window as well using `window.opener` reference. It is `null` for all windows except popups.
+Obdobně může vyskakovací okno přistupovat k „otevírajícímu“ pomocí odkazu `window.opener`. Ten je `null` ve všech oknech kromě vyskakovacích.
 
-If you run the code below, it replaces the opener (current) window content with "Test":
+Pokud si spustíte následující kód, nahradí obsah otevírajícího (aktuálního) okna za „Test“:
 
 ```js run
-let newWin = window.open("about:blank", "hello", "width=200,height=200");
+let novéOkno = window.open("about:blank", "ahoj", "width=200,height=200");
 
-newWin.document.write(
+novéOkno.document.write(
   "<script>window.opener.document.body.innerHTML = 'Test'<\/script>"
 );
 ```
 
-So the connection between the windows is bidirectional: the main window and the popup have a reference to each other.
+Spojení mezi okny je tedy obousměrné: hlavní okno a vyskakovací okno mají odkazy na sebe navzájem.
 
-## Closing a popup
+## Zavření vyskakovacího okna
 
-To close a window: `win.close()`.
+Zavření okna: `okno.close()`.
 
-To check if a window is closed: `win.closed`.
+Ověření, zda je okno zavřeno: `okno.closed`.
 
-Technically, the `close()` method is available for any `window`, but `window.close()` is ignored by most browsers if `window` is not created with `window.open()`. So it'll only work on a popup.
+Technicky je metoda `close()` k dispozici pro každé `window`, ale pokud `window` není vytvořeno voláním `window.open()`, většina prohlížečů `window.close()` ignoruje. Funguje tedy jedině na vyskakovacích oknech.
 
-The `closed` property is `true` if the window is closed. That's useful to check if the popup (or the main window) is still open or not. A user can close it anytime, and our code should take that possibility into account.
+Pokud je okno zavřeno, vlastnost `closed` je `true`. To je užitečné pro ověření, zda je vyskakovací (nebo hlavní) okno stále otevřené nebo ne. Uživatel je může kdykoli zavřít a náš kód by měl tuto možnost brát v úvahu.
 
-This code loads and then closes the window:
+Tento kód načte a pak zavře okno:
 
 ```js run
-let newWindow = open('/', 'example', 'width=300,height=300');
+let novéOkno = open('/', 'příklad', 'width=300,height=300');
 
-newWindow.onload = function() {
-  newWindow.close();
-  alert(newWindow.closed); // true
+novéOkno.onload = function() {
+  novéOkno.close();
+  alert(novéOkno.closed); // true
 };
 ```
 
 
-## Moving and resizing
+## Přesun a změna velikosti
 
-There are methods to move/resize a window:
+K přesunu nebo změně velikosti okna slouží následující metody:
 
-`win.moveBy(x,y)`
-: Move the window relative to current position `x` pixels to the right and `y` pixels down. Negative values are allowed (to move left/up).
+`okno.moveBy(x,y)`
+: Přesune okno relativně k aktuální pozici o `x` pixelů doprava a `y` pixelů dolů. Záporné hodnoty jsou povoleny (způsobí přesun doleva/nahoru).
 
-`win.moveTo(x,y)`
-: Move the window to coordinates `(x,y)` on the screen.
+`okno.moveTo(x,y)`
+: Přesune okno na souřadnice `(x,y)` na obrazovce.
 
-`win.resizeBy(width,height)`
-: Resize the window by given `width/height` relative to the current size. Negative values are allowed.
+`okno.resizeBy(šířka,výška)`
+: Změní velikost okna o zadanou hodnotu `šířka/výška` vzhledem k aktuální velikosti. Záporné hodnoty jsou povoleny.
 
-`win.resizeTo(width,height)`
-: Resize the window to the given size.
+`okno.resizeTo(šířka,výška)`
+: Změní velikost okna na zadanou hodnotu.
 
-There's also `window.onresize` event.
+Existuje i událost `okno.onresize`.
 
-```warn header="Only popups"
-To prevent abuse, the browser usually blocks these methods. They only work reliably on popups that we opened, that have no additional tabs.
+```warn header="Jen pro vyskakovací okna"
+Aby prohlížeč zabránil zneužití, obvykle tyto metody blokuje. Spolehlivě fungují jen na vyskakovacích oknech, která jsme otevřeli a která nemají žádné další záložky.
 ```
 
-```warn header="No minification/maximization"
-JavaScript has no way to minify or maximize a window. These OS-level functions are hidden from Frontend-developers.
+```warn header="Není zde minimalizace ani maximalizace"
+JavaScript nemá žádný způsob, jak minimalizovat nebo maximalizovat okno. Tyto funkce na úrovni operačního systému jsou před vývojáři předních stran ukryty.
 
-Move/resize methods do not work for maximized/minimized windows.
+Metody pro přesun a změnu velikosti na minimalizovaných a maximalizovaných oknech nefungují.
 ```
 
-## Scrolling a window
+## Rolování okna
 
-We already talked about scrolling a window in the chapter <info:size-and-scroll-window>.
+O rolování okna jsme již hovořili v kapitole <info:size-and-scroll-window>.
 
-`win.scrollBy(x,y)`
-: Scroll the window `x` pixels right and `y` down relative the current scroll. Negative values are allowed.
+`okno.scrollBy(x,y)`
+: Roluje okno o `x` pixelů doprava a `y` dolů relativně vzhledem k aktuálnímu rolování. Záporné hodnoty jsou povoleny.
 
-`win.scrollTo(x,y)`
-: Scroll the window to the given coordinates `(x,y)`.
+`okno.scrollTo(x,y)`
+: Roluje okno na zadané souřadnice `(x,y)`.
 
-`elem.scrollIntoView(top = true)`
-: Scroll the window to make `elem` show up at the top (the default) or at the bottom for `elem.scrollIntoView(false)`.
+`element.scrollIntoView(nahoře = true)`
+: Roluje okno tak, aby se `element` zobrazil nahoře (standardně) anebo při `element.scrollIntoView(false)` dole.
 
-There's also `window.onscroll` event.
+Existuje i událost `okno.onscroll`.
 
-## Focus/blur on a window
+## Získání a ztráta fokusu na okně
 
-Theoretically, there are `window.focus()` and `window.blur()` methods to focus/unfocus on a window. And there are also `focus/blur` events that allow to catch the moment when the visitor focuses on a window and switches elsewhere.
+Teoreticky existují metody `okno.focus()` a `okno.blur()`, které způsobí, že okno získá/ztratí fokus. A existují také události `focus/blur`, které umožňují zachytit okamžik, kdy návštěvník vstoupí do okna nebo se přepne jinam.
 
-Although, in practice they are severely limited, because in the past evil pages abused them.
+V praxi jsou však do značné míry omezené, jelikož v minulosti je zlomyslné stránky zneužívaly.
 
-For instance, look at this code:
+Podívejte se například na tento kód:
 
 ```js run
 window.onblur = () => window.focus();
 ```
 
-When a user attempts to switch out of the window (`window.onblur`), it brings the window back into focus. The intention is to "lock" the user within the `window`.
+Když se uživatel pokusí přepnout se mimo okno (`window.onblur`), kód vrátí oknu fokus. Jeho záměrem je „uzamknout“ uživatele uvnitř `window`.
 
-So browsers had to introduce many limitations to forbid the code like that and protect the user from ads and evils pages. They depend on the browser.
+Prohlížeče tedy musely zavést mnohá omezení, aby takový kód zakázaly a chránily uživatele před reklamami a zlomyslnými stránkami. Konkrétní omezení závisejí na prohlížeči.
 
-For instance, a mobile browser usually ignores `window.focus()` completely. Also focusing doesn't work when a popup opens in a separate tab rather than a new window.
+Například prohlížeč na mobilech obvykle `window.focus()` zcela ignoruje. Získání fokusu nefunguje ani tehdy, když se vyskakovací okno otevře v samostatné záložce a nikoli v novém okně.
 
-Still, there are some use cases when such calls do work and can be useful.
+Stále však existují případy použití, kdy taková volání fungují a mohou být užitečná.
 
-For instance:
+Například:
 
-- When we open a popup, it might be a good idea to run `newWindow.focus()` on it. Just in case, for some OS/browser combinations it ensures that the user is in the new window now.
-- If we want to track when a visitor actually uses our web-app, we can track `window.onfocus/onblur`. That allows us to suspend/resume in-page activities, animations etc. But please note that the `blur` event means that the visitor switched out from the window, but they still may observe it. The window is in the background, but still may be visible.
+- Když otevřeme vyskakovací okno, může být dobrý nápad spustit na něm `novéOkno.focus()`. Jen pro případ, kdy to na některých kombinacích OS/prohlížeče zajistí, že uživatel pak bude v novém okně.
+- Jestliže chceme sledovat, kdy návštěvník opravdu využívá naši webovou aplikaci, můžeme sledovat `window.onfocus/onblur`. To nám umožní pozastavit/obnovit aktivity na stránce, animace a podobně. Nicméně prosíme, všimněte si, že událost `blur` znamená, že se uživatel přepnul z okna jinam, ale stále může okno pozorovat. Okno je v pozadí, ale pořád může být viditelné.
 
-## Summary
+## Shrnutí
 
-Popup windows are used rarely, as there are alternatives: loading and displaying information in-page, or in iframe.
+Vyskakovací okna se používají jen zřídka, protože k nim existují alternativy: načíst a zobrazit informace na stránce nebo ve vnitřním rámu.
 
-If we're going to open a popup, a good practice is to inform the user about it. An "opening window" icon near a link or button would allow the visitor to survive the focus shift and keep both windows in mind.
+Pokud se chystáme otevřít vyskakovací okno, je dobrým zvykem o tom uživatele informovat. Ikona „otevření okna“ vedle odkazu nebo tlačítka umožní návštěvníkovi vydržet změnu fokusu a mít obě okna na paměti.
 
-- A popup can be opened by the `open(url, name, params)` call. It returns the reference to the newly opened window.
-- Browsers block `open` calls from the code outside of user actions. Usually a notification appears, so that a user may allow them.
-- Browsers open a new tab by default, but if sizes are provided, then it'll be a popup window.
-- The popup may access the opener window using the `window.opener` property.
-- The main window and the popup can freely read and modify each other if they have the same origin. Otherwise, they can change location of each other and [exchange messages](info:cross-window-communication).
+- Vyskakovací okno lze otevřít voláním `open(url, název, parametry)`, které vrátí odkaz na nově otevřené okno.
+- Prohlížeče blokují volání `open` z kódu odjinud než z uživatelských akcí. Zpravidla se objeví oznámení, takže to uživatel může povolit.
+- Prohlížeče standardně otevírají novou záložku, ale pokud je uvedena velikost, otevře se nové vyskakovací okno.
+- Vyskakovací okno může přistupovat k otevírajícímu oknu pomocí vlastnosti `window.opener`.
+- Hlavní okno a vyskakovací okno se mohou navzájem volně číst a modifikovat, jestliže mají stejný původ. V opačném případě si mohou navzájem měnit lokaci a [vyměňovat zprávy](info:cross-window-communication).
 
-To close the popup: use `close()` call. Also the user may close them (just like any other windows). The `window.closed` is `true` after that.
+Vyskakovací okno uzavřete voláním `close()`. Může je zavřít i uživatel (stejně jako každé jiné okno). Vlastnost `okno.closed` má pak hodnotu `true`.
 
-- Methods `focus()` and `blur()` allow to focus/unfocus a window. But they don't work all the time.
-- Events `focus` and `blur` allow to track switching in and out of the window. But please note that a  window may still be visible even in the background state, after `blur`.
+- Metody `focus()` a `blur()` umožňují oknu získat/ztratit fokus. Nefungují však všude.
+- Události `focus` a `blur` umožňují sledovat přepnutí do a z okna. Všimněte si však, že okno může být stále vidět, i když je po `blur` na pozadí.

@@ -1,82 +1,82 @@
 # WebSocket
 
-The `WebSocket` protocol, described in the specification [RFC 6455](https://datatracker.ietf.org/doc/html/rfc6455), provides a way to exchange data between browser and server via a persistent connection. The data can be passed in both directions as "packets", without breaking the connection and the need of additional HTTP-requests.
+Protokol `WebSocket`, popsaný ve specifikaci [RFC 6455](https://datatracker.ietf.org/doc/html/rfc6455), poskytuje způsob výměny dat mezi prohlížečem a serverem pomocí trvalého spojení. Data mohou být posílána oběma směry jako „pakety“ bez přerušení spojení a bez nutnosti posílat další HTTP požadavky.
 
-WebSocket is especially great for services that require continuous data exchange, e.g. online games, real-time trading systems and so on.
+WebSocket je obzvláště vhodný pro služby, které vyžadují nepřetržitou výměnu dat, např. online hry, obchodní systémy v reálném čase a podobně.
 
-## A simple example
+## Jednoduchý příklad
 
-To open a websocket connection, we need to create `new WebSocket` using the special protocol `ws` in the url:
+Abychom otevřeli websocketové spojení, musíme vytvořit `new WebSocket` se speciálním protokolem `ws` v URL:
 
 ```js
 let socket = new WebSocket("*!*ws*/!*://javascript.info");
 ```
 
-There's also encrypted `wss://` protocol. It's like HTTPS for websockets.
+Existuje i šifrovaný protokol `wss://`. Je to něco jako HTTPS pro websockety.
 
-```smart header="Always prefer `wss://`"
-The `wss://` protocol is not only encrypted, but also more reliable.
+```smart header="Vždy dávejte přednost `wss://`"
+Protokol `wss://` je nejen šifrovaný, ale i spolehlivější.
 
-That's because `ws://` data is not encrypted, visible for any intermediary. Old proxy servers do not know about WebSocket, they may see "strange" headers and abort the connection.
+Je to proto, že data ve `ws://` nejsou zašifrovaná, a tedy jsou viditelná pro všechny prostředníky. Staré proxy servery neznají WebSocket, proto mohou spatřit „podivné“ hlavičky a ukončit spojení.
 
-On the other hand, `wss://` is WebSocket over TLS, (same as HTTPS is HTTP over TLS), the transport security layer encrypts the data at the sender and decrypts it at the receiver. So data packets are passed encrypted through proxies. They can't see what's inside and let them through.
+Na druhou stranu `wss://` je WebSocket nad TLS (stejně jako HTTPS je HTTP nad TLS). TLS (transport security layer -- přenosová zabezpečovací vrstva) zašifruje data u odesílatele a dešifruje je u příjemce. Datové pakety se tedy přes proxy přenášejí zašifrované, takže proxy nevidí jejich obsah a nechá je projít.
 ```
 
-Once the socket is created, we should listen to events on it. There are totally 4 events:
-- **`open`** -- connection established,
-- **`message`** -- data received,
-- **`error`** -- websocket error,
-- **`close`** -- connection closed.
+Když je socket vytvořen, můžeme naslouchat jeho událostem. Tyto události jsou celkem čtyři:
+- **`open`** -- spojení vytvořeno,
+- **`message`** -- data přijata,
+- **`error`** -- chyba websocketu,
+- **`close`** -- spojení uzavřeno.
 
-...And if we'd like to send something, then `socket.send(data)` will do that.
+...A když chceme něco odeslat, slouží k tomu `socket.send(data)`.
 
-Here's an example:
+Zde je příklad:
 
 ```js run
 let socket = new WebSocket("wss://javascript.info/article/websocket/demo/hello");
 
 socket.onopen = function(e) {
-  alert("[open] Connection established");
-  alert("Sending to server");
+  alert("[open] Spojení vytvořeno");
+  alert("Posílám na server");
   socket.send("My name is John");
 };
 
-socket.onmessage = function(event) {
-  alert(`[message] Data received from server: ${event.data}`);
+socket.onmessage = function(událost) {
+  alert(`[message] Přijata data ze serveru: ${událost.data}`);
 };
 
-socket.onclose = function(event) {
-  if (event.wasClean) {  
-    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+socket.onclose = function(událost) {
+  if (událost.wasClean) {  
+    alert(`[close] Spojení čistě uzavřeno, kód=${událost.code} důvod=${událost.reason}`);
   } else {
-    // e.g. server process killed or network down
-    // event.code is usually 1006 in this case
-    alert('[close] Connection died');
+    // např. proces serveru je zastaven nebo spadne síť
+    // událost.code je v takovém případě obvykle 1006
+    alert('[close] Spojení ztraceno');
   }
 };
 
-socket.onerror = function(error) {
+socket.onerror = function(chyba) {
   alert(`[error]`);
 };
 ```
 
-For demo purposes, there's a small server [server.js](demo/server.js) written in Node.js, for the example above, running. It responds with "Hello from server, John", then waits 5 seconds and closes the connection.
+Pro demonstrační účely je pro uvedený příklad spuštěn malý server [server.js](demo/server.js), napsaný v Node.js. Odpoví „Hello from server, John“, pak počká 5 sekund a uzavře spojení.
 
-So you'll see events `open` -> `message` -> `close`.
+Uvidíte tedy události `open` -> `message` -> `close`.
 
-That's actually it, we can talk WebSocket already. Quite simple, isn't it?
+To je v zásadě všechno, nyní můžeme komunikovat WebSocketem. Docela jednoduché, že?
 
-Now let's talk more in-depth.
+Nyní si o tom promluvme podrobněji.
 
-## Opening a websocket
+## Otevření websocketu
 
-When `new WebSocket(url)` is created, it starts connecting immediately.
+Když je vytvořen `new WebSocket(url)`, začne se okamžitě připojovat.
 
-During the connection, the browser (using headers) asks the server: "Do you support Websocket?" And if the server replies "yes", then the talk continues in WebSocket protocol, which is not HTTP at all.
+Při spojení se prohlížeč (pomocí hlaviček) zeptá serveru: „Podporuješ WebSocket?“ A pokud server odpoví „ano“, pak hovor pokračuje v protokolu WebSocket, což je něco úplně jiného než HTTP.
 
 ![](websocket-handshake.svg)
 
-Here's an example of browser headers for a request made by `new WebSocket("wss://javascript.info/chat")`.
+Následuje příklad hlaviček prohlížeče v požadavku, který byl vytvořen voláním `new WebSocket("wss://javascript.info/chat")`.
 
 ```
 GET /chat
@@ -88,17 +88,17 @@ Sec-WebSocket-Key: Iv8io/9s+lYFgZWcXczP8Q==
 Sec-WebSocket-Version: 13
 ```
 
-- `Origin` -- the origin of the client page, e.g. `https://javascript.info`. WebSocket objects are cross-origin by nature. There are no special headers or other limitations. Old servers are unable to handle WebSocket anyway, so there are no compatibility issues. But the `Origin` header is important, as it allows the server to decide whether or not to talk WebSocket with this website.
-- `Connection: Upgrade` -- signals that the client would like to change the protocol.
-- `Upgrade: websocket` -- the requested protocol is "websocket".
-- `Sec-WebSocket-Key` -- a random browser-generated key, used to ensure that the server supports WebSocket protocol. It's random to prevent proxies from caching any following communication.
-- `Sec-WebSocket-Version` -- WebSocket protocol version, 13 is the current one.
+- `Origin` -- původ klientské stránky, např. `https://javascript.info`. Objekty WebSocketu jsou ze své povahy jiného původu. Nejsou zde žádné speciální hlavičky ani jiná omezení. Staré servery stejně nedokáží WebSocket zpracovávat, takže problémy s kompatibilitou se nevyskytnou. Důležitá je však hlavička `Origin`, která umožňuje serveru rozhodnout se, zda bude s tímto webovým sídlem komunikovat WebSocketem nebo ne.
+- `Connection: Upgrade` -- signalizuje, že klient chce změnit protokol.
+- `Upgrade: websocket` -- požadovaný protokol je „websocket“.
+- `Sec-WebSocket-Key` -- náhodný klíč generovaný prohlížečem, používaný k ujištění, že server podporuje protokol WebSocket. Je náhodný, aby si proxy servery následnou komunikaci neukládaly do mezipaměti.
+- `Sec-WebSocket-Version` -- verze protokolu WebSocket, aktuální je 13.
 
-```smart header="WebSocket handshake can't be emulated"
-We can't use `XMLHttpRequest` or `fetch` to make this kind of HTTP-request, because JavaScript is not allowed to set these headers.
+```smart header="Podání rukou pro WebSocket nelze emulovat"
+HTTP požadavek tohoto druhu nemůžeme vytvořit pomocí `XMLHttpRequest` nebo `fetch`, protože JavaScript nemá dovoleno tyto hlavičky nastavovat.
 ```
 
-If the server agrees to switch to WebSocket, it should send code 101 response:
+Jestliže server souhlasí s přepnutím na WebSocket, měl by poslat odpověď s kódem 101:
 
 ```
 101 Switching Protocols
@@ -107,29 +107,29 @@ Connection: Upgrade
 Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=
 ```
 
-Here `Sec-WebSocket-Accept` is `Sec-WebSocket-Key`, recoded using a special algorithm. Upon seeing it, the browser understands that the server really does support the WebSocket protocol.
+Zde `Sec-WebSocket-Accept` je `Sec-WebSocket-Key`, překódovaný speciálním algoritmem. Když ho prohlížeč uvidí, pozná, že server skutečně podporuje protokol WebSocket.
 
-Afterwards, the data is transferred using the WebSocket protocol, we'll see its structure ("frames") soon. And that's not HTTP at all.
+Poté jsou data přenášena protokolem WebSocket. Jeho strukturu („rámce“) brzy uvidíme. A ten nemá nic společného s HTTP.
 
-### Extensions and subprotocols
+### Rozšíření a subprotokoly
 
-There may be additional headers `Sec-WebSocket-Extensions` and `Sec-WebSocket-Protocol` that describe extensions and subprotocols.
+Požadavek může obsahovat další hlavičky `Sec-WebSocket-Extensions` a `Sec-WebSocket-Protocol`, které popisují rozšíření a subprotokoly.
 
-For instance:
+Například:
 
-- `Sec-WebSocket-Extensions: deflate-frame` means that the browser supports data compression. An extension is something related to transferring the data, functionality that extends the WebSocket protocol. The header `Sec-WebSocket-Extensions` is sent automatically by the browser, with the list of all extensions it supports.
+- `Sec-WebSocket-Extensions: deflate-frame` znamená, že prohlížeč podporuje kompresi dat. Rozšíření je něco, co má nějaký vztah k přenosu dat, funkcionalita, která rozšiřuje protokol WebSocket. Prohlížeč automaticky posílá hlavičku `Sec-WebSocket-Extensions` se seznamem všech rozšíření, která podporuje.
 
-- `Sec-WebSocket-Protocol: soap, wamp` means that we'd like to transfer not just any data, but the data in [SOAP](https://en.wikipedia.org/wiki/SOAP) or WAMP ("The WebSocket Application Messaging Protocol") protocols. WebSocket subprotocols are registered in the [IANA catalogue](https://www.iana.org/assignments/websocket/websocket.xml). So, this header describes the data formats that we're going to use.
+- `Sec-WebSocket-Protocol: soap, wamp` znamená, že nechceme posílat jen tak nějaká data, ale data v protokolech [SOAP](https://cs.wikipedia.org/wiki/SOAP) nebo WAMP („The WebSocket Application Messaging Protocol“ -- Websocketový protokol pro zprávy aplikací). Subprotokoly WebSocketu jsou registrovány v [katalogu IANA](https://www.iana.org/assignments/websocket/websocket.xml). Tato hlavička tedy popisuje formáty dat, které se chystáme použít.
 
-    This optional header is set using the second parameter of `new WebSocket`. That's the array of subprotocols, e.g. if we'd like to use SOAP or WAMP:
+    Tato nepovinná hlavička se nastavuje druhým parametrem konstruktoru `new WebSocket`, který obsahuje pole subprotokolů, např. když chceme použít SOAP nebo WAMP:
 
     ```js
     let socket = new WebSocket("wss://javascript.info/chat", ["soap", "wamp"]);
     ```
 
-The server should respond with a list of protocols and extensions that it agrees to use.
+Server by měl odpovědět seznamem protokolů a rozšíření, s jejichž používáním souhlasí.
 
-For example, the request:
+Příklad požadavku:
 
 ```
 GET /chat
@@ -145,7 +145,7 @@ Sec-WebSocket-Protocol: soap, wamp
 */!*
 ```
 
-Response:
+Odpověď:
 
 ```
 101 Switching Protocols
@@ -158,231 +158,230 @@ Sec-WebSocket-Protocol: soap
 */!*
 ```
 
-Here the server responds that it supports the extension "deflate-frame", and only SOAP of the requested subprotocols.
+Zde server odpovídá, že podporuje rozšíření `deflate-frame` a z požadovaných subprotokolů jedině SOAP.
 
-## Data transfer
+## Přenos dat
 
-WebSocket communication consists of "frames" -- data fragments, that can be sent from either side, and can be of several kinds:
+Komunikace WebSocketem se skládá z „rámců“ -- fragmentů dat, které mohou posílat obě strany a které mohou být několika druhů:
 
-- "text frames" -- contain text data that parties send to each other.
-- "binary data frames" -- contain binary data that parties send to each other.
-- "ping/pong frames" are used to check the connection, sent from the server, the browser responds to these automatically.
-- there's also "connection close frame" and a few other service frames.
+- „textové rámce“ -- obsahují textová data, která si strany navzájem posílají.
+- „binární rámce“ -- obsahují binární data, která si strany navzájem posílají.
+- „ping-pongové rámce“ se používají ke kontrole spojení, posílá je server a prohlížeč na ně automaticky odpovídá.
+- existují i „uzavírací rámce“ a několik dalších servisních rámců.
 
-In the browser, we directly work only with text or binary frames.
+V prohlížeči přímo pracujeme jen s textovými a binárními rámci.
 
-**WebSocket `.send()` method can send either text or binary data.**
+**Metoda WebSocket `.send()` umí poslat textová i binární data.**
 
-A call `socket.send(body)` allows `body` in string or a binary format, including `Blob`, `ArrayBuffer`, etc. No settings are required: just send it out in any format.
+Volání `socket.send(tělo)` umožňuje, aby `tělo` byl řetězec nebo binární formát, např. `Blob`, `ArrayBuffer` atd. Není třeba nic nastavovat: prostě pošle data v jakémkoli formátu.
 
-**When we receive the data, text always comes as string. And for binary data, we can choose between `Blob` and `ArrayBuffer` formats.**
+**Když přijímáme data, textová data přicházejí vždy jako řetězec. U binárních dat si můžeme vybrat mezi formáty `Blob` a `ArrayBuffer`.**
 
-That's set by `socket.binaryType` property, it's `"blob"` by default, so binary data comes as `Blob` objects.
+To se nastavuje vlastností `socket.binaryType`. Standardně je `"blob"`, takže binární data přicházejí jako objekty `Blob`.
 
-[Blob](info:blob) is a high-level binary object, it directly integrates with `<a>`, `<img>` and other tags, so that's a sane default. But for binary processing, to access individual data bytes, we can change it to `"arraybuffer"`:
+[Blob](info:blob) je binární objekt vysoké úrovně. Je přímo integrován s `<a>`, `<img>` a jinými značkami, proto je to rozumný standard. Pro binární zpracování a přístup k jednotlivým bytům dat však můžeme změnit formát na `"arraybuffer"`:
 
 ```js
 socket.binaryType = "arraybuffer";
-socket.onmessage = (event) => {
-  // event.data is either a string (if text) or arraybuffer (if binary)
+socket.onmessage = (událost) => {
+  // událost.data je buď řetězec (u textových dat), nebo arraybuffer (u binárních dat)
 };
 ```
 
-## Rate limiting
+## Omezení rychlosti
 
-Imagine, our app is generating a lot of data to send. But the user has a slow network connection, maybe on a mobile internet, outside of a city.
+Představme si, že naše aplikace generuje velké množství dat k odesílání, ale uživatel má pomalé síťové připojení, třeba mobilní internet mimo město.
 
-We can call `socket.send(data)` again and again. But the data will be buffered (stored) in memory and sent out only as fast as network speed allows.
+Můžeme volat `socket.send(data)` znovu a znovu. Data se však budou ukládat do bufferu (vyrovnávací paměti) a posílat jen tak rychle, jak rychlost sítě dovolí.
 
-The `socket.bufferedAmount` property stores how many bytes remain buffered at this moment, waiting to be sent over the network.
+Vlastnost `socket.bufferedAmount` sděluje, kolik bytů zůstává v této chvíli v bufferu a čeká na poslání po síti.
 
-We can examine it to see whether the socket is actually available for transmission.
+Jejím prozkoumáním můžeme zjistit, zda je socket právě dostupný pro přenos dat.
 
 ```js
-// every 100ms examine the socket and send more data  
-// only if all the existing data was sent out
+// každých 100 ms prozkoumáme socket a další data pošleme
+// teprve tehdy, až budou všechna existující data odeslána
 setInterval(() => {
   if (socket.bufferedAmount == 0) {
-    socket.send(moreData());
+    socket.send(dalšíData());
   }
 }, 100);
 ```
 
 
-## Connection close
+## Uzavření spojení
 
-Normally, when a party wants to close the connection (both browser and server have equal rights), they send a "connection close frame" with a numeric code and a textual reason.
+Běžně, když chce některá strana uzavřít spojení (prohlížeč i server mají stejná práva), pošle „uzavírací rámec“ s číselným kódem a textovým odůvodněním.
 
-The method for that is:
+K tomu slouží metoda:
 ```js
-socket.close([code], [reason]);
+socket.close([kód], [důvod]);
 ```
 
-- `code` is a special WebSocket closing code (optional)
-- `reason` is a string that describes the reason of closing (optional)
+- `kód` je speciální WebSocketový uzavírací kód (nepovinný)
+- `důvod` je řetězec, který popisuje důvod uzavření (nepovinný)
 
-Then the other party in the `close` event handler gets the code and the reason, e.g.:
+Pak druhá strana obdrží tento kód a důvod v handleru události `close`, například:
 
 ```js
-// closing party:
-socket.close(1000, "Work complete");
+// uzavírací strana:
+socket.close(1000, "Práce hotova");
 
-// the other party
-socket.onclose = event => {
-  // event.code === 1000
-  // event.reason === "Work complete"
-  // event.wasClean === true (clean close)
+// druhá strana
+socket.onclose = událost => {
+  // událost.code === 1000
+  // událost.reason === "Práce hotova"
+  // událost.wasClean === true (čisté uzavření)
 };
 ```
 
-Most common code values:
+Nejčastější hodnoty kódu:
 
-- `1000` -- the default, normal closure (used if no `code` supplied),
-- `1006` -- no way to set such code manually, indicates that the connection was lost (no close frame).
+- `1000` -- standardní, běžné uzavření (použije se, není-li `kód` uveden),
+- `1006` -- tento kód nelze nastavit ručně, oznamuje, že spojení bylo ztraceno (bez uzavíracího rámce).
 
-There are other codes like:
+Existují i jiné kódy, například:
 
-- `1001` -- the party is going away, e.g. server is shutting down, or a browser leaves the page,
-- `1009` -- the message is too big to process,
-- `1011` -- unexpected error on server,
-- ...and so on.
+- `1001` -- strana odchází, např. server se vypíná nebo prohlížeč opouští stránku,
+- `1009` -- zpráva je pro zpracování příliš velká,
+- `1011` -- neočekávaná chyba na serveru,
+- ...a podobně.
 
-The full list can be found in [RFC6455, §7.4.1](https://tools.ietf.org/html/rfc6455#section-7.4.1).
+Celý seznam najdete v [RFC6455, §7.4.1](https://tools.ietf.org/html/rfc6455#section-7.4.1).
 
-WebSocket codes are somewhat like HTTP codes, but different. In particular, codes lower than `1000` are reserved, there'll be an error if we try to set such a code.
+Kódy WebSocketu se trochu podobají kódům HTTP, ale jejich hodnoty jsou jiné. Například kódy nižší než `1000` jsou rezervovány a pokud se takový kód pokusíme nastavit, nastane chyba.
 
 ```js
-// in case connection is broken
-socket.onclose = event => {
-  // event.code === 1006
-  // event.reason === ""
-  // event.wasClean === false (no closing frame)
+// v případě přerušení spojení
+socket.onclose = událost => {
+  // událost.code === 1006
+  // událost.reason === ""
+  // událost.wasClean === false (nebyl uzavírací rámec)
 };
 ```
 
 
-## Connection state
+## Stav spojení
 
-To get connection state, additionally there's `socket.readyState` property with values:
+K získání stavu spojení slouží vlastnost `socket.readyState` s těmito hodnotami:
 
-- **`0`** -- "CONNECTING": the connection has not yet been established,
-- **`1`** -- "OPEN": communicating,
-- **`2`** -- "CLOSING": the connection is closing,
-- **`3`** -- "CLOSED": the connection is closed.
+- **`0`** -- „CONNECTING“: spojení ještě nebylo vytvořeno,
+- **`1`** -- „OPEN“: komunikace probíhá,
+- **`2`** -- „CLOSING“: spojení se uzavírá,
+- **`3`** -- „CLOSED“: spojení je uzavřeno.
 
 
-## Chat example
+## Příklad chatu
 
-Let's review a chat example using browser WebSocket API and Node.js WebSocket module <https://github.com/websockets/ws>. We'll pay the main attention to the client side, but the server is also simple.
+Přepracujme příklad chatu s použitím prohlížečového WebSocketového API a WebSocketového modulu <https://github.com/websockets/ws> pro Node.js. Pozornost budeme věnovat převážně straně klienta, ale server je také jednoduchý.
 
-HTML: we need a `<form>` to send messages and a `<div>` for incoming messages:
+HTML: potřebujeme `<form>` k posílání zpráv a `<div>` pro přicházející zprávy:
 
 ```html
-<!-- message form -->
-<form name="publish">
-  <input type="text" name="message">
-  <input type="submit" value="Send">
+<!-- formulář pro zprávy -->
+<form name="odesílání">
+  <input type="text" name="zpráva">
+  <input type="submit" value="Odeslat">
 </form>
 
-<!-- div with messages -->
-<div id="messages"></div>
+<!-- div se zprávami -->
+<div id="zprávy"></div>
 ```
 
-From JavaScript we want three things:
-1. Open the connection.
-2. On form submission -- `socket.send(message)` for the message.
-3. On incoming message -- append it to `div#messages`.
+Od JavaScriptu chceme tři věci:
+1. Otevřít spojení.
+2. Při odeslání formuláře zavolat `socket.send(zpráva)` s odesílanou zprávou.   
+3. Při příchodu zprávy ji připojit k `div#zprávy`.
 
-Here's the code:
+Zde je kód:
 
 ```js
 let socket = new WebSocket("wss://javascript.info/article/websocket/chat/ws");
 
-// send message from the form
+// poslání zprávy z formuláře
 document.forms.publish.onsubmit = function() {
-  let outgoingMessage = this.message.value;
+  let odesílanáZpráva = this.zpráva.value;
 
-  socket.send(outgoingMessage);
+  socket.send(odesílanáZpráva);
   return false;
 };
 
-// message received - show the message in div#messages
-socket.onmessage = function(event) {
-  let message = event.data;
+// zpráva přijata - zobrazíme ji v div#zprávy
+socket.onmessage = function(událost) {
+  let zpráva = událost.data;
 
-  let messageElem = document.createElement('div');
-  messageElem.textContent = message;
-  document.getElementById('messages').prepend(messageElem);
+  let elementZprávy = document.createElement('div');
+  elementZprávy.textContent = zpráva;
+  document.getElementById('zprávy').prepend(elementZprávy);
 }
 ```
 
-Server-side code is a little bit beyond our scope. Here we'll use Node.js, but you don't have to. Other platforms also have their means to work with WebSocket.
+Kód na straně serveru je poněkud mimo náš rámec. Zde používáme Node.js, ale to není nutné. I jiné platformy mají své způsoby práce s WebSocketem.
 
-The server-side algorithm will be:
+Algoritmus na straně serveru bude:
 
-1. Create `clients = new Set()` -- a set of sockets.
-2. For each accepted websocket, add it to the set `clients.add(socket)` and set `message` event listener to get its messages.
-3. When a message is received: iterate over clients and send it to everyone.
-4. When a connection is closed: `clients.delete(socket)`.
+1. Vytvoříme `klienti = new Set()` -- množina socketů.
+2. Každý přijatý websocket přidáme do množiny `klienti.add(socket)` a nastavíme posluchače události `message`, aby přijímal jeho zprávy.
+3. Když je zpráva přijata: iterujeme nad klienty a pošleme ji každému z nich.
+4. Když je spojení uzavřeno: `klienti.delete(socket)`.
 
 ```js
 const ws = new require('ws');
 const wss = new ws.Server({noServer: true});
 
-const clients = new Set();
+const klienti = new Set();
 
-http.createServer((req, res) => {
-  // here we only handle websocket connections
-  // in real project we'd have some other code here to handle non-websocket requests
-  wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
+http.createServer((požadavek, odpověď) => {
+  // zde zpracováváme jen websocketová spojení
+  // ve skutečném projektu bychom zde měli i jiný kód, který by zpracovával jiné než websocketové požadavky
+  wss.handleUpgrade(požadavek, požadavek.socket, Buffer.alloc(0), onSocketConnect);
 });
 
 function onSocketConnect(ws) {
-  clients.add(ws);
+  klienti.add(ws);
 
-  ws.on('message', function(message) {
-    message = message.slice(0, 50); // max message length will be 50
+  ws.on('message', function(zpráva) {
+    zpráva = zpráva.slice(0, 50); // maximální délka zprávy bude 50
 
-    for(let client of clients) {
-      client.send(message);
+    for(let klient of klienti) {
+      klient.send(zpráva);
     }
   });
 
   ws.on('close', function() {
-    clients.delete(ws);
+    klienti.delete(ws);
   });
 }
 ```
 
-
-Here's the working example:
+Zde je funkční příklad:
 
 [iframe src="chat" height="100" zip]
 
-You can also download it (upper-right button in the iframe) and run it locally. Just don't forget to install [Node.js](https://nodejs.org/en/) and `npm install ws` before running.
+Můžete si jej také stáhnout (tlačítko vpravo nahoře ve vnitřním rámu) a spustit si jej lokálně. Jen si nezapomeňte nainstalovat [Node.js](https://nodejs.org/en/) a před spuštěním příkladu spustit `npm install ws`.
 
-## Summary
+## Shrnutí
 
-WebSocket is a modern way to have persistent browser-server connections.
+WebSocket je moderní způsob, jak získat stálé spojení prohlížeče se serverem.
 
-- WebSockets don't have cross-origin limitations.
-- They are well-supported in browsers.
-- Can send/receive strings and binary data.
+- WebSockety nemají omezení jiného původu.
+- V prohlížečích jsou široce podporovány.
+- Mohou odesílat i přijímat řetězce a binární data.
 
-The API is simple.
+Jejich API je jednoduché.
 
-Methods:
+Metody:
 - `socket.send(data)`,
-- `socket.close([code], [reason])`.
+- `socket.close([kód], [důvod])`.
 
-Events:
+Události:
 - `open`,
 - `message`,
 - `error`,
 - `close`.
 
-WebSocket by itself does not include reconnection, authentication and many other high-level mechanisms. So there are client/server libraries for that, and it's also possible to implement these capabilities manually.
+WebSocket sám o sobě neobsahuje obnovu spojení, autentifikaci a mnoho dalších mechanismů vysoké úrovně. K tomu existují knihovny pro klienta i pro server a můžeme si také tyto schopnosti implementovat ručně.
 
-Sometimes, to integrate WebSocket into existing projects, people run a WebSocket server in parallel with the main HTTP-server, and they share a single database. Requests to WebSocket use `wss://ws.site.com`, a subdomain that leads to the WebSocket server, while `https://site.com` goes to the main HTTP-server.
+Aby lidé integrovali WebSocket do existujících projektů, někdy spouštějí WebSocketový server paralelně s hlavním HTTP serverem a oba servery přistupují do stejné databáze. Požadavky na WebSocket používají `wss://ws.site.com`, subdoménu vedoucí na WebSocketový server, zatímco `https://site.com` vede na hlavní HTTP server.
 
-Surely, other ways of integration are also possible.
+Samozřejmě jsou možné i jiné způsoby integrace.

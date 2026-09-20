@@ -1,23 +1,23 @@
 
-# Live timer element
+# Element živých hodin
 
-We already have `<time-formatted>` element to show a nicely formatted time.
+Už máme element `<formatovany-cas>`, který zobrazuje hezky naformátovaný čas.
 
-Create `<live-timer>` element to show the current time:
-1. It should use `<time-formatted>` internally, not duplicate its functionality.
-2. Ticks (updates) every second.
-3. For every tick, a custom event named `tick` should be generated, with the current date in `event.detail` (see chapter <info:dispatch-events>).
+Vytvořte element `<zive-hodiny>`, který bude zobrazovat aktuální čas:
+1. Interně by měl používat `<formatovany-cas>` a neměl by duplikovat jeho funkcionalitu.
+2. Bude tikat (aktualizovat se) každou sekundu.
+3. Při každém tiknutí by měla být vygenerována vlastní událost jménem `tik` s aktuálním datem v `událost.detail` (viz kapitolu <info:dispatch-events>).
 
-Usage:
+Použití:
 
 ```html
-<live-timer id="elem"></live-timer>
+<zive-hodiny id="elem"></zive-hodiny>
 
 <script>
-  elem.addEventListener('tick', event => console.log(event.detail));
+  elem.addEventListener('tik', událost => console.log(událost.detail));
 </script>
 ```
 
-Demo:
+Ukázka:
 
 [iframe src="solution" height=40]

@@ -1,14 +1,14 @@
-# Find non-negative integers
+# Najděte nezáporná čísla
 
-There's a string of integer numbers.
+Máme řetězec celých čísel.
 
-Create a regexp that looks for only non-negative ones (zero is allowed).
+Vytvořte regulární výraz, který mezi nimi najde jen nezáporná čísla (včetně nuly).
 
-An example of use:
+Příklad použití:
 ```js
-let regexp = /your regexp/g;
+let rv = /váš RV/g;
 
-let str = "0 12 -5 123 -18";
+let řetězec = "0 12 -5 123 -18";
 
-alert( str.match(regexp) ); // 0, 12, 123
+alert( řetězec.match(rv) ); // 0, 12, 123
 ```

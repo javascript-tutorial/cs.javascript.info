@@ -146,20 +146,19 @@ xhr-another-domain.svg:
   Server: 'Server'
   HTTP-request: 'HTTP požadavek'
   HTTP-response: 'HTTP odpověď'
-  '* OR https://javascript.info': '* NEBO https://javascript.info'
-  'if the header allows, then success,': 'pokud to hlavička umožní, pak úspěch,'
-  otherwise fail: 'jinak chyba'
+  "(or https://javascript.info)": '(nebo https://javascript.info)'
+  "if the header allows, then success,": 'pokud to hlavička umožní, pak úspěch,'
+  "otherwise fail": 'jinak chyba'
 
 xhr-preflight.svg:
   _defaults:
   Browser: 'Prohlížeč'
   Server: 'Server'
+  preflight: 'předběžný'
   Main HTTP-response: 'Hlavní HTTP odpověď'
   otherwise error: 'jinak chyba'
   'if allowed: success,': 'je-li povoleno, úspěch,'
   Main HTTP-request: 'Hlavní HTTP požadavek'
-  preflight:
-    text: 'předlet'
   if allowed:
     text: 'je-li povoleno'
 
@@ -175,7 +174,7 @@ websocket-handshake.svg:
   HTTP-request: 'HTTP požadavek'
   '"Hey, server, let''s talk WebSocket?"': '„Servere, popovídáme si na WebSocketu?“'
   HTTP-response: 'HTTP odpověď'
-  '"Okay!"': 'Dobře!'
+  '"Okay!"': '„Dobře!“'
   WebSocket protocol: 'Protokol WebSocket'
 
 long-polling.svg:
@@ -704,3 +703,32 @@ metric-client-width-nopadding.svg:
 ball_shift.svg:
   'shiftX': 'posunX'
   'shiftY': 'posunY'
+  
+8bit-integer-257.svg:
+  '8-bit integer': '8-bitové číslo'
+
+8bit-integer-256.svg:
+  '8-bit integer': '8-bitové číslo'
+
+indexeddb-structure.svg:
+  'Database': 'Databáze'
+  'key1: value1': 'klíč1: hodn1'
+  'key2: value2': 'klíč2: hodn2'
+  'key3: value3': 'klíč3: hodn3'
+  'key4: value4': 'klíč4: hodn4'
+  'key5: value5': 'klíč5: hodn5'  
+  'objectStore': 'úložiště'
+  
+indexeddb-index.svg:
+  'books': 'knihy'
+  'price: 3': 'cena: 3'
+  'price: 5': 'cena: 5'
+  'price: 10': 'cena: 10'
+  
+regexp-nested-groups-pattern.svg:
+  'span class="my"': 'span class="moje"'
+  'class="my"': 'class="moje"'
+  
+regexp-nested-groups-matches.svg:
+  'span class="my"': 'span class="moje"'
+  'class="my"': 'class="moje"'

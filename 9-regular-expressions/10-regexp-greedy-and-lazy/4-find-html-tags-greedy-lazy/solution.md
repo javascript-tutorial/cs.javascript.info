@@ -1,10 +1,10 @@
 
-The solution is `pattern:<[^<>]+>`.
+Řešením je `pattern:<[^<>]+>`.
 
 ```js run
-let regexp = /<[^<>]+>/g;
+let rv = /<[^<>]+>/g;
 
-let str = '<> <a href="/"> <input type="radio" checked> <b>';
+let řetězec = '<> <a href="/"> <input type="radio" checked> <b>';
 
-alert( str.match(regexp) ); // '<a href="/">', '<input type="radio" checked>', '<b>'
+alert( řetězec.match(rv) ); // '<a href="/">', '<input type="radio" checked>', '<b>'
 ```

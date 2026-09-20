@@ -17,14 +17,14 @@ function onUpload(req, res) {
     res.end();
   }
 
-  // we'll files "nowhere"
+  // budeme ukládat soubory „nikam“
   let filePath = '/dev/null';
-  // could use a real path instead, e.g.
+  // mohli bychom místo toho použít skutečnou cestu, např.
   // let filePath = path.join('/tmp', fileId);
 
   debug("onUpload fileId: ", fileId);
 
-  // initialize a new upload
+  // inicializujeme nový příjem
   if (!uploads[fileId]) uploads[fileId] = {};
   let upload = uploads[fileId];
 
@@ -32,7 +32,7 @@ function onUpload(req, res) {
 
   let fileStream;
 
-  // if startByte is 0 or not set, create a new file, otherwise check the size and append to existing one
+  // pokud startByte je 0 nebo není nastaven, vytvoříme nový soubor, jinak zkontrolujeme velikost a připojíme data k existujícímu
   if (!startByte) {
     upload.bytesReceived = 0;
     fileStream = fs.createWriteStream(filePath, {
@@ -40,13 +40,13 @@ function onUpload(req, res) {
     });
     debug("New file created: " + filePath);
   } else {
-    // we can check on-disk file size as well to be sure
+    // můžeme zkontrolovat i velikost souboru na disku, abychom měli jistotu
     if (upload.bytesReceived != startByte) {
       res.writeHead(400, "Wrong start byte");
       res.end(upload.bytesReceived);
       return;
     }
-    // append to existing file
+    // připojíme k existujícímu souboru
     fileStream = fs.createWriteStream(filePath, {
       flags: 'a'
     });
@@ -59,26 +59,26 @@ function onUpload(req, res) {
     upload.bytesReceived += data.length;
   });
 
-  // send request body to file
+  // pošleme do souboru tělo požadavku
   req.pipe(fileStream);
 
-  // when the request is finished, and all its data is written
+  // když je požadavek dokončen a všechna jeho data jsou zapsána
   fileStream.on('close', function() {
     if (upload.bytesReceived == req.headers['x-file-size']) {
       debug("Upload finished");
       delete uploads[fileId];
 
-      // can do something else with the uploaded file here
+      // s přijatým souborem zde můžeme dělat něco jiného
 
       res.end("Success " + upload.bytesReceived);
     } else {
-      // connection lost, we leave the unfinished file around
+      // ztráta spojení, necháme soubor nedokončený
       debug("File unfinished, stopped at " + upload.bytesReceived);
       res.end();
     }
   });
 
-  // in case of I/O error - finish the request
+  // v případě I/O chyby ukončíme požadavek
   fileStream.on('error', function(err) {
     debug("fileStream error");
     res.writeHead(500, "File error");

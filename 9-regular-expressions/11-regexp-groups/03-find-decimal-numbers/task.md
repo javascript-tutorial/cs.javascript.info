@@ -1,13 +1,13 @@
-# Find all numbers
+# Najděte všechna čísla
 
-Write a regexp that looks for all decimal numbers including integer ones, with the floating point and negative ones.
+Napište RV, který hledá všechna desetinná čísla včetně celých čísel, čísel s pohyblivou řádovou tečkou a záporných čísel.
 
-An example of use:
+Příklad použití:
 
 ```js
-let regexp = /your regexp/g;
+let rv = /váš RV/g;
 
-let str = "-1.5 0 2 -123.4.";
+let řetězec = "-1.5 0 2 -123.4.";
 
-alert( str.match(regexp) ); // -1.5, 0, 2, -123.4
+alert( řetězec.match(rv) ); // -1.5, 0, 2, -123.4
 ```

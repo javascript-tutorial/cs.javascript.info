@@ -1,7 +1,7 @@
-class LiveTimer extends HTMLElement {
+class ŽivéHodiny extends HTMLElement {
 
-  /* your code here */
+  /* sem patří váš kód */
 
 }
 
-customElements.define("live-timer", LiveTimer);
+customElements.define("zive-hodiny", ŽivéHodiny);

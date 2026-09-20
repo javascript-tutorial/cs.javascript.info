@@ -1,65 +1,65 @@
 class Uploader {
 
-  constructor({file, onProgress}) {
-    this.file = file;
+  constructor({soubor, onProgress}) {
+    this.soubor = soubor;
     this.onProgress = onProgress;
 
-    // create fileId that uniquely identifies the file
-    // we could also add user session identifier (if had one), to make it even more unique
-    this.fileId = file.name + '-' + file.size + '-' + file.lastModified;
+    // vytvoříme idSouboru, který unikátně identifikuje soubor
+    // můžeme také přidat identifikátor uživatelského připojení (pokud nějaké máme), aby byl ještě unikátnější
+    this.idSouboru = soubor.name + '-' + soubor.size + '-' + soubor.lastModified;
   }
 
-  async getUploadedBytes() {
-    let response = await fetch('status', {
+  async vraťPočetOdeslanýchBytů() {
+    let odpověď = await fetch('status', {
       headers: {
-        'X-File-Id': this.fileId
+        'X-File-Id': this.idSouboru
       }
     });
 
-    if (response.status != 200) {
-      throw new Error("Can't get uploaded bytes: " + response.statusText);
+    if (odpověď.status != 200) {
+      throw new Error("Nelze získat počet odeslaných bytů: " + odpověď.statusText);
     }
 
-    let text = await response.text();
+    let text = await odpověď.text();
 
     return +text;
   }
 
   async upload() {
-    this.startByte = await this.getUploadedBytes();
+    this.počátečníByte = await this.vraťPočetOdeslanýchBytů();
 
     let xhr = this.xhr = new XMLHttpRequest();
     xhr.open("POST", "upload", true);
 
-    // send file id, so that the server knows which file to resume
-    xhr.setRequestHeader('X-File-Id', this.fileId);
-    // send the byte we're resuming from, so the server knows we're resuming
-    xhr.setRequestHeader('X-Start-Byte', this.startByte);
+    // pošleme id souboru, aby server věděl, který soubor má obnovit
+    xhr.setRequestHeader('X-File-Id', this.idSouboru);
+    // pošleme byte, od kterého obnovujeme, aby server věděl, že obnovujeme
+    xhr.setRequestHeader('X-Start-Byte', this.počátečníByte);
 
     xhr.upload.onprogress = (e) => {
-      this.onProgress(this.startByte + e.loaded, this.startByte + e.total);
+      this.onProgress(this.počátečníByte + e.loaded, this.počátečníByte + e.total);
     };
 
-    console.log("send the file, starting from", this.startByte);
-    xhr.send(this.file.slice(this.startByte));
+    console.log("posíláme soubor, začínáme od", this.počátečníByte);
+    xhr.send(this.soubor.slice(this.počátečníByte));
 
-    // return
-    //   true if upload was successful,
-    //   false if aborted
-    // throw in case of an error
-    return await new Promise((resolve, reject) => {
+    // vrátíme
+    //   true, pokud bylo odeslání úspěšné
+    //   false, pokud bylo přerušeno
+    // throw v případě chyby
+    return await new Promise((splň, zamítni) => {
 
       xhr.onload = xhr.onerror = () => {
         console.log("upload end status:" + xhr.status + " text:" + xhr.statusText);
 
         if (xhr.status == 200) {
-          resolve(true);
+          splň(true);
         } else {
-          reject(new Error("Upload failed: " + xhr.statusText));
+          zamítni(new Error("Odeslání selhalo: " + xhr.statusText));
         }
       };
 
-      // onabort triggers only when xhr.abort() is called
+      // onabort se spustí jen při volání xhr.abort()
       xhr.onabort = () => resolve(false);
 
     });

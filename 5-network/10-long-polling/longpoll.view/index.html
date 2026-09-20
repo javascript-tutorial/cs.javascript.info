@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <script src="browser.js"></script>
 
-All visitors of this page will see messages of each other.
+Všichni návštěvníci této stránky vidí své zprávy navzájem.
 
-<form name="publish">
-  <input type="text" name="message" />
-  <input type="submit" value="Send" />
+<form name="odeslání">
+  <input type="text" name="zpráva" />
+  <input type="submit" value="Odeslat" />
 </form>
 
-<div id="subscribe">
+<div id="podpis">
 </div>
 
 <script>
-  new PublishForm(document.forms.publish, 'publish');
-  // random url parameter to avoid any caching issues
-  new SubscribePane(document.getElementById('subscribe'), 'subscribe?random=' + Math.random());
+  new OdešliFormulář(document.forms.odeslání, 'odeslání');
+  // náhodný URL parametr, abychom se vyhnuli ukládání do mezipaměti
+  new ZapišZáložku(document.getElementById('podpis'), 'podpis?random=' + Math.random());
 </script>

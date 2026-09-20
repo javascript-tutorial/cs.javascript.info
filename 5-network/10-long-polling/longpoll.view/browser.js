@@ -1,54 +1,54 @@
-// Sending messages, a simple POST
-function PublishForm(form, url) {
+// Posílání zpráv, jednoduchý POST
+function OdešliFormulář(form, url) {
 
-  function sendMessage(message) {
+  function odešliZprávu(zpráva) {
     fetch(url, {
       method: 'POST',
-      body: message
+      body: zpráva
     });
   }
 
   form.onsubmit = function() {
-    let message = form.message.value;
-    if (message) {
-      form.message.value = '';
-      sendMessage(message);
+    let zpráva = form.zpráva.value;
+    if (zpráva) {
+      form.zpráva.value = '';
+      odešliZprávu(zpráva);
     }
     return false;
   };
 }
 
-// Receiving messages with long polling
-function SubscribePane(elem, url) {
+// Přijímání zpráv dlouhým dotazováním
+function ZapišZáložku(elem, url) {
 
-  function showMessage(message) {
-    let messageElem = document.createElement('div');
-    messageElem.append(message);
-    elem.append(messageElem);
+  function zobrazZprávu(zpráva) {
+    let elemZprávy = document.createElement('div');
+    elemZprávy.append(zpráva);
+    elem.append(elemZprávy);
   }
 
-  async function subscribe() {
-    let response = await fetch(url);
+  async function podpis() {
+    let odpověď = await fetch(url);
 
-    if (response.status == 502) {
-      // Connection timeout
-      // happens when the connection was pending for too long
-      // let's reconnect
-      await subscribe();
-    } else if (response.status != 200) {
-      // Show Error
-      showMessage(response.statusText);
-      // Reconnect in one second
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await subscribe();
+    if (odpověď.status == 502) {
+      // Vypršel čas spojení
+      // nastává, když spojení čeká příliš dlouho
+      // spojíme se znovu
+      await podpis();
+    } else if (odpověď.status != 200) {
+      // Zobrazíme chybu
+      zobrazZprávu(odpověď.statusText);
+      // Za jednu sekundu se spojíme znovu
+      await new Promise(splň => setTimeout(splň, 1000));
+      await podpis();
     } else {
-      // Got message
-      let message = await response.text();
-      showMessage(message);
-      await subscribe();
+      // Přijali jsme zprávu
+      let zpráva = await odpověď.text();
+      zobrazZprávu(zpráva);
+      await podpis();
     }
   }
 
-  subscribe();
+  podpis();
 
 }

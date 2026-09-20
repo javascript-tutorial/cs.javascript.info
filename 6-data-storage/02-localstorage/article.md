@@ -1,249 +1,249 @@
-# LocalStorage, sessionStorage
+# Objekty localStorage, sessionStorage
 
-Web storage objects `localStorage` and `sessionStorage` allow to save key/value pairs in the browser.
+Webové ukládací objekty `localStorage` a `sessionStorage` umožňují ukládat v prohlížeči dvojice klíč/hodnota.
 
-What's interesting about them is that the data survives a page refresh (for `sessionStorage`) and even a full browser restart (for `localStorage`). We'll see that very soon.
+Zajímavé na nich je to, že data přežijí znovunačtení stránky (u `sessionStorage`) a dokonce kompletní restart prohlížeče (u `localStorage`). Velmi brzy to uvidíme.
 
-We already have cookies. Why additional objects?
+K čemu jsou další objekty, když už máme cookies?
 
-- Unlike cookies, web storage objects are not sent to server with each request. Because of that, we can store much more. Most modern browsers allow at least 5 megabytes of data (or more) and have settings to configure that.
-- Also unlike cookies, the server can't manipulate storage objects via HTTP headers. Everything's done in JavaScript.
-- The storage is bound to the origin (domain/protocol/port triplet). That is, different protocols or subdomains infer different storage objects, they can't access data from each other.
+- Na rozdíl od cookies nejsou webové ukládací objekty s každým požadavkem odesílány na server. Z toho důvodu do nich můžeme uložit mnohem více dat. Většina moderních prohlížečů dovoluje nejméně 5 megabytů dat (nebo více) a umožňuje to konfigurovat ve svých nastaveních.
+- Rovněž na rozdíl od cookies nemůže server manipulovat s ukládacími objekty pomocí HTTP hlaviček. Všechno se provádí v JavaScriptu.
+- Úložiště je vázáno na původ (trojice doména/protokol/port). To znamená, že různé protokoly nebo subdomény vytvářejí různé ukládací objekty a nemohou vzájemně přistupovat ke svým datům.
 
-Both storage objects provide the same methods and properties:
+Oba ukládací objekty poskytují stejné metody a vlastnosti:
 
-- `setItem(key, value)` -- store key/value pair.
-- `getItem(key)` -- get the value by key.
-- `removeItem(key)` -- remove the key with its value.
-- `clear()` -- delete everything.
-- `key(index)` -- get the key on a given position.
-- `length` -- the number of stored items.
+- `setItem(klíč, hodnota)` -- uloží dvojici klíč/hodnota.
+- `getItem(klíč)` -- vrátí hodnotu podle klíče.
+- `removeItem(klíč)` -- odstraní klíč s jeho hodnotou.
+- `clear()` -- vymaže vše.
+- `key(index)` -- vrátí klíč na zadané pozici.
+- `length` -- počet uložených dvojic.
 
-As you can see, it's like a `Map` collection (`setItem/getItem/removeItem`), but also allows access by index with `key(index)`.
+Jak vidíte, podobají se kolekci `Map` (`setItem/getItem/removeItem`), ale navíc umožňují přístup podle indexu metodou `key(index)`.
 
-Let's see how it works.
+Podívejme se, jak to funguje.
 
-## localStorage demo
+## Demo pro localStorage
 
-The main features of `localStorage` are:
+Hlavní vlastnosti `localStorage` jsou:
 
-- Shared between all tabs and windows from the same origin.
-- The data does not expire. It remains after the browser restart and even OS reboot.
+- Je sdílen mezi všemi záložkami a okny stejného původu.
+- Data neexpirují. Zůstanou uložena po restartu prohlížeče a dokonce i po restartu operačního systému.
 
-For instance, if you run this code...
+Když si například spustíte tento kód...
 
 ```js run
 localStorage.setItem('test', 1);
 ```
 
-...And close/open the browser or just open the same page in a different window, then you can get it like this:
+...a zavřete a pak otevřete prohlížeč nebo jen otevřete stejnou stránku v jiném okně, můžete získat uložená data takto:
 
 ```js run
 alert( localStorage.getItem('test') ); // 1
 ```
 
-We only have to be on the same origin (domain/port/protocol), the url path can be different.
+Musíme jen být na stejném původu (doména/protokol/port), URL cesta se může lišit.
 
-The `localStorage` is shared between all windows with the same origin, so if we set the data in one window, the change becomes visible in another one.
+Objekt `localStorage` sdílejí všechna okna se stejným původem, takže pokud nastavíme data v jednom okně, změna bude viditelná i v ostatních.
 
-## Object-like access
+## Objektový přístup
 
-We can also use a plain object way of getting/setting keys, like this:
+Načítat a ukládat klíče můžeme i čistě objektovým přístupem, například:
 
 ```js run
-// set key
+// uložení klíče
 localStorage.test = 2;
 
-// get key
+// načtení klíče
 alert( localStorage.test ); // 2
 
-// remove key
+// odstranění klíče
 delete localStorage.test;
 ```
 
-That's allowed for historical reasons, and mostly works, but generally not recommended, because:
+Z historických důvodů je to dovoleno a většinou to funguje, ale obecně se to nedoporučuje, protože:
 
-1. If the key is user-generated, it can be anything, like `length` or `toString`, or another built-in method of `localStorage`. In that case `getItem/setItem` work fine, while object-like access fails:
+1. Jestliže je klíč generován uživatelem, může jím být cokoli, např. `length`, `toString` nebo název jiné zabudované metody `localStorage`. V takovém případě `getItem/setItem` fungují dobře, ale objektový přístup selže:
 
     ```js run
-    let key = 'length';
-    localStorage[key] = 5; // Error, can't assign length
+    let klíč = 'length';
+    localStorage[klíč] = 5; // Chyba, nelze nastavit vlastnost length
     ```
 
-2. There's a `storage` event, it triggers when we modify the data. That event does not happen for object-like access. We'll see that later in this chapter.
+2. Existuje událost `storage`, která se spustí při změně dat. Při objektovém přístupu se tato událost nespustí. Uvidíme to později v této kapitole.
 
-## Looping over keys
+## Cyklus nad klíči
 
-As we've seen, the methods provide "get/set/remove by key" functionality. But how to get all saved values or keys?
+Jak jsme viděli, tyto metody poskytují funkcionalitu „načti/ulož/odstraň klíč“. Ale jak získat všechny uložené hodnoty nebo klíče?
 
-Unfortunately, storage objects are not iterable.
+Naneštěstí ukládací objekty nejsou iterovatelné.
 
-One way is to loop over them as over an array:
+Jedním způsobem je procházet je v cyklu jako pole:
 
 ```js run
 for(let i=0; i<localStorage.length; i++) {
-  let key = localStorage.key(i);
-  alert(`${key}: ${localStorage.getItem(key)}`);
+  let klíč = localStorage.key(i);
+  alert(`${klíč}: ${localStorage.getItem(klíč)}`);
 }
 ```
 
-Another way is to use `for key in localStorage` loop, just as we do with regular objects.
+Dalším způsobem je použít cyklus `for klíč in localStorage`, stejně jako u běžných objektů.
 
-It iterates over keys, but also outputs few built-in fields that we don't need:
+Ten iteruje nad klíči, ale také vypíše několik zabudovaných polí, která nepotřebujeme:
 
 ```js run
-// bad try
-for(let key in localStorage) {
-  alert(key); // shows getItem, setItem and other built-in stuff
+// špatný pokus
+for(let klíč in localStorage) {
+  alert(klíč); // zobrazí getItem, setItem a jiné zabudované věci
 }
 ```
 
-...So we need either to filter fields from the prototype with `hasOwnProperty` check:
+...Musíme tedy buď odfiltrovat pole z prototypu kontrolou `hasOwnProperty`:
 
 ```js run
-for(let key in localStorage) {
-  if (!localStorage.hasOwnProperty(key)) {
-    continue; // skip keys like "setItem", "getItem" etc
+for(let klíč in localStorage) {
+  if (!localStorage.hasOwnProperty(klíč)) {
+    continue; // přeskakuje klíče jako "setItem", "getItem" atd.
   }
-  alert(`${key}: ${localStorage.getItem(key)}`);
+  alert(`${klíč}: ${localStorage.getItem(klíč)}`);
 }
 ```
 
-...Or just get the "own" keys with `Object.keys` and then loop over them if needed:
+...Nebo prostě načíst „vlastní“ klíče pomocí `Object.keys` a pak nad nimi spustit cyklus, je-li to zapotřebí:
 
 ```js run
-let keys = Object.keys(localStorage);
-for(let key of keys) {
-  alert(`${key}: ${localStorage.getItem(key)}`);
+let klíče = Object.keys(localStorage);
+for(let klíč of klíče) {
+  alert(`${klíč}: ${localStorage.getItem(klíč)}`);
 }
 ```
 
-The latter works, because `Object.keys` only returns the keys that belong to the object, ignoring the prototype.
+To funguje, protože `Object.keys` vrátí jen klíče, které náleží objektu, a ignoruje prototyp.
 
-## Strings only
+## Pouze řetězce
 
-Please note that both key and value must be strings.
+Prosíme všimněte si, že klíč i hodnota musejí být řetězce.
 
-If they were any other type, like a number, or an object, they would get converted to a string automatically:
+Pokud jsou jiného typu, například číslo nebo objekt, budou automaticky převedeny na řetězec:
 
 ```js run
-localStorage.user = {name: "John"};
-alert(localStorage.user); // [object Object]
+localStorage.uživatel = {jméno: "Jan"};
+alert(localStorage.uživatel); // [object Object]
 ```
 
-We can use `JSON` to store objects though:
+Můžeme ovšem k ukládání objektů použít `JSON`:
 
 ```js run
-localStorage.user = JSON.stringify({name: "John"});
+localStorage.uživatel = JSON.stringify({jméno: "Jan"});
 
-// sometime later
-let user = JSON.parse( localStorage.user );
-alert( user.name ); // John
+// o něco později
+let uživatel = JSON.parse( localStorage.uživatel );
+alert( uživatel.jméno ); // Jan
 ```
 
-Also it is possible to stringify the whole storage object, e.g. for debugging purposes:
+Je také možné převést na řetězec celý ukládací objekt, např. pro účely ladění:
 
 ```js run
-// added formatting options to JSON.stringify to make the object look nicer
+// do JSON.stringify přidáme formátovací možnosti, aby objekt vypadal lépe
 alert( JSON.stringify(localStorage, null, 2) );
 ```
 
 ## sessionStorage
 
-The `sessionStorage` object is used much less often than `localStorage`.
+Objekt `sessionStorage` se používá výrazně méně často než `localStorage`.
 
-Properties and methods are the same, but it's much more limited:
+Jeho vlastnosti a metody jsou stejné, ale objekt je mnohem omezenější:
 
-- The `sessionStorage` exists only within the current browser tab.
-  - Another tab with the same page will have a different storage.
-  - But it is shared between iframes in the same tab (assuming they come from the same origin).
-- The data survives page refresh, but not closing/opening the tab.
+- Objekt `sessionStorage` existuje jedině uvnitř aktuální záložky prohlížeče.
+  - Další záložka se stejnou stránkou bude mít jiné úložiště.
+  - Objekt je však sdílen mezi vnitřními rámy ve stejné záložce (za předpokladu, že pocházejí ze stejného původu).
+- Data přežijí znovunačtení stránky, ale ne zavření a otevření záložky.
 
-Let's see that in action.
+Podívejme se na to v akci.
 
-Run this code...
+Spusťte si tento kód...
 
 ```js run
 sessionStorage.setItem('test', 1);
 ```
 
-...Then refresh the page. Now you can still get the data:
+...Pak aktualizujte stránku. Nyní stále můžete získat data:
 
 ```js run
-alert( sessionStorage.getItem('test') ); // after refresh: 1
+alert( sessionStorage.getItem('test') ); // po aktualizaci: 1
 ```
 
-...But if you open the same page in another tab, and try again there, the code above returns `null`, meaning "nothing found".
+...Ale pokud si otevřete tutéž stránku v jiné záložce a zkusíte to znovu tam, uvedený kód vrátí `null`, což znamená „nic nenalezeno“.
 
-That's exactly because `sessionStorage` is bound not only to the origin, but also to the browser tab. For that reason, `sessionStorage` is used sparingly.
+Je to proto, že `sessionStorage` je vázán nejen na původ, ale i na záložku prohlížeče. Z toho důvodu se `sessionStorage` používá zřídkakdy.
 
-## Storage event
+## Událost storage
 
-When the data gets updated in `localStorage` or `sessionStorage`, [storage](https://html.spec.whatwg.org/multipage/webstorage.html#the-storageevent-interface) event triggers, with properties:
+Když jsou data v `localStorage` nebo `sessionStorage` změněna, spustí se událost [storage](https://html.spec.whatwg.org/multipage/webstorage.html#the-storageevent-interface) s následujícími vlastnostmi:
 
-- `key` – the key that was changed (`null` if `.clear()` is called).
-- `oldValue` – the old value (`null` if the key is newly added).
-- `newValue` – the new value (`null` if the key is removed).
-- `url` – the url of the document where the update happened.
-- `storageArea` – either `localStorage` or `sessionStorage` object where the update happened.
+- `key` – klíč, který byl změněn (`null`, pokud bylo voláno `.clear()`).
+- `oldValue` – původní hodnota (`null`, pokud byl přidán nový klíč).
+- `newValue` – nová hodnota (`null`, pokud byl klíč odstraněn).
+- `url` – URL dokumentu, na němž ke změně došlo.
+- `storageArea` – objekt `localStorage` nebo `sessionStorage`, v němž ke změně došlo.
 
-The important thing is: the event triggers on all `window` objects where the storage is accessible, except the one that caused it.
+Důležité je, že tato událost se spustí na všech objektech `window`, v nichž je úložiště dostupné, kromě toho, který ji způsobil.
 
-Let's elaborate.
+Vysvětlíme to.
 
-Imagine, you have two windows with the same site in each. So `localStorage` is shared between them.
+Představte si, že máte dvě okna a v obou je stejné sídlo. Objekt `localStorage` je tedy sdílen oběma.
 
 ```online
-You might want to open this page in two browser windows to test the code below.
+Možná budete chtít otevřít si tuto stránku ve dvou oknech prohlížeče, abyste otestovali následující kód.
 ```
 
-If both windows are listening for `window.onstorage`, then each one will react on updates that happened in the other one.
+Jestliže obě okna naslouchají `window.onstorage`, pak každé bude reagovat na změny, ke kterým došlo ve druhém okně.
 
 ```js run
-// triggers on updates made to the same storage from other documents
-window.onstorage = event => { // can also use window.addEventListener('storage', event => {
-  if (event.key != 'now') return;
-  alert(event.key + ':' + event.newValue + " at " + event.url);
+// spustí se při změnách, které byly učiněny ve stejném úložišti z jiných dokumentů
+window.onstorage = událost => { // můžeme použít i window.addEventListener('storage', událost => {
+  if (událost.key != 'nyní') return;
+  alert(událost.key + ':' + událost.newValue + " na " + událost.url);
 };
 
-localStorage.setItem('now', Date.now());
+localStorage.setItem('nyní', Date.now());
 ```
 
-Please note that the event also contains: `event.url` -- the url of the document where the data was updated.
+Prosíme všimněte si, že událost také obsahuje `událost.url` -- URL dokumentu, v němž byla data změněna.
 
-Also, `event.storageArea` contains the storage object -- the event is the same for both `sessionStorage` and `localStorage`, so `event.storageArea` references the one that was modified. We may even want to set something back in it, to "respond" to a change.
+Navíc `událost.storageArea` obsahuje ukládací objekt -- tato událost je stejná pro `sessionStorage` i pro `localStorage`, takže `událost.storageArea` se odkazuje na objekt, který byl změněn. Můžeme v něm dokonce chtít něco nastavit, abychom na změnu „odpověděli“.
 
-**That allows different windows from the same origin to exchange messages.**
+**To umožňuje různým oknům stejného původu vyměňovat si zprávy.**
 
-Modern browsers also support [Broadcast channel API](mdn:/api/Broadcast_Channel_API), the special API for same-origin inter-window communication, it's more full featured, but less supported. There are libraries that polyfill that API, based on `localStorage`, that make it available everywhere.
+Moderní prohlížeče podporují také [Broadcast Channel API](mdn:/api/Broadcast_Channel_API), speciální API pro komunikaci mezi okny stejného původu. Má více schopností, ale je méně podporováno. Existují knihovny, které provádějí polyfill tohoto API založený na `localStorage`, díky němuž je dostupné všude.
 
-## Summary
+## Shrnutí
 
-Web storage objects `localStorage` and `sessionStorage` allow to store key/value pairs in the browser.
+Webové ukládací objekty `localStorage` a `sessionStorage` umožňují v prohlížeči ukládat dvojice klíč/hodnota.
 
-- Both `key` and `value` must be strings.
-- The limit is 5mb+, depends on the browser.
-- They do not expire.
-- The data is bound to the origin (domain/port/protocol).
+- Jak `klíč`, tak `hodnota` musejí být řetězce.
+- Omezení velikosti je 5 MB nebo více, závisí na prohlížeči.
+- Tato data neexpirují.
+- Data jsou vázána na původ (doména/protokol/port).
 
 | `localStorage` | `sessionStorage` |
 |----------------|------------------|
-| Shared between all tabs and windows with the same origin | Visible within a browser tab, including iframes from the same origin |
-| Survives browser restart | Survives page refresh (but not tab close) |
+| Sdílena mezi všemi záložkami a okny se stejným původem | Viditelná uvnitř záložky prohlížeče včetně vnitřních rámů se stejným původem |
+| Přežije restart prohlížeče | Přežije znovunačtení stránky (ale ne zavření záložky) |
 
 API:
 
-- `setItem(key, value)` -- store key/value pair.
-- `getItem(key)` -- get the value by key.
-- `removeItem(key)` -- remove the key with its value.
-- `clear()` -- delete everything.
-- `key(index)` -- get the key number `index`.
-- `length` -- the number of stored items.
-- Use `Object.keys` to get all keys.
-- We access keys as object properties, in that case `storage` event isn't triggered.
+- `setItem(klíč, hodnota)` -- uloží dvojici klíč/hodnota.
+- `getItem(klíč)` -- vrátí hodnotu podle klíče.
+- `removeItem(klíč)` -- odstraní klíč s jeho hodnotou.
+- `clear()` -- vymaže vše.
+- `key(index)` -- vrátí klíč na pozici `index`.
+- `length` -- počet uložených dvojic.
+- K získání všech klíčů použijte `Object.keys`.
+- Ke klíčům přistupujeme jako k vlastnostem objektu, v takovém případě se nespustí událost `storage`.
 
-Storage event:
+Událost `storage`:
 
-- Triggers on `setItem`, `removeItem`, `clear` calls.
-- Contains all the data about the operation (`key/oldValue/newValue`), the document `url` and the storage object `storageArea`.
-- Triggers on all `window` objects that have access to the storage except the one that generated it (within a tab for `sessionStorage`, globally for `localStorage`).
+- Spustí se při volání `setItem`, `removeItem`, `clear`.
+- Obsahuje všechna data o prováděné operaci (`key/oldValue/newValue`), `url` dokumentu a ukládací objekt `storageArea`.
+- Spouští se na všech objektech `window`, které mají přístup k úložišti, s výjimkou toho, který ji vygeneroval (uvnitř záložky u `sessionStorage`, globálně u `localStorage`).

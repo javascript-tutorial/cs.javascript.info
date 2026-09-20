@@ -2,49 +2,49 @@
 <script>
 let eventSource;
 
-function start() { // when "Start" button pressed
+function start() { // když je stisknuto tlačítko „Start“
   if (!window.EventSource) {
-    // IE or an old browser
-    alert("The browser doesn't support EventSource.");
+    // IE nebo jiný starý prohlížeč
+    alert("Tento prohlížeč nepodporuje EventSource.");
     return;
   }
 
   eventSource = new EventSource('digits');
 
   eventSource.onopen = function(e) {
-    log("Event: open");
+    log("Událost: open");
   };
 
   eventSource.onerror = function(e) {
-    log("Event: error");
+    log("Událost: error");
     if (this.readyState == EventSource.CONNECTING) {
-      log(`Reconnecting (readyState=${this.readyState})...`);
+      log(`Obnova připojení (readyState=${this.readyState})...`);
     } else {
-      log("Error has occured.");
+      log("Nastala chyba.");
     }
   };
 
   eventSource.addEventListener('bye', function(e) {
-    log("Event: bye, data: " + e.data);
+    log("Událost: bye, data: " + e.data);
   });
 
   eventSource.onmessage = function(e) {
-    log("Event: message, data: " + e.data);
+    log("Událost: message, data: " + e.data);
   };
 }
 
-function stop() { // when "Stop" button pressed
+function stop() { // když je stisknuto tlačítko „Stop“
   eventSource.close();
   log("eventSource.close()");
 }
 
-function log(msg) {
-  logElem.innerHTML += msg + "<br>";
+function log(zpráva) {
+  logElem.innerHTML += zpráva + "<br>";
   document.documentElement.scrollTop = 99999999;
 }
 </script>
 
-<button onclick="start()">Start</button> Press the "Start" to begin.
+<button onclick="start()">Start</button> Začněte stisknutím „Start“.
 <div id="logElem" style="margin: 6px 0"></div>
 
-<button onclick="stop()">Stop</button> "Stop" to finish.
+<button onclick="stop()">Stop</button> Ukončete stisknutím „Stop“.

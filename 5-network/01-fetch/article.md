@@ -1,169 +1,169 @@
 
 # Fetch
 
-JavaScript can send network requests to the server and load new information whenever it's needed.
+JavaScript umí posílat síťové požadavky na server a načítat nové informace, kdykoli jsou zapotřebí.
 
-For example, we can use a network request to:
+Můžeme například použít síťový požadavek k:
 
-- Submit an order,
-- Load user information,
-- Receive latest updates from the server,
-- ...etc.
+- odeslání objednávky,
+- načtení informací o uživateli,
+- stažení posledních aktualizací ze serveru,
+- ...atd.
 
-...And all of that without reloading the page!
+...A to všechno je možné bez znovunačtení stránky!
 
-There's an umbrella term "AJAX" (abbreviated <b>A</b>synchronous <b>J</b>avaScript <b>A</b>nd <b>X</b>ML) for network requests from JavaScript. We don't have to use XML though: the term comes from old times, that's why that word is there. You may have heard that term already.
+Pro síťové požadavky z JavaScriptu se používá zastřešující pojem „AJAX“ (zkratka z <b>A</b>synchronous <b>J</b>avaScript <b>A</b>nd <b>X</b>ML -- „Asynchronní JavaScript a XML“). Nemusíme však používat XML: tento pojem pochází z dřívější doby, proto se tam toto slovo vyskytuje. Možná jste tento pojem už slyšeli.
 
-There are multiple ways to send a network request and get information from the server.
+Poslat síťový požadavek a získat informace ze serveru je možné mnoha způsoby.
 
-The `fetch()` method is modern and versatile, so we'll start with it. It's not supported by old browsers (can be polyfilled), but very well supported among the modern ones.
+Metoda `fetch()` je moderní a víceúčelová, proto začneme s ní. Není podporována ve starých prohlížečích (lze použít polyfill), ale v moderních je podporována velmi dobře.
 
-The basic syntax is:
+Její základní syntaxe je:
 
 ```js
-let promise = fetch(url, [options])
+let příslib = fetch(url, [volby])
 ```
 
-- **`url`** -- the URL to access.
-- **`options`** -- optional parameters: method, headers etc.
+- **`url`** -- URL, z níž se má stahovat.
+- **`volby`** -- nepovinné volby: metoda, hlavičky atd.
 
-Without `options`, this is a simple GET request, downloading the contents of the `url`.
+Bez objektu `volby` je to jednoduchý požadavek GET, který stáhne obsah adresy `url`.
 
-The browser starts the request right away and returns a promise that the calling code should use to get the result.
+Prohlížeč začne tento požadavek ihned plnit a vrátí příslib, který by měl volající kód použít k získání výsledku.
 
-Getting a response is usually a two-stage process.
+Získání odpovědi je obvykle dvoufázový proces.
 
-**First, the `promise`, returned by `fetch`, resolves with an object of the built-in [Response](https://fetch.spec.whatwg.org/#response-class) class as soon as the server responds with headers.**
+**V první fázi se `příslib`, vrácený metodou `fetch`, splní s objektem zabudované třídy [Response](https://fetch.spec.whatwg.org/#response-class) hned, jakmile server pošle hlavičky odpovědi.**
 
-At this stage we can check HTTP status, to see whether it is successful or not, check headers, but don't have the body yet.
+V této fázi můžeme zkontrolovat HTTP status, abychom viděli, zda požadavek byl úspěšný nebo ne, zkontrolovat hlavičky, ale tělo ještě nemáme.
 
-The promise rejects if the `fetch` was unable to make HTTP-request, e.g. network problems, or there's no such site. Abnormal HTTP-statuses, such as 404 or 500 do not cause an error.
+Příslib je zamítnut, jestliže metoda `fetch` nedokázala tento HTTP požadavek vytvořit, např. kvůli síťovým problémům, nebo když zadané webové sídlo neexistuje. Abnormální HTTP statusy, např. 404 nebo 500, chybu nevyvolají.
 
-We can see HTTP-status in response properties:
+HTTP status vidíme ve vlastnostech odpovědi:
 
-- **`status`** -- HTTP status code, e.g. 200.
-- **`ok`** -- boolean, `true` if the HTTP status code is 200-299.
+- **`status`** -- kód HTTP statusu, např. 200.
+- **`ok`** -- boolean, `true`, pokud kód HTTP statusu je 200-299.
 
-For example:
+Příklad:
 
 ```js
-let response = await fetch(url);
+let odpověď = await fetch(url);
 
-if (response.ok) { // if HTTP-status is 200-299
-  // get the response body (the method explained below)
-  let json = await response.json();
+if (odpověď.ok) { // pokud HTTP status je 200-299
+  // získáme tělo odpovědi (metodou vysvětlenou dále)
+  let json = await odpověď.json();
 } else {
-  alert("HTTP-Error: " + response.status);
+  alert("HTTP chyba: " + odpověď.status);
 }
 ```
 
-**Second, to get the response body, we need to use an additional method call.**
+**Abychom ve druhé fázi získali tělo odpovědi, musíme volat další metodu.**
 
-`Response` provides multiple promise-based methods to access the body in various formats:
+`Response` poskytuje několik metod založených na příslibech, které slouží k přístupu k tělu v různých formátech:
 
-- **`response.text()`** -- read the response and return as text,
-- **`response.json()`** -- parse the response as JSON,
-- **`response.formData()`** -- return the response as `FormData` object (explained in the [next chapter](info:formdata)),
-- **`response.blob()`** -- return the response as [Blob](info:blob) (binary data with type),
-- **`response.arrayBuffer()`** -- return the response as [ArrayBuffer](info:arraybuffer-binary-arrays) (low-level representation of binary data),
-- additionally, `response.body` is a [ReadableStream](https://streams.spec.whatwg.org/#rs-class) object, it allows you to read the body chunk-by-chunk, we'll see an example later.
+- **`response.text()`** -- načte odpověď a vrátí ji jako text,
+- **`response.json()`** -- rozparsuje odpověď ve formátu JSON,
+- **`response.formData()`** -- vrátí odpověď jako objekt `FormData` (bude vysvětleno v [příští kapitole](info:formdata)),
+- **`response.blob()`** -- vrátí odpověď jako [blob](info:blob) (binární data s typem),
+- **`response.arrayBuffer()`** -- vrátí odpověď jako [ArrayBuffer](info:arraybuffer-binary-arrays) (nízkoúrovňová reprezentace binárních dat),
+- kromě toho `response.body` je objekt třídy [ReadableStream](https://streams.spec.whatwg.org/#rs-class), který umožňuje načtení těla po částech, příklad uvidíme později.
 
-For instance, let's get a JSON-object with latest commits from GitHub:
+Například získejme objekt JSON s posledními příspěvky z GitHubu:
 
 ```js run async
 let url = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
-let response = await fetch(url);
+let odpověď = await fetch(url);
 
 *!*
-let commits = await response.json(); // read response body and parse as JSON
+let příspěvky = await odpověď.json(); // načteme tělo odpovědi a parsujeme je jako JSON
 */!*
 
-alert(commits[0].author.login);
+alert(příspěvky[0].author.login);
 ```
 
-Or, the same without `await`, using pure promises syntax:
+Nebo totéž bez `await` za použití čistě příslibové syntaxe:
 
 ```js run
 fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits')
-  .then(response => response.json())
-  .then(commits => alert(commits[0].author.login));
+  .then(odpověď => odpověď.json())
+  .then(příspěvky => alert(příspěvky[0].author.login));
 ```
 
-To get the response text, `await response.text()` instead of `.json()`:
+K získání odpovědi v textové podobě použijeme `await odpověď.text()` místo `.json()`:
 
 ```js run async
-let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+let odpověď = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
 
-let text = await response.text(); // read response body as text
+let text = await odpověď.text(); // načteme tělo odpovědi jako text
 
 alert(text.slice(0, 80) + '...');
 ```
 
-As a show-case for reading in binary format, let's fetch and show a logo image of ["fetch" specification](https://fetch.spec.whatwg.org) (see chapter [Blob](info:blob) for details about operations on `Blob`):
+Pro ukázku načítání v binárním formátu načteme a zobrazíme obrázek s logem [specifikace „fetch“](https://fetch.spec.whatwg.org) (podrobnosti o operacích na `Blob` najdete v kapitole [Blob](info:blob)):
 
 ```js async run
-let response = await fetch('/article/fetch/logo-fetch.svg');
+let odpověď = await fetch('/article/fetch/logo-fetch.svg');
 
 *!*
-let blob = await response.blob(); // download as Blob object
+let blob = await odpověď.blob(); // stáhneme jako objekt Blob
 */!*
 
-// create <img> for it
-let img = document.createElement('img');
-img.style = 'position:fixed;top:10px;left:10px;width:100px';
-document.body.append(img);
+// vytvoříme z něj <img>
+let obrázek = document.createElement('img');
+obrázek.style = 'position:fixed;top:10px;left:10px;width:100px';
+document.body.append(obrázek);
 
-// show it
-img.src = URL.createObjectURL(blob);
+// zobrazíme jej
+obrázek.src = URL.createObjectURL(blob);
 
-setTimeout(() => { // hide after three seconds
-  img.remove();
-  URL.revokeObjectURL(img.src);
+setTimeout(() => { // po třech sekundách zmizí
+  obrázek.remove();
+  URL.revokeObjectURL(obrázek.src);
 }, 3000);
 ```
 
 ````warn
-We can choose only one body-reading method.
+Můžeme si zvolit pouze jednu metodu načtení těla.
 
-If we've already got the response with `response.text()`, then `response.json()` won't work, as the body content has already been processed.
+Jestliže jsme odpověď již získali voláním `odpověď.text()`, pak následné `odpověď.json()` nebude fungovat, neboť obsah těla již byl zpracován.
 
 ```js
-let text = await response.text(); // response body consumed
-let parsed = await response.json(); // fails (already consumed)
+let text = await odpověď.text(); // tělo odpovědi je spotřebováno
+let parsovaný = await odpověď.json(); // selže (tělo je již spotřebováno)
 ```
 ````
 
-## Response headers
+## Hlavičky odpovědi
 
-The response headers are available in a Map-like headers object in `response.headers`.
+Hlavičky odpovědi jsou k dispozici v objektu `odpověď.headers`, který je podobný mapě.
 
-It's not exactly a Map, but it has similar methods to get individual headers by name or iterate over them:
+Není to přesně Map, ale obsahuje podobné metody k získání jednotlivých hlaviček podle názvu nebo k iteraci nad nimi:
 
 ```js run async
-let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+let odpověď = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
 
-// get one header
-alert(response.headers.get('Content-Type')); // application/json; charset=utf-8
+// získáme jednu hlavičku
+alert(odpověď.headers.get('Content-Type')); // application/json; charset=utf-8
 
-// iterate over all headers
-for (let [key, value] of response.headers) {
-  alert(`${key} = ${value}`);
+// iterujeme nad všemi hlavičkami
+for (let [klíč, hodnota] of odpověď.headers) {
+  alert(`${klíč} = ${hodnota}`);
 }
 ```
 
-## Request headers
+## Hlavičky požadavku
 
-To set a request header in `fetch`, we can use the `headers` option. It has an object with outgoing headers, like this:
+K nastavení hlaviček požadavku v metodě `fetch` můžeme použít volbu `headers`, která obsahuje objekt s odesílanými hlavičkami, například:
 
 ```js
-let response = fetch(protectedUrl, {
+let odpověď = fetch(chráněnéURL, {
   headers: {
     Authentication: 'secret'
   }
 });
 ```
 
-...But there's a list of [forbidden HTTP headers](https://fetch.spec.whatwg.org/#forbidden-header-name) that we can't set:
+...Existuje však seznam [zakázaných HTTP hlaviček](https://fetch.spec.whatwg.org/#forbidden-header-name), které nastavit nemůžeme:
 
 - `Accept-Charset`, `Accept-Encoding`
 - `Access-Control-Request-Headers`
@@ -186,58 +186,58 @@ let response = fetch(protectedUrl, {
 - `Proxy-*`
 - `Sec-*`
 
-These headers ensure proper and safe HTTP, so they are controlled exclusively by the browser.
+Tyto hlavičky zajišťují správný a bezpečný HTTP, takže jsou nastavovány výlučně prohlížečem.
 
-## POST requests
+## Požadavky POST
 
-To make a `POST` request, or a request with another method, we need to use `fetch` options:
+K vytvoření požadavku `POST` nebo s nějakou jinou metodou musíme nastavit ve volbách metody `fetch`:
 
-- **`method`** -- HTTP-method, e.g. `POST`,
-- **`body`** -- the request body, one of:
-  - a string (e.g. JSON-encoded),
-  - `FormData` object, to submit the data as `multipart/form-data`,
-  - `Blob`/`BufferSource` to send binary data,
-  - [URLSearchParams](info:url), to submit the data in `x-www-form-urlencoded` encoding, rarely used.
+- **`method`** -- HTTP metoda, např. `POST`,
+- **`body`** -- tělo požadavku, jedno z následujících:
+  - řetězec (např. zakódovaný v JSONu),
+  - objekt `FormData` k odeslání dat jako `multipart/form-data`,
+  - `Blob`/`BufferSource` k odeslání binárních dat,
+  - [URLSearchParams](info:url), k odeslání dat v kódování `x-www-form-urlencoded`, používáno zřídka.
 
-The JSON format is used most of the time.
+Ve většině případů se používá formát JSON.
 
-For example, this code submits `user` object as JSON:
+Například tento kód odešle objekt `uživatel` jako JSON:
 
 ```js run async
-let user = {
-  name: 'John',
-  surname: 'Smith'
+let uživatel = {
+  jméno: 'Jan',
+  příjmení: 'Novák'
 };
 
 *!*
-let response = await fetch('/article/fetch/post/user', {
+let odpověď = await fetch('/article/fetch/post/user', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json;charset=utf-8'
   },
-  body: JSON.stringify(user)
+  body: JSON.stringify(uživatel)
 });
 */!*
 
-let result = await response.json();
-alert(result.message);
+let výsledek = await odpověď.json();
+alert(výsledek.message);
 ```
 
-Please note, if the request `body` is a string, then `Content-Type` header is set to `text/plain;charset=UTF-8` by default.
+Prosíme všimněte si, že jestliže je `body` požadavku řetězec, pak se hlavička `Content-Type` standardně nastaví na `text/plain;charset=UTF-8`.
 
-But, as we're going to send JSON, we use `headers` option to send `application/json` instead, the correct `Content-Type` for JSON-encoded data.
+Pokud však chceme poslat JSON, použijeme volbu `headers`, abychom místo toho poslali `application/json`, správný `Content-Type` pro data zakódovaná v JSONu.
 
-## Sending an image
+## Poslání obrázku
 
-We can also submit binary data with `fetch` using `Blob` or `BufferSource` objects.
+Metodou `fetch` můžeme také poslat binární data pomocí objektů `Blob` nebo `BufferSource`.
 
-In this example, there's a `<canvas>` where we can draw by moving a mouse over it. A click on the "submit" button sends the image to the server:
+V následujícím příkladu máme `<canvas>`, do něhož můžeme kreslit pohybem myši nad ním. Kliknutím na tlačítko „Odeslat“ pošleme obrázek na server:
 
 ```html run autorun height="90"
 <body style="margin:0">
   <canvas id="canvasElem" width="100" height="80" style="border:1px solid"></canvas>
 
-  <input type="button" value="Submit" onclick="submit()">
+  <input type="button" value="Odeslat" onclick="odeslat()">
 
   <script>
     canvasElem.onmousemove = function(e) {
@@ -246,71 +246,71 @@ In this example, there's a `<canvas>` where we can draw by moving a mouse over i
       ctx.stroke();
     };
 
-    async function submit() {
+    async function odeslat() {
       let blob = await new Promise(resolve => canvasElem.toBlob(resolve, 'image/png'));
-      let response = await fetch('/article/fetch/post/image', {
+      let odpověď = await fetch('/article/fetch/post/image', {
         method: 'POST',
         body: blob
       });
 
-      // the server responds with confirmation and the image size
-      let result = await response.json();
-      alert(result.message);
+      // server odpoví potvrzením a velikostí obrázku
+      let výsledek = await odpověď.json();
+      alert(výsledek.message);
     }
 
   </script>
 </body>
 ```
 
-Please note, here we don't set `Content-Type` header manually, because a `Blob` object has a built-in type (here `image/png`, as generated by `toBlob`). For `Blob` objects that type becomes the value of `Content-Type`.
+Prosíme všimněte si, že zde nenastavujeme `Content-Type` ručně, protože objekt `Blob` obsahuje vestavěný typ (zde `image/png`, který je generován metodou `toBlob`). Při odesílání objektu `Blob` bude hodnota `Content-Type` nastavena na tento typ.
 
-The `submit()` function can be rewritten without `async/await` like this:
+Funkci `odeslat()` můžeme přepsat bez použití `async/await` následovně:
 
 ```js
-function submit() {
+function odeslat() {
   canvasElem.toBlob(function(blob) {        
     fetch('/article/fetch/post/image', {
       method: 'POST',
       body: blob
     })
-      .then(response => response.json())
-      .then(result => alert(JSON.stringify(result, null, 2)))
+      .then(odpověď => odpověď.json())
+      .then(výsledek => alert(JSON.stringify(výsledek, null, 2)))
   }, 'image/png');
 }
 ```
 
-## Summary
+## Shrnutí
 
-A typical fetch request consists of two `await` calls:
-
-```js
-let response = await fetch(url, options); // resolves with response headers
-let result = await response.json(); // read body as json
-```
-
-Or, without `await`:
+Obvyklý požadavek na stažení se skládá ze dvou volání `await`:
 
 ```js
-fetch(url, options)
-  .then(response => response.json())
-  .then(result => /* process result */)
+let odpověď = await fetch(url, volby); // vyhodnotí se s hlavičkami odpovědi
+let výsledek = await odpověď.json(); // načte tělo jako JSON
 ```
 
-Response properties:
-- `response.status` -- HTTP code of the response,
-- `response.ok` -- `true` if the status is 200-299.
-- `response.headers` -- Map-like object with HTTP headers.
+Nebo bez `await`:
 
-Methods to get response body:
-- **`response.text()`** -- return the response as text,
-- **`response.json()`** -- parse the response as JSON object,
-- **`response.formData()`** -- return the response as `FormData` object (`multipart/form-data` encoding, see the next chapter),
-- **`response.blob()`** -- return the response as [Blob](info:blob) (binary data with type),
-- **`response.arrayBuffer()`** -- return the response as [ArrayBuffer](info:arraybuffer-binary-arrays) (low-level binary data),
+```js
+fetch(url, volby)
+  .then(odpověď => odpověď.json())
+  .then(výsledek => /* zpracování výsledku */)
+```
 
-Fetch options so far:
-- `method` -- HTTP-method,
-- `headers` -- an object with request headers (not any header is allowed),
-- `body` -- the data to send (request body) as `string`, `FormData`, `BufferSource`, `Blob` or `UrlSearchParams` object.
+Vlastnosti odpovědi:
+- `odpověď.status` -- HTTP kód odpovědi,
+- `odpověď.ok` -- `true`, pokud status je 200-299,
+- `odpověď.headers` -- objekt podobný Map s HTTP hlavičkami.
 
-In the next chapters we'll see more options and use cases of `fetch`.
+Metody pro získání těla odpovědi:
+- **`response.text()`** -- vrátí odpověď jako text,
+- **`response.json()`** -- rozparsuje odpověď ve formátu JSON do objektu,
+- **`response.formData()`** -- vrátí odpověď jako objekt `FormData` (kódování `multipart/form-data`, viz příští kapitolu),
+- **`response.blob()`** -- vrátí odpověď jako [blob](info:blob) (binární data s typem),
+- **`response.arrayBuffer()`** -- vrátí odpověď jako [ArrayBuffer](info:arraybuffer-binary-arrays) (nízkoúrovňová reprezentace binárních dat).
+
+Dosud uvedené volby stahování:
+- `method` -- HTTP metoda,
+- `headers` -- objekt s hlavičkami požadavku (ne všechny hlavičky jsou povoleny),
+- `body` -- data k odeslání (tělo požadavku) jako objekt `string`, `FormData`, `BufferSource`, `Blob` nebo `UrlSearchParams`.
+
+V příští kapitole uvidíme další volby a případy použití metody `fetch`.

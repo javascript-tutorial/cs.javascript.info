@@ -1,15 +1,15 @@
-# Regexp for HTML colors
+# Regulární výraz pro HTML barvy
 
-Create a regexp to search HTML-colors written as `#ABCDEF`: first `#` and then 6 hexadecimal characters.
+Vytvořte regulární výraz, který najde HTML barvy zapsané ve tvaru `#ABCDEF`: nejprve `#` a pak 6 hexadecimálních znaků.
 
-An example of use:
+Příklad použití:
 
 ```js
-let regexp = /...your regexp.../
+let rv = /...váš RV.../
 
-let str = "color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2 #12345678";
+let řetězec = "color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2 #12345678";
 
-alert( str.match(regexp) )  // #121212,#AA00ef
+alert( řetězec.match(rv) )  // #121212,#AA00ef
 ```
 
-P.S. In this task we do not need other color formats like `#123` or `rgb(1,2,3)` etc.
+P.S. V této úloze se nemusíte zabývat jinými formáty barev, např. `#123` nebo `rgb(1,2,3)` atd.

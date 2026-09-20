@@ -10,35 +10,35 @@
 <body>
 
 
-  <textarea id="textExample" rows="5" cols="60">He took his vorpal sword in hand:
+  <textarea id="příkladTextu" rows="5" cols="60">He took his vorpal sword in hand:
 Long time the manxome foe he sought—
 So rested he by the Tumtum tree,
 And stood awhile in thought.
   </textarea>
 
-  <button onclick="animateText(textExample)">Run the animated typing!</button>
+  <button onclick="animaceTextu(příkladTextu)">Spustit animované psaní!</button>
 
   <script>
-    function animateText(textArea) {
+    function animaceTextu(textArea) {
       let text = textArea.value;
-      let to = text.length,
-        from = 0;
+      let kam = text.length,
+        odkud = 0;
 
       animate({
         duration: 5000,
-        timing: bounce,
-        draw: function(progress) {
-          let result = (to - from) * progress + from;
-          textArea.value = text.slice(0, Math.ceil(result))
+        timing: skákání,
+        draw: function(postup) {
+          let výsledek = (kam - odkud) * postup + odkud;
+          textArea.value = text.slice(0, Math.ceil(výsledek))
         }
       });
     }
 
 
-    function bounce(timeFraction) {
+    function skákání(poměrČasu) {
       for (let a = 0, b = 1; 1; a += b, b /= 2) {
-        if (timeFraction >= (7 - 4 * a) / 11) {
-          return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+        if (poměrČasu >= (7 - 4 * a) / 11) {
+          return -Math.pow((11 - 6 * a - 11 * poměrČasu) / 4, 2) + Math.pow(b, 2)
         }
       }
     }

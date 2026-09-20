@@ -1,5 +1,5 @@
-stripe.onclick = function() {
-  let sec = new Date().getSeconds() % 10;
-  stripe.style.transitionDelay = '-' + sec + 's';
-  stripe.classList.add('animate');
+pás.onclick = function() {
+  let sekunda = new Date().getSeconds() % 10;
+  pás.style.transitionDelay = '-' + sekunda + 's';
+  pás.classList.add('animace');
 };

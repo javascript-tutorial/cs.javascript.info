@@ -1,61 +1,61 @@
-# CSS-animations
+# CSS animace
 
-CSS animations make it possible to do simple animations without JavaScript at all.
+CSS umožňuje vytvářet jednoduché animace zcela bez JavaScriptu.
 
-JavaScript can be used to control CSS animations and make them even better, with little code.
+V JavaScriptu můžeme CSS animace řídit nebo je vylepšit krátkým kódem.
 
-## CSS transitions [#css-transition]
+## CSS přechody [#css-transition]
 
-The idea of CSS transitions is simple. We describe a property and how its changes should be animated. When the property changes, the browser paints the animation.
+Myšlenka CSS přechodů je jednoduchá. Uvedeme vlastnost a způsob, jak se mají animovat její změny. Když se vlastnost změní, prohlížeč vykreslí animaci.
 
-That is, all we need is to change the property, and the fluid transition will be done by the browser.
+To znamená, že nám stačí změnit vlastnost a prohlížeč zobrazí plynulý přechod.
 
-For instance, the CSS below animates changes of `background-color` for 3 seconds:
+Například následující CSS animace mění vlastnost `background-color` během 3 sekund:
 
 ```css
-.animated {
+.animováno {
   transition-property: background-color;
   transition-duration: 3s;
 }
 ```
 
-Now if an element has `.animated` class, any change of `background-color` is animated during 3 seconds.
+Když nyní má nějaký element třídu `.animováno`, každá změna jeho `background-color` bude animována v průběhu 3 sekund.
 
-Click the button below to animate the background:
+Kliknutím na následující tlačítko spustíte animaci jeho pozadí:
 
 ```html run autorun height=60
-<button id="color">Click me</button>
+<button id="barva">Klikněte na mě</button>
 
 <style>
-  #color {
+  #barva {
     transition-property: background-color;
     transition-duration: 3s;
   }
 </style>
 
 <script>
-  color.onclick = function() {
+  barva.onclick = function() {
     this.style.backgroundColor = 'red';
   };
 </script>
 ```
 
-There are 4 properties to describe CSS transitions:
+K popisu CSS přechodů slouží 4 vlastnosti:
 
 - `transition-property`
 - `transition-duration`
 - `transition-timing-function`
 - `transition-delay`
 
-We'll cover them in a moment, for now let's note that the common `transition` property allows declaring them together in the order: `property duration timing-function delay`, as well as animating multiple properties at once.
+Probereme je za okamžik. Prozatím poznamenejme, že společná vlastnost `transition` umožňuje deklarovat všechny najednou v pořadí: `property duration timing-function delay`, stejně jako animovat více vlastností současně.
 
-For instance, this button animates both `color` and `font-size`:
+Například toto tlačítko animuje vlastnosti `color` a `font-size`:
 
 ```html run height=80 autorun no-beautify
-<button id="growing">Click me</button>
+<button id="rostoucí">Klikněte na mě</button>
 
 <style>
-#growing {
+#rostoucí {
 *!*
   transition: font-size 3s, color 2s;
 */!*
@@ -63,356 +63,356 @@ For instance, this button animates both `color` and `font-size`:
 </style>
 
 <script>
-growing.onclick = function() {
+rostoucí.onclick = function() {
   this.style.fontSize = '36px';
   this.style.color = 'red';
 };
 </script>
 ```
 
-Now, let's cover animation properties one by one.
+Nyní probereme animační vlastnosti jednu po druhé.
 
 ## transition-property
 
-In `transition-property`, we write a list of properties to animate, for instance: `left`, `margin-left`, `height`, `color`. Or we could write `all`, which means "animate all properties".
+Ve vlastnosti `transition-property` uvádíme seznam vlastností, které mají být animovány, například: `left`, `margin-left`, `height`, `color`. Nebo můžeme napsat `all`, což znamená „animovat všechny vlastnosti“.
 
-Do note that, there are properties which can not be animated. However, [most of the generally used properties are animatable](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties).
+Všimněte si však, že existují vlastnosti, které animovat nelze. Nicméně [většina obecně užívaných vlastností je animovatelná](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties).
 
 ## transition-duration
 
-In `transition-duration` we can specify how long the animation should take. The time should be in [CSS time format](https://www.w3.org/TR/css3-values/#time): in seconds `s` or milliseconds `ms`.
+Ve vlastnosti `transition-duration` můžeme specifikovat, jak dlouho má animace trvat. Čas by měl být v [časovém formátu CSS](https://www.w3.org/TR/css3-values/#time): v sekundách `s` nebo milisekundách `ms`.
 
 ## transition-delay
 
-In `transition-delay` we can specify the delay *before* the animation. For instance, if `transition-delay` is `1s` and `transition-duration` is `2s`, then the animation starts 1 second after the property change and the total duration will be 2 seconds.
+Ve vlastnosti `transition-delay` můžeme specifikovat prodlevu *před* animací. Například pokud `transition-delay` je `1s` a `transition-duration` je `2s`, pak se animace spustí 1 sekundu po změně vlastnosti a její celková doba trvání budou 2 sekundy.
 
-Negative values are also possible. Then the animation is shown immediately, but the starting point of the animation will be after given value (time). For example, if `transition-delay` is `-1s` and `transition-duration` is `2s`, then animation starts from the halfway point and total duration will be 1 second.
+Povoleny jsou i záporné hodnoty. Pak se animace spustí okamžitě, ale její počáteční bod bude v zadané hodnotě (čase). Například pokud `transition-delay` je `-1s` a `transition-duration` je `2s`, spustí se animace přesně od poloviny a bude trvat celkem 1 sekundu.
 
-Here the animation shifts numbers from `0` to `9` using CSS `translate` property:
+Následující animace posouvá čísla od `0` do `9` pomocí CSS vlastnosti `translate`:
 
 [codetabs src="digits"]
 
-The `transform` property is animated like this:
+Vlastnost `transform` se animuje následovně:
 
 ```css
-#stripe.animate {
+#pás.animace {
   transform: translate(-90%);
   transition-property: transform;
   transition-duration: 9s;
 }
 ```
 
-In the example above JavaScript adds the class `.animate` to the element -- and the animation starts:
+V uvedeném příkladu JavaScript přidá elementu třídu `.animace` -- a animace začne:
 
 ```js
-stripe.classList.add('animate');
+pás.classList.add('animace');
 ```
 
-We could also start it from somewhere in the middle of the transition, from an exact number, e.g. corresponding to the current second, using a negative `transition-delay`.
+Pomocí záporné `transition-delay` bychom mohli také začít někde uprostřed přechodu, od určitého čísla, např. odpovídajícího aktuální sekundě.
 
-Here if you click the digit -- it starts the animation from the current second:
+Když zde kliknete na číslici, animace se spustí od aktuální sekundy:
 
 [codetabs src="digits-negative-delay"]
 
-JavaScript does it with an extra line:
+JavaScript to provádí řádkem navíc:
 
 ```js
-stripe.onclick = function() {
-  let sec = new Date().getSeconds() % 10;
+pás.onclick = function() {
+  let sekunda = new Date().getSeconds() % 10;
 *!*
-  // for instance, -3s here starts the animation from the 3rd second
-  stripe.style.transitionDelay = '-' + sec + 's';
+  // například -3s zde spustí animaci od 3. sekundy
+  pás.style.transitionDelay = '-' + sekunda + 's';
 */!*
-  stripe.classList.add('animate');
+  pás.classList.add('animace');
 };
 ```
 
 ## transition-timing-function
 
-The timing function describes how the animation process is distributed along its timeline. Will it start slowly and then go fast, or vice versa.
+Časovací funkce popisuje, jak je animační proces rozložen podél své časové linie. Zda začne pomalu a pak zrychlí, nebo naopak.
 
-It appears to be the most complicated property at first. But it becomes very simple if we devote a bit time to it.
+Na první pohled vypadá jako nejsložitější vlastnost, ale pokud jí věnujete trochu času, začne vám připadat velice jednoduchá.
 
-That property accepts two kinds of values: a Bezier curve or steps. Let's start with the curve, as it's used more often.
+Tato vlastnost přijímá dva druhy hodnot: Bézierovu křivku nebo kroky. Začneme křivkou, jelikož ta se používá častěji.
 
-### Bezier curve
+### Bézierova křivka
 
-The timing function can be set as a [Bezier curve](/bezier-curve) with 4 control points that satisfy the conditions:
+Časovací funkce může být nastavena jako [Bézierova křivka](/bezier-curve) se 4 řídícími body, které splňují tyto podmínky:
 
-1. First control point: `(0,0)`.
-2. Last control point: `(1,1)`.
-3. For intermediate points, the values of `x` must be in the interval `0..1`, `y` can be anything.
+1. První řídící bod je `(0,0)`.
+2. Poslední řídící bod je `(1,1)`.
+3. Hodnota `x` mezilehlých bodů musí být v intervalu `0..1`, `y` může být jakákoli.
 
-The syntax for a Bezier curve in CSS: `cubic-bezier(x2, y2, x3, y3)`. Here we need to specify only 2nd and 3rd control points, because the 1st one is fixed to `(0,0)` and the 4th one is `(1,1)`.
+Syntaxe Bézierovy křivky v CSS: `cubic-bezier(x2, y2, x3, y3)`. Zde musíme specifikovat jen 2. a 3. řídící bod, protože první je pevně stanoven jako `(0,0)` a čtvrtý jako `(1,1)`.
 
-The timing function describes how fast the animation process goes.
+Časovací funkce popisuje, jak rychle animační proces probíhá.
 
-- The `x` axis is the time: `0` -- the start, `1` -- the end of `transition-duration`.
-- The `y` axis specifies the completion of the process: `0` -- the starting value of the property, `1` -- the final value.
+- Osa `x` představuje čas: `0` -- začátek, `1` -- konec `transition-duration`.
+- Osa `y` specifikuje míru dokončení procesu: `0` -- počáteční hodnota vlastnosti, `1` -- konečná hodnota.
 
-The simplest variant is when the animation goes uniformly, with the same linear speed. That can be specified by the curve `cubic-bezier(0, 0, 1, 1)`.
+Nejjednodušší varianta je ta, kdy animace probíhá rovnoměrně, stále stejnou lineární rychlostí. To můžeme specifikovat křivkou `cubic-bezier(0, 0, 1, 1)`.
 
-Here's how that curve looks:
+Tato křivka vypadá následovně:
 
 ![](bezier-linear.svg)
 
-...As we can see, it's just a straight line. As the time (`x`) passes, the completion (`y`) of the animation steadily goes from `0` to `1`.
+...Jak vidíte, je to obyčejná přímka. Když probíhá čas (`x`), proces animace (`y`) rovnoměrně pokračuje od `0` k `1`.
 
-The train in the example below goes from left to right with the permanent speed (click it):
+V následujícím příkladu jede vláček zleva doprava stálou rychlostí (klikněte na něj):
 
 [codetabs src="train-linear"]
 
-The CSS `transition` is based on that curve:
+CSS vlastnost `transition` je založena na této křivce:
 
 ```css
-.train {
+.vláček {
   left: 0;
   transition: left 5s cubic-bezier(0, 0, 1, 1);
-  /* click on a train sets left to 450px, thus triggering the animation */
+  /* kliknutí na vláček nastaví vlastnost left na 450px, čímž spustí animaci */
 }
 ```
 
-...And how can we show a train slowing down?
+...A jak můžeme zobrazit zpomalující vláček?
 
-We can use another Bezier curve: `cubic-bezier(0.0, 0.5, 0.5 ,1.0)`.
+Můžeme použít jinou Bézierovu křivku: `cubic-bezier(0.0, 0.5, 0.5 ,1.0)`.
 
-The graph:
+Graf:
 
 ![](train-curve.svg)
 
-As we can see, the process starts fast: the curve soars up high, and then slower and slower.
+Jak vidíme, proces začíná rychle: křivka strmě vzroste, ale pak zpomaluje a zpomaluje.
 
-Here's the timing function in action (click the train):
+Časovací funkce v akci (klikněte na vláček):
 
 [codetabs src="train"]
 
 CSS:
 ```css
-.train {
+.vláček {
   left: 0;
   transition: left 5s cubic-bezier(0, .5, .5, 1);
-  /* click on a train sets left to 450px, thus triggering the animation */
+  /* kliknutí na vláček nastaví vlastnost left na 450px, čímž spustí animaci */
 }
 ```
 
-There are several built-in curves: `linear`, `ease`, `ease-in`, `ease-out` and `ease-in-out`.
+Existuje několik vestavěných křivek: `linear`, `ease`, `ease-in`, `ease-out` a `ease-in-out`.
 
-The `linear` is a shorthand for `cubic-bezier(0, 0, 1, 1)` -- a straight line, which we described above.
+`linear` je zkratka pro `cubic-bezier(0, 0, 1, 1)` -- přímku, jakou jsme popsali výše.
 
-Other names are shorthands for the following `cubic-bezier`:
+Další názvy jsou zkratky pro následující `cubic-bezier`:
 
 | <code>ease</code><sup>*</sup> | <code>ease-in</code> | <code>ease-out</code> | <code>ease-in-out</code> |
 |-------------------------------|----------------------|-----------------------|--------------------------|
 | <code>(0.25, 0.1, 0.25, 1.0)</code> | <code>(0.42, 0, 1.0, 1.0)</code> | <code>(0, 0, 0.58, 1.0)</code> | <code>(0.42, 0, 0.58, 1.0)</code> |
 | ![ease, figure](ease.svg) | ![ease-in, figure](ease-in.svg) | ![ease-out, figure](ease-out.svg) | ![ease-in-out, figure](ease-in-out.svg) |
 
-`*` -- by default, if there's no timing function, `ease` is used.
+`*` -- není-li uvedena časovací funkce, standardně se používá `ease`.
 
-So we could use `ease-out` for our slowing down train:
+Pro náš zpomalující vláček bychom tedy mohli použít `ease-out`:
 
 ```css
-.train {
+.vláček {
   left: 0;
   transition: left 5s ease-out;
-  /* same as transition: left 5s cubic-bezier(0, .5, .5, 1); */
+  /* totéž jako transition: left 5s cubic-bezier(0, .5, .5, 1); */
 }
 ```
 
-But it looks a bit differently.
+Vypadá to však trochu jinak.
 
-**A Bezier curve can make the animation exceed its range.**
+**Bézierova křivka může způsobit, že animace překročí svůj rozsah.**
 
-The control points on the curve can have any `y` coordinates: even negative or huge ones. Then the Bezier curve would also extend very low or high, making the animation go beyond its normal range.
+Řídící body křivky mohou mít jakékoli souřadnice `y`, dokonce záporné nebo obrovské. Pak se i Bézierova křivka roztáhne velmi nízko nebo vysoko a způsobí, že animace opustí svůj obvyklý rozsah.
 
-In the example below the animation code is:
+Následující příklad obsahuje tento animační kód:
 
 ```css
-.train {
+.vláček {
   left: 100px;
   transition: left 5s cubic-bezier(.5, -1, .5, 2);
-  /* click on a train sets left to 450px */
+  /* kliknutí na vláček nastaví vlastnost left na 450px */
 }
 ```
 
-The property `left` should animate from `100px` to `400px`.
+Vlastnost `left` by měla být animována od `100px` do `400px`.
 
-But if you click the train, you'll see that:
+Když však kliknete na vláček, uvidíte tohle:
 
-- First, the train goes *back*: `left` becomes less than `100px`.
-- Then it goes forward, a little bit farther than `400px`.
-- And then back again -- to `400px`.
+- Nejprve vláček jede *dozadu*: `left` poklesne pod `100px`.
+- Pak jede dopředu, o něco dál než `400px`.
+- A pak znovu zpět -- na `400px`.
 
 [codetabs src="train-over"]
 
-Why it happens is pretty obvious if we look at the graph of the given Bezier curve:
+Proč se tak děje, nám bude zcela jasné, když se podíváme na graf zadané Bézierovy křivky:
 
 ![](bezier-train-over.svg)
 
-We moved the `y` coordinate of the 2nd point below zero, and for the 3rd point we made it over `1`, so the curve goes out of the "regular" quadrant. The `y` is out of the "standard" range `0..1`.
+Souřadnici `y` druhého bodu jsme nastavili pod nulu a třetího bodu nad `1`, takže křivka vyběhla ze svého „běžného“ kvadrantu. Souřadnice `y` je mimo „standardní“ rozsah `0..1`.
 
-As we know, `y` measures "the completion of the animation process". The value `y = 0` corresponds to the starting property value and `y = 1` -- the ending value. So values `y<0` move the property beyond the starting `left` and `y>1` -- past the final `left`.
+Jak víme, `y` znamená „míru dokončení procesu animace“. Hodnota `y = 0` odpovídá počáteční hodnotě vlastnosti a hodnota `y = 1` koncové hodnotě. Hodnoty `y<0` tedy posunují vlastnost před počáteční `left` a hodnoty `y>1` za koncovou `left`.
 
-That's a "soft" variant for sure. If we put `y` values like `-99` and `99` then the train would jump out of the range much more.
+To je samozřejmě „měkká“ varianta. Jestliže nastavíme hodnoty `y` třeba na `-99` a `99`, pak vláček vyskočí z rozsahu mnohem dál.
 
-But how do we make a Bezier curve for a specific task? There are many tools.
+Jak ale vytvoříme Bézierovu křivku pro specifický úkol? K tomu existuje mnoho nástrojů.
 
-- For instance, we can do it on the site <https://cubic-bezier.com>.
-- Browser developer tools also have special support for Bezier curves in CSS:
-    1. Open the developer tools with `key:F12` (Mac: `key:Cmd+Opt+I`).
-    2. Select the `Elements` tab, then pay attention to the `Styles` sub-panel at the right side.
-    3. CSS properties with a word `cubic-bezier` will have an icon before this word.
-    4. Click this icon to edit the curve.
+- Můžeme to například udělat na stránce <https://cubic-bezier.com>.
+- Také prohlížečové vývojářské nástroje mají zvláštní podporu pro Bézierovy křivky v CSS:
+    1. Otevřete si vývojářské nástroje klávesou `key:F12` (Mac: `key:Cmd+Opt+I`).
+    2. Zvolte záložku `Elements` (`Prvky`) a věnujte pozornost subpanelu `Styles` (`Styly`) na pravé straně.
+    3. CSS vlastnosti se slovem `cubic-bezier` budou mít před tímto slovem ikonu.
+    4. Po kliknutí na tuto ikonu můžete editovat křivku.
 
 
-### Steps
+### Kroky
 
-The timing function `steps(number of steps[, start/end])` allows splitting an transition into multiple steps.
+Časovací funkce `steps(počet kroků[, start/end])` umožňuje rozdělit přechod do více kroků.
 
-Let's see that in an example with digits.
+Podívejme se na to v příkladu s číslicemi.
 
-Here's a list of digits, without any animations, just as a source:
+Zde je seznam číslic bez jakýchkoli animací, jen jako zdroj:
 
 [codetabs src="step-list"]
 
-In the HTML, a stripe of digits is enclosed into a fixed-length `<div id="digits">`:
+V HTML je pás číslic uzavřen do `<div id="číslice">` pevné délky:
 
 ```html
-<div id="digit">
-  <div id="stripe">0123456789</div>
+<div id="číslice">
+  <div id="pás">0123456789</div>
 </div>
 ```
 
-The `#digit` div has a fixed width and a border, so it looks like a red window.
+Element `#digit` má pevnou šířku a ohraničení, proto vypadá jako červené okno.
 
-We'll make a timer: the digits will appear one by one, in a discrete way.
+Vytvoříme časovač: číslice se budou objevovat nespojitě jedna po druhé.
 
-To achieve that, we'll hide the `#stripe` outside of `#digit` using `overflow: hidden`, and then shift the `#stripe` to the left step-by-step.
+Abychom toho docílili, skryjeme `#pás` mimo `#číslice` pomocí `overflow: hidden` a pak budeme `#pás` posunovat doleva krok za krokem.
 
-There will be 9 steps, a step-move for each digit:
+Bude to mít 9 kroků, pro každou číslici jeden krok-posun:
 
 ```css
-#stripe.animate  {
+#pás.animate  {
   transform: translate(-90%);
   transition: transform 9s *!*steps(9, start)*/!*;
 }
 ```
 
-The first argument of `steps(9, start)` is the number of steps. The transform will be split into 9 parts (10% each). The time interval is automatically divided into 9 parts as well, so `transition: 9s` gives us 9 seconds for the whole animation – 1 second per digit.
+První argument funkce `steps(9, start)` je počet kroků. Přechod bude rozdělen na 9 částí (každá 10%). Časový interval se rovněž automaticky rozdělí na 9 částí, takže `transition: 9s` nám dává 9 sekund na celou animaci -- 1 sekundu na každou číslici.
 
-The second argument is one of two words: `start` or `end`.
+Druhý argument je jedno ze dvou slov: `start` nebo `end`.
 
-The `start` means that in the beginning of animation we need to make the first step immediately.
+`start` znamená, že první krok potřebujeme udělat okamžitě na začátku animace.
 
-In action:
+V akci:
 
 [codetabs src="step"]
 
-A click on the digit changes it to `1` (the first step) immediately, and then changes in the beginning of the next second.
+Po kliknutí se číslice okamžitě změní na `1` (první krok) a pak se změní na začátku další sekundy.
 
-The process is progressing like this:
+Proces postupuje následovně:
 
-- `0s` -- `-10%` (first change in the beginning of the 1st second, immediately)
+- `0s` -- `-10%` (první změna na začátku 1. sekundy, okamžitě)
 - `1s` -- `-20%`
 - ...
 - `8s` -- `-90%`
-- (the last second shows the final value).
+- (poslední sekunda ukazuje konečnou hodnotu.)
 
-Here, the first change was immediate because of `start` in the `steps`.
+První změna zde proběhla okamžitě v důsledku `start` ve `steps`.
 
-The alternative value `end` would mean that the change should be applied not in the beginning, but at the end of each second.
+Druhá možná hodnota `end` by znamenala, že změna se nebude aplikovat na začátku, ale na konci každé sekundy.
 
-So the process for `steps(9, end)` would go like this:
+Proces pro `steps(9, end)` tedy bude probíhat takto:
 
-- `0s` -- `0` (during the first second nothing changes)
-- `1s` -- `-10%` (first change at the end of the 1st second)
+- `0s` -- `0` (během první sekundy se nic nezmění)
+- `1s` -- `-10%` (první změna na konci 1. sekundy)
 - `2s` -- `-20%`
 - ...
 - `9s` -- `-90%`
 
-Here's `steps(9, end)` in action (note the pause before the first digit change):
+Následuje `steps(9, end)` v akci (všimněte si prodlevy před první změnou číslice):
 
 [codetabs src="step-end"]
 
-There are also some pre-defined shorthands for `steps(...)`:
+Pro `steps(...)` existují i některé předdefinované zkratky:
 
-- `step-start` -- is the same as `steps(1, start)`. That is, the animation starts immediately and takes 1 step. So it starts and finishes immediately, as if there were no animation.
-- `step-end` -- the same as `steps(1, end)`: make the animation in a single step at the end of `transition-duration`.
+- `step-start` -- totéž jako `steps(1, start)`. To znamená, že animace začne okamžitě a bude trvat 1 krok. Začne a skončí tedy okamžitě, jako by žádná animace nebyla.
+- `step-end` -- totéž jako `steps(1, end)`: vykoná animaci v jediném kroku na konci `transition-duration`.
 
-These values are rarely used, as they represent not a real animation, but rather a single-step change. We mention them here for completeness.
+Tyto hodnoty se používají málokdy, jelikož nepředstavují skutečnou animaci, ale jednokrokovou změnu. Uvádíme je jen pro úplnost.
 
-## Event: "transitionend"
+## Událost: „transitionend“
 
-When the CSS animation finishes, the `transitionend` event triggers.
+Když CSS animace skončí, spustí se událost `transitionend`.
 
-It is widely used to do an action after the animation is done. Also we can join animations.
+Zhusta se používá k provedení akce po skončení animace. Můžeme také spojovat animace.
 
-For instance, the ship in the example below starts to sail there and back when clicked, each time farther and farther to the right:
+Například loď v následujícím příkladu začne po kliknutí plout sem a tam, pokaždé dál a dál doprava:
 
 [iframe src="boat" height=300 edit link]
 
-The animation is initiated by the function `go` that re-runs each time the transition finishes, and flips the direction:
+Animaci spustila funkce `pluj`, která se znovu spouští pokaždé, když přechod skončí, a obrátí směr plavby:
 
 ```js
 boat.onclick = function() {
   //...
-  let times = 1;
+  let kolikrát = 1;
 
-  function go() {
-    if (times % 2) {
-      // sail to the right
+  function pluj() {
+    if (kolikrát % 2) {
+      // plujeme doprava
       boat.classList.remove('back');
-      boat.style.marginLeft = 100 * times + 200 + 'px';
+      boat.style.marginLeft = 100 * kolikrát + 200 + 'px';
     } else {
-      // sail to the left
+      // plujeme doleva
       boat.classList.add('back');
-      boat.style.marginLeft = 100 * times - 200 + 'px';
+      boat.style.marginLeft = 100 * kolikrát - 200 + 'px';
     }
 
   }
 
-  go();
+  pluj();
 
   boat.addEventListener('transitionend', function() {
-    times++;
-    go();
+    kolikrát++;
+    pluj();
   });
 };
 ```
 
-The event object for `transitionend` has a few specific properties:
+Objekt události `transitionend` má dvě specifické vlastnosti:
 
-`event.propertyName`
-: The property that has finished animating. Can be good if we animate multiple properties simultaneously.
+`událost.propertyName`
+: Vlastnost, jejíž animace skončila. Může se hodit, když animujeme více vlastností současně.
 
-`event.elapsedTime`
-: The time (in seconds) that the animation took, without `transition-delay`.
+`událost.elapsedTime`
+: Doba trvání animace (v sekundách) bez `transition-delay`.
 
 ## Keyframes
 
-We can join multiple simple animations together using the `@keyframes` CSS rule.
+Pomocí CSS pravidla `@keyframes` můžeme spojit více jednoduchých animací dohromady.
 
-It specifies the "name" of the animation and rules - what, when and where to animate. Then using the `animation` property, we can attach the animation to the element and specify additional parameters for it.
+Specifikuje „název“ animace a pravidla -- co, kdy a kde animovat. Pak můžeme pomocí vlastnosti `animation` připojit animaci k elementu a specifikovat její další parametry.
 
-Here's an example with explanations:
+Následuje příklad s vysvětlením:
 
 ```html run height=60 autorun="no-epub" no-beautify
-<div class="progress"></div>
+<div class="postup"></div>
 
 <style>
 *!*
-  @keyframes go-left-right {        /* give it a name: "go-left-right" */
-    from { left: 0px; }             /* animate from left: 0px */
-    to { left: calc(100% - 50px); } /* animate to left: 100%-50px */
+  @keyframes pluj-zleva-doprava {   /* pojmenujeme ji: "pluj-zleva-doprava" */
+    from { left: 0px; }             /* začátek animace left: 0px */
+    to { left: calc(100% - 50px); } /* konec animace left: 100%-50px */
   }
 */!*
 
-  .progress {
+  .postup {
 *!*
-    animation: go-left-right 3s infinite alternate;
-    /* apply the animation "go-left-right" to the element
-       duration 3 seconds
-       number of times: infinite
-       alternate direction every time
+    animation: pluj-zleva-doprava 3s infinite alternate;
+    /* aplikujeme animaci "pluj-zleva-doprava" na element
+       trvání 3 sekundy
+       počet opakování: nekonečný (infinite)
+       pokaždé změní směr (alternate)
     */
 */!*
 
@@ -425,69 +425,69 @@ Here's an example with explanations:
 </style>
 ```
 
-There are many articles about `@keyframes` and a [detailed specification](https://drafts.csswg.org/css-animations/).
+O `@keyframes` existuje mnoho článků a [detailní specifikace](https://drafts.csswg.org/css-animations/).
 
-You probably won't need `@keyframes` often, unless everything is in constant motion on your sites.
+Pravděpodobně nebudete potřebovat `@keyframes` často, pokud na vašich stránkách není všechno v neustálém pohybu.
 
-## Performance
+## Výkonnost
 
-Most CSS properties can be animated, because most of them are numeric values. For instance, `width`, `color`, `font-size` are all numbers. When you animate them, the browser gradually changes these numbers frame by frame, creating a smooth effect.
+Většinu CSS vlastností je možné animovat, protože většina z nich má číselné hodnoty. Například `width`, `color`, `font-size` jsou všechny čísla. Když je budete animovat, prohlížeč postupně tato čísla mění krok za krokem, čímž vytváří plynulý efekt.
 
-However, not all animations will look as smooth as you'd like, because different CSS properties cost differently to change.
+Ne všechny animace však budou vypadat tak hladce, jak byste si přáli, protože změna různých CSS vlastností trvá různou dobu.
 
-In more technical details, when there's a style change, the browser goes through 3 steps to render the new look:
+Technické podrobnosti jsou takové, že když nastane změna stylu, prohlížeč projde 3 fáze, aby zobrazil nový vzhled:
 
-1. **Layout**: re-compute the geometry and position of each element, then
-2. **Paint**: re-compute how everything should look like at their places, including background, colors,
-3. **Composite**: render the final results into pixels on screen, apply CSS transforms if they exist.
+1. **Layout (rozložení)**: přepočítá geometrii a pozici každého elementu, pak
+2. **Paint (kreslení)**: přepočítá, jak má všechno vypadat na svých místech, včetně pozadí a barev,
+3. **Composite (složení)**: zobrazí konečné výsledky do pixelů na obrazovce a aplikuje CSS přechody, pokud nějaké jsou.
 
-During a CSS animation, this process repeats every frame. However, CSS properties that never affect geometry or position, such as `color`, may skip the Layout step. If a `color` changes, the browser  doesn't calculate any new geometry, it goes to Paint -> Composite. And there are few properties that directly go to Composite. You can find a longer list of CSS properties and which stages they trigger at <https://csstriggers.com>.
+Během CSS animace se tento proces opakuje v každém snímku. Avšak CSS vlastnosti, které nemají vliv na geometrii nebo pozici, např. `color`, mohou přeskočit fázi rozložení. Pokud se změní `color`, prohlížeč nepočítá žádnou novou geometrii a jde rovnou na kreslení -> složení. Existuje i několik vlastností, které přecházejí přímo ke složení. Delší seznam CSS vlastností a fází, které spouštějí, najdete na <https://csstriggers.com>.
 
-The calculations may take time, especially on pages with many elements and a complex layout. And the delays are actually visible on most devices, leading to "jittery", less fluid animations.
+Tyto výpočty mohou nějakou dobu trvat, zejména na stránkách s mnoha elementy a složitým rozložením. A na většině zařízení jsou tyto prodlevy viditelné, což vede k „trhání“, méně plynulým animacím.
 
-Animations of properties that skip the Layout step are faster. It's even better if Paint is skipped too.
+Animace vlastností, které přeskakují fázi rozložení, jsou rychlejší. Ještě lepší je, když je přeskočeno i kreslení.
 
-The `transform` property is a great choice, because:
-- CSS transforms affect the target element box as a whole (rotate, flip, stretch, shift it).
-- CSS transforms never affect neighbour elements.
+Vlastnost `transform` je skvělá volba, protože:
+- CSS přechody ovlivňují box cílového elementu jako celek (otáčejí ho, obracejí, roztahují, přesunují).
+- CSS přechody nikdy neovlivňují sousední elementy.
 
-...So browsers apply `transform` "on top" of existing Layout and Paint calculations, in the Composite stage.
+...Prohlížeče tedy aplikují `transform` „nad“ existujícími výpočty rozložení a kreslení, ve fázi složení.
 
-In other words, the browser calculates the Layout (sizes, positions), paints it with colors, backgrounds, etc at the Paint stage, and then applies `transform` to element boxes that need it.
+Jinými slovy, prohlížeč vypočítá rozložení (velikosti, pozice), ve fázi kreslení vykreslí barvy, pozadí atd., a pak aplikuje `transform` na boxy elementů, které ji potřebují.
 
-Changes (animations) of the `transform` property never trigger Layout and Paint steps. More than that, the browser  leverages the graphics accelerator (a special chip on the CPU or graphics card) for CSS transforms, thus making them very efficient.
+Změny (animace) vlastnosti `transform` nikdy nevyvolají kroky rozložení a kreslení. Kromě toho prohlížeč využívá pro CSS přechody grafický akcelerátor (speciální čip na CPU nebo grafické kartě), díky čemuž jsou velmi efektivní.
 
-Luckily, the `transform` property is very powerful. By using `transform` on an element, you could rotate and flip it, stretch and shrink it, move it around, and [much more](https://developer.mozilla.org/docs/Web/CSS/transform#syntax). So instead of `left/margin-left` properties we can use `transform: translateX(…)`, use `transform: scale` for increasing element size, etc.
+Naštěstí je vlastnost `transform` velmi silná. Používáním `transform` na elementu jej můžete otáčet, převracet, roztahovat a zmenšovat, přesunovat a [mnoho dalšího](https://developer.mozilla.org/docs/Web/CSS/transform#syntax). Místo vlastností `left/margin-left` tedy můžeme použít `transform: translateX(…)`, pro zvětšování elementu můžeme použít `transform: scale` atd.
 
-The `opacity` property also never triggers Layout (also skips Paint in Mozilla Gecko). We can use it for show/hide or fade-in/fade-out effects.
+Rovněž vlastnost `opacity` nikdy nespustí rozložení (v Mozille Gecku přeskakuje i kreslení). Můžeme ji používat pro efekty zobrazení/skrytí nebo zjevování/mizení.
 
-Paring `transform` with `opacity` can usually solve most of our needs, providing fluid, good-looking animations.
+Spojení `transform` a `opacity` nám obvykle dokáže vyřešit většinu našich potřeb a poskytnout plynulé, pěkně vypadající animace.
 
-For example, here clicking on the `#boat` element adds the class with `transform: translateX(300px)` and `opacity: 0`, thus making it move `300px` to the right and disappear:
+Například zde kliknutím na element `#loď` přidáte třídu s `transform: translateX(300px)` a `opacity: 0`, což přiměje loď přesunout se o `300px` doprava a zmizet:
 
 ```html run height=260 autorun no-beautify
-<img src="https://js.cx/clipart/boat.png" id="boat">
+<img src="https://js.cx/clipart/boat.png" id="loď">
 
 <style>
-#boat {
+#loď {
   cursor: pointer;
   transition: transform 2s ease-in-out, opacity 2s ease-in-out;
 }
 
-.move {
+.posun {
   transform: translateX(300px);
   opacity: 0;
 }
 </style>
 <script>
-  boat.onclick = () => boat.classList.add('move');
+  loď.onclick = () => loď.classList.add('posun');
 </script>
 ```
 
-Here's a more complex example, with `@keyframes`:
+Následující příklad je složitější a obsahuje `@keyframes`:
 
 ```html run height=80 autorun no-beautify
-<h2 onclick="this.classList.toggle('animated')">click me to start / stop</h2>
+<h2 onclick="this.classList.toggle('animated')">kliknutí sem spustí / zastaví animaci</h2>
 <style>
   .animated {
     animation: hello-goodbye 1.8s infinite;
@@ -510,23 +510,23 @@ Here's a more complex example, with `@keyframes`:
 </style>
 ```
 
-## Summary
+## Shrnutí
 
-CSS animations allow smoothly (or step-by-step) animated changes of one or multiple CSS properties.
+CSS animace umožňují plynulé (nebo krokové) animované změny jedné nebo více CSS vlastností.
 
-They are good for most animation tasks. We're also able to use JavaScript for animations, the next chapter is devoted to that.
+Hodí se pro většinu animačních úloh. Pro animace můžeme používat i JavaScript. Tomu je věnována příští kapitola.
 
-Limitations of CSS animations compared to JavaScript animations:
+Omezení CSS animací ve srovnání s JavaScriptovými animacemi:
 
-```compare plus="CSS animations" minus="JavaScript animations"
-+ Simple things done simply.
-+ Fast and lightweight for CPU.
-- JavaScript animations are flexible. They can implement any animation logic, like an "explosion" of an element.
-- Not just property changes. We can create new elements in JavaScript as part of the animation.
+```compare go="CSS animace" minus="JavaScript animace"
++ Jednoduché věci se dělají jednoduše.
++ Rychlé a nenáročné na CPU.
+- JavaScriptové animace jsou flexibilní. Mohou implementovat jakoukoli animační logiku, např. „explozi“ elementu.
+- Umějí nejen změny vlastností, ale v JavaScriptu můžeme v rámci animace i vytvářet nové elementy.
 ```
 
-In early examples in this chapter, we animate `font-size`, `left`, `width`, `height`, etc. In real life projects, we should use `transform: scale()` and `transform: translate()` for better performance.
+V počátečních příkladech v naší kapitole jsme animovali `font-size`, `left`, `width`, `height` atd. Ve skutečných projektech bychom měli pro lepší výkon používat `transform: scale()` a `transform: translate()`.
 
-The majority of animations can be implemented using CSS as described in this chapter. And the `transitionend` event allows JavaScript to be run after the animation, so it integrates fine with the code.
+Většinu animací lze implementovat pomocí CSS podle popisu v této kapitole. Událost `transitionend` umožňuje po skončení animace spustit JavaScript, takže se dobře integruje s kódem.
 
-But in the next chapter we'll do some JavaScript animations to cover more complex cases.
+V následující kapitole však budeme provádět animace v JavaScriptu, abychom pokryli složitější případy.

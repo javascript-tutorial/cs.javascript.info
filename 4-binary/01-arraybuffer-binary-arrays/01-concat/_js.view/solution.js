@@ -1,18 +1,18 @@
-function concat(arrays) {
-  // sum of individual array lengths
-  let totalLength = arrays.reduce((acc, value) => acc + value.length, 0);
+function zřetěz(polePolí) {
+  // součet délek jednotlivých polí
+  let celkováDélka = polePolí.reduce((součet, hodnota) => součet + hodnota.length, 0);
 
-  let result = new Uint8Array(totalLength);
+  let výsledek = new Uint8Array(celkováDélka);
   
-  if (!arrays.length) return result;
+  if (!polePolí.length) return výsledek;
 
-  // for each array - copy it over result
-  // next array is copied right after the previous one
-  let length = 0;
-  for(let array of arrays) {
-    result.set(array, length);
-    length += array.length;
+  // pro každé pole - zkopírujeme je do výsledku
+  // každé další pole se zkopíruje právě za předchozí
+  let délka = 0;
+  for(let pole of polePolí) {
+    výsledek.set(pole, délka);
+    délka += pole.length;
   }
 
-  return result;
+  return výsledek;
 }

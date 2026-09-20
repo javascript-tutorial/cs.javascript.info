@@ -1,10 +1,10 @@
-describe("getUsers", function() {
+describe("vraťUživatele", function() {
 
-  it("gets users from GitHub", async function() {
-    let users = await getUsers(['iliakan', 'remy', 'no.such.users']);
-    assert.equal(users[0].login, 'iliakan');
-    assert.equal(users[1].login, 'remy');
-    assert.equal(users[2], null);
+  it("vrátí uživatele z GitHubu", async function() {
+    let uživatelé = await vraťUživatele(['iliakan', 'remy', 'no.such.users']);
+    assert.equal(uživatelé[0].login, 'iliakan');
+    assert.equal(uživatelé[1].login, 'remy');
+    assert.equal(uživatelé[2], null);
   });
 
 });

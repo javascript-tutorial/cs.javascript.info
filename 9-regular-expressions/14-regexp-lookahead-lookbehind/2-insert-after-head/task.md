@@ -1,15 +1,15 @@
-# Insert After Head
+# Vložení za hlavičku
 
-We have a string with an HTML Document.
+Máme řetězec s HTML dokumentem.
 
-Write a regular expression that inserts `<h1>Hello</h1>` immediately after `<body>` tag. The tag may have attributes.
+Napište regulární výraz, který vloží `<h1>Ahoj</h1>` hned za značku `<body>`. Tato značka může obsahovat atributy.
 
-For instance:
+Například:
 
 ```js
-let regexp = /your regular expression/;
+let rv = /váš regulární výraz/;
 
-let str = `
+let řetězec = `
 <html>
   <body style="height: 200px">
   ...
@@ -17,14 +17,14 @@ let str = `
 </html>
 `;
 
-str = str.replace(regexp, `<h1>Hello</h1>`);
+řetězec = řetězec.replace(rv, `<h1>Ahoj</h1>`);
 ```
 
-After that the value of `str` should be:
+Pak by hodnota proměnné `řetězec` měla být následující:
 
 ```html
 <html>
-  <body style="height: 200px"><h1>Hello</h1>
+  <body style="height: 200px"><h1>Ahoj</h1>
   ...
   </body>
 </html>

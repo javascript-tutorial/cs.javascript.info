@@ -9,47 +9,47 @@
 <body>
 
 
-  <div id="field">
-    <img src="https://js.cx/clipart/ball.svg" width="40" height="40" id="ball">
+  <div id="hřiště">
+    <img src="https://js.cx/clipart/ball.svg" width="40" height="40" id="míč">
   </div>
 
   <script>
-    function makeEaseOut(timing) {
-      return function(timeFraction) {
-        return 1 - timing(1 - timeFraction);
+    function vytvořEaseOut(časování) {
+      return function(poměrČasu) {
+        return 1 - časování(1 - poměrČasu);
       }
     }
 
-    function bounce(timeFraction) {
+    function skákání(poměrČasu) {
       for (let a = 0, b = 1; 1; a += b, b /= 2) {
-        if (timeFraction >= (7 - 4 * a) / 11) {
-          return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+        if (poměrČasu >= (7 - 4 * a) / 11) {
+          return -Math.pow((11 - 6 * a - 11 * poměrČasu) / 4, 2) + Math.pow(b, 2)
         }
       }
     }
 
-    function quad(timeFraction) {
-      return Math.pow(timeFraction, 2);
+    function naDruhou(poměrČasu) {
+      return Math.pow(poměrČasu, 2);
     }
 
-    ball.onclick = function() {
+    míč.onclick = function() {
 
-      let height = field.clientHeight - ball.clientHeight;
-      let width = 100;
+      let výška = hřiště.clientHeight - míč.clientHeight;
+      let šířka = 100;
 
       animate({
         duration: 2000,
-        timing: makeEaseOut(bounce),
-        draw: function(progress) {
-          ball.style.top = height * progress + 'px'
+        timing: vytvořEaseOut(skákání),
+        draw: function(postup) {
+          míč.style.top = výška * postup + 'px'
         }
       });
 
       animate({
         duration: 2000,
-        timing: makeEaseOut(quad),
-        draw: function(progress) {
-          ball.style.left = width * progress + "px"
+        timing: vytvořEaseOut(naDruhou),
+        draw: function(postup) {
+          míč.style.left = šířka * postup + "px"
         }
       });
     }

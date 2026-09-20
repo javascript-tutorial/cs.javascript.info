@@ -1,87 +1,87 @@
-# Multiline mode of anchors ^ $, flag "m"
+# Víceřádkový režim kotev ^ $, příznak „m“
 
-The multiline mode is enabled by the flag `pattern:m`.
+Víceřádkový režim se nastavuje příznakem `pattern:m`.
 
-It only affects the behavior of `pattern:^` and `pattern:$`.
+Má vliv pouze na chování `pattern:^` a `pattern:$`.
 
-In the multiline mode they match not only at the beginning and the end of the string, but also at start/end of line.
+Ve víceřádkovém režimu jim odpovídá nejen začátek a konec řetězce, ale také začátek a konec řádku.
 
-## Searching at line start ^
+## Hledání na začátku řádku ^
 
-In the example below the text has multiple lines. The pattern `pattern:/^\d/gm` takes a digit from the beginning of each line:
+V následujícím příkladu má text více řádků. Vzor `pattern:/^\d/gm` vezme číslici ze začátku každého řádku:
 
 ```js run
-let str = `1st place: Winnie
-2nd place: Piglet
-3rd place: Eeyore`;
+let řetězec = `1. místo: Pankrác
+2. místo: Servác
+3. místo: Bonifác`;
 
 *!*
-console.log( str.match(/^\d/gm) ); // 1, 2, 3
+console.log( řetězec.match(/^\d/gm) ); // 1, 2, 3
 */!*
 ```
 
-Without the flag `pattern:m` only the first digit is matched:
+Bez příznaku `pattern:m` bude nalezena jen první číslice:
 
 ```js run
-let str = `1st place: Winnie
-2nd place: Piglet
-3rd place: Eeyore`;
+let řetězec = `1. místo: Pankrác
+2. místo: Servác
+3. místo: Bonifác`;
 
 *!*
-console.log( str.match(/^\d/g) ); // 1
+console.log( řetězec.match(/^\d/g) ); // 1
 */!*
 ```
 
-That's because by default a caret `pattern:^` only matches at the beginning of the text, and in the multiline mode -- at the start of any line.
+Je to tím, že stříšce `pattern:^` odpovídá standardně jen začátek textu, ale ve víceřádkovém režimu začátek každého řádku.
 
 ```smart
-"Start of a line" formally means "immediately after a line break": the test  `pattern:^` in multiline mode matches at all positions preceded by a newline character `\n`.
+„Začátek řádku“ formálně znamená „ihned za zlomem řádku“: testu `pattern:^` ve víceřádkovém režimu odpovídají všechny pozice, kterým předchází znak nového řádku `\n`.
 
-And at the text start.
+A začátek textu.
 ```
 
-## Searching at line end $
+## Hledání na konci řádku $
 
-The dollar sign `pattern:$` behaves similarly.
+Znak dolaru `pattern:$` se chová obdobně.
 
-The regular expression `pattern:\d$` finds the last digit in every line
+Regulární výraz `pattern:\d$` nalezne poslední číslici na každém řádku:
 
 ```js run
-let str = `Winnie: 1
-Piglet: 2
-Eeyore: 3`;
+let řetězec = `Pankrác: 1
+Servác: 2
+Bonifác: 3`;
 
-console.log( str.match(/\d$/gm) ); // 1,2,3
+console.log( řetězec.match(/\d$/gm) ); // 1,2,3
 ```
 
-Without the flag `pattern:m`, the dollar `pattern:$` would only match the end of the whole text, so only the very last digit would be found.
+Bez příznaku `pattern:m` by dolar `pattern:$` nalezl jen konec celého textu, takže by se našla jen úplně poslední číslice.
 
 ```smart
-"End of a line" formally means "immediately before a line break": the test  `pattern:$` in multiline mode matches at all positions succeeded by a newline character `\n`.
+„Konec řádku“ formálně znamená „bezprostředně před zlomem řádku“: testu `pattern:$` ve víceřádkovém režimu odpovídají všechny pozice následované znakem nového řádku `\n`.
 
-And at the text end.
+A konec textu.
 ```
 
-## Searching for \n instead of ^ $
+## Hledání \n místo ^ $
 
-To find a newline, we can use not only anchors `pattern:^` and `pattern:$`, but also the newline character `\n`.
+Abychom našli nový řádek, můžeme použít nejenom kotvy `pattern:^` a `pattern:$`, ale i znak nového řádku `\n`.
 
-What's the difference? Let's see an example.
+Jaký je v tom rozdíl? Podívejme se na příklad.
 
-Here we search for `pattern:\d\n` instead of `pattern:\d$`:
+Zde budeme hledat `pattern:\d\n` namísto `pattern:\d$`:
 
 ```js run
-let str = `Winnie: 1
-Piglet: 2
-Eeyore: 3`;
+let řetězec = `Pankrác: 1
+Servác: 2
+Bonifác: 3`;
 
-console.log( str.match(/\d\n/g) ); // 1\n,2\n
+console.log( řetězec.match(/\d\n/g) ); // 1\n,2\n
 ```
 
-As we can see, there are 2 matches instead of 3.
+Jak vidíme, našly se jen 2 shody namísto tří.
 
-That's because there's no newline after `subject:3` (there's text end though, so it matches `pattern:$`).
+Je to tím, že za `subject:3` nenásleduje nový řádek (ale je tam konec textu, takže odpovídá `pattern:$`).
 
-Another difference: now every match includes a newline character `match:\n`. Unlike the anchors `pattern:^` `pattern:$`, that only test the condition (start/end of a line), `\n` is a character, so it becomes a part of the result.
+Další rozdíl: každá shoda nyní obsahuje znak nového řádku `match:\n`. Na rozdíl od kotev `pattern:^` `pattern:$`, které testují jen podmínku (začátek/konec řádku), je `\n` znak, takže se stane součástí výsledku.
 
-So, a `\n` in the pattern is used when we need newline characters in the result, while anchors are used to find something at the beginning/end of a line.
+Znak `\n` tedy ve vzoru používáme, když potřebujeme ve výsledku znaky nového řádku, zatímco kotvy používáme, když chceme najít něco na začátku nebo konci řádku.

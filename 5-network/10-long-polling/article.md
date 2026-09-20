@@ -1,98 +1,99 @@
-# Long polling
+# Dlouhé dotazování
 
-Long polling is the simplest way of having persistent connection with server, that doesn't use any specific protocol like WebSocket or Server Sent Events.
+Dlouhé dotazování (long polling) je nejjednodušší způsob, jak udržovat stále spojení se serverem, bez nutnosti použít specifický protokol jako WebSocket nebo Server Sent Events.
 
-Being very easy to implement, it's also good enough in a lot of cases.
+Je velmi snadné na implementaci a v mnoha případech dostačuje.
 
-## Regular Polling
+## Pravidelné dotazování
 
-The simplest way to get new information from the server is periodic polling. That is, regular requests to the server: "Hello, I'm here, do you have any information for me?". For example, once every 10 seconds.
+Nejjednodušší způsob, jak ze serveru dostávat nové informace, je periodické dotazování. To znamená pravidelně odesílat na server požadavek: „Ahoj, jsem tady, máš pro mě nějaké informace?“ Například každých 10 sekund.
 
-In response, the server first takes a notice to itself that the client is online, and second - sends a packet of messages it got till that moment.
+Při odpovídání si server nejprve poznamená, že klient je online, a pak mu pošle paket se zprávami, které do této chvíle obdržel.
 
-That works, but there are downsides:
-1. Messages are passed with a delay up to 10 seconds (between requests).
-2. Even if there are no messages, the server is bombed with requests every 10 seconds, even if the user switched somewhere else or is asleep. That's quite a load to handle, speaking performance-wise.
+Funguje to, ale má to své nevýhody:
+1. Zprávy se předávají se zpožděním až 10 sekund (mezi požadavky).
+2. I když nejsou žádné zprávy, server je každých 10 sekund bombardován požadavky, i když se uživatel přepnul jinam nebo usnul. To představuje docela velkou zátěž, která snižuje výkon.
 
-So, if we're talking about a very small service, the approach may be viable, but generally, it needs an improvement.
+Když tedy jde o velmi malou službu, může tento přístup být použitelný, ale obecně potřebuje vylepšení.
 
-## Long polling
+## Dlouhé dotazování
 
-So-called "long polling" is a much better way to poll the server.
+Mnohem lepším způsobem, jak se serveru dotazovat, je tzv. „dlouhé dotazování“ (*long polling*).
 
-It's also very easy to implement, and delivers messages without delays.
+I to je velmi snadné na implementaci a navíc doručuje zprávy bez prodlení.
 
-The flow:
+Průběh je následující:
 
-1. A request is sent to the server.
-2. The server doesn't close the connection until it has a message to send.
-3. When a message appears - the server responds to the request with it.
-4. The browser makes a new request immediately.
+1. Na server je poslán požadavek.
+2. Server neuzavře spojení, dokud nebude mít zprávu k odeslání.
+3. Když se zpráva objeví, server odpoví touto zprávou na požadavek.
+4. Prohlížeč okamžitě učiní nový požadavek.
 
-This situation, where the browser has sent a request and keeps a pending connection with the server, is standard for this method. Only when a message is delivered, the connection is closed and reestablished.
+Tato situace, kdy prohlížeč pošle požadavek a pak udržuje se serverem čekající spojení, je pro tuto metodu standardní. Teprve až bude zpráva doručena, bude spojení uzavřeno a znovu vytvořeno.
 
 ![](long-polling.svg)
 
-If the connection is lost, because of, say, a network error, the browser immediately sends a new request.
+Pokud je spojení ztraceno, například kvůli síťové chybě, prohlížeč okamžitě pošle nový požadavek.
 
-A sketch of client-side `subscribe` function that makes long requests:
+Nástin funkce `podpis` na straně klienta, která vytváří dlouhé požadavky:
 
 ```js
-async function subscribe() {
-  let response = await fetch("/subscribe");
+async function podpis() {
+  let odpověď = await fetch("/podpis");
 
-  if (response.status == 502) {
-    // Status 502 is a connection timeout error,
-    // may happen when the connection was pending for too long,
-    // and the remote server or a proxy closed it
-    // let's reconnect
-    await subscribe();
-  } else if (response.status != 200) {
-    // An error - let's show it
-    showMessage(response.statusText);
-    // Reconnect in one second
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    await subscribe();
+  if (odpověď.status == 502) {
+    // Status 502 je vypršení časového limitu spojení,
+    // může nastat, když spojení čeká příliš dlouho
+    // a vzdálený server nebo proxy je uzavřel
+    // pak se připojíme znovu
+    await podpis();
+  } else if (odpověď.status != 200) {
+    // Chyba - zobrazíme ji
+    zobrazZprávu(odpověď.statusText);
+    // Za jednu sekundu se připojíme znovu
+    await new Promise(splň => setTimeout(splň, 1000));
+    await podpis();
   } else {
-    // Get and show the message
-    let message = await response.text();
-    showMessage(message);
-    // Call subscribe() again to get the next message
-    await subscribe();
+    // Načteme a zobrazíme zprávu
+    let zpráva = await odpověď.text();
+    zobrazZprávu(zpráva);
+    // Znovu zavoláme podpis(), abychom obdrželi další zprávu
+    await podpis();
   }
 }
 
-subscribe();
+podpis();
 ```
 
-As you can see, `subscribe` function makes a fetch, then waits for the response, handles it and calls itself again.
+Jak vidíte, funkce `podpis` vytvoří požadavek, pak počká na odpověď, zpracuje ji a znovu volá sama sebe.
 
-```warn header="Server should be ok with many pending connections"
-The server architecture must be able to work with many pending connections.
+```warn header="Server by měl být schopen poradit si s mnoha čekajícími spojeními"
 
-Certain server architectures run one process per connection, resulting in there being as many processes as there are connections, while each process consumes quite a bit of memory. So, too many connections will just consume it all.
+Architektura serveru musí být schopna pracovat s mnoha čekajícími spojeními.
 
-That's often the case for backends written in languages like PHP and Ruby.
+Některé serverové architektury spouštějí pro každé spojení jeden proces, což vede k tomu, že vznikne tolik procesů, kolik je spojení, přičemž každý proces zabírá určité množství paměti. Příliš mnoho spojení tedy může zahltit celou paměť.
 
-Servers written using Node.js usually don't have such problems.
+Často je to případ backendů napsaných v jazycích jako PHP nebo Ruby.
 
-That said, it isn't a programming language issue. Most modern languages, including PHP and Ruby allow to implement a proper backend. Just please make sure that your server architecture works fine with many simultaneous connections.
+Servery napsané v Node.js tento problém obvykle nemají.
+
+Tím netvrdíme, že je to vina programovacího jazyka. Většina moderních jazyků, včetně PHP a Ruby, umožňuje implementovat vhodný backend. Jen se prosíme přesvědčte, že vaše serverová architektura dobře funguje i při mnoha spojeních současně.
 ```
 
-## Demo: a chat
+## Demo: chat
 
-Here's a demo chat, you can also download it and run locally (if you're familiar with Node.js and can install modules):
+Následuje demonstrativní chat. Můžete si jej také stáhnout a spustit u sebe lokálně (pokud znáte Node.js a můžete instalovat moduly):
 
 [codetabs src="longpoll" height=500]
 
-Browser code is in `browser.js`.
+Kód pro prohlížeč se nachází v `browser.js`.
 
-## Area of usage
+## Oblast použití
 
-Long polling works great in situations when messages are rare.
+Dlouhé dotazování funguje výborně v situacích, kdy zpráv není příliš mnoho.
 
-If messages come very often, then the chart of requesting-receiving messages, painted above, becomes saw-like.
+Jestliže však zprávy přicházejí velmi často, bude výše zobrazený nákres odesílání požadavků a přijímání zpráv vypadat jako zuby pily.
 
-Every message is a separate request, supplied with headers, authentication overhead, and so on.
+Každá zpráva je samostatný požadavek, vybavený hlavičkami, autentifikací a podobně.
 
-So, in this case, another method is preferred, such as [Websocket](info:websocket) or [Server Sent Events](info:server-sent-events).
+Proto se v takovém případě dává přednost jiným metodám, například [Websocket](info:websocket) nebo [Server Sent Events](info:server-sent-events).

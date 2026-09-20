@@ -1,142 +1,142 @@
-# Quantifiers +, *, ? and {n}
+# Kvantifikátory +, *, ? a {n}
 
-Let's say we have a string like `+7(903)-123-45-67` and want to find all numbers in it. But unlike before, we are interested not in single digits, but full numbers: `7, 903, 123, 45, 67`.
+Dejme tomu, že máme řetězec, např. `+7(903)-123-45-67`, a chceme v něm najít všechna čísla. Na rozdíl od předchozích příkladů nás však nezajímají jednotlivé číslice, ale celá čísla: `7, 903, 123, 45, 67`.
 
-A number is a sequence of 1 or more digits `pattern:\d`. To mark how many we need, we can append a *quantifier*.
+Číslo je posloupnost 1 nebo více číslic `pattern:\d`. Abychom specifikovali, kolik jich potřebujeme, můžeme uvést *kvantifikátor*.
 
-## Quantity {n}
+## Kvantita {n}
 
-The simplest quantifier is a number in curly braces: `pattern:{n}`.
+Nejjednodušší kvantifikátor je číslo ve složených závorkách: `pattern:{n}`.
 
-A quantifier is appended to a character (or a character class, or a `[...]` set etc) and specifies how many we need.
+Kvantifikátor se přidává ke znaku (nebo ke znakové třídě, množině `[...]` atd.) a specifikuje, kolik jich potřebujeme.
 
-It has a few advanced forms, let's see examples:
+Má několik pokročilejších forem, podívejme se na příklady:
 
-The exact count: `pattern:{5}`
-: `pattern:\d{5}` denotes exactly 5 digits, the same as `pattern:\d\d\d\d\d`.
+Přesný počet: `pattern:{5}`
+: `pattern:\d{5}` znamená přesně 5 číslic, totéž jako `pattern:\d\d\d\d\d`.
 
-    The example below looks for a 5-digit number:
-
-    ```js run
-    alert( "I'm 12345 years old".match(/\d{5}/) ); //  "12345"
-    ```
-
-    We can add `\b` to exclude longer numbers: `pattern:\b\d{5}\b`.
-
-The range: `pattern:{3,5}`, match 3-5 times
-: To find numbers from 3 to 5 digits we can put the limits into curly braces: `pattern:\d{3,5}`
+    Následující příklad najde 5-ciferné číslo:
 
     ```js run
-    alert( "I'm not 12, but 1234 years old".match(/\d{3,5}/) ); // "1234"
+    alert( "Je mi 12345 let".match(/\d{5}/) ); //  "12345"
     ```
 
-    We can omit the upper limit.
+    Abychom vyloučili delší čísla, můžeme přidat `\b`: `pattern:\b\d{5}\b`.
 
-    Then a regexp `pattern:\d{3,}` looks for sequences of digits of length `3` or more:
+Rozsah: `pattern:{3,5}`, shoda 3-5krát
+: Abychom našli čísla o délce 3 až 5 číslic, můžeme uvést do složených závorek hraniční hodnoty: `pattern:\d{3,5}`
 
     ```js run
-    alert( "I'm not 12, but 345678 years old".match(/\d{3,}/) ); // "345678"
+    alert( "Není mi 12, ale 1234 let".match(/\d{3,5}/) ); // "1234"
     ```
 
-Let's return to the string `+7(903)-123-45-67`.
+    Horní hranici můžeme vynechat.
 
-A number is a sequence of one or more digits in a row. So the regexp is `pattern:\d{1,}`:
+    Regulární výraz `pattern:\d{3,}` pak hledá posloupnosti číslic o délce `3` a více:
+
+    ```js run
+    alert( "Není mi 12, ale 345678 let".match(/\d{3,}/) ); // "345678"
+    ```
+
+Vraťme se k řetězci `+7(903)-123-45-67`.
+
+Číslo je posloupnost jedné nebo více číslic za sebou. Regulární výraz tedy bude `pattern:\d{1,}`:
 
 ```js run
-let str = "+7(903)-123-45-67";
+let řetězec = "+7(903)-123-45-67";
 
-let numbers = str.match(/\d{1,}/g);
+let čísla = řetězec.match(/\d{1,}/g);
 
-alert(numbers); // 7,903,123,45,67
+alert(čísla); // 7,903,123,45,67
 ```
 
-## Shorthands
+## Zkratky
 
-There are shorthands for most used quantifiers:
+Pro nejpoužívanější kvantifikátory existují zkratky:
 
 `pattern:+`
-: Means "one or more", the same as `pattern:{1,}`.
+: Znamená „jeden nebo více“, totéž jako `pattern:{1,}`.
 
-    For instance, `pattern:\d+` looks for numbers:
+    Například `pattern:\d+` hledá čísla:
 
     ```js run
-    let str = "+7(903)-123-45-67";
+    let řetězec = "+7(903)-123-45-67";
 
-    alert( str.match(/\d+/g) ); // 7,903,123,45,67
+    alert( řetězec.match(/\d+/g) ); // 7,903,123,45,67
     ```
 
 `pattern:?`
-: Means "zero or one", the same as `pattern:{0,1}`. In other words, it makes the symbol optional.
+: Znamená „žádný nebo jeden“, totéž jako `pattern:{0,1}`. Jinými slovy, učiní symbol nepovinným.
 
-    For instance, the pattern `pattern:ou?r` looks for `match:o` followed by zero or one `match:u`, and then `match:r`.
+    Například vzor `pattern:ou?r` hledá `match:o`, po němž následuje žádné nebo jedno `match:u` a pak `match:r`.
 
-    So, `pattern:colou?r` finds both `match:color` and `match:colour`:
+    `pattern:colou?r` tedy najde jak `match:color`, tak `match:colour`:
 
     ```js run
-    let str = "Should I write color or colour?";
+    let řetězec = "Mám psát color nebo colour?";
 
-    alert( str.match(/colou?r/g) ); // color, colour
+    alert( řetězec.match(/colou?r/g) ); // color, colour
     ```
 
 `pattern:*`
-: Means "zero or more", the same as `pattern:{0,}`. That is, the character may repeat any times or be absent.
+: Znamená „žádný nebo více“, totéž jako `pattern:{0,}`. Znak se tedy může opakovat libovolněkrát nebo chybět.
 
-    For example, `pattern:\d0*` looks for a digit followed by any number of zeroes (may be many or none):
+    Například `pattern:\d0*` hledá číslici následovanou libovolným počtem nul (může jich být mnoho a nemusí být žádná):
 
     ```js run
     alert( "100 10 1".match(/\d0*/g) ); // 100, 10, 1
     ```
 
-    Compare it with `pattern:+` (one or more):
+    Porovnejte si to s `pattern:+` (jeden nebo více):
 
     ```js run
     alert( "100 10 1".match(/\d0+/g) ); // 100, 10
-    // 1 not matched, as 0+ requires at least one zero
+    // 1 se neshoduje, neboť 0+ vyžaduje aspoň jednu nulu
     ```
 
-## More examples
+## Další příklady
 
-Quantifiers are used very often. They serve as the main "building block" of complex regular expressions, so let's see more examples.
+Kvantifikátory se používají velmi často a slouží jako hlavní „stavební blok“ složitých regulárních výrazů. Podívejme se tedy na další příklady.
 
-**Regexp for decimal fractions (a number with a floating point): `pattern:\d+\.\d+`**
+**RV pro desetinná čísla (číslo s pohyblivou řádovou tečkou): `pattern:\d+\.\d+`**
 
-In action:
+V akci:
 ```js run
 alert( "0 1 12.345 7890".match(/\d+\.\d+/g) ); // 12.345
 ```
 
-**Regexp for an "opening HTML-tag without attributes", such as `<span>` or `<p>`.**
+**RV pro „otevírací HTML značku bez atributů“, například `<span>` nebo `<p>`.**
 
-1. The simplest one: `pattern:/<[a-z]+>/i`
+1. Nejjednodušší: `pattern:/<[a-z]+>/i`
 
     ```js run
     alert( "<body> ... </body>".match(/<[a-z]+>/gi) ); // <body>
     ```
 
-    The regexp looks for character `pattern:'<'` followed by one or more Latin letters, and then  `pattern:'>'`.
+    Regulární výraz hledá znak `pattern:'<'`, po němž následuje jedno nebo více písmen latinské abecedy a pak `pattern:'>'`.
 
-2. Improved: `pattern:/<[a-z][a-z0-9]*>/i`
+2. Vylepšený: `pattern:/<[a-z][a-z0-9]*>/i`
 
-    According to the standard, HTML tag name may have a digit at any position except the first one, like `<h1>`.
+    Podle standardu může název HTML značky obsahovat číslici na kterékoli pozici kromě první, např. `<h1>`.
 
     ```js run
-    alert( "<h1>Hi!</h1>".match(/<[a-z][a-z0-9]*>/gi) ); // <h1>
+    alert( "<h1>Ahoj!</h1>".match(/<[a-z][a-z0-9]*>/gi) ); // <h1>
     ```
 
-**Regexp "opening or closing HTML-tag without attributes": `pattern:/<\/?[a-z][a-z0-9]*>/i`**
+**RV pro „otevírací nebo uzavírací HTML značku bez atributů“: `pattern:/<\/?[a-z][a-z0-9]*>/i`**
 
-We added an optional slash `pattern:/?` near the beginning of the pattern. Had to escape it with a backslash, otherwise JavaScript would think it is the pattern end.
+Na začátek vzoru jsme přidali nepovinné lomítko `pattern:/?`. Museli jsme před ním uvést únikové zpětné lomítko, jinak by je JavaScript považoval za konec vzoru.
 
 ```js run
-alert( "<h1>Hi!</h1>".match(/<\/?[a-z][a-z0-9]*>/gi) ); // <h1>, </h1>
+alert( "<h1>Ahoj!</h1>".match(/<\/?[a-z][a-z0-9]*>/gi) ); // <h1>, </h1>
 ```
 
-```smart header="To make a regexp more precise, we often need make it more complex"
-We can see one common rule in these examples: the more precise is the regular expression -- the longer and more complex it is.
+```smart header="Abychom učinili regulární výraz přesnějším, musíme jej často učinit složitějším"
+Na těchto příkladech vidíme jedno společné pravidlo: čím je regulární výraz přesnější, tím je delší a složitější.
 
-For instance, for HTML tags we could use a simpler regexp: `pattern:<\w+>`. But as HTML has stricter restrictions for a tag name, `pattern:<[a-z][a-z0-9]*>` is more reliable.
+Například pro HTML značky jsme mohli použít jednodušší RV: `pattern:<\w+>`. Protože však HTML klade na název značky přísnější omezení, je výraz `pattern:<[a-z][a-z0-9]*>` spolehlivější.
 
-Can we use `pattern:<\w+>` or we need `pattern:<[a-z][a-z0-9]*>`?
+Můžeme použít `pattern:<\w+>`, nebo potřebujeme `pattern:<[a-z][a-z0-9]*>`?
 
-In real life both variants are acceptable. Depends on how tolerant we can be to "extra" matches and whether it's difficult or not to remove them from the result by other means.
+Ve skutečném životě jsou přijatelné obě varianty. Záleží na tom, jak tolerantní můžeme být k nálezům „navíc“ a nakolik je obtížné je z výsledku odstranit jinými způsoby.
 ```

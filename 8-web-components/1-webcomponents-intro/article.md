@@ -1,76 +1,76 @@
-# From the orbital height
+# Z oběžné dráhy
 
-This section describes a set of modern standards for "web components".
+Tato část popisuje sadu moderních standardů pro „webové komponenty“.
 
-As of now, these standards are under development. Some features are well-supported and integrated into the modern HTML/DOM standard, while others are yet in draft stage. You can try examples in any browser, Google Chrome is probably the most up to date with these features. Guess, that's because Google fellows are behind many of the related specifications.
+V současnosti jsou tyto standardy ve fázi vývoje. Některé vlastnosti jsou široce podporovány a integrovány do moderního HTML/DOM standardu, jiné jsou zatím ve fázi návrhu. Příklady si můžete vyzkoušet v kterémkoli prohlížeči, nejaktualizovanější co do těchto prvků je pravděpodobně Google Chrome. Hádáte správně, je to tím, že za mnoha souvisejícími specifikacemi stojí lidé z Googlu.
 
-## What's common between...
+## Co mají společného...
 
-The whole component idea is nothing new. It's used in many frameworks and elsewhere.
+Celá myšlenka komponent není nic nového. Používá se v mnoha frameworcích i jinde.
 
-Before we move to implementation details, take a look at this great achievement of humanity:
+Než se pustíme do implementačních podrobností, podívejme se na tento ohromný úspěch lidstva:
 
 ![](satellite.jpg)
 
-That's the International Space Station (ISS).
+To je Mezinárodní vesmírná stanice (International Space Station, ISS).
 
-And this is how it's made inside (approximately):
+A takto je vytvořena uvnitř (přibližně):
 
 ![](satellite-expanded.jpg)
 
-The International Space Station:
-- Consists of many components.
-- Each component, in its turn, has many smaller details inside.
-- The components are very complex, much more complicated than most websites.
-- Components are developed internationally, by teams from different countries, speaking different languages.
+<br>Mezinárodní vesmírná stanice:
+- Skládá se z mnoha komponent.
+- Každá komponenta obsahuje uvnitř množství dalších menších detailů.
+- Tyto komponenty jsou velmi složité, mnohem složitější než většina webových sídel.
+- Komponenty jsou vyvíjeny mezinárodně, pracují na nich týmy z různých zemí hovořící různými jazyky.
 
-...And this thing flies, keeps humans alive in space!
+...A celá ta věc létá a udržuje lidi ve vesmíru naživu!
 
-How are such complex devices created?
+Jak se taková složitá zařízení vyrábějí?
 
-Which principles could we borrow to make our development same-level reliable and scalable? Or, at least, close to it?
+Které principy bychom si odtud mohli vypůjčit, abychom při našem vývoji dosáhli stejné úrovně spolehlivosti a rozšiřitelnosti? Nebo se jí aspoň přiblížili?
 
-## Component architecture
+## Komponentová architektura
 
-The well known rule for developing complex software is: don't make complex software.
+Dobře známé pravidlo pro vývoj složitého softwaru zní: nevytvářejte složitý software.
 
-If something becomes complex -- split it into simpler parts and connect in the most obvious way.
+Pokud se něco stane složitým, rozdělte to na jednodušší části a spojte je tím nejzřejmějším způsobem.
 
-**A good architect is the one who can make the complex simple.**
+**Dobrý architekt je takový, který dokáže učinit složité věci jednoduchými.**
 
-We can split user interface into visual components: each of them has own place on the page, can "do" a well-described task, and is separate from the others.
+Můžeme rozdělit uživatelské rozhraní na vizuální komponenty: každá z nich má na stránce své místo, dokáže „splnit“ dobře popsaný úkol a je oddělená od ostatních.
 
-Let's take a look at a website, for example Twitter.
+Podívejme se na webovou stránku, například Twitter (dnes X).
 
-It naturally splits into components:
+Je přirozeně rozdělena na komponenty:
 
 ![](web-components-twitter.svg)
 
-1. Top navigation.
-2. User info.
-3. Follow suggestions.
-4. Submit form.
-5. (and also 6, 7) -- messages.
+1. Hlavní navigace.
+2. Informace o uživateli.
+3. Návrhy sledování.
+4. Odesílací formulář.
+5. (a také 6, 7) -- zprávy.
 
-Components may have subcomponents, e.g. messages may be parts of a higher-level "message list" component. A clickable user picture itself may be a component, and so on.
+Komponenty mohou obsahovat vnitřní komponenty, např. zprávy mohou být součástí komponenty vyšší úrovně „seznam zpráv“. Obrázek uživatele, na který lze kliknout, může být komponenta a tak dále.
 
-How do we decide, what is a component? That comes from intuition, experience and common sense. Usually it's a separate visual entity that we can describe in terms of what it does and how it interacts with the page. In the case above, the page has blocks, each of them plays its own role, it's logical to make these components.
+Jak rozhodneme, co je komponenta? To je otázka intuice, zkušeností a zdravého rozumu. Obvykle je to oddělená vizuální entita, kterou můžeme popsat podle toho, co dělá a jak interaguje se stránkou. V uvedeném případě stránka obsahuje bloky, každý z nich hraje svou vlastní roli, je tedy logické udělat z nich komponenty.
 
-A component has:
-- Its own JavaScript class.
-- DOM structure, managed solely by its class, outside code doesn't access it ("encapsulation" principle).
-- CSS styles, applied to the component.
-- API: events, class methods etc, to interact with other components.
+Komponenta má:
+- Svou vlastní třídu v JavaScriptu.
+- Strukturu DOMu, kterou spravuje výhradně její třída a vnější kód k ní nepřistupuje (princip „zapouzdření“).
+- CSS styly, aplikované na komponentu.
+- API: události, třídní metody atd., k interakci s ostatními komponentami.
 
-Once again, the whole "component" thing is nothing special.
+Opakujeme, že celý „komponentový“ přístup není nic zvláštního.
 
-There exist many frameworks and development methodologies to build them, each with its own bells and whistles. Usually, special CSS classes and conventions are used to provide "component feel" -- CSS scoping and DOM encapsulation.
+Pro vytváření komponent existuje řada frameworků a vývojových metodik, každá má své vlastní speciality. K vytváření „komponentového dojmu“ se zpravidla používají speciální CSS třídy a konvence -- rozsah platnosti CSS a zapouzdření DOMu.
 
-"Web components" provide built-in browser capabilities for that, so we don't have to emulate them any more.
+„Webové komponenty“ k tomu poskytují zabudované prohlížečové schopnosti, takže je už nebudeme muset emulovat.
 
-- [Custom elements](https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements) -- to define custom HTML elements.
-- [Shadow DOM](https://dom.spec.whatwg.org/#shadow-trees) -- to create an internal DOM for the component, hidden from the others.
-- [CSS Scoping](https://drafts.csswg.org/css-scoping/) -- to declare styles that only apply inside the Shadow DOM of the component.
-- [Event retargeting](https://dom.spec.whatwg.org/#retarget) and other minor stuff to make custom components better fit the development.
+- [Vlastní elementy](https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements) -- k definici vlastních HTML elementů.
+- [Stínový DOM](https://dom.spec.whatwg.org/#shadow-trees) -- k vytvoření vnitřního DOMu komponenty, ukrytého před ostatními.
+- [Rozsah platnosti CSS](https://drafts.csswg.org/css-scoping/) -- k deklaraci stylů, které se aplikují pouze uvnitř stínového DOMu komponenty.
+- [Přesměrování událostí](https://dom.spec.whatwg.org/#retarget) a další méně důležité záležitosti, aby bylo možné vlastní komponenty lépe vyvíjet.
 
-In the next chapter we'll go into details of "Custom Elements" -- the fundamental and well-supported feature of web components, good on its own.
+V příští kapitole podrobně probereme „vlastní elementy“ -- základní a hojně podporovaný prvek webových komponent, který je dobrý sám o sobě.

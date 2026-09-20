@@ -17,11 +17,11 @@
   </style>
 
   <script>
-    function attack() {
+    function útok() {
 
       window.onbeforeunload = function() {
         window.onbeforeunload = null;
-        return "Want to leave without learning all the secrets (he-he)?";
+        return "Chcete odejít, aniž se dozvíte všechna ta tajemství (haha)?";
       };
 
       document.body.insertAdjacentHTML('beforeend', '<iframe src="iframe.html">');
@@ -31,11 +31,11 @@
 
 <body>
 
-  <p>After a click on the button the visitor gets a "strange" question about whether they want to leave.</p>
+  <p>Po kliknutí na tlačítko návštěvník dostane „podivnou“ otázku, zda chce odejít.</p>
 
-  <p>Probably they would respond "No", and the iframe protection is hacked.</p>
+  <p>Odpoví pravděpodobně „Ne“ a ochrana vnitřního rámu bude prolomena.</p>
 
-  <button onclick="attack()">Add a "protected" iframe</button>
+  <button onclick="útok()">Přidá „chráněný“ vnitřní rám</button>
 
 </body>
 </html>

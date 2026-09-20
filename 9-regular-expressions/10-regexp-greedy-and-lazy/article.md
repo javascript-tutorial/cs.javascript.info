@@ -1,301 +1,301 @@
-# Greedy and lazy quantifiers
+# Hltavé a liknavé kvantifikátory
 
-Quantifiers are very simple from the first sight, but in fact they can be tricky.
+Na první pohled jsou kvantifikátory velice jednoduché, ale ve skutečnosti mohou být záludné.
 
-We should understand how the search works very well if we plan to look for something more complex than `pattern:/\d+/`.
+Pokud plánujeme hledat něco složitějšího než `pattern:/\d+/`, měli bychom velmi dobře rozumět tomu, jak hledání funguje.
 
-Let's take the following task as an example.
+Jako příklad si vezměme následující úlohu.
 
-We have a text and need to replace all quotes `"..."` with guillemet marks: `«...»`. They are preferred for typography in many countries.
+Máme text a potřebujeme v něm nahradit všechny uvozovky `"..."` francouzskými: `«...»`. Ty jsou preferovány v typografii v mnoha zemích.
 
-For instance: `"Hello, world"` should become `«Hello, world»`. There exist other quotes, such as `„Witaj, świecie!”` (Polish) or `「你好，世界」` (Chinese), but for our task let's choose `«...»`.
+Například z `"Ahoj, světe"` by se mělo stát `«Ahoj, světe»`. Existují i jiné uvozovky, například `„Witaj, świecie!”` (polské), `„Ahoj, světe“` (české) nebo `「你好，世界」` (čínské), ale pro naši úlohu jsme si vybrali `«...»`.
 
-The first thing to do is to locate quoted strings, and then we can replace them.
+Jako první musíme najít řetězce v uvozovkách a pak je můžeme nahradit.
 
-A regular expression like `pattern:/".+"/g` (a quote, then something, then the other quote) may seem like a good fit, but it isn't!
+Regulární výraz jako `pattern:/".+"/g` (uvozovky, pak něco a pak další uvozovky) se může jevit jako vyhovující, ale není!
 
-Let's try it:
+Zkusme to:
 
 ```js run
-let regexp = /".+"/g;
+let rv = /".+"/g;
 
-let str = 'a "witch" and her "broom" is one';
+let řetězec = 'a "witch" and her "broom" is one';
 
-alert( str.match(regexp) ); // "witch" and her "broom"
+alert( řetězec.match(rv) ); // "witch" and her "broom"
 ```
 
-...We can see that it works not as intended!
+...Vidíme, že to nefunguje tak, jak jsme zamýšleli!
 
-Instead of finding two matches `match:"witch"` and `match:"broom"`, it finds one: `match:"witch" and her "broom"`.
+Místo nalezení dvou shod `match:"witch"` a `match:"broom"` byla nalezena jen jedna: `match:"witch" and her "broom"`.
 
-That can be described as "greediness is the cause of all evil".
+Můžeme to popsat jako „nenasytnost je příčinou všeho zla“.
 
-## Greedy search
+## Hltavé hledání
 
-To find a match, the regular expression engine uses the following algorithm:
+Aby motor regulárních výrazů našel shodu, používá následující algoritmus:
 
-- For every position in the string
-    - Try to match the pattern at that position.
-    - If there's no match, go to the next position.
+- Pro každou pozici v řetězci:
+    - Zkusí nalézt vzor na této pozici.
+    - Pokud není vzor nalezen, přejde k další pozici.
 
-These common words do not make it obvious why the regexp fails, so let's elaborate how the search works for the pattern `pattern:".+"`.
+Z tohoto obyčejného vysvětlení není jasné, proč tento RV selhal. Proto vysvětlíme, jak hledání funguje, na vzoru `pattern:".+"`.
 
-1. The first pattern character is a quote `pattern:"`.
+1. Prvním znakem vzoru jsou uvozovky `pattern:"`.
 
-    The regular expression engine tries to find it at the zero position of the source string `subject:a "witch" and her "broom" is one`, but there's `subject:a` there, so there's immediately no match.
-
-    Then it advances: goes to the next positions in the source string and tries to find the first character of the pattern there, fails again, and finally finds the quote at the 3rd position:
+    Motor regulárních výrazů se snaží najít je na nulové pozici zdrojového řetězce `subject:a "witch" and her "broom" is one`, ale tam je `subject:a`, takže v tomto okamžiku není žádná shoda.
+    
+    Pak pokračuje: jde ve zdrojovém řetězci na další pozice a snaží se na nich najít první znak vzoru, znovu selže a nakonec najde uvozovky na 3. pozici:
 
     ![](witch_greedy1.svg)
 
-2. The quote is detected, and then the engine tries to find a match for the rest of the pattern. It tries to see if the rest of the subject string conforms to `pattern:.+"`.
+2. Uvozovky jsou detekovány a pak se motor pokusí najít shodu se zbytkem vzoru. Podívá se, zda zbytek prohledávaného řetězce odpovídá vzoru `pattern:.+"`.
 
-    In our case the next pattern character is `pattern:.` (a dot). It denotes "any character except a newline", so the next string letter `match:'w'` fits:
+    V našem případě je dalším znakem vzoru `pattern:.` (tečka). Ta znamená „libovolný znak kromě nového řádku“, takže další písmeno řetězce `match:'w'` odpovídá:
 
     ![](witch_greedy2.svg)
 
-3. Then the dot repeats because of the quantifier `pattern:.+`. The regular expression engine adds to the match one character after another.
+3. Pak se tečka opakuje kvůli kvantifikátoru `pattern:.+`. Motor regulárních výrazů přidává do shody jeden znak za druhým.
 
-    ...Until when? All characters match the dot, so it only stops when it reaches the end of the string:
+    ...Jak dlouho? Všechny znaky odpovídají tečce, takže se zastaví až tehdy, když narazí na konec řetězce:
 
     ![](witch_greedy3.svg)
 
-4. Now the engine finished repeating `pattern:.+` and tries to find the next character of the pattern. It's the quote `pattern:"`. But there's a problem: the string has finished, there are no more characters!
+4. Nyní motor skončil s opakováním `pattern:.+` a snaží se najít další znak vzoru. Tím jsou uvozovky `pattern:"`. Tady je však problém: řetězec skončil a další znaky neobsahuje!
 
-    The regular expression engine understands that it took too many `pattern:.+` and starts to *backtrack*.
+    Motor regulárních výrazů pochopí, že si vzal příliš mnoho `pattern:.+`, a zahájí *zpětný průchod*.
 
-    In other words, it shortens the match for the quantifier by one character:
+    Jinými slovy, zkrátí shodu pro kvantifikátor o jeden znak:
 
     ![](witch_greedy4.svg)
 
-    Now it assumes that `pattern:.+` ends one character before the string end and tries to match the rest of the pattern from that position.
+    Nyní předpokládá, že `pattern:.+` končí jeden znak před koncem řetězce, a snaží se najít shodu se zbytkem vzoru od této pozice.
 
-    If there were a quote there, then the search would end, but the last character is `subject:'e'`, so there's no match.
+    Kdyby tam byly uvozovky, hledání by skončilo, ale poslední znak je `subject:'e'`, takže shoda nenastane.
 
-5. ...So the engine decreases the number of repetitions of `pattern:.+` by one more character:
+5. ...Motor tedy sníží počet opakování vzoru `pattern:.+` o další znak:
 
     ![](witch_greedy5.svg)
 
-    The quote `pattern:'"'` does not match `subject:'n'`.
+    Uvozovky `pattern:'"'` se neshodují s `subject:'n'`.
 
-6. The engine keep backtracking: it decreases the count of repetition for `pattern:'.'` until the rest of the pattern (in our case `pattern:'"'`) matches:
+6. Motor pokračuje ve zpětném průchodu: snižuje počet opakování `pattern:'.'`, dokud se neshoduje zbytek vzoru (v našem případě `pattern:'"'`):
 
     ![](witch_greedy6.svg)
 
-7. The match is complete.
+7. Shoda je kompletní.
 
-8. So the first match is `match:"witch" and her "broom"`. If the regular expression has flag `pattern:g`, then the search will continue from where the first match ends. There are no more quotes in the rest of the string `subject:is one`, so no more results.
+8. První shoda je tedy `match:"witch" and her "broom"`. Jestliže regulární výraz obsahuje příznak `pattern:g`, bude hledání pokračovat od místa, kde první shoda skončila. Ve zbytku řetězce `subject:is one` žádné další uvozovky nejsou, takže další výsledky se nenajdou.
 
-That's probably not what we expected, but that's how it works.
+To není pravděpodobně to, co jsme očekávali, ale takhle to funguje.
 
-**In the greedy mode (by default) a quantified character is repeated as many times as possible.**
+**V hltavém (greedy) režimu (standardním) se kvantifikovaný znak opakuje tolikrát, kolikrát je to možné.**
 
-The regexp engine adds to the match as many characters as it can for `pattern:.+`, and then shortens that one by one, if the rest of the pattern doesn't match.
+Motor RV přidává do shody s `pattern:.+` tolik znaků, kolik může, a pak shodu zkracuje po jednom znaku, dokud zbytek vzoru nesouhlasí.
 
-For our task we want another thing. That's where a lazy mode can help.
+V naší úloze však potřebujeme něco jiného. Tady nám může pomoci liknavý režim.
 
-## Lazy mode
+## Liknavý režim
 
-The lazy mode of quantifiers is an opposite to the greedy mode. It means: "repeat minimal number of times".
+Liknavý (lazy) režim kvantifikátorů je opakem hltavého režimu. Znamená „co nejmenší počet opakování“.
 
-We can enable it by putting a question mark `pattern:'?'` after the quantifier, so that it becomes  `pattern:*?` or `pattern:+?` or even `pattern:??` for `pattern:'?'`.
+Můžeme jej povolit uvedením otazníku `pattern:'?'` za kvantifikátorem, takže se z něj stane `pattern:*?` nebo `pattern:+?` nebo dokonce `pattern:??` pro `pattern:'?'`.
 
-To make things clear: usually a question mark `pattern:?` is a quantifier by itself (zero or one), but if added *after another quantifier (or even itself)* it gets another meaning -- it switches the matching mode from greedy to lazy.
+Aby to bylo jasné: otazník `pattern:?` je obvykle sám o sobě kvantifikátor (žádný nebo jeden), ale pokud je přidán *za jiný kvantifikátor (třeba i za sebe)*, získá odlišný význam -- přepne režim shody z hltavého do liknavého.
 
-The regexp `pattern:/".+?"/g` works as intended: it finds `match:"witch"` and `match:"broom"`:
+Regulární výraz `pattern:/".+?"/g` funguje tak, jak jsme zamýšleli: nalezne `match:"witch"` a `match:"broom"`:
 
 ```js run
-let regexp = /".+?"/g;
+let rv = /".+?"/g;
 
-let str = 'a "witch" and her "broom" is one';
+let řetězec = 'a "witch" and her "broom" is one';
 
-alert( str.match(regexp) ); // "witch", "broom"
+alert( řetězec.match(rv) ); // "witch", "broom"
 ```
 
-To clearly understand the change, let's trace the search step by step.
+Abychom změnu správně pochopili, projděme si hledání krok za krokem.
 
-1. The first step is the same: it finds the pattern start `pattern:'"'` at the 3rd position:
+1. První krok je stejný: nalezne začátek vzoru `pattern:'"'` na 3. pozici:
 
     ![](witch_greedy1.svg)
 
-2. The next step is also similar: the engine finds a match for the dot `pattern:'.'`:
+2. Další krok je podobný: motor najde shodu s tečkou `pattern:'.'`:
 
     ![](witch_greedy2.svg)
 
-3. And now the search goes differently. Because we have a lazy mode for `pattern:+?`, the engine doesn't try to match a dot one more time, but stops and tries to match the rest of the pattern  `pattern:'"'` right now:
+3. A nyní se hledání začne chovat odlišně. Protože pro `pattern:+?` máme liknavý režim, motor se nepokusí najít další tečku, ale hned teď se zastaví a pokusí se najít shodu se zbytkem vzoru `pattern:'"'`:
 
     ![](witch_lazy3.svg)
 
-    If there were a quote there, then the search would end, but there's `'i'`, so there's no match.
-4. Then the regular expression engine increases the number of repetitions for the dot and tries one more time:
+    Kdyby tam byly uvozovky, hledání by skončilo, ale je tam `'i'`, takže shoda nenastane.
+4. Pak motor regulárních výrazů zvýší počet opakování tečky a pokusí se znovu o totéž:
 
     ![](witch_lazy4.svg)
 
-    Failure again. Then the number of repetitions is increased again and again...
-5. ...Till the match for the rest of the pattern is found:
+    Opět neúspěch. Pak se počet opakování zvyšuje znovu a znovu...
+5. ...Dokud nebude nalezena shoda se zbytkem vzoru:
 
     ![](witch_lazy5.svg)
 
-6. The next search starts from the end of the current match and yield one more result:
+6. Další hledání začne od konce aktuální shody a vydá jeden další výsledek:
 
     ![](witch_lazy6.svg)
 
-In this example we saw how the lazy mode works for `pattern:+?`. Quantifiers `pattern:*?` and `pattern:??` work the similar way -- the regexp engine increases the number of repetitions only if the rest of the pattern can't match on the given position.
+V tomto příkladu jsme viděli, jak liknavý režim funguje pro vzor `pattern:+?`. Kvantifikátory `pattern:*?` a `pattern:??` fungují podobně -- motor RV zvyšuje počet opakování jen tehdy, pokud se zbytek vzoru na dané pozici neshoduje.
 
-**Laziness is only enabled for the quantifier with `?`.**
+**Liknavý režim je povolen pouze u kvantifikátorů s `?`.**
 
-Other quantifiers remain greedy.
+Ostatní kvantifikátory zůstanou hltavé.
 
-For instance:
+Příklad:
 
 ```js run
 alert( "123 456".match(/\d+ \d+?/) ); // 123 4
 ```
 
-1. The pattern `pattern:\d+` tries to match as many digits as it can (greedy mode), so it finds  `match:123` and stops, because the next character is a space `pattern:' '`.
-2. Then there's a space in the pattern, it matches.
-3. Then there's `pattern:\d+?`. The quantifier is in lazy mode, so it finds one digit `match:4` and tries to check if the rest of the pattern matches from there.
+1. Vzor `pattern:\d+` se pokusí najít co nejvíce číslic (hltavý režim), takže najde `match:123` a zastaví se, protože další znak je mezera `pattern:' '`.
+2. Pak je ve vzoru mezera, shoduje se.
+3. Pak je `pattern:\d+?`. Kvantifikátor je v liknavém režimu, takže najde jednu číslici `match:4` a pokusí se ověřit, zda se zbytek vzoru shoduje od této pozice.
 
-    ...But there's nothing in the pattern after `pattern:\d+?`.
+    ...Ve vzoru však po `pattern:\d+?` nic nenásleduje.
 
-    The lazy mode doesn't repeat anything without a need. The pattern finished, so we're done. We have a match `match:123 4`.
+    Liknavý režim neopakuje nic, pokud to není nutné. Vzor skončil, takže jsme hotovi. Máme shodu `match:123 4`.
 
-```smart header="Optimizations"
-Modern regular expression engines can optimize internal algorithms to work faster. So they may work a bit differently from the described algorithm.
+```smart header="Optimalizace"
+Moderní motory regulárních výrazů mohou své vnitřní algoritmy optimalizovat, aby fungovaly rychleji. Mohou tedy fungovat trochu odlišně od popisovaného algoritmu.
 
-But to understand how regular expressions work and to build regular expressions, we don't need to know about that. They are only used internally to optimize things.
+K pochopení, jak regulární výrazy fungují a jak je vytvářet, o tom však nemusíme nic vědět. To se používá jen interně pro optimalizaci.
 
-Complex regular expressions are hard to optimize, so the search may work exactly as described as well.
+Složité regulární výrazy se optimalizují obtížně, takže hledání může fungovat přesně tak, jak je zde popsáno.
 ```
 
-## Alternative approach
+## Alternativní přístup
 
-With regexps, there's often more than one way to do the same thing.
+U regulárních výrazů často existuje více způsobů, jak udělat totéž.
 
-In our case we can find quoted strings without lazy mode using the regexp `pattern:"[^"]+"`:
+V našem případě můžeme najít řetězce v uvozovkách bez liknavého režimu regulárním výrazem `pattern:"[^"]+"`:
 
 ```js run
-let regexp = /"[^"]+"/g;
+let rv = /"[^"]+"/g;
 
-let str = 'a "witch" and her "broom" is one';
+let řetězec = 'a "witch" and her "broom" is one';
 
-alert( str.match(regexp) ); // "witch", "broom"
+alert( řetězec.match(rv) ); // "witch", "broom"
 ```
 
-The regexp `pattern:"[^"]+"` gives correct results, because it looks for a quote `pattern:'"'` followed by one or more non-quotes `pattern:[^"]`, and then the closing quote.
+Regulární výraz `pattern:"[^"]+"` dává správné výsledky, protože hledá uvozovky `pattern:'"'`, po nichž následuje jeden nebo více jiných znaků než uvozovky `pattern:[^"]` a pak uzavírací uvozovky.
 
-When the regexp engine looks for `pattern:[^"]+` it stops the repetitions when it meets the closing quote, and we're done.
+Když motor RV hledá `pattern:[^"]+`, zastaví opakování ve chvíli, kdy narazí na uzavírací uvozovky, a je hotov.
 
-Please note, that this logic does not replace lazy quantifiers!
+Prosíme všimněte si, že tato logika nenahrazuje liknavé kvantifikátory!
 
-It is just different. There are times when we need one or another.
+Je to jen něco jiného. Jsou chvíle, kdy potřebujeme jedno nebo druhé.
 
-**Let's see an example where lazy quantifiers fail and this variant works right.**
+**Podívejme se na příklad, kdy liknavé kvantifikátory selžou a tato varianta funguje správně.**
 
-For instance, we want to find links of the form `<a href="..." class="doc">`, with any `href`.
+Například chceme najít odkazy ve tvaru `<a href="..." class="doc">` s jakýmkoli `href`.
 
-Which regular expression to use?
+Jaký regulární výraz použijeme?
 
-The first idea might be: `pattern:/<a href=".*" class="doc">/g`.
+První myšlenka by mohla být: `pattern:/<a href=".*" class="doc">/g`.
 
-Let's check it:
+Ověřme to:
 ```js run
-let str = '...<a href="link" class="doc">...';
-let regexp = /<a href=".*" class="doc">/g;
+let řetězec = '...<a href="link" class="doc">...';
+let rv = /<a href=".*" class="doc">/g;
 
-// Works!
-alert( str.match(regexp) ); // <a href="link" class="doc">
+// Funguje!
+alert( řetězec.match(rv) ); // <a href="link" class="doc">
 ```
 
-It worked. But let's see what happens if there are many links in the text?
+Fungovalo to. Ale co se stane, když je v textu více odkazů?
 
 ```js run
-let str = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
-let regexp = /<a href=".*" class="doc">/g;
+let řetězec = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
+let rv = /<a href=".*" class="doc">/g;
 
-// Whoops! Two links in one match!
-alert( str.match(regexp) ); // <a href="link1" class="doc">... <a href="link2" class="doc">
+// Ouha! Dva odkazy v jedné shodě!
+alert( řetězec.match(rv) ); // <a href="link1" class="doc">... <a href="link2" class="doc">
 ```
 
-Now the result is wrong for the same reason as our "witches" example. The quantifier `pattern:.*` took too many characters.
+Nyní je výsledek nesprávný ze stejného důvodu jako v našem příkladu s „čarodějnicí“ („witch“). Kvantifikátor `pattern:.*` vzal příliš mnoho znaků.
 
-The match looks like this:
+Shoda vypadá takto:
 
 ```html
 <a href="....................................." class="doc">
 <a href="link1" class="doc">... <a href="link2" class="doc">
 ```
 
-Let's modify the pattern by making the quantifier `pattern:.*?` lazy:
+Modifikujme vzor tak, že kvantifikátor `pattern:.*?` učiníme liknavým:
 
 ```js run
-let str = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
-let regexp = /<a href=".*?" class="doc">/g;
+let řetězec = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
+let rv = /<a href=".*?" class="doc">/g;
 
-// Works!
-alert( str.match(regexp) ); // <a href="link1" class="doc">, <a href="link2" class="doc">
+// Funguje to!
+alert( řetězec.match(rv) ); // <a href="link1" class="doc">, <a href="link2" class="doc">
 ```
 
-Now it seems to work, there are two matches:
+Nyní se zdá, že to funguje, našly se dvě shody:
 
 ```html
 <a href="....." class="doc">    <a href="....." class="doc">
 <a href="link1" class="doc">... <a href="link2" class="doc">
 ```
 
-...But let's test it on one more text input:
+...Ale otestujme to na jiném textovém vstupu:
 
 ```js run
-let str = '...<a href="link1" class="wrong">... <p style="" class="doc">...';
-let regexp = /<a href=".*?" class="doc">/g;
+let řetězec = '...<a href="link1" class="špatná">... <p style="" class="doc">...';
+let rv = /<a href=".*?" class="doc">/g;
 
-// Wrong match!
-alert( str.match(regexp) ); // <a href="link1" class="wrong">... <p style="" class="doc">
+// Špatná shoda!
+alert( řetězec.match(rv) ); // <a href="link1" class="špatná">... <p style="" class="doc">
 ```
 
-Now it fails. The match includes not just a link, but also a lot of text after it, including `<p...>`.
+Nyní to selže. Shoda neobsahuje jen odkaz, ale i spoustu textu za ním včetně `<p...>`.
 
-Why?
+Proč?
 
-That's what's going on:
+Stane se následující:
 
-1. First the regexp finds a link start `match:<a href="`.
-2. Then it looks for `pattern:.*?`: takes one character (lazily!), check if there's a match for `pattern:" class="doc">` (none).
-3. Then takes another character into `pattern:.*?`, and so on... until it finally reaches `match:" class="doc">`.
+1. Nejprve RV najde začátek odkazu `match:<a href="`.
+2. Pak hledá `pattern:.*?`: vezme jeden znak (liknavě!) a prověří, zda je shoda s `pattern:" class="doc">` (není).
+3. Pak vezme do `pattern:.*?` další znak a tak dále... až nakonec dorazí k `match:" class="doc">`.
 
-But the problem is: that's already beyond the link `<a...>`, in another tag `<p>`. Not what we want.
+Problém je však v tom, že    tento text je už za odkazem `<a...>`, v jiné značce `<p>`. To není to, co chceme.
 
-Here's the picture of the match aligned with the text:
+Zde je obrázek shody zarovnané s textem:
 
 ```html
-<a href="..................................." class="doc">
-<a href="link1" class="wrong">... <p style="" class="doc">
+<a href="...................................." class="doc">
+<a href="link1" class="špatná">... <p style="" class="doc">
 ```
 
-So, we need the pattern to look for `<a href="...something..." class="doc">`, but both greedy and lazy variants have problems.
+Potřebujeme tedy, aby vzor hledal `<a href="...něco..." class="doc">`, ale hltavá i liknavá varianta tady mají problém.
 
-The correct variant can be: `pattern:href="[^"]*"`. It will take all characters inside the `href` attribute till the nearest quote, just what we need.
+Správná varianta může být: `pattern:href="[^"]*"`. Vezme všechny znaky uvnitř atributu `href` až do nejbližších uvozovek, což je přesně to, co potřebujeme.
 
-A working example:
+Fungující příklad:
 
 ```js run
-let str1 = '...<a href="link1" class="wrong">... <p style="" class="doc">...';
-let str2 = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
-let regexp = /<a href="[^"]*" class="doc">/g;
+let řetězec1 = '...<a href="link1" class="špatná">... <p style="" class="doc">...';
+let řetězec2 = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
+let rv = /<a href="[^"]*" class="doc">/g;
 
-// Works!
-alert( str1.match(regexp) ); // null, no matches, that's correct
-alert( str2.match(regexp) ); // <a href="link1" class="doc">, <a href="link2" class="doc">
+// Funguje!
+alert( řetězec1.match(rv) ); // null, žádná shoda, to je správně
+alert( řetězec2.match(rv) ); // <a href="link1" class="doc">, <a href="link2" class="doc">
 ```
 
-## Summary
+## Shrnutí
 
-Quantifiers have two modes of work:
+Kvantifikátory mají dva režimy práce:
 
-Greedy
-: By default the regular expression engine tries to repeat the quantified character as many times as possible. For instance, `pattern:\d+` consumes all possible digits. When it becomes impossible to consume more (no more digits or string end), then it continues to match the rest of the pattern. If there's no match then it decreases the number of repetitions (backtracks) and tries again.
+Hltavý
+: Standardně se motor regulárních výrazů snaží opakovat kvantifikovaný znak tolikrát, kolikrát je to možné. Například `pattern:\d+` pohltí všechny možné číslice. Až přestane být možné pohlcovat další (další číslice nejsou nebo řetězec skončil), pokračuje v porovnávání se zbytkem vzoru. Pokud nenajde shodu, sníží počet opakování (zpětný průchod) a zkusí to znovu.
 
-Lazy
-: Enabled by the question mark `pattern:?` after the quantifier. The regexp engine tries to match the rest of the pattern before each repetition of the quantified character.
+Liknavý
+: Nastavuje se otazníkem `pattern:?` za kvantifikátorem. Motor RV se pokusí porovnat zbytek vzoru před každým opakováním kvantifikovaného znaku.
 
-As we've seen, the lazy mode is not a "panacea" from the greedy search. An alternative is a "fine-tuned" greedy search, with exclusions, as in the pattern `pattern:"[^"]+"`.
+Jak jsme viděli, liknavý režim není „všelékem“ oproti hltavému hledání. Alternativou je „vyladěné“ hltavé hledání s uvedením vyloučení, jako ve vzoru `pattern:"[^"]+"`.

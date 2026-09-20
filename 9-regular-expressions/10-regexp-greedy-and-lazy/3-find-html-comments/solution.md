@@ -1,15 +1,15 @@
-We need to find the beginning of the comment `match:<!--`, then everything till the end of `match:-->`.
+Musíme najít začátek komentáře `match:<!--` a pak všechno až do konce `match:-->`.
 
-An acceptable variant is `pattern:<!--.*?-->` -- the lazy quantifier makes the dot stop right before `match:-->`. We also need to add flag `pattern:s` for the dot to include newlines.
+Přijatelná varianta je `pattern:<!--.*?-->` -- liknavý kvantifikátor přinutí tečku zastavit se těsně před `match:-->`. Musíme také uvést příznak `pattern:s`, aby tečka zahrnovala i znaky nového řádku.
 
-Otherwise multiline comments won't be found:
+Jinak by se nenašly víceřádkové komentáře:
 
 ```js run
-let regexp = /<!--.*?-->/gs;
+let rv = /<!--.*?-->/gs;
 
-let str = `... <!-- My -- comment
- test --> ..  <!----> ..
+let řetězec = `... <!-- Můj -- komentář
+ test --> ..  <!----> .. 
 `;
 
-alert( str.match(regexp) ); // '<!-- My -- comment \n test -->', '<!---->'
+alert( řetězec.match(rv) ); // '<!-- Můj -- komentář \n test -->', '<!---->'
 ```

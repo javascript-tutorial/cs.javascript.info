@@ -1,32 +1,32 @@
-In the task <info:task/animate-ball> we had only one property to animate. Now we need one more: `elem.style.left`.
+V úloze <info:task/animate-ball> jsme museli animovat jenom jednu vlastnost. Nyní potřebujeme ještě jednu: `elem.style.left`.
 
-The horizontal coordinate changes by another law: it does not "bounce", but gradually increases shifting the ball to the right.
+Vodorovná souřadnice se mění podle jiného pravidla: „neskáče“, ale postupně se zvyšuje a tím posunuje míč doprava.
 
-We can write one more `animate` for it.
+Můžeme pro ni napsat další volání `animate`.
 
-As the time function we could use `linear`, but something like `makeEaseOut(quad)` looks much better.
+Jako časovací funkci bychom mohli použít `lineární`, ale mnohem lépe vypadá něco jako `vytvořEaseOut(naDruhou)`.
 
-The code:
+Kód:
 
 ```js
-let height = field.clientHeight - ball.clientHeight;
-let width = 100;
+let výška = hřiště.clientHeight - míč.clientHeight;
+let šířka = 100;
 
-// animate top (bouncing)
+// animace horního okraje (skákání)
 animate({
   duration: 2000,
-  timing: makeEaseOut(bounce),
-  draw: function(progress) {
-    ball.style.top = height * progress + 'px'
+  timing: vytvořEaseOut(skákání),
+  draw: function(postup) {
+    míč.style.top = výška * postup + 'px'
   }
 });
 
-// animate left (moving to the right)
+// animace levého okraje (posun doprava)
 animate({
   duration: 2000,
-  timing: makeEaseOut(quad),
-  draw: function(progress) {
-    ball.style.left = width * progress + "px"
+  timing: vytvořEaseOut(naDruhou),
+  draw: function(postup) {
+    míč.style.left = šířka * postup + "px"
   }
 });
 ```

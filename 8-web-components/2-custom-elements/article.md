@@ -1,234 +1,232 @@
 
-# Custom elements
+# Vlastní elementy
 
-We can create custom HTML elements, described by our class, with its own methods and properties, events and so on.
+Můžeme si vytvářet vlastní HTML elementy, popsané naší třídou, které budou mít své vlastní metody, vlastnosti, události a podobně.
 
-Once a custom element is defined, we can use it on par with built-in HTML elements.
+Jakmile je vlastní element definován, můžeme jej používat spolu s vestavěnými HTML elementy.
 
-That's great, as HTML dictionary is rich, but not infinite. There are no `<easy-tabs>`, `<sliding-carousel>`, `<beautiful-upload>`... Just think of any other tag we might need.
+To je vynikající, neboť HTML slovník je bohatý, ale není nekonečný. Neexistují v něm `<snadna-zalozka>`, `<otacivy-kolotoc>`, `<nadherne-nahravani>`... Můžete si vymyslet jakoukoli jinou značku, kterou bychom mohli potřebovat.
 
-We can define them with a special class, and then use as if they were always a part of HTML.
+Můžeme je definovat speciální třídou a pak je používat tak, jako by byly odjakživa součástí HTML.
 
-There are two kinds of custom elements:
+Vlastní elementy se dělí na dva druhy:
 
-1. **Autonomous custom elements** -- "all-new" elements, extending the abstract `HTMLElement` class.
-2. **Customized built-in elements** -- extending built-in elements, like a customized button, based on `HTMLButtonElement` etc.
+1. **Autonomní vlastní elementy** -- „úplně nové“ elementy, rozšiřující abstraktní třídu `HTMLElement`.
+2. **Přizpůsobené vestavěné elementy** -- rozšiřují vestavěné elementy, např. přizpůsobené tlačítko, založené na třídě `HTMLButtonElement`, atd.
 
-First we'll cover autonomous elements, and then move to customized built-in ones.
+Nejprve probereme autonomní elementy a pak se přesuneme k přizpůsobeným vestavěným.
 
-To create a custom element, we need to tell the browser several details about it: how to show it, what to do when the element is added or removed to page, etc.
+Když chceme vytvořit vlastní element, musíme o něm prohlížeči sdělit některé detaily: jak ho má zobrazit, co má dělat, když je element přidán na stránku nebo z ní odstraněn, atd.
 
-That's done by making a class with special methods. That's easy, as there are only few methods, and all of them are optional.
+Provedeme to vytvořením třídy se speciálními metodami. Je to jednoduché, neboť těchto metod je jen několik a žádná z nich není povinná.
 
-Here's a sketch with the full list:
+Následuje náčrt s úplným seznamem:
 
 ```js
-class MyElement extends HTMLElement {
+class MůjElement extends HTMLElement {
   constructor() {
     super();
-    // element created
+    // element je vytvořen
   }
 
   connectedCallback() {
-    // browser calls this method when the element is added to the document
-    // (can be called many times if an element is repeatedly added/removed)
+    // tuto metodu prohlížeč volá, když je element přidán do dokumentu
+    // (může ji volat mnohokrát, je-li element opakovaně přidán/odstraněn)
   }
 
   disconnectedCallback() {
-    // browser calls this method when the element is removed from the document
-    // (can be called many times if an element is repeatedly added/removed)
+    // tuto metodu prohlížeč volá, když je element odstraněn z dokumentu
+    // (může ji volat mnohokrát, je-li element opakovaně přidán/odstraněn)
   }
 
   static get observedAttributes() {
-    return [/* array of attribute names to monitor for changes */];
+    return [/* pole názvů atributů, jejichž změny mají být sledovány */];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    // called when one of attributes listed above is modified
+  attributeChangedCallback(název, původníHodnota, nováHodnota) {
+    // volá se, když je jeden z výše uvedených atributů změněn
   }
 
   adoptedCallback() {
-    // called when the element is moved to a new document
-    // (happens in document.adoptNode, very rarely used)
+    // volá se, když je element přesunut do nového dokumentu
+    // (stává se to v document.adoptNode, používá se velmi vzácně)
   }
 
-  // there can be other element methods and properties
+  // zde mohou být další metody a vlastnosti elementu
 }
 ```
 
-After that, we need to register the element:
+Poté musíme element registrovat:
 
 ```js
-// let the browser know that <my-element> is served by our new class
-customElements.define("my-element", MyElement);
+// oznámíme prohlížeči, že <muj-element> obsluhuje naše nová třída
+customElements.define("muj-element", MůjElement);
 ```
 
-Now for any HTML elements with tag `<my-element>`, an instance of `MyElement` is created, and the aforementioned methods are called. We also can `document.createElement('my-element')` in JavaScript.
+Nyní bude pro všechny HTML elementy se značkou `<muj-element>` vytvořena instance třídy `MůjElement` a budou volány uvedené metody. V JavaScriptu také můžeme volat `document.createElement('muj-element')`.
 
-```smart header="Custom element name must contain a hyphen `-`"
-Custom element name must have a hyphen `-`, e.g. `my-element` and `super-button` are valid names, but `myelement` is not.
+```smart header="Názvy vlastních elementů musejí obsahovat pomlčku `-`"
+Názvy vlastních elementů musejí obsahovat pomlčku `-`, např. `muj-element` nebo `super-tlacitko` jsou platné názvy, ale `mujelement` ne.
 
-That's to ensure that there are no name conflicts between built-in and custom HTML elements.
+Tím se zajišťuje, že mezi vestavěnými a vlastními HTML elementy nedojde ke konfliktu názvů.
 ```
 
-## Example: "time-formatted"
+## Příklad: „formatovany-cas“
 
-For example, there already exists `<time>` element in HTML, for date/time. But it doesn't do any formatting by itself.
+Například v HTML již existuje element `<time>` pro datum a čas. Ten však sám o sobě neprovádí žádné formátování.
 
-Let's create `<time-formatted>` element that displays the time in a nice, language-aware format:
-
+Vytvořme element `<formatovany-cas>`, který zobrazuje čas v pěkném formátu, který bere v úvahu jazyk:
 
 ```html run height=50 autorun="no-epub"
 <script>
 *!*
-class TimeFormatted extends HTMLElement { // (1)
+class FormátovanýČas extends HTMLElement { // (1)
 */!*
 
   connectedCallback() {
-    let date = new Date(this.getAttribute('datetime') || Date.now());
+    let datum = new Date(this.getAttribute('datumčas') || Date.now());
 
     this.innerHTML = new Intl.DateTimeFormat("default", {
-      year: this.getAttribute('year') || undefined,
-      month: this.getAttribute('month') || undefined,
-      day: this.getAttribute('day') || undefined,
-      hour: this.getAttribute('hour') || undefined,
-      minute: this.getAttribute('minute') || undefined,
-      second: this.getAttribute('second') || undefined,
-      timeZoneName: this.getAttribute('time-zone-name') || undefined,
-    }).format(date);
+      year: this.getAttribute('rok') || undefined,
+      month: this.getAttribute('měsíc') || undefined,
+      day: this.getAttribute('den') || undefined,
+      hour: this.getAttribute('hodiny') || undefined,
+      minute: this.getAttribute('minuty') || undefined,
+      second: this.getAttribute('sekundy') || undefined,
+      timeZoneName: this.getAttribute('časové-pásmo') || undefined,
+    }).format(datum);
   }
 
 }
 
 *!*
-customElements.define("time-formatted", TimeFormatted); // (2)
+customElements.define("formatovany-cas", FormátovanýČas); // (2)
 */!*
 </script>
 
 <!-- (3) -->
 *!*
-<time-formatted datetime="2019-12-01"
+<formatovany-cas datumčas="2019-12-01"
 */!*
-  year="numeric" month="long" day="numeric"
-  hour="numeric" minute="numeric" second="numeric"
-  time-zone-name="short"
-></time-formatted>
+  rok="numeric" měsíc="long" den="numeric"
+  hodiny="numeric" minuty="numeric" sekundy="numeric"
+  časové-pásmo="short"
+></formatovany-cas>
 ```
 
-1. The class has only one method `connectedCallback()` -- the browser calls it when `<time-formatted>` element is added to page (or when HTML parser detects it), and it uses the built-in [Intl.DateTimeFormat](mdn:/JavaScript/Reference/Global_Objects/DateTimeFormat) data formatter, well-supported across the browsers, to show a nicely formatted time.
-2. We need to register our new element by `customElements.define(tag, class)`.
-3. And then we can use it everywhere.
+1. Třída obsahuje jen jednu metodu, `connectedCallback()` -- prohlížeč ji zavolá, až bude element `<formatovany-cas>` přidán na stránku (nebo když ho detekuje HTML parser). Metoda zobrazí pěkně formátováný čas pomocí zabudovaného formátovače data [Intl.DateTimeFormat](mdn:/JavaScript/Reference/Global_Objects/DateTimeFormat), který prohlížeče zhusta podporují.
+2. Náš nový element musíme zaregistrovat voláním `customElements.define(značka, třída)`.
+3. A pak jej můžeme všude používat.
 
 
-```smart header="Custom elements upgrade"
-If the browser encounters any `<time-formatted>` elements before `customElements.define`, that's not an error. But the element is yet unknown, just like any non-standard tag.
+```smart header="Aktualizace vlastních elementů"
+Jestliže prohlížeč narazí na element `<formatovany-cas>` před `customElements.define`, nenastane chyba. Element však bude neznámý, tak jako každá nestandardní značka.
 
-Such "undefined" elements can be styled with CSS selector `:not(:defined)`.
+Takovým „nedefinovaným“ elementům lze nastavit styl CSS selektorem `:not(:defined)`.
 
-When `customElement.define` is called, they are "upgraded": a new instance of `TimeFormatted`
-is created for each, and `connectedCallback` is called. They become `:defined`.
+Když je volána metoda `customElement.define`, budou „aktualizovány“: pro každý z nich se vytvoří nová instance třídy `FormátovanýČas` a bude volána metoda `connectedCallback`. Stanou se z nich `:defined`.
 
-To get the information about custom elements, there are methods:
-- `customElements.get(name)` -- returns the class for a custom element with the given `name`,
-- `customElements.whenDefined(name)` -- returns a promise that resolves (without value) when a custom element with the given `name` becomes defined.
+K získání informací o vlastních elementech slouží tyto metody:
+- `customElements.get(název)` -- vrátí třídu vlastního elementu s názvem `název`,
+- `customElements.whenDefined(název)` -- vrátí příslib, který se splní (bez hodnoty), když bude definován vlastní element s názvem `název`.
 ```
 
-```smart header="Rendering in `connectedCallback`, not in `constructor`"
-In the example above, element content is rendered (created) in `connectedCallback`.
+```smart header="Vykreslujeme v `connectedCallback`, ne v `constructor`"
+V uvedeném příkladu je obsah elementu vykreslen (vytvořen) v `connectedCallback`.
 
-Why not in the `constructor`?
+Proč ne v `constructor`?
 
-The reason is simple: when `constructor` is called, it's yet too early. The element is created, but the browser did not yet process/assign attributes at this stage: calls to `getAttribute` would return `null`. So we can't really render there.
+Důvod je jednoduchý: když je volán `constructor`, je ještě příliš brzy. Element je již vytvořen, ale prohlížeč v této chvíli dosud nezpracoval a nepřiřadil atributy: volání `getAttribute` by vrátilo `null`. Zde tedy nemůžeme skutečně vykreslovat.
 
-Besides, if you think about it, that's better performance-wise -- to delay the work until it's really needed.
+Kromě toho, když se nad tím zamyslíte, poznáte, že to zlepšuje výkonnost -- práce se odloží, dokud nebude opravdu zapotřebí.
 
-The `connectedCallback` triggers when the element is added to the document. Not just appended to another element as a child, but actually becomes a part of the page. So we can build detached DOM, create elements and prepare them for later use. They will only be actually rendered when they make it into the page.
+Metoda `connectedCallback` se volá, když je element přidán do dokumentu. Ne když je jen přidán jako dítě k jinému elementu, ale když se skutečně stane součástí stránky. Můžeme tedy vytvářet samostatný DOM, vytvářet elementy a připravovat je na budoucí použití. Skutečně vykresleny budou až ve chvíli, kdy se opravdu dostanou na stránku.
 ```
 
-## Observing attributes
+## Pozorování atributů
 
-In the current implementation of `<time-formatted>`, after the element is rendered, further attribute changes don't have any effect. That's strange for an HTML element. Usually, when we change an attribute, like `a.href`, we expect the change to be immediately visible. So let's fix this.
+Poté, co je v aktuální implementaci `<formatovany-cas>` element vykreslen, nemají další změny atributů žádný efekt. To je u HTML elementu zvláštní. Když změníme atribut, například `a.href`, obvykle očekáváme, že změna bude ihned viditelná. Opravme to.
 
-We can observe attributes by providing their list in `observedAttributes()` static getter. For such attributes, `attributeChangedCallback` is called when they are modified. It doesn't trigger for other, unlisted attributes (that's for performance reasons).
+Můžeme sledovat atributy, jejichž seznam poskytneme ve statickém getteru `observedAttributes()`. Když se pak tyto atributy změní, volá se `attributeChangedCallback`. U ostatních, neuvedených atributů se nespouští (z výkonnostních důvodů). 
 
-Here's a new `<time-formatted>`, that auto-updates when attributes change:
+Zde je nový `<formatovany-cas>`, který se po změně atributů automaticky aktualizuje:
 
 ```html run autorun="no-epub" height=50
 <script>
-class TimeFormatted extends HTMLElement {
+class FormátovanýČas extends HTMLElement {
 
 *!*
-  render() { // (1)
+  vykresli() { // (1)
 */!*
-    let date = new Date(this.getAttribute('datetime') || Date.now());
+    let datum = new Date(this.getAttribute('datetime') || Date.now());
 
     this.innerHTML = new Intl.DateTimeFormat("default", {
-      year: this.getAttribute('year') || undefined,
-      month: this.getAttribute('month') || undefined,
-      day: this.getAttribute('day') || undefined,
-      hour: this.getAttribute('hour') || undefined,
-      minute: this.getAttribute('minute') || undefined,
-      second: this.getAttribute('second') || undefined,
-      timeZoneName: this.getAttribute('time-zone-name') || undefined,
-    }).format(date);
+      year: this.getAttribute('rok') || undefined,
+      month: this.getAttribute('měsíc') || undefined,
+      day: this.getAttribute('den') || undefined,
+      hour: this.getAttribute('hodiny') || undefined,
+      minute: this.getAttribute('minuty') || undefined,
+      second: this.getAttribute('sekundy') || undefined,
+      timeZoneName: this.getAttribute('časové-pásmo') || undefined,
+    }).format(datum);
   }
 
 *!*
   connectedCallback() { // (2)
 */!*
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
+    if (!this.vykreslen) {
+      this.vykresli();
+      this.vykreslen = true;
     }
   }
 
 *!*
   static get observedAttributes() { // (3)
 */!*
-    return ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'time-zone-name'];
+    return ['datumčas', 'rok', 'měsíc', 'den', 'hodiny', 'minuty', 'sekundy', 'časové-pásmo'];
   }
 
 *!*
-  attributeChangedCallback(name, oldValue, newValue) { // (4)
+  attributeChangedCallback(název, původníHodnota, nováHodnota) { // (4)
 */!*
-    this.render();
+    this.vykresli();
   }
 
 }
 
-customElements.define("time-formatted", TimeFormatted);
+customElements.define("formatovany-cas", FormátovanýČas);
 </script>
 
-<time-formatted id="elem" hour="numeric" minute="numeric" second="numeric"></time-formatted>
+<formatovany-cas id="elem" hodiny="numeric" minuty="numeric" sekundy="numeric"></formatovany-cas>
 
 <script>
 *!*
-setInterval(() => elem.setAttribute('datetime', new Date()), 1000); // (5)
+setInterval(() => elem.setAttribute('datumčas', new Date()), 1000); // (5)
 */!*
 </script>
 ```
 
-1. The rendering logic is moved to `render()` helper method.
-2. We call it once when the element is inserted into page.
-3. For a change of an attribute, listed in `observedAttributes()`, `attributeChangedCallback` triggers.
-4. ...and re-renders the element.
-5. At the end, we can easily make a live timer.
+1. Logika vykreslování je přesunuta do pomocné metody `vykresli()`.
+2. Tuto metodu zavoláme jednou, když bude element vložen na stránku.
+3. Při změně atributu, který je uveden v `observedAttributes()`, se spustí `attributeChangedCallback`.
+4. ...a překreslí element.
+5. Nakonec můžeme snadno vytvořit živé hodiny.
 
-## Rendering order
+## Pořadí vykreslování
 
-When HTML parser builds the DOM, elements are processed one after another, parents before children. E.g. if we have `<outer><inner></inner></outer>`, then `<outer>` element is created and connected to DOM first, and then `<inner>`.
+Když HTML parser buduje DOM, zpracovává elementy jeden po druhém, rodiče před dětmi. Například když máme `<vnejsi><vnitrni></vnitrni></vnejsi>`, pak se nejprve vytvoří a připojí k DOMu element `<vnejsi>` a až poté `<vnitrni>`.
 
-That leads to important consequences for custom elements.
+To vede k důležitým důsledkům u vlastních elementů.
 
-For example, if a custom element tries to access `innerHTML` in `connectedCallback`, it gets nothing:
+Například jestliže se vlastní element pokusí přistoupit k `innerHTML` v `connectedCallback`, nic nezíská:
 
 ```html run height=40
 <script>
-customElements.define('user-info', class extends HTMLElement {
+customElements.define('info-uzivatel', class extends HTMLElement {
 
   connectedCallback() {
 *!*
-    alert(this.innerHTML); // empty (*)
+    alert(this.innerHTML); // prázdný (*)
 */!*
   }
 
@@ -236,27 +234,27 @@ customElements.define('user-info', class extends HTMLElement {
 </script>
 
 *!*
-<user-info>John</user-info>
+<info-uzivatel>Jan</info-uzivatel>
 */!*
 ```
 
-If you run it, the `alert` is empty.
+Pokud si tento příklad spustíte, bude `alert` prázdný.
 
-That's exactly because there are no children on that stage, the DOM is unfinished. HTML parser connected the custom element `<user-info>`, and is going to proceed to its children, but just didn't yet.
+Je to proto, že v této chvíli ještě neexistují žádné děti, DOM není ještě dokončen. HTML parser připojí vlastní element `<info-uzivatel>` a chystá se zpracovat jeho děti, ale zatím to neudělal.
 
-If we'd like to pass information to custom element, we can use attributes. They are available immediately.
+Pokud chceme předat vlastnímu elementu nějakou informaci, můžeme použít atributy. Ty jsou k dispozici okamžitě.
 
-Or, if we really need the children, we can defer access to them with zero-delay `setTimeout`.
+Nebo, jestliže děti opravdu potřebujeme, můžeme přístup k nim odložit pomocí `setTimeout` s nulovou prodlevou.
 
-This works:
+Tohle funguje:
 
 ```html run height=40
 <script>
-customElements.define('user-info', class extends HTMLElement {
+customElements.define('info-uzivatel', class extends HTMLElement {
 
   connectedCallback() {
 *!*
-    setTimeout(() => alert(this.innerHTML)); // John (*)
+    setTimeout(() => alert(this.innerHTML)); // Jan (*)
 */!*
   }
 
@@ -264,137 +262,137 @@ customElements.define('user-info', class extends HTMLElement {
 </script>
 
 *!*
-<user-info>John</user-info>
+<info-uzivatel>Jan</info-uzivatel>
 */!*
 ```
 
-Now the `alert` in line `(*)` shows "John", as we run it asynchronously, after the HTML parsing is complete. We can process children if needed and finish the initialization.
+Nyní `alert` na řádku `(*)` zobrazí „Jan“, protože ho spouštíme asynchronně, až po dokončení parsování HTML. Pokud je třeba, můžeme zpracovat děti a dokončit inicializaci.
 
-On the other hand, this solution is also not perfect. If nested custom elements also use `setTimeout` to initialize themselves, then they queue up: the outer `setTimeout` triggers first, and then the inner one.
+Na druhou stranu, ani toto řešení není dokonalé. Pokud i vnořené vlastní elementy používají ke své inicializaci `setTimeout`, vloží se do fronty: jako první se spustí vnější `setTimeout` a pak vnitřní.
 
-So the outer element finishes the initialization before the inner one.
+Inicializace vnějšího elementu tedy skončí před vnitřním.
 
-Let's demonstrate that on example:
+Předveďme si to na příkladu:
 
 ```html run height=0
 <script>
-customElements.define('user-info', class extends HTMLElement {
+customElements.define('info-uzivatel', class extends HTMLElement {
   connectedCallback() {
-    alert(`${this.id} connected.`);
-    setTimeout(() => alert(`${this.id} initialized.`));
+    alert(`${this.id} připojen.`);
+    setTimeout(() => alert(`${this.id} inicializován.`));
   }
 });
 </script>
 
 *!*
-<user-info id="outer">
-  <user-info id="inner"></user-info>
-</user-info>
+<info-uzivatel id="vnější">
+  <info-uzivatel id="vnitřní"></info-uzivatel>
+</info-uzivatel>
 */!*
 ```
 
-Output order:
+Pořadí výstupu:
 
-1. outer connected.
-2. inner connected.
-3. outer initialized.
-4. inner initialized.
+1. vnější připojen.
+2. vnitřní připojen.
+3. vnější inicializován.
+4. vnitřní inicializován.
 
-We can clearly see that the outer element finishes initialization `(3)` before the inner one `(4)`.
+Jasně vidíme, že inicializace vnějšího elementu `(3)` skončila před vnitřním `(4)`.
 
-There's no built-in callback that triggers after nested elements are ready. If needed, we can implement such thing on our own. For instance, inner elements can dispatch events like `initialized`, and outer ones can listen and react on them.
+Neexistuje žádný zabudovaný callback, který by se spustil, až budou vnořené elementy připraveny. Pokud něco takového potřebujeme, můžeme si to implementovat sami. Například vnitřní elementy mohou vyvolávat události, třeba `inicializován`, a vnější jim mohou naslouchat a reagovat na ně.
 
-## Customized built-in elements
+## Přizpůsobené vestavěné elementy
 
-New elements that we create, such as `<time-formatted>`, don't have any associated semantics. They are unknown to search engines, and accessibility devices can't handle them.
+Nové elementy, které vytvoříme, například `<formatovany-cas>`, nemají připojenou žádnou sémantiku. Vyhledávací stroje je neznají a přístupová zařízení je nedokáží zpracovat.
 
-But such things can be important. E.g, a search engine would be interested to know that we actually show a time. And if we're making a special kind of button, why not reuse the existing `<button>` functionality?
+Takové věci však mohou být důležité. Například vyhledávací stroj by zajímalo, že opravdu zobrazujeme čas. A pokud vytváříme zvláštní druh tlačítka, proč nevyužít stávající funkcionalitu `<button>`?
 
-We can extend and customize built-in HTML elements by inheriting from their classes.
+Vestavěné HTML elementy si můžeme přizpůsobit a rozšířit tak, že budeme dědit z jejich tříd.
 
-For example, buttons are instances of `HTMLButtonElement`, let's build upon it.
+Například tlačítka jsou instancemi třídy `HTMLButtonElement`. Stavme tedy na ní.
 
-1. Extend `HTMLButtonElement` with our class:
+1. Rozšíříme `HTMLButtonElement` naší třídou:
 
     ```js
-    class HelloButton extends HTMLButtonElement { /* custom element methods */ }
+    class TlačítkoAhoj extends HTMLButtonElement { /* metody vlastního elementu */ }
     ```
 
-2. Provide the third argument to `customElements.define`, that specifies the tag:
+2. Poskytneme metodě `customElements.define` třetí argument, který specifikuje značku:
     ```js
-    customElements.define('hello-button', HelloButton, *!*{extends: 'button'}*/!*);
+    customElements.define('tlacitko-ahoj', TlačítkoAhoj, *!*{extends: 'button'}*/!*);
     ```    
 
-    There may be different tags that share the same DOM-class, that's why specifying `extends` is needed.
+    Stejnou DOM třídu mohou sdílet různé značky, proto je specifikace `extends` nutná.
 
-3. At the end, to use our custom element, insert a regular `<button>` tag, but add `is="hello-button"` to it:
+3. Nakonec, abychom využili náš vlastní element, vložíme obvyklou značku `<button>`, ale přidáme do ní `is="tlacitko-ahoj"`:
     ```html
-    <button is="hello-button">...</button>
+    <button is="tlacitko-ahoj">...</button>
     ```
 
-Here's a full example:
+Zde je celý příklad:
 
 ```html run autorun="no-epub"
 <script>
-// The button that says "hello" on click
-class HelloButton extends HTMLButtonElement {
+// Tlačítko, které po kliknutí zobrazí „ahoj“
+class TlačítkoAhoj extends HTMLButtonElement {
 *!*
   constructor() {
 */!*
     super();
-    this.addEventListener('click', () => alert("Hello!"));
+    this.addEventListener('click', () => alert("Ahoj!"));
   }
 }
 
 *!*
-customElements.define('hello-button', HelloButton, {extends: 'button'});
+customElements.define('tlacitko-ahoj', TlačítkoAhoj, {extends: 'button'});
 */!*
 </script>
 
 *!*
-<button is="hello-button">Click me</button>
+<button is="tlacitko-ahoj">Klikněte na mě</button>
 */!*
 
 *!*
-<button is="hello-button" disabled>Disabled</button>
+<button is="tlacitko-ahoj" disabled>Zakázané</button>
 */!*
 ```
 
-Our new button extends the built-in one. So it keeps the same styles and standard features like `disabled` attribute.
+Naše nové tlačítko rozšiřuje zabudované, takže si ponechává stejné styly a standardní vlastnosti, například atribut `disabled`.
 
-## References
+## Odkazy
 
 - HTML Living Standard: <https://html.spec.whatwg.org/#custom-elements>.
-- Compatiblity: <https://caniuse.com/#feat=custom-elementsv1>.
+- Kompatibilita: <https://caniuse.com/#feat=custom-elementsv1>.
 
-## Summary
+## Shrnutí
 
-Custom elements can be of two types:
+Vlastní elementy se dělí do dvou druhů:
 
-1. "Autonomous" -- new tags, extending `HTMLElement`.
+1. „Autonomní“ -- nové značky, které rozšiřují `HTMLElement`.
 
-    Definition scheme:
+    Definiční schéma:
 
     ```js
-    class MyElement extends HTMLElement {
+    class MůjElement extends HTMLElement {
       constructor() { super(); /* ... */ }
       connectedCallback() { /* ... */ }
       disconnectedCallback() { /* ... */  }
       static get observedAttributes() { return [/* ... */]; }
-      attributeChangedCallback(name, oldValue, newValue) { /* ... */ }
+      attributeChangedCallback(název, původníHodnota, nováHodnota) { /* ... */ }
       adoptedCallback() { /* ... */ }
      }
-    customElements.define('my-element', MyElement);
-    /* <my-element> */
+    customElements.define('muj-element', MůjElement);
+    /* <muj-element> */
     ```
 
-2. "Customized built-in elements" -- extensions of existing elements.
+2. „Přizpůsobené vestavěné elementy“ -- rozšíření existujících elementů.
 
-    Requires one more `.define` argument, and `is="..."` in HTML:
+    Vyžadují další argument v `.define` a `is="..."` v HTML:
     ```js
-    class MyButton extends HTMLButtonElement { /*...*/ }
-    customElements.define('my-button', MyElement, {extends: 'button'});
-    /* <button is="my-button"> */
+    class MojeTlačítko extends HTMLButtonElement { /*...*/ }
+    customElements.define('moje-tlacitko', MojeTlačítko, {extends: 'button'});
+    /* <button is="moje-tlacitko"> */
     ```
 
-Custom elements are well-supported among browsers. There's a polyfill <https://github.com/webcomponents/polyfills/tree/master/packages/webcomponentsjs>.
+Vlastní elementy jsou v prohlížečích široce podporovány. Existuje polyfill <https://github.com/webcomponents/polyfills/tree/master/packages/webcomponentsjs>.

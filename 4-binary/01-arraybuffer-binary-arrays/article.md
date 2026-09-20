@@ -1,182 +1,181 @@
-# ArrayBuffer, binary arrays
+# ArrayBuffer, binární pole
 
-In web-development we meet binary data mostly while dealing with files (create, upload, download). Another typical use case is image processing.
+Při vývoji webů se setkáváme s binárními daty převážně při práci se soubory (vytváření, ukládání, stahování). Další typický případ použití je zpracování obrázků.
 
-That's all possible in JavaScript, and binary operations are high-performant.
+V JavaScriptu je to všechno proveditelné a binární operace jsou vysoce výkonné.
 
-Although, there's a bit of confusion, because there are many classes. To name a few:
-- `ArrayBuffer`, `Uint8Array`, `DataView`, `Blob`, `File`, etc.
+Mohou však způsobit menší zmatení, protože pro práci s nimi existuje mnoho tříd. Jmenujme některé:
+- `ArrayBuffer`, `Uint8Array`, `DataView`, `Blob`, `File`, atd.
 
-Binary data in JavaScript is implemented in a non-standard way, compared to other languages. But when we sort things out, everything becomes fairly simple.
+Ve srovnání s jinými jazyky jsou binární data v JavaScriptu implementována nestandardním způsobem. Ale když si to všechno utřídíme, začne nám to rychle připadat jednoduché.
 
-**The basic binary object is `ArrayBuffer` -- a reference to a fixed-length contiguous memory area.**
+**Základním binárním objektem je `ArrayBuffer` -- odkaz na souvislou oblast paměti pevné délky.**
 
-We create it like this:
+Vytvoříme jej následovně:
 ```js run
-let buffer = new ArrayBuffer(16); // create a buffer of length 16
+let buffer = new ArrayBuffer(16); // vytvoříme buffer o délce 16
 alert(buffer.byteLength); // 16
 ```
 
-This allocates a contiguous memory area of 16 bytes and pre-fills it with zeroes.
+Tím obsadíme souvislou oblast paměti o délce 16 bytů a vyplníme ji nulami.
 
-```warn header="`ArrayBuffer` is not an array of something"
-Let's eliminate a possible source of confusion. `ArrayBuffer` has nothing in common with `Array`:
-- It has a fixed length, we can't increase or decrease it.
-- It takes exactly that much space in the memory.
-- To access individual bytes, another "view" object is needed, not `buffer[index]`.
+```warn header="`ArrayBuffer` není pole ničeho"
+Vyhněme se možnému zdroji zmatků. `ArrayBuffer` nemá nic společného s `Array`:
+- Má pevnou délku, kterou nemůžeme zvýšit ani snížit.
+- V paměti zabírá přesně uvedené množství místa.
+- Pro přístup k jednotlivým bytům je zapotřebí další objekt „náhledu“, není to možné pomocí `buffer[index]`.
 ```
 
-`ArrayBuffer` is a memory area. What's stored in it? It has no clue. Just a raw sequence of bytes.
+`ArrayBuffer` je oblast v paměti. Co je v ní uloženo? O tom nemá ponětí. Jen planá posloupnost bytů.
 
-**To manipulate an `ArrayBuffer`, we need to use a "view" object.**
+**K manipulaci s `ArrayBuffer` musíme použít objekt „náhledu“.**
 
-A view object does not store anything on its own. It's the "eyeglasses" that give an interpretation of the bytes stored in the `ArrayBuffer`.
+Objekt náhledu sám o sobě nic neukládá. Jsou to jen „brýle“, které nám poskytují interpretaci bytů uložených v `ArrayBuffer`.
 
-For instance:
+Například:
 
-- **`Uint8Array`** -- treats each byte in `ArrayBuffer` as a separate number, with possible values from 0 to 255 (a byte is 8-bit, so it can hold only that much). Such value is called a "8-bit unsigned integer".
-- **`Uint16Array`** -- treats every 2 bytes as an integer, with possible values from 0 to 65535. That's called a "16-bit unsigned integer".
-- **`Uint32Array`** -- treats every 4 bytes as an integer, with possible values from 0 to 4294967295. That's called a "32-bit unsigned integer".
-- **`Float64Array`** -- treats every 8 bytes as a floating point number with possible values from <code>5.0x10<sup>-324</sup></code> to <code>1.8x10<sup>308</sup></code>.
+- **`Uint8Array`** -- zachází s každým bytem v `ArrayBuffer` jako se samostatným číslem s možnými hodnotami od 0 do 255 (byte má 8 bitů, takže nemůže uschovat větší číslo). Taková hodnota se nazývá „8-bitové celé číslo bez znaménka“.
+- **`Uint16Array`** -- zachází s každými 2 byty jako s celým číslem s možnými hodnotami od 0 do 65535. To se nazývá „16-bitové celé číslo bez znaménka“.
+- **`Uint32Array`** -- zachází s každými 4 byty jako s celým číslem s možnými hodnotami od 0 do 4294967295. To se nazývá „32-bitové celé číslo bez znaménka“.
+- **`Float64Array`** -- zachází s každými 8 byty jako s číslem s pohyblivou řádovou čárkou s možnými hodnotami od <code>5.0x10<sup>-324</sup></code> do <code>1.8x10<sup>308</sup></code>.
 
-So, the binary data in an `ArrayBuffer` of 16 bytes can be interpreted as 16 "tiny numbers", or 8 bigger numbers (2 bytes each), or 4 even bigger (4 bytes each), or 2 floating-point values with high precision (8 bytes each).
+Binární data v `ArrayBuffer` o délce 16 bytů je tedy možné interpretovat jako 16 „malých čísel“, nebo 8 větších čísel (každé o 2 bytech), nebo 4 ještě větší čísla (každé o 4 bytech), nebo 2 hodnoty s pohyblivou řádovou čárkou s vysokou přesností (každá o 8 bytech).
 
 ![](arraybuffer-views.svg)
 
-`ArrayBuffer` is the core object, the root of everything, the raw binary data.
+`ArrayBuffer` je jádrový objekt, kořen všeho, planá binární data.
 
-But if we're going to write into it, or iterate over it, basically for almost any operation – we must use a view, e.g:
+Když do něj však chceme zapisovat, iterovat nad ním, v zásadě pro téměř jakoukoli operaci -- musíme použít náhled, například:
 
 ```js run
-let buffer = new ArrayBuffer(16); // create a buffer of length 16
+let buffer = new ArrayBuffer(16); // vytvoříme buffer o délce 16
 
 *!*
-let view = new Uint32Array(buffer); // treat buffer as a sequence of 32-bit integers
+let náhled = new Uint32Array(buffer); // zacházíme s ním jako s posloupností 32-bitových celých čísel
 
-alert(Uint32Array.BYTES_PER_ELEMENT); // 4 bytes per integer
+alert(Uint32Array.BYTES_PER_ELEMENT); // 4 byty na jedno číslo
 */!*
 
-alert(view.length); // 4, it stores that many integers
-alert(view.byteLength); // 16, the size in bytes
+alert(náhled.length); // 4, počet čísel, která dokáže uložit
+alert(náhled.byteLength); // 16, velikost v bytech
 
-// let's write a value
-view[0] = 123456;
+// zapišme do něj hodnotu
+náhled[0] = 123456;
 
-// iterate over values
-for(let num of view) {
-  alert(num); // 123456, then 0, 0, 0 (4 values total)
+// iterujme nad hodnotami
+for(let číslo of náhled) {
+  alert(číslo); // 123456, pak 0, 0, 0 (celkem 4 hodnoty)
 }
 
 ```
 
 ## TypedArray
 
-The common term for all these views (`Uint8Array`, `Uint32Array`, etc) is [TypedArray](https://tc39.github.io/ecma262/#sec-typedarray-objects). They share the same set of methods and properties.
+Společným pojmem pro všechny tyto náhledy (`Uint8Array`, `Uint32Array`, atd.) je [TypedArray](https://tc39.github.io/ecma262/#sec-typedarray-objects) -- typové pole. Všechny mají společnou sadu metod a vlastností.
 
-Please note, there's no constructor called `TypedArray`, it's just a common "umbrella" term to represent one of views over `ArrayBuffer`: `Int8Array`, `Uint8Array` and so on, the full list will soon follow.
+Prosíme všimněte si, že neexistuje konstruktor s názvem `TypedArray`. Je to jen společný „zastřešující“ pojem, který představuje jeden z náhledů na `ArrayBuffer`: `Int8Array`, `Uint8Array` a tak dále. Úplný seznam bude brzy následovat.
 
-When you see something like `new TypedArray`, it means any of `new Int8Array`, `new Uint8Array`, etc.
+Když vidíte něco jako `new TypedArray`, znamená to cokoli z `new Int8Array`, `new Uint8Array`, atd.
 
-Typed arrays behave like regular arrays: have indexes and are iterable.
+Typová pole se chovají stejně jako běžná pole: mají indexy a jsou iterovatelná.
 
-A typed array constructor (be it `Int8Array` or `Float64Array`, doesn't matter) behaves differently depending on argument types.
+Konstruktor typového pole (ať je to `Int8Array` nebo `Float64Array`, na tom nezáleží) se chová různě v závislosti na typech svých argumentů.
 
-There are 5 variants of arguments:
+Má 5 možných variant argumentů:
 
 ```js
-new TypedArray(buffer, [byteOffset], [length]);
-new TypedArray(object);
-new TypedArray(typedArray);
-new TypedArray(length);
+new TypedArray(buffer, [poziceBytu], [délka]);
+new TypedArray(objekt);
+new TypedArray(typovéPole);
+new TypedArray(délka);
 new TypedArray();
 ```
 
-1. If an `ArrayBuffer` argument is supplied, the view is created over it. We used that syntax already.
+1. Pokud je uveden argument `ArrayBuffer`, náhled se vytvoří nad ním. Tuto syntaxi jsme již použili.
 
-    Optionally we can provide `byteOffset` to start from (0 by default) and the `length` (till the end of the buffer by default), then the view will cover only a part of the `buffer`.
+    Nepovinně můžeme uvést `poziceBytu`, což je pozice, od které se má začít (standardně 0), a `délka` (standardně až do konce bufferu). Pak se náhled vytvoří jen nad částí `buffer`.
 
-2. If an `Array`, or any array-like object is given, it creates a typed array of the same length and copies the content.
+2. Pokud je uvedeno `Array` nebo objekt podobný poli, vytvoří se typové pole stejné délky a obsah se do něj zkopíruje.
 
-    We can use it to pre-fill the array with the data:
+    To můžeme použít k předvyplnění pole daty:
     ```js run
     *!*
-    let arr = new Uint8Array([0, 1, 2, 3]);
+    let pole = new Uint8Array([0, 1, 2, 3]);
     */!*
-    alert( arr.length ); // 4, created binary array of the same length
-    alert( arr[1] ); // 1, filled with 4 bytes (unsigned 8-bit integers) with given values
+    alert( pole.length ); // 4, vzniklo binární pole o stejné délce
+    alert( pole[1] ); // 1, zaplnilo se 4 byty (8-bitová celá čísla bez znaménka) se zadanými hodnotami
     ```
-3. If another `TypedArray` is supplied, it does the same: creates a typed array of the same length and copies values. Values are converted to the new type in the process, if needed.
+3. Pokud je uvedeno jiné `TypedArray`, stane se totéž: vytvoří se typové pole stejné délky a zkopírují se hodnoty. Při tomto procesu se hodnoty převedou na nový typ, je-li to nutné.
     ```js run
-    let arr16 = new Uint16Array([1, 1000]);
+    let pole16 = new Uint16Array([1, 1000]);
     *!*
-    let arr8 = new Uint8Array(arr16);
+    let pole8 = new Uint8Array(pole16);
     */!*
-    alert( arr8[0] ); // 1
-    alert( arr8[1] ); // 232, tried to copy 1000, but can't fit 1000 into 8 bits (explanations below)
+    alert( pole8[0] ); // 1
+    alert( pole8[1] ); // 232, snažilo se zkopírovat 1000, ale 1000 se nevejde do 8 bitů (vysvětleno dále)
     ```
 
-4. For a numeric argument `length` -- creates the typed array to contain that many elements. Its byte length will be `length` multiplied by the number of bytes in a single item `TypedArray.BYTES_PER_ELEMENT`:
+4. Pro číselný argument `délka` se vytvoří typové pole, které bude obsahovat uvedený počet prvků. Jeho délka v bytech bude `délka` násobená počtem bytů v jednom prvku `TypedArray.BYTES_PER_ELEMENT`:
     ```js run
-    let arr = new Uint16Array(4); // create typed array for 4 integers
-    alert( Uint16Array.BYTES_PER_ELEMENT ); // 2 bytes per integer
-    alert( arr.byteLength ); // 8 (size in bytes)
+    let pole = new Uint16Array(4); // vytvoří typové pole pro 4 celá čísla
+    alert( Uint16Array.BYTES_PER_ELEMENT ); // 2 byty na číslo
+    alert( pole.byteLength ); // 8 (velikost v bytech)
     ```
 
-5. Without arguments, creates an zero-length typed array.
+5. Bez argumentů se vytvoří typové pole s nulovou délkou.
 
-We can create a `TypedArray` directly, without mentioning `ArrayBuffer`. But a view cannot exist without an underlying `ArrayBuffer`, so gets created automatically in all these cases except the first one (when provided).
+Můžeme vytvořit `TypedArray` přímo, bez uvedení `ArrayBuffer`. Náhled však nemůže existovat bez podkladového `ArrayBuffer`, takže ten se vytvoří automaticky ve všech uvedených případech kromě prvního (kdy je předán).
 
-To access the underlying `ArrayBuffer`, there are following properties in `TypedArray`:
-- `buffer` -- references the `ArrayBuffer`.
-- `byteLength` -- the length of the `ArrayBuffer`.
+Pro přístup k podkladovému `ArrayBuffer` slouží následující vlastnosti `TypedArray`:
+- `buffer` -- odkaz na `ArrayBuffer`.
+- `byteLength` -- délka `ArrayBuffer`.
 
-So, we can always move from one view to another:
+Kdykoli tedy můžeme přejít od jednoho náhledu k druhému:
 ```js
-let arr8 = new Uint8Array([0, 1, 2, 3]);
+let pole8 = new Uint8Array([0, 1, 2, 3]);
 
-// another view on the same data
-let arr16 = new Uint16Array(arr8.buffer);
+// jiný náhled na stejná data
+let pole16 = new Uint16Array(pole8.buffer);
 ```
 
+Seznam typových polí je následující:
 
-Here's the list of typed arrays:
+- `Uint8Array`, `Uint16Array`, `Uint32Array` -- pro celá čísla o velikosti 8, 16 a 32 bitů.
+  - `Uint8ClampedArray` -- pro 8-bitová celá čísla, při přiřazení budou „stlačena“ (*clamp*, viz dále).
+- `Int8Array`, `Int16Array`, `Int32Array` -- pro celá čísla se znaménkem (mohou být záporná).
+- `Float32Array`, `Float64Array` -- pro čísla s pohyblivou řádovou čárkou se znaménkem o velikosti 32 a 64 bitů.
 
-- `Uint8Array`, `Uint16Array`, `Uint32Array` -- for integer numbers of 8, 16 and 32 bits.
-  - `Uint8ClampedArray` -- for 8-bit integers, "clamps" them on assignment (see below).
-- `Int8Array`, `Int16Array`, `Int32Array` -- for signed integer numbers (can be negative).
-- `Float32Array`, `Float64Array` -- for signed floating-point numbers of 32 and 64 bits.
+```warn header="Neexistuje `int8` nebo podobný typ pro jedinou hodnotu"
+Prosíme všimněte si, že i přes názvy jako `Int8Array` v JavaScriptu neexistuje typ pro jedinou hodnotu jako `int` nebo `int8`.
 
-```warn header="No `int8` or similar single-valued types"
-Please note, despite of the names like `Int8Array`, there's no single-value type like `int`, or `int8` in JavaScript.
-
-That's logical, as `Int8Array` is not an array of these individual values, but rather a view on `ArrayBuffer`.
+Je to logické, neboť `Int8Array` není pole těchto jednotlivých hodnot, ale náhled na `ArrayBuffer`.
 ```
 
-### Out-of-bounds behavior
+### Chování při překročení mezí
 
-What if we attempt to write an out-of-bounds value into a typed array? There will be no error. But extra bits are cut-off.
+Co se stane, když se pokusíme zapsat do typového pole hodnotu mimo jeho meze? Nenastane chyba, ale přebytečné bity budou odříznuty.
 
-For instance, let's try to put 256 into `Uint8Array`. In binary form, 256 is `100000000` (9 bits), but `Uint8Array` only provides 8 bits per value, that makes the available range from 0 to 255.
+Pokusme se například uložit 256 do `Uint8Array`. 256 je v binární podobě `100000000` (9 bitů), ale `Uint8Array` poskytuje pro každou hodnotu jen 8 bitů, což dává dostupný rozsah od 0 do 255.
 
-For bigger numbers, only the rightmost (less significant) 8 bits are stored, and the rest is cut off:
+Pro větší čísla se uloží jen 8 bitů zprava (méně významných) a zbytek se odřízne:
 
 ![](8bit-integer-256.svg)
 
-So we'll get zero.
+Dostaneme tedy nulu.
 
-For 257, the binary form is `100000001` (9 bits), the rightmost 8 get stored, so we'll have `1` in the array:
+Pro 257 je binární podoba `100000001` (9 bitů), uloží se 8 bitů zprava, v poli tedy budeme mít `1`:
 
 ![](8bit-integer-257.svg)
 
-In other words, the number modulo 2<sup>8</sup> is saved.
+Jinými slovy, uloží se zbytek po dělení tohoto čísla číslem 2<sup>8</sup>.
 
-Here's the demo:
+Následuje ukázka:
 
 ```js run
 let uint8array = new Uint8Array(16);
 
-let num = 256;
-alert(num.toString(2)); // 100000000 (binary representation)
+let číslo = 256;
+alert(číslo.toString(2)); // 100000000 (binární reprezentace)
 
 uint8array[0] = 256;
 uint8array[1] = 257;
@@ -185,88 +184,88 @@ alert(uint8array[0]); // 0
 alert(uint8array[1]); // 1
 ```
 
-`Uint8ClampedArray` is special in this aspect, its behavior is different. It saves 255 for any number that is greater than 255, and 0 for any negative number. That behavior is useful for image processing.
+`Uint8ClampedArray` je v tomto směru zvláštní, jeho chování je odlišné. Místo každého čísla většího než 255 se uloží 255 a místo každého záporného čísla se uloží 0. Toto chování je užitečné při zpracování obrázků.
 
-## TypedArray methods
+## Metody TypedArray
 
-`TypedArray` has regular `Array` methods, with notable exceptions.
+`TypedArray` obsahuje metody běžného `Array` s určitými výjimkami.
 
-We can iterate, `map`, `slice`, `find`, `reduce` etc.
+Můžeme nad ním iterovat, volat `map`, `slice`, `find`, `reduce` atd.
 
-There are few things we can't do though:
+Je tady však několik věcí, které dělat nemůžeme:
 
-- No `splice` -- we can't "delete" a value, because typed arrays are views on a buffer, and these are fixed, contiguous areas of memory. All we can do is to assign a zero.
-- No `concat` method.
+- Není zde `splice` -- nemůžeme „smazat“ hodnotu, protože typová pole jsou náhledy na buffer a ten představuje pevnou, souvislou oblast paměti. Jediné, co můžeme dělat, je přiřadit nulu.
+- Není zde metoda `concat`.
 
-There are two additional methods:
+Jsou tady však dvě další metody:
 
-- `arr.set(fromArr, [offset])` copies all elements from `fromArr` to the `arr`, starting at position `offset` (0 by default).
-- `arr.subarray([begin, end])` creates a new view of the same type from `begin` to `end` (exclusive). That's similar to `slice` method (that's also supported), but doesn't copy anything -- just creates a new view, to operate on the given piece of data.
+- `pole.set(zdrojovéPole, [pozice])` zkopíruje všechny prvky ze `zdrojovéPole` do `pole`, počínajíc od `pozice` (standardně 0).
+- `pole.subarray([začátek, konec])` vytvoří nový náhled na stejný typ od `začátek` do `konec` (nebude zahrnut). Podobá se metodě `slice` (ta je rovněž podporována), ale nic se nekopíruje -- vytvoří se jen nový náhled, který bude pracovat nad zadanou částí dat.
 
-These methods allow us to copy typed arrays, mix them, create new arrays from existing ones, and so on.
+Tyto metody nám umožňují typová pole kopírovat, směšovat, vytvářet nová pole z existujících a podobně.
 
 
 
 ## DataView
 
-[DataView](mdn:/JavaScript/Reference/Global_Objects/DataView) is a special super-flexible "untyped" view over `ArrayBuffer`. It allows to access the data on any offset in any format.
+[DataView](mdn:/JavaScript/Reference/Global_Objects/DataView) je speciální, vysoce flexibilní „beztypový“ náhled na `ArrayBuffer`, který nám umožňuje přistupovat k datům na jakékoli pozici v jakémkoli formátu.
 
-- For typed arrays, the constructor dictates what the format is. The whole array is supposed to be uniform. The i-th number is `arr[i]`.
-- With `DataView` we access the data with methods like `.getUint8(i)` or `.getUint16(i)`. We choose the format at method call time instead of the construction time.
+- U typových polí je formát stanoven konstruktorem. Celé pole se považuje za uniformní. Jeho i-tý člen je `pole[i]`.
+- V `DataView` přistupujeme k datům pomocí metod jako `.getUint8(i)` nebo `.getUint16(i)`. Formát si volíme až při volání metody, ne při vytvoření.
 
-The syntax:
+Syntaxe:
 
 ```js
-new DataView(buffer, [byteOffset], [byteLength])
+new DataView(buffer, [poziceBytu], [délkaVBytech])
 ```
 
-- **`buffer`** -- the underlying `ArrayBuffer`. Unlike typed arrays, `DataView` doesn't create a buffer on its own. We need to have it ready.
-- **`byteOffset`** -- the starting byte position of the view (by default 0).
-- **`byteLength`** -- the byte length of the view (by default till the end of `buffer`).
+- **`buffer`** -- podkladový `ArrayBuffer`. Na rozdíl od typových polí `DataView` nevytváří buffer sám o sobě. Musíme ho již mít připravený.
+- **`poziceBytu`** -- pozice počátečního bytu náhledu (standardně 0).
+- **`délkaVBytech`** -- délka náhledu v bytech (standardně až do konce `buffer`).
 
-For instance, here we extract numbers in different formats from the same buffer:
+Například zde vytahujeme ze stejného bufferu čísla v různých formátech:
 
 ```js run
-// binary array of 4 bytes, all have the maximal value 255
+// binární pole 4 bytů, všechny mají nejvyšší možnou hodnotu 255
 let buffer = new Uint8Array([255, 255, 255, 255]).buffer;
 
 let dataView = new DataView(buffer);
 
-// get 8-bit number at offset 0
+// získáme 8-bitové číslo na pozici 0
 alert( dataView.getUint8(0) ); // 255
 
-// now get 16-bit number at offset 0, it consists of 2 bytes, together interpreted as 65535
-alert( dataView.getUint16(0) ); // 65535 (biggest 16-bit unsigned int)
+// nyní získáme 16-bitové číslo na pozici 0, skládá se ze 2 bytů, společně interpretovaných jako 65535
+alert( dataView.getUint16(0) ); // 65535 (nejvyšší 16-bitové celé číslo bez znaménka)
 
-// get 32-bit number at offset 0
-alert( dataView.getUint32(0) ); // 4294967295 (biggest 32-bit unsigned int)
+// získáme 32-bitové číslo na pozici 0
+alert( dataView.getUint32(0) ); // 4294967295 (nejvyšší 32-bitové celé číslo bez znaménka)
 
-dataView.setUint32(0, 0); // set 4-byte number to zero, thus setting all bytes to 0
+dataView.setUint32(0, 0); // nastaví 4-bytové číslo na nulu, tedy nastaví všechny byty na 0
 ```
 
-`DataView` is great when we store mixed-format data in the same buffer. For example, when we store a sequence of pairs (16-bit integer, 32-bit float), `DataView` allows to access them easily.
+`DataView` je vynikající, když ukládáme do stejného bufferu data v různých formátech. Například když ukládáme posloupnost dvojic (16-bitové celé číslo, 32-bitové číslo s pohyblivou řádovou čárkou), `DataView` nám k nim umožňuje snadno přistupovat.
 
-## Summary
+## Shrnutí
 
-`ArrayBuffer` is the core object, a reference to the fixed-length contiguous memory area.
+`ArrayBuffer` je jádrový objekt, odkaz na souvislou oblast paměti pevné délky.
 
-To do almost any operation on `ArrayBuffer`, we need a view.
+K provedení téměř jakékoli operace na `ArrayBuffer` potřebujeme náhled.
 
-- It can be a `TypedArray`:
-    - `Uint8Array`, `Uint16Array`, `Uint32Array` -- for unsigned integers of 8, 16, and 32 bits.
-    - `Uint8ClampedArray` -- for 8-bit integers, "clamps" them on assignment.
-    - `Int8Array`, `Int16Array`, `Int32Array` -- for signed integer numbers (can be negative).
-    - `Float32Array`, `Float64Array` -- for signed floating-point numbers of 32 and 64 bits.
-- Or a `DataView` -- the view that uses methods to specify a format, e.g. `getUint8(offset)`.
+- Může to být `TypedArray`:
+    - `Uint8Array`, `Uint16Array`, `Uint32Array` -- pro celá čísla bez znaménka o velikosti 8, 16 a 32 bitů.
+    - `Uint8ClampedArray` -- pro 8-bitová celá čísla, při přiřazení jsou „stlačena“.
+    - `Int8Array`, `Int16Array`, `Int32Array` -- pro celá čísla se znaménkem (mohou být záporná).
+    - `Float32Array`, `Float64Array` -- pro čísla s pohyblivou řádovou čárkou se znaménkem o velikosti 32 a 64 bitů.
+- Nebo `DataView` -- náhled, který ke specifikaci formátu používá metody, např. `getUint8(pozice)`.
 
-In most cases we create and operate directly on typed arrays, leaving `ArrayBuffer` under cover, as a "common denominator". We can access it as `.buffer` and make another view if needed.
+Ve většině případů vytváříme a pracujeme s typovými poli a `ArrayBuffer` ponecháváme pod pláštěm jako „společného jmenovatele“. Pokud to potřebujeme, můžeme k němu přistoupit pomocí `.buffer` a vytvořit jiný náhled.
 
-There are also two additional terms, that are used in descriptions of methods that operate on binary data:
-- `ArrayBufferView` is an umbrella term for all these kinds of views.
-- `BufferSource` is an umbrella term for `ArrayBuffer` or `ArrayBufferView`.
+Při popisech metod pracujících nad binárními daty se používají ještě následující dva pojmy:
+- `ArrayBufferView` je zastřešující pojem pro všechny tyto druhy náhledů.
+- `BufferSource` je zastřešující pojem pro `ArrayBuffer` a `ArrayBufferView`.
 
-We'll see these terms in the next chapters. `BufferSource` is one of the most common terms, as it means "any kind of binary data" -- an `ArrayBuffer` or a view over it.
+Tyto pojmy uvidíme v dalších kapitolách. `BufferSource` je jeden z nejčastěji používaných pojmů, neboť znamená „jakýkoli druh binárních dat“ -- `ArrayBuffer` nebo náhled na něj.
 
-Here's a cheatsheet:
+Zde je přehled:
 
 ![](arraybuffer-view-buffersource.svg)

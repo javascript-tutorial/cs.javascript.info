@@ -1,119 +1,119 @@
 
-# Fetch API
+# API metody fetch
 
-So far, we know quite a bit about `fetch`.
+O metodě `fetch` jsme se už leccos dozvěděli.
 
-Let's see the rest of API, to cover all its abilities.
+Podívejme se nyní na zbytek API, abychom probrali všechny její možnosti.
 
 ```smart
-Please note: most of these options are used rarely. You may skip this chapter and still use `fetch` well.
+Prosíme všimněte si, že většina zde uvedených voleb se používá jen vzácně. Metodu `fetch` budete moci správně používat, i když tuto kapitolu přeskočíte.
 
-Still, it's good to know what `fetch` can do, so if the need arises, you can return and read the details.
+Je však dobré vědět, co všechno `fetch` umí, a v případě potřeby se sem vrátit a přečíst si podrobnosti.
 ```
 
-Here's the full list of all possible `fetch` options with their default values (alternatives in comments):
+Následující seznam obsahuje všechny volby `fetch` spolu s jejich standardními hodnotami (alternativy jsou uvedeny v komentářích):
 
 ```js
-let promise = fetch(url, {
-  method: "GET", // POST, PUT, DELETE, etc.
+let příslib = fetch(url, {
+  method: "GET", // POST, PUT, DELETE, atd.
   headers: {
-    // the content type header value is usually auto-set
-    // depending on the request body
+    // hodnota hlavičky s typem obsahu se obvykle nastavuje automaticky
+    // v závislosti na těle požadavku
     "Content-Type": "text/plain;charset=UTF-8"
   },
-  body: undefined, // string, FormData, Blob, BufferSource, or URLSearchParams
-  referrer: "about:client", // or "" to send no Referer header,
-  // or an url from the current origin
+  body: undefined, // řetězec, FormData, Blob, BufferSource nebo URLSearchParams
+  referrer: "about:client", // nebo "", aby nebyla poslána žádná hlavička Referer,
+  // nebo URL z aktuálního původu
   referrerPolicy: "strict-origin-when-cross-origin", // no-referrer-when-downgrade, no-referrer, origin, same-origin...
   mode: "cors", // same-origin, no-cors
   credentials: "same-origin", // omit, include
-  cache: "default", // no-store, reload, no-cache, force-cache, or only-if-cached
+  cache: "default", // no-store, reload, no-cache, force-cache nebo only-if-cached
   redirect: "follow", // manual, error
-  integrity: "", // a hash, like "sha256-abcdef1234567890"
+  integrity: "", // kontrolní součet, např. "sha256-abcdef1234567890"
   keepalive: false, // true
-  signal: undefined, // AbortController to abort request
+  signal: undefined, // AbortController pro zastavení požadavku
   window: window // null
 });
 ```
 
-An impressive list, right?
+Úctyhodný seznam, že?
 
-We fully covered `method`, `headers` and `body` in the chapter <info:fetch>.
+V kapitole <info:fetch> jsme podrobně probrali `method`, `headers` a `body`.
 
-The `signal` option is covered in <info:fetch-abort>.
+V kapitole <info:fetch-abort> jsme probrali volbu `signal`.
 
-Now let's explore the remaining capabilities.
+Nyní prozkoumejme ostatní volby.
 
 ## referrer, referrerPolicy
 
-These options govern how `fetch` sets the HTTP `Referer` header.
+Tyto volby stanovují způsob, jak `fetch` nastavuje HTTP hlavičku `Referer`.
 
-Usually that header is set automatically and contains the url of the page that made the request. In most scenarios, it's not important at all, sometimes, for security purposes, it makes sense to remove or shorten it.
+Tato hlavička je obvykle nastavována automaticky a obsahuje URL stránky, která vytvořila požadavek. Ve většině scénářů není vůbec důležitá, ale někdy z bezpečnostních důvodů má smysl ji odstranit nebo zkrátit.
 
-**The `referrer` option allows to set any `Referer` (within the current origin) or remove it.**
+**Volba `referrer` umožňuje nastavit libovolný `Referer` (v rámci aktuálního původu) nebo jej odstranit.**
 
-To send no referrer, set an empty string:
+Nechceme-li poslat žádný referer, nastavíme prázdný řetězec:
 ```js
 fetch('/page', {
 *!*
-  referrer: "" // no Referer header
+  referrer: "" // bez hlavičky Referer
 */!*
 });
 ```
 
-To set another url within the current origin:
+Chceme-li nastavit jinou URL uvnitř aktuálního původu:
 
 ```js
 fetch('/page', {
-  // assuming we're on https://javascript.info
-  // we can set any Referer header, but only within the current origin
+  // předpokládejme, že jsme na https://javascript.info
+  // můžeme nastavit jakoukoli hlavičku Referer, ale jen uvnitř aktuálního původu
 *!*
-  referrer: "https://javascript.info/anotherpage"
+  referrer: "https://javascript.info/jinastranka"
 */!*
 });
 ```
 
-**The `referrerPolicy` option sets general rules for `Referer`.**
+**Volba `referrerPolicy` nastavuje obecná pravidla pro `Referer`.**
 
-Requests are split into 3 types:
+Požadavky se dělí na tři druhy:
 
-1. Request to the same origin.
-2. Request to another origin.
-3. Request from HTTPS to HTTP (from safe to unsafe protocol).
+1. Požadavky na stejný původ.
+2. Požadavky na jiný původ.
+3. Požadavky z HTTPS na HTTP (z bezpečného protokolu na méně bezpečný).
 
-Unlike the `referrer` option that allows to set the exact `Referer` value, `referrerPolicy` tells the browser general rules for each request type.
+Na rozdíl od volby `referrer`, která umožňuje hodnotu `Referer` přesně nastavit, `referrerPolicy` sděluje prohlížeči obecná pravidla pro všechny druhy požadavků.
 
-Possible values are described in the [Referrer Policy specification](https://w3c.github.io/webappsec-referrer-policy/):
+Možné hodnoty jsou popsány ve [specifikaci politiky refereru](https://w3c.github.io/webappsec-referrer-policy/):
 
-- **`"strict-origin-when-cross-origin"`** -- the default value: for same-origin send the full `Referer`, for cross-origin send only the origin, unless it's HTTPS→HTTP request, then send nothing.
-- **`"no-referrer-when-downgrade"`** -- full `Referer` is always sent, unless we send a request from HTTPS to HTTP (to the less secure protocol).
-- **`"no-referrer"`** -- never send `Referer`.
-- **`"origin"`** -- only send the origin in `Referer`, not the full page URL, e.g. only `http://site.com` instead of `http://site.com/path`.
-- **`"origin-when-cross-origin"`** -- send the full `Referer` to the same origin, but only the origin part for cross-origin requests (as above).
-- **`"same-origin"`** -- send the full `Referer` to the same origin, but no `Referer` for cross-origin requests.
-- **`"strict-origin"`** -- send only the origin, not the `Referer` for HTTPS→HTTP requests.
-- **`"unsafe-url"`** -- always send the full url in `Referer`, even for HTTPS→HTTP requests.
+- **`"strict-origin-when-cross-origin"`** -- standardní hodnota: na stejný původ se posílá úplný `Referer`, na jiný původ se posílá jen původ, při požadavku HTTPS→HTTP se neposílá nic.
+- **`"no-referrer-when-downgrade"`** -- vždy se posílá úplný `Referer` s výjimkou požadavků z HTTPS na HTTP (na méně bezpečný protokol).
+- **`"no-referrer"`** -- `Referer` se nikdy neposílá.
+- **`"origin"`** -- v `Referer` se posílá jen původ a ne celé URL stránky, např. jen `http://site.com` místo `http://site.com/path`.
+- **`"origin-when-cross-origin"`** -- na stejný původ se posílá úplný `Referer`, ale u požadavků jiného původu jen původ (stejně jako výše).
+- **`"same-origin"`** -- na stejný původ se posílá úplný `Referer`, ale u požadavků jiného původu se `Referer` neposílá.
+- **`"strict-origin"`** -- posílá se jen původ, u požadavků HTTPS→HTTP se `Referer` neposílá.
+- **`"unsafe-url"`** -- v `Referer` se vždy posílá celá URL, i u požadavků HTTPS→HTTP.
 
-Here's a table with all combinations:
+Následující tabulka obsahuje všechny kombinace:
 
-| Value | To same origin | To another origin | HTTPS→HTTP |
+| Hodnota | Na stejný původ | Na jiný původ | HTTPS→HTTP |
 |-------|----------------|-------------------|------------|
 | `"no-referrer"` | - | - | - |
-| `"no-referrer-when-downgrade"` | full | full | - |
-| `"origin"` | origin | origin | origin |
-| `"origin-when-cross-origin"` | full | origin | origin |
-| `"same-origin"` | full | - | - |
-| `"strict-origin"` | origin | origin | - |
-| `"strict-origin-when-cross-origin"` or `""` (default) | full | origin | - |
-| `"unsafe-url"` | full | full | full |
+| `"no-referrer-when-downgrade"` | úplný | úplný | - |
+| `"origin"` | původ | původ | původ |
+| `"origin-when-cross-origin"` | úplný | původ | původ |
+| `"same-origin"` | úplný | - | - |
+| `"strict-origin"` | původ | původ | - |
+| `"strict-origin-when-cross-origin"` nebo `""` (standardně) | úplný | původ | - |
+| `"unsafe-url"` | úplný | úplný | úplný |
 
-Let's say we have an admin zone with a URL structure that shouldn't be known from outside of the site.
+Řekněme, že máme administrátorskou zónu se strukturou URL, která by neměla být vidět mimo toto sídlo.
 
-If we send a `fetch`, then by default it always sends the `Referer` header with the full url of our page (except when we request from HTTPS to HTTP, then no `Referer`).
+Jestliže pošleme `fetch`, standardně pošle vždy hlavičku `Referer` s celou URL naší stránky (kromě požadavků z HTTPS na HTTP, které hlavičku `Referer` nebudou obsahovat).
 
-E.g. `Referer: https://javascript.info/admin/secret/paths`.
+Například `Referer: https://javascript.info/admin/secret/paths`.
 
-If we'd like other websites know only the origin part, not the URL-path, we can set the option:
+Pokud bychom chtěli, aby jiná webová sídla znala jen původ a ne celou URL cestu, můžeme nastavit:
 
 ```js
 fetch('https://another.com/page', {
@@ -122,66 +122,66 @@ fetch('https://another.com/page', {
 });
 ```
 
-We can put it to all `fetch` calls, maybe integrate into JavaScript library of our project that does all requests and uses `fetch` inside.
+Můžeme to umístit do všech volání `fetch` nebo třeba integrovat do JavaScriptové knihovny našeho projektu, která provádí všechny požadavky, a použít `fetch` v ní.
 
-Its only difference compared to the default behavior is that for requests to another origin `fetch` sends only the origin part of the URL (e.g. `https://javascript.info`, without path). For requests to our origin we still get the full `Referer` (maybe useful for debugging purposes).
+Jediný rozdíl oproti standardnímu chování spočívá v tom, že na požadavky jiného původu `fetch` posílá jen částečnou URL obsahující jen původ (např. `https://javascript.info` bez cesty). Pro požadavky na náš původ budeme stále mít úplný `Referer` (což může být užitečné pro účely ladění).
 
-```smart header="Referrer policy is not only for `fetch`"
-Referrer policy, described in the [specification](https://w3c.github.io/webappsec-referrer-policy/), is not just for `fetch`, but more global.
+```smart header="Politika refereru není jen pro `fetch`"
+Politika refereru, popsaná ve [specifikaci](https://w3c.github.io/webappsec-referrer-policy/), neslouží jen pro metodu `fetch`, ale je globálnější.
 
-In particular, it's possible to set the default policy for the whole page using the `Referrer-Policy` HTTP header, or per-link, with `<a rel="noreferrer">`.
+Konkrétně je možné nastavit standardní politiku pro celou stránku pomocí HTTP hlavičky `Referrer-Policy` nebo v jednotlivých odkazech pomocí `<a rel="noreferrer">`.
 ```
 
 ## mode
 
-The `mode` option is a safe-guard that prevents occasional cross-origin requests:
+Volba `mode` je zabezpečení, které brání nechtěným požadavkům jiného původu:
 
-- **`"cors"`** -- the default, cross-origin requests are allowed, as described in <info:fetch-crossorigin>,
-- **`"same-origin"`** -- cross-origin requests are forbidden,
-- **`"no-cors"`** -- only safe cross-origin requests are allowed.
+- **`"cors"`** -- standardně, požadavky jiného původu jsou povoleny, jak je popsáno v kapitole <info:fetch-crossorigin>,
+- **`"same-origin"`** -- požadavky jiného původu jsou zakázány,
+- **`"no-cors"`** -- jsou povoleny jen bezpečné požadavky jiného původu.
 
-This option may be useful when the URL for `fetch` comes from a 3rd-party, and we want a "power off switch" to limit cross-origin capabilities.
+Tato volba může být užitečná, když URL pro `fetch` pochází od třetí strany a my bychom chtěli „vypínač“, který omezí možnosti posílání požadavků jiného původu.
 
 ## credentials
 
-The `credentials` option specifies whether `fetch` should send cookies and HTTP-Authorization headers with the request.
+Volba `credentials` specifikuje, zda má `fetch` v požadavku posílat cookies a hlavičky pro HTTP autorizaci.
 
-- **`"same-origin"`** -- the default, don't send for cross-origin requests,
-- **`"include"`** -- always send, requires `Access-Control-Allow-Credentials` from cross-origin server in order for JavaScript to access the response, that was covered in the chapter <info:fetch-crossorigin>,
-- **`"omit"`** -- never send, even for same-origin requests.
+- **`"same-origin"`** -- standardně, neposílají se v požadavcích jiného původu,
+- **`"include"`** -- vždy se posílají, od serveru jiného původu vyžaduje `Access-Control-Allow-Credentials`, aby JavaScript mohl přistupovat k odpovědi, bylo to vysvětleno v kapitole <info:fetch-crossorigin>,
+- **`"omit"`** -- nikdy se neposílají, ani v požadavcích stejného původu.
 
 ## cache
 
-By default, `fetch` requests make use of standard HTTP-caching. That is, it respects the `Expires` and `Cache-Control` headers, sends `If-Modified-Since` and so on. Just like regular HTTP-requests do.
+Standardně požadavky `fetch` využívání standardní HTTP mezipaměť. To znamená, že respektují hlavičky `Expires` a `Cache-Control`, posílají `If-Modified-Since` a podobně, stejně jako běžné HTTP požadavky.
 
-The `cache` options allows to ignore HTTP-cache or fine-tune its usage:
+Volba `cache` umožňuje HTTP mezipaměť ignorovat nebo vyladit její používání:
 
-- **`"default"`** -- `fetch` uses standard HTTP-cache rules and headers,
-- **`"no-store"`** -- totally ignore HTTP-cache, this mode becomes the default if we set a header `If-Modified-Since`, `If-None-Match`, `If-Unmodified-Since`, `If-Match`, or `If-Range`,
-- **`"reload"`** -- don't take the result from HTTP-cache (if any), but populate the cache with the response (if the response headers permit this action),
-- **`"no-cache"`** -- create a conditional request if there is a cached response, and a normal request otherwise. Populate HTTP-cache with the response,
-- **`"force-cache"`** -- use a response from HTTP-cache, even if it's stale. If there's no response in HTTP-cache, make a regular HTTP-request, behave normally,
-- **`"only-if-cached"`** -- use a response from HTTP-cache, even if it's stale. If there's no response in HTTP-cache, then error. Only works when `mode` is `"same-origin"`.
+- **`"default"`** -- `fetch` používá standardní pravidla a hlavičky pro HTTP mezipaměť,
+- **`"no-store"`** -- HTTP mezipaměť se zcela ignoruje, tento režim se stane standardním, jestliže nastavíme hlavičku `If-Modified-Since`, `If-None-Match`, `If-Unmodified-Since`, `If-Match` nebo `If-Range`,
+- **`"reload"`** -- nepřebírá výsledek z HTTP mezipaměti (pokud tam je), ale umístí do mezipaměti odpověď (pokud hlavičky odpovědi tuto akci povolí),
+- **`"no-cache"`** -- pokud je odpověď v mezipaměti, vytvoří podmíněný požadavek, jinak vytvoří běžný požadavek. Umístí odpověď do HTTP mezipaměti,
+- **`"force-cache"`** -- použije odpověď z HTTP mezipaměti, i když je stará. Pokud v HTTP mezipaměti není odpověď, vytvoří běžný HTTP požadavek a chová se jako obvykle,
+- **`"only-if-cached"`** -- použije odpověď z HTTP mezipaměti, i když je stará. Pokud v HTTP mezipaměti není odpověď, nastane chyba. Funguje jen tehdy, když je `mode` nastaven na `"same-origin"`.
 
 ## redirect
 
-Normally, `fetch` transparently follows HTTP-redirects, like 301, 302 etc.
+Za normálních okolností `fetch` průhledně následuje HTTP přesměrování, např. 301, 302 atd.
 
-The `redirect` option allows to change that:
+Volba `redirect` to umožňuje změnit:
 
-- **`"follow"`** -- the default, follow HTTP-redirects,
-- **`"error"`** -- error in case of HTTP-redirect,
-- **`"manual"`** -- allows to process HTTP-redirects manually. In case of redirect, we'll get a special response object, with `response.type="opaqueredirect"` and zeroed/empty status and most other properies.
+- **`"follow"`** -- standardní, HTTP přesměrování je následováno,
+- **`"error"`** -- v případě HTTP přesměrování nastane chyba,
+- **`"manual"`** -- umožňuje zpracovat HTTP přesměrování ručně. V případě přesměrování obdržíme speciální objekt odpovědi, který obsahuje `odpověď.type="opaqueredirect"` a nulový nebo prázdný status a většinu dalších vlastností.
 
 ## integrity
 
-The `integrity` option allows to check if the response matches the known-ahead checksum.
+Volba `integrity` umožňuje zkontrolovat, zda odpověď odpovídá předem známému kontrolnímu součtu.
 
-As described in the [specification](https://w3c.github.io/webappsec-subresource-integrity/), supported hash-functions are SHA-256, SHA-384, and SHA-512, there might be others depending on the browser.
+Jak je popsáno ve [specifikaci](https://w3c.github.io/webappsec-subresource-integrity/), podporované hashovací funkce jsou SHA-256, SHA-384 a SHA-512. V závislosti na prohlížeči mohou být i další.
 
-For example, we're downloading a file, and we know that its SHA-256 checksum is "abcdef" (a real checksum is longer, of course).
+Například stahujeme soubor a víme, že jeho kontrolní součet SHA-256 je „abcdef“ (skutečný kontrolní součet by samozřejmě byl delší).
 
-We can put it in the `integrity` option, like this:
+Můžeme jej umístit do volby `integrity` následovně:
 
 ```js
 fetch('http://site.com/file', {
@@ -189,17 +189,17 @@ fetch('http://site.com/file', {
 });
 ```
 
-Then `fetch` will calculate SHA-256 on its own and compare it with our string. In case of a mismatch, an error is triggered.
+Pak `fetch` vypočítá SHA-256 sama o sobě a porovná ji s naším řetězcem. V případě neshody nastane chyba.
 
 ## keepalive
 
-The `keepalive` option indicates that the request may "outlive" the webpage that initiated it.
+Volba `keepalive` oznamuje, že požadavek může „přežít“ webovou stránku, která jej vyvolala.
 
-For example, we gather statistics on how the current visitor uses our page (mouse clicks, page fragments he views), to analyze and improve the user experience.
+Například shromažďujeme statistiku o tom, jak aktuální návštěvník využívá naši stránku (jak kliká myší, které části stránky si zobrazuje), abychom uživatelské zkušenosti analyzovali a vylepšovali.
 
-When the visitor leaves our page -- we'd like to save the data to our server.
+Když návštěvník naši stránku opustí, chtěli bychom uložit data na server.
 
-We can use the `window.onunload` event for that:
+Můžeme k tomu využít událost `window.onunload`:
 
 ```js run
 window.onunload = function() {
@@ -213,12 +213,12 @@ window.onunload = function() {
 };
 ```
 
-Normally, when a document is unloaded, all associated network requests are aborted. But the `keepalive` option tells the browser to perform the request in the background, even after it leaves the page. So this option is essential for our request to succeed.
+Za normálních okolností, když je dokument odstraněn, všechny síťové požadavky k němu příslušející jsou zastaveny. Avšak volba `keepalive` říká prohlížeči, aby provedl požadavek v pozadí, i když návštěvník opustil stránku. Tato volba je tedy pro úspěch našeho požadavku klíčová.
 
-It has a few limitations:
+Má několik omezení:
 
-- We can't send megabytes: the body limit for `keepalive` requests is 64KB.
-    - If we need to gather a lot of statistics about the visit, we should send it out regularly in packets, so that there won't be a lot left for the last `onunload` request.
-    - This limit applies to all `keepalive` requests together. In other words, we can perform multiple `keepalive` requests in parallel, but the sum of their body lengths should not exceed 64KB.
-- We can't handle the server response if the document is unloaded. So in our example `fetch` will succeed due to `keepalive`, but subsequent functions won't work.
-    - In most cases, such as sending out statistics, it's not a problem, as the server just accepts the data and usually sends an empty response to such requests.
+- Nemůžeme posílat megabyty dat: velikost těla u požadavků s `keepalive` je omezena na 64 KB.
+    - Pokud potřebujeme shromažďovat velké množství statistických dat o návštěvě, měli bychom je odesílat pravidelně v paketech, aby jich na poslední požadavek `onunload` nezbylo příliš mnoho.
+    - Tento limit platí pro všechny požadavky s `keepalive` dohromady. Jinými slovy, můžeme provádět více požadavků s `keepalive` současně, ale součet délek jejich těl by neměl překročit 64 KB.
+- Pokud je dokument odstraněn, nemůžeme zpracovat odpověď serveru. V našem příkladu tedy `fetch` díky `keepalive` uspěje, ale další funkce již nebudou fungovat.
+    - Ve většině případů, například při odesílání statistik, to není problém, jelikož server jenom přijme data a obvykle na takové požadavky odešle prázdnou odpověď.

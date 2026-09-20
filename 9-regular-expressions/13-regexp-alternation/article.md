@@ -1,70 +1,70 @@
-# Alternation (OR) |
+# Alternace (NEBO) |
 
-Alternation is the term in regular expression that is actually a simple "OR".
+Alternace je v regulárních výrazech pojem, který ve skutečnosti znamená jednoduše „NEBO“.
 
-In a regular expression it is denoted with a vertical line character `pattern:|`.
+V regulárním výrazu je označován znakem svislé čáry `pattern:|`.
 
-For instance, we need to find programming languages: HTML, PHP, Java or JavaScript.
+Například potřebujeme najít názvy programovacích jazyků: HTML, PHP, Java nebo JavaScript.
 
-The corresponding regexp: `pattern:html|php|java(script)?`.
+Odpovídající regulární výraz: `pattern:html|php|java(script)?`.
 
-A usage example:
+Příklad použití:
 
 ```js run
-let regexp = /html|php|css|java(script)?/gi;
+let rv = /html|php|css|java(script)?/gi;
 
-let str = "First HTML appeared, then CSS, then JavaScript";
+let řetězec = "Napřed se objevil HTML, pak CSS, pak JavaScript";
 
-alert( str.match(regexp) ); // 'HTML', 'CSS', 'JavaScript'
+alert( řetězec.match(rv) ); // 'HTML', 'CSS', 'JavaScript'
 ```
 
-We already saw a similar thing -- square brackets. They allow to choose between multiple characters, for instance `pattern:gr[ae]y` matches `match:gray` or `match:grey`.
+Už jsme viděli něco podobného -- hranaté závorky. Ty nám umožňují výběr z několika znaků, například `pattern:gr[ae]y` najde `match:gray` nebo `match:grey`.
 
-Square brackets allow only characters or character classes. Alternation allows any expressions. A regexp `pattern:A|B|C` means one of expressions `A`, `B` or `C`.
+Hranaté závorky umožňují jen znaky nebo znakové třídy. Alternace umožňuje libovolné výrazy. Regulární výraz `pattern:A|B|C` znamená jeden z výrazů `A`, `B` nebo `C`.
 
-For instance:
+Příklad:
 
-- `pattern:gr(a|e)y` means exactly the same as `pattern:gr[ae]y`.
-- `pattern:gra|ey` means `match:gra` or `match:ey`.
+- `pattern:gr(a|e)y` znamená přesně totéž jako `pattern:gr[ae]y`.
+- `pattern:gra|ey` znamená `match:gra` nebo `match:ey`.
 
-To apply alternation to a chosen part of the pattern, we can enclose it in parentheses:
-- `pattern:I love HTML|CSS` matches `match:I love HTML` or `match:CSS`.
-- `pattern:I love (HTML|CSS)` matches `match:I love HTML` or `match:I love CSS`.
+Abychom aplikovali alternaci na zvolenou část vzoru, můžeme ji uzavřít do závorek:
+- `pattern:Mám rád HTML|CSS` znamená `match:Mám rád HTML` nebo `match:CSS`.
+- `pattern:Mám rád (HTML|CSS)` znamená `match:Mám rád HTML` nebo `match:Mám rád CSS`.
 
-## Example: regexp for time
+## Příklad: regulární výraz pro čas
 
-In previous articles there was a task to build a regexp for searching time in the form `hh:mm`, for instance `12:00`. But a simple `pattern:\d\d:\d\d` is too vague. It accepts `25:99` as the time (as 99 minutes match the pattern, but that time is invalid).
+V předchozích článcích jsme měli úlohu na vytvoření RV pro hledání času ve tvaru `hh:mm`, například `12:00`. Jednoduchý výraz `pattern:\d\d:\d\d` je však příliš neurčitý. Přijme jako čas `25:99` (protože 99 minut odpovídá vzoru, ale čas je neplatný).
 
-How can we make a better pattern?
+Jak můžeme vytvořit lepší vzor?
 
-We can use more careful matching. First, the hours:
+Můžeme použít pečlivější porovnávání. Napřed hodiny:
 
-- If the first digit is `0` or `1`, then the next digit can be any: `pattern:[01]\d`.
-- Otherwise, if the first digit is `2`, then the next must be `pattern:[0-3]`.
-- (no other first digit is allowed)
+- Pokud je první číslice `0` nebo `1`, pak následující číslice může být libovolná: `pattern:[01]\d`.
+- Jinak pokud je první číslice `2`, pak následující musí být `pattern:[0-3]`.
+- (žádná jiná první číslice není povolena)
 
-We can write both variants in a regexp using alternation: `pattern:[01]\d|2[0-3]`.
+V regulárním výrazu můžeme zapsat obě varianty pomocí alternace: `pattern:[01]\d|2[0-3]`.
 
-Next, minutes must be from `00` to `59`. In the regular expression language that can be written as `pattern:[0-5]\d`: the first digit `0-5`, and then any digit.
+Dále minuty musejí být od `00` do `59`. V jazyce regulárních výrazů to můžeme zapsat jako `pattern:[0-5]\d`: první číslice `0-5` a pak libovolná.
 
-If we glue hours and minutes together, we get the pattern: `pattern:[01]\d|2[0-3]:[0-5]\d`.
+Když spojíme hodiny a minuty dohromady, získáme vzor: `pattern:[01]\d|2[0-3]:[0-5]\d`.
 
-We're almost done, but there's a problem. The alternation `pattern:|` now happens to be between `pattern:[01]\d` and `pattern:2[0-3]:[0-5]\d`.
+Jsme téměř hotovi, ale je tu problém. Alternace `pattern:|` se nyní děje mezi `pattern:[01]\d` a `pattern:2[0-3]:[0-5]\d`.
 
-That is: minutes are added to the second alternation variant, here's a clear picture:
+To znamená, že minuty jsou přidány jako druhá varianta alternace, zde je to jasně vidět:
 
 ```
 [01]\d  |  2[0-3]:[0-5]\d
 ```
 
-That pattern looks for `pattern:[01]\d` or `pattern:2[0-3]:[0-5]\d`.
+Tento vzor hledá `pattern:[01]\d` nebo `pattern:2[0-3]:[0-5]\d`.
 
-But that's wrong, the alternation should only be used in the "hours" part of the regular expression, to allow `pattern:[01]\d` OR `pattern:2[0-3]`. Let's correct that by enclosing "hours" into parentheses: `pattern:([01]\d|2[0-3]):[0-5]\d`.
+To je však špatně, alternace by měla být použita jen v „hodinové“ části regulárního výrazu, aby umožňovala `pattern:[01]\d` NEBO `pattern:2[0-3]`. Opravme to uzavřením „hodin“ do závorek: `pattern:([01]\d|2[0-3]):[0-5]\d`.
 
-The final solution:
+Konečné řešení:
 
 ```js run
-let regexp = /([01]\d|2[0-3]):[0-5]\d/g;
+let rv = /([01]\d|2[0-3]):[0-5]\d/g;
 
-alert("00:00 10:10 23:59 25:99 1:2".match(regexp)); // 00:00,10:10,23:59
+alert("00:00 10:10 23:59 25:99 1:2".match(rv)); // 00:00,10:10,23:59
 ```

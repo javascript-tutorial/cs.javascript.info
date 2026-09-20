@@ -1,31 +1,31 @@
-We need to look for `#` followed by 6 hexadecimal characters.
+Potřebujeme najít `#` následované 6 hexadecimálními znaky.
 
-A hexadecimal character can be described as `pattern:[0-9a-fA-F]`. Or if we use the `pattern:i` flag, then just  `pattern:[0-9a-f]`.
+Hexadecimální znak můžeme popsat jako `pattern:[0-9a-fA-F]`. Nebo když použijeme příznak `pattern:i`, stačí nám `pattern:[0-9a-f]`.
 
-Then we can look for 6 of them using the quantifier `pattern:{6}`.
+Pak jich můžeme najít 6 pomocí kvantifikátoru `pattern:{6}`.
 
-As a result, we have the regexp: `pattern:/#[a-f0-9]{6}/gi`.
+Výsledkem bude regulární výraz `pattern:/#[a-f0-9]{6}/gi`.
 
 ```js run
-let regexp = /#[a-f0-9]{6}/gi;
+let rv = /#[a-f0-9]{6}/gi;
 
-let str = "color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2"
+let řetězec = "color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2"
 
-alert( str.match(regexp) );  // #121212,#AA00ef
+alert( řetězec.match(rv) );  // #121212,#AA00ef
 ```
 
-The problem is that it finds the color in longer sequences:
+Problém je, že nalezne barvu i v delších posloupnostech:
 
 ```js run
 alert( "#12345678".match( /#[a-f0-9]{6}/gi ) ) // #123456
 ```
 
-To fix that, we can add `pattern:\b` to the end:
+Abychom to opravili, můžeme na konec přidat `pattern:\b`:
 
 ```js run
-// color
+// barva
 alert( "#123456".match( /#[a-f0-9]{6}\b/gi ) ); // #123456
 
-// not a color
+// toto není barva
 alert( "#12345678".match( /#[a-f0-9]{6}\b/gi ) ); // null
 ```

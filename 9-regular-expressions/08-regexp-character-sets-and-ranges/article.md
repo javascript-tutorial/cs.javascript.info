@@ -1,169 +1,169 @@
-# Sets and ranges [...]
+# Množiny a rozsahy [...]
 
-Several characters or character classes inside square brackets `[…]` mean to "search for any character among given".
+Více znaků nebo znakových tříd uvnitř hranatých závorek `[…]` znamená „najdi kterýkoli z uvedených znaků“.
 
-## Sets
+## Množiny
 
-For instance, `pattern:[eao]` means any of the 3 characters: `'a'`, `'e'`, or `'o'`.
+Například `pattern:[eao]` znamená kterýkoli z těchto 3 znaků: `'a'`, `'e'` nebo `'o'`.
 
-That's called a *set*. Sets can be used in a regexp along with regular characters:
+To se nazývá *množina*. Množiny lze používat v regulárním výrazu spolu s běžnými znaky:
 
 ```js run
-// find [t or m], and then "op"
+// najdi [t nebo m] a pak "op"
 alert( "Mop top".match(/[tm]op/gi) ); // "Mop", "top"
 ```
 
-Please note that although there are multiple characters in the set, they correspond to exactly one character in the match.
+Prosíme všimněte si, že ačkoli je v množině několik znaků, ve shodě jim odpovídá právě jeden znak.
 
-So the example below gives no matches:
+Následující příklad tedy nenajde žádnou shodu:
 
 ```js run
-// find "V", then [o or i], then "la"
-alert( "Voila".match(/V[oi]la/) ); // null, no matches
+// najdi "V", pak [o nebo i], pak "la"
+alert( "Voila".match(/V[oi]la/) ); // null, žádná shoda
 ```
 
-The pattern searches for:
+Vzor hledá:
 
 - `pattern:V`,
-- then *one* of the letters `pattern:[oi]`,
-- then `pattern:la`.
+- pak *jedno* z písmen `pattern:[oi]`,
+- pak `pattern:la`.
 
-So there would be a match for `match:Vola` or `match:Vila`.
+Shoda tedy nastane pro `match:Vola` nebo `match:Vila`.
 
-## Ranges
+## Rozsahy
 
-Square brackets may also contain *character ranges*.
+Hranaté závorky mohou obsahovat i *rozsahy znaků*.
 
-For instance, `pattern:[a-z]` is a character in range from `a` to `z`, and `pattern:[0-5]` is a digit from `0` to `5`.
+Například `pattern:[a-z]` znamená libovolný znak v rozsahu od `a` do `z` a `pattern:[0-5]` znamená číslici od `0` do `5`.
 
-In the example below we're searching for `"x"` followed by two digits or letters from `A` to `F`:
-
-```js run
-alert( "Exception 0xAF".match(/x[0-9A-F][0-9A-F]/g) ); // xAF
-```
-
-Here `pattern:[0-9A-F]` has two ranges: it searches for a character that is either a digit from `0` to `9` or a letter from `A` to `F`.
-
-If we'd like to look for lowercase letters as well, we can add the range `a-f`: `pattern:[0-9A-Fa-f]`. Or add the flag `pattern:i`.
-
-We can also use character classes inside `[…]`.
-
-For instance, if we'd like to look for a wordly character `pattern:\w` or a hyphen `pattern:-`, then the set is `pattern:[\w-]`.
-
-Combining multiple classes is also possible, e.g. `pattern:[\s\d]` means "a space character or a digit".
-
-```smart header="Character classes are shorthands for certain character sets"
-For instance:
-
-- **\d** -- is the same as `pattern:[0-9]`,
-- **\w** -- is the same as `pattern:[a-zA-Z0-9_]`,
-- **\s** -- is the same as `pattern:[\t\n\v\f\r ]`, plus few other rare Unicode space characters.
-```
-
-### Example: multi-language \w
-
-As the character class `pattern:\w` is a shorthand for `pattern:[a-zA-Z0-9_]`, it can't find Chinese hieroglyphs, Cyrillic letters, etc.
-
-We can write a more universal pattern, that looks for wordly characters in any language. That's easy with Unicode properties: `pattern:[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]`.
-
-Let's decipher it. Similar to `pattern:\w`, we're making a set of our own that includes characters with following Unicode properties:
-
-- `Alphabetic` (`Alpha`) - for letters,
-- `Mark` (`M`) - for accents,
-- `Decimal_Number` (`Nd`) - for digits,
-- `Connector_Punctuation` (`Pc`) - for the underscore `'_'` and similar characters,
-- `Join_Control` (`Join_C`) - two special codes `200c` and `200d`, used in ligatures, e.g. in Arabic.
-
-An example of use:
+V následujícím příkladu hledáme `"x"`, po němž následují dvě číslice nebo písmena od `A` do `F`:
 
 ```js run
-let regexp = /[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]/gu;
-
-let str = `Hi 你好 12`;
-
-// finds all letters and digits:
-alert( str.match(regexp) ); // H,i,你,好,1,2
+alert( "Výjimka 0xAF".match(/x[0-9A-F][0-9A-F]/g) ); // xAF
 ```
 
-Of course, we can edit this pattern: add Unicode properties or remove them. Unicode properties are covered in more details in the article <info:regexp-unicode>.
+Zde `pattern:[0-9A-F]` obsahuje dva rozsahy: najde znak, kterým je buď číslice od `0` do `9`, nebo písmeno od `A` do `F`.
 
-```warn header="Unicode properties aren't supported in IE"
-Unicode properties `pattern:p{…}` are not implemented in IE. If we really need them, we can use library [XRegExp](https://xregexp.com/).
+Kdybychom chtěli hledat i malá písmena, mohli bychom přidat rozsah `a-f`: `pattern:[0-9A-Fa-f]`. Nebo uvést příznak `pattern:i`.
 
-Or just use ranges of characters in a language that interests us, e.g.  `pattern:[а-я]` for Cyrillic letters.
+Uvnitř `[…]` můžeme používat i znakové třídy.
+
+Kdybychom například chtěli hledat slovní znak `pattern:\w` nebo pomlčku `pattern:-`, pak by množina byla `pattern:[\w-]`.
+
+Je možné i kombinovat více tříd, např. `pattern:[\s\d]` znamená „mezerový znak nebo číslice“.
+
+```smart header="Znakové třídy jsou zkratky určitých množin znaků"
+Například:
+
+- **\d** -- je totéž jako `pattern:[0-9]`,
+- **\w** -- je totéž jako `pattern:[a-zA-Z0-9_]`,
+- **\s** -- je totéž jako `pattern:[\t\n\v\f\r ]` plus několik dalších vzácných mezerových znaků z Unicode.
 ```
 
-## Excluding ranges
+### Příklad: vícejazyčné \w
 
-Besides normal ranges, there are "excluding" ranges that look like `pattern:[^…]`.
+Protože znaková třída `pattern:\w` je zkratkou pro `pattern:[a-zA-Z0-9_]`, nedokáže najít čínské hieroglyfy, písmena kyrilice a podobně.
 
-They are denoted by a caret character `^` at the start and match any character *except the given ones*.
+Můžeme si napsat univerzálnější vzor, který bude hledat slovní znaky jakéhokoli jazyka. S vlastnostmi z Unicode je to snadné: `pattern:[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]`.
 
-For instance:
+Rozšifrujme to. Vytváříme si vlastní množinu podobnou `pattern:\w`, která obsahuje znaky s následujícími vlastnostmi v Unicode:
 
-- `pattern:[^aeyo]` -- any character except  `'a'`, `'e'`, `'y'` or `'o'`.
-- `pattern:[^0-9]` -- any character except a digit, the same as `pattern:\D`.
-- `pattern:[^\s]` -- any non-space character, same as `\S`.
+- `Alphabetic` (`Alpha`) - písmena,
+- `Mark` (`M`) - diakritická znaménka,
+- `Decimal_Number` (`Nd`) - číslice,
+- `Connector_Punctuation` (`Pc`) - podtržítko `'_'` a podobné znaky,
+- `Join_Control` (`Join_C`) - dva speciální kódy `200c` a `200d` používané v ligaturách, např. v arabštině.
 
-The example below looks for any characters except letters, digits and spaces:
+Příklad použití:
 
 ```js run
-alert( "alice15@gmail.com".match(/[^\d\sA-Z]/gi) ); // @ and .
+let rv = /[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]/gu;
+
+let řetězec = `Čau 你好 12`;
+
+// najde všechna písmena a číslice:
+alert( řetězec.match(rv) ); // Č,a,u,你,好,1,2
 ```
 
-## Escaping in […]
+Tento vzor můžeme samozřejmě měnit: přidávat nebo odstraňovat vlastnosti z Unicode. Tyto vlastnosti jsou podrobněji probrány v článku <info:regexp-unicode>.
 
-Usually when we want to find exactly a special character, we need to escape it like `pattern:\.`. And if we need a backslash, then we use `pattern:\\`, and so on.
+```warn header="Vlastnosti z Unicode nejsou podporovány v IE"
+Vlastnosti z Unicode `pattern:p{…}` nejsou implementovány v IE. Pokud je opravdu potřebujeme, můžeme použít knihovnu [XRegExp](https://xregexp.com/).
 
-In square brackets we can use the vast majority of special characters without escaping:
+Nebo jen použít rozsahy znaků v jazyce, který nás zajímá, např. `pattern:[а-я]` pro písmena kyrilice.
+```
 
-- Symbols `pattern:. + ( )` never need escaping.
-- A hyphen `pattern:-` is not escaped in the beginning or the end (where it does not define a range).
-- A caret `pattern:^` is only escaped in the beginning (where it means exclusion).
-- The closing square bracket `pattern:]` is always escaped (if we need to look for that symbol).
+## Vylučovací rozsahy
 
-In other words, all special characters are allowed without escaping, except when they mean something for square brackets.
+Kromě normálních rozsahů existují také „vylučovací“ rozsahy, které vypadají takto: `pattern:[^…]`.
 
-A dot `.` inside square brackets means just a dot. The pattern `pattern:[.,]` would look for one of characters: either a dot or a comma.
+Jsou na začátku označeny znakem stříšky `^` a odpovídá jim každý znak *kromě uvedených*.
 
-In the example below the regexp `pattern:[-().^+]` looks for one of the characters `-().^+`:
+Například:
+
+- `pattern:[^aeyo]` -- jakýkoli znak kromě  `'a'`, `'e'`, `'y'` nebo `'o'`.
+- `pattern:[^0-9]` -- jakýkoli znak kromě číslice, totéž jako `pattern:\D`.
+- `pattern:[^\s]` -- jakýkoli nemezerový znak, totéž jako `\S`.
+
+Následující příklad hledá všechny znaky kromě písmen, číslic a mezer:
 
 ```js run
-// No need to escape
-let regexp = /[-().^+]/g;
-
-alert( "1 + 2 - 3".match(regexp) ); // Matches +, -
+alert( "alice15@gmail.com".match(/[^\d\sA-Z]/gi) ); // @ a .
 ```
 
-...But if you decide to escape them "just in case", then there would be no harm:
+## Únikové znaky v […]
+
+Když chceme najít přímo speciální znak, obvykle před ním musíme uvést únikový znak `pattern:\.`. Pokud potřebujeme zpětné lomítko, používáme `pattern:\\` a podobně.
+
+V hranatých závorkách můžeme používat převážnou většinu speciálních znaků bez únikového znaku:
+
+- Symboly `pattern:. + ( )` nikdy nepotřebují únikový znak.
+- Pomlčka `pattern:-` nepotřebuje únikový znak na začátku a na konci (kde nedefinuje rozsah).
+- Stříška `pattern:^` potřebuje únikový znak jen na začátku (kde znamená vyloučení).
+- Uzavírací hranatá závorka `pattern:]` potřebuje únikový znak vždy (pokud ji potřebujeme hledat).
+
+Jinými slovy, všechny speciální znaky jsou povoleny bez únikového znaku kromě situace, kdy mají v hranatých závorkách nějaký zvláštní význam.
+
+Tečka `.` uvnitř hranatých závorek znamená skutečnou tečku. Vzor `pattern:[.,]` najde jeden z uvedených znaků: buď tečku, nebo čárku.
+
+V následujícím příkladu RV `pattern:[-().^+]` hledá jeden ze znaků `-().^+`:
 
 ```js run
-// Escaped everything
-let regexp = /[\-\(\)\.\^\+]/g;
+// Nepotřebujeme únikový znak
+let rv = /[-().^+]/g;
 
-alert( "1 + 2 - 3".match(regexp) ); // also works: +, -
+alert( "1 + 2 - 3".match(rv) ); // Najde +, -
 ```
 
-## Ranges and flag "u"
-
-If there are surrogate pairs in the set, flag `pattern:u` is required for them to work correctly.
-
-For instance, let's look for `pattern:[𝒳𝒴]` in the string `subject:𝒳`:
+...Když se však rozhodnete „pro všechny případy“ únikový znak uvést, ničemu tím neublížíte:
 
 ```js run
-alert( '𝒳'.match(/[𝒳𝒴]/) ); // shows a strange character, like [?]
-// (the search was performed incorrectly, half-character returned)
+// Únikový znak všude
+let rv = /[\-\(\)\.\^\+]/g;
+
+alert( "1 + 2 - 3".match(rv) ); // také to funguje: +, -
 ```
 
-The result is incorrect, because by default regular expressions "don't know" about surrogate pairs.
+## Rozsahy a příznak „u“
 
-The regular expression engine thinks that `[𝒳𝒴]` -- are not two, but four characters:
-1. left half of `𝒳` `(1)`,
-2. right half of `𝒳` `(2)`,
-3. left half of `𝒴` `(3)`,
-4. right half of `𝒴` `(4)`.
+Jestliže jsou v množině zástupné páry, je třeba uvést příznak `pattern:u`, aby fungovaly správně.
 
-We can see their codes like this:
+Podívejme se například na `pattern:[𝒳𝒴]` v řetězci `subject:𝒳`:
+
+```js run
+alert( '𝒳'.match(/[𝒳𝒴]/) ); // zobrazí podivný znak, např. [?]
+// (hledání bylo provedeno nesprávně, vrátila se polovina znaku)
+```
+
+Výsledek není správný, protože regulární výrazy standardně „neznají“ zástupné páry.
+
+Motor regulárních výrazů si myslí, že `[𝒳𝒴]` nejsou dva, ale čtyři znaky:
+1. levá polovina `𝒳` `(1)`,
+2. pravá polovina `𝒳` `(2)`,
+3. levá polovina `𝒴` `(3)`,
+4. pravá polovina `𝒴` `(4)`.
+
+Jejich kódy můžeme vidět následovně:
 
 ```js run
 for(let i=0; i<'𝒳𝒴'.length; i++) {
@@ -171,27 +171,27 @@ for(let i=0; i<'𝒳𝒴'.length; i++) {
 };
 ```
 
-So, the example above finds and shows the left half of `𝒳`.
+Výše uvedený příklad tedy najde a zobrazí levou polovinu znaku `𝒳`.
 
-If we add flag `pattern:u`, then the behavior will be correct:
+Jestliže přidáme příznak `pattern:u`, chování bude korektní:
 
 ```js run
 alert( '𝒳'.match(/[𝒳𝒴]/u) ); // 𝒳
 ```
 
-The similar situation occurs when looking for a range, such as `[𝒳-𝒴]`.
+Obdobná situace nastane, když budeme hledat rozsah, například `[𝒳-𝒴]`.
 
-If we forget to add flag `pattern:u`, there will be an error:
+Pokud zapomeneme uvést příznak `pattern:u`, nastane chyba:
 
 ```js run
 '𝒳'.match(/[𝒳-𝒴]/); // Error: Invalid regular expression
 ```
 
-The reason is that without flag `pattern:u` surrogate pairs are perceived as two characters, so `[𝒳-𝒴]` is interpreted as `[<55349><56499>-<55349><56500>]` (every surrogate pair is replaced with its codes). Now it's easy to see that the range `56499-55349` is invalid: its starting code `56499` is greater than the end `55349`. That's the formal reason for the error.
+Důvodem je, že bez příznaku `pattern:u` se zástupné páry považují za dva znaky, takže `[𝒳-𝒴]` je interpretováno jako `[<55349><56499>-<55349><56500>]` (každý zástupný pár je nahrazen svými kódy). Nyní jasně vidíme, proč je rozsah `56499-55349` neplatný: jeho počáteční kód `56499` je větší než koncový `55349`. To je formální příčina chyby.
 
-With the flag `pattern:u` the pattern works correctly:
+S příznakem `pattern:u` bude vzor fungovat správně:
 
 ```js run
-// look for characters from 𝒳 to 𝒵
+// hledá znaky od 𝒳 do 𝒵
 alert( '𝒴'.match(/[𝒳-𝒵]/u) ); // 𝒴
 ```

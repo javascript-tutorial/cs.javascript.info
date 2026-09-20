@@ -1,14 +1,14 @@
-# Find color in the format #abc or #abcdef
+# Najděte barvu ve formátu #abc nebo #abcdef
 
-Write a RegExp that matches colors in the format `#abc` or `#abcdef`. That is: `#` followed by 3 or 6 hexadecimal digits.
+Napište RV, který najde barvy ve formátu `#abc` nebo `#abcdef`. To znamená: `#` následované 3 nebo 6 hexadecimálními číslicemi.
 
-Usage example:
+Příklad použití:
 ```js
-let regexp = /your regexp/g;
+let rv = /váš RV/g;
 
-let str = "color: #3f3; background-color: #AA00ef; and: #abcd";
+let řetězec = "color: #3f3; background-color: #AA00ef; and: #abcd";
 
-alert( str.match(regexp) ); // #3f3 #AA00ef
+alert( řetězec.match(rv) ); // #3f3 #AA00ef
 ```
 
-P.S. This should be exactly 3 or 6 hex digits. Values with 4 digits, such as `#abcd`, should not match.
+P.S. Počet hexadecimálních číslic by měl být přesně 3 nebo 6. Hodnoty se 4 číslicemi, např. `#abcd`, by se neměly shodovat.

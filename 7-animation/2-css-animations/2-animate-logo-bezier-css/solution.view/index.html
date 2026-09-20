@@ -10,13 +10,13 @@
     }
   </style>
   <style>
-    #flyjet {
+    #letadlo {
       width: 40px;
       height: 24px;
       transition: all 3s cubic-bezier(0.25, 1.5, 0.75, 1.5);
     }
 
-    #flyjet.growing {
+    #letadlo.zvětšování {
       width: 400px;
       height: 240px;
     }
@@ -25,11 +25,11 @@
 
 <body>
 
-  <img id="flyjet" src="https://en.js.cx/clipart/flyjet.jpg">
+  <img id="letadlo" src="https://en.js.cx/clipart/flyjet.jpg">
 
   <script>
-    flyjet.onclick = function() {
-      flyjet.classList.add('growing');
+    letadlo.onclick = function() {
+      letadlo.classList.add('zvětšování');
     };
   </script>
 

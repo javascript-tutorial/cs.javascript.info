@@ -1,207 +1,205 @@
-# Bezier curve
+# Bézierovy křivky
 
-Bezier curves are used in computer graphics to draw shapes, for CSS animation and in many other places.
+Bézierovy křivky se používají v počítačové grafice ke kreslení tvarů, pro CSS animace a na mnoha dalších místech.
 
-They are a very simple thing, worth to study once and then feel comfortable in the world of vector graphics and advanced animations.
+Jsou velmi jednoduché. Stačí si je jednou prostudovat a pak se budete ve světě vektorové grafiky a pokročilých animací cítit jako doma.
 
-```smart header="Some theory, please"
-This article provides a theoretical, but very needed insight into what Bezier curves are, while [the next one](info:css-animations#bezier-curve) shows how we can use them for CSS animations.
+```smart header="Trochu teorie, prosím"
+Tento článek poskytuje teoretický, ale velmi potřebný náhled na to, co Bézierovy křivky jsou, zatímco [další](info:css-animations#bezier-curve) ukazuje, jak je můžeme využít pro CSS animace.
 
-Please take your time to read and understand the concept, it'll serve you well.
+Prosíme, udělejte si čas, abyste si ho přečetli a porozuměli konceptu. Dobře vám poslouží.
 ```
 
-## Control points
+## Řídící body
 
-A [bezier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve) is defined by control points.
+[Bézierova křivka](https://en.wikipedia.org/wiki/B%C3%A9zier_curve) je definována řídícími body.
 
-There may be 2, 3, 4 or more.
+Mohou být 2, 3, 4 nebo jich může být víc.
 
-For instance, two points curve:
+Například dvoubodová křivka:
 
 ![](bezier2.svg)
 
-Three points curve:
+Tříbodová křivka:
 
 ![](bezier3.svg)
 
-Four points curve:
+Čtyřbodová křivka:
 
 ![](bezier4.svg)
 
-If you look closely at these curves, you can immediately notice:
+Pokud se na tyto křivky pozorně podíváte, můžete si okamžitě všimnout:
 
-1. **Points are not always on curve.** That's perfectly normal, later we'll see how the curve is built.
-2. **The curve order equals the number of points minus one**.
-For two points we have a linear curve (that's a straight line), for three points -- quadratic curve (parabolic), for four points -- cubic curve.
-3. **A curve is always inside the [convex hull](https://en.wikipedia.org/wiki/Convex_hull) of control points:**
+1. **Body nejsou vždy na křivce.** To je naprosto v pořádku. Později uvidíme, jak je křivka vytvořena.
+2. **Řád křivky se rovná počtu bodů minus jedna.** Pro dva body máme lineární křivku (přímku), pro tři body kvadratickou křivku (parabolu), pro čtyři body kubickou křivku.
+3. **Křivka je vždy uvnitř [konvexního obalu](https://cs.wikipedia.org/wiki/Konvexn%C3%AD_obal) řídících bodů:**
 
     ![](bezier4-e.svg) ![](bezier3-e.svg)
 
-Because of that last property, in computer graphics it's possible to optimize intersection tests. If convex hulls do not intersect, then curves do not either. So checking for the convex hulls intersection first can give a very fast "no intersection" result. Checking the intersection of convex hulls is much easier, because they are rectangles, triangles and so on (see the picture above), much simpler figures than the curve.
+Díky této poslední vlastnosti je v počítačové grafice možné optimalizovat testy protínání. Pokud se konvexní obaly neprotínají, neprotínají se ani křivky. Prověření průniku konvexních obalů tedy může vydat velmi rychlou odpověď „křivky se neprotínají“. Prověřit průnik konvexních obalů je mnohem jednodušší, protože to jsou obdélníky, trojúhelníky a podobně (viz obrázek výše), mnohem jednodušší útvary než křivky.
 
-**The main value of Bezier curves for drawing -- by moving the points the curve is changing *in intuitively obvious way*.**
+**Hlavní výhodou Bézierových křivek pro kreslení je, že při posunu bodů se křivka mění *intuitivně zřejmým způsobem*.**
 
-Try to move control points using a mouse in the example below:
+V následujícím příkladu zkuste posunovat řídící body myší:
 
 [iframe src="demo.svg?nocpath=1&p=0,0,0.5,0,0.5,1,1,1" height=370]
 
-**As you can notice, the curve stretches along the tangential lines 1 -> 2 and 3 -> 4.**
+**Jak si můžete všimnout, křivka se táhne podél tangenciálních čar 1 -> 2 a 3 -> 4.**
 
-After some practice it becomes obvious how to place points to get the needed curve. And by connecting several curves we can get practically anything.
+Po trošce tréninku vám bude jasné, jak umístit body, abyste získali požadovanou křivku. A spojením několika křivek můžeme získat prakticky cokoli.
 
-Here are some examples:
+Zde jsou příklady:
 
 ![](bezier-car.svg) ![](bezier-letter.svg) ![](bezier-vase.svg)
 
-## De Casteljau's algorithm
+## De Casteljauův algoritmus
 
-There's a mathematical formula for Bezier curves, but let's cover it a bit later, because
-[De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) is identical to the mathematical definition and visually shows how it is constructed.
+Pro Bézierovy křivky existuje matematický vzorec, ale probereme ho později, jelikož 
+[de Casteljauův algoritmus](https://cs.wikipedia.org/wiki/De_Casteljau%C5%AFv_algoritmus) je identický matematické definici a vizuálně nám ukazuje, jak je křivka konstruována.
 
-First let's see the 3-points example.
+Nejprve se podívejme na 3-bodový příklad.
 
-Here's the demo, and the explanation follow.
+Zde je ukázka a vysvětlení bude následovat.
 
-Control points (1,2 and 3) can be moved by the mouse. Press the "play" button to run it.
+Řídící body (1, 2 a 3) můžete posunovat myší. Stisknutím tlačítka „Přehrát“ spustíte ukázku.
 
 [iframe src="demo.svg?p=0,0,0.5,1,1,0&animate=1" height=370]
 
-**De Casteljau's algorithm of building the 3-point bezier curve:**
+**De Casteljauův algoritmus vytvoření 3-bodové Bézierovy křivky:**
 
-1. Draw control points. In the demo above they are labeled: `1`, `2`, `3`.
-2. Build segments between control points 1 -> 2 -> 3. In the demo above they are <span style="color:#825E28">brown</span>.
-3. The parameter `t` moves from `0` to `1`. In the example above the step `0.05` is used: the loop goes over `0, 0.05, 0.1, 0.15, ... 0.95, 1`.
+1. Nakreslete řídící body. V uvedené ukázce jsou označeny `1`, `2`, `3`.
+2. Nakreslete úsečky mezi řídícími body 1 -> 2 -> 3. V uvedené ukázce jsou <span style="color:#825E28">hnědé</span>.
+3. Parametr `t` nabývá hodnot od `0` do `1`. V uvedeném příkladu používáme krok `0.05`: smyčka jde přes `0, 0.05, 0.1, 0.15, ... 0.95, 1`.
 
-    For each of these values of `t`:
+    Pro každou z těchto hodnot `t`:
 
-    - On each <span style="color:#825E28">brown</span> segment we take a point located on the distance proportional to `t` from its beginning. As there are two segments, we have two points.
+    - Na každé <span style="color:#825E28">hnědé</span> úsečce vezmeme bod umístěný v poměrné vzdálenosti `t` od jejího počátku. Protože úsečky jsou dvě, máme dva body.
 
-        For instance, for `t=0` -- both points will be at the beginning of segments, and for `t=0.25` -- on the 25% of segment length from the beginning, for `t=0.5` -- 50%(the middle), for `t=1` -- in the end of segments.
+        Například pro `t=0` budou oba body na začátku úseček, pro `t=0.25` ve 25% délky úsečky od počátku, pro `t=0.5` v 50% (uprostřed), pro `t=1` na konci úseček.
 
-    - Connect the points. On the picture below the connecting segment is painted <span style="color:#167490">blue</span>.
+    - Tyto body spojíme. Na následujícím obrázku je spojovací úsečka zobrazena <span style="color:#167490">modře</span>.
 
 
-| For `t=0.25`             | For `t=0.5`            |
+| Pro `t=0.25`             | Pro `t=0.5`            |
 | ------------------------ | ---------------------- |
 | ![](bezier3-draw1.svg)   | ![](bezier3-draw2.svg) |
 
-4. Now in the <span style="color:#167490">blue</span> segment take a point on the distance proportional to the same value of `t`. That is, for `t=0.25` (the left picture) we have a point at the end of the left quarter of the segment, and for `t=0.5` (the right picture) -- in the middle of the segment. On pictures above that point is <span style="color:red">red</span>.
+4. Nyní na <span style="color:#167490">modré</span> úsečce vezmeme bod ve stejné poměrné vzdálenosti `t`. To znamená, že pro `t=0.25` (obrázek vlevo) máme bod na konci levé čtvrtiny úsečky, pro `t=0.5` (obrázek vpravo) bod uprostřed úsečky. Na uvedených obrázcích je tento bod vyznačen <span style="color:red">červeně</span>.
 
-5. As `t` runs from `0` to `1`, every value of `t` adds a point to the curve. The set of such points forms the Bezier curve. It's red and parabolic on the pictures above.
+5. Protože `t` nabývá hodnot od `0` do `1`, každá hodnota `t` přidává na křivku jeden bod. Množina těchto bodů tvoří Bézierovu křivku. Na uvedených obrázcích je červená a parabolická.
 
-That was a process for 3 points. But the same is for 4 points.
+To byl proces pro 3 body, ale proces pro 4 body je stejný.
 
-The demo for 4 points (points can be moved by a mouse):
+Ukázka pro 4 body (body lze přesunovat myší):
 
 [iframe src="demo.svg?p=0,0,0.5,0,0.5,1,1,1&animate=1" height=370]
 
-The algorithm for 4 points:
+Algoritmus pro 4 body:
 
-- Connect control points by segments: 1 -> 2, 2 -> 3, 3 -> 4. There will be 3 <span style="color:#825E28">brown</span> segments.
-- For each `t` in the interval from `0` to `1`:
-    - We take points on these segments on the distance proportional to `t` from the beginning. These points are connected, so that we have two <span style="color:#0A0">green segments</span>.
-    - On these segments we take points proportional to `t`. We get one <span style="color:#167490">blue segment</span>.
-    - On the blue segment we take a point proportional to `t`. On the example above it's <span style="color:red">red</span>.
-- These points together form the curve.
+- Spojíme řídící body úsečkami: 1 -> 2, 2 -> 3, 3 -> 4. Budou to 3 <span style="color:#825E28">hnědé</span> úsečky.
+- Pro každé `t` v intervalu od `0` do `1`:
+    - Vezmeme body na těchto úsečkách v poměrné vzdálenosti `t` od počátku. Tyto body spojíme, takže získáme dvě <span style="color:#0A0">zelené úsečky</span>.
+    - Na těchto úsečkách vezmeme body v poměrné vzdálenosti `t`. Získáme jednu <span style="color:#167490">modrou úsečku</span>.
+    - Na modré úsečce vezmeme bod v poměrné vzdálenosti `t`. V uvedeném příkladu je zobrazen <span style="color:red">červeně</span>.
+- Tyto body dohromady tvoří Bézierovu křivku.
 
-The algorithm is recursive and can be generalized for any number of control points.
+Tento algoritmus je rekurzívní a může být zobecněn pro libovolný počet řídících bodů.
 
-Given N of control points:
+Máme-li zadaných N řídících bodů:
 
-1. We connect them to get initially N-1 segments.
-2. Then for each `t` from `0` to `1`, we take a point on each segment on the distance proportional to `t` and connect them. There will be N-2 segments.
-3. Repeat step 2 until there is only one point.
+1. Nejprve je spojíme, abychom získali N-1 úseček.
+2. Pak pro každé `t` od `0` do `1` vezmeme na každé úsečce bod v poměrné vzdálenosti `t` a tyto body spojíme. Tím získáme N-2 úseček.
+3. Opakujeme krok 2 tak dlouho, až nám zbude jen jeden bod.
 
-These points make the curve.
+Tyto body tvoří křivku.
 
 ```online
-**Run and pause examples to clearly see the segments and how the curve is built.**
+**Když budete spouštět a zastavovat příklady, jasně uvidíte úsečky a způsob, jakým se křivka vytváří.**
 ```
 
 
-A curve that looks like `y=1/t`:
+Křivka, která vypadá jako `y=1/t`:
 
 [iframe src="demo.svg?p=0,0,0,0.75,0.25,1,1,1&animate=1" height=370]
 
-Zig-zag control points also work fine:
+Pěkně fungují i řídící body umístěné na přeskáčku:
 
 [iframe src="demo.svg?p=0,0,1,0.5,0,0.5,1,1&animate=1" height=370]
 
-Making a loop is possible:
+Můžeme vytvořit i smyčku:
 
 [iframe src="demo.svg?p=0,0,1,0.5,0,1,0.5,0&animate=1" height=370]
 
-A non-smooth Bezier curve (yeah, that's possible too):
+Nespojitá Bézierova křivka (ano, i to je možné):
 
 [iframe src="demo.svg?p=0,0,1,1,0,1,1,0&animate=1" height=370]
 
 ```online
-If there's something unclear in the algorithm description, please look at the live examples above to see how
-the curve is built.
+Pokud je vám na popisu algoritmu něco nejasného, podívejte se prosíme na uvedené živé příklady, abyste viděli, jak se křivka vytváří.
 ```
 
-As the algorithm is recursive, we can build Bezier curves of any order, that is: using 5, 6 or more control points. But in practice many points are less useful. Usually we take 2-3 points, and for complex lines glue several curves together. That's simpler to develop and calculate.
+Protože algoritmus je rekurzívní, můžeme vytvořit Bézierovu křivku jakéhokoli řádu, tedy použít 5, 6 nebo více řídících bodů. V praxi je však velký počet bodů méně užitečný. Obvykle používáme 2-3 body a složitější čáry vytváříme spojením několika křivek dohromady. Je to jednodušší pro vývoj i pro výpočet.
 
-```smart header="How to draw a curve *through* given points?"
-To specify a Bezier curve, control points are used. As we can see, they are not on the curve, except the first and the last ones.
+```smart header="Jak nakreslit křivku *procházející* zadanými body?"
+Ke specifikaci Bézierovy křivky používáme řídící body. Jak vidíme, kromě prvního a posledního neleží na samotné křivce.
 
-Sometimes we have another task: to draw a curve *through several points*, so that all of them are on a single smooth curve. That task is called  [interpolation](https://en.wikipedia.org/wiki/Interpolation), and here we don't cover it.
+Někdy máme jinou úlohu: nakreslit křivku *procházející několika body*, tak, aby všechny ležely na jedné spojité křivce. Tato úloha se nazývá [interpolace](https://cs.wikipedia.org/wiki/Interpolace) a zde se jí nebudeme zabývat.
 
-There are mathematical formulas for such curves, for instance [Lagrange polynomial](https://en.wikipedia.org/wiki/Lagrange_polynomial). In computer graphics [spline interpolation](https://en.wikipedia.org/wiki/Spline_interpolation) is often used to build smooth curves that connect many points.
+Pro takové křivky existují matematické vzorce, například [Lagrangeova interpolace](https://cs.wikipedia.org/wiki/Lagrangeova_interpolace). V počítačové grafice se k vytvoření spojitých křivek procházejících mnoha body často používá [spline interpolace](https://en.wikipedia.org/wiki/Spline_interpolation).
 ```
 
 
-## Maths
+## Matematika
 
-A Bezier curve can be described using a mathematical formula.
+Bézierovu křivku je možné popsat matematickým vzorcem.
 
-As we saw -- there's actually no need to know it, most people just draw the curve by moving points with a mouse. But if you're into maths -- here it is.
+Jak jsme viděli, ve skutečnosti není nutné jej znát, většina lidí kreslí křivku prostým posunováním bodů myší. Pokud se však zajímáte o matematiku, je tady.
 
-Given the coordinates of control points <code>P<sub>i</sub></code>: the first control point has coordinates <code>P<sub>1</sub> = (x<sub>1</sub>, y<sub>1</sub>)</code>, the second: <code>P<sub>2</sub> = (x<sub>2</sub>, y<sub>2</sub>)</code>, and so on, the curve coordinates are described by the equation that depends on the parameter `t` from the segment `[0,1]`.
+Mějme zadány souřadnice řídících bodů <code>P<sub>i</sub></code>: první řídící bod má souřadnice <code>P<sub>1</sub> = (x<sub>1</sub>, y<sub>1</sub>)</code>, druhý <code>P<sub>2</sub> = (x<sub>2</sub>, y<sub>2</sub>)</code> a tak dále. Souřadnice křivky jsou popsány rovnicí, která závisí na parametru `t` z intervalu `[0,1]`.
 
-- The formula for a 2-points curve:
+- Vzorec 2-bodové křivky:
 
     <code>P = (1-t)P<sub>1</sub> + tP<sub>2</sub></code>
-- For 3 control points:
+- Vzorec 3-bodové křivky:
 
     <code>P = (1−t)<sup>2</sup>P<sub>1</sub> + 2(1−t)tP<sub>2</sub> + t<sup>2</sup>P<sub>3</sub></code>
-- For 4 control points:
+- Vzorec 4-bodové křivky:
 
     <code>P = (1−t)<sup>3</sup>P<sub>1</sub> + 3(1−t)<sup>2</sup>tP<sub>2</sub>  +3(1−t)t<sup>2</sup>P<sub>3</sub> + t<sup>3</sup>P<sub>4</sub></code>
 
 
-These are vector equations. In other words, we can put `x` and `y` instead of `P` to get corresponding coordinates.
+Tyto rovnice jsou vektorové. Jinými slovy, za `P` můžeme dosadit `x` a `y`, abychom získali příslušné souřadnice.
 
-For instance, the 3-point curve is formed by points `(x,y)` calculated as:
+Například 3-bodová křivka je tvořena body `(x,y)`, které se vypočítají následovně:
 
 - <code>x = (1−t)<sup>2</sup>x<sub>1</sub> + 2(1−t)tx<sub>2</sub> + t<sup>2</sup>x<sub>3</sub></code>
 - <code>y = (1−t)<sup>2</sup>y<sub>1</sub> + 2(1−t)ty<sub>2</sub> + t<sup>2</sup>y<sub>3</sub></code>
 
-Instead of <code>x<sub>1</sub>, y<sub>1</sub>, x<sub>2</sub>, y<sub>2</sub>, x<sub>3</sub>, y<sub>3</sub></code> we should put coordinates of 3 control points, and then as `t` moves from `0` to `1`, for each value of `t` we'll have `(x,y)` of the curve.
+Za <code>x<sub>1</sub>, y<sub>1</sub>, x<sub>2</sub>, y<sub>2</sub>, x<sub>3</sub>, y<sub>3</sub></code> bychom měli dosadit souřadnice 3 řídících bodů. Když pak bude `t` nabývat hodnot od `0` do `1`, pro každou hodnotu `t` budeme mít bod `(x,y)` křivky.
 
-For instance, if control points are  `(0,0)`, `(0.5, 1)` and `(1, 0)`, the equations become:
+Například pokud řídící body jsou `(0,0)`, `(0.5, 1)` a `(1, 0)`, v rovnicích dostaneme:
 
 - <code>x = (1−t)<sup>2</sup> * 0 + 2(1−t)t * 0.5 + t<sup>2</sup> * 1 = (1-t)t + t<sup>2</sup> = t</code>
 - <code>y = (1−t)<sup>2</sup> * 0 + 2(1−t)t * 1 + t<sup>2</sup> * 0 = 2(1-t)t = –2t<sup>2</sup> + 2t</code>
 
-Now as `t` runs from `0` to `1`, the set of values `(x,y)` for each `t` forms the curve for such control points.
+Když nyní `t` nabývá hodnot od `0` do `1`, množina hodnot `(x,y)` pro každé `t` tvoří křivku pro tyto řídící body.
 
-## Summary
+## Shrnutí
 
-Bezier curves are defined by their control points.
+Bézierovy křivky jsou definovány svými řídícími body.
 
-We saw two definitions of Bezier curves:
+Viděli jsme dvě definice Bézierových křivek:
 
-1. Using a drawing process: De Casteljau's algorithm.
-2. Using a mathematical formulas.
+1. Pomocí procesu vykreslování: de Casteljauův algoritmus.
+2. Pomocí matematických vzorců.
 
-Good properties of Bezier curves:
+Kladné vlastnosti Bézierových křivek:
 
-- We can draw smooth lines with a mouse by moving control points.
-- Complex shapes can be made of several Bezier curves.
+- Můžeme kreslit spojité křivky posunováním řídících bodů myší.
+- Z několika Bézierových křivek můžeme vytvořit složité útvary.
 
-Usage:
+Použití:
 
-- In computer graphics, modeling, vector graphic editors. Fonts are described by Bezier curves.
-- In web development -- for graphics on Canvas and in the SVG format. By the way, "live" examples above are written in SVG. They are actually a single SVG document that is given different points as parameters. You can open it in a separate window and see the source: [demo.svg](demo.svg?p=0,0,1,0.5,0,0.5,1,1&animate=1).
-- In CSS animation to describe the path and speed of animation.
+- V počítačové grafice, modelování, vektorových grafických editorech. Fonty jsou popsány Bézierovými křivkami.
+- Při vývoji webů pro grafiku na plátně a ve formátu SVG. Mimochodem, výše uvedené „živé“ příklady jsou napsány v SVG. Ve skutečnosti je to vždy jediný SVG dokument, který dostává jako své parametry různé body. Můžete si jej otevřít v samostatném okně a prohlédnout si zdrojový kód: [demo.svg](demo.svg?p=0,0,1,0.5,0,0.5,1,1&animate=1).
+- V CSS animacích k popisu cesty a rychlosti animace.

@@ -1,48 +1,48 @@
-# Shadow DOM slots, composition
+# Sloty a kompozice stínového DOMu
 
-Many types of components, such as tabs, menus, image galleries, and so on, need the content to render.
+Mnoho druhů komponent, například záložky, menu, obrázkové galerie a podobně, potřebuje vykreslit obsah.
 
-Just like built-in browser `<select>` expects `<option>` items, our `<custom-tabs>` may expect the actual tab content to be passed. And a `<custom-menu>` may expect menu items.
+Stejně jako zabudovaná prohlížečová značka `<select>` očekává položky `<option>`, naše `<vlastni-zalozky>` mohou očekávat, že do nich bude předán skutečný obsah záložek. A `<vlastni-menu>` může očekávat položky menu.
 
-The code that makes use of `<custom-menu>` can look like this:
+Kód, který využívá `<vlastni-menu>`, může vypadat následovně:
 
 ```html
-<custom-menu>
-  <title>Candy menu</title>
-  <item>Lollipop</item>
-  <item>Fruit Toast</item>
-  <item>Cup Cake</item>
-</custom-menu>
+<vlastni-menu>
+  <title>Nabídka sladkostí</title>
+  <item>Lízátko</item>
+  <item>Ovocný toast</item>
+  <item>Košíčky</item>
+</vlastni-menu>
 ```
 
-...Then our component should render it properly, as a nice menu with given title and items, handle menu events, etc.
+...Pak by je naše komponenta měla správně vykreslit jako pěkné menu se zadaným titulkem a položkami, zpracovávat události menu a tak dále.
 
-How to implement it?
+Jak to implementovat?
 
-We could try to analyze the element content and dynamically copy-rearrange DOM nodes. That's possible, but if we're moving elements to shadow DOM, then CSS styles from the document do not apply in there, so the visual styling may be lost. Also that requires some coding.
+Můžeme se pokusit analyzovat obsah elementu a dynamicky zkopírovat a přeskládat DOM uzly. To je možné, ale když budeme přesunovat elementy do stínového DOMu, nebudou se v nich aplikovat CSS styly z dokumentu, takže můžeme ztratit vizuální stylizaci. Navíc to vyžaduje napsat nějaký ten kód.
 
-Luckily, we don't have to. Shadow DOM supports `<slot>` elements, that are automatically filled by the content from light DOM.
+Naštěstí to nemusíme dělat. Stínový DOM podporuje elementy `<slot>`, které se automaticky naplní obsahem ze světlého DOMu.
 
-## Named slots
+## Pojmenované sloty
 
-Let's see how slots work on a simple example.
+Na jednoduchém příkladu se podívejme, jak sloty fungují.
 
-Here, `<user-card>` shadow DOM provides two slots, filled from light DOM:
+Zde stínový DOM značky `<karta-uzivatele>` poskytuje dva sloty, naplňované ze světlého DOMu:
 
 ```html run autorun="no-epub" untrusted height=80
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
-      <div>Name:
+      <div>Jméno:
 *!*
-        <slot name="username"></slot>
+        <slot name="uživatel"></slot>
 */!*
       </div>
-      <div>Birthday:
+      <div>Datum narození:
 *!*
-        <slot name="birthday"></slot>
+        <slot name="narození"></slot>
 */!*
       </div>
     `;
@@ -50,143 +50,143 @@ customElements.define('user-card', class extends HTMLElement {
 });
 </script>
 
-<user-card>
-  <span *!*slot="username"*/!*>John Smith</span>
-  <span *!*slot="birthday"*/!*>01.01.2001</span>
-</user-card>
+<karta-uzivatele>
+  <span *!*slot="uživatel"*/!*>Jan Novák</span>
+  <span *!*slot="narození"*/!*>01.01.2001</span>
+</karta-uzivatele>
 ```
 
-In the shadow DOM, `<slot name="X">` defines an "insertion point", a place where elements with `slot="X"` are rendered.
+Ve stínovém DOMu `<slot name="X">` definuje „bod vložení“, místo, kam budou vykresleny elementy obsahující `slot="X"`.
 
-Then the browser performs "composition": it takes elements from the light DOM and renders them in corresponding slots of the shadow DOM. At the end, we have exactly what we want -- a component that can be filled with data.
+Prohlížeč pak provede „kompozici“: vezme elementy ze světlého DOMu a vykreslí je do odpovídajících slotů stínového DOMu. Na konci budeme mít přesně to, co jsme chtěli -- komponentu, která může být vyplněna daty.
 
-Here's the DOM structure after the script, not taking composition into account:
+Zde je struktura DOMu po provedení skriptu, nebereme-li v úvahu kompozici:
 
 ```html
-<user-card>
+<karta-uzivatele>
   #shadow-root
-    <div>Name:
-      <slot name="username"></slot>
+    <div>Jméno:
+      <slot name="uživatel"></slot>
     </div>
-    <div>Birthday:
-      <slot name="birthday"></slot>
+    <div>Datum narození:
+      <slot name="narození"></slot>
     </div>
-  <span slot="username">John Smith</span>
-  <span slot="birthday">01.01.2001</span>
-</user-card>
+  <span slot="uživatel">Jan Novák</span>
+  <span slot="narození">01.01.2001</span>
+</karta-uzivatele>
 ```
 
-We created the shadow DOM, so here it is, under `#shadow-root`. Now the element has both light and shadow DOM.
+Vytvořili jsme stínový DOM, takže je zde pod `#shadow-root`. Nyní element obsahuje světlý i stínový DOM.
 
-For rendering purposes, for each `<slot name="...">` in shadow DOM, the browser looks for `slot="..."` with the same name in the light DOM. These elements are rendered inside the slots:
+Pro účely vykreslení prohlížeč pro každou značku `<slot name="...">` ve stínovém DOMu vyhledá `slot="..."` se stejným názvem ve světlém DOMu. Tyto elementy jsou vykresleny do slotů:
 
 ![](shadow-dom-user-card.svg)
 
-The result is called "flattened" DOM:
+Výsledek se nazývá „zploštělý“ (flattened) DOM:
 
 ```html
-<user-card>
+<karta-uzivatele>
   #shadow-root
-    <div>Name:
-      <slot name="username">
-        <!-- slotted element is inserted into the slot -->
-        <span slot="username">John Smith</span>
+    <div>Jméno:
+      <slot name="uživatel">
+        <!-- do slotu je vložen element se slotem -->
+        <span slot="uživatel">Jan Novák</span>
       </slot>
     </div>
-    <div>Birthday:
-      <slot name="birthday">
-        <span slot="birthday">01.01.2001</span>
+    <div>Datum narození:
+      <slot name="narození">
+        <span slot="narození">01.01.2001</span>
       </slot>
     </div>
-</user-card>
+</karta-uzivatele>
 ```
 
-...But the flattened DOM exists only for rendering and event-handling purposes. It's kind of "virtual". That's how things are shown. But the nodes in the document are actually not moved around!
+...Zploštělý DOM však existuje výhradně pro účely vykreslování a zpracování událostí. Je svým způsobem „virtuální“. Je to způsob, jak se vše zobrazuje. Ale ve skutečnosti nejsou uzly v dokumentu přesunuty!
 
-That can be easily checked if we run `querySelectorAll`: nodes are still at their places.
+To si můžeme snadno zkontrolovat, jestliže spustíme `querySelectorAll`: uzly budou stále na svých místech.
 
 ```js
-// light DOM <span> nodes are still at the same place, under `<user-card>`
-alert( document.querySelectorAll('user-card span').length ); // 2
+// uzly <span> světlého DOMu jsou stále na stejných místech, pod `<karta-uzivatele>`
+alert( document.querySelectorAll('karta-uzivatele span').length ); // 2
 ```
 
-So, the flattened DOM is derived from shadow DOM by inserting slots. The browser renders it and uses for style inheritance, event propagation (more about that later). But JavaScript still sees the document "as is", before flattening.
+Zploštělý DOM je tedy odvozen ze stínového DOMu vložením slotů. Prohlížeč jej vykreslí a použije pro zdědění stylů a propagaci událostí (více o tom později). JavaScript však stále vidí dokument tak, „jak je“, před zploštěním.
 
-````warn header="Only top-level children may have slot=\"...\" attribute"
-The `slot="..."` attribute is only valid for direct children of the shadow host (in our example, `<user-card>` element). For nested elements it's ignored.
+````warn header="Atribut slot=\"...\" mohou mít jen děti na nejvyšší úrovni"
+Atribut `slot="..."` platí jen u přímých dětí stínového hostitele (v našem příkladu elementu `<karta-uzivatele>`). U vnořených elementů je ignorován.
 
-For example, the second `<span>` here is ignored (as it's not a top-level child of `<user-card>`):
+Například druhý `<span>` zde je ignorován (protože to není dítě `<karta-uzivatele>` nejvyšší úrovně):
 ```html
-<user-card>
-  <span slot="username">John Smith</span>
+<karta-uzivatele>
+  <span slot="uživatel">Jan Novák</span>
   <div>
-    <!-- invalid slot, must be direct child of user-card -->
-    <span slot="birthday">01.01.2001</span>
+    <!-- nesprávný slot, musí být přímým dítětem elementu karta-uzivatele -->
+    <span slot="narození">01.01.2001</span>
   </div>
-</user-card>
+</karta-uzivatele>
 ```
 ````
 
-If there are multiple elements in light DOM with the same slot name, they are appended into the slot, one after another.
+Pokud je ve světlém DOMu více elementů se stejným názvem slotu, budou vloženy do slotu jeden po druhém.
 
-For example, this:
+Například tohle:
 
 ```html
-<user-card>
-  <span slot="username">John</span>
-  <span slot="username">Smith</span>
-</user-card>
+<karta-uzivatele>
+  <span slot="uživatel">Jan</span>
+  <span slot="uživatel">Novák</span>
+</karta-uzivatele>
 ```
 
-Gives this flattened DOM with two elements in `<slot name="username">`:
+vydá následující zploštělý DOM se dvěma elementy ve `<slot name="uživatel">`:
 
 ```html
-<user-card>
+<karta-uzivatele>
   #shadow-root
-    <div>Name:
-      <slot name="username">
-        <span slot="username">John</span>
-        <span slot="username">Smith</span>
+    <div>Jméno:
+      <slot name="uživatel">
+        <span slot="uživatel">Jan</span>
+        <span slot="uživatel">Novák</span>
       </slot>
     </div>
-    <div>Birthday:
-      <slot name="birthday"></slot>
+    <div>Datum narození:
+      <slot name="narození"></slot>
     </div>
-</user-card>
+</karta-uzivatele>
 ```
 
-## Slot fallback content
+## Záložní obsah slotu
 
-If we put something inside a `<slot>`, it becomes the fallback, "default" content. The browser shows it if there's no corresponding filler in light DOM.
+Pokud vložíme něco do značky `<slot>`, stane se to záložním, „standardním“ obsahem. Prohlížeč to zobrazí, jestliže světlý DOM nebude obsahovat odpovídající náplň.
 
-For example, in this piece of shadow DOM, `Anonymous` renders if there's no `slot="username"` in light DOM.
+Například v tomto kousku stínového DOMu se zobrazí `Anonym`, jestliže ve světlém DOMu nebude žádný `slot="uživatel"`.
 
 ```html
-<div>Name:
-  <slot name="username">Anonymous</slot>
+<div>Jméno:
+  <slot name="uživatel">Anonym</slot>
 </div>
 ```
 
-## Default slot: first unnamed
+## Standardní slot: první nepojmenovaný
 
-The first `<slot>` in shadow DOM that doesn't have a name is a "default" slot. It gets all nodes from the light DOM that aren't slotted elsewhere.
+První `<slot>` ve stínovém DOMu, který nemá žádný název, je „standardní“ slot. Získá všechny uzly ze světlého DOMu, které nejsou vloženy do jiného slotu.
 
-For example, let's add the default slot to our `<user-card>` that shows all unslotted information about the user:
+Přidejme například do našeho elementu `<karta-uzivatele>` standardní slot, který zobrazí všechny informace o uživateli, které nebyly vloženy do slotů:
 
 ```html run autorun="no-epub" untrusted height=140
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
-    <div>Name:
-      <slot name="username"></slot>
+    <div>Jméno:
+      <slot name="uživatel"></slot>
     </div>
-    <div>Birthday:
-      <slot name="birthday"></slot>
+    <div>Datum narození:
+      <slot name="narození"></slot>
     </div>
     <fieldset>
-      <legend>Other information</legend>
+      <legend>Další informace</legend>
 *!*
       <slot></slot>
 */!*
@@ -196,156 +196,156 @@ customElements.define('user-card', class extends HTMLElement {
 });
 </script>
 
-<user-card>
+<karta-uzivatele>
 *!*
-  <div>I like to swim.</div>
+  <div>Rád plavu.</div>
 */!*
-  <span slot="username">John Smith</span>
-  <span slot="birthday">01.01.2001</span>
+  <span slot="uživatel">Jan Novák</span>
+  <span slot="narození">01.01.2001</span>
 *!*
-  <div>...And play volleyball too!</div>
+  <div>...A taky hraji volejbal!</div>
 */!*
-</user-card>
+</karta-uzivatele>
 ```
 
-All the unslotted light DOM content gets into the "Other information" fieldset.
+Veškerý obsah světlého DOMu, který nebyl vložen do slotů, se dostane do sady polí „Další informace“.
 
-Elements are appended to a slot one after another, so both unslotted pieces of information are in the default slot together.
+Elementy se do slotu vkládají jeden za druhým, takže oba nevložené kousky informace budou společně ve standardním slotu.
 
-The flattened DOM looks like this:
+Zploštělý DOM vypadá následovně:
 
 ```html
-<user-card>
+<karta-uzivatele>
   #shadow-root
     <div>Name:
-      <slot name="username">
-        <span slot="username">John Smith</span>
+      <slot name="uživatel">
+        <span slot="uživatel">Jan Novák</span>
       </slot>
     </div>
-    <div>Birthday:
-      <slot name="birthday">
-        <span slot="birthday">01.01.2001</span>
+    <div>Datum narození:
+      <slot name="narození">
+        <span slot="narození">01.01.2001</span>
       </slot>
     </div>
     <fieldset>
-      <legend>Other information</legend>
+      <legend>Další informace</legend>
 *!*
       <slot>
-        <div>I like to swim.</div>
-        <div>...And play volleyball too!</div>
+        <div>Rád plavu.</div>
+        <div>...A taky hraji volejbal!</div>
       </slot>
 */!*
     </fieldset>
-</user-card>
+</karta-uzivatele>
 ```
 
-## Menu example
+## Příklad menu
 
-Now let's back to `<custom-menu>`, mentioned at the beginning of the chapter.
+Nyní se vraťme k `<vlastni-menu>`, zmíněnému na začátku kapitoly.
 
-We can use slots to distribute elements.
+K předání elementů můžeme použít sloty.
 
-Here's the markup for `<custom-menu>`:
+Zde je kód pro `<vlastni-menu>`:
 
 ```html
-<custom-menu>
-  <span slot="title">Candy menu</span>
-  <li slot="item">Lollipop</li>
-  <li slot="item">Fruit Toast</li>
-  <li slot="item">Cup Cake</li>
-</custom-menu>
+<vlastni-menu>
+  <span slot="titulek">Nabídka sladkostí</span>
+  <li slot="položka">Lízátko</li>
+  <li slot="položka">Ovocný toast</li>
+  <li slot="položka">Košíčky</li>
+</vlastni-menu>
 ```
 
-The shadow DOM template with proper slots:
+Šablona stínového DOMu s příslušnými sloty:
 
 ```html
-<template id="tmpl">
-  <style> /* menu styles */ </style>
+<template id="šablona">
+  <style> /* styly menu */ </style>
   <div class="menu">
-    <slot name="title"></slot>
-    <ul><slot name="item"></slot></ul>
+    <slot name="titulek"></slot>
+    <ul><slot name="položka"></slot></ul>
   </div>
 </template>
 ```
 
-1. `<span slot="title">` goes into `<slot name="title">`.
-2. There are many `<li slot="item">` in the `<custom-menu>`, but only one `<slot name="item">` in the template. So all such `<li slot="item">` are appended to `<slot name="item">` one after another, thus forming the list.
+1. `<span slot="titulek">` bude vložen do `<slot name="titulek">`.
+2. V elementu `<vlastni-menu>` je mnoho položek `<li slot="položka">`, ale v šabloně je jen jedna `<slot name="položka">`. Všechny tyto elementy `<li slot="položka">` se tedy vloží do `<slot name="položka">` jeden po druhém, čímž vytvoří seznam.
 
-The flattened DOM becomes:
+Zploštělý DOM bude vypadat takto:
 
 ```html
-<custom-menu>
+<vlastni-menu>
   #shadow-root
-    <style> /* menu styles */ </style>
+    <style> /* styly menu */ </style>
     <div class="menu">
-      <slot name="title">
-        <span slot="title">Candy menu</span>
+      <slot name="titulek">
+        <span slot="titulek">Nabídka sladkostí</span>
       </slot>
       <ul>
-        <slot name="item">
-          <li slot="item">Lollipop</li>
-          <li slot="item">Fruit Toast</li>
-          <li slot="item">Cup Cake</li>
+        <slot name="položka">
+          <li slot="položka">Lízátko</li>
+          <li slot="položka">Ovocný toast</li>
+          <li slot="položka">Košíčky</li>
         </slot>
       </ul>
     </div>
-</custom-menu>
+</vlastni-menu>
 ```
 
-One might notice that, in a valid DOM, `<li>` must be a direct child of `<ul>`. But that's flattened DOM, it describes how the component is rendered, such thing happens naturally here.
+Můžeme si všimnout, že v platném DOMu `<li>` musí být přímým dítětem `<ul>`, ale tohle je zploštělý DOM, který popisuje, jak budou komponenty vykresleny, takže takové věci se tady běžně stávají.
 
-We just need to add a `click` handler to open/close the list, and the `<custom-menu>` is ready:
+Potřebujeme už jen přidat handler `click` k otevření a zavření seznamu a `<vlastni-menu>` je hotové:
 
 ```js
-customElements.define('custom-menu', class extends HTMLElement {
+customElements.define('vlastni-menu', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
 
-    // tmpl is the shadow DOM template (above)
-    this.shadowRoot.append( tmpl.content.cloneNode(true) );
+    // šablona je šablona stínového DOMu (výše)
+    this.shadowRoot.append( šablona.content.cloneNode(true) );
 
-    // we can't select light DOM nodes, so let's handle clicks on the slot
-    this.shadowRoot.querySelector('slot[name="title"]').onclick = () => {
-      // open/close the menu
+    // nemůžeme vybírat uzly světlého DOMu, takže budeme zpracovávat kliknutí na slot
+    this.shadowRoot.querySelector('slot[name="titulek"]').onclick = () => {
+      // otevře/zavře menu
       this.shadowRoot.querySelector('.menu').classList.toggle('closed');
     };
   }
 });
 ```
 
-Here's the full demo:
+Zde je celá ukázka:
 
 [iframe src="menu" height=140 edit]
 
-Of course, we can add more functionality to it: events, methods and so on.
+Samozřejmě do ní můžeme přidávat další funkcionalitu: události, metody a podobně.
 
-## Updating slots
+## Aktualizace slotů
 
-What if the outer code wants to add/remove menu items dynamically?
+Co když vnější kód chce dynamicky přidávat a odstraňovat položky menu?
 
-**The browser monitors slots and updates the rendering if slotted elements are added/removed.**
+**Prohlížeč sleduje sloty a aktualizuje vykreslení, pokud jsou přidány nebo odstraněny elementy do slotů.**
 
-Also, as light DOM nodes are not copied, but just rendered in slots, the changes inside them immediately become visible.
+Navíc, protože uzly světlého DOMu se nekopírují, ale jen vykreslují do slotů, změny uvnitř nich budou okamžitě viditelné.
 
-So we don't have to do anything to update rendering. But if the component code wants to know about slot changes, then `slotchange` event is available.
+Pro aktualizaci vykreslování tedy nemusíme dělat nic. Jestliže však kód komponenty chce vědět o změnách slotů, má k dispozici událost `slotchange`.
 
-For example, here the menu item is inserted dynamically after 1 second, and the title changes after 2 seconds:
+Například zde je po 1 sekundě dynamicky vložena položka menu a po 2 sekundách se změní titulek:
 
 ```html run untrusted height=80
-<custom-menu id="menu">
-  <span slot="title">Candy menu</span>
-</custom-menu>
+<vlastni-menu id="menu">
+  <span slot="titulek">Nabídka sladkostí</span>
+</vlastni-menu>
 
 <script>
-customElements.define('custom-menu', class extends HTMLElement {
+customElements.define('vlastni-menu', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `<div class="menu">
-      <slot name="title"></slot>
-      <ul><slot name="item"></slot></ul>
+      <slot name="titulek"></slot>
+      <ul><slot name="položka"></slot></ul>
     </div>`;
 
-    // shadowRoot can't have event handlers, so using the first child
+    // shadowRoot nemůže mít handlery událostí, použijeme tedy první dítě
     this.shadowRoot.firstElementChild.addEventListener('slotchange',
       e => alert("slotchange: " + e.target.name)
     );
@@ -353,106 +353,106 @@ customElements.define('custom-menu', class extends HTMLElement {
 });
 
 setTimeout(() => {
-  menu.insertAdjacentHTML('beforeEnd', '<li slot="item">Lollipop</li>')
+  menu.insertAdjacentHTML('beforeEnd', '<li slot="položka">Lízátko</li>')
 }, 1000);
 
 setTimeout(() => {
-  menu.querySelector('[slot="title"]').innerHTML = "New menu";
+  menu.querySelector('[slot="titulek"]').innerHTML = "Nové menu";
 }, 2000);
 </script>
 ```
 
-The menu rendering updates each time without our intervention.
+Vykreslování menu se pokaždé aktualizuje bez našeho zásahu.
 
-There are two `slotchange` events here:
+Nastanou tady dvě události `slotchange`:
 
-1. At initialization:
+1. Při inicializaci:
 
-    `slotchange: title` triggers immediately, as the `slot="title"` from the light DOM gets into the corresponding slot.
-2. After 1 second:
+    `slotchange: titulek` se spustí okamžitě, když se `slot="titulek"` ze světlého DOMu vloží do příslušného slotu.
+2. Po 1 sekundě:
 
-    `slotchange: item` triggers, when a new `<li slot="item">` is added.
+    `slotchange: položka` se spustí, když je přidána nová `<li slot="položka">`.
 
-Please note: there's no `slotchange` event after 2 seconds, when the content of `slot="title"` is modified. That's because there's no slot change. We modify the content inside the slotted element, that's another thing.
+Prosíme všimněte si, že po 2 sekundách, když se změní obsah `slot="titulek"`, událost `slotchange` nenastane. Je to proto, že při tom nedojde ke změně slotu. Modifikujeme obsah elementu vloženého do slotu, to je něco jiného.
 
-If we'd like to track internal modifications of light DOM from JavaScript, that's also possible using a more generic mechanism: [MutationObserver](info:mutation-observer).
+Kdybychom chtěli v JavaScriptu sledovat vnitřní modifikace světlého DOMu, je to rovněž možné pomocí obecnějšího mechanismu: [MutationObserver](info:mutation-observer).
 
-## Slot API
+## API pro sloty
 
-Finally, let's mention the slot-related JavaScript methods.
+Na závěr uveďme metody JavaScriptu pro práci se sloty.
 
-As we've seen before, JavaScript looks at the "real" DOM, without flattening. But, if the shadow tree has `{mode: 'open'}`, then we can figure out which elements assigned to a slot and, vice-versa, the slot by the element inside it:
+Jak jsme již viděli, JavaScript se dívá na „skutečný“, nezploštělý DOM. Pokud však stínový strom má `{mode: 'open'}`, můžeme zjistit, které elementy jsou přiřazeny do slotu, a naopak, najít slot podle elementu uvnitř něj:
 
-- `node.assignedSlot` -- returns the `<slot>` element that the `node` is assigned to.
-- `slot.assignedNodes({flatten: true/false})` -- DOM nodes, assigned to the slot. The `flatten` option is `false` by default. If explicitly set to `true`, then it looks more deeply into the flattened DOM, returning nested slots in case of nested components and the fallback content if no node assigned.
-- `slot.assignedElements({flatten: true/false})` -- DOM elements, assigned to the slot (same as above, but only element nodes).
+- `uzel.assignedSlot` -- vrátí element `<slot>`, do něhož je přiřazen `uzel`.
+- `slot.assignedNodes({flatten: true/false})` -- DOM uzly, přiřazené do slotu. Volba `flatten` je standardně `false`. Pokud je výslovně nastavena na `true`, metoda se podívá hlouběji do zploštělého DOMu, v případě vnořených komponent vrátí vnořené sloty a není-li žádný uzel přiřazen, vrátí záložní obsah.
+- `slot.assignedElements({flatten: true/false})` -- DOM elementy přiřazené do slotu (totéž jako předchozí metoda, ale jen elementové uzly).
 
-These methods are useful when we need not just show the slotted content, but also track it in JavaScript.
+Tyto metody jsou užitečné, když chceme obsah vložený do slotů nejen zobrazovat, ale i zpracovávat v JavaScriptu.
 
-For example, if `<custom-menu>` component wants to know, what it shows, then it could track `slotchange` and get the items from `slot.assignedElements`:
+Například jestliže komponenta `<vlastni-menu>` chce vědět, co zobrazuje, může sledovat `slotchange` a získat položky ze `slot.assignedElements`:
 
 ```html run untrusted height=120
-<custom-menu id="menu">
-  <span slot="title">Candy menu</span>
-  <li slot="item">Lollipop</li>
-  <li slot="item">Fruit Toast</li>
-</custom-menu>
+<vlastni-menu id="menu">
+  <span slot="titulek">Nabídka sladkostí</span>
+  <li slot="položka">Lízátko</li>
+  <li slot="položka">Ovocný toast</li>
+</vlastni-menu>
 
 <script>
-customElements.define('custom-menu', class extends HTMLElement {
-  items = []
+customElements.define('vlastni-menu', class extends HTMLElement {
+  položky = []
 
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `<div class="menu">
-      <slot name="title"></slot>
-      <ul><slot name="item"></slot></ul>
+      <slot name="titulek"></slot>
+      <ul><slot name="položka"></slot></ul>
     </div>`;
 
-    // triggers when slot content changes
+    // spustí se, když se obsah slotu změní
 *!*
     this.shadowRoot.firstElementChild.addEventListener('slotchange', e => {
       let slot = e.target;
-      if (slot.name == 'item') {
-        this.items = slot.assignedElements().map(elem => elem.textContent);
-        alert("Items: " + this.items);
+      if (slot.name == 'položka') {
+        this.položky = slot.assignedElements().map(elem => elem.textContent);
+        alert("Položky: " + this.položky);
       }
     });
 */!*
   }
 });
 
-// items update after 1 second
+// aktualizujeme položky po 1 sekundě
 setTimeout(() => {
-  menu.insertAdjacentHTML('beforeEnd', '<li slot="item">Cup Cake</li>')
+  menu.insertAdjacentHTML('beforeEnd', '<li slot="položka">Košíčky</li>')
 }, 1000);
 </script>
 ```
 
 
-## Summary
+## Shrnutí
 
-Usually, if an element has shadow DOM, then its light DOM is not displayed. Slots allow to show elements from light DOM in specified places of shadow DOM.
+Když element obsahuje stínový DOM, jeho světlý DOM se zpravidla nezobrazí. Sloty umožňují zobrazit elementy ze světlého DOMu na stanovených místech stínového DOMu.
 
-There are two kinds of slots:
+Sloty se dělí do dvou druhů:
 
-- Named slots: `<slot name="X">...</slot>` -- gets light children with `slot="X"`.
-- Default slot: the first `<slot>` without a name (subsequent unnamed slots are ignored) -- gets unslotted light children.
-- If there are many elements for the same slot -- they are appended one after another.
-- The content of `<slot>` element is used as a fallback. It's shown if there are no light children for the slot.
+- Pojmenované sloty: `<slot name="X">...</slot>` -- obdrží děti ze světlého DOMu obsahující `slot="X"`.
+- Standardní slot: první `<slot>` bez názvu (další nepojmenované sloty jsou ignorovány) -- obdrží děti ze světlého DOMu nevložené do jiných slotů.
+- Pokud pro stejný slot existuje více elementů, budou vloženy jeden za druhým.
+- Obsah elementu `<slot>` se používá jako záloha. Zobrazí se, jestliže pro tento slot nejsou ve světlém DOMu žádné děti.
 
-The process of rendering slotted elements inside their slots is called "composition". The result is called a "flattened DOM".
+Proces vykreslování elementů uvnitř jejich slotů se nazývá „kompozice“. Výsledek se nazývá „zploštělý DOM“.
 
-Composition does not really move nodes, from JavaScript point of view the DOM is still same.
+Kompozice ve skutečnosti nepřesunuje uzly, z pohledu JavaScriptu je DOM stále stejný.
 
-JavaScript can access slots using methods:
-- `slot.assignedNodes/Elements()` -- returns nodes/elements inside the `slot`.
-- `node.assignedSlot` -- the reverse property, returns slot by a node.
+JavaScript může přistupovat ke slotům pomocí těchto metod:
+- `slot.assignedNodes/Elements()` -- vrací uzly/elementy uvnitř `slot`.
+- `node.assignedSlot` -- opačná vlastnost, vrací slot podle uzlu.
 
-If we'd like to know what we're showing, we can track slot contents using:
-- `slotchange` event -- triggers the first time a slot is filled, and on any add/remove/replace operation of the slotted element, but not its children. The slot is `event.target`.
-- [MutationObserver](info:mutation-observer) to go deeper into slot content, watch changes inside it.
+Jestliže chceme vědět, co zobrazujeme, můžeme sledovat obsah slotu pomocí:
+- událost `slotchange` -- spustí se poprvé, kdy je slot naplněn, a při všech operacích přidání, odstranění a nahrazení elementu ve slotu, ale ne jeho dětí. Tento slot je v `událost.target`.
+- [MutationObserver](info:mutation-observer) pro vstup hlouběji do obsahu slotu a sledování změn uvnitř něj.
 
-Now, as we know how to show elements from light DOM in shadow DOM, let's see how to style them properly. The basic rule is that shadow elements are styled inside, and light elements -- outside, but there are notable exceptions.
+Když teď víme, jak zobrazovat elementy ze světlého DOMu ve stínovém DOMu, podívejme se, jak jim správně nastavit styly. Základní pravidlo zní, že styly stínových elementů se nastavují uvnitř a styly světlých vně, ale existují významné výjimky.
 
-We'll see the details in the next chapter.
+Podrobnosti probereme v příští kapitole.

@@ -1,361 +1,361 @@
-# Methods of RegExp and String
+# Metody tříd RegExp a String
 
-In this article we'll cover various methods that work with regexps in-depth.
+V tomto článku probereme do hloubky různé metody, které pracují s regulárními výrazy.
 
-## str.match(regexp)
+## řetězec.match(rv)
 
-The method `str.match(regexp)` finds matches for `regexp` in the string `str`.
+Metoda `řetězec.match(rv)` najde shody regulárního výrazu `rv` v řetězci `řetězec`.
 
-It has 3 modes:
+Pracuje ve třech režimech:
 
-1. If the `regexp` doesn't have flag `pattern:g`, then it returns the first match as an array with capturing groups and properties `index` (position of the match), `input` (input string, equals `str`):
-
-    ```js run
-    let str = "I love JavaScript";
-
-    let result = str.match(/Java(Script)/);
-
-    alert( result[0] );     // JavaScript (full match)
-    alert( result[1] );     // Script (first capturing group)
-    alert( result.length ); // 2
-
-    // Additional information:
-    alert( result.index );  // 7 (match position)
-    alert( result.input );  // I love JavaScript (source string)
-    ```
-
-2. If the `regexp` has flag `pattern:g`, then it returns an array of all matches as strings, without capturing groups and other details.
-    ```js run
-    let str = "I love JavaScript";
-
-    let result = str.match(/Java(Script)/g);
-
-    alert( result[0] ); // JavaScript
-    alert( result.length ); // 1
-    ```
-
-3. If there are no matches, no matter if there's flag `pattern:g` or not, `null` is returned.
-
-    That's an important nuance. If there are no matches, we don't get an empty array, but `null`. It's easy to make a mistake forgetting about it, e.g.:
+1. Jestliže `rv` neobsahuje příznak `pattern:g`, pak metoda vrátí první shodu jako pole se zachytávacími skupinami a vlastnostmi `index` (pozice shody), `input` (vstupní řetězec, je roven `řetězec`):
 
     ```js run
-    let str = "I love JavaScript";
+    let řetězec = "Mám rád JavaScript";
 
-    let result = str.match(/HTML/);
+    let výsledek = řetězec.match(/Java(Script)/);
 
-    alert(result); // null
-    alert(result.length); // Error: Cannot read property 'length' of null
+    alert( výsledek[0] );     // JavaScript (celá shoda)
+    alert( výsledek[1] );     // Script (první zachytávací skupina)
+    alert( výsledek.length ); // 2
+
+    // Další informace:
+    alert( výsledek.index );  // 8 (pozice shody)
+    alert( výsledek.input );  // Mám rád JavaScript (zdrojový řetězec)
     ```
 
-    If we want the result to be an array, we can write like this:
+2. Jestliže `rv` obsahuje příznak `pattern:g`, pak metoda vrátí pole všech shod jako řetězce, bez zachytávacích skupin a dalších detailů.
+    ```js run
+    let řetězec = "Mám rád JavaScript";
+
+    let výsledek = řetězec.match(/Java(Script)/g);
+
+    alert( výsledek[0] ); // JavaScript
+    alert( výsledek.length ); // 1
+    ```
+
+3. Jestliže žádné shody nejsou, metoda bez ohledu na přítomnost příznaku `pattern:g` vrátí `null`.
+
+    To je důležitý detail. Pokud nenastanou žádné shody, neobdržíme prázdné pole, ale `null`. Je snadné na to zapomenout a udělat chybu, například:
+
+    ```js run
+    let řetězec = "Mám rád JavaScript";
+
+    let výsledek = řetězec.match(/HTML/);
+
+    alert(výsledek); // null
+    alert(výsledek.length); // Error: Cannot read property 'length' of null
+    ```
+
+    Pokud chceme, aby výsledek byl pole, můžeme to zapsat následovně:
 
     ```js
-    let result = str.match(regexp) || [];
+    let výsledek = řetězec.match(rv) || [];
     ```
 
-## str.matchAll(regexp)
+## řetězec.matchAll(rv)
 
 [recent browser="new"]
 
-The method `str.matchAll(regexp)` is a "newer, improved" variant of `str.match`.
+Metoda `řetězec.matchAll(rv)` je „novější a vylepšená“ varianta metody `řetězec.match`.
 
-It's used mainly to search for all matches with all groups.
+Používá se převážně k hledání všech shod se všemi skupinami.
 
-There are 3 differences from `match`:
+Od metody `match` se liší ve třech věcech:
 
-1. It returns an iterable object with matches instead of an array. We can make a regular array from it using `Array.from`.
-2. Every match is returned as an array with capturing groups (the same format as `str.match` without flag `pattern:g`).
-3. If there are no results, it returns an empty iterable object instead of `null`.
+1. Namísto pole vrací iterovatelný objekt se shodami. Můžeme z něj vytvořit skutečné pole pomocí `Array.from`.
+2. Každá shoda se vrátí jako pole se zachytávacími skupinami (ve stejném formátu jako u `řetězec.match` bez příznaku `pattern:g`).
+3. Pokud žádné výsledky nejsou, místo `null` vrátí prázdný iterovatelný objekt.
 
-Usage example:
+Příklad použití:
 
 ```js run
-let str = '<h1>Hello, world!</h1>';
-let regexp = /<(.*?)>/g;
+let řetězec = '<h1>Ahoj, světe!</h1>';
+let rv = /<(.*?)>/g;
 
-let matchAll = str.matchAll(regexp);
+let matchAll = řetězec.matchAll(rv);
 
-alert(matchAll); // [object RegExp String Iterator], not array, but an iterable
+alert(matchAll); // [object RegExp String Iterator], ne pole, ale iterovatelný objekt
 
-matchAll = Array.from(matchAll); // array now
+matchAll = Array.from(matchAll); // teď je to pole
 
-let firstMatch = matchAll[0];
-alert( firstMatch[0] );  // <h1>
-alert( firstMatch[1] );  // h1
-alert( firstMatch.index );  // 0
-alert( firstMatch.input );  // <h1>Hello, world!</h1>
+let prvníShoda = matchAll[0];
+alert( prvníShoda[0] );  // <h1>
+alert( prvníShoda[1] );  // h1
+alert( prvníShoda.index );  // 0
+alert( prvníShoda.input );  // <h1>Ahoj, světe!</h1>
 ```
 
-If we use `for..of` to loop over `matchAll` matches, then we don't need `Array.from` any more.
+Pokud budeme procházet shody z metody `matchAll` pomocí cyklu `for..of`, nebudeme už `Array.from` potřebovat.
 
-## str.split(regexp|substr, limit)
+## řetězec.split(rv|podřetězec, limit)
 
-Splits the string using the regexp (or a substring) as a delimiter.
+Rozdělí řetězec podle regulárního výrazu (nebo podřetězce) jako oddělovače.
 
-We can use `split` with strings, like this:
+Můžeme použít `split` s řetězci, například:
 
 ```js run
-alert('12-34-56'.split('-')) // array of ['12', '34', '56']
+alert('12-34-56'.split('-')) // pole ['12', '34', '56']
 ```
 
-But we can split by a regular expression, the same way:
+Stejným způsobem však můžeme rozdělovat i podle regulárního výrazu:
 
 ```js run
-alert('12, 34, 56'.split(/,\s*/)) // array of ['12', '34', '56']
+alert('12, 34, 56'.split(/,\s*/)) // pole ['12', '34', '56']
 ```
 
-## str.search(regexp)
+## řetězec.search(rv)
 
-The method `str.search(regexp)` returns the position of the first match or `-1` if none found:
+Metoda `řetězec.search(rv)` vrátí pozici první shody nebo `-1`, pokud shoda nebyla nalezena:
 
 ```js run
-let str = "A drop of ink may make a million think";
+let řetězec = "A drop of ink may make a million think";
 
-alert( str.search( /ink/i ) ); // 10 (first match position)
+alert( řetězec.search( /ink/i ) ); // 10 (pozice první shody)
 ```
 
-**The important limitation: `search` only finds the first match.**
+**Důležité omezení: `search` najde pouze první shodu.**
 
-If we need positions of further matches, we should use other means, such as finding them all with `str.matchAll(regexp)`.
+Jestliže potřebujeme i pozice dalších shod, měli bychom je najít jiným způsobem, například pomocí `řetězec.matchAll(rv)`.
 
-## str.replace(str|regexp, str|func)
+## řetězec.replace(řetězec|rv, řetězec|funkce)
 
-This is a generic method for searching and replacing, one of most useful ones. The swiss army knife for searching and replacing.  
+Toto je obecná metoda pro hledání a nahrazování, jedna z nejužitečnějších. Švýcarský armádní nůž pro hledání a nahrazování.
 
-We can use it without regexps, to search and replace a substring:
+Můžeme ji použít bez regulárních výrazů k nalezení a nahrazení podřetězce:
 
 ```js run
-// replace a dash by a colon
+// nahradí pomlčku dvojtečkou
 alert('12-34-56'.replace("-", ":")) // 12:34-56
 ```
 
-There's a pitfall though.
+Je tady však jedna záludnost.
 
-**When the first argument of `replace` is a string, it only replaces the first match.**
+**Pokud je prvním argumentem `replace` řetězec, metoda nahradí jen první shodu.**
 
-You can see that in the example above: only the first `"-"` is replaced by `":"`.
+Můžete to vidět v uvedeném příkladu: za `":"` byla nahrazena jedině první `"-"`.
 
-To find all hyphens, we need to use not the string `"-"`, but a regexp `pattern:/-/g`, with the obligatory `pattern:g` flag:
+Abychom našli všechny pomlčky, nesmíme použít řetězec `"-"`, ale regulární výraz `pattern:/-/g` s povinným příznakem `pattern:g`:
 
 ```js run
-// replace all dashes by a colon
+// nahradí všechny pomlčky dvojtečkou
 alert( '12-34-56'.replace( *!*/-/g*/!*, ":" ) )  // 12:34:56
 ```
 
-The second argument is a replacement string. We can use special characters in it:
+Druhým argumentem je nahrazovací řetězec. Můžeme v něm používat speciální znaky:
 
-| Symbols | Action in the replacement string |
+| Symboly | Akce v nahrazovacím řetězci |
 |--------|--------|
-|`$&`|inserts the whole match|
-|<code>$&#096;</code>|inserts a part of the string before the match|
-|`$'`|inserts a part of the string after the match|
-|`$n`|if `n` is a 1-2 digit number, inserts the contents of n-th capturing group, for details see [](info:regexp-groups)|
-|`$<name>`|inserts the contents of the parentheses with the given `name`, for details see [](info:regexp-groups)|
-|`$$`|inserts character `$` |
+|`$&`|vloží celou shodu|
+|<code>$&#096;</code>|vloží část řetězce před shodou|
+|`$'`|vloží část řetězce za shodou|
+|`$n`|pokud `n` je 1-2ciferné číslo, vloží obsah n-té zachytávací skupiny, podrobnosti viz [](info:regexp-groups)|
+|`$<jméno>`|vloží obsah závorek se jménem `jméno`, podrobnosti viz [](info:regexp-groups)|
+|`$$`|vloží znak `$` |
 
-For instance:
+Příklad:
 
 ```js run
-let str = "John Smith";
+let řetězec = "Jan Novák";
 
-// swap first and last name
-alert(str.replace(/(john) (smith)/i, '$2, $1')) // Smith, John
+// přehodí jméno a příjmení
+alert(řetězec.replace(/(jan) (novák)/i, '$2, $1')) // Novák, Jan
 ```
 
-**For situations that require "smart" replacements, the second argument can be a function.**
+**V situacích, které vyžadují „chytré“ nahrazení, může být druhým argumentem funkce.**
 
-It will be called for each match, and the returned value will be inserted as a replacement.
+Tato funkce bude volána pro každou shodu a jako nahrazovací řetězec pak bude vložena její návratová hodnota.
 
-The function is called with arguments `func(match, p1, p2, ..., pn, offset, input, groups)`:
+Funkce bude volána s argumenty `funkce(shoda, p1, p2, ..., pn, pozice, vstup, skupiny)`:
 
-1. `match` -- the match,
-2. `p1, p2, ..., pn` -- contents of capturing groups (if there are any),
-3. `offset` -- position of the match,
-4. `input` -- the source string,
-5. `groups` -- an object with named groups.
+1. `shoda` -- shoda,
+2. `p1, p2, ..., pn` -- obsahy zachytávacích skupin (pokud nějaké jsou),
+3. `pozice` -- pozice shody,
+4. `vstup` -- zdrojový řetězec,
+5. `skupiny` -- objekt s pojmenovanými skupinami.
 
-If there are no parentheses in the regexp, then there are only 3 arguments: `func(str, offset, input)`.
+Pokud regulární výraz neobsahuje závorky, pak jsou argumenty pouze tři: `funkce(řetězec, pozice, vstup)`.
 
-For example, let's uppercase all matches:
+Například převeďme všechny shody na velká písmena:
 
 ```js run
-let str = "html and css";
+let řetězec = "html a css";
 
-let result = str.replace(/html|css/gi, str => str.toUpperCase());
+let výsledek = řetězec.replace(/html|css/gi, řetězec => řetězec.toUpperCase());
 
-alert(result); // HTML and CSS
+alert(výsledek); // HTML a CSS
 ```
 
-Replace each match by its position in the string:
+Každou shodu nahraďme její pozicí v řetězci:
 
 ```js run
-alert("Ho-Ho-ho".replace(/ho/gi, (match, offset) => offset)); // 0-3-6
+alert("Ha-Ha-ha".replace(/ha/gi, (shoda, pozice) => pozice)); // 0-3-6
 ```
 
-In the example below there are two parentheses, so the replacement function is called with 5 arguments: the first is the full match, then 2 parentheses, and after it (not used in the example) the match position and the source string:
+V následujícím příkladu jsou dvoje závorky, takže nahrazovací funkce je volána s 5 argumenty: první je celá shoda, pak jsou 2 závorky a po nich (v příkladu nepoužité) pozice shody a zdrojový řetězec:
 
 ```js run
-let str = "John Smith";
+let řetězec = "Jan Novak";
 
-let result = str.replace(/(\w+) (\w+)/, (match, name, surname) => `${surname}, ${name}`);
+let výsledek = řetězec.replace(/(\w+) (\w+)/, (shoda, jméno, příjmení) => `${příjmení}, ${jméno}`);
 
-alert(result); // Smith, John
+alert(výsledek); // Novak, Jan
 ```
 
-If there are many groups, it's convenient to use rest parameters to access them:
+Pokud je skupin mnoho, je vhodné přistupovat k nim pomocí zbytkových parametrů:
 
 ```js run
-let str = "John Smith";
+let řetězec = "Jan Novak";
 
-let result = str.replace(/(\w+) (\w+)/, (...match) => `${match[2]}, ${match[1]}`);
+let výsledek = řetězec.replace(/(\w+) (\w+)/, (...shoda) => `${shoda[2]}, ${shoda[1]}`);
 
-alert(result); // Smith, John
+alert(výsledek); // Novak, Jan
 ```
 
-Or, if we're using named groups, then `groups` object with them is always the last, so we can obtain it like this:
+Nebo jestliže používáme pojmenované skupiny, objekt `skupiny` s nimi je vždy poslední, takže jej můžeme získat následovně:
 
 ```js run
-let str = "John Smith";
+let řetězec = "Jan Novak";
 
-let result = str.replace(/(?<name>\w+) (?<surname>\w+)/, (...match) => {
-  let groups = match.pop();
+let výsledek = řetězec.replace(/(?<jméno>\w+) (?<příjmení>\w+)/, (...shoda) => {
+  let skupiny = shoda.pop();
 
-  return `${groups.surname}, ${groups.name}`;
+  return `${skupiny.příjmení}, ${skupiny.jméno}`;
 });
 
-alert(result); // Smith, John
+alert(výsledek); // Novak, Jan
 ```
 
-Using a function gives us the ultimate replacement power, because it gets all the information about the match, has access to outer variables and can do everything.
+Použití funkce nám dává mocnou nahrazovací sílu, jelikož funkce obdrží všechny informace o shodě, má přístup k vnějším proměnným a může udělat cokoli.
 
-## str.replaceAll(str|regexp, str|func)
+## řetězec.replaceAll(řetězec|rv, řetězec|funkce)
 
-This method is essentially the same as `str.replace`, with two major differences:
+Tato metoda je v zásadě stejná jako `řetězec.replace`, ale má dva hlavní rozdíly:
 
-1. If the first argument is a string, it replaces *all occurrences* of the string, while `replace` replaces only the *first occurrence*.
-2. If the first argument is a regular expression without the `g` flag, there'll be an error. With `g` flag, it works the same as `replace`.
+1. Pokud je první argument řetězec, nahradí *všechny výskyty* tohoto řetězce, zatímco `replace` nahrazuje jedině *první výskyt*.
+2. Pokud je první argument regulární výraz bez příznaku `g`, nastane chyba. S příznakem `g` funguje stejně jako `replace`.
 
-The main use case for `replaceAll` is replacing all occurrences of a string.
+Hlavní využití metody `replaceAll` je nahrazení všech výskytů řetězce.
 
-Like this:
+Například:
 
 ```js run
-// replace all dashes by a colon
+// nahradí všechny pomlčky dvojtečkou
 alert('12-34-56'.replaceAll("-", ":")) // 12:34:56
 ```
 
 
-## regexp.exec(str)
+## rv.exec(řetězec)
 
-The `regexp.exec(str)` method returns a match for `regexp` in the string `str`.  Unlike previous methods, it's called on a regexp, not on a string.
+Metoda `rv.exec(řetězec)` vrátí shodu s regulárním výrazem `rv` v řetězci `řetězec`. Na rozdíl od předchozích metod se nevolá na řetězci, ale na regulárním výrazu.
 
-It behaves differently depending on whether the regexp has flag `pattern:g`.
+Chová se odlišně podle toho, zda regulární výraz obsahuje příznak `pattern:g`.
 
-If there's no `pattern:g`, then `regexp.exec(str)` returns the first match exactly as  `str.match(regexp)`. This behavior doesn't bring anything new.
+Pokud neobsahuje `pattern:g`, pak `rv.exec(řetězec)` vrátí první shodu stejně, jako `řetězec.match(rv)`. Toto chování nepřináší nic nového.
 
-But if there's flag `pattern:g`, then:
-- A call to `regexp.exec(str)` returns the first match and saves the position immediately after it in the property `regexp.lastIndex`.
-- The next such call starts the search from position `regexp.lastIndex`, returns the next match and saves the position after it in `regexp.lastIndex`.
-- ...And so on.
-- If there are no matches, `regexp.exec` returns `null` and resets `regexp.lastIndex` to `0`.
+Avšak pokud je příznak `pattern:g` uveden, pak:
+- Volání `rv.exec(řetězec)` vrátí první shodu a uloží pozici bezprostředně za ní do vlastnosti `rv.lastIndex`.
+- Další takové volání začne hledat od pozice `rv.lastIndex`, vrátí další shodu a uloží pozici bezprostředně za ní do `rv.lastIndex`.
+- ...A tak dále.
+- Pokud nejsou žádné shody, `rv.exec` vrátí `null` a vyresetuje `rv.lastIndex` na `0`.
 
-So, repeated calls return all matches one after another, using property `regexp.lastIndex` to keep track of the current search position.
+Opakovaná volání tedy vracejí všechny shody jednu po druhé a ve vlastnosti `rv.lastIndex` si pamatují aktuální pozici hledání.
 
-In the past, before the method `str.matchAll` was added to JavaScript, calls of `regexp.exec` were used in the loop to get all matches with groups:
+V minulosti, než byla do JavaScriptu přidána metoda `řetězec.matchAll`, se volání `rv.exec` používala v cyklu k získání všech shod ve skupinách:
 
 ```js run
-let str = 'More about JavaScript at https://javascript.info';
-let regexp = /javascript/ig;
+let řetězec = 'Více se o JavaScriptu dozvíte na https://javascript.info';
+let rv = /javascript/ig;
 
-let result;
+let výsledek;
 
-while (result = regexp.exec(str)) {
-  alert( `Found ${result[0]} at position ${result.index}` );
-  // Found JavaScript at position 11, then
-  // Found javascript at position 33
+while (výsledek = rv.exec(řetězec)) {
+  alert( `Nalezeno ${výsledek[0]} na pozici ${výsledek.index}` );
+  // Nalezeno JavaScript na pozici 10, pak
+  // Nalezeno javascript na pozici 40
 }
 ```
 
-This works now as well, although for newer browsers `str.matchAll` is usually more convenient.
+To funguje dosud, ačkoli u nových prohlížečů je `řetězec.matchAll` zpravidla vhodnější.
 
-**We can use `regexp.exec` to search from a given position by manually setting `lastIndex`.**
+**Můžeme použít `rv.exec` pro hledání od zadané pozice, když nastavíme `lastIndex` ručně.**
 
-For instance:
-
-```js run
-let str = 'Hello, world!';
-
-let regexp = /\w+/g; // without flag "g", lastIndex property is ignored
-regexp.lastIndex = 5; // search from 5th position (from the comma)
-
-alert( regexp.exec(str) ); // world
-```
-
-If the regexp has flag `pattern:y`, then the search will be performed exactly at the  position `regexp.lastIndex`, not any further.
-
-Let's replace flag `pattern:g` with `pattern:y` in the example above. There will be no matches, as there's no word at position `5`:
+Například:
 
 ```js run
-let str = 'Hello, world!';
+let řetězec = 'Ahoj, svete!';
 
-let regexp = /\w+/y;
-regexp.lastIndex = 5; // search exactly at position 5
+let rv = /\w+/g; // bez příznaku "g" je vlastnost lastIndex ignorována
+rv.lastIndex = 5; // hledá od 5. pozice (od čárky)
 
-alert( regexp.exec(str) ); // null
+alert( rv.exec(řetězec) ); // svete
 ```
 
-That's convenient for situations when we need to "read" something from the string by a regexp at the exact position, not somewhere further.
+Pokud RV obsahuje příznak `pattern:y`, pak bude hledání provedeno výhradně na pozici `rv.lastIndex` a nikde dál.
 
-## regexp.test(str)
-
-The method `regexp.test(str)` looks for a match and returns `true/false` whether it exists.
-
-For instance:
+Nahraďme v uvedeném příkladu příznak `pattern:g` příznakem `pattern:y`. Nenajde se žádná shoda, protože na pozici `5` není žádné slovo:
 
 ```js run
-let str = "I love JavaScript";
+let řetězec = 'Ahoj, svete!';
 
-// these two tests do the same
-alert( *!*/love/i*/!*.test(str) ); // true
-alert( str.search(*!*/love/i*/!*) != -1 ); // true
+let rv = /\w+/y;
+rv.lastIndex = 5; // hledá výhradně na pozici 5
+
+alert( rv.exec(řetězec) ); // null
 ```
 
-An example with the negative answer:
+To se hodí v situacích, kdy potřebujeme z řetězce něco „načíst“ regulárním výrazem z přesně dané pozice, ale ne odnikud dál.
+
+## rv.test(řetězec)
+
+Metoda `rv.test(řetězec)` se pokusí najít shodu a vrátí `true/false` podle toho, zda existuje.
+
+Například:
 
 ```js run
-let str = "Bla-bla-bla";
+let řetězec = "Mám rád JavaScript";
 
-alert( *!*/love/i*/!*.test(str) ); // false
-alert( str.search(*!*/love/i*/!*) != -1 ); // false
+// tyto dva testy udělají totéž
+alert( *!*/rád/i*/!*.test(řetězec) ); // true
+alert( řetězec.search(*!*/rád/i*/!*) != -1 ); // true
 ```
 
-If the regexp has flag `pattern:g`, then `regexp.test` looks from `regexp.lastIndex` property and updates this property, just like `regexp.exec`.
-
-So we can use it to search from a given position:
+Příklad se zápornou odpovědí:
 
 ```js run
-let regexp = /love/gi;
+let řetězec = "Bla-bla-bla";
 
-let str = "I love JavaScript";
-
-// start the search from position 10:
-regexp.lastIndex = 10;
-alert( regexp.test(str) ); // false (no match)
+alert( *!*/rád/i*/!*.test(řetězec) ); // false
+alert( řetězec.search(*!*/rád/i*/!*) != -1 ); // false
 ```
 
-````warn header="Same global regexp tested repeatedly on different sources may fail"
-If we apply the same global regexp to different inputs, it may lead to wrong result, because `regexp.test` call advances `regexp.lastIndex` property, so the search in another string may start from non-zero position.
+Jestliže RV obsahuje příznak `pattern:g`, pak `rv.test` hledá od vlastnosti `rv.lastIndex` a aktualizuje ji, stejně jako `rv.exec`.
 
-For instance, here we call `regexp.test` twice on the same text, and the second time fails:
+Můžeme ji tedy použít pro hledání od určité pozice:
 
 ```js run
-let regexp = /javascript/g;  // (regexp just created: regexp.lastIndex=0)
+let rv = /rád/gi;
 
-alert( regexp.test("javascript") ); // true (regexp.lastIndex=10 now)
-alert( regexp.test("javascript") ); // false
+let řetězec = "Mám rád JavaScript";
+
+// začneme hledat na pozici 10:
+rv.lastIndex = 10;
+alert( rv.test(řetězec) ); // false (žádná shoda)
 ```
 
-That's exactly because `regexp.lastIndex` is non-zero in the second test.
+````warn header="Stejný globální RV testovaný opakovaně na různých zdrojích může selhat"
+Jestliže aplikujeme stejný globální RV na různé vstupy, může vést k nesprávnému výsledku, protože volání `rv.test` posune vlastnost `rv.lastIndex`, takže hledání v jiném řetězci může začít od nenulové pozice.
 
-To work around that, we can set `regexp.lastIndex = 0` before each search. Or instead of calling methods on regexp, use string methods `str.match/search/...`, they don't use `lastIndex`.
+Například zde voláme `rv.test` dvakrát na stejném textu a druhé volání selže:
+
+```js run
+let rv = /javascript/g;  // (rv právě vytvořen: rv.lastIndex=0)
+
+alert( rv.test("javascript") ); // true (teď je rv.lastIndex=10)
+alert( rv.test("javascript") ); // false
+```
+
+Je to právě proto, že ve druhém testu je `rv.lastIndex` nenulová.
+
+Abychom se tomu vyhnuli, můžeme před každým hledáním nastavit `rv.lastIndex = 0`. Anebo místo volání metod na regulárním výrazu použijeme řetězcové metody `řetězec.match/search/...`, které `lastIndex` nepoužívají.
 ````

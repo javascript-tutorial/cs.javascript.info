@@ -1,306 +1,305 @@
-# Cross-window communication
+# Komunikace mezi okny
 
-The "Same Origin" (same site) policy limits access of windows and frames to each other.
+Vzájemný přístup mezi okny a rámy omezuje politika „stejného původu“ (stejného sídla).
 
-The idea is that if a user has two pages open: one from `john-smith.com`, and another one is `gmail.com`, then they wouldn't want a script from `john-smith.com` to read our mail from `gmail.com`. So, the purpose of the "Same Origin" policy is to protect users from information theft.
+Myšlenkou je, že když má uživatel otevřené dvě stránky, jednu z `john-smith.com` a druhá je `gmail.com`, pak nechce, aby skript z `john-smith.com` mohl přečíst mail z `gmail.com`. Účelem politiky „stejného původu“ je tedy chránit uživatele před krádeží informací.
 
-## Same Origin [#same-origin]
+## Stejný původ [#same-origin]
 
-Two URLs are said to have the "same origin" if they have the same protocol, domain and port.
+O dvou URL říkáme, že mají „stejný původ“, jestliže mají stejný protokol, doménu a port.
 
-These URLs all share the same origin:
+Všechna následující URL mají stejný původ:
 
 - `http://site.com`
 - `http://site.com/`
 - `http://site.com/my/page.html`
 
-These ones do not:
+Následující nemají stejný původ jako předchozí:
 
-- <code>http://<b>www.</b>site.com</code> (another domain: `www.` matters)
-- <code>http://<b>site.org</b></code> (another domain: `.org` matters)
-- <code><b>https://</b>site.com</code> (another protocol: `https`)
-- <code>http://site.com:<b>8080</b></code> (another port: `8080`)
+- <code>http://<b>www.</b>site.com</code> (jiná doména: `www.` vadí)
+- <code>http://<b>site.org</b></code> (jiná doména: `.org` vadí)
+- <code><b>https://</b>site.com</code> (jiný protokol: `https`)
+- <code>http://site.com:<b>8080</b></code> (jiný port: `8080`)
 
-The "Same Origin" policy states that:
+Politika „stejného původu“ říká, že:
 
-- if we have a reference to another window, e.g. a popup created by `window.open` or a window inside `<iframe>`, and that window comes from the same origin, then we have full access to that window.
-- otherwise, if it comes from another origin, then we can't access the content of that window: variables, document, anything. The only exception is `location`: we can change it (thus redirecting the user). But we cannot *read* location (so we can't see where the user is now, no information leak).
+- jestliže máme odkaz na jiné okno, např. vyskakovací okno vytvořené pomocí `window.open` nebo okno uvnitř `<iframe>`, a toto okno pochází ze stejného původu, máme k tomuto oknu plný přístup;
+- v opačném případě, když pochází z jiného původu, nemůžeme přistupovat k jeho obsahu: k proměnným, k dokumentu, zkrátka k ničemu. Jedinou výjimkou je `location`: tu můžeme změnit (a tedy přesměrovat uživatele). Nemůžeme však lokaci *načíst* (takže nevidíme, kde se uživatel právě nachází, aby nedošlo k úniku informací).
 
-### In action: iframe
+### V akci: iframe
 
-An `<iframe>` tag hosts a separate embedded window, with its own separate `document` and `window` objects.
+Značka `<iframe>` obsahuje oddělené vnořené okno s jeho vlastními oddělenými objekty `document` a `window`.
 
-We can access them using properties:
+Můžeme k nim přistupovat pomocí těchto vlastností:
 
-- `iframe.contentWindow` to get the window inside the `<iframe>`.
-- `iframe.contentDocument` to get the document inside the `<iframe>`, shorthand for `iframe.contentWindow.document`.
+- `iframe.contentWindow` vrátí okno uvnitř `<iframe>`.
+- `iframe.contentDocument` vrátí dokument uvnitř `<iframe>`, je to zkratka pro `iframe.contentWindow.document`.
 
-When we access something inside the embedded window, the browser checks if the iframe has the same origin. If that's not so then the access is denied (writing to `location` is an exception, it's still permitted).
+Když přistoupíme k něčemu uvnitř vnořeného okna, prohlížeč prověří, zda vnitřní rám má stejný původ. Pokud ne, nebude přístup povolen (výjimkou je zápis do `location`, který bude stále povolen).
 
-For instance, let's try reading and writing to `<iframe>` from another origin:
+Například zkusme číst a psát do `<iframe>` jiného původu:
 
 ```html run
 <iframe src="https://example.com" id="iframe"></iframe>
 
 <script>
   iframe.onload = function() {
-    // we can get the reference to the inner window
+    // můžeme získat odkaz na vnitřní okno
 *!*
-    let iframeWindow = iframe.contentWindow; // OK
+    let vnitřníOkno = iframe.contentWindow; // OK
 */!*
     try {
-      // ...but not to the document inside it
+      // ...ale ne na dokument uvnitř
 *!*
-      let doc = iframe.contentDocument; // ERROR
+      let doc = iframe.contentDocument; // CHYBA
 */!*
     } catch(e) {
-      alert(e); // Security Error (another origin)
+      alert(e); // Security Error (jiný původ)
     }
 
-    // also we can't READ the URL of the page in iframe
+    // nemůžeme ani NAČÍST URL stránky ve vnitřním rámu
     try {
-      // Can't read URL from the Location object
+      // nelze načíst URL z objektu Location
 *!*
-      let href = iframe.contentWindow.location.href; // ERROR
+      let href = iframe.contentWindow.location.href; // CHYBA
 */!*
     } catch(e) {
       alert(e); // Security Error
     }
 
-    // ...we can WRITE into location (and thus load something else into the iframe)!
+    // ...můžeme ZAPSAT do lokace (a tím načíst do vnitřního rámu něco jiného)!
 *!*
     iframe.contentWindow.location = '/'; // OK
 */!*
 
-    iframe.onload = null; // clear the handler, not to run it after the location change
+    iframe.onload = null; // smažeme handler, aby se nespustil po změně lokace
   };
 </script>
 ```
 
-The code above shows errors for any operations except:
+Uvedený kód zobrazí chyby pro všechny operace kromě:
 
-- Getting the reference to the inner window `iframe.contentWindow` - that's allowed.
-- Writing to `location`.
+- Získání odkazu na vnitřní okno `iframe.contentWindow` - to je dovoleno.
+- Zápisu do `location`.
 
-Contrary to that, if the `<iframe>` has the same origin, we can do anything with it:
+Naproti tomu jestliže má `<iframe>` stejný původ, můžeme s ním provádět cokoli:
 
 ```html run
-<!-- iframe from the same site -->
+<!-- iframe ze stejného sídla -->
 <iframe src="/" id="iframe"></iframe>
 
 <script>
   iframe.onload = function() {
-    // just do anything
-    iframe.contentDocument.body.prepend("Hello, world!");
+    // můžeme dělat cokoli
+    iframe.contentDocument.body.prepend("Ahoj, světe!");
   };
 </script>
 ```
 
-```smart header="`iframe.onload` vs `iframe.contentWindow.onload`"
-The `iframe.onload` event (on the `<iframe>` tag) is essentially the same as `iframe.contentWindow.onload` (on the embedded window object). It triggers when the embedded window fully loads with all resources.
+```smart header="`iframe.onload` oproti `iframe.contentWindow.onload`"
+Událost `iframe.onload` (na značce `<iframe>`) je v zásadě totéž jako `iframe.contentWindow.onload` (na objektu vnořeného okna). Spustí se, když se vnořené okno kompletně načte i se všemi zdroji.
 
-...But we can't access `iframe.contentWindow.onload` for an iframe from another origin, so using `iframe.onload`.
+...Nemůžeme však přistupovat k `iframe.contentWindow.onload` pro vnitřní rám jiného původu, proto používáme `iframe.onload`.
 ```
 
-## Windows on subdomains: document.domain
+## Okna na subdoméně: document.domain
 
-By definition, two URLs with different domains have different origins.
+Podle definice mají dvě URL s různými doménami různé původy.
 
-But if windows share the same second-level domain, for instance `john.site.com`, `peter.site.com` and `site.com` (so that their common second-level domain is `site.com`), we can make the browser ignore that difference, so that they can be treated as coming from the "same origin" for the purposes of cross-window communication.
+Jestliže však dvě okna mají stejnou doménu druhého řádu, například `jan.site.com`, `petr.site.com` a `site.com` (takže jejich společná doména druhého řádu je `site.com`), můžeme přimět prohlížeč, aby tento rozdíl ignoroval, takže s nimi pro účely meziokenní komunikace můžeme zacházet, jako by pocházely ze „stejného původu“.
 
-To make it work, each such window should run the code:
+Aby to fungovalo, mělo by každé takové okno spustit tento kód:
 
 ```js
 document.domain = 'site.com';
 ```
 
-That's all. Now they can interact without limitations. Again, that's only possible for pages with the same second-level domain.
+To je vše. Nyní spolu mohou komunikovat bez omezení. Opakujeme, že to je možné jen u stránek se stejnou doménou druhého řádu.
 
-```warn header="Deprecated, but still working"
-The `document.domain` property is in the process of being removed from the [specification](https://html.spec.whatwg.org/multipage/origin.html#relaxing-the-same-origin-restriction). The cross-window messaging (explained soon below) is the suggested replacement.
+```warn header="Zastaralá, ale stále funguje"
+Vlastnost `document.domain` podstupuje odstraňování ze [specifikace](https://html.spec.whatwg.org/multipage/origin.html#relaxing-the-same-origin-restriction). Doporučenou náhradou je meziokenní posílání zpráv (brzy bude vysvětleno).
 
-That said, as of now all browsers support it. And the support will be kept for the future, not to break old code that relies on `document.domain`.
+Přesto ji v současnosti všechny prohlížeče stále podporují. A tato podpora zůstane zachována i v budoucnu, aby se nerozbil starý kód, který se spoléhá na `document.domain`.
 ```
 
 
-## Iframe: wrong document pitfall
+## Vnitřní rám: záludnost s nesprávným dokumentem
 
-When an iframe comes from the same origin, and we may access its  `document`, there's a pitfall. It's not related to cross-origin things, but important to know.
+Když vnitřní rám pochází ze stejného původu a my můžeme přistupovat k jeho `document`, je tady jedna záludnost. Nevztahuje se k záležitostem ohledně stejného původu, ale je důležité o ní vědět.
 
-Upon its creation an iframe immediately has a document. But that document is different from the one that loads into it!
+Vnitřní rám má dokument ihned po svém vytvoření. Ale tento dokument se liší od dokumentu, do něhož se načte!
 
-So if we do something with the document immediately, that will probably be lost.
+Jestliže tedy s tímto dokumentem něco okamžitě provedeme, bude to pravděpodobně ztraceno.
 
-Here, look:
-
+Podívejte se zde:
 
 ```html run
 <iframe src="/" id="iframe"></iframe>
 
 <script>
-  let oldDoc = iframe.contentDocument;
+  let starýDokument = iframe.contentDocument;
   iframe.onload = function() {
-    let newDoc = iframe.contentDocument;
+    let novýDokument = iframe.contentDocument;
 *!*
-    // the loaded document is not the same as initial!
-    alert(oldDoc == newDoc); // false
+    // načtený dokument není stejný jako původní!
+    alert(starýDokument == novýDokument); // false
 */!*
   };
 </script>
 ```
 
-We shouldn't work with the document of a not-yet-loaded iframe, because that's the *wrong document*. If we set any event handlers on it, they will be ignored.
+Neměli bychom pracovat s dokumentem rámu, který ještě nebyl načten, protože to je *nesprávný dokument*. Jestliže na něm nastavíme handlery událostí, budou ignorovány.
 
-How to detect the moment when the document is there?
+Jak zjistit okamžik, kdy je dokument na místě?
 
-The right document is definitely at place when `iframe.onload`  triggers. But it only triggers when the whole iframe with all resources is loaded.
+Správný dokument je zaručeně na místě, když se spustí `iframe.onload`. Tato událost se však spustí až tehdy, když je načten celý vnitřní rám se všemi zdroji.
 
-We can try to catch the moment earlier using checks in `setInterval`:
+Můžeme se pokusit zachytit příslušný okamžik dříve ověřováním v `setInterval`:
 
 ```html run
 <iframe src="/" id="iframe"></iframe>
 
 <script>
-  let oldDoc = iframe.contentDocument;
+  let starýDokument = iframe.contentDocument;
 
-  // every 100 ms check if the document is the new one
-  let timer = setInterval(() => {
-    let newDoc = iframe.contentDocument;
-    if (newDoc == oldDoc) return;
+  // každých 100 ms zkontrolujeme, zda je dokument nový
+  let časovač = setInterval(() => {
+    let novýDokument = iframe.contentDocument;
+    if (novýDokument == starýDokument) return;
 
-    alert("New document is here!");
+    alert("Nový dokument je tady!");
 
-    clearInterval(timer); // cancel setInterval, don't need it any more
+    clearInterval(časovač); // zrušíme setInterval, už ho nepotřebujeme
   }, 100);
 </script>
 ```
 
-## Collection: window.frames
+## Kolekce: window.frames
 
-An alternative way to get a window object for `<iframe>` -- is to get it from the named collection  `window.frames`:
+Alternativním způsobem, jak získat objekt okna pro `<iframe>`, je získat ho z jmenné kolekce `window.frames`:
 
-- By number: `window.frames[0]` -- the window object for the first frame in the document.
-- By name: `window.frames.iframeName` -- the window object for the frame with  `name="iframeName"`.
+- Podle čísla: `window.frames[0]` -- objekt okna pro první rám v dokumentu.
+- Podle názvu: `window.frames.názevRámu` -- objekt okna pro rám obsahující `name="názevRámu"`.
 
-For instance:
+Příklad:
 
 ```html run
-<iframe src="/" style="height:80px" name="win" id="iframe"></iframe>
+<iframe src="/" style="height:80px" name="okno" id="iframe"></iframe>
 
 <script>
   alert(iframe.contentWindow == frames[0]); // true
-  alert(iframe.contentWindow == frames.win); // true
+  alert(iframe.contentWindow == frames.okno); // true
 </script>
 ```
 
-An iframe may have other iframes inside. The corresponding `window` objects form a hierarchy.
+Vnitřní rám může uvnitř obsahovat jiné rámy. Příslušné objekty `window` pak tvoří hierarchii.
 
-Navigation links are:
+Navigační odkazy jsou:
 
-- `window.frames` -- the collection of "children" windows (for nested frames).
-- `window.parent` -- the reference to the "parent" (outer) window.
-- `window.top` -- the reference to the topmost parent window.
+- `window.frames` -- kolekce „dětských“ oken (pro vnořené rámy).
+- `window.parent` -- odkaz na „rodičovské“ (vnější) okno.
+- `window.top` -- odkaz na nejvyšší rodičovské okno.
 
-For instance:
+Příklad:
 
 ```js run
 window.frames[0].parent === window; // true
 ```
 
-We can use the `top` property to check if the current document is open inside a frame or not:
+Pomocí vlastnosti `top` můžeme zjistit, zda je aktuální dokument otevřen uvnitř rámu nebo ne:
 
 ```js run
-if (window == top) { // current window == window.top?
-  alert('The script is in the topmost window, not in a frame');
+if (window == top) { // aktuální okno == window.top?
+  alert('Skript je v nejvyšším okně, ne v rámu');
 } else {
-  alert('The script runs in a frame!');
+  alert('Skript běží v rámu!');
 }
 ```
 
-## The "sandbox" iframe attribute
+## Atribut „sandbox“ vnitřního rámu
 
-The `sandbox` attribute allows for the exclusion of certain actions inside an `<iframe>` in order to prevent it executing untrusted code. It "sandboxes" the iframe by treating it as coming from another origin and/or applying other limitations.
+Atribut `sandbox` (pískoviště) nám umožní zakázat uvnitř `<iframe>` určité akce, aby zabránil spuštění nevěrohodného kódu. Vytvoří tedy z vnitřního rámu „pískoviště“, s nímž se bude zacházet, jako by pocházelo z jiného původu, a/nebo s určitými dalšími omezeními.
 
-There's a "default set" of restrictions applied for `<iframe sandbox src="...">`. But it can be relaxed if we provide a space-separated list of restrictions that should not be applied as a value of the attribute, like this: `<iframe sandbox="allow-forms allow-popups">`.
+Na `<iframe sandbox src="...">` se aplikuje „standardní sada“ omezení. Tu však můžeme zmírnit, pokud do hodnoty tohoto atributu uvedeme seznam omezení oddělených mezerami, která by se neměla aplikovat, například: `<iframe sandbox="allow-forms allow-popups">`.
 
-In other words, an empty `"sandbox"` attribute puts the strictest limitations possible, but we can put a space-delimited list of those that we want to lift.
+Jinými slovy, prázdný atribut `"sandbox"` vytvoří nejpřísnější možná omezení, ale můžeme uvést mezerami oddělený seznam těch, která nechceme použít.
 
-Here's a list of limitations:
+Seznam omezení je následující:
 
 `allow-same-origin`
-: By default `"sandbox"` forces the "different origin" policy for the iframe. In other words, it makes the browser to treat the `iframe` as coming from another origin, even if its `src` points to the same site. With all implied restrictions for scripts. This option removes that feature.
+: Standardně `"sandbox"` vynucuje pro vnitřní rám politiku „jiného původu“. Jinými slovy, nutí prohlížeč zacházet s tímto `iframe`, jako by pocházel z jiného původu, i když jeho `src` ukazuje na stejné sídlo, se všemi omezeními pro skripty, která z toho vyplývají. Tato volba toto chování ruší.
 
 `allow-top-navigation`
-: Allows the `iframe` to change `parent.location`.
+: Umožňuje tomuto `iframe` změnit `parent.location`.
 
 `allow-forms`
-: Allows to submit forms from `iframe`.
+: Umožňuje z tohoto `iframe` posílat formuláře.
 
 `allow-scripts`
-: Allows to run scripts from the `iframe`.
+: Umožňuje z tohoto `iframe` spouštět skripty.
 
 `allow-popups`
-: Allows to `window.open` popups from the `iframe`
+: Umožňuje z tohoto `iframe` otevírat vyskakovací okna pomocí `window.open`.
 
-See [the manual](mdn:/HTML/Element/iframe) for more.
+Další omezení najdete v [manuálu](mdn:/HTML/Element/iframe).
 
-The example below demonstrates a sandboxed iframe with the default set of restrictions: `<iframe sandbox src="...">`. It has some JavaScript and a form.
+Následující příklad demonstruje vnitřní rám jako pískoviště se standardní sadou omezení: `<iframe sandbox src="...">`. Rám obsahuje krátký JavaScriptový kód a formulář.
 
-Please note that nothing works. So the default set is really harsh:
+Prosíme všimněte si, že v něm nic nefunguje. Standardní sada omezení je tedy opravdu přísná:
 
 [codetabs src="sandbox" height=140]
 
 
 ```smart
-The purpose of the `"sandbox"` attribute is only to *add more* restrictions. It cannot remove them. In particular, it can't relax same-origin restrictions if the iframe comes from another origin.
+Účelem atributu `"sandbox"` je výhradně *přidat další* omezení. Nemůže je odstranit. Konkrétně nedokáže zmírnit omezení stejného původu, pokud rám pochází z jiného původu.
 ```
 
-## Cross-window messaging
+## Posílání zpráv mezi okny
 
-The `postMessage` interface allows windows to talk to each other no matter which origin they are from.
+Rozhraní `postMessage` umožňuje oknům, aby spolu navzájem hovořila, a to bez ohledu na jejich původ.
 
-So, it's a way around the "Same Origin" policy. It allows a window from `john-smith.com` to talk to `gmail.com` and exchange information, but only if they both agree and call corresponding JavaScript functions. That makes it safe for users.
+Je to tedy způsob, jak obejít politiku „stejného původu“. Umožňuje oknu z `john-smith.com` komunikovat s `gmail.com` a vyměňovat si s ním informace, ale jen tehdy, pokud obě okna souhlasí a volají příslušné JavaScriptové funkce. Tím je to bezpečné pro uživatele.
 
-The interface has two parts.
+Rozhraní se skládá ze dvou částí.
 
 ### postMessage
 
-The window that wants to send a message calls [postMessage](mdn:api/Window.postMessage) method of the receiving window. In other words, if we want to send the message to `win`, we should call  `win.postMessage(data, targetOrigin)`.
+Okno, které chce poslat zprávu, zavolá na přijímajícím okně metodu [postMessage](mdn:api/Window.postMessage). Jinými slovy, chceme-li poslat zprávu oknu `okno`, měli bychom volat `okno.postMessage(data, původCíle)`.
 
-Arguments:
+Argumenty:
 
 `data`
-: The data to send. Can be any object, the data is cloned using the "structured serialization algorithm". IE supports only strings, so we should `JSON.stringify` complex objects to support that browser.
+: Data k odeslání. Může to být libovolný objekt, data budou naklonována „algoritmem strukturované serializace“. IE podporuje pouze řetězce, takže pokud chceme tento prohlížeč podporovat, měli bychom na složitých objektech volat `JSON.stringify`.
 
-`targetOrigin`
-: Specifies the origin for the target window, so that only a window from the given origin will get the message.
+`původCíle`
+: Specifikuje původ cílového okna, takže zprávu získá pouze okno se zadaným původem.
 
-The `targetOrigin` is a safety measure. Remember, if the target window comes from another origin, we can't read its `location` in the sender window. So we can't be sure which site is open in the intended window right now: the user could navigate away, and the sender window has no idea about it.
+Argument `původCíle` je bezpečnostní opatření. Nezapomeňte, že jestliže cílové okno pochází z jiného původu, nemůžeme v odesílajícím okně načíst jeho `location`. Nemůžeme tedy s jistotou vědět, jaká stránka je v cílovém okně právě otevřená: uživatel se mohl přesunout jinam a odesílající okno o tom nemá ponětí.
 
-Specifying `targetOrigin` ensures that the window only receives the data if it's still at the right site. Important when the data is sensitive.
+Specifikace `původCíle` zaručuje, že okno získá data jen tehdy, je-li stále na správné stránce. To je důležité, když jsou data důvěrná.
 
-For instance, here `win` will only receive the message if it has a document from the origin `http://example.com`:
+Například zde `okno` získá zprávu jen tehdy, pokud obsahuje dokument z původu `http://example.com`:
 
 ```html no-beautify
-<iframe src="http://example.com" name="example">
+<iframe src="http://example.com" name="příklad">
 
 <script>
-  let win = window.frames.example;
+  let okno = window.frames.příklad;
 
-  win.postMessage("message", "http://example.com");
+  okno.postMessage("zpráva", "http://example.com");
 </script>
 ```
 
-If we don't want that check, we can set `targetOrigin` to `*`.
+Pokud si tuto kontrolu nepřejeme, můžeme nastavit `původCíle` na `*`.
 
 ```html no-beautify
-<iframe src="http://example.com" name="example">
+<iframe src="http://example.com" name="příklad">
 
 <script>
-  let win = window.frames.example;
+  let okno = window.frames.příklad;
 
 *!*
-  win.postMessage("message", "*");
+  okno.postMessage("zpráva", "*");
 */!*
 </script>
 ```
@@ -308,70 +307,70 @@ If we don't want that check, we can set `targetOrigin` to `*`.
 
 ### onmessage
 
-To receive a message, the target window should have a handler on the `message` event. It triggers when `postMessage` is called (and `targetOrigin` check is successful).
+Aby cílové okno zprávu obdrželo, mělo by mít handler události `message`. Ten se spustí, když je volána `postMessage` (a kontrola `původCíle` je úspěšná).
 
-The event object has special properties:
+Objekt této události má speciální vlastnosti:
 
 `data`
-: The data from `postMessage`.
+: Data z `postMessage`.
 
 `origin`
-: The origin of the sender, for instance `http://javascript.info`.
+: Původ odesílatele, například `http://javascript.info`.
 
 `source`
-: The reference to the sender window. We can immediately `source.postMessage(...)` back if we want.
+: Odkaz na odesílající okno. Pokud chceme, můžeme okamžitě poslat zprávu zpět voláním `source.postMessage(...)`.
 
-To assign that handler, we should use `addEventListener`, a short syntax `window.onmessage` does not work.
+Tento handler bychom měli přiřadit metodou `addEventListener`, krátká syntaxe `window.onmessage` nefunguje.
 
-Here's an example:
+Příklad:
 
 ```js
-window.addEventListener("message", function(event) {
-  if (event.origin != 'http://javascript.info') {
-    // something from an unknown domain, let's ignore it
+window.addEventListener("zpráva", function(událost) {
+  if (událost.origin != 'http://javascript.info') {
+    // něco z neznámé domény, ignorujme to
     return;
   }
 
-  alert( "received: " + event.data );
+  alert( "obdrženo: " + událost.data );
 
-  // can message back using event.source.postMessage(...)
+  // můžeme poslat zprávu zpět voláním událost.source.postMessage(...)
 });
 ```
 
-The full example:
+Celý příklad:
 
 [codetabs src="postmessage" height=120]
 
-## Summary
+## Shrnutí
 
-To call methods and access the content of another window, we should first have a reference to it.
+Abychom mohli volat metody jiného okna a přistupovat k jeho obsahu, měli bychom na něj nejprve mít odkaz.
 
-For popups we have these references:
-- From the opener window: `window.open` -- opens a new window and returns a reference to it,
-- From the popup: `window.opener` -- is a reference to the opener window from a popup.
+Pro vyskakovací okna máme tyto odkazy:
+- Z otevírajícího okna: `window.open` -- otevře nové okno a vrátí odkaz na ně.
+- Z vyskakovacího okna: `window.opener` -- ve vyskakovacím okně odkaz na otevírající.
 
-For iframes, we can access parent/children windows using:
-- `window.frames` -- a collection of nested window objects,
-- `window.parent`, `window.top` are the references to parent and top windows,
-- `iframe.contentWindow` is the window inside an `<iframe>` tag.
+U vnitřních rámů můžeme přistupovat k rodičovským/dětským oknům pomocí:
+- `window.frames` -- kolekce objektů vnořených oken,
+- `window.parent`, `window.top` jsou odkazy na rodičovské a nejvyšší okno,
+- `iframe.contentWindow` je okno uvnitř značky `<iframe>`.
 
-If windows share the same origin (host, port, protocol), then windows can do whatever they want with each other.
+Jestliže okna mají stejný původ (doména, port, protokol), mohou navzájem jedno s druhým dělat, co chtějí.
 
-Otherwise, only possible actions are:
-- Change the `location` of another window (write-only access).
-- Post a message to it.
+Jinak jsou možné jen následující akce:
+- Změnit `location` druhého okna (přístup jen pro zápis).
+- Poslat druhému oknu zprávu.
 
-Exceptions are:
-- Windows that share the same second-level domain: `a.site.com` and `b.site.com`. Then setting `document.domain='site.com'` in both of them puts them into the "same origin" state.
-- If an iframe has a `sandbox` attribute, it is forcefully put into the "different origin" state, unless the `allow-same-origin` is specified in the attribute value. That can be used to run untrusted code in iframes from the same site.
+Výjimky jsou:
+- Okna, která mají stejnou doménu druhého řádu: `a.site.com` a `b.site.com`. Pak je nastavení `document.domain='site.com'` v obou oknech uvede do stavu „stejného původu“.
+- Jestliže vnitřní rám má atribut `sandbox`, je nuceně uveden do stavu „jiného původu“, pokud v hodnotě atributu není uvedeno `allow-same-origin`. To lze použít ke spuštění nevěrohodného kódu ve vnitřních rámech ze stejného sídla.
 
-The `postMessage` interface allows two windows with any origins to talk:
+Rozhraní `postMessage` umožňuje vzájemný hovor mezi dvěma okny jakýchkoli původů:
 
-1. The sender calls `targetWin.postMessage(data, targetOrigin)`.
-2. If `targetOrigin` is not `'*'`, then the browser checks if window `targetWin` has the origin `targetOrigin`.
-3. If it is so, then `targetWin` triggers the `message` event with special properties:
-    - `origin` -- the origin of the sender window (like `http://my.site.com`)
-    - `source` -- the reference to the sender window.
-    - `data` -- the data, any object in everywhere except IE that supports only strings.
+1. Odesílatel zavolá `cílovéOkno.postMessage(data, původCíle)`.
+2. Pokud `původCíle` není `'*'`, prohlížeč ověří, zda okno `cílovéOkno` má původ `původCíle`.
+3. Pokud ano, pak `cílovéOkno` spustí událost `message` se speciálními vlastnostmi:
+    - `origin` -- původ odesílajícího okna (např. `http://my.site.com`).
+    - `source` -- odkaz na odesílající okno.
+    - `data` -- data, libovolný objekt kdekoli kromě IE, který podporuje pouze řetězce.
 
-    We should use `addEventListener` to set the handler for this event inside the target window.
+    K nastavení handleru této události v cílovém okně bychom měli použít `addEventListener`.

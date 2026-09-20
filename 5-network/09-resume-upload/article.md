@@ -1,82 +1,82 @@
-# Resumable file upload
+# Obnovitelné odesílání souboru
 
-With `fetch` method it's fairly easy to upload a file.
+Odeslat soubor metodou `fetch` je velice snadné.
 
-How to resume the upload after lost connection? There's no built-in option for that, but we have the pieces to implement it.
+Jak obnovit odeslání po ztrátě spojení? Neexistuje pro to žádná vestavěná možnost, ale máme součásti, které nám to umožní implementovat.
 
-Resumable uploads should come with upload progress indication, as we expect big files (if we may need to resume). So, as `fetch` doesn't allow to track upload progress, we'll use [XMLHttpRequest](info:xmlhttprequest).
+Obnovitelné odesílání by mělo přijít společně s oznamováním průběhu odesílání, protože očekáváme velké soubory (pokud máme potřebu je obnovovat). Jelikož `fetch` neumožňuje sledovat průběh odesílání, použijeme [XMLHttpRequest](info:xmlhttprequest).
 
-## Not-so-useful progress event
+## Nepříliš užitečná událost průběhu
 
-To resume upload, we need to know how much was uploaded till the connection was lost.
+Abychom mohli odesílání obnovit, potřebujeme vědět, kolik bytů bylo odesláno před ztrátou spojení.
 
-There's `xhr.upload.onprogress` to track upload progress.
+Pro sledování průběhu odesílání máme událost `xhr.upload.onprogress`.
 
-Unfortunately, it won't help us to resume the upload here, as it triggers when the data is *sent*, but was it received by the server? The browser doesn't know.
+Naneštěstí nám tady tato událost nepomůže obnovit odesílání, protože se spouští, když jsou data *odeslána*, ale byla přijata serverem? To prohlížeč neví.
 
-Maybe it was buffered by a local network proxy, or maybe the remote server process just died and couldn't process them, or it was just lost in the middle and didn't reach the receiver.
+Možná byla uložena do bufferu místní síťovou proxy, možná vzdálený serverový proces spadl a nemohl je zpracovat, nebo prostě byla ztracena po cestě a nedostala se k příjemci.
 
-That's why this event is only useful to show a nice progress bar.
+Tato událost je tedy užitečná jen k zobrazení hezkého ukazatele průběhu.
 
-To resume upload, we need to know *exactly* the number of bytes received by the server. And only the server can tell that, so we'll make an additional request.
+Abychom mohli obnovit odesílání, musíme znát *přesný* počet bytů, které server přijal. A ten nám může sdělit jedině server, proto vytvoříme dodatečný požadavek.
 
-## Algorithm
+## Algoritmus
 
-1. First, create a file id, to uniquely identify the file we're going to upload:
+1. Nejprve vytvoříme identifikátor souboru, aby unikátně identifikoval soubor, který se chystáme odeslat:
     ```js
-    let fileId = file.name + '-' + file.size + '-' + file.lastModified;
+    let idSouboru = soubor.name + '-' + soubor.size + '-' + soubor.lastModified;
     ```
-    That's needed for resume upload, to tell the server what we're resuming.
+    Ten je zapotřebí k obnově odesílání, abychom sdělili serveru, co obnovujeme.
 
-    If the name or the size or the last modification date changes, then there'll be another `fileId`.
+    Pokud se změní název, velikost nebo datum poslední změny, vytvoří se jiný `idSouboru`.
 
-2. Send a request to the server, asking how many bytes it already has, like this:
+2. Pošleme na server požadavek s dotazem, kolik bytů už server má, například:
     ```js
-    let response = await fetch('status', {
+    let odpověď = await fetch('status', {
       headers: {
         'X-File-Id': fileId
       }
     });
 
-    // The server has that many bytes
-    let startByte = +await response.text();
+    // Server má tento počet bytů
+    let počátečníByte = +await odpověď.text();
     ```
 
-    This assumes that the server tracks file uploads by `X-File-Id` header. Should be implemented at server-side.
+    Předpokládáme, že server sleduje odesílání souborů podle hlavičky `X-File-Id`. To by mělo být implementováno na straně serveru.
 
-    If the file doesn't yet exist at the server, then the server response should be `0`
+    Jestliže soubor na serveru ještě neexistuje, odpověď serveru by měla být `0`.
 
-3. Then, we can use `Blob` method `slice` to send the file from `startByte`:
+3. Pak můžeme použít metodu `slice` objektu `Blob` k odeslání souboru od `počátečníByte`:
     ```js
     xhr.open("POST", "upload");
 
-    // File id, so that the server knows which file we upload
-    xhr.setRequestHeader('X-File-Id', fileId);
+    // id souboru, aby server věděl, který soubor odesíláme
+    xhr.setRequestHeader('X-File-Id', idSouboru);
 
-    // The byte we're resuming from, so the server knows we're resuming
-    xhr.setRequestHeader('X-Start-Byte', startByte);
+    // byte, od kterého obnovujeme, aby server věděl, že obnovujeme
+    xhr.setRequestHeader('X-Start-Byte', počátečníByte);
 
     xhr.upload.onprogress = (e) => {
-      console.log(`Uploaded ${startByte + e.loaded} of ${startByte + e.total}`);
+      console.log(`Odesláno ${počátečníByte + e.loaded} z ${počátečníByte + e.total}`);
     };
 
-    // file can be from input.files[0] or another source
-    xhr.send(file.slice(startByte));
+    // soubor může být z input.files[0] nebo jiného zdroje
+    xhr.send(soubor.slice(počátečníByte));
     ```
 
-    Here we send the server both file id as `X-File-Id`, so it knows which file we're uploading, and the starting byte as `X-Start-Byte`, so it knows we're not uploading it initially, but resuming.
+    Zde posíláme serveru jak identifikátor souboru v hlavičce `X-File-Id`, aby server věděl, který soubor odesíláme, tak počáteční byte v hlavičce `X-Start-Byte`, aby server věděl, že soubor neodesíláme od začátku, ale obnovujeme přerušené odesílání.
 
-    The server should check its records, and if there was an upload of that file, and the current uploaded size is exactly `X-Start-Byte`, then append the data to it.
+    Server by si měl projít své záznamy, a pokud tento soubor dříve přijímal a aktuální velikost přijatých dat je přesně `X-Start-Byte`, měl by nová data připojit k němu.
 
 
-Here's the demo with both client and server code, written on Node.js.
+Následuje demo s kódem klienta i serveru, napsané v Node.js.
 
-It works only partially on this site, as Node.js is behind another server named Nginx, that buffers uploads, passing them to Node.js when fully complete.
+Na této stránce funguje jen částečně, protože Node.js je za jiným serverem jménem Nginx, který si přijatá data ukládá do bufferu a předává je Node.js, až když jsou zcela kompletní.
 
-But you can download it and run locally for the full demonstration:
+Můžete si však demo stáhnout a pro plnou ukázku si je spustit lokálně:
 
 [codetabs src="upload-resume" height=200]
 
-As we can see, modern networking methods are close to file managers in their capabilities -- control over headers, progress indicator, sending file parts, etc.
+Jak vidíme, moderní síťové metody se svými možnostmi blíží správcům souborů -- máme kontrolu nad hlavičkami, indikátor průběhu, posílání částí souborů a podobně.
 
-We can implement resumable upload and much more.
+Můžeme implementovat obnovitelné odesílání a mnoho dalšího.

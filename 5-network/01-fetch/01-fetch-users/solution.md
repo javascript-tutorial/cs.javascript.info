@@ -1,40 +1,40 @@
 
-To fetch a user we need: `fetch('https://api.github.com/users/USERNAME')`.
+Pro stažení uživatele potřebujeme: `fetch('https://api.github.com/users/USERNAME')`.
 
-If the response has status `200`, call `.json()` to read the JS object.
+Jestliže odpověď má status `200`, zavoláme `.json()`, abychom načetli JS objekt.
 
-Otherwise, if a `fetch` fails, or the response has non-200 status, we just return `null` in the resulting array.
+V opačném případě, jestliže `fetch` selže nebo odpověď má jiný status než 200, jen vrátíme ve výsledném poli `null`.
 
-So here's the code:
+Zde je tedy kód:
 
 ```js demo
-async function getUsers(names) {
-  let jobs = [];
+async function vraťUživatele(jména) {
+  let uživatelé = [];
 
-  for(let name of names) {
-    let job = fetch(`https://api.github.com/users/${name}`).then(
-      successResponse => {
-        if (successResponse.status != 200) {
+  for(let jméno of jména) {
+    let uživatel = fetch(`https://api.github.com/users/${jméno}`).then(
+      úspěšnáOdpověď => {
+        if (úspěšnáOdpověď.status != 200) {
           return null;
         } else {
-          return successResponse.json();
+          return úspěšnáOdpověď.json();
         }
       },
-      failResponse => {
+      neúspěšnáOdpověď => {
         return null;
       }
     );
-    jobs.push(job);
+    uživatelé.push(uživatel);
   }
 
-  let results = await Promise.all(jobs);
+  let výsledky = await Promise.all(uživatelé);
 
-  return results;
+  return výsledky;
 }
 ```
 
-Please note: `.then` call is attached directly to `fetch`, so that when we have the response, it doesn't wait for other fetches, but starts to read `.json()` immediately.
+Prosíme všimněte si, že volání `.then` je připojeno přímo k `fetch`. Když tedy máme odpověď, nečeká na ostatní stahování, ale začne okamžitě načítat `.json()`.
 
-If we used `await Promise.all(names.map(name => fetch(...)))`, and call `.json()` on the results, then it would wait for all fetches to respond. By adding `.json()` directly to each `fetch`, we ensure that individual fetches start reading data as JSON without waiting for each other.
+Kdybychom použili `await Promise.all(jména.map(jméno => fetch(...)))` a volali `.json()` na výsledcích, napřed by se čekalo na odpovědi všech stahování. Přidáním `.json()` přímo ke každému `fetch` zajistíme, že jednotlivá stahování začnou načítat data jako JSON bez čekání na ostatní stahování.
 
-That's an example of how low-level Promise API can still be useful even if we mainly use `async/await`.
+Je to příklad toho, jak může být příslibové API nižší úrovně stále užitečné, i když převážně používáme `async/await`.

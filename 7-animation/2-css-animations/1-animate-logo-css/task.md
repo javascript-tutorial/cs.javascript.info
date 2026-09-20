@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Animate a plane (CSS)
+# Animace letadla (CSS)
 
-Show the animation like on the picture below (click the plane):
+Zobrazte animaci stejně jako na následujícím obrázku (klikněte na letadlo):
 
 [iframe src="solution" height=300]
 
-- The picture grows on click from `40x24px` to `400x240px` (10 times larger).
-- The animation takes 3 seconds.
-- At the end output: "Done!".
-- During the animation process, there may be more clicks on the plane. They shouldn't "break" anything.
+- Po kliknutí se obrázek zvětší z `40x24px` na `400x240px` (10-násobně).
+- Animace trvá 3 sekundy.
+- Na konci zobrazte: „Hotovo!“
+- Během procesu animace může dojít k dalším kliknutím na letadlo. Při nich by se nemělo nic „rozbít“.

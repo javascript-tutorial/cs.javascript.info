@@ -1,5 +1,5 @@
-An empty string is the only match: it starts and immediately finishes.
+Odpovídá mu jedině prázdný řetězec: začne a okamžitě skončí.
 
-The task once again demonstrates that anchors are not characters, but tests.
+Tato úloha znovu předvádí, že kotvy nejsou znaky, ale testy.
 
-The string is empty `""`. The engine first matches the `pattern:^` (input start), yes it's there, and then immediately the end `pattern:$`, it's here too. So there's a match.
+Řetězec je prázdný `""`. Motor napřed prověří `pattern:^` (začátek vstupu), ano, je tam, a pak okamžitě konec `pattern:$`, ten je tam také. Proto nastane shoda.

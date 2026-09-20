@@ -7,10 +7,10 @@
 
 <body>
 
-  Receiving iframe.
+  Přijímající rám.
   <script>
-    window.addEventListener('message', function(event) {
-      alert(`Received ${event.data} from ${event.origin}`);
+    window.addEventListener('message', function(událost) {
+      alert(`Získáno ${událost.data} z ${událost.origin}`);
     });
   </script>
 

@@ -1,113 +1,112 @@
-# Shadow DOM and events
+# Stínový DOM a události
 
-The idea behind shadow tree is to encapsulate internal implementation details of a component.
+Myšlenkou stínového stromu je zapouzdřit vnitřní implementaci detailů komponenty.
 
-Let's say, a click event happens inside a shadow DOM of `<user-card>` component. But scripts in the main document have no idea about the shadow DOM internals, especially if the component comes from a 3rd-party library.  
+Řekněme, že uvnitř stínového DOMu komponenty `<karta-uzivatele>` nastane událost kliknutí. Skripty v hlavním dokumentu však nemají ponětí o vnitřku stínového DOMu, zvláště pokud komponenta pochází z knihovny třetí strany.
 
-So, to keep the details encapsulated, the browser *retargets* the event.
+Aby tedy detaily zůstaly zapouzdřeny, prohlížeč tuto událost *přesměruje*.
 
-**Events that happen in shadow DOM have the host element as the target, when caught outside of the component.**
+**Když jsou události, které se stanou ve stínovém DOMu, zachyceny mimo komponentu, jejich cílem je hostitelský element.**
 
-Here's a simple example:
+Jednoduchý příklad:
 
 ```html run autorun="no-epub" untrusted height=60
-<user-card></user-card>
+<karta-uzivatele></karta-uzivatele>
 
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `<p>
-      <button>Click me</button>
+      <button>Klikněte na mě</button>
     </p>`;
     this.shadowRoot.firstElementChild.onclick =
-      e => alert("Inner target: " + e.target.tagName);
+      e => alert("Vnitřní cíl: " + e.target.tagName);
   }
 });
 
 document.onclick =
-  e => alert("Outer target: " + e.target.tagName);
+  e => alert("Vnější cíl: " + e.target.tagName);
 </script>
 ```
 
-If you click on the button, the messages are:
+Jestliže na tlačítko kliknete, zobrazí se zprávy:
 
-1. Inner target: `BUTTON` -- internal event handler gets the correct target, the element inside shadow DOM.
-2. Outer target: `USER-CARD` -- document event handler gets shadow host as the target.
+1. Vnitřní cíl: `BUTTON` -- vnitřní handler události obdrží správný cíl, element uvnitř stínového DOMu.
+2. Vnější cíl: `KARTA-UZIVATELE` -- dokumentový handler události obdrží jako cíl stínového hostitele.
 
-Event retargeting is a great thing to have, because the outer document doesn't have to know  about component internals. From its point of view, the event happened on `<user-card>`.
+Přesměrování událostí je skvělá věc, protože vnější dokument nemusí vědět nic o vnitřku komponenty. Z jeho pohledu se událost stala na elementu `<karta-uzivatele>`.
 
-**Retargeting does not occur if the event occurs on a slotted element, that physically lives in the light DOM.**
+**K přesměrování nedojde, pokud se událost stala na elementu ve slotu, který fyzicky přebývá ve světlém DOMu.**
 
-For example, if a user clicks on `<span slot="username">` in the example below, the event target is exactly this `span` element, for both shadow and light handlers:
+Například když v následujícím příkladu uživatel klikne na `<span slot="uživatel">`, cílem události bude ve stínovém i ve světlém handleru právě tento element `span`:
 
 ```html run autorun="no-epub" untrusted height=60
-<user-card id="userCard">
+<karta-uzivatele id="kartaUživatele">
 *!*
-  <span slot="username">John Smith</span>
+  <span slot="uživatel">Jan Novák</span>
 */!*
-</user-card>
+</karta-uzivatele>
 
 <script>
-customElements.define('user-card', class extends HTMLElement {
+customElements.define('karta-uzivatele', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `<div>
-      <b>Name:</b> <slot name="username"></slot>
+      <b>Jméno:</b> <slot name="uživatel"></slot>
     </div>`;
 
     this.shadowRoot.firstElementChild.onclick =
-      e => alert("Inner target: " + e.target.tagName);
+      e => alert("Vnitřní cíl: " + e.target.tagName);
   }
 });
 
-userCard.onclick = e => alert(`Outer target: ${e.target.tagName}`);
+kartaUživatele.onclick = e => alert(`Vnější cíl: ${e.target.tagName}`);
 </script>
 ```
 
-If a click happens on `"John Smith"`, for both inner and outer handlers the target is `<span slot="username">`. That's an element from the light DOM, so no retargeting.
+Jestliže nastane kliknutí na `"Jan Novák"`, ve vnitřním i vnějším handleru bude cíl `<span slot="uživatel">`. To je element ze světlého DOMu, takže nedojde k přesměrování.
 
-On the other hand, if the click occurs on an element originating from shadow DOM, e.g. on `<b>Name</b>`, then, as it bubbles out of the shadow DOM, its `event.target` is reset to `<user-card>`.
+Naproti tomu jestliže nastane kliknutí na element pocházející ze stínového DOMu, např. `<b>Jméno:</b>`, pak když probublá ven ze stínového DOMu, jeho `událost.target` se nastaví na `<karta-uzivatele>`.
 
-## Bubbling, event.composedPath()
+## Bublání, událost.composedPath()
 
-For purposes of event bubbling, flattened DOM is used.
+Pro účely bublání událostí se používá zploštělý DOM.
 
-So, if we have a slotted element, and an event occurs somewhere inside it, then it bubbles up to the `<slot>` and upwards.
+Máme-li tedy element ve slotu a někde uvnitř něj nastane událost, tato událost probublá do `<slot>` a výš.
 
-The full path to the original event target, with all the shadow elements, can be obtained using `event.composedPath()`. As we can see from the name of the method, that path is taken after the composition.
+Celou cestu k původnímu cíli události se všemi stínovými elementy je možné získat voláním `událost.composedPath()`. Jak vidíme z názvu metody, je vrácena cesta po kompozici.
 
-In the example above, the flattened DOM is:
+V uvedeném příkladu vypadá zploštělý DOM následovně:
 
 ```html
-<user-card id="userCard">
+<karta-uzivatele id="kartaUživatele">
   #shadow-root
     <div>
-      <b>Name:</b>
-      <slot name="username">
-        <span slot="username">John Smith</span>
+      <b>Jméno:</b>
+      <slot name="uživatel">
+        <span slot="uživatel">Jan Novák</span>
       </slot>
     </div>
-</user-card>
+</karta-uzivatele>
+```
+
+Při kliknutí na `<span slot="uživatel">` tedy volání `událost.composedPath()` vrátí toto pole: [`span`, `slot`, `div`, `shadow-root`, `karta-uzivatele`, `body`, `html`, `document`, `window`]. To je přesně řetězec rodičů od cílového elementu ve zploštělém DOMu po kompozici.
+
+```warn header="Detaily stínového stromu jsou vráceny jen u stromů s `{mode:'open'}`"
+Pokud byl stínový strom vytvořen s `{mode: 'closed'}`, pak složená cesta začne od hostitele `karta-uzivatele` a pokračuje výš.
+
+Je to podobný princip jako u jiných metod, které pracují se stínovým DOMem. Vnitřní části uzavřených stromů jsou zcela ukryty.
 ```
 
 
-So, for a click on `<span slot="username">`, a call to `event.composedPath()` returns an array: [`span`, `slot`, `div`, `shadow-root`, `user-card`, `body`, `html`, `document`, `window`]. That's exactly the parent chain from the target element in the flattened DOM, after the composition.
+## událost.composed
 
-```warn header="Shadow tree details are only provided for `{mode:'open'}` trees"
-If the shadow tree was created with `{mode: 'closed'}`, then the composed path starts from the host: `user-card` and upwards.
+Většina událostí úspěšně probublá skrz hranici stínového DOMu, ale některé události to neudělají.
 
-That's the similar principle as for other methods that work with shadow DOM. Internals of closed trees are completely hidden.
-```
+Ovládá to vlastnost objektu události `composed`. Pokud je `true`, událost překročí hranici. Jinak může být zachycena jen uvnitř stínového DOMu.
 
-
-## event.composed
-
-Most events successfully bubble through a shadow DOM boundary. There are few events that do not.
-
-This is governed by the `composed` event object property. If it's `true`, then the event does cross the boundary. Otherwise, it only can be caught from inside the shadow DOM.
-
-If you take a look at [UI Events specification](https://www.w3.org/TR/uievents), most events have `composed: true`:
+Když se podíváte na [specifikaci událostí UI](https://www.w3.org/TR/uievents), uvidíte, že většina událostí má `composed: true`:
 
 - `blur`, `focus`, `focusin`, `focusout`,
 - `click`, `dblclick`,
@@ -115,78 +114,78 @@ If you take a look at [UI Events specification](https://www.w3.org/TR/uievents),
 - `wheel`,
 - `beforeinput`, `input`, `keydown`, `keyup`.
 
-All touch events and pointer events also have `composed: true`.
+Rovněž všechny dotekové a ukazatelové události mají `composed: true`.
 
-There are some events that have `composed: false` though:
+Existují však události, které mají `composed: false`:
 
-- `mouseenter`, `mouseleave` (they do not bubble at all),
+- `mouseenter`, `mouseleave` (ty vůbec nebublají),
 - `load`, `unload`, `abort`, `error`,
 - `select`,
 - `slotchange`.
 
-These events can be caught only on elements within the same DOM, where the event target resides.
+Tyto události je možné zachytit jedině na elementech uvnitř stejného DOMu, v němž sídlí cíl události.
 
-## Custom events
+## Vlastní události
 
-When we dispatch custom events, we need to set both `bubbles` and `composed` properties to `true` for it to bubble up and out of the component.
+Když vytváříme vlastní události a chceme, aby vybublaly výš a ven z komponenty, musíme jim nastavit obě vlastnosti `bubbles` a `composed` na `true`.
 
-For example, here we create `div#inner` in the shadow DOM of `div#outer` and trigger two events on it. Only the one with `composed: true` makes it outside to the document:
+Například zde vytvoříme `div#vnitřní` ve stínovém DOMu elementu `div#vnější` a spustíme na něm dvě události. Ven z dokumentu se dostane pouze ta, která má `composed: true`:
 
 ```html run untrusted height=0
-<div id="outer"></div>
+<div id="vnější"></div>
 
 <script>
-outer.attachShadow({mode: 'open'});
+vnější.attachShadow({mode: 'open'});
 
-let inner = document.createElement('div');
-outer.shadowRoot.append(inner);
+let vnitřní = document.createElement('div');
+vnější.shadowRoot.append(vnitřní);
 
 /*
-div(id=outer)
+div(id=vnější)
   #shadow-dom
-    div(id=inner)
+    div(id=vnitřní)
 */
 
-document.addEventListener('test', event => alert(event.detail));
+document.addEventListener('test', událost => alert(událost.detail));
 
-inner.dispatchEvent(new CustomEvent('test', {
+vnitřní.dispatchEvent(new CustomEvent('test', {
   bubbles: true,
 *!*
   composed: true,
 */!*
-  detail: "composed"
+  detail: "má composed"
 }));
 
-inner.dispatchEvent(new CustomEvent('test', {
+vnitřní.dispatchEvent(new CustomEvent('test', {
   bubbles: true,
 *!*
   composed: false,
 */!*
-  detail: "not composed"
+  detail: "nemá composed"
 }));
 </script>
 ```
 
-## Summary
+## Shrnutí
 
-Events only cross shadow DOM boundaries if their `composed` flag is set to `true`.
+Události překročí hranici stínového DOMu jedině tehdy, mají-li přepínač `composed` nastaven na `true`.
 
-Built-in events mostly have `composed: true`, as described in the relevant specifications:
+Vestavěné události mají převážně `composed: true`, jak je popsáno v příslušných specifikacích:
 
-- UI Events <https://www.w3.org/TR/uievents>.
-- Touch Events <https://w3c.github.io/touch-events>.
-- Pointer Events <https://www.w3.org/TR/pointerevents>.
-- ...And so on.
+- události UI: <https://www.w3.org/TR/uievents>.
+- dotekové události: <https://w3c.github.io/touch-events>.
+- ukazatelové události: <https://www.w3.org/TR/pointerevents>.
+- ...a tak dále.
 
-Some built-in events that have `composed: false`:
+Některé vestavěné události, které mají `composed: false`:
 
-- `mouseenter`, `mouseleave` (also do not bubble),
+- `mouseenter`, `mouseleave` (ty ani nebublají),
 - `load`, `unload`, `abort`, `error`,
 - `select`,
 - `slotchange`.
 
-These events can be caught only on elements within the same DOM.
+Tyto události můžeme zachytit jedině na elementech uvnitř stejného DOMu.
 
-If we dispatch a `CustomEvent`, then we should explicitly set `composed: true`.
+Pokud vytváříme `CustomEvent`, měli bychom výslovně nastavit `composed: true`.
 
-Please note that in case of nested components, one shadow DOM may be nested into another. In that case composed events bubble through all shadow DOM boundaries. So, if an event is intended only for the immediate enclosing component, we can also dispatch it on the shadow host and set `composed: false`. Then it's out of the component shadow DOM, but won't bubble up to higher-level DOM.
+Prosíme všimněte si, že v případě vnořených komponent může být jeden stínový DOM vnořen do druhého. V tom případě události s nastaveným `composed` bublají skrz hranice všech stínových DOMů. Pokud tedy je událost určena jen pro bezprostředně uzavírající komponentu, můžeme ji ve stínovém hostiteli ošetřit a nastavit `composed: false`. Pak se dostane ven ze stínového DOMu komponenty, ale neprobublá do DOMu vyšší úrovně.

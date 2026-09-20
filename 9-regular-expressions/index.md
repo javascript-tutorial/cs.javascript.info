@@ -1,3 +1,3 @@
-# Regular expressions
+# Regulární výrazy
 
-Regular expressions is a powerful way of doing search and replace in strings.
+Regulární výrazy představují mocný způsob, jak provádět hledání a nahrazování v řetězcích.

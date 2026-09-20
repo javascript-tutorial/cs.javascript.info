@@ -1,25 +1,25 @@
 
-# Animated circle with callback
+# Animovaný kruh s callbackem
 
-In the task <info:task/animate-circle> an animated growing circle is shown.
+V úloze <info:task/animate-circle> je zobrazen animovaný zvětšující se kruh.
 
-Now let's say we need not just a circle, but to show a message inside it. The message should appear *after* the animation is complete (the circle is fully grown), otherwise it would look ugly.
+Nyní řekněme, že potřebujeme nejen kruh, ale také zobrazit v něm zprávu. Tato zpráva by se měla objevit až *po* skončení animace (když má kruh plnou velikost), jinak by vypadala ošklivě.
 
-In the solution of the task, the function `showCircle(cx, cy, radius)` draws the circle, but gives no way to track when it's ready.
+V řešení předchozí úlohy funkce `zobrazKruh(cx, cy, poloměr)` zobrazila kruh, ale neumožnila nijak zjistit, zda je kruh připraven.
 
-Add a callback argument: `showCircle(cx, cy, radius, callback)` to be called when the animation is complete. The `callback` should receive the circle `<div>` as an argument.
+Přidejte argument s callbackem: `zobrazKruh(cx, cy, poloměr, callback)`, který se bude volat, až bude animace dokončena. Tento `callback` by měl jako argument přijímat `<div>` s kruhem.
 
-Here's the example:
+Příklad:
 
 ```js
-showCircle(150, 150, 100, div => {
-  div.classList.add('message-ball');
-  div.append("Hello, world!");
+zobrazKruh(150, 150, 100, div => {
+  div.classList.add('zpráva-kruh');
+  div.append("Ahoj, světe!");
 });
 ```
 
-Demo:
+Ukázka:
 
 [iframe src="solution" height=260]
 
-Take the solution of the task <info:task/animate-circle> as the base.
+Vyjděte z řešení úlohy <info:task/animate-circle>.

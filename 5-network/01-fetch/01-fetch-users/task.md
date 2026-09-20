@@ -1,13 +1,13 @@
-# Fetch users from GitHub
+# Stáhněte uživatele z GitHubu
 
-Create an async function `getUsers(names)`, that gets an array of GitHub logins, fetches the users from GitHub and returns an array of GitHub users.
+Vytvořte asynchronní funkci `vraťUživatele(jména)`, která obdrží pole uživatelských jmen na GitHubu, stáhne z GitHubu příslušné uživatele a vrátí je jako pole.
 
-The GitHub url with user information for the given `USERNAME` is: `https://api.github.com/users/USERNAME`.
+URL GitHubu s informacemi o uživateli s uživatelským jménem `USERNAME` je: `https://api.github.com/users/USERNAME`.
 
-There's a test example in the sandbox.
+V pískovišti najdete testovací příklad.
 
-Important details:
+Důležité detaily:
 
-1. There should be one `fetch` request per user.
-2. Requests shouldn't wait for each other. So that the data arrives as soon as possible.
-3. If any request fails, or if there's no such user, the function should return `null` in the resulting array.
+1. Pro každého uživatele by se měl volat jeden požadavek `fetch`.
+2. Požadavky by na sebe neměly navzájem čekat. Data tedy dorazí tak rychle, jak je to možné.
+3. Jestliže některý požadavek selže nebo zadaný uživatel neexistuje, funkce by ve výsledném poli měla vrátit `null`.

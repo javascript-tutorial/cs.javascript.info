@@ -1,17 +1,17 @@
-The solution: `pattern:/"(\\.|[^"\\])*"/g`.
+Řešení: `pattern:/"(\\.|[^"\\])*"/g`.
 
-Step by step:
+Krok za krokem:
 
-- First we look for an opening quote `pattern:"`
-- Then if we have a backslash `pattern:\\` (we have to double it in the pattern because it is a special character), then any character is fine after it (a dot).
-- Otherwise we take any character except a quote (that would mean the end of the string) and a backslash (to prevent lonely backslashes, the backslash is only used with some other symbol after it): `pattern:[^"\\]`
-- ...And so on till the closing quote.
+- Nejprve najdeme otevírací uvozovky `pattern:"`.
+- Potom, pokud máme zpětné lomítko `pattern:\\` (ve vzoru je musíme zdvojit, protože je to speciální znak), pak za ním může být jakýkoli znak (tečka).
+- V opačném případě přijmeme libovolný znak kromě uvozovek (ty znamenají konec řetězce) a zpětného lomítka (abychom zabránili osamoceným zpětným lomítkům, zpětné lomítko se používá jen s jiným symbolem za sebou): `pattern:[^"\\]`
+- ...A tak dále až do uzavíracích uvozovek.
 
-In action:
+V akci:
 
 ```js run
-let regexp = /"(\\.|[^"\\])*"/g;
-let str = ' .. "test me" .. "Say \\"Hello\\"!" .. "\\\\ \\"" .. ';
+let rv = /"(\\.|[^"\\])*"/g;
+let řetězec = ' .. "otestuj mě" .. "Řekni \\"Ahoj\\"!" .. "\\\\ \\"" .. ';
 
-alert( str.match(regexp) ); // "test me","Say \"Hello\"!","\\ \""
+alert( řetězec.match(rv) ); // "otestuj mě","Řekni \"Ahoj\"!","\\ \""
 ```

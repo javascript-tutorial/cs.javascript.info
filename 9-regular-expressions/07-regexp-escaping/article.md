@@ -1,99 +1,99 @@
 
-# Escaping, special characters
+# Únikové a speciální znaky
 
-As we've seen, a backslash `pattern:\` is used to denote character classes, e.g. `pattern:\d`. So it's a special character in regexps (just like in regular strings).
+Jak jsme viděli, k označení znakových tříd se používá zpětné lomítko `pattern:\`, např. `pattern:\d`. V regulárních výrazech je to tedy speciální znak (stejně jako v běžných řetězcích).
 
-There are other special characters as well, that have special meaning in a regexp, such as `pattern:[ ] { } ( ) \ ^ $ . | ? * +`. They are used to do more powerful searches.
+V regulárních výrazech mají speciální význam i jiné speciální znaky, například `pattern:[ ] { } ( ) \ ^ $ . | ? * +`. Používají se k provádění silnějšího hledání.
 
-Don't try to remember the list -- soon we'll deal with each of them, and you'll know them by heart automatically.
+Nesnažte se si tento seznam zapamatovat -- se všemi těmito znaky se brzy setkáme a pak je budete znát jako své boty.
 
-## Escaping
+## Únikový znak
 
-Let's say we want to find literally a dot. Not "any character", but just a dot.
+Řekněme, že chceme najít tečku. Ne „libovolný znak“, ale skutečnou tečku.
 
-To use a special character as a regular one, prepend it with a backslash: `pattern:\.`.
+Abychom použili speciální znak jako běžný, uvedeme před ním zpětné lomítko: `pattern:\.`.
 
-That's also called "escaping a character".
+Tomu se také říká „únikový znak“.
 
-For example:
+Příklad:
 ```js run
-alert( "Chapter 5.1".match(/\d\.\d/) ); // 5.1 (match!)
-alert( "Chapter 511".match(/\d\.\d/) ); // null (looking for a real dot \.)
+alert( "Kapitola 5.1".match(/\d\.\d/) ); // 5.1 (shoda!)
+alert( "Kapitola 511".match(/\d\.\d/) ); // null (hledá opravdovou tečku \.)
 ```
 
-Parentheses are also special characters, so if we want them, we should use `pattern:\(`. The example below looks for a string `"g()"`:
+Závorky jsou také speciální znaky, takže pokud je chceme hledat, měli bychom použít `pattern:\(`. Následující příklad hledá řetězec `"g()"`:
 
 ```js run
 alert( "function g()".match(/g\(\)/) ); // "g()"
 ```
 
-If we're looking for a backslash `\`, it's a special character in both regular strings and regexps, so we should double it.
+Jestliže hledáme zpětné lomítko `\`, je to speciální znak v běžných řetězcích i v regulárních výrazech, takže bychom je měli zdvojit.
 
 ```js run
 alert( "1\\2".match(/\\/) ); // '\'
 ```
 
-## A slash
+## Lomítko
 
-A slash symbol `'/'` is not a special character, but in JavaScript it is used to open and close the regexp: `pattern:/...pattern.../`, so we should escape it too.
+Symbol lomítka `'/'` není speciální znak, ale v JavaScriptu se používá k otevření a uzavření RV: `pattern:/...vzor.../`, takže bychom i před ním měli uvést únikový znak.
 
-Here's what a search for a slash `'/'` looks like:
+Takto vypadá hledání lomítka `'/'`:
 
 ```js run
 alert( "/".match(/\//) ); // '/'
 ```
 
-On the other hand, if we're not using `pattern:/.../`, but create a regexp using `new RegExp`, then we don't need to escape it:
+Naproti tomu, jestliže nepoužíváme `pattern:/.../`, ale vytváříme nový RV pomocí `new RegExp`, nemusíme uvádět únikový znak:
 
 ```js run
-alert( "/".match(new RegExp("/")) ); // finds /
+alert( "/".match(new RegExp("/")) ); // najde /
 ```
 
 ## new RegExp
 
-If we are creating a regular expression with `new RegExp`, then we don't have to escape `/`, but need to do some other escaping.
+Jestliže vytváříme regulární výraz pomocí `new RegExp`, nemusíme uvést únikový znak před `/`, ale musíme jej uvést před jinými znaky.
 
-For instance, consider this:
+Uvažujme například tohle:
 
 ```js run
-let regexp = new RegExp("\d\.\d");
+let rv = new RegExp("\d\.\d");
 
-alert( "Chapter 5.1".match(regexp) ); // null
+alert( "Kapitola 5.1".match(rv) ); // null
 ```
 
-The similar search in one of previous examples worked with `pattern:/\d\.\d/`, but `new RegExp("\d\.\d")` doesn't work, why?
+V jednom z předchozích příkladů fungovalo podobné hledání s `pattern:/\d\.\d/`, ale `new RegExp("\d\.\d")` nefunguje, proč?
 
-The reason is that backslashes are "consumed" by a string. As we may recall, regular strings have their own special characters, such as `\n`, and a backslash is used for escaping.
+Důvodem je, že zpětná lomítka jsou „spotřebována“ řetězcem. Jak si možná vzpomínáme, běžné řetězce mají své vlastní speciální znaky, např. `\n`, a zpětné lomítko se používá jako únikový znak.
 
-Here's how "\d\.\d" is perceived:
+Takto bude pochopeno `"\d\.\d"`:
 
 ```js run
 alert("\d\.\d"); // d.d
 ```
 
-String quotes "consume" backslashes and interpret them on their own, for instance:
+Řetězcové uvozovky „spotřebují“ zpětná lomítka a interpretují je po svém, například:
 
-- `\n` -- becomes a newline character,
-- `\u1234` -- becomes the Unicode character with such code,
-- ...And when there's no special meaning: like `pattern:\d` or `\z`, then the backslash is simply removed.
+- `\n` -- vytvoří znak nového řádku,
+- `\u1234` -- vytvoří znak s uvedeným kódem v Unicode,
+- ...a když není žádný speciální význam, například `pattern:\d` nebo `\z`, bude zpětné lomítko jednoduše odstraněno.
 
-So `new RegExp` gets a string without backslashes. That's why the search doesn't work!
+`new RegExp` tedy obdrží řetězec bez zpětných lomítek. Proto hledání nefunguje!
 
-To fix it, we need to double backslashes, because string quotes turn `\\` into `\`:
+Abychom to opravili, potřebujeme dvojici zpětných lomítek, protože řetězcové uvozovky změní `\\` na `\`:
 
 ```js run
 *!*
-let regStr = "\\d\\.\\d";
+let regŘetězec = "\\d\\.\\d";
 */!*
-alert(regStr); // \d\.\d (correct now)
+alert(regŘetězec); // \d\.\d (teď je to správně)
 
-let regexp = new RegExp(regStr);
+let rv = new RegExp(regŘetězec);
 
-alert( "Chapter 5.1".match(regexp) ); // 5.1
+alert( "Kapitola 5.1".match(rv) ); // 5.1
 ```
 
-## Summary
+## Shrnutí
 
-- To search for special characters `pattern:[ \ ^ $ . | ? * + ( )` literally, we need to prepend them with a backslash `\` ("escape them").
-- We also need to escape `/` if we're inside `pattern:/.../` (but not inside `new RegExp`).
-- When passing a string to `new RegExp`, we need to double backslashes `\\`, cause string quotes consume one of them.
+- Abychom mohli najít přímo speciální znaky `pattern:[ \ ^ $ . | ? * + ( )`, musíme před nimi uvést zpětné lomítko `\` („únikový znak“).
+- Pokud jsme uvnitř `pattern:/.../`, musíme uvést únikový znak i před `/` (ale ne uvnitř `new RegExp`).
+- Když předáváme řetězec do `new RegExp`, musíme zpětná lomítka zdvojit `\\`, protože řetězcové uvozovky jedno z nich spotřebují.

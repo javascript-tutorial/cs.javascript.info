@@ -1,35 +1,35 @@
-# TextDecoder and TextEncoder
+# TextDecoder a TextEncoder
 
-What if the binary data is actually a string? For instance, we received a file with textual data.
+Co když jsou binární data ve skutečnosti řetězec? Například když obdržíme soubor s textovými daty.
 
-The built-in [TextDecoder](https://encoding.spec.whatwg.org/#interface-textdecoder) object allows one to read the value into an actual JavaScript string, given the buffer and the encoding.
+Vestavěný objekt [TextDecoder](https://encoding.spec.whatwg.org/#interface-textdecoder) nám umožní načíst hodnotu do skutečného JavaScriptového řetězce, když uvedeme buffer a kódování.
 
-We first need to create it:
+Nejprve jej musíme vytvořit:
 ```js
-let decoder = new TextDecoder([label], [options]);
+let dekodér = new TextDecoder([kódování], [volby]);
 ```
 
-- **`label`** -- the encoding, `utf-8` by default, but `big5`, `windows-1251` and many other are also supported.
-- **`options`** -- optional object:
-  - **`fatal`** -- boolean, if `true` then throw an exception for invalid (non-decodable) characters, otherwise (default) replace them with character `\uFFFD`.
-  - **`ignoreBOM`** -- boolean, if `true` then ignore BOM (an optional byte-order Unicode mark), rarely needed.
+- **`kódování`** -- kódování, standardně `utf-8`, ale podporována jsou i `big5`, `windows-1251` a mnoho dalších.
+- **`volby`** -- nepovinný objekt:
+  - **`fatal`** -- booleovská hodnota, pokud je `true`, pak se pro neplatné (nerozkódovatelné) znaky vyhodí výjimka, jinak (standardně) budou nahrazeny znakem `\uFFFD`.
+  - **`ignoreBOM`** -- booleovská hodnota, pokud je `true`, pak se ignoruje BOM (nepovinný znak pořadí bytů v Unicode), je potřeba jen zřídka.
 
-...And then decode:
+...A pak dekódujeme:
 
 ```js
-let str = decoder.decode([input], [options]);
+let řetězec = dekodér.decode([vstup], [volby]);
 ```
 
-- **`input`** -- `BufferSource` to decode.
-- **`options`** -- optional object:
-  - **`stream`** -- true for decoding streams, when `decoder` is called repeatedly with incoming chunks of data. In that case a multi-byte character may occasionally split between chunks. This options tells `TextDecoder` to memorize "unfinished" characters and decode them when the next chunk comes.
+- **`vstup`** -- `BufferSource` k dekódování.
+- **`volby`** -- nepovinný objekt:
+  - **`stream`** -- `true` při dekódování proudů, kdy je `dekodér` volán opakovaně pro přicházející bloky dat. V takovém případě může být znak, zakódovaný ve více bytech, občas rozdělen mezi jednotlivé bloky. Tato volba říká, že si `TextDecoder` má pamatovat „nedokončené“ znaky a dekódovat je, až přijde další blok.
 
-For instance:
+Příklad:
 
 ```js run
-let uint8Array = new Uint8Array([72, 101, 108, 108, 111]);
+let uint8Array = new Uint8Array([65, 104, 111, 106]);
 
-alert( new TextDecoder().decode(uint8Array) ); // Hello
+alert( new TextDecoder().decode(uint8Array) ); // Ahoj
 ```
 
 
@@ -39,38 +39,38 @@ let uint8Array = new Uint8Array([228, 189, 160, 229, 165, 189]);
 alert( new TextDecoder().decode(uint8Array) ); // 你好
 ```
 
-We can decode a part of the buffer by creating a subarray view for it:
+Chceme-li dekódovat jen část bufferu, můžeme pro ni vytvořit náhled z podpole:
 
 
 ```js run
-let uint8Array = new Uint8Array([0, 72, 101, 108, 108, 111, 0]);
+let uint8Array = new Uint8Array([0, 65, 104, 111, 106, 0]);
 
-// the string is in the middle
-// create a new view over it, without copying anything
-let binaryString = uint8Array.subarray(1, -1);
+// řetězec je uprostřed
+// vytvoříme nad ním nový náhled, aniž bychom něco kopírovali
+let binárníŘetězec = uint8Array.subarray(1, -1);
 
-alert( new TextDecoder().decode(binaryString) ); // Hello
+alert( new TextDecoder().decode(binárníŘetězec) ); // Ahoj
 ```
 
 ## TextEncoder
 
-[TextEncoder](https://encoding.spec.whatwg.org/#interface-textencoder) does the reverse thing -- converts a string into bytes.
+[TextEncoder](https://encoding.spec.whatwg.org/#interface-textencoder) provádí opak -- převádí řetězec na byty.
 
-The syntax is:
+Jeho syntaxe je:
 
 ```js
-let encoder = new TextEncoder();
+let kodér = new TextEncoder();
 ```
 
-The only encoding it supports is "utf-8".
+Jediné kódování, které podporuje, je `utf-8`.
 
-It has two methods:
-- **`encode(str)`** -- returns `Uint8Array` from a string.
-- **`encodeInto(str, destination)`** -- encodes `str` into `destination` that must be `Uint8Array`.
+Má dvě metody:
+- **`encode(řetězec)`** -- vrátí `Uint8Array` z řetězce.
+- **`encodeInto(řetězec, cíl)`** -- zakóduje `řetězec` do objektu `cíl`, kterým musí být `Uint8Array`.
 
 ```js run
-let encoder = new TextEncoder();
+let kodér = new TextEncoder();
 
-let uint8Array = encoder.encode("Hello");
-alert(uint8Array); // 72,101,108,108,111
+let uint8Array = kodér.encode("Ahoj");
+alert(uint8Array); // 65,104,111,106
 ```

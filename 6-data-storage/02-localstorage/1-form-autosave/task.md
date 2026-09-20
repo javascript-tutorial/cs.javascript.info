@@ -1,10 +1,10 @@
 
-# Autosave a form field
+# Automatické uložení pole formuláře
 
-Create a `textarea` field that "autosaves" its value on every change.
+Vytvořte pole `textarea`, které svou hodnotu při každé změně „automaticky uloží“.
 
-So, if the user accidentally closes the page, and opens it again, he'll find his unfinished input at place.
+Pokud tedy uživatel stránku neúmyslně zavře a pak ji znovu otevře, najde svůj nedokončený vstup na místě.
 
-Like this:
+Příklad:
 
 [iframe src="solution" height=120]

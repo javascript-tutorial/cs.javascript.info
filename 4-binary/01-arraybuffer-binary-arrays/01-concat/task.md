@@ -1,4 +1,4 @@
 
-# Concatenate typed arrays
+# Zřetězení typových polí
 
-Given an array of `Uint8Array`, write a function `concat(arrays)` that returns a concatenation of them into a single array.
+Je dáno pole polí `Uint8Array`. Napište funkci `zřetěz(polePolí)`, která vrátí jejich zřetězení do jediného pole.

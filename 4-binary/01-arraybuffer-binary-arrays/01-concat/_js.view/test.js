@@ -1,30 +1,30 @@
-describe("concat", function() {
-  let chunks = [
+describe("zřetěz", function() {
+  let kusyDat = [
     new Uint8Array([0, 1, 2]),
     new Uint8Array([3, 4, 5]),
     new Uint8Array([6, 7, 8])
   ];
 
-  it("result has the same array type", function() {
+  it("výsledek má stejný typ pole", function() {
 
-    let result = concat(chunks);
+    let výsledek = zřetěz(kusyDat);
 
-    assert.equal(result.constructor, Uint8Array);
+    assert.equal(výsledek.constructor, Uint8Array);
   });
 
-  it("concatenates arrays", function() {
+  it("zřetězí pole", function() {
 
-    let result = concat(chunks);
+    let výsledek = zřetěz(kusyDat);
 
-    assert.deepEqual(result, new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8]));
+    assert.deepEqual(výsledek, new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8]));
 
   });
 
-  it("returns empty array on empty input", function() {
+  it("při prázdném vstupu vrátí prázdné pole", function() {
 
-    let result = concat([]);
+    let výsledek = zřetěz([]);
 
-    assert.equal(result.length, 0);
+    assert.equal(výsledek.length, 0);
 
   });
 

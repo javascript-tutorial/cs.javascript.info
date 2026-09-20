@@ -1,20 +1,20 @@
-# Check MAC-address
+# Ověřte MAC adresu
 
-[MAC-address](https://en.wikipedia.org/wiki/MAC_address) of a network interface consists of 6 two-digit hex numbers separated by a colon.
+[MAC adresa](https://cs.wikipedia.org/wiki/MAC_adresa) síťového rozhraní se skládá ze 6 dvouciferných hexadecimálních čísel oddělených dvojtečkou.
 
-For instance: `subject:'01:32:54:67:89:AB'`.
+Příklad: `subject:'01:32:54:67:89:AB'`.
 
-Write a regexp that checks whether a string is MAC-address.
+Napište regulární výraz, který ověří, zda řetězec je MAC adresa.
 
-Usage:
+Použití:
 ```js
-let regexp = /your regexp/;
+let rv = /váš RV/;
 
-alert( regexp.test('01:32:54:67:89:AB') ); // true
+alert( rv.test('01:32:54:67:89:AB') ); // true
 
-alert( regexp.test('0132546789AB') ); // false (no colons)
+alert( rv.test('0132546789AB') ); // false (bez dvojteček)
 
-alert( regexp.test('01:32:54:67:89') ); // false (5 numbers, must be 6)
+alert( rv.test('01:32:54:67:89') ); // false (5 čísel, musí být 6)
 
-alert( regexp.test('01:32:54:67:89:ZZ') ) // false (ZZ at the end)
+alert( rv.test('01:32:54:67:89:ZZ') ) // false (ZZ na konci)
 ```

@@ -1,3 +1,3 @@
-# Animation
+# Animace
 
-CSS and JavaScript animations.
+Animace v CSS a JavaScriptu.

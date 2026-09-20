@@ -1,60 +1,60 @@
 
-# Fetch: Download progress
+# Fetch: průběh stahování
 
-The `fetch` method allows to track *download* progress.
+Metoda `fetch` umožňuje sledovat průběh *stahování*.
 
-Please note: there's currently no way for `fetch` to track *upload* progress. For that purpose, please use [XMLHttpRequest](info:xmlhttprequest), we'll cover it later.
+Prosíme všimněte si, že v současnosti neexistuje žádný způsob, jak by `fetch` mohla sledovat průběh *odesílání*. K tomuto účelu prosíme používejte [XMLHttpRequest](info:xmlhttprequest), který probereme později.
 
-To track download progress, we can use `response.body` property. It's a `ReadableStream` -- a special object that provides body chunk-by-chunk, as it comes. Readable streams are described in the [Streams API](https://streams.spec.whatwg.org/#rs-class) specification.
+Ke sledování průběhu stahování můžeme použít vlastnost `odpověď.body`. To je `ReadableStream` -- speciální objekt, který poskytuje tělo po částech v pořadí, v jakém přicházejí. Objekty `ReadableStream` jsou popsány ve specifikaci [API Streams](https://streams.spec.whatwg.org/#rs-class).
 
-Unlike `response.text()`, `response.json()` and other methods, `response.body` gives full control over the reading process, and we can count how much is consumed at any moment.
+Na rozdíl od `odpověď.text()`, `odpověď.json()` a jiných metod nám `odpověď.body` dává úplnou kontrolu nad procesem načítání a my můžeme kdykoli spočítat, kolik dat se již načetlo.
 
-Here's the sketch of code that reads the response from `response.body`:
+Následuje nástin kódu, který načte odpověď z `odpověď.body`:
 
 ```js
-// instead of response.json() and other methods
-const reader = response.body.getReader();
+// místo odpověď.json() a jiných metod
+const reader = odpověď.body.getReader();
 
-// infinite loop while the body is downloading
+// nekonečná smyčka, dokud se tělo stahuje
 while(true) {
-  // done is true for the last chunk
-  // value is Uint8Array of the chunk bytes
+  // done je true pro poslední část
+  // value je Uint8Array s byty načtené části
   const {done, value} = await reader.read();
 
   if (done) {
     break;
   }
 
-  console.log(`Received ${value.length} bytes`)
+  console.log(`Načteno ${value.length} bytů`)
 }
 ```
 
-The result of `await reader.read()` call is an object with two properties:
-- **`done`** -- `true` when the reading is complete, otherwise `false`.
-- **`value`** -- a typed array of bytes: `Uint8Array`.
+Výsledkem volání `await reader.read()` je objekt se dvěma vlastnostmi:
+- **`done`** -- `true`, když je načítání kompletní, jinak `false`.
+- **`value`** -- typové pole bytů: `Uint8Array`.
 
 ```smart
-Streams API also describes asynchronous iteration over `ReadableStream` with `for await..of` loop, but it's not yet widely supported (see [browser issues](https://github.com/whatwg/streams/issues/778#issuecomment-461341033)), so we use `while` loop.
+API Streams popisuje také asynchronní iteraci nad `ReadableStream` pomocí cyklu `for await..of`, ale to zatím není široce podporováno (viz [vlastnosti prohlížečů](https://github.com/whatwg/streams/issues/778#issuecomment-461341033)), proto používáme cyklus `while`.
 ```
 
-We receive response chunks in the loop, until the loading finishes, that is: until `done` becomes `true`.
+V cyklu dostáváme části odpovědi, dokud načítání neskončí, tedy než se `done` nastaví na `true`.
 
-To log the progress, we just need for every received fragment `value` to add its length to the counter.
+Abychom tento proces mohli logovat, stačí nám pro každý získaný fragment `value` přičíst jeho délku k počítadlu.
 
-Here's the full working example that gets the response and logs the progress in console, more explanations to follow:
+Následující plně funkční příklad načítá odpověď a loguje průběh načítání v konzoli, další vysvětlení budou následovat:
 
 ```js run async
-// Step 1: start the fetch and obtain a reader
-let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100');
+// Krok 1: začneme načítat a získáme reader
+let odpověď = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100');
 
-const reader = response.body.getReader();
+const reader = odpověď.body.getReader();
 
-// Step 2: get total length
-const contentLength = +response.headers.get('Content-Length');
+// Krok 2: zjistíme celkovou délku
+const délkaObsahu = +odpověď.headers.get('Content-Length');
 
-// Step 3: read the data
-let receivedLength = 0; // received that many bytes at the moment
-let chunks = []; // array of received binary chunks (comprises the body)
+// Krok 3: načteme data
+let obdrženáDélka = 0; // kolik bytů jsme do této chvíle obdrželi
+let části = []; // pole získaných binárních částí (dohromady tvoří tělo)
 while(true) {
   const {done, value} = await reader.read();
 
@@ -62,53 +62,53 @@ while(true) {
     break;
   }
 
-  chunks.push(value);
-  receivedLength += value.length;
+  části.push(value);
+  obdrženáDélka += value.length;
 
-  console.log(`Received ${receivedLength} of ${contentLength}`)
+  console.log(`Načteno ${obdrženáDélka} z ${délkaObsahu}`)
 }
 
-// Step 4: concatenate chunks into single Uint8Array
-let chunksAll = new Uint8Array(receivedLength); // (4.1)
-let position = 0;
-for(let chunk of chunks) {
-	chunksAll.set(chunk, position); // (4.2)
-	position += chunk.length;
+// Krok 4: spojíme části do jediného Uint8Array
+let všechnyČásti = new Uint8Array(obdrženáDélka); // (4.1)
+let pozice = 0;
+for(let část of části) {
+	všechnyČásti.set(část, pozice); // (4.2)
+	pozice += část.length;
 }
 
-// Step 5: decode into a string
-let result = new TextDecoder("utf-8").decode(chunksAll);
+// Krok 5: dekódujeme do řetězce
+let výsledek = new TextDecoder("utf-8").decode(všechnyČásti);
 
-// We're done!
-let commits = JSON.parse(result);
-alert(commits[0].author.login);
+// Jsme hotovi!
+let příspěvky = JSON.parse(výsledek);
+alert(příspěvky[0].author.login);
 ```
 
-Let's explain that step-by-step:
+Vysvětlíme to krok za krokem:
 
-1. We perform `fetch` as usual, but instead of calling `response.json()`, we obtain a stream reader `response.body.getReader()`.
+1. Provedeme `fetch` jako obvykle, ale místo volání `odpověď.json()` získáme reader proudu `response.body.getReader()`.
 
-    Please note, we can't use both these methods to read the same response: either use a reader or a response method to get the result.
-2. Prior to reading, we can figure out the full response length from the `Content-Length` header.
+    Prosíme všimněte si, že nemůžeme načíst tutéž odpověď oběma těmito metodami: pro získání výsledku použijeme buď reader, nebo metodu odpovědi.
+2. Před načtením můžeme zjistit délku celé odpovědi z hlavičky `Content-Length`.
 
-    It may be absent for cross-origin requests (see chapter <info:fetch-crossorigin>) and, well, technically a server doesn't have to set it. But usually it's at place.
-3. Call `await reader.read()` until it's done.
+    Hlavička může chybět u požadavku jiného původu (viz kapitolu <info:fetch-crossorigin>) a server ji technicky nemusí nastavit, ale většinou tam je.
+3. Voláme `await reader.read()`, dokud nejsme hotovi.
 
-    We gather response chunks in the array `chunks`. That's important, because after the response is consumed, we won't be able to "re-read" it using `response.json()` or another way (you can try, there'll be an error).
-4. At the end, we have `chunks` -- an array of `Uint8Array` byte chunks. We need to join them into a single result. Unfortunately, there's no single method that concatenates those, so there's some code to do that:
-    1. We create `chunksAll = new Uint8Array(receivedLength)` -- a same-typed array with the combined length.
-    2. Then use `.set(chunk, position)` method to copy each `chunk` one after another in it.
-5. We have the result in `chunksAll`. It's a byte array though, not a string.
+    Jednotlivé části odpovědi shromažďujeme v poli `části`. To je důležité, jelikož po načtení odpovědi ji už nemůžeme načíst znovu voláním `odpověď.json()` nebo jiným způsobem (můžete si to zkusit, nastane chyba).
+4. Nakonec tedy máme `části` -- pole bytových částí `Uint8Array`. Musíme je spojit do jediného výsledku. Naneštěstí neexistuje žádná metoda, která by je dokázala sama zřetězit, proto k tomu použijeme krátký kód:
+    1. Vytvoříme `všechnyČásti = new Uint8Array(obdrženáDélka)` -- pole prvků stejného typu o celkové délce všech částí.
+    2. Pak do něj metodou `.set(část, pozice)` zkopírujeme každou `část`, jednu za druhou.
+5. Výsledek máme v poli `všechnyČásti`. To je však bytové pole, ne řetězec.
 
-    To create a string, we need to interpret these bytes. The built-in [TextDecoder](info:text-decoder) does exactly that. Then we can `JSON.parse` it, if necessary.
+    Abychom vytvořili řetězec, musíme tyto byty interpretovat. K tomu právě slouží zabudovaný [TextDecoder](info:text-decoder). Na řetězci pak můžeme volat `JSON.parse`, pokud je to zapotřebí.
 
-    What if we need binary content instead of a string? That's even simpler. Replace steps 4 and 5 with a single line that creates a `Blob` from all chunks:
+    Co když místo řetězce potřebujeme binární obsah? To je ještě jednodušší. Nahradíme kroky 4 a 5 jediným řádkem, který vytvoří `Blob` ze všech částí:
     ```js
-    let blob = new Blob(chunks);
+    let blob = new Blob(části);
     ```
 
-At the end we have the result (as a string or a blob, whatever is convenient), and progress-tracking in the process.
+Nakonec máme výsledek (jako řetězec nebo blob, co se nám hodí víc) a sledování průběhu tohoto procesu.
 
-Once again, please note, that's not for *upload* progress (no way now with `fetch`), only for *download* progress.
+Opakujeme, prosíme všimněte si, že to nefunguje pro proces *odesílání* (to s metodou `fetch` v současnosti není možné), jedině pro *stahování*.
 
-Also, if the size is unknown, we should check `receivedLength` in the loop and break it once it reaches a certain limit. So that the `chunks` won't overflow the memory. 
+Dále, jestliže velikost není známa, měli bychom v cyklu kontrolovat proměnnou `obdrženáDélka`, a jakmile dosáhne určitého limitu, ukončit cyklus. Tím zajistíme, že `části` nepřekročí dostupnou paměť.

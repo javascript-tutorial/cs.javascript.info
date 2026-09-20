@@ -1,15 +1,15 @@
-#digit {
+#číslice {
   width: .5em;
   overflow: hidden;
   font: 32px monospace;
   cursor: pointer;
 }
 
-#stripe {
+#pás {
   display: inline-block
 }
 
-#stripe.animate {
+#pás.animace {
   transform: translate(-90%);
   transition-property: transform;
   transition-duration: 9s;

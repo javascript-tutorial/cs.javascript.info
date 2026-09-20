@@ -1,203 +1,203 @@
-# Character classes
+# Znakové třídy
 
-Consider a practical task -- we have a phone number like `"+7(903)-123-45-67"`, and we need to turn it into pure numbers: `79031234567`.
+Uvažujme praktickou úlohu: máme telefonní číslo, například `"+7(903)-123-45-67"`, a potřebujeme je převést na čisté číslo obsahující jen číslice: `79031234567`.
 
-To do so, we can find and remove anything that's not a number. Character classes can help with that.
+Můžeme to udělat tak, že najdeme a odstraníme vše, co není číslice. Mohou nám s tím pomoci znakové třídy.
 
-A *character class* is a special notation that matches any symbol from a certain set.
+*Znaková třída* je speciální zápis, kterému odpovídají všechny symboly z určité množiny.
 
-For the start, let's explore the "digit" class. It's written as `pattern:\d` and corresponds to "any single digit".
+Na začátku vysvětlíme třídu „číslic“. Zapisuje se `pattern:\d` a odpovídá „jedné libovolné číslici“.
 
-For instance, let's find the first digit in the phone number:
-
-```js run
-let str = "+7(903)-123-45-67";
-
-let regexp = /\d/;
-
-alert( str.match(regexp) ); // 7
-```
-
-Without the flag `pattern:g`, the regular expression only looks for the first match, that is the first digit `pattern:\d`.
-
-Let's add the `pattern:g` flag to find all digits:
+Najděme například první číslici v telefonním čísle:
 
 ```js run
-let str = "+7(903)-123-45-67";
+let řetězec = "+7(903)-123-45-67";
 
-let regexp = /\d/g;
+let rv = /\d/;
 
-alert( str.match(regexp) ); // array of matches: 7,9,0,3,1,2,3,4,5,6,7
-
-// let's make the digits-only phone number of them:
-alert( str.match(regexp).join('') ); // 79031234567
+alert( řetězec.match(rv) ); // 7
 ```
 
-That was a character class for digits. There are other character classes as well.
+Bez příznaku `pattern:g` regulární výraz hledá pouze první shodu, kterou je první číslice `pattern:\d`.
 
-Most used are:
-
-`pattern:\d` ("d" is from "digit")
-: A digit: a character from `0` to `9`.
-
-`pattern:\s` ("s" is from "space")
-: A space symbol: includes spaces, tabs `\t`, newlines `\n` and few other rare characters, such as `\v`, `\f` and `\r`.
-
-`pattern:\w` ("w" is from "word")
-: A "wordly" character: either a letter of Latin alphabet or a digit or an underscore `_`. Non-Latin letters (like cyrillic or hindi) do not belong to `pattern:\w`.
-
-For instance, `pattern:\d\s\w` means a "digit" followed by a "space character" followed by a "wordly character", such as `match:1 a`.
-
-**A regexp may contain both regular symbols and character classes.**
-
-For instance, `pattern:CSS\d` matches a string `match:CSS` with a digit after it:
+Přidejme příznak `pattern:g`, abychom našli všechny číslice:
 
 ```js run
-let str = "Is there CSS4?";
-let regexp = /CSS\d/
+let řetězec = "+7(903)-123-45-67";
 
-alert( str.match(regexp) ); // CSS4
+let rv = /\d/g;
+
+alert( řetězec.match(rv) ); // pole shod: 7,9,0,3,1,2,3,4,5,6,7
+
+// vytvořme z nich telefonní číslo skládající se jen z číslic:
+alert( řetězec.match(rv).join('') ); // 79031234567
 ```
 
-Also we can use many character classes:
+To byla znaková třída pro číslice. Existují i jiné znakové třídy.
+
+Nejpoužívanější jsou:
+
+`pattern:\d` („d“ od slova „digit“, číslice)
+: Číslice: znak od `0` do `9`.
+
+`pattern:\s` („s“ od slova „space“, mezera)
+: Mezerový symbol: patří sem mezery, tabelátory `\t`, nové řádky `\n` a několik dalších vzácných znaků, např. `\v`, `\f` a `\r`.
+
+`pattern:\w` („w“ od slova „word“, slovo)
+: „Slovní“ znak: písmeno latinské abecedy, číslice nebo podtržítko `_`. Znaky nelatinských abeced (např. kyrilice nebo hindi) *(včetně písmen s diakritickými znaménky -- pozn. překl.)* do `pattern:\w` nepatří.
+
+Například `pattern:\d\s\w` znamená „číslici“ následovanou „mezerovým znakem“ následovaným „slovním znakem“, například `match:1 a`.
+
+**Regulární výraz může obsahovat regulární symboly a znakové třídy současně.**
+
+Například výrazu `pattern:CSS\d` odpovídá řetězec `match:CSS` následovaný číslicí:
+
+```js run
+let řetězec = "Je tam CSS4?";
+let rv = /CSS\d/
+
+alert( řetězec.match(rv) ); // CSS4
+```
+
+Můžeme použít i více znakových tříd najednou:
 
 ```js run
 alert( "I love HTML5!".match(/\s\w\w\w\w\d/) ); // ' HTML5'
 ```
 
-The match (each regexp character class has the corresponding result character):
+Shoda (každá znaková třída regulárního výrazu má ve výsledku odpovídající znak):
 
 ![](love-html5-classes.svg)
 
-## Inverse classes
+## Inverzní třídy
 
-For every character class there exists an "inverse class", denoted with the same letter, but uppercased.
+Ke každé znakové třídě existuje „inverzní třída“, označovaná stejným, ale velkým písmenem.
 
-The "inverse" means that it matches all other characters, for instance:
+„Inverzní“ znamená, že odpovídá všem ostatním znakům, například:
 
 `pattern:\D`
-: Non-digit: any character except `pattern:\d`, for instance a letter.
+: Nečíslice: jakýkoli znak kromě `pattern:\d`, například písmeno.
 
 `pattern:\S`
-: Non-space: any character except `pattern:\s`, for instance a letter.
+: Nemezerový znak: jakýkoli znak kromě `pattern:\s`, například písmeno.
 
 `pattern:\W`
-: Non-wordly character: anything but `pattern:\w`, e.g a non-latin letter or a space.
+: Neslovní znak: cokoli kromě `pattern:\w`, například nelatinské písmeno nebo mezera.
 
-In the beginning of the chapter we saw how to make a number-only phone number from a string like `subject:+7(903)-123-45-67`: find all digits and join them.
-
-```js run
-let str = "+7(903)-123-45-67";
-
-alert( str.match(/\d/g).join('') ); // 79031234567
-```
-
-An alternative, shorter way is to find non-digits `pattern:\D` and remove them from the string:
+Na začátku kapitoly jsme viděli, jak z řetězce jako `subject:+7(903)-123-45-67` vytvořit telefonní číslo obsahující pouze číslice: najdeme všechny číslice a spojíme je.
 
 ```js run
-let str = "+7(903)-123-45-67";
+let řetězec = "+7(903)-123-45-67";
 
-alert( str.replace(/\D/g, "") ); // 79031234567
+alert( řetězec.match(/\d/g).join('') ); // 79031234567
 ```
 
-## A dot is "any character"
+Alternativním, kratším způsobem je najít všechny nečíslicové znaky `pattern:\D` a odstranit je z řetězce:
 
-A dot `pattern:.` is a special character class that matches "any character except a newline".
+```js run
+let řetězec = "+7(903)-123-45-67";
 
-For instance:
+alert( řetězec.replace(/\D/g, "") ); // 79031234567
+```
+
+## Tečka znamená „libovolný znak“
+
+Tečka `pattern:.` je speciální znaková třída, které odpovídá „jakýkoli znak kromě konce řádku“.
+
+Příklad:
 
 ```js run
 alert( "Z".match(/./) ); // Z
 ```
 
-Or in the middle of a regexp:
+Nebo uprostřed regulárního výrazu:
 
 ```js run
-let regexp = /CS.4/;
+let rv = /CS.4/;
 
-alert( "CSS4".match(regexp) ); // CSS4
-alert( "CS-4".match(regexp) ); // CS-4
-alert( "CS 4".match(regexp) ); // CS 4 (space is also a character)
+alert( "CSS4".match(rv) ); // CSS4
+alert( "CS-4".match(rv) ); // CS-4
+alert( "CS 4".match(rv) ); // CS 4 (mezera je také znak)
 ```
 
-Please note that a dot means "any character", but not the "absence of a character". There must be a character to match it:
+Prosíme všimněte si, že tečka znamená „libovolný znak“, ale ne „žádný znak“. Musí tam být znak, který jí bude odpovídat:
 
 ```js run
-alert( "CS4".match(/CS.4/) ); // null, no match because there's no character for the dot
+alert( "CS4".match(/CS.4/) ); // null, beze shody, protože pro tečku tam není žádný znak
 ```
 
-### Dot as literally any character with "s" flag
+### Tečka jako doslova jakýkoli znak s příznakem „s“
 
-By default, a dot doesn't match the newline character `\n`.
+Standardně tečce neodpovídá znak nového řádku `\n`.
 
-For instance, the regexp `pattern:A.B` matches `match:A`, and then `match:B` with any character between them, except a newline `\n`:
+Například regulárnímu výrazu `pattern:A.B` odpovídá `match:A` a pak `match:B` s libovolným znakem mezi nimi kromě nového řádku `\n`:
 
 ```js run
-alert( "A\nB".match(/A.B/) ); // null (no match)
+alert( "A\nB".match(/A.B/) ); // null (není shoda)
 ```
 
-There are many situations when we'd like a dot to mean literally "any character", newline included.
+V mnoha situacích bychom chtěli, aby tečka znamenala doslova „jakýkoli znak“ včetně nového řádku.
 
-That's what flag `pattern:s` does. If a regexp has it, then a dot `pattern:.` matches literally any character:
+To zajistí příznak `pattern:s`. Pokud ho regulární výraz obsahuje, pak tečka `pattern:.` znamená doslova libovolný znak:
 
 ```js run
-alert( "A\nB".match(/A.B/s) ); // A\nB (match!)
+alert( "A\nB".match(/A.B/s) ); // A\nB (shoda!)
 ```
 
-````warn header="Not supported in IE"
-The `pattern:s` flag is not supported in IE.
+````warn header="Není podporován v IE"
+Příznak `pattern:s` není podporován v IE.
 
-Luckily, there's an alternative, that works everywhere. We can use a regexp like `pattern:[\s\S]` to match "any character" (this pattern will be covered in the article <info:regexp-character-sets-and-ranges>).
+Naštěstí je tady alternativa, která funguje všude. K nalezení „libovolného znaku“ můžeme použít regulární výraz jako `pattern:[\s\S]` (tento vzor vysvětlíme v článku <info:regexp-character-sets-and-ranges>).
 
 ```js run
-alert( "A\nB".match(/A[\s\S]B/) ); // A\nB (match!)
+alert( "A\nB".match(/A[\s\S]B/) ); // A\nB (shoda!)
 ```
 
-The pattern `pattern:[\s\S]` literally says: "a space character OR not a space character". In other words, "anything". We could use another pair of complementary classes, such as `pattern:[\d\D]`, that doesn't matter. Or even the `pattern:[^]` -- as it means match any character except nothing.
+Vzor `pattern:[\s\S]` říká doslova: „mezerový znak NEBO nemezerový znak“. Jinými slovy: „cokoli“. Můžeme použít i jinou dvojici doplňujících se tříd, např. `pattern:[\d\D]`, na tom nezáleží. Nebo dokonce vzor `pattern:[^]` -- tomu odpovídá jakýkoli znak kromě žádného.
 
-Also we can use this trick if we want both kind of "dots" in the same pattern: the actual dot `pattern:.` behaving the regular way ("not including a newline"), and also a way to match "any character" with `pattern:[\s\S]` or alike.
+Tento trik můžeme použít i tehdy, když chceme ve stejném vzoru mít oba druhy „teček“: obvyklou tečku `pattern:.` chovající se běžným způsobem („kromě nového řádku“) a také způsob, jak najít „libovolný znak“ pomocí vzoru `pattern:[\s\S]` nebo podobného.
 ````
 
-````warn header="Pay attention to spaces"
-Usually we pay little attention to spaces. For us strings `subject:1-5` and `subject:1 - 5` are nearly identical.
+````warn header="Dávejte pozor na mezery"
+Mezerám obvykle nevěnujeme velkou pozornost. Řetězce `subject:1-5` a `subject:1 - 5` jsou pro nás téměř stejné.
 
-But if a regexp doesn't take spaces into account, it may fail to work.
+Pokud však regulární výraz nebude brát mezery v úvahu, může fungovat nesprávně.
 
-Let's try to find digits separated by a hyphen:
-
-```js run
-alert( "1 - 5".match(/\d-\d/) ); // null, no match!
-```
-
-Let's fix it adding spaces into the regexp `pattern:\d - \d`:
+Zkusme najít číslice oddělené pomlčkou:
 
 ```js run
-alert( "1 - 5".match(/\d - \d/) ); // 1 - 5, now it works
-// or we can use \s class:
-alert( "1 - 5".match(/\d\s-\s\d/) ); // 1 - 5, also works
+alert( "1 - 5".match(/\d-\d/) ); // null, není shoda!
 ```
 
-**A space is a character. Equal in importance with any other character.**
+Opravme to přidáním mezer do regulárního výrazu `pattern:\d - \d`:
 
-We can't add or remove spaces from a regular expression and expect it to work the same.
+```js run
+alert( "1 - 5".match(/\d - \d/) ); // 1 - 5, nyní funguje
+// nebo můžeme použít třídu \s:
+alert( "1 - 5".match(/\d\s-\s\d/) ); // 1 - 5, také funguje
+```
 
-In other words, in a regular expression all characters matter, spaces too.
+**Mezera je znak. Je stejně důležitý jako kterýkoli jiný znak.**
+
+Nemůžeme do regulárního výrazu přidat nebo z něj odstranit mezery a očekávat, že bude fungovat stále stejně.
+
+Jinými slovy, v regulárním výrazu záleží na všech znacích včetně mezer.
 ````
 
-## Summary
+## Shrnutí
 
-There exist following character classes:
+Existují následující znakové třídy:
 
-- `pattern:\d` -- digits.
-- `pattern:\D` -- non-digits.
-- `pattern:\s` -- space symbols, tabs, newlines.
-- `pattern:\S` -- all but `pattern:\s`.
-- `pattern:\w` -- Latin letters, digits, underscore `'_'`.
-- `pattern:\W` -- all but `pattern:\w`.
-- `pattern:.` -- any character if with the regexp `'s'` flag, otherwise any except a newline `\n`.
+- `pattern:\d` -- číslice.
+- `pattern:\D` -- nečíslice.
+- `pattern:\s` -- mezerové symboly, tabelátory, nové řádky.
+- `pattern:\S` -- všechno kromě `pattern:\s`.
+- `pattern:\w` -- latinská písmena, číslice, podtržítko `'_'`.
+- `pattern:\W` -- všechno kromě `pattern:\w`.
+- `pattern:.` -- s příznakem `'s'` libovolný znak, bez něj libovolný znak kromě nového řádku `\n`.
 
-...But that's not all!
+...To však není všechno!
 
-Unicode encoding, used by JavaScript for strings, provides many properties for characters, like: which language the letter belongs to (if it's a letter), is it a punctuation sign, etc.
+Kódování Unicode, které JavaScript používá pro řetězce, poskytuje mnoho vlastností znaků, například: do kterého jazyka znak patří (pokud je to písmeno), zda je to interpunkční znaménko a podobně.
 
-We can search by these properties as well. That requires flag `pattern:u`, covered in the next article.
+I podle těchto vlastností můžeme vyhledávat. Potřebujeme k tomu příznak `pattern:u`, který probereme v příštím článku.

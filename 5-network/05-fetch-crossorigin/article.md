@@ -1,8 +1,8 @@
-# Fetch: Cross-Origin Requests
+# Fetch: požadavky jiného původu
 
-If we send a `fetch` request to another web-site, it will probably fail.
+Jestliže pošleme požadavek `fetch` na jiné webové sídlo, pravděpodobně neuspěje.
 
-For instance, let's try fetching `http://example.com`:
+Zkusme například stáhnout `http://example.com`:
 
 ```js run async
 try {
@@ -12,149 +12,150 @@ try {
 }
 ```
 
-Fetch fails, as expected.
+Jak jsme očekávali, stažení selhalo.
 
-The core concept here is *origin* -- a domain/port/protocol triplet.
+Klíčovým konceptem je zde *původ* -- trojice doména/port/protokol.
 
-Cross-origin requests -- those sent to another domain (even a subdomain) or protocol or port -- require special headers from the remote side.
+Požadavky jiného (křížového) původu -- ty, které jsou posílány na jinou doménu (nebo i subdoménu), protokol nebo port -- vyžadují speciální hlavičky ze vzdálené strany.
 
-That policy is called "CORS": Cross-Origin Resource Sharing.
+Tato politika se nazývá „CORS“: Cross-Origin Resource Sharing -- sdílení zdrojů křížového původu.
 
-## Why is CORS needed? A brief history
+## Proč je CORS zapotřebí? Stručná historie
 
-CORS exists to protect the internet from evil hackers.
+CORS existuje proto, aby chránila internet před zlými hackery.
 
-Seriously. Let's make a very brief historical digression.
+Teď vážně. Udělejme si kraťoučkou odbočku do historie.
 
-**For many years a script from one site could not access the content of another site.**
+**Mnoho let nemohl skript z jednoho sídla přistupovat k obsahu z jiného sídla.**
 
-That simple, yet powerful rule was a foundation of the internet security. E.g. an evil script from website `hacker.com` could not access the user's mailbox at website `gmail.com`. People felt safe.
+Toto jednoduché, ale silné pravidlo bylo základem internetové bezpečnosti. Například zlý skript z webového sídla `hacker.com` nemohl přistupovat k uživatelově poštovní schránce na webovém sídle `gmail.com`. Lidé měli pocit bezpečí.
 
-JavaScript also did not have any special methods to perform network requests at that time. It was a toy language to decorate a web page.
+Navíc JavaScript v té době neměl žádné speciální metody k provádění síťových požadavků. Byl to jen jazyk „na hraní“, sloužící k dekoraci webových stránek.
 
-But web developers demanded more power. A variety of tricks were invented to work around the limitation and make requests to other websites.
+Jenže vývojáři webů požadovali další možnosti. Byla vyvinuta celá řada triků, jak toto omezení obejít a odesílat požadavky na jiná webová sídla.
 
-### Using forms
+### Používání formulářů
 
-One way to communicate with another server was to submit a `<form>` there. People submitted it into `<iframe>`, just to stay on the current page, like this:
+Jedním způsobem, jak komunikovat s jiným serverem, bylo odeslat na něj `<form>`. Lidé ho vkládali do `<iframe>`, aby zůstali na aktuální stránce, například:
 
 ```html
-<!-- form target -->
+<!-- cíl formuláře -->
 *!*
 <iframe name="iframe"></iframe>
 */!*
 
-<!-- a form could be dynamically generated and submitted by JavaScript -->
+<!-- formulář může být dynamicky vygenerován a odeslán JavaScriptem -->
 *!*
-<form target="iframe" method="POST" action="http://another.com/…">
+<form target="iframe" method="POST" action="http://jiny-server.com/…">
 */!*
   ...
 </form>
 ```
 
-So, it was possible to make a GET/POST request to another site, even without networking methods, as forms can send data anywhere. But as it's forbidden to access the content of an `<iframe>` from another site, it wasn't possible to read the response.
+I bez síťových metod tedy bylo možné vytvořit požadavek GET/POST na jiné sídlo, neboť formuláře mohou posílat data kamkoli. Protože však je zakázáno přistupovat k obsahu `<iframe>` z jiného sídla, nebylo možné načíst odpověď.
 
-To be precise, there were actually tricks for that, they required special scripts at both the iframe and the page. So the communication with the iframe was technically possible. Right now there's no point to go into details, let these dinosaurs rest in peace.
+Abychom byli přesní, i na to ve skutečnosti existovaly triky, které vyžadovaly speciální skripty jak ve vnitřním rámu, tak na stránce. Komunikace s vnitřním rámem tedy byla technicky možná. Dnes již nemá smysl zabíhat do detailů, nechme tyto dinosaury v klidu spát.
 
-### Using scripts
+### Používání skriptů
 
-Another trick was to use a `script` tag. A script could have any `src`, with any domain, like `<script src="http://another.com/…">`. It's possible to execute a script from any website.
+Dalším trikem bylo použití značky `script`. Skript může mít libovolný `src`, s libovolnou doménou, například `<script src="http://jiny-server.com/…">`. Je možné spustit skript z libovolného webového sídla.
 
-If a website, e.g. `another.com` intended to expose data for this kind of access, then a so-called "JSONP (JSON with padding)" protocol was used.
+Jestliže webové sídlo, např. `jiny-server.com`, mělo v úmyslu zviditelnit svá data tomuto druhu přístupu, používal se tzv. protokol „JSONP“ („JSON with padding“ -- „JSON s vycpávkou“).
 
-Here's how it worked.
+Fungovalo to následovně.
 
-Let's say we, at our site, need to get the data from `http://another.com`, such as the weather:
+Řekněme, že na našem sídle potřebujeme získat data z `http://jiny-server.com`, například informace o počasí:
 
-1. First, in advance, we declare a global function to accept the data, e.g. `gotWeather`.
+1. Nejprve deklarujeme globální funkci, která tato data přijme, např. `počasíZískáno`.
 
     ```js
-    // 1. Declare the function to process the weather data
-    function gotWeather({ temperature, humidity }) {
-      alert(`temperature: ${temperature}, humidity: ${humidity}`);
+    // 1. Deklarujeme funkci, která bude zpracovávat data o počasí
+    function počasíZískáno({ teplota, vlhkost }) {
+      alert(`teplota: ${teplota}, vlhkost: ${vlhkost}`);
     }
     ```
-2. Then we make a `<script>` tag with `src="http://another.com/weather.json?callback=gotWeather"`, using the name of our function as the `callback` URL-parameter.
+2. Pak vytvoříme značku `<script>` se `src="http://jiny-server.com/weather.json?callback=počasíZískáno"`. Název naší funkce vložíme do URL parametru `callback`.
 
     ```js
-    let script = document.createElement('script');
-    script.src = `http://another.com/weather.json?callback=gotWeather`;
-    document.body.append(script);
+    let skript = document.createElement('script');
+    skript.src = `http://jiny-server.com/weather.json?callback=počasíZískáno`;
+    document.body.append(skript);
     ```
-3. The remote server `another.com` dynamically generates a script that calls `gotWeather(...)` with the data it wants us to receive.
+3. Vzdálený server `jiny-server.com` dynamicky vygeneruje skript, který volá `počasíZískáno(...)` s daty, která chce, abychom získali.
     ```js
-    // The expected answer from the server looks like this:
-    gotWeather({
-      temperature: 25,
-      humidity: 78
+    // Očekávaná odpověď ze serveru vypadá takto:
+    počasíZískáno({
+      teplota: 25,
+      vlhkost: 78
     });
     ```
-4. When the remote script loads and executes, `gotWeather` runs, and, as it's our function, we have the data.
+4. Když se vzdálený skript načte a spustí, vyvolá se `počasíZískáno`, a protože je to naše funkce, máme data.
 
-That works, and doesn't violate security, because both sides agreed to pass the data this way. And, when both sides agree, it's definitely not a hack. There are still services that provide such access, as it works even for very old browsers.
+To funguje a neporušuje to bezpečnost, protože obě strany souhlasily, že si budou data takto posílat. A když obě strany souhlasily, nemůže to být hacknutí. Některé služby takový přístup poskytují dodnes, protože funguje i ve velmi starých prohlížečích.
 
-After a while, networking methods appeared in browser JavaScript.
+Po nějaké době se v prohlížečovém JavaScriptu objevily síťové metody.
 
-At first, cross-origin requests were forbidden. But as a result of long discussions, cross-origin requests were allowed, but with any new capabilities requiring an explicit allowance by the server, expressed in special headers.
+Požadavky jiného původu byly nejdříve zakázány. Po dlouhých diskusích však byly nakonec povoleny, ale s tím, že nové schopnosti vyžadují výslovné povolení od serveru, uvedené ve speciálních hlavičkách.
 
-## Safe requests
+## Bezpečné požadavky
 
-There are two types of cross-origin requests:
+Požadavky jiného původu se dělí na dva druhy:
 
-1. Safe requests.
-2. All the others.
+1. Bezpečné požadavky.
+2. Všechny ostatní.
 
-Safe Requests are simpler to make, so let's start with them.
+Vytváření bezpečných požadavků je jednodušší, začněme tedy s nimi.
 
-A request is safe if it satisfies two conditions:
+Požadavek je bezpečný, jestliže splňuje tyto dvě podmínky:
 
-1. [Safe method](https://fetch.spec.whatwg.org/#cors-safelisted-method): GET, POST or HEAD
-2. [Safe headers](https://fetch.spec.whatwg.org/#cors-safelisted-request-header) -- the only allowed custom headers are:
+1. [Bezpečná metoda](https://fetch.spec.whatwg.org/#cors-safelisted-method): GET, POST nebo HEAD.
+2. [Bezpečné hlavičky](https://fetch.spec.whatwg.org/#cors-safelisted-request-header) -- jsou povoleny jedině tyto vlastní hlavičky:
     - `Accept`,
     - `Accept-Language`,
     - `Content-Language`,
-    - `Content-Type` with the value `application/x-www-form-urlencoded`, `multipart/form-data` or `text/plain`.
+    - `Content-Type` s hodnotou `application/x-www-form-urlencoded`, `multipart/form-data` nebo `text/plain`.
 
-Any other request is considered "unsafe". For instance, a request with `PUT` method or with an `API-Key` HTTP-header does not fit the limitations.
+Jakýkoli jiný požadavek se považuje za „nebezpečný“. Například požadavek s metodou `PUT` nebo s HTTP hlavičkou `API-Key` tato omezení nesplňuje.
 
-**The essential difference is that a safe request can be made with a `<form>` or a `<script>`, without any special methods.**
+**Podstatným rozdílem je, že bezpečný požadavek je možné vytvořit pomocí `<form>` nebo `<script>`, bez jakýchkoli speciálních metod.**
 
-So, even a very old server should be ready to accept a safe request.
+I velmi starý server by tedy měl být připraven přijmout bezpečný požadavek.
 
-Contrary to that, requests with non-standard headers or e.g. method `DELETE` can't be created this way. For a long time JavaScript was unable to do such requests. So an old server may assume that such requests come from a privileged source, "because a webpage is unable to send them".
+Naproti tomu požadavky s nestandardními hlavičkami nebo např. s metodou `DELETE` nemohou být vytvořeny tímto způsobem. JavaScript dlouho nedokázal takové požadavky vytvářet. Starší server tedy může předpokládat, že takové požadavky přicházejí z privilegovaného zdroje, „protože webová stránka je není schopna posílat“.
 
-When we try to make a unsafe request, the browser sends a special "preflight" request that asks the server -- does it agree to accept such cross-origin requests, or not?
+Když se pokoušíme vytvořit nebezpečný požadavek, prohlížeč pošle speciální „předběžný“ („preflight“) požadavek, který se zeptá serveru: souhlasíš s přijetím takového požadavku jiného původu, nebo ne?
 
-And, unless the server explicitly confirms that with headers, an unsafe request is not sent.
+A pokud k tomu server výslovně nedá souhlas v hlavičkách odpovědi, nebezpečný požadavek nebude poslán.
 
-Now we'll go into details.
+Nyní pojďme do detailů.
 
-## CORS for safe requests
+## CORS pro bezpečné požadavky
 
-If a request is cross-origin, the browser always adds the `Origin` header to it.
+Pokud požadavek je z jiného původu, prohlížeč do něj vždy přidá hlavičku `Origin`.
 
-For instance, if we request `https://anywhere.com/request` from `https://javascript.info/page`, the headers will look like:
+Například pokud posíláme požadavek na    `https://kdekoli.com/request` z `https://javascript.info/page`, hlavičky budou vypadat takto:
 
 ```http
 GET /request
-Host: anywhere.com
+Host: kdekoli.com
 *!*
 Origin: https://javascript.info
 */!*
 ...
 ```
 
-As you can see, the `Origin` header contains exactly the origin (domain/protocol/port), without a path.
+Jak vidíte, hlavička `Origin` obsahuje jedině původ (doménu/protokol/port) bez cesty.
 
-The server can inspect the `Origin` and, if it agrees to accept such a request, add a special header `Access-Control-Allow-Origin` to the response. That header should contain the allowed origin (in our case `https://javascript.info`), or a star `*`. Then the response is successful, otherwise it's an error.
+Server může `Origin` prozkoumat, a pokud s přijetím takového požadavku souhlasí, přidá do odpovědi speciální hlavičku `Access-Control-Allow-Origin`. Tato hlavička by měla obsahovat povolený původ (v našem případě `https://javascript.info`) nebo hvězdičku `*`. Pak je odpověď úspěšná. V opačném případě nastane chyba.
 
-The browser plays the role of a trusted mediator here:
-1. It ensures that the correct `Origin` is sent with a cross-origin request.
-2. It checks for permitting `Access-Control-Allow-Origin` in the response, if it exists, then JavaScript is allowed to access the response, otherwise it fails with an error.
-
+Prohlížeč zde hraje roli důvěryhodného prostředníka:
+1. Zajišťuje, že v požadavku jiného původu je odeslán správný `Origin`.
+2. Ověří, zda odpověď obsahuje `Access-Control-Allow-Origin` s povolením. Pokud ano, povolí JavaScriptu přístup k odpovědi, v opačném případě vyvolá chybu.
+ 
 ![](xhr-another-domain.svg)
 
-Here's an example of a permissive server response:
+Zde je příklad odpovědi serveru s povolením:
+
 ```http
 200 OK
 Content-Type:text/html; charset=UTF-8
@@ -163,9 +164,9 @@ Access-Control-Allow-Origin: https://javascript.info
 */!*
 ```
 
-## Response headers
+## Hlavičky odpovědi
 
-For cross-origin request, by default JavaScript may only access so-called "safe" response headers:
+U požadavku jiného původu může JavaScript standardně přistupovat jen k tzv. „bezpečným“ hlavičkám odpovědi:
 
 - `Cache-Control`
 - `Content-Language`
@@ -175,11 +176,11 @@ For cross-origin request, by default JavaScript may only access so-called "safe"
 - `Last-Modified`
 - `Pragma`
 
-Accessing any other response header causes an error.
+Přístup ke kterékoli jiné hlavičce vyvolá chybu.
 
-To grant JavaScript access to any other response header, the server must send the `Access-Control-Expose-Headers` header. It contains a comma-separated list of unsafe header names that should be made accessible.
+Aby server povolil JavaScriptu přístup k jiným hlavičkám odpovědi, musí poslat hlavičku `Access-Control-Expose-Headers`, která obsahuje seznam názvů nebezpečných hlaviček, které mají být zpřístupněny, oddělených čárkou.
 
-For example:
+Příklad:
 
 ```http
 200 OK
@@ -193,35 +194,35 @@ Access-Control-Expose-Headers: Content-Encoding,API-Key
 */!*
 ```
 
-With such an `Access-Control-Expose-Headers` header, the script is allowed to read the `Content-Encoding` and `API-Key` headers of the response.
+S takovou hlavičkou `Access-Control-Expose-Headers` má skript dovoleno číst hlavičky odpovědi `Content-Encoding` a `API-Key`.
 
-## "Unsafe" requests
+## „Nebezpečné“ požadavky
 
-We can use any HTTP-method: not just `GET/POST`, but also `PATCH`, `DELETE` and others.
+Můžeme použít jakoukoli HTTP metodu: nejenom `GET/POST`, ale také `PATCH`, `DELETE` i jiné.
 
-Some time ago no one could even imagine that a webpage could make such requests. So there may still exist webservices that treat a non-standard method as a signal: "That's not a browser". They can take it into account when checking access rights.
+Před nějakou dobou si nikdo neuměl ani představit, že by webová stránka mohla vytvářet takové požadavky. Stále tedy mohou existovat webové služby, které nestandardní metodu považují za signál: „Tohle není prohlížeč.“ Mohou to vzít v úvahu, když budou ověřovat přístupová práva.
 
-So, to avoid misunderstandings, any "unsafe" request -- that couldn't be done in the old times, the browser does not make such requests right away. First, it sends a preliminary, so-called "preflight" request, to ask for permission.
+Abychom tedy předešli nedorozumění, když jde o „nebezpečný“ požadavek, jaký nemohl být v dřívější době vytvořen, prohlížeč takový požadavek neposílá okamžitě. Napřed pošle předběžný požadavek, tzv. „preflight“, kterým požádá o povolení.
 
-A preflight request uses the method `OPTIONS`, no body and three headers:
+Předběžný požadavek používá metodu `OPTIONS`, nemá žádné tělo a má tři hlavičky:
 
-- `Access-Control-Request-Method` header has the method of the unsafe request.
-- `Access-Control-Request-Headers` header provides a comma-separated list of its unsafe HTTP-headers.
-- `Origin` header tells from where the request came. (such as `https://javascript.info`)
+- Hlavička `Access-Control-Request-Method` obsahuje metodu nebezpečného požadavku.
+- Hlavička `Access-Control-Request-Headers` poskytuje seznam jeho nebezpečných HTTP hlaviček, oddělených čárkou.
+- Hlavička `Origin` sděluje, odkud požadavek přišel (např. `https://javascript.info`).
 
-If the server agrees to serve the requests, then it should respond with empty body, status 200 and headers:
+Pokud server souhlasí s obsluhováním takových požadavků, měl by poslat odpověď s prázdným tělem, statusem 200 a hlavičkami:
 
-- `Access-Control-Allow-Origin` must be either `*` or the requesting origin, such as `https://javascript.info`, to allow it.
-- `Access-Control-Allow-Methods` must have the allowed method.
-- `Access-Control-Allow-Headers` must have a list of allowed headers.
-- Additionally, the header `Access-Control-Max-Age` may specify a number of seconds to cache the permissions. So the browser won't have to send a preflight for subsequent requests that satisfy given permissions.
+- `Access-Control-Allow-Origin` musí být buď `*`, nebo požadovaný původ, např. `https://javascript.info`, který má být povolen.
+- `Access-Control-Allow-Methods` musí obsahovat povolenou metodu.
+- `Access-Control-Allow-Headers` musí obsahovat seznam povolených hlaviček.
+- Navíc hlavička `Access-Control-Max-Age` může specifikovat čas v sekundách, jak dlouho si server bude povolení pamatovat. Prohlížeč tedy v tomto čase nebude muset posílat předběžné požadavky před dalšími požadavky, které splňují daná povolení.
 
 ![](xhr-preflight.svg)
 
-Let's see how it works step-by-step on the example of a cross-origin `PATCH` request (this method is often used to update data):
+Podívejme se krok za krokem, jak to funguje, na příkladu požadavku `PATCH` jiného původu (tato metoda se často používá k aktualizaci dat):
 
 ```js
-let response = await fetch('https://site.com/service.json', {
+let odpověď = await fetch('https://site.com/service.json', {
   method: 'PATCH',
   headers: {
     'Content-Type': 'application/json',
@@ -230,14 +231,14 @@ let response = await fetch('https://site.com/service.json', {
 });
 ```
 
-There are three reasons why the request is unsafe (one is enough):
-- Method `PATCH`
-- `Content-Type` is not one of: `application/x-www-form-urlencoded`, `multipart/form-data`, `text/plain`.
-- "Unsafe" `API-Key` header.
+Tento požadavek má tři důvody, proč je nebezpečný (stačil by jeden):
+- Metoda `PATCH`.
+- `Content-Type` není jeden z: `application/x-www-form-urlencoded`, `multipart/form-data`, `text/plain`.
+- „Nebezpečná“ hlavička `API-Key`.
 
-### Step 1 (preflight request)
+### Krok 1 (předběžný požadavek)
 
-Prior to sending such a request, the browser, on its own, sends a preflight request that looks like this:
+Před odesláním takového požadavku prohlížeč sám o sobě odešle předběžný požadavek, který vypadá následovně:
 
 ```http
 OPTIONS /service.json
@@ -247,25 +248,25 @@ Access-Control-Request-Method: PATCH
 Access-Control-Request-Headers: Content-Type,API-Key
 ```
 
-- Method: `OPTIONS`.
-- The path -- exactly the same as the main request: `/service.json`.
-- Cross-origin special headers:
-    - `Origin` -- the source origin.
-    - `Access-Control-Request-Method` -- requested method.
-    - `Access-Control-Request-Headers` -- a comma-separated list of "unsafe" headers.
+- Metoda: `OPTIONS`.
+- Cesta je přesně stejná, jako v hlavním požadavku: `/service.json`.
+- Speciální hlavičky jiného původu:
+    - `Origin` -- původ zdroje.
+    - `Access-Control-Request-Method` -- požadovaná metoda.
+    - `Access-Control-Request-Headers` -- seznam „nebezpečných“ hlaviček oddělených čárkou.
 
-### Step 2 (preflight response)
+### Krok 2 (předběžná odpověď)
 
-The server should respond with status 200 and the headers:
+Server by měl odpovědět statusem 200 a těmito hlavičkami:
 - `Access-Control-Allow-Origin: https://javascript.info`
 - `Access-Control-Allow-Methods: PATCH`
-- `Access-Control-Allow-Headers: Content-Type,API-Key`.
+- `Access-Control-Allow-Headers: Content-Type,API-Key`
 
-That allows future communication, otherwise an error is triggered.
+To umožní následnou komunikaci, jinak bude vyvolána chyba.
 
-If the server expects other methods and headers in the future, it makes sense to allow them in advance by adding them to the list.
+Pokud server v budoucnu očekává i jiné metody a hlavičky, má smysl je s předstihem povolit a zahrnout do seznamu.
 
-For example, this response also allows `PUT`, `DELETE` and additional headers:
+Například tato odpověď povoluje také metody `PUT`, `DELETE` a další hlavičky:
 
 ```http
 200 OK
@@ -275,15 +276,15 @@ Access-Control-Allow-Headers: API-Key,Content-Type,If-Modified-Since,Cache-Contr
 Access-Control-Max-Age: 86400
 ```
 
-Now the browser can see that `PATCH` is in `Access-Control-Allow-Methods` and `Content-Type,API-Key` are in the list `Access-Control-Allow-Headers`, so it sends out the main request.
+Nyní prohlížeč vidí, že `PATCH` je v `Access-Control-Allow-Methods` a `Content-Type,API-Key` jsou v seznamu `Access-Control-Allow-Headers`, takže pošle hlavní požadavek.
 
-If there's the header `Access-Control-Max-Age` with a number of seconds, then the preflight permissions are cached for the given time. The response above will be cached for 86400 seconds (one day). Within this timeframe, subsequent requests will not cause a preflight. Assuming that they fit the cached allowances, they will be sent directly.
+Pokud je uvedena hlavička `Access-Control-Max-Age` s časem v sekundách, pak se předběžná povolení na zadanou dobu uloží do paměti. Uvedená odpověď bude v paměti 86400 sekund (jeden den). Po tuto dobu se před dalšími požadavky nebude posílat předběžný požadavek. Pokud budou splňovat uvedená povolení, budou odeslány rovnou.
 
-### Step 3 (actual request)
+### Krok 3 (skutečný požadavek)
 
-When the preflight is successful, the browser now makes the main request. The process here is the same as for safe requests.
+Když je předběžný požadavek úspěšný, prohlížeč vytvoří hlavní požadavek. Je to stejný proces jako u bezpečných požadavků.
 
-The main request has the `Origin` header (because it's cross-origin):
+Hlavní požadavek obsahuje hlavičku `Origin` (protože je jiného původu):
 
 ```http
 PATCH /service.json
@@ -293,49 +294,49 @@ API-Key: secret
 Origin: https://javascript.info
 ```
 
-### Step 4 (actual response)
+### Krok 4 (skutečná odpověď)
 
-The server should not forget to add `Access-Control-Allow-Origin` to the main response. A successful preflight does not relieve from that:
+Server by neměl zapomenout přidat do hlavní odpovědi `Access-Control-Allow-Origin`. Úspěšný předběžný požadavek ho z toho nevyvazuje:
 
 ```http
 Access-Control-Allow-Origin: https://javascript.info
 ```
 
-Then JavaScript is able to read the main server response.
+Pak je JavaScript schopen načíst hlavní odpověď serveru.
 
 ```smart
-Preflight request occurs "behind the scenes", it's invisible to JavaScript.
+Předběžné požadavky se odehrávají „za scénou“ a pro JavaScript jsou neviditelné.
 
-JavaScript only gets the response to the main request or an error if there's no server permission.
+JavaScript dostane jen odpověď na hlavní požadavek anebo chybu, pokud server nevrátil povolení.
 ```
 
-## Credentials
+## Přihlašovací údaje
 
-A cross-origin request initiated by JavaScript code by default does not bring any credentials (cookies or HTTP authentication).
+Požadavek jiného původu vytvořený JavaScriptovým kódem standardně neobsahuje žádné přihlašovací údaje (cookies nebo HTTP autentifikaci).
 
-That's uncommon for HTTP-requests. Usually, a request to `http://site.com` is accompanied by all cookies from that domain. Cross-origin requests made by JavaScript methods on the other hand are an exception.
+Pro HTTP požadavky je to neobvyklé. Požadavek na `http://site.com` je zpravidla doprovázen všemi cookies z této domény. Požadavky jiného původu vytvořené metodami v JavaScriptu jsou však výjimkou.
 
-For example, `fetch('http://another.com')` does not send any cookies, even those  (!) that belong to `another.com` domain.
+Například `fetch('http://jiny-server.com')` nepošle žádné cookies, dokonce ani ty (!), které patří doméně `jiny-server.com`.
 
-Why?
+Proč?
 
-That's because a request with credentials is much more powerful than without them. If allowed, it grants JavaScript the full power to act on behalf of the user and access sensitive information using their credentials.
+Je to proto, že požadavek s přihlašovacími údaji je mnohem silnější než bez nich. Kdyby byly povoleny, poskytly by JavaScriptu plnou moc jednat jménem uživatele a skrz jeho přihlašovací údaje přistupovat k důvěrným informacím.
 
-Does the server really trust the script that much? Then it must explicitly allow requests with credentials with an additional header.
+Co když server opravdu skriptu věří natolik, že mu to chce umožnit? Pak musí v další hlavičce výslovně povolit požadavky s přihlašovacími údaji.
 
-To send credentials in `fetch`, we need to add the option `credentials: "include"`, like this:
+Abychom ve `fetch` poslali přihlašovací údaje, musíme přidat volbu `credentials: "include"`, například:
 
 ```js
-fetch('http://another.com', {
+fetch('http://jiny-server.com', {
   credentials: "include"
 });
 ```
 
-Now `fetch` sends cookies originating from `another.com` with request to that site.
+Nyní `fetch` posílá cookies pocházející z `jiny-server.com` spolu s požadavkem na toto sídlo.
 
-If the server agrees to accept the request *with credentials*, it should add a header `Access-Control-Allow-Credentials: true` to the response, in addition to `Access-Control-Allow-Origin`.
+Jestliže server souhlasí s přijetím požadavku *s přihlašovacími údaji*, měl by do odpovědi kromě hlavičky `Access-Control-Allow-Origin` přidat i hlavičku `Access-Control-Allow-Credentials: true`.
 
-For example:
+Příklad:
 
 ```http
 200 OK
@@ -343,42 +344,42 @@ Access-Control-Allow-Origin: https://javascript.info
 Access-Control-Allow-Credentials: true
 ```
 
-Please note: `Access-Control-Allow-Origin` is prohibited from using a star `*` for requests with credentials. Like shown above, it must provide the exact origin there. That's an additional safety measure, to ensure that the server really knows who it trusts to make such requests.
+Prosíme všimněte si, že `Access-Control-Allow-Origin` nesmí u požadavků s přihlašovacími údaji obsahovat hvězdičku `*`. Jak zde vidíme, musí tentokrát poskytnout přesný původ. To je další bezpečnostní opatření, které zajistí, že server opravdu ví, komu důvěřuje natolik, aby mu povolil takové požadavky.
 
-## Summary
+## Shrnutí
 
-From the browser point of view, there are two kinds of cross-origin requests: "safe" and all the others.
+Z pohledu prohlížeče existují dva druhy požadavků jiného původu: „bezpečné“ a všechny ostatní.
 
-"Safe" requests must satisfy the following conditions:
-- Method: GET, POST or HEAD.
-- Headers -- we can set only:
+„Bezpečné“ požadavky musejí splňovat následující podmínky:
+- Metoda: GET, POST nebo HEAD.
+- Hlavičky -- můžeme nastavit jedině tyto:
     - `Accept`
     - `Accept-Language`
     - `Content-Language`
-    - `Content-Type` to the value `application/x-www-form-urlencoded`, `multipart/form-data` or `text/plain`.
+    - `Content-Type` na hodnotu `application/x-www-form-urlencoded`, `multipart/form-data` nebo `text/plain`.
 
-The essential difference is that safe requests were doable since ancient times using `<form>` or `<script>` tags, while unsafe were impossible for browsers for a long time.
+Podstatným rozdílem je, že bezpečné požadavky byly proveditelné již před dlouhou dobou pomocí značek `<form>` nebo `<script>`, zatímco nebezpečné nemohly prohlížeče dlouhou dobu vůbec vytvářet.
 
-So, the practical difference is that safe requests are sent right away, with the `Origin` header, while for the other ones the browser makes a preliminary "preflight" request, asking for permission.
+Praktický rozdíl je tedy v tom, že bezpečné požadavky se posílají rovnou a s hlavičkou `Origin`, zatímco pro ostatní prohlížeč vytvoří předběžný požadavek, tzv. „preflight“, kterým žádá o povolení.
 
-**For safe requests:**
+**Pro bezpečné požadavky:**
 
-- → The browser sends the `Origin` header with the origin.
-- ← For requests without credentials (not sent by default), the server should set:
-    - `Access-Control-Allow-Origin` to `*` or same value as `Origin`
-- ← For requests with credentials, the server should set:
-    - `Access-Control-Allow-Origin` to same value as `Origin`
-    - `Access-Control-Allow-Credentials` to `true`
+- → Prohlížeč posílá hlavičku `Origin` s původem.
+- ← Pro požadavky bez přihlašovacích údajů (ty se standardně neposílají) by server měl nastavit:
+    - `Access-Control-Allow-Origin` na `*` nebo na stejnou hodnotu jako `Origin`
+- ← Pro požadavky s přihlašovacími údaji by server měl nastavit:
+    - `Access-Control-Allow-Origin` na stejnou hodnotu jako `Origin`
+    - `Access-Control-Allow-Credentials` na `true`
 
-Additionally, to grant JavaScript access to any response headers except `Cache-Control`,  `Content-Language`, `Content-Type`, `Expires`, `Last-Modified` or `Pragma`, the server should list the allowed ones in `Access-Control-Expose-Headers` header.
+Navíc aby server umožnil JavaScriptu přístup k jiným hlavičkám odpovědi než `Cache-Control`,  `Content-Language`, `Content-Type`, `Expires`, `Last-Modified` nebo `Pragma`, měl by příslušné hlavičky vyjmenovat v seznamu v hlavičce`Access-Control-Expose-Headers`.
 
-**For unsafe requests, a preliminary "preflight" request is issued before the requested one:**
+**Pro nebezpečné požadavky je před skutečným požadavkem vydán předběžný požadavek, tzv. „preflight“:**
 
-- → The browser sends an `OPTIONS` request to the same URL, with the headers:
-    - `Access-Control-Request-Method` has requested method.
-    - `Access-Control-Request-Headers` lists unsafe requested headers.
-- ← The server should respond with status 200 and the headers:
-    - `Access-Control-Allow-Methods` with a list of allowed methods,
-    - `Access-Control-Allow-Headers` with a list of allowed headers,
-    - `Access-Control-Max-Age` with a number of seconds to cache the permissions.
-- Then the actual request is sent, and the previous "safe" scheme is applied.
+- → Prohlížeč pošle na stejné URL požadavek `OPTIONS` s těmito hlavičkami:
+    - `Access-Control-Request-Method` obsahuje požadovanou metodu.
+    - `Access-Control-Request-Headers` obsahuje seznam nebezpečných hlaviček požadavku.
+- ← Server by měl odpovědět statusem 200 a těmito hlavičkami:
+    - `Access-Control-Allow-Methods` se seznamem povolených metod,
+    - `Access-Control-Allow-Headers` se seznamem povolených hlaviček,
+    - `Access-Control-Max-Age` s časem v sekundách, jak dlouho si bude povolení pamatovat.
+- Pak je odeslán skutečný požadavek a aplikuje se předchozí „bezpečné“ schéma.

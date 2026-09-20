@@ -1,4 +1,4 @@
 
-async function getUsers(names) {
-  /* your code */
+async function vraťUživatele(jména) {
+  /* váš kód */
 }

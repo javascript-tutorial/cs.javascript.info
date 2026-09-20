@@ -1,138 +1,138 @@
 
-# Sticky flag "y", searching at position
+# Lepkavý příznak „y“, hledání na stanovené pozici
 
-The flag `pattern:y` allows to perform the search at the given position in the source string.
+Příznak `pattern:y` nám umožňuje provést hledání na zadané pozici zdrojového řetězce.
 
-To grasp the use case of `pattern:y` flag, and better understand the ways of regexps, let's explore a practical example.
+Abychom pochopili využití příznaku `pattern:y` a lépe porozuměli fungování regulárních výrazů, podívejme se na praktický příklad.
 
-One of common tasks for regexps is "lexical analysis": we get a text, e.g. in a programming language, and need to find its structural elements. For instance, HTML has tags and attributes, JavaScript code has functions, variables, and so on.
+Jedna z běžných úloh pro regulární výrazy je „lexikální analýza“: máme text, např. v programovacím jazyce, a potřebujeme najít jeho strukturální prvky. Například HTML obsahuje značky a atributy, kód v JavaScriptu má funkce, proměnné a podobně.
 
-Writing lexical analyzers is a special area, with its own tools and algorithms, so we don't go deep in there, but there's a common task: to read something at the given position.
+Psaní lexikálních analyzátorů je samostatný obor s vlastními nástroji a algoritmy, proto zde nepůjdeme do hloubky, ale jedna úloha je společná: načíst něco na zadané pozici.
 
-E.g. we have a code string `subject:let varName = "value"`, and we need to read the variable name from it, that starts at position `4`.
+Například máme řetězec s kódem `subject:let promenna = "hodnota"` a potřebujeme z něj načíst název proměnné, který začíná na pozici `4`.
 
-We'll look for variable name using regexp `pattern:\w+`. Actually, JavaScript variable names need a bit more complex regexp for accurate matching, but here it doesn't matter.
+Název proměnné hledáme regulárním výrazem `pattern:\w+`. Ve skutečnosti správné hledání názvů proměnných v JavaScriptu vyžaduje trochu složitější RV, ale tady na tom nezáleží.
 
-- A call to `str.match(/\w+/)` will find only the first word in the line (`let`). That's not it.
-- We can add the flag `pattern:g`. But then the call `str.match(/\w+/g)` will look for all words in the text, while we need one word at position `4`. Again, not what we need.
+- Volání `řetězec.match(/\w+/)` najde jen první slovo na řádku (`let`). To není ono.
+- Můžeme přidat příznak `pattern:g`, ale pak volání `řetězec.match(/\w+/g)` najde všechna slova v textu, zatímco my potřebujeme jen jedno slovo na pozici `4`. Opět to není to, co potřebujeme.
 
-**So, how to search for a regexp exactly at the given position?**
+**Jak tedy regulárním výrazem hledat přesně na zadané pozici?**
 
-Let's try using method `regexp.exec(str)`.
+Zkusme použít metodu `rv.exec(řetězec)`.
 
-For a `regexp` without flags `pattern:g` and `pattern:y`, this method looks only for the first match, it works exactly like `str.match(regexp)`.
+Pro `rv` bez příznaků `pattern:g` a `pattern:y` tato metoda hledá jen první shodu, funguje tedy přesně stejně jako `řetězec.match(rv)`.
 
-...But if there's flag `pattern:g`, then it performs the search in `str`, starting from position stored in the `regexp.lastIndex` property. And, if it finds a match, then sets `regexp.lastIndex` to the index immediately after the match.
+...Pokud je však uveden příznak `pattern:g`, pak provede hledání v řetězci `řetězec` od pozice uložené ve vlastnosti `rv.lastIndex`. A pokud najde shodu, pak nastaví `rv.lastIndex` na index pozice bezprostředně za shodou.
 
-In other words, `regexp.lastIndex` serves as a starting point for the search, that each `regexp.exec(str)` call resets to the new value ("after the last match"). That's only if there's `pattern:g` flag, of course.
+Jinými slovy, `rv.lastIndex` slouží jako počáteční bod pro hledání a pak ji každé volání `rv.exec(řetězec)` nastaví na novou hodnotu („za poslední shodou“). To platí samozřejmě jen tehdy, je-li uveden příznak `pattern:g`.
 
-So, successive calls to `regexp.exec(str)` return matches one after another.
+Volání `rv.exec(řetězec)` za sebou tedy vracejí jednu shodu za druhou.
 
-Here's an example of such calls:
+Příklad takových volání:
 
 ```js run
-let str = 'let varName'; // Let's find all words in this string
-let regexp = /\w+/g;
+let řetězec = 'let promenna'; // Najděme v tomto řetězci všechna slova
+let rv = /\w+/g;
 
-alert(regexp.lastIndex); // 0 (initially lastIndex=0)
+alert(rv.lastIndex); // 0 (na začátku lastIndex=0)
 
-let word1 = regexp.exec(str);
-alert(word1[0]); // let (1st word)
-alert(regexp.lastIndex); // 3 (position after the match)
+let slovo1 = rv.exec(řetězec);
+alert(slovo1[0]); // let (1. slovo)
+alert(rv.lastIndex); // 3 (pozice za shodou)
 
-let word2 = regexp.exec(str);
-alert(word2[0]); // varName (2nd word)
-alert(regexp.lastIndex); // 11 (position after the match)
+let slovo2 = rv.exec(řetězec);
+alert(slovo2[0]); // promenna (2. slovo)
+alert(rv.lastIndex); // 12 (pozice za shodou)
 
-let word3 = regexp.exec(str);
-alert(word3); // null (no more matches)
-alert(regexp.lastIndex); // 0 (resets at search end)
+let slovo3 = rv.exec(řetězec);
+alert(slovo3); // null (další shody nejsou)
+alert(rv.lastIndex); // 0 (na konci hledání se resetuje)
 ```
 
-We can get all matches in the loop:
+Můžeme získat všechny shody v cyklu:
 
 ```js run
-let str = 'let varName';
-let regexp = /\w+/g;
+let řetězec = 'let promenna';
+let rv = /\w+/g;
 
-let result;
+let výsledek;
 
-while (result = regexp.exec(str)) {
-  alert( `Found ${result[0]} at position ${result.index}` );
-  // Found let at position 0, then
-  // Found varName at position 4
+while (výsledek = rv.exec(řetězec)) {
+  alert( `Nalezeno ${výsledek[0]} na pozici ${výsledek.index}` );
+  // Nalezeno let na pozici 0, pak
+  // Nalezeno promenna na pozici 4
 }
 ```
 
-Such use of `regexp.exec` is an alternative to method `str.matchAll`, with a bit more control over the process.
+Toto použití `rv.exec` je alternativou k metodě `řetězec.matchAll`, která nám poskytuje trochu více kontroly nad procesem.
 
-Let's go back to our task.
+Vraťme se k naší úloze.
 
-We can manually set `lastIndex` to `4`, to start the search from the given position!
+Můžeme ručně nastavit `lastIndex` na `4`, abychom zahájili hledání na zadané pozici!
 
-Like this:
+Například:
 
 ```js run
-let str = 'let varName = "value"';
+let řetězec = 'let promenna = "hodnota"';
 
-let regexp = /\w+/g; // without flag "g", property lastIndex is ignored
+let rv = /\w+/g; // bez příznaku "g" je vlastnost lastIndex ignorována
 
 *!*
-regexp.lastIndex = 4;
+rv.lastIndex = 4;
 */!*
 
-let word = regexp.exec(str);
-alert(word); // varName
+let slovo = rv.exec(řetězec);
+alert(slovo); // promenna
 ```
 
-Hooray! Problem solved! 
+Hurá! Problém je vyřešen!
 
-We performed a search of `pattern:\w+`, starting from position `regexp.lastIndex = 4`.
+Provedli jsme hledání `pattern:\w+` počínajíce pozicí `rv.lastIndex = 4`.
 
-The result is correct.
+Výsledek je správný.
 
-...But wait, not so fast.
+...Ale počkat, ne tak rychle.
 
-Please note: the `regexp.exec` call starts searching at position `lastIndex` and then goes further. If there's no word at position `lastIndex`, but it's somewhere after it, then it will be found:
+Prosíme všimněte si: volání `rv.exec` zahájí hledání na pozici `lastIndex` a pak pokračuje dál. Jestliže na pozici `lastIndex` slovo není, ale je někde za ní, pak bude nalezeno:
 
 ```js run
-let str = 'let varName = "value"';
+let řetězec = 'let promenna = "hodnota"';
 
-let regexp = /\w+/g;
+let rv = /\w+/g;
 
 *!*
-// start the search from position 3
-regexp.lastIndex = 3;
+// začneme hledání od pozice 3
+rv.lastIndex = 3;
 */!*
 
-let word = regexp.exec(str); 
-// found the match at position 4
-alert(word[0]); // varName
-alert(word.index); // 4
+let slovo = rv.exec(řetězec); 
+// najdeme shodu na pozici 4
+alert(slovo[0]); // promenna
+alert(slovo.index); // 4
 ```
 
-For some tasks, including the lexical analysis, that's just wrong. We need to find a match exactly at the given position at the text, not somewhere after it. And that's what the flag `y` is for.
+Pro některé úlohy, včetně lexikální analýzy, je to špatně. Potřebujeme najít shodu přesně na zadané pozici v textu, ne někde za ní. A právě k tomu slouží příznak `y`.
 
-**The flag `pattern:y` makes `regexp.exec` to search exactly at position `lastIndex`, not "starting from" it.**
+**Příznak `pattern:y` způsobí, že `rv.exec` bude hledat výhradně na pozici `lastIndex`, nebude od ní „začínat“.**
 
-Here's the same search with flag `pattern:y`:
+Zde je stejné hledání s příznakem `pattern:y`:
 
 ```js run
-let str = 'let varName = "value"';
+let řetězec = 'let promenna = "hodnota"';
 
-let regexp = /\w+/y;
+let rv = /\w+/y;
 
-regexp.lastIndex = 3;
-alert( regexp.exec(str) ); // null (there's a space at position 3, not a word)
+rv.lastIndex = 3;
+alert( rv.exec(řetězec) ); // null (na pozici 3 je mezera, ne slovo)
 
-regexp.lastIndex = 4;
-alert( regexp.exec(str) ); // varName (word at position 4)
+rv.lastIndex = 4;
+alert( rv.exec(řetězec) ); // promenna (slovo na pozici 4)
 ```
 
-As we can see, regexp `pattern:/\w+/y` doesn't match at position `3` (unlike the flag  `pattern:g`), but matches at position `4`.
+Jak vidíme, regulární výraz `pattern:/\w+/y` nenajde shodu na pozici `3` (na rozdíl od příznaku `pattern:g`), ale najde ji na pozici `4`.
 
-Not only that's what we need, there's an important performance gain when using flag `pattern:y`.
+Nejenom že přesně tohle potřebujeme, ale použitím příznaku `pattern:y` získáme významné zlepšení výkonu.
 
-Imagine, we have a long text, and there are no matches in it, at all. Then a search with flag `pattern:g` will go till the end of the text and find nothing, and this will take significantly more time than the search with flag `pattern:y`, that checks only the exact position.
+Představte si, že máme dlouhý text a v něm nejsou vůbec žádné shody. Pak hledání s příznakem `pattern:g` bude pokračovat až na konec textu a nic nenajde, což bude trvat výrazně delší dobu než hledání s příznakem `pattern:y`, které prověří jen danou pozici.
 
-In tasks like lexical analysis, there are usually many searches at an exact position, to check what we have there. Using flag `pattern:y` is the key for correct implementations and a good performance.
+V úlohách jako lexikální analýza se obvykle provádí mnoho hledání na stanovené pozici, abychom zjistili, co tam máme. Používání příznaku `pattern:y` je klíčem ke správným implementacím a dobrému výkonu.

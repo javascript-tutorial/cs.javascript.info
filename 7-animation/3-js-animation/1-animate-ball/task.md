@@ -2,8 +2,8 @@ importance: 5
 
 ---
 
-# Animate the bouncing ball
+# Animace skákajícího míče
 
-Make a bouncing ball. Click to see how it should look:
+Vytvořte skákající míč. Po kliknutí uvidíte, jak by měl vypadat:
 
 [iframe height=250 src="solution"]

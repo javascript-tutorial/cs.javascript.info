@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <style>
-    .circle {
+    .kruh {
       transition-property: width, height;
       transition-duration: 2s;
       position: fixed;
@@ -17,21 +17,21 @@
 
 <body>
 
-  <button onclick="showCircle(150, 150, 100)">showCircle(150, 150, 100)</button>
+  <button onclick="zobrazKruh(150, 150, 100)">zobrazKruh(150, 150, 100)</button>
 
   <script>
-  function showCircle(cx, cy, radius) {
+  function zobrazKruh(cx, cy, poloměr) {
     let div = document.createElement('div');
     div.style.width = 0;
     div.style.height = 0;
     div.style.left = cx + 'px';
     div.style.top = cy + 'px';
-    div.className = 'circle';
+    div.className = 'kruh';
     document.body.append(div);
 
     setTimeout(() => {
-      div.style.width = radius * 2 + 'px';
-      div.style.height = radius * 2 + 'px';
+      div.style.width = poloměr * 2 + 'px';
+      div.style.height = poloměr * 2 + 'px';
     }, 0);
   }
   </script>

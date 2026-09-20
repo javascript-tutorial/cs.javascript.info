@@ -1,32 +1,32 @@
-# Find quoted strings
+# Najděte řetězce v uvozovkách
 
-Create a regexp to find strings in double quotes `subject:"..."`.
+Vytvořte regulární výraz, který najde řetězce ve dvojitých uvozovkách `subject:"..."`.
 
-The strings should support escaping, the same way as JavaScript strings do. For instance, quotes can be inserted as `subject:\"` a newline as `subject:\n`, and the backslash itself as `subject:\\`.
+Řetězce by měly podporovat únikové znaky stejným způsobem, jako řetězce v JavaScriptu. Například uvozovky mohou být vloženy jako `subject:\"`, nový řádek jako `subject:\n` a samotné zpětné lomítko jako `subject:\\`.
 
 ```js
-let str = "Just like \"here\".";
+let řetězec = "Tak jako \"tady\".";
 ```
 
-Please note, in particular, that an escaped quote `subject:\"` does not end a string.
+Prosíme všimněte si, že uvozovky za únikovým znakem `subject:\"` neukončují řetězec.
 
-So we should search from one quote to the other ignoring escaped quotes on the way.
+Měli bychom tedy hledat od prvních uvozovek ke druhým, ale po cestě ignorovat uvozovky za únikovým znakem.
 
-That's the essential part of the task, otherwise it would be trivial.
+To je klíčová součást úlohy, jinak by byla triviální.
 
-Examples of strings to match:
+Příklady řetězců, které se mají shodovat:
 ```js
-.. *!*"test me"*/!* ..  
-.. *!*"Say \"Hello\"!"*/!* ... (escaped quotes inside)
-.. *!*"\\"*/!* ..  (double backslash inside)
-.. *!*"\\ \""*/!* ..  (double backslash and an escaped quote inside)
+.. *!*"otestuj mě"*/!* ..  
+.. *!*"Řekni \"Ahoj\"!"*/!* ... (uvozovky s únikovým znakem uvnitř)
+.. *!*"\\"*/!* ..  (dvojité lomítko uvnitř)
+.. *!*"\\ \""*/!* ..  (dvojité lomítko a uvozovky s únikovým znakem uvnitř)
 ```
 
-In JavaScript we need to double the backslashes to pass them right into the string, like this:
+Abychom v JavaScriptu správně předali do řetězce zpětná lomítka, musíme je zdvojit, například:
 
 ```js run
-let str = ' .. "test me" .. "Say \\"Hello\\"!" .. "\\\\ \\"" .. ';
+let řetězec = ' .. "otestuj mě" .. "Řekni \\"Ahoj\\"!" .. "\\\\ \\"" .. ';
 
-// the in-memory string
-alert(str); //  .. "test me" .. "Say \"Hello\"!" .. "\\ \"" ..
+// řetězec v paměti
+alert(řetězec); //  .. "otestuj mě" .. "Řekni \"Ahoj\"!" .. "\\ \"" ..
 ```

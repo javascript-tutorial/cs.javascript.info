@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
 
   <style>
-    #protector {
+    #ochránce {
       height: 100%;
       width: 100%;
       position: absolute;
@@ -19,23 +19,23 @@
 
 <body>
 
-<div id="protector">
-  <a href="/" target="_blank">Go to the site</a>
+<div id="ochránce">
+  <a href="/" target="_blank">Přejděte na stránku</a>
 </div>
 
 <script>
 
   if (top.document.domain == document.domain) {
-    protector.remove();
+    ochránce.remove();
   }
 
 </script>
 
-  This text is always visible.
+  Tento text je vždy viditelný.
+  
+  Pokud však byla stránka otevřena uvnitř dokumentu z jiné domény, div nad ní zabrání všem akcím.
 
-  But if the page was open inside a document from another domain, the div over it would prevent any actions.
-
-  <button onclick="alert(1)">Click wouldn't work in that case</button>
+  <button onclick="alert(1)">Kliknutí v tom případě nebude fungovat</button>
 
 </body>
 </html>

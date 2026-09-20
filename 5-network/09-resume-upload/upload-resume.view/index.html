@@ -4,13 +4,13 @@
 
 <form name="upload" method="POST" enctype="multipart/form-data" action="/upload">
   <input type="file" name="myfile">
-  <input type="submit" name="submit" value="Upload (Resumes automatically)">
+  <input type="submit" name="submit" value="Odeslat (Automaticky se obnoví)">
 </form>
 
-<button onclick="uploader.stop()">Stop upload</button>
+<button onclick="uploader.stop()">Konec odesílání</button>
 
 
-<div id="log">Progress indication</div>
+<div id="log">Zobrazení průběhu</div>
 
 <script>
   function log(html) {
@@ -18,8 +18,8 @@
     console.log(html);
   }
 
-  function onProgress(loaded, total) {
-    log("progress " + loaded + ' / ' + total);
+  function onProgress(načteno, celkem) {
+    log("progress " + načteno + ' / ' + celkem);
   }
 
   let uploader;
@@ -27,23 +27,23 @@
   document.forms.upload.onsubmit = async function(e) {
     e.preventDefault();
 
-    let file = this.elements.myfile.files[0];
-    if (!file) return;
+    let soubor = this.elements.myfile.files[0];
+    if (!soubor) return;
 
-    uploader = new Uploader({file, onProgress});
+    uploader = new Uploader({soubor, onProgress});
 
     try {
-      let uploaded = await uploader.upload();
+      let odesláno = await uploader.upload();
 
-      if (uploaded) {
-        log('success');
+      if (odesláno) {
+        log('úspěch');
       } else {
-        log('stopped');
+        log('přerušeno');
       }
 
     } catch(err) {
       console.error(err);
-      log('error');
+      log('chyba');
     }
   };
 

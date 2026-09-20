@@ -1,21 +1,21 @@
-A two-digit hex number is `pattern:[0-9a-f]{2}` (assuming the flag `pattern:i` is set).
+Dvouciferné hexadecimální číslo je `pattern:[0-9a-f]{2}` (předpokládáme, že je nastaven příznak `pattern:i`).
 
-We need that number `NN`, and then `:NN` repeated 5 times (more numbers);
+Potřebujeme toto číslo `NN` a pak `:NN` opakované pětkrát (další čísla).
 
-The regexp is: `pattern:[0-9a-f]{2}(:[0-9a-f]{2}){5}`
+Regulární výraz je: `pattern:[0-9a-f]{2}(:[0-9a-f]{2}){5}`
 
-Now let's show that the match should capture all the text: start at the beginning and end at the end. That's done by wrapping the pattern in `pattern:^...$`.
+Nyní dosáhneme toho, aby shoda zachytávala celý text: začala na začátku a skončila na konci. To učiníme tak, že vzor obklopíme mezi `pattern:^...$`.
 
-Finally:
+Nakonec:
 
 ```js run
-let regexp = /^[0-9a-f]{2}(:[0-9a-f]{2}){5}$/i;
+let rv = /^[0-9a-f]{2}(:[0-9a-f]{2}){5}$/i;
 
-alert( regexp.test('01:32:54:67:89:AB') ); // true
+alert( rv.test('01:32:54:67:89:AB') ); // true
 
-alert( regexp.test('0132546789AB') ); // false (no colons)
+alert( rv.test('0132546789AB') ); // false (bez dvojteček)
 
-alert( regexp.test('01:32:54:67:89') ); // false (5 numbers, need 6)
+alert( rv.test('01:32:54:67:89') ); // false (5 čísel, musí být 6)
 
-alert( regexp.test('01:32:54:67:89:ZZ') ) // false (ZZ in the end)
+alert( rv.test('01:32:54:67:89:ZZ') ) // false (ZZ na konci)
 ```

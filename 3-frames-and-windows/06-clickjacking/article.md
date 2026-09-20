@@ -1,79 +1,79 @@
-# The clickjacking attack
+# Útok clickjackingem
 
-The "clickjacking" attack allows an evil page to click on a "victim site" *on behalf of the visitor*.
+„Clickjacking“ je útok, který umožňuje zlé stránce, aby kliknula na „stránku oběti“ *jménem návštěvníka*.
 
-Many sites were hacked this way, including Twitter, Facebook, Paypal and other sites. They have all been fixed, of course.
+Tímto způsobem již bylo napadeno mnoho stránek, mezi nimi Twitter, Facebook, Paypal a jiné. Všechny už byly samozřejmě opraveny.
 
-## The idea
+## Myšlenka
 
-The idea is very simple.
+Myšlenka je velmi jednoduchá.
 
-Here's how clickjacking was done with Facebook:
+Clickjacking na Facebook byl proveden tímto způsobem:
 
-1. A visitor is lured to the evil page. It doesn't matter how.
-2. The page has a harmless-looking link on it (like "get rich now" or "click here, very funny").
-3. Over that link the evil page positions a transparent `<iframe>` with `src` from facebook.com, in such a way that the "Like" button is right above that link. Usually that's done with `z-index`.
-4. In attempting to click the link, the visitor in fact clicks the button.
+1. Návštěvník je nalákán na zlou stránku. Nezáleží na tom, jak.
+2. Stránka obsahuje neškodně vypadající odkaz (např. „zbohatněte hned teď“ nebo „klikněte sem, obrovská legrace“).
+3. Přes tento odkaz zlá stránka umístí průhledný `<iframe>` se `src` z facebook.com takovým způsobem, že přímo na tomto odkazu je tlačítko „To se mi líbí“. To je obvykle provedeno použitím `z-index`.
+4. Když se návštěvník pokusí kliknout na tento odkaz, ve skutečnosti klikne na tlačítko.
 
-## The demo
+## Demo
 
-Here's how the evil page looks. To make things clear, the `<iframe>` is half-transparent (in real evil pages it's fully transparent):
+Zlá stránka vypadá následovně. Aby to bylo vidět, je `<iframe>` poloprůhledný (na skutečných zlých stránkách je zcela průhledný):
 
 ```html run height=120 no-beautify
 <style>
-iframe { /* iframe from the victim site */
+iframe { /* iframe ze stránky oběti */
   width: 400px;
   height: 100px;
   position: absolute;
   top:0; left:-20px;
 *!*
-  opacity: 0.5; /* in real opacity:0 */
+  opacity: 0.5; /* v realitě opacity:0 */
 */!*
   z-index: 1;
 }
 </style>
 
-<div>Click to get rich now:</div>
+<div>Klikněte pro okamžité zbohatnutí:</div>
 
-<!-- The url from the victim site -->
+<!-- URL ze stránky oběti -->
 *!*
 <iframe src="/clickjacking/facebook.html"></iframe>
 
-<button>Click here!</button>
+<button>Klikněte sem!</button>
 */!*
 
-<div>...And you're cool (I'm a cool hacker actually)!</div>
+<div>...A jste cool (ve skutečnosti jsem já cool hacker)!</div>
 ```
 
-The full demo of the attack:
+Celé demo útoku:
 
 [codetabs src="clickjacking-visible" height=160]
 
-Here we have a half-transparent `<iframe src="facebook.html">`, and in the example we can see it hovering over the button. A click on the button actually clicks on the iframe, but that's not visible to the user, because the iframe is transparent.
+Zde máme poloprůhledný `<iframe src="facebook.html">` a v příkladu vidíme, jak se vznáší nad tlačítkem. Kliknutím na tlačítko uživatel ve skutečnosti klikne na vnitřní rám, ale to nevidí, protože vnitřní rám je průhledný.
 
-As a result, if the visitor is authorized on Facebook ("remember me" is usually turned on), then it adds a "Like". On Twitter that would be a "Follow" button.
+Důsledkem je, že pokud je návštěvník přihlášen na Facebook („Pamatuj si mě“ je obvykle zapnuto), pak přidá „To se mi líbí“. Na Twitteru by to bylo tlačítko „Follow“.
 
-Here's the same example, but closer to reality, with `opacity:0` for `<iframe>`:
+Následuje stejný příklad, ale bližší realitě, pro `<iframe>` má `opacity:0`:
 
 [codetabs src="clickjacking" height=160]
 
-All we need to attack -- is to position the `<iframe>` on the evil page in such a way that the button is right over the link. So that when a user clicks the link, they actually click the button. That's usually doable with CSS.
+Všechno, co k útoku potřebujeme, je umístit `<iframe>` na zlou stránku tak, aby tlačítko bylo umístěno přesně přes odkaz. Když tedy uživatel klikne na odkaz, klikne ve skutečnosti na tlačítko. To lze obvykle provést pomocí CSS.
 
-```smart header="Clickjacking is for clicks, not for keyboard"
-The attack only affects mouse actions (or similar, like taps on mobile).
+```smart header="Clickjacking reaguje na kliknutí, ne na klávesnici"
+Útok má vliv jen na akce myši (nebo podobné, např. doteky na mobilu).
 
-Keyboard input is much difficult to redirect. Technically, if we have a text field to hack, then we can position an iframe in such a way that text fields overlap each other. So when a visitor tries to focus on the input they see on the page, they actually focus on the input inside the iframe.
+Přesměrovat vstup z klávesnice je mnohem obtížnější. Technicky jestliže chceme nabourat textové pole, můžeme umístit vnitřní rám tak, aby se textová pole navzájem překrývala. Když se tedy návštěvník pokusí vstoupit na textové pole, které vidí na stránce, vstoupí ve skutečnosti na pole uvnitř rámu.
 
-But then there's a problem. Everything that the visitor types will be hidden, because the iframe is not visible.
+Pak ale nastává problém. Všechno, co návštěvník napíše, bude ukryté, protože rám není vidět.
 
-People will usually stop typing when they can't see their new characters printing on the screen.
+Když lidé neuvidí své napsané znaky na obrazovce, obvykle přestanou psát.
 ```
 
-## Old-school defences (weak)
+## Obrany ze staré školy (slabé)
 
-The oldest defence is a bit of JavaScript which forbids opening the page in a frame (so-called "framebusting").
+Nejstarší obranou je krátký kód v JavaScriptu, který zakáže otevření stránky v rámu (tzv. „framebusting“).
 
-That looks like this:
+Vypadá následovně:
 
 ```js
 if (top != window) {
@@ -81,15 +81,15 @@ if (top != window) {
 }
 ```
 
-That is: if the window finds out that it's not on top, then it automatically makes itself the top.
+To znamená: jestliže okno zjistí, že není vrchní, automaticky se nastaví jako vrchní.
 
-This not a reliable defence, because there are many ways to hack around it. Let's cover a few.
+Tato obrana není spolehlivá, protože existuje mnoho způsobů, jak ji obejít. Podívejme se na některé z nich.
 
-### Blocking top-navigation
+### Blokování navigace ve vrchním okně
 
-We can block the transition caused by changing `top.location` in  [beforeunload](info:onload-ondomcontentloaded#window.onbeforeunload) event handler.
+Můžeme zablokovat přesun způsobený změnou `top.location` v handleru události [beforeunload](info:onload-ondomcontentloaded#window.onbeforeunload).
 
-The top page (enclosing one, belonging to the hacker) sets a preventing handler to it, like this:
+Vrchní stránka (uzavírající, patřící hackerovi) nastaví handler, který tomu zabrání, například:
 
 ```js
 window.onbeforeunload = function() {
@@ -97,72 +97,71 @@ window.onbeforeunload = function() {
 };
 ```
 
-When the `iframe` tries to change `top.location`, the visitor gets a message asking them whether they want to leave.
+Když se `iframe` pokusí změnit `top.location`, návštěvník dostane otázku, zda opravdu chce odejít.
 
-In most cases the visitor would answer negatively because they don't know about the iframe - all they can see is the top page, there's no reason to leave. So `top.location` won't change!
+Ve většině případů návštěvník odpoví záporně, neboť o vnitřním rámu neví -- nevidí nic jiného než vrchní stránku, a tak nemá důvod odejít. Proto se `top.location` nezmění!
 
-In action:
+V akci:
 
 [codetabs src="top-location"]
 
-### Sandbox attribute
+### Atribut sandbox
 
-One of the things restricted by the `sandbox` attribute is navigation. A sandboxed iframe may not change `top.location`.
+Jednou z věcí, které atribut `sandbox` omezuje, je navigace. Vnitřní rám obsahující `sandbox` nemůže změnit `top.location`.
 
-So we can add the iframe with `sandbox="allow-scripts allow-forms"`. That would relax the restrictions, permitting scripts and forms. But we omit `allow-top-navigation` so that changing `top.location` is forbidden.
+Můžeme tedy přidat vnitřní rám obsahující `sandbox="allow-scripts allow-forms"`. Tím se omezení zmírní a budou povoleny skripty a formuláře. Neuvedeme však `allow-top-navigation`, takže změna `top.location` bude zakázána.
 
-Here's the code:
+Kód je následující:
 
 ```html
 <iframe *!*sandbox="allow-scripts allow-forms"*/!* src="facebook.html"></iframe>
 ```
 
-There are other ways to work around that simple protection too.
+Existují i jiné způsoby, jak tuto jednoduchou ochranu překonat.
 
 ## X-Frame-Options
 
-The server-side header `X-Frame-Options` can permit or forbid displaying the page inside a frame.
+Hlavička `X-Frame-Options` ze strany serveru může povolit nebo zakázat zobrazení stránky v rámu.
 
-It must be sent exactly as HTTP-header: the browser will ignore it if found in HTML `<meta>` tag. So, `<meta http-equiv="X-Frame-Options"...>` won't do anything.
+Musí být poslána jako skutečná HTTP hlavička: pokud ji prohlížeč nalezne v HTML značce `<meta>`, bude ji ignorovat, takže `<meta http-equiv="X-Frame-Options"...>` nic neudělá.
 
-The header may have 3 values:
-
+Hlavička může mít tři hodnoty:
 
 `DENY`
-: Never ever show the page inside a frame.
+: Vůbec nikdy nelze zobrazit tuto stránku v rámu.
 
 `SAMEORIGIN`
-: Allow inside a frame if the parent document comes from the same origin.
+: Umožní zobrazení v rámu, jestliže rodičovský dokument pochází ze stejného původu.
 
-`ALLOW-FROM domain`
-: Allow inside a frame if the parent document is from the given domain.
+`ALLOW-FROM doména`
+: Umožní zobrazení v rámu, jestliže rodičovský dokument pochází z uvedené domény.
 
-For instance, Twitter uses `X-Frame-Options: SAMEORIGIN`.
+Například Twitter používá `X-Frame-Options: SAMEORIGIN`.
 
 ````online
-Here's the result:
+Výsledek je následující:
 
 ```html
 <iframe src="https://twitter.com"></iframe>
 ```
 
-<!-- ebook: prerender/ chrome headless dies and timeouts on this iframe -->
+<!-- ebook: prerender/ chrome bez hlavičky se na tomto iframe zasekne a vyprší mu čas -->
 <iframe src="https://twitter.com"></iframe>
 
-Depending on your browser, the `iframe` above is either empty or alerting you that the browser won't permit that page to be navigating in this way.
+V závislosti na vašem prohlížeči bude uvedený `iframe` buď prázdný, nebo vám oznámí, že prohlížeč nedovolil navigovat na stránku tímto způsobem.
 ````
 
-## Showing with disabled functionality
+## Zobrazení s potlačenou funkcionalitou
 
-The `X-Frame-Options` header has a side effect. Other sites won't be able to show our page in a frame, even if they have good reasons to do so.
+Hlavička `X-Frame-Options` má vedlejší efekt. Jiné stránky nebudou moci zobrazit naši stránku v rámu, ani když pro to mají dobrý důvod.
 
-So there are other solutions... For instance, we can "cover" the page with a `<div>` with styles `height: 100%; width: 100%;`, so that it will intercept all clicks. That `<div>` is to be removed if `window == top` or if we figure out that we don't need the protection.
+Existují tedy i jiná řešení... Můžeme například stránku „zakrýt“ značkou `<div>` se styly `height: 100%; width: 100%;` tak, aby zachytila všechna kliknutí. Tato `<div>` bude odstraněna, pokud `window == top` nebo pokud zjistíme, že tuto ochranu nepotřebujeme.
 
-Something like this:
+Něco takového:
 
 ```html
 <style>
-  #protector {
+  #ochránce {
     height: 100%;
     width: 100%;
     position: absolute;
@@ -172,50 +171,50 @@ Something like this:
   }
 </style>
 
-<div id="protector">
-  <a href="/" target="_blank">Go to the site</a>
+<div id="ochránce">
+  <a href="/" target="_blank">Přejděte na stránku</a>
 </div>
 
 <script>
-  // there will be an error if top window is from the different origin
-  // but that's ok here
+  // pokud je vrchní okno z jiného původu, nastane chyba
+  // ale to je tady v pořádku
   if (top.document.domain == document.domain) {
-    protector.remove();
+    ochránce.remove();
   }
 </script>
 ```
 
-The demo:
+Ukázka:
 
 [codetabs src="protector"]
 
-## Samesite cookie attribute
+## Cookie atribut samesite
 
-The `samesite` cookie attribute can also prevent clickjacking attacks.
+Clickjackingům může předejít i cookie atribut `samesite`.
 
-A cookie with such attribute is only sent to a website if it's opened directly, not via a frame, or otherwise. More information in the chapter <info:cookie#samesite>.
+Cookie s takovým atributem je poslán na webovou stránku jen tehdy, když je otevřena přímo, ne v rámu nebo jinak. Více informací najdete v kapitole <info:cookie#samesite>.
 
-If the site, such as Facebook, had `samesite` attribute on its authentication cookie, like this:
+Jestliže nějaká stránka, např. Facebook, má ve své autentifikační cookie atribut `samesite`, například takto:
 
 ```
 Set-Cookie: authorization=secret; samesite
 ```
 
-...Then such cookie wouldn't be sent when Facebook is open in iframe from another site. So the attack would fail.
+...Pak taková cookie nebude poslána, když je Facebook otevřen ve vnitřním rámu z jiné stránky. Útok tedy neuspěje.
 
-The `samesite` cookie attribute will not have an effect when cookies are not used. This may allow other websites to easily show our public, unauthenticated pages in iframes.
+Atribut `samesite` nebude mít žádný efekt, když nebudou používány cookies. To může jiným stránkám umožnit snadno zobrazit naše veřejné, neautentifikované stránky ve vnitřních rámech.
 
-However, this may also allow clickjacking attacks to work in a few limited cases. An anonymous polling website that prevents duplicate voting by checking IP addresses, for example, would still be vulnerable to clickjacking because it does not authenticate users using cookies.
+Nicméně to může také v některých případech umožnit, aby clickjacking fungoval. Například anonymní hlasovací stránka, která brání dvojímu hlasování ověřením IP adresy, bude clickjackingem stále zranitelná, protože neautentifikuje uživatele pomocí cookies.
 
-## Summary
+## Shrnutí
 
-Clickjacking is a way to "trick" users into clicking on a victim site without even knowing what's happening. That's dangerous if there are important click-activated actions.
+Clickjacking je způsob, jak „přimět“ uživatele kliknout na stránku oběti, aniž by vůbec věděl, co se děje. Pokud tam jsou důležité akce aktivované kliknutím, je to nebezpečné.
 
-A hacker can post a link to their evil page in a message, or lure visitors to their page by some other means. There are many variations.
+Hacker může umístit odkaz na svou zlou stránku do zprávy nebo nalákat návštěvníky na svou stránku jinými způsoby. Možností je mnoho.
 
-From one perspective -- the attack is "not deep": all a hacker is doing is intercepting a single click. But from another perspective, if the hacker knows that after the click another control will appear, then they may use cunning messages to coerce the user into clicking on them as well.
+Z jednoho pohledu není tento útok „hluboký“: všechno, co hacker udělá, je zachycení jediného kliknutí. Avšak z jiného pohledu, jestliže hacker ví, že po kliknutí se objeví další ovládací prvky, může lstivými zprávami nalákat uživatele, aby kliknul i na ně.
 
-The attack is quite dangerous, because when we engineer the UI we usually don't anticipate that a hacker may click on behalf of the visitor. So vulnerabilities can be found in totally unexpected places.
+Tento útok je poměrně nebezpečný, neboť když navrhujeme uživatelské rozhraní, obvykle nepředpokládáme, že na ně může kliknout hacker jménem uživatele. Zranitelnosti tedy lze najít na zcela nečekaných místech.
 
-- It is recommended to use `X-Frame-Options: SAMEORIGIN` on pages (or whole websites) which are not intended to be viewed inside frames.
-- Use a covering `<div>` if we want to allow our pages to be shown in iframes, but still stay safe.
+- Doporučuje se používat na stránkách (nebo celých webových sídlech), které nejsou určeny k zobrazení v rámech, `X-Frame-Options: SAMEORIGIN`.
+- Pokud chcete, aby se vaše stránky mohly zobrazovat ve vnitřních rámech, ale stále zůstaly bezpečné, použijte překryvný `<div>`.

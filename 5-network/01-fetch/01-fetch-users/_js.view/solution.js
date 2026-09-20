@@ -1,24 +1,23 @@
-
-async function getUsers(names) {
+async function vraťUživatele(jména) {
   let jobs = [];
 
-  for(let name of names) {
-    let job = fetch(`https://api.github.com/users/${name}`).then(
-      successResponse => {
-        if (successResponse.status != 200) {
+  for(let jméno of jména) {
+    let job = fetch(`https://api.github.com/users/${jméno}`).then(
+      úspěšnáOdpověď => {
+        if (úspěšnáOdpověď.status != 200) {
           return null;
         } else {
-          return successResponse.json();
+          return úspěšnáOdpověď.json();
         }
       },
-      failResponse => {
+      neúspěšnáOdpověď => {
         return null;
       }
     );
     jobs.push(job);
   }
 
-  let results = await Promise.all(jobs);
+  let výsledky = await Promise.all(jobs);
 
-  return results;
+  return výsledky;
 }

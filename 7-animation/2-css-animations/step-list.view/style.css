@@ -1,9 +1,9 @@
-#digit {
+#číslice {
   border: 1px solid red;
   width: 1.2em;
 }
 
-#stripe {
+#pás {
   display: inline-block;
   font: 32px monospace;
 }

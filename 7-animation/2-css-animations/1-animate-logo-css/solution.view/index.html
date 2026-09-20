@@ -9,13 +9,13 @@
     }
   </style>
   <style>
-    #flyjet {
+    #letadlo {
       width: 40px;
       height: 24px;
       transition: all 3s;
     }
 
-    #flyjet.growing {
+    #letadlo.zvětšování {
       width: 400px;
       height: 240px;
     }
@@ -24,21 +24,21 @@
 
 <body>
 
-  <img id="flyjet" src="https://en.js.cx/clipart/flyjet.jpg">
+  <img id="letadlo" src="https://en.js.cx/clipart/flyjet.jpg">
 
   <script>
-    let ended = false; // will change to true after the animation finishes
+    let skončila = false; // po skončení animace se změní na true
 
-    flyjet.onclick = function() {
+    letadlo.onclick = function() {
 
-      flyjet.addEventListener('transitionend', function() {
-        if (!ended) { // check to show the message only once
-          ended = true;
-          alert('Done!');
+      letadlo.addEventListener('transitionend', function() {
+        if (!skončila) { // kontrola, aby se zpráva zobrazila jen jednou
+          skončila = true;
+          alert('Hotovo!');
         }
       });
 
-      flyjet.classList.add('growing');
+      letadlo.classList.add('zvětšování');
     }
   </script>
 

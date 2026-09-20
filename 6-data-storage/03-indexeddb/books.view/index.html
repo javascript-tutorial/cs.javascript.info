@@ -1,12 +1,12 @@
 <!doctype html>
 <script src="https://cdn.jsdelivr.net/npm/idb@3.0.2/build/idb.min.js"></script>
 
-<button onclick="addBook()">Add a book</button>
-<button onclick="clearBooks()">Clear books</button>
+<button onclick="přidejKnihu()">Přidat knihu</button>
+<button onclick="smažKnihy()">Smazat knihy</button>
 
-<p>Books list:</p>
+<p>Seznam knih:</p>
 
-<ul id="listElem"></ul>
+<ul id="seznamElem"></ul>
 
 <script>
 let db;
@@ -14,57 +14,57 @@ let db;
 init();
 
 async function init() {
-  db = await idb.openDb('booksDb', 1, db => {
-    db.createObjectStore('books', {keyPath: 'name'});
+  db = await idb.openDb('knihyDb', 1, db => {
+    db.createObjectStore('knihy', {keyPath: 'název'});
   });
 
-  list();
+  vypiš();
 }
 
-async function list() {
-  let tx = db.transaction('books');
-  let bookStore = tx.objectStore('books');
+async function vypiš() {
+  let tx = db.transaction('knihy');
+  let skladKnih = tx.objectStore('knihy');
 
-  let books = await bookStore.getAll();
+  let knihy = await skladKnih.getAll();
 
-  if (books.length) {
-    listElem.innerHTML = books.map(book => `<li>
-        name: ${book.name}, price: ${book.price}
+  if (knihy.length) {
+    seznamElem.innerHTML = knihy.map(kniha => `<li>
+        název: ${kniha.název}, cena: ${kniha.cena}
       </li>`).join('');
   } else {
-    listElem.innerHTML = '<li>No books yet. Please add books.</li>'
+    seznamElem.innerHTML = '<li>Žádné knihy zde zatím nejsou. Přidejte prosím nějaké.</li>'
   }
 
 
 }
 
-async function clearBooks() {
-  let tx = db.transaction('books', 'readwrite');
-  await tx.objectStore('books').clear();
-  await list();
+async function smažKnihy() {
+  let tx = db.transaction('knihy', 'readwrite');
+  await tx.objectStore('knihy').clear();
+  await vypiš();
 }
 
-async function addBook() {
-  let name = prompt("Book name?");
-  let price = +prompt("Book price?");
+async function přidejKnihu() {
+  let název = prompt("Název knihy?");
+  let cena = +prompt("Cena knihy?");
 
-  let tx = db.transaction('books', 'readwrite');
+  let tx = db.transaction('knihy', 'readwrite');
 
   try {
-    await tx.objectStore('books').add({name, price});
-    await list();
-  } catch(err) {
-    if (err.name == 'ConstraintError') {
-      alert("Such book exists already");
-      await addBook();
+    await tx.objectStore('knihy').add({název, cena});
+    await vypiš();
+  } catch(chyba) {
+    if (chyba.název == 'ConstraintError') {
+      alert("Taková kniha již existuje");
+      await přidejKnihu();
     } else {
-      throw err;
+      throw chyba;
     }
   }
 }
 
-window.addEventListener('unhandledrejection', event => {
-  alert("Error: " + event.reason.message);
+window.addEventListener('unhandledrejection', událost => {
+  alert("Chyba: " + událost.reason.message);
 });
 
 </script>

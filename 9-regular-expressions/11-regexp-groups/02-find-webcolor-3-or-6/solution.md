@@ -1,27 +1,27 @@
-A regexp to search 3-digit color `#abc`: `pattern:/#[a-f0-9]{3}/i`.
+Regulární výraz hledající 3-cifernou barvu `#abc`: `pattern:/#[a-f0-9]{3}/i`.
 
-We can add exactly 3 more optional hex digits. We don't need more or less. The color has either 3 or 6 digits.
+Můžeme přidat přesně 3 další nepovinné hexadecimální číslice. Nepotřebujeme jich více ani méně. Barva má buď 3, nebo 6 číslic.
 
-Let's use the quantifier `pattern:{1,2}` for that: we'll have `pattern:/#([a-f0-9]{3}){1,2}/i`.
+Použijme k tomu kvantifikátor `pattern:{1,2}`: získáme `pattern:/#([a-f0-9]{3}){1,2}/i`.
 
-Here the pattern `pattern:[a-f0-9]{3}` is enclosed in parentheses to apply the quantifier `pattern:{1,2}`.
+Zde je vzor `pattern:[a-f0-9]{3}` uzavřen do závorek, aby se na něj aplikoval kvantifikátor `pattern:{1,2}`.
 
-In action:
+V akci:
 
 ```js run
-let regexp = /#([a-f0-9]{3}){1,2}/gi;
+let rv = /#([a-f0-9]{3}){1,2}/gi;
 
-let str = "color: #3f3; background-color: #AA00ef; and: #abcd";
+let řetězec = "color: #3f3; background-color: #AA00ef; and: #abcd";
 
-alert( str.match(regexp) ); // #3f3 #AA00ef #abc
+alert( řetězec.match(rv) ); // #3f3 #AA00ef #abc
 ```
 
-There's a minor problem here: the pattern found `match:#abc` in `subject:#abcd`. To prevent that we can add `pattern:\b` to the end:
+Je tady malý problém: vzor nalezl `match:#abc` v `subject:#abcd`. Abychom tomu zabránili, můžeme na konec přidat `pattern:\b`:
 
 ```js run
-let regexp = /#([a-f0-9]{3}){1,2}\b/gi;
+let rv = /#([a-f0-9]{3}){1,2}\b/gi;
 
-let str = "color: #3f3; background-color: #AA00ef; and: #abcd";
+let řetězec = "color: #3f3; background-color: #AA00ef; and: #abcd";
 
-alert( str.match(regexp) ); // #3f3 #AA00ef
+alert( řetězec.match(rv) ); // #3f3 #AA00ef
 ```

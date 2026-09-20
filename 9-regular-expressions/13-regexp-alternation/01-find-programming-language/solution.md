@@ -1,33 +1,33 @@
 
-The first idea can be to list the languages with `|` in-between.
+První myšlenka může být vyjmenovat jazyky a vložit mezi ně `|`.
 
-But that doesn't work right:
+To však nebude fungovat správně:
 
 ```js run
-let regexp = /Java|JavaScript|PHP|C|C\+\+/g;
+let rv = /Java|JavaScript|PHP|C|C\+\+/g;
 
-let str = "Java, JavaScript, PHP, C, C++";
+let řetězec = "Java, JavaScript, PHP, C, C++";
 
-alert( str.match(regexp) ); // Java,Java,PHP,C,C
+alert( řetězec.match(rv) ); // Java,Java,PHP,C,C
 ```
 
-The regular expression engine looks for alternations one-by-one. That is: first it checks if we have  `match:Java`, otherwise -- looks for `match:JavaScript` and so on.
+Motor regulárních výrazů hledá alternace jednu po druhé. To znamená, že nejprve ověří, zda máme `match:Java`, pokud ne, hledá `match:JavaScript` a tak dále.
 
-As a result, `match:JavaScript` can never be found, just because `match:Java` is checked first.
+Výsledkem bude, že `match:JavaScript` nemůže být nikdy nalezen prostě proto, že `match:Java` se ověřuje jako první.
 
-The same with `match:C` and `match:C++`.
+Totéž platí pro `match:C` a `match:C++`.
 
-There are two solutions for that problem:
+Tento problém má dvě řešení:
 
-1. Change the order to check the longer match first: `pattern:JavaScript|Java|C\+\+|C|PHP`.
-2. Merge variants with the same start: `pattern:Java(Script)?|C(\+\+)?|PHP`.
+1. Změnit pořadí, aby se delší výraz ověřoval jako první: `pattern:JavaScript|Java|C\+\+|C|PHP`.
+2. Sloučit varianty, které začínají stejně: `pattern:Java(Script)?|C(\+\+)?|PHP`.
 
-In action:
+V akci:
 
 ```js run
-let regexp = /Java(Script)?|C(\+\+)?|PHP/g;
+let rv = /Java(Script)?|C(\+\+)?|PHP/g;
 
-let str = "Java, JavaScript, PHP, C, C++";
+let řetězec = "Java, JavaScript, PHP, C, C++";
 
-alert( str.match(regexp) ); // Java,JavaScript,PHP,C,C++
+alert( řetězec.match(rv) ); // Java,JavaScript,PHP,C,C++
 ```

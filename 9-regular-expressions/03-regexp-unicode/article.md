@@ -1,12 +1,12 @@
-# Unicode: flag "u" and class \p{...}
+# Unicode: příznak „u“ a třída \p{...}
 
-JavaScript uses [Unicode encoding](https://en.wikipedia.org/wiki/Unicode) for strings. Most characters are encoded with 2 bytes, but that allows to represent at most 65536 characters.
+JavaScript používá pro řetězce [kódování Unicode](https://cs.wikipedia.org/wiki/Unicode). Většina znaků je zakódována do 2 bytů, ale to umožňuje reprezentovat nejvýše 65536 znaků.
 
-That range is not big enough to encode all possible characters, that's why some rare characters are encoded with 4 bytes, for instance like `𝒳` (mathematical X) or `😄` (a smile), some hieroglyphs and so on.
+Tento rozsah nestačí pro zakódování všech možných znaků, proto jsou některé vzácné znaky zakódovány do 4 bytů, například `𝒳` (matematické X) nebo `😄` (úsměv), některé hieroglyfy a podobně.
 
-Here are the Unicode values of some characters:
+Zde jsou hodnoty některých znaků v Unicode:
 
-| Character  | Unicode | Bytes count in Unicode  |
+| Znak  | Unicode | Počet bytů v Unicode  |
 |------------|---------|--------|
 | a | `0x0061` |  2 |
 | ≈ | `0x2248` |  2 |
@@ -14,148 +14,147 @@ Here are the Unicode values of some characters:
 |𝒴| `0x1d4b4` | 4 |
 |😄| `0x1f604` | 4 |
 
-So characters like `a` and `≈` occupy 2 bytes, while codes for `𝒳`, `𝒴` and `😄` are longer, they have 4 bytes.
+Znaky jako `a` a `≈` tedy zabírají 2 byty, zatímco kódy pro `𝒳`, `𝒴` a `😄` jsou delší a mají 4 byty.
 
-Long time ago, when JavaScript language was created, Unicode encoding was simpler: there were no 4-byte characters. So, some language features still handle them incorrectly.
+Před delší dobou, když JavaScript vznikl, bylo kódování Unicode jednodušší: neobsahovalo 4-bytové znaky. Některé prvky jazyka je tedy stále zpracovávají nesprávně.
 
-For instance, `length` thinks that here are two characters:
+Například `length` si myslí, že to jsou dva znaky:
 
 ```js run
 alert('😄'.length); // 2
 alert('𝒳'.length); // 2
 ```
 
-...But we can see that there's only one, right? The point is that `length` treats 4 bytes as two 2-byte characters. That's incorrect, because they must be considered only together (so-called "surrogate pair", you can read about them in the article <info:string>).
+...Ale my vidíme, že tam je jen jeden znak, že? Důvod spočívá v tom, že `length` zachází se 4 byty jako se dvěma 2-bytovými znaky. To je nekorektní, protože se s nimi musí zacházet vždy společně (tzv. „zástupný pár“, můžete si o něm přečíst v článku <info:string>).
 
-By default, regular expressions also treat 4-byte "long characters" as a pair of 2-byte ones. And, as it happens with strings, that may lead to odd results. We'll see that a bit later, in the article <info:regexp-character-sets-and-ranges>.
+Regulární výrazy také standardně zacházejí se 4-bytovými „dlouhými znaky“ jako s párem 2-bytových. A stejně jako u řetězců to může vést k podivným výsledkům. Uvidíme to o něco později, v článku <info:regexp-character-sets-and-ranges>.
 
-Unlike strings, regular expressions have flag `pattern:u` that fixes such problems. With such flag, a regexp handles 4-byte characters correctly. And also Unicode property search becomes available, we'll get to it next.
+Na rozdíl od řetězců však regulární výrazy mají příznak `pattern:u`, který tyto problémy řeší. S tímto příznakem RV zpracovává 4-bytové znaky správně. Rovněž se tím zpřístupní vyhledávání podle vlastnosti v Unicode, ke kterému se dostaneme dále.
 
-## Unicode properties \p{...}
+## Vlastnosti Unicode \p{...}
 
-Every character in Unicode has a lot of properties. They describe what "category" the character belongs to, contain miscellaneous information about it.
+Každý znak v Unicode má mnoho vlastností. Ty popisují, do jaké „kategorie“ tento znak patří, a obsahují o něm různé informace.
 
-For instance, if a character has `Letter` property, it means that the character belongs to an alphabet (of any language). And `Number` property means that it's a digit: maybe Arabic or Chinese, and so on.
+Například pokud znak má vlastnost `Letter` (písmeno), znamená to, že patří do nějaké abecedy (jakéhokoli jazyka). A vlastnost `Number` (číslo) znamená, že to je číslice: může být arabská, čínská i jiná.
 
-We can search for characters with a property, written as `pattern:\p{…}`. To use `pattern:\p{…}`, a regular expression must have flag `pattern:u`.
+Můžeme vyhledávat znaky s určitou vlastností pomocí zápisu `pattern:\p{…}`. Abychom mohli `pattern:\p{…}` použít, musí regulární výraz obsahovat příznak `pattern:u`.
 
-For instance, `\p{Letter}` denotes a letter in any language. We can also use `\p{L}`, as `L` is an alias of `Letter`. There are shorter aliases for almost every property.
+Například `\p{Letter}` znamená písmeno v jakémkoli jazyce. Můžeme psát i `\p{L}`, jelikož `L` je zkratka pro `Letter`. Zkratka existuje pro téměř každou vlastnost.
 
-In the example below three kinds of letters will be found: English, Georgian and Korean.
+V následujícím příkladu můžeme najít písmena tří druhů: anglické, gruzínské a korejské.
 
 ```js run
 let str = "A ბ ㄱ";
 
 alert( str.match(/\p{L}/gu) ); // A,ბ,ㄱ
-alert( str.match(/\p{L}/g) ); // null (no matches, \p doesn't work without the flag "u")
+alert( str.match(/\p{L}/g) ); // null (žádná shoda, \p nefunguje bez příznaku "u")
 ```
 
-Here's the main character categories and their subcategories:
+Hlavní kategorie znaků a jejich podkategorie jsou následující:
 
-- Letter `L`:
-  - lowercase `Ll`
-  - modifier `Lm`,
-  - titlecase `Lt`,
-  - uppercase `Lu`,
-  - other `Lo`.
-- Number `N`:
-  - decimal digit `Nd`,
-  - letter number `Nl`,
-  - other `No`.
-- Punctuation `P`:
-  - connector `Pc`,
-  - dash `Pd`,
-  - initial quote `Pi`,
-  - final quote `Pf`,
-  - open `Ps`,
-  - close `Pe`,
-  - other `Po`.
-- Mark `M` (accents etc):
-  - spacing combining `Mc`,
-  - enclosing `Me`,
-  - non-spacing `Mn`.
+- Písmeno `L`:
+  - malé `Ll`,
+  - modifikátor `Lm`,
+  - titulkové `Lt`,
+  - velké `Lu`,
+  - jiné `Lo`.
+- Číslo `N`:
+  - desítková číslice `Nd`,
+  - písmenné číslo `Nl`,
+  - jiné `No`.
+- Interpunkční znaménko `P`:
+  - spojovník `Pc`,
+  - pomlčka `Pd`,
+  - počáteční uvozovky `Pi`,
+  - koncové uvozovky `Pf`,
+  - otevírací závorka `Ps`,
+  - uzavírací závorka `Pe`,
+  - jiné `Po`.
+- Diakritické znaménko `M` (přízvuky apod.):
+  - vedle písmene („spacing combining“) `Mc`,
+  - obklopující `Me`,
+  - nad nebo pod písmenem `Mn`.
 - Symbol `S`:
-  - currency `Sc`,
-  - modifier `Sk`,
-  - math `Sm`,
-  - other `So`.
-- Separator `Z`:
-  - line `Zl`,
-  - paragraph `Zp`,
-  - space `Zs`.
-- Other `C`:
-  - control `Cc`,
-  - format `Cf`,
-  - not assigned `Cn`,
-  - private use `Co`,
-  - surrogate `Cs`.
+  - měny `Sc`,
+  - modifikátor `Sk`,
+  - matematický `Sm`,
+  - jiný `So`.
+- Oddělovač `Z`:
+  - čára `Zl`,
+  - odstavec `Zp`,
+  - mezera `Zs`.
+- Jiné `C`:
+  - řídící znak `Cc`,
+  - formátovací znak `Cf`,
+  - nepřiřazený `Cn`,
+  - k soukromému použití `Co`,
+  - zástupný `Cs`.
 
+Když tedy například potřebujeme malá písmena, můžeme zapsat `pattern:\p{Ll}`, pro interpunkční znaménka `pattern:\p{P}` a tak dále.
 
-So, e.g. if we need letters in lower case, we can write `pattern:\p{Ll}`, punctuation signs: `pattern:\p{P}` and so on.
+Existují i jiné odvozené kategorie, například:
+- `Alphabetic` (`Alpha`), obsahuje písmena `L`, písmenná čísla `Nl` (např. Ⅻ - znak pro římské číslo 12) a některé další symboly `Other_Alphabetic` (`OAlpha`).
+- `Hex_Digit` obsahuje hexadecimální číslice: `0-9`, `a-f`.
+- ...a podobně.
 
-There are also other derived categories, like:
-- `Alphabetic` (`Alpha`), includes Letters `L`, plus letter numbers `Nl` (e.g. Ⅻ - a character for the roman number 12), plus some other symbols `Other_Alphabetic` (`OAlpha`).
-- `Hex_Digit` includes hexadecimal digits: `0-9`, `a-f`.
-- ...And so on.
+Unicode podporuje mnoho různých vlastností a jejich úplný seznam by zabral spoustu místa, proto uvádíme odkazy:
 
-Unicode supports many different properties, their full list would require a lot of space, so here are the references:
+- Seznam všech vlastností podle znaků: <https://unicode.org/cldr/utility/character.jsp>.
+- Seznam všech znaků podle vlastností: <https://unicode.org/cldr/utility/list-unicodeset.jsp>.
+- Zkratky vlastností: <https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt>.
+- Úplný seznam znaků v Unicode v textovém formátu se všemi vlastnostmi je zde: <https://www.unicode.org/Public/UCD/latest/ucd/>.
 
-- List all properties by a character: <https://unicode.org/cldr/utility/character.jsp>.
-- List all characters by a property: <https://unicode.org/cldr/utility/list-unicodeset.jsp>.
-- Short aliases for properties: <https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt>.
-- A full base of Unicode characters in text format, with all properties, is here: <https://www.unicode.org/Public/UCD/latest/ucd/>.
+### Příklad: čísla v šestnáctkové soustavě
 
-### Example: hexadecimal numbers
+Hledejme například čísla v šestnáctkové soustavě zapsaná jako `xFF`, kde `F` je hexadecimální číslice (0..9 nebo A..F).
 
-For instance, let's look for hexadecimal numbers, written as `xFF`, where `F` is a hex digit (0..9 or A..F).
-
-A hex digit can be denoted as `pattern:\p{Hex_Digit}`:
-
-```js run
-let regexp = /x\p{Hex_Digit}\p{Hex_Digit}/u;
-
-alert("number: xAF".match(regexp)); // xAF
-```
-
-### Example: Chinese hieroglyphs
-
-Let's look for Chinese hieroglyphs.
-
-There's a Unicode property `Script` (a writing system), that may have a value: `Cyrillic`, `Greek`, `Arabic`, `Han` (Chinese) and so on, [here's the full list](https://en.wikipedia.org/wiki/Script_(Unicode)).
-
-To look for characters in a given writing system we should use `pattern:Script=<value>`, e.g. for Cyrillic letters: `pattern:\p{sc=Cyrillic}`, for Chinese hieroglyphs: `pattern:\p{sc=Han}`, and so on:
+Hexadecimální číslici můžeme zapsat jako `pattern:\p{Hex_Digit}`:
 
 ```js run
-let regexp = /\p{sc=Han}/gu; // returns Chinese hieroglyphs
+let rv = /x\p{Hex_Digit}\p{Hex_Digit}/u;
 
-let str = `Hello Привет 你好 123_456`;
-
-alert( str.match(regexp) ); // 你,好
+alert("číslo: xAF".match(rv)); // xAF
 ```
 
-### Example: currency
+### Příklad: čínské hieroglyfy
 
-Characters that denote a currency, such as `$`, `€`, `¥`, have Unicode property  `pattern:\p{Currency_Symbol}`, the short alias: `pattern:\p{Sc}`.
+Hledejme čínské hieroglyfy.
 
-Let's use it to look for prices in the format "currency, followed by a digit":
+V Unicode existuje vlastnost `Script` (písmenná soustava), která může mít hodnotu: `Cyrillic`, `Greek`, `Arabic`, `Han` (čínská) a tak dále, [úplný seznam je zde](https://en.wikipedia.org/wiki/Script_(Unicode)).
+
+Pro hledání znaků určité písmenné soustavy bychom měli použít `pattern:Script=<hodnota>`, např. pro písmena kyrilice: `pattern:\p{sc=Cyrillic}`, pro čínské hieroglyfy: `pattern:\p{sc=Han}`, a tak dále:
 
 ```js run
-let regexp = /\p{Sc}\d/gu;
+let rv = /\p{sc=Han}/gu; // vrátí čínské hieroglyfy
 
-let  str = `Prices: $2, €1, ¥9`;
+let řetězec = `Ahoj Привет 你好 123_456`;
 
-alert( str.match(regexp) ); // $2,€1,¥9
+alert( řetězec.match(rv) ); // 你,好
 ```
 
-Later, in the article <info:regexp-quantifiers> we'll see how to look for numbers that contain many digits.
+### Příklad: měna
 
-## Summary
+Znaky, které označují měnu, například `$`, `€`, `¥`, mají v Unicode vlastnost `pattern:\p{Currency_Symbol}`, zkratka: `pattern:\p{Sc}`.
 
-Flag `pattern:u` enables the support of Unicode in regular expressions.
+Použijme ji pro hledání cen ve formátu „měna následovaná číslicí“:
 
-That means two things:
+```js run
+let rv = /\p{Sc}\d/gu;
 
-1. Characters of 4 bytes are handled correctly: as a single character, not two 2-byte characters.
-2. Unicode properties can be used in the search: `\p{…}`.
+let řetězec = `Ceny: $2, €1, ¥9`;
 
-With Unicode properties we can look for words in given languages, special characters (quotes, currencies) and so on.
+alert( řetězec.match(rv) ); // $2,€1,¥9
+```
+
+Později, v článku <info:regexp-quantifiers>, uvidíme, jak najít čísla obsahující více číslic.
+
+## Shrnutí
+
+Příznak `pattern:u` umožňuje podporu Unicode v regulárních výrazech.
+
+To znamená dvě věci:
+
+1. Znaky o délce 4 byty budou zpracovány správně: jako jediný znak, ne jako dva 2-bytové znaky.
+2. Pro hledání můžeme použít vlastnosti v Unicode: `\p{…}`.
+
+Pomocí vlastností v Unicode můžeme hledat slova v určitém jazyce, speciální znaky (uvozovky, měny) a podobně.

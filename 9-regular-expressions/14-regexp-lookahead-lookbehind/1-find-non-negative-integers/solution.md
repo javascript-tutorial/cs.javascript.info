@@ -1,28 +1,28 @@
 
-The regexp for an integer number is `pattern:\d+`.
+Regulární výraz pro celé číslo je `pattern:\d+`.
 
-We can exclude negatives by prepending it with the negative lookbehind: `pattern:(?<!-)\d+`.
+Záporná čísla můžeme vyloučit tak, že před něj umístíme negativní zpětné nahlédnutí: `pattern:(?<!-)\d+`.
 
-Although, if we try it now, we may notice one more "extra" result:
+Když to však nyní vyzkoušíme, můžeme si všimnout jednoho výsledku „navíc“:
 
 ```js run
-let regexp = /(?<!-)\d+/g;
+let rv = /(?<!-)\d+/g;
 
-let str = "0 12 -5 123 -18";
+let řetězec = "0 12 -5 123 -18";
 
-console.log( str.match(regexp) ); // 0, 12, 123, *!*8*/!*
+console.log( řetězec.match(rv) ); // 0, 12, 123, *!*8*/!*
 ```
 
-As you can see, it matches `match:8`, from `subject:-18`. To exclude it, we need to ensure that the regexp starts matching a number not from the middle of another (non-matching) number.
+Jak vidíte, našel i `match:8` z `subject:-18`. Abychom to vyloučili, musíme zajistit, že RV nezačne hledat shodu uprostřed jiného (neodpovídajícího) čísla.
 
-We can do it by specifying another negative lookbehind: `pattern:(?<!-)(?<!\d)\d+`. Now `pattern:(?<!\d)` ensures that a match does not start after another digit, just what we need.
+Můžeme to udělat uvedením dalšího negativního zpětného nahlédnutí: `pattern:(?<!-)(?<!\d)\d+`. Nyní `pattern:(?<!\d)` zajistí, že shoda nebude začínat po jiné číslici, což je přesně to, co potřebujeme.
 
-We can also join them into a single lookbehind here:
+Můžeme je také spojit do jediného zpětného nahlédnutí následovně:
 
 ```js run
-let regexp = /(?<![-\d])\d+/g;
+let rv = /(?<![-\d])\d+/g;
 
-let str = "0 12 -5 123 -18";
+let řetězec = "0 12 -5 123 -18";
 
-alert( str.match(regexp) ); // 0, 12, 123
+alert( řetězec.match(rv) ); // 0, 12, 123
 ```

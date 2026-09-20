@@ -5,836 +5,836 @@ libs:
 
 # IndexedDB
 
-IndexedDB is a database that is built into a browser, much more powerful than `localStorage`.
+IndexedDB je databáze zabudovaná do prohlížeče. Je mnohem silnější než `localStorage`.
 
-- Stores almost any kind of values by keys, multiple key types.
-- Supports transactions for reliability.
-- Supports key range queries, indexes.
-- Can store much bigger volumes of data than `localStorage`.
+- Umožňuje ukládat téměř jakýkoli druh hodnot podle klíčů, klíče mohou být několika typů.
+- Podporuje transakce pro dosažení větší spolehlivosti.
+- Podporuje dotazy podle rozsahu klíčů a indexy.
+- Dokáže ukládat mnohem větší objemy dat než `localStorage`.
 
-That power is usually excessive for traditional client-server apps. IndexedDB is intended for offline apps, to be combined with ServiceWorkers and other technologies.
+Tyto schopnosti jsou pro běžné aplikace klient-server obvykle příliš silné. IndexedDB je určena pro offline aplikace, pro kombinaci se ServiceWorkers a jinými technologiemi.
 
-The native interface to IndexedDB, described in the specification <https://www.w3.org/TR/IndexedDB>, is event-based.
+Nativní rozhraní IndexedDB, popsané ve specifikaci <https://www.w3.org/TR/IndexedDB>, je založeno na událostech.
 
-We can also use `async/await` with the help of a promise-based wrapper, like <https://github.com/jakearchibald/idb>. That's pretty convenient, but the wrapper is not perfect, it can't replace events for all cases. So we'll start with events, and then, after we gain an understanding of IndexedDB, we'll use the wrapper.
+Můžeme také použít `async/await` za pomoci obalu založeného na příslibech, například <https://github.com/jakearchibald/idb>. Je to praktické, ale obal není dokonalý a nedokáže nahradit události ve všech případech. Začneme tedy s událostmi a pak, až IndexedDB porozumíme, budeme používat obal.
 
-```smart header="Where's the data?"
-Technically, the data is usually stored in the visitor's home directory, along with browser settings, extensions, etc.
+```smart header="Kde jsou data uložena?"
+Technicky se data obvykle ukládají do domovského adresáře návštěvníka, společně s nastavením prohlížeče, jeho rozšířeními a podobně.
 
-Different browsers and OS-level users have each their own independant storage.
+Různé prohlížeče a různí uživatelé na úrovni OS mají každý své nezávislé úložiště.
 ```
 
-## Open database
+## Otevření databáze
 
-To start working with IndexedDB, we first need to `open` (connect to) a database.
+K zahájení práce s IndexedDB musíme nejprve otevřít databázi (připojit se k ní) funkcí `open`.
 
-The syntax:
+Syntaxe:
 
 ```js
-let openRequest = indexedDB.open(name, version);
+let požadavekOtevření = indexedDB.open(název, verze);
 ```
 
-- `name` -- a string, the database name.
-- `version` -- a positive integer version, by default `1` (explained below).
+- `název` -- řetězec s názvem databáze.
+- `version` -- celé kladné číslo verze, standardně `1` (bude vysvětleno dále).
 
-We can have many databases with different names, but all of them exist within the current origin (domain/protocol/port). Different websites can't access each other's databases.
+Můžeme mít mnoho databází s různými názvy, ale všechny budou existovat jen v rámci aktuálního původu (doména/protokol/port). Různá webová sídla nemohou navzájem přistupovat ke svým databázím.
 
-The call returns `openRequest` object, we should listen to events on it:
-- `success`: database is ready, there's the "database object" in `openRequest.result`, we should use it for further calls.
-- `error`: opening failed.
-- `upgradeneeded`: database is ready, but its version is outdated (see below).
+Volání vrací objekt `požadavekOtevření`. Na něm bychom měli naslouchat událostem:
+- `success`: databáze je připravena, `požadavekOtevření.result` obsahuje „objekt databáze“, který bychom měli používat pro další volání.
+- `error`: otevření selhalo.
+- `upgradeneeded`: databáze je připravena, ale její verze je zastaralá (viz dále).
 
-**IndexedDB has a built-in mechanism of "schema versioning", absent in server-side databases.**
+**IndexedDB má vestavěný mechanismus „verzování schématu“, který v databázích na straně serveru chybí.**
 
-Unlike server-side databases, IndexedDB is client-side, the data is stored in the browser, so we, developers, don't have full-time access to it. So, when we have published a new version of our app, and the user visits our webpage, we may need to update the database.
+Na rozdíl od databází na straně serveru je IndexedDB na straně klienta a data se ukládají v prohlížeči, takže my vývojáři k nim nemáme neustálý přístup. Když tedy vydáme novou verzi naší aplikace a uživatel navštíví naši webovou stránku, budeme možná muset aktualizovat jeho databázi.
 
-If the local database version is less than specified in `open`, then a special event `upgradeneeded` is triggered, and we can compare versions and upgrade data structures as needed.
+Jestliže verze lokální databáze je nižší, než je uvedeno v `open`, spustí se speciální událost `upgradeneeded` a my můžeme porovnat verze a podle potřeby aktualizovat datové struktury.
 
-The `upgradeneeded` event also triggers when the database doesn't yet exist (technically, its version is `0`), so we can perform the initialization.
+Událost `upgradeneeded` se spustí i tehdy, když databáze ještě neexistuje (technicky je její verze `0`), takže můžeme provést inicializaci.
 
-Let's say we published the first version of our app.
+Řekněme, že jsme vydali první verzi naší aplikace.
 
-Then we can open the database with version `1` and perform the initialization in an `upgradeneeded` handler like this:
+Pak můžeme otevřít databázi s verzí `1` a provést inicializaci v handleru `upgradeneeded` následovně:
 
 ```js
-let openRequest = indexedDB.open("store", *!*1*/!*);
+let požadavekOtevření = indexedDB.open("úložiště", *!*1*/!*);
 
-openRequest.onupgradeneeded = function() {
-  // triggers if the client had no database
-  // ...perform initialization...
+požadavekOtevření.onupgradeneeded = function() {
+  // spustí se, pokud klient neměl žádnou databázi
+  // ...provedeme inicializaci...
 };
 
-openRequest.onerror = function() {
-  console.error("Error", openRequest.error);
+požadavekOtevření.onerror = function() {
+  console.error("Chyba", požadavekOtevření.error);
 };
 
-openRequest.onsuccess = function() {
-  let db = openRequest.result;
-  // continue working with database using db object
+požadavekOtevření.onsuccess = function() {
+  let db = požadavekOtevření.result;
+  // pokračujeme v práci s databází používáním objektu db
 };
 ```
 
-Then, later, we publish the 2nd version.
+Pak později publikujeme druhou verzi.
 
-We can open it with version `2` and perform the upgrade like this:
+Můžeme ji otevřít s verzí `2` a provést aktualizaci následovně:
 
 ```js
-let openRequest = indexedDB.open("store", *!*2*/!*);
+let požadavekOtevření = indexedDB.open("store", *!*2*/!*);
 
-openRequest.onupgradeneeded = function(event) {
-  // the existing database version is less than 2 (or it doesn't exist)
-  let db = openRequest.result;
-  switch(event.oldVersion) { // existing db version
+požadavekOtevření.onupgradeneeded = function(událost) {
+  // verze existující databáze je menší než 2 (nebo databáze neexistuje)
+  let db = požadavekOtevření.result;
+  switch(událost.oldVersion) { // verze existující databáze
     case 0:
-      // version 0 means that the client had no database
-      // perform initialization
+      // verze 0 znamená, že klient neměl žádnou databázi
+      // provedeme inicializaci
     case 1:
-      // client had version 1
-      // update
+      // klient měl verzi 1
+      // aktualizace
   }
 };
 ```
 
-Please note: as our current version is `2`, the `onupgradeneeded` handler has a code branch for version `0`, suitable for users that are accessing for the first time and have no database, and also for version `1`, for upgrades.
+Prosíme všimněte si: protože naše aktuální verze je `2`, handler `onupgradeneeded` má větev kódu pro verzi `0`, určenou pro uživatele, kteří sem přistupují poprvé a ještě nemají žádnou databázi, i pro verzi `1` kvůli aktualizaci.
 
-And then, only if `onupgradeneeded` handler finishes without errors, `openRequest.onsuccess` triggers, and the database is considered successfully opened.
+A teprve pak, jen pokud handler `onupgradeneeded` skončí bez chyb, spustí se `požadavekOtevření.onsuccess` a databáze se považuje za úspěšně otevřenou.
 
-To delete a database:
-
-```js
-let deleteRequest = indexedDB.deleteDatabase(name)
-// deleteRequest.onsuccess/onerror tracks the result
-```
-
-```warn header="We can't open a database using an older open call version"
-If the current user database has a higher version than in the `open` call, e.g. the existing DB version is `3`, and we try to `open(...2)`, then that's an error, `openRequest.onerror` triggers.
-
-That's rare, but such a thing may happen when a visitor loads outdated JavaScript code, e.g. from a proxy cache. So the code is old, but his database is new.
-
-To protect from errors, we should check `db.version` and suggest a page reload. Use proper HTTP caching headers to avoid loading the old code, so that you'll never have such problems.
-```
-
-### Parallel update problem
-
-As we're talking about versioning, let's tackle a small related problem.
-
-Let's say:
-1. A visitor opened our site in a browser tab, with database version `1`.
-2. Then we rolled out an update, so our code is newer.
-3. And then the same visitor opens our site in another tab.
-
-So there's a tab with an open connection to DB version `1`, while the second one attempts to update it to version `2` in its `upgradeneeded` handler.
-
-The problem is that a database is shared between two tabs, as it's the same site, same origin. And it can't be both version `1` and `2`. To perform the update to version `2`, all connections to version 1 must be closed, including the one in the first tab.
-
-In order to organize that, the `versionchange` event triggers on the "outdated" database object. We should listen for it and close the old database connection (and probably suggest a page reload, to load the updated code).
-
-If we don't listen for the `versionchange` event and don't close the old connection, then the second, new connection won't be made. The `openRequest` object will emit the `blocked` event instead of `success`. So the second tab won't work.
-
-Here's the code to correctly handle the parallel upgrade. It installs the `onversionchange` handler, that triggers if the current database connection becomes outdated (db version is updated elsewhere) and closes the connection.
+Pro smazání databáze:
 
 ```js
-let openRequest = indexedDB.open("store", 2);
+let požadavekSmazání = indexedDB.deleteDatabase(název)
+// požadavekSmazání.onsuccess/onerror sleduje výsledek
+```
 
-openRequest.onupgradeneeded = ...;
-openRequest.onerror = ...;
+```warn header="Nemůžeme otevřít databázi voláním open se starší verzí"
+Jestliže aktuální uživatelova databáze má vyšší verzi, než je ve volání `open`, např. verze existující databáze je `3` a my se pokusíme otevřít `open(...2)`, pak nastane chyba a spustí se `požadavekOtevření.onerror`.
 
-openRequest.onsuccess = function() {
-  let db = openRequest.result;
+Stává se to vzácně, ale může se to stát, když si návštěvník načte zastaralý JavaScriptový kód, např. z mezipaměti v proxy. Kód je tedy starý, ale uživatelova databáze je nová.
+
+Abychom se před takovými chybami chránili, měli bychom kontrolovat `db.version` a navrhovat aktualizaci stránky. Abyste se vyhnuli načtení starého kódu, používejte vhodné HTTP hlavičky pro mezipaměť. Pak takové problémy nikdy mít nebudete.
+```
+
+### Problém paralelní aktualizace
+
+Když hovoříme o verzování, zmiňme se o malém souvisejícím problému.
+
+Dejme tomu:
+1. Návštěvník otevřel naše sídlo v záložce prohlížeče s verzí databáze `1`.
+2. Pak jsme vydali aktualizaci, takže náš kód je novější.
+3. A pak tentýž návštěvník otevře naše sídlo v jiné záložce.
+
+Bude tedy mít záložku s otevřeným připojením k databázi verze `1`, zatímco druhá se ji pokusí ve svém handleru `upgradeneeded` aktualizovat na verzi `2`.
+
+Problém je v tom, že databáze je sdílena mezi dvěma záložkami, protože obě mají stejné sídlo, stejný původ. A nemůže být současně v obou verzích `1` a `2`. Abychom mohli provést aktualizaci na verzi `2`, musejí být zavřena všechna připojení k verzi `1`, včetně připojení v první záložce.
+
+Abychom to mohli zorganizovat, spustí se na „zastaralém“ databázovém objektu událost `versionchange`. Měli bychom jí naslouchat a připojení ke staré databázi zavřít (a pravděpodobně navrhnout uživateli aktualizaci stránky, aby si načetl aktualizovaný kód).
+
+Pokud nebudeme naslouchat události `versionchange` a neuzavřeme staré připojení, pak se druhé, nové připojení nevytvoří. Objekt `požadavekOtevření` vyvolá místo události `success` událost `blocked`. Druhá záložka tedy nebude fungovat.
+
+Následující kód správně ošetřuje paralelní aktualizaci. Instaluje handler `onversionchange`, který se spustí, když se aktuální připojení k databázi stane zastaralým (někde jinde bude aktualizována verze databáze), a uzavře připojení.
+
+```js
+let požadavekOtevření = indexedDB.open("store", 2);
+
+požadavekOtevření.onupgradeneeded = ...;
+požadavekOtevření.onerror = ...;
+
+požadavekOtevření.onsuccess = function() {
+  let db = požadavekOtevření.result;
 
   *!*
   db.onversionchange = function() {
     db.close();
-    alert("Database is outdated, please reload the page.")
+    alert("Databáze není aktuální, prosím aktualizujte stránku.")
   };
   */!*
 
-  // ...the db is ready, use it...
+  // ...databáze je připravena, můžeme ji používat...
 };
 
 *!*
-openRequest.onblocked = function() {
-  // this event shouldn't trigger if we handle onversionchange correctly
+požadavekOtevření.onblocked = function() {
+  // tato událost by se neměla spustit, pokud správně zpracujeme onversionchange
 
-  // it means that there's another open connection to the same database
-  // and it wasn't closed after db.onversionchange triggered for it
+  // znamená, že ke stejné databázi existuje jiné otevřené připojení
+  // a nebylo zavřeno poté, co se na ní spustila db.onversionchange
 };
 */!*
 ```
 
-...In other words, here we do two things:
+...Jinými slovy, provádíme zde dvě věci:
 
-1. The `db.onversionchange` listener informs us about a parallel update attempt, if the current database version becomes outdated.
-2. The `openRequest.onblocked` listener informs us about the opposite situation: there's a connection to an outdated version elsewhere, and it doesn't close, so the newer connection can't be made.
+1. Posluchač `db.onversionchange` nás informuje o paralelním pokusu o aktualizaci, když aktuální verze databáze přestala být aktuální.
+2. Posluchač `požadavekOtevření.onblocked` nás informuje o opačné situaci: někde jinde existuje připojení k zastaralé verzi a nebylo zavřeno, takže nové připojení nelze vytvořit.
 
-We can handle things more gracefully in `db.onversionchange`, prompt the visitor to save the data before the connection is closed and so on. 
+V `db.onversionchange` můžeme všechno ošetřit kultivovaněji, požádat návštěvníka o uložení dat před uzavřením připojení a podobně.
 
-Or, an alternative approach would be to not close the database in `db.onversionchange`, but instead use the `onblocked` handler (in the new tab) to alert the visitor, tell him that the newer version can't be loaded until they close other tabs.
+Alternativní přístup by byl nezavírat databázi v `db.onversionchange`, ale místo toho použít handler `onblocked` (v nové záložce), abychom návštěvníka upozornili, že novou verzi není možné načíst, dokud si nezavře ostatní záložky.
 
-These update collisions happen rarely, but we should at least have some handling for them, at least an `onblocked` handler, to prevent our script from dying silently.
+Tyto kolize aktualizací se stávají jen vzácně, ale měli bychom pro ně mít aspoň nějaké ošetření, minimálně handler `onblocked`, abychom zabránili tichému spadnutí našeho skriptu.
 
-## Object store
+## Objektové úložiště
 
-To store something in IndexedDB, we need an *object store*.
+K ukládání čehokoli v IndexedDB potřebujeme *objektové úložiště*.
 
-An object store is a core concept of IndexedDB. Counterparts in other databases are called "tables" or "collections". It's where the data is stored. A database may have multiple stores: one for users, another one for goods, etc.
+Objektové úložiště je jádrem konceptu IndexedDB. Jeho obdoby v jiných databázích se nazývají „tabulky“ nebo „kolekce“. Je to místo, do něhož se ukládají data. Databáze může obsahovat více úložišť: jedno pro uživatele, druhé pro zboží a tak dále.
 
-Despite being named an "object store", primitives can be stored too.
+Přestože se úložiště nazývá „objektové“, můžeme do něj ukládat i primitivy.
 
-**We can store almost any value, including complex objects.**
+**Můžeme uložit téměř jakoukoli hodnotu včetně složitých objektů.**
 
-IndexedDB uses the [standard serialization algorithm](https://www.w3.org/TR/html53/infrastructure.html#section-structuredserializeforstorage) to clone-and-store an object. It's like `JSON.stringify`, but more powerful, capable of storing much more datatypes.
+IndexedDB používá k naklonování a uložení objektu [standardní serializační algoritmus](https://www.w3.org/TR/html53/infrastructure.html#section-structuredserializeforstorage). Podobá se `JSON.stringify`, ale je silnější a dokáže uložit mnohem více datových typů.
 
-An example of an object that can't be stored: an object with circular references. Such objects are not serializable. `JSON.stringify` also fails for such objects.
+Příkladem objektu, který nelze uložit, je objekt s kruhovými odkazy. Takové objekty nejsou serializovatelné a selže na nich i `JSON.stringify`.
 
-**There must be a unique `key` for every value in the store.**     
+**Každá hodnota v úložišti musí mít unikátní `klíč`.**
 
-A key must be one of these types - number, date, string, binary, or array. It's a unique identifier, so we can search/remove/update values by the key.
+Klíč musí být jednoho z těchto typů: číslo, datum, řetězec, binární objekt nebo pole. Je to unikátní identifikátor, takže podle něj můžeme vyhledávat, odstraňovat a měnit hodnoty.
 
 ![](indexeddb-structure.svg)
 
-As we'll see very soon, we can provide a key when we add a value to the store, similar to `localStorage`. But when we store objects, IndexedDB allows setting up an object property as the key, which is much more convenient. Or we can auto-generate keys.
+Jak velmi brzy uvidíme, klíč můžeme uvést, když do úložiště přidáváme hodnotu, podobně jako do `localStorage`. Když však ukládáme objekty, IndexedDB nám umožňuje nastavit jako klíč některou vlastnost objektu, což je mnohem vhodnější. Můžeme také klíče automaticky generovat.
 
-But we need to create an object store first.
+Napřed však musíme vytvořit objektové úložiště.
 
-The syntax to create an object store:
+Syntaxe pro vytvoření objektového úložiště:
 
 ```js
-db.createObjectStore(name[, keyOptions]);
+db.createObjectStore(název[, volbyKlíče]);
 ```
 
-Please note, the operation is synchronous, no `await` needed.
+Prosíme všimněte si, že tato operace je synchronní, není potřeba `await`.
 
-- `name` is the store name, e.g. `"books"` for books,
-- `keyOptions` is an optional object with one of two properties:
-  - `keyPath` -- a path to an object property that IndexedDB will use as the key, e.g. `id`.
-  - `autoIncrement` -- if `true`, then the key for a newly stored object is generated automatically, as an ever-incrementing number.
+- `název` je název úložiště, např. `"knihy"` pro knihy,
+- `volbyKlíče` je nepovinný objekt obsahující jednu ze dvou vlastností:
+  - `keyPath` -- cesta k vlastnosti objektu, kterou IndexedDB použije jako klíč, např. `id`.
+  - `autoIncrement` -- pokud je `true`, pak se klíč nově uloženého objektu vygeneruje automaticky jako neustále se zvyšující číslo.
 
-If we don't supply `keyOptions`, then we'll need to provide a key explicitly later, when storing an object.
+Jestliže neuvedeme `volbyKlíče`, budeme muset výslovně uvést klíč později, až budeme ukládat objekt.
 
-For instance, this object store uses `id` property as the key:
+Například toto objektové úložiště používá jako klíč vlastnost `id`:
 
 ```js
-db.createObjectStore('books', {keyPath: 'id'});
+db.createObjectStore('knihy', {keyPath: 'id'});
 ```
 
-**An object store can only be created/modified while updating the DB version, in `upgradeneeded` handler.**
+**Objektové úložiště může být vytvořeno nebo měněno jen při aktualizaci verze databáze, v handleru `upgradeneeded`.**
 
-That's a technical limitation. Outside of the handler we'll be able to add/remove/update the data, but object stores can only be created/removed/altered during a version update.
+To je technické omezení. Přidávat, odstraňovat a měnit data můžeme i mimo tento handler, ale objektová úložiště smíme vytvářet, odstraňovat a měnit jen při aktualizaci verze.
 
-To perform a database version upgrade, there are two main approaches:
+Aktualizaci verze databáze je možné provést v zásadě dvěma způsoby:
 
-1. We can implement per-version upgrade functions: from 1 to 2, from 2 to 3, from 3 to 4 etc. Then, in `upgradeneeded` we can compare versions (e.g. old 2, now 4) and run per-version upgrades step by step, for every intermediate version (2 to 3, then 3 to 4).
-2. Or we can just examine the database: get a list of existing object stores as `db.objectStoreNames`. That object is a [DOMStringList](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#domstringlist) that provides `contains(name)` method to check for existance. And then we can do updates depending on what exists and what doesn't.
+1. Můžeme implementovat funkce aktualizace pro každou verzi: z 1 na 2, z 2 na 3, z 3 na 4 atd. Pak můžeme v `upgradeneeded` porovnat verze (např. stará 2, nová 4) a spustit aktualizace pro jednotlivé verze krok za krokem, pro každou mezilehlou verzi (z 2 na 3, pak z 3 na 4).
+2. Nebo můžeme prostě prozkoumat databázi: seznam existujících objektových úložišť získáme z `db.objectStoreNames`. To je objekt třídy [DOMStringList](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#domstringlist), který poskytuje metodu  `contains(název)` pro ověření existence. A pak můžeme provádět aktualizace podle toho, co existuje a co ne.
 
-For small databases the second variant may be simpler.
+Pro malé databáze může být druhá varianta jednodušší.
 
-Here's the demo of the second approach:
+Následuje demo druhého způsobu:
 
 ```js
-let openRequest = indexedDB.open("db", 2);
+let požadavekOtevření = indexedDB.open("db", 2);
 
-// create/upgrade the database without version checks
-openRequest.onupgradeneeded = function() {
-  let db = openRequest.result;
-  if (!db.objectStoreNames.contains('books')) { // if there's no "books" store
-    db.createObjectStore('books', {keyPath: 'id'}); // create it
+// vytvoříme/aktualizujeme databázi bez kontroly verzí
+požadavekOtevření.onupgradeneeded = function() {
+  let db = požadavekOtevření.result;
+  if (!db.objectStoreNames.contains('knihy')) { // pokud neexistuje úložiště "knihy",
+    db.createObjectStore('knihy', {keyPath: 'id'}); // vytvoříme je
   }
 };
 ```
 
-To delete an object store:
+Smazání objektového úložiště:
 
 ```js
-db.deleteObjectStore('books')
+db.deleteObjectStore('knihy')
 ```
 
-## Transactions
+## Transakce
 
-The term "transaction" is generic, used in many kinds of databases.
+„Transakce“ je obecný pojem, používaný v mnoha druzích databází.
 
-A transaction is a group of operations, that should either all succeed or all fail.
+Transakce je skupina operací, které musejí být úspěšně provedeny buď všechny, nebo žádná.
 
-For instance, when a person buys something, we need to:
+Například když si osoba něco koupí, musíme:
 
-1. Subtract the money from their account.
-2. Add the item to their inventory.
+1. Odečíst peníze z jejího konta.
+2. Přidat zakoupenou věc do jejího inventáře.
 
-It would be pretty bad if we complete the 1st operation, and then something goes wrong, e.g. lights out, and we fail to do the 2nd. Both should either succeed (purchase complete, good!) or both fail (at least the person kept their money, so they can retry).
+Bylo by velice špatné, kdybychom dokončili operaci 1 a pak se něco pokazilo, např. by byl vypnut proud, a my bychom neprovedli operaci 2. Obě operace by měly buď uspět (nákup kompletní, dobře!), nebo neuspět (pak aspoň osobě zůstanou peníze a bude to moci zkusit znovu).
 
-Transactions can guarantee that.
+Transakce to dokáží zaručit.
 
-**All data operations must be made within a transaction in IndexedDB.**
+**Veškeré datové operace v IndexedDB musejí být vykonávány uvnitř transakce.**
 
-To start a transaction:
+Začátek transakce:
 
 ```js
-db.transaction(store[, type]);
+db.transaction(úložiště[, typ]);
 ```
 
-- `store` is a store name that the transaction is going to access, e.g. `"books"`. Can be an array of store names if we're going to access multiple stores.
-- `type` – a transaction type, one of:
-  - `readonly` -- can only read, the default.
-  - `readwrite` -- can only read and write the data, but not create/remove/alter object stores.
+- `úložiště` je název úložiště, k němuž má transakce přistupovat, např. `"knihy"`. Pokud chceme přistupovat k více úložištím, může to být pole jejich názvů.
+- `type` – typ transakce, jeden z následujících:
+  - `readonly` -- může pouze číst, standardní.
+  - `readwrite` -- může pouze číst a zapisovat data, ale ne vytvářet, odstraňovat nebo měnit objektová úložiště.
 
-There's also `versionchange` transaction type: such transactions can do everything, but we can't create them manually. IndexedDB automatically creates a `versionchange` transaction when opening the database, for `upgradeneeded` handler. That's why it's a single place where we can update the database structure, create/remove object stores.
+Existuje i typ transakce `versionchange`. Takové transakce mohou provádět cokoli, ale my je nemůžeme ručně vytvářet. Transakci typu `versionchange` vytváří IndexedDB automaticky, když otevírá databázi pro handler `upgradeneeded`. Proto je to jediné místo, kde můžeme aktualizovat databázovou strukturu a vytvářet nebo odstraňovat objektová úložiště.
 
-```smart header="Why are there different types of transactions?"
-Performance is the reason why transactions need to be labeled either `readonly` and `readwrite`.
+```smart header="Proč existují různé typy transakcí?"
+Důvodem, proč musíme transakce označovat jako `readonly` nebo `readwrite`, je výkonnost.
 
-Many `readonly` transactions are able to access the same store concurrently, but `readwrite` transactions can't. A `readwrite` transaction "locks" the store for writing. The next transaction must wait before the previous one finishes before accessing the same store.
+K jednomu úložišti může současně přistupovat více transakcí typu `readonly`, ale ne transakce typu `readwrite`. Transakce typu `readwrite` si „zamkne“ úložiště pro zápis. Než bude další transakce moci přistupovat ke stejnému úložišti, musí počkat, než předchozí transakce skončí.
 ```
 
-After the transaction is created, we can add an item to the store, like this:
+Po vytvoření transakce můžeme přidat prvek do úložiště, například:
 
 ```js
-let transaction = db.transaction("books", "readwrite"); // (1)
+let transakce = db.transaction("knihy", "readwrite"); // (1)
 
-// get an object store to operate on it
+// získáme objektové úložiště, nad nímž budeme pracovat
 *!*
-let books = transaction.objectStore("books"); // (2)
+let knihy = transakce.objectStore("knihy"); // (2)
 */!*
 
-let book = {
+let kniha = {
   id: 'js',
-  price: 10,
-  created: new Date()
+  cena: 10,
+  vytvořena: new Date()
 };
 
 *!*
-let request = books.add(book); // (3)
+let požadavek = knihy.add(kniha); // (3)
 */!*
 
-request.onsuccess = function() { // (4)
-  console.log("Book added to the store", request.result);
+požadavek.onsuccess = function() { // (4)
+  console.log("Kniha přidána do úložiště", požadavek.result);
 };
 
-request.onerror = function() {
-  console.log("Error", request.error);
+požadavek.onerror = function() {
+  console.log("Chyba", požadavek.error);
 };
 ```
 
-There were basically four steps:
+Jsou to v zásadě čtyři kroky:
 
-1. Create a transaction, mentioning all the stores it's going to access, at `(1)`.
-2. Get the store object using `transaction.objectStore(name)`, at `(2)`.
-3. Perform the request to the object store `books.add(book)`, at `(3)`.
-4. ...Handle request success/error `(4)`, then we can make other requests if needed, etc.
+1. V `(1)` vytvoříme transakci a uvedeme všechna úložiště, k nimž chceme přistupovat.
+2. V `(2)` získáme objekt úložiště voláním `transaction.objectStore(název)`.
+3. V `(3)` provedeme požadavek na objektové úložiště `knihy.add(kniha)`.
+4. ...V `(4)` zpracujeme úspěch/chybu požadavku, pak můžeme podle potřeby vytvářet další požadavky atd.
 
-Object stores support two methods to store a value:
+Objektová úložiště podporují dvě metody uložení hodnoty:
 
-- **put(value, [key])**
-    Add the `value` to the store. The `key` is supplied only if the object store did not have `keyPath` or `autoIncrement` option. If there's already a value with the same key, it will be replaced.
+- **put(hodnota, [klíč])**
+    Přidá do úložiště hodnotu `hodnota`. Musíme poskytnout `klíč` jen tehdy, pokud objektové úložiště nemá nastavenou volbu `keyPath` nebo `autoIncrement`. Pokud už obsahuje hodnotu se stejným klíčem, bude nahrazena novou.
 
-- **add(value, [key])**
-    Same as `put`, but if there's already a value with the same key, then the request fails, and an error with the name `"ConstraintError"` is generated.
+- **add(hodnota, [klíč])**
+    Totéž jako `put`, ale pokud už existuje hodnota se stejným klíčem, požadavek selže a bude vygenerována chyba nazvaná `"ConstraintError"`.
 
-Similar to opening a database, we can send a request: `books.add(book)`, and then wait for `success/error` events.
+Podobně jako při otevření databáze můžeme poslat požadavek: `knihy.add(kniha)` a pak čekat na události `success/error`.
 
-- The `request.result` for `add` is the key of the new object.
-- The error is in `request.error` (if any).
+- U funkce `add` je `požadavek.result` klíč nového objektu.
+- Chyba (pokud k ní došlo) se nachází v `požadavek.error`.
 
-## Transactions' autocommit
+## Automatické provádění transakcí
 
-In the example above we started the transaction and made `add` request. But as we stated previously, a transaction may have multiple associated requests, that must either all succeed or all fail. How do we mark the transaction as finished, with no more requests to come?
+V uvedeném příkladu jsme zahájili transakci a vytvořili požadavek `add`. Ale jak jsme již dříve uvedli, transakce může obsahovat více požadavků, které se musejí buď všechny úspěšně provést, nebo všechny neprovést. Jak oznámíme, že transakce je hotová a žádné další požadavky nepřijdou?
 
-The short answer is: we don't.
+Stručná odpověď zní: nijak.
 
-In the next version 3.0 of the specification, there will probably be a manual way to finish the transaction, but right now in 2.0 there isn't.
+V další verzi specifikace 3.0 pravděpodobně bude způsob, jak ukončit transakci ručně, ale v současné verzi 2.0 neexistuje.
 
-**When all transaction requests are finished, and the [microtasks queue](info:microtask-queue) is empty, it is committed automatically.**
+**Až budou všechny požadavky na transakce hotovy a [fronta mikroúloh](info:microtask-queue) bude prázdná, transakce se automaticky provede.**
 
-Usually, we can assume that a transaction commits when all its requests are complete, and the current code finishes.
+Zpravidla můžeme předpokládat, že transakce se provede, až budou všechny její požadavky hotovy a průběh aktuálního kódu skončí.
 
-So, in the example above no special call is needed to finish the transaction.
+V uvedeném příkladu tedy není k dokončení transakce nutné žádné speciální volání.
 
-Transactions auto-commit principle has an important side effect. We can't insert an async operation like `fetch`, `setTimeout` in the middle of a transaction. IndexedDB will not keep the transaction waiting till these are done.
+Princip automatického provádění transakcí má důležitý vedlejší efekt. Nemůžeme doprostřed transakce vkládat asynchronní operace, např. `fetch` nebo `setTimeout`. IndexedDB nebude s transakcí čekat na jejich dokončení.
 
-In the code below, `request2` in the line `(*)` fails, because the transaction is already committed, and can't make any request in it:
+V následujícím kódu `požadavek2` na řádku `(*)` selže, protože transakce již byla provedena a nelze v ní vytvořit žádný další požadavek:
 
 ```js
-let request1 = books.add(book);
+let požadavek1 = knihy.add(kniha);
 
-request1.onsuccess = function() {
-  fetch('/').then(response => {
+požadavek1.onsuccess = function() {
+  fetch('/').then(odpověď => {
 *!*
-    let request2 = books.add(anotherBook); // (*)
+    let požadavek2 = knihy.add(dalšíKniha); // (*)
 */!*
-    request2.onerror = function() {
-      console.log(request2.error.name); // TransactionInactiveError
+    požadavek2.onerror = function() {
+      console.log(požadavek2.error.name); // TransactionInactiveError
     };
   });
 };
 ```
 
-That's because `fetch` is an asynchronous operation, a macrotask. Transactions are closed before the browser starts doing macrotasks.
+Je to tím, že `fetch` je asynchronní operace, makroúloha. Transakce jsou uzavřeny dříve, než prohlížeč začne provádět makroúlohy.
 
-Authors of IndexedDB spec believe that transactions should be short-lived. Mostly for performance reasons.
+Autoři specifikace IndexedDB se domnívají, že transakce by měly existovat jen krátce, zejména z výkonnostních důvodů.
 
-Notably, `readwrite` transactions "lock" the stores for writing. So if one part of the application initiated `readwrite` on `books` object store, then another part that wants to do the same has to wait: the new transaction "hangs" till the first one is done. That can lead to strange delays if transactions take a long time.
+Zejména transakce `readwrite` „zamykají“ úložiště pro zápis. Pokud tedy jedna část aplikace vyvolá `readwrite` na objektovém úložišti `knihy`, pak jiná část, která chce udělat totéž, musí počkat: nová transakce bude „viset“, dokud nebude první transakce hotová. To může vést ke zvláštním prodlevám, jestliže transakce budou trvat dlouhou dobu.
 
-So, what to do?
+Co tedy můžeme dělat?
 
-In the example above we could make a new `db.transaction` right before the new request `(*)`.
+V uvedeném příkladu můžeme vytvořit novou `db.transaction` těsně před novým požadavkem `(*)`.
 
-But it will be even better, if we'd like to keep the operations together, in one transaction, to split apart IndexedDB transactions and "other" async stuff.
+Ještě lepší však bude, když budeme provádět operace společně, v jedné transakci, abychom oddělili transakce IndexedDB od „jiných“ asynchronních záležitostí.
 
-First, make `fetch`, prepare the data if needed, afterwards create a transaction and perform all the database requests, it'll work then.
+Nejprve zavoláme `fetch`, připravíme si potřebná data, a pak vytvoříme transakci a provedeme všechny databázové požadavky. To bude fungovat.
 
-To detect the moment of successful completion, we can listen to `transaction.oncomplete` event:
+Abychom detekovali okamžik úspěšného splnění, můžeme naslouchat události `transakce.oncomplete`:
 
 ```js
-let transaction = db.transaction("books", "readwrite");
+let transakce = db.transaction("knihy", "readwrite");
 
-// ...perform operations...
+// ...provedeme operace...
 
-transaction.oncomplete = function() {
-  console.log("Transaction is complete");
+transakce.oncomplete = function() {
+  console.log("Transakce je hotová");
 };
 ```
 
-Only `complete` guarantees that the transaction is saved as a whole. Individual requests may succeed, but the final write operation may go wrong (e.g. I/O error or something).
+Jedině `complete` nám zaručuje, že transakce je uložena jako celek. Jednotlivé požadavky mohou uspět, ale finální operace zápisu se může pokazit (např. kvůli I/O chybě nebo něčemu jinému).
 
-To manually abort the transaction, call:
+Pro ruční zrušení transakce voláme:
 
 ```js
-transaction.abort();
+transakce.abort();
 ```
 
-That cancels all modification made by the requests in it and triggers `transaction.onabort` event.
+Tím se v ní zruší všechny změny, které učinily její požadavky, a vyvolá se událost `transaction.onabort`.
 
 
-## Error handling
+## Zpracování chyb
 
-Write requests may fail.
+Požadavek na zápis může selhat.
 
-That's to be expected, not only because of possible errors at our side, but also for reasons not related to the transaction itself. For instance, the storage quota may be exceeded. So we must be ready to handle such case.
+To musíme očekávat, nejenom kvůli možným chybám na naší straně, ale i z důvodů, které se netýkají samotné transakce. Například může být překročena kapacita úložiště. Musíme tedy být připraveni takový případ ošetřit.
 
-**A failed request automatically aborts the transaction, canceling all its changes.**
+**Neúspěšný požadavek automaticky ukončí transakci a zruší všechny její změny.**
 
-In some situations, we may want to handle the failure (e.g. try another request), without canceling existing changes, and continue the transaction. That's possible. The `request.onerror` handler is able to prevent the transaction abort by calling `event.preventDefault()`.
+V některých situacích můžeme chtít neúspěch ošetřit (např. zkusit jiný požadavek) bez zrušení provedených změn a pokračovat v transakci. To je možné. Handler `požadavek.onerror` dokáže zabránit zrušení transakce voláním `událost.preventDefault()`.
 
-In the example below a new book is added with the same key (`id`) as the existing one. The `store.add` method generates a `"ConstraintError"` in that case. We handle it without canceling the transaction:
+V následujícím příkladu je přidána nová kniha se stejným klíčem (`id`), jaký už existuje. Metoda `store.add` v tom případě vygeneruje chybu `"ConstraintError"`. Ošetříme ji, aniž bychom zrušili transakci:
 
 ```js
-let transaction = db.transaction("books", "readwrite");
+let transakce = db.transaction("knihy", "readwrite");
 
-let book = { id: 'js', price: 10 };
+let kniha = { id: 'js', cena: 10 };
 
-let request = transaction.objectStore("books").add(book);
+let požadavek = transakce.objectStore("knihy").add(kniha);
 
-request.onerror = function(event) {
-  // ConstraintError occurs when an object with the same id already exists
-  if (request.error.name == "ConstraintError") {
-    console.log("Book with such id already exists"); // handle the error
-    event.preventDefault(); // don't abort the transaction
-    // use another key for the book?
+požadavek.onerror = function(událost) {
+  // ConstraintError nastane, když objekt se stejným id už existuje
+  if (požadavek.error.name == "ConstraintError") {
+    console.log("Kniha s tímto id již existuje"); // ošetříme chybu
+    událost.preventDefault(); // nezrušíme transakci
+    // použijeme pro knihu jiný klíč?
   } else {
-    // unexpected error, can't handle it
-    // the transaction will abort
+    // neočekávaná chyba, nemůžeme ji ošetřit
+    // transakce bude zrušena
   }
 };
 
-transaction.onabort = function() {
-  console.log("Error", transaction.error);
+transakce.onabort = function() {
+  console.log("Chyba", transakce.error);
 };
 ```
 
-### Event delegation
+### Delegování událostí
 
-Do we need onerror/onsuccess for every request? Not every time. We can use event delegation instead.
+Potřebujeme onerror/onsuccess pro každý požadavek? Ne vždy. Můžeme místo toho použít delegování událostí.
 
-**IndexedDB events bubble: `request` -> `transaction` -> `database`.**
+**Události IndexedDB bublají: `požadavek` -> `transakce` -> `databáze`.**
 
-All events are DOM events, with capturing and bubbling, but usually only bubbling stage is used.
+Všechny události jsou DOM události a obsahují zachytávání a bublání. Obvykle se však využívá jen fáze bublání.
 
-So we can catch all errors using `db.onerror` handler, for reporting or other purposes:
+Můžeme tedy všechny chyby zachytávat v handleru `db.onerror`, pro oznámení nebo jiné účely:
 
 ```js
-db.onerror = function(event) {
-  let request = event.target; // the request that caused the error
+db.onerror = function(událost) {
+  let požadavek = událost.target; // požadavek, který vyvolal chybu
 
-  console.log("Error", request.error);
+  console.log("Chyba", požadavek.error);
 };
 ```
 
-...But what if an error is fully handled? We don't want to report it in that case.
+...Ale co když je chyba zcela ošetřena? V takovém případě ji nechceme oznamovat.
 
-We can stop the bubbling and hence `db.onerror` by using `event.stopPropagation()` in `request.onerror`.
+Můžeme zastavit bublání a tedy i `db.onerror` voláním `událost.stopPropagation()` v `požadavek.onerror`.
 
 ```js
-request.onerror = function(event) {
-  if (request.error.name == "ConstraintError") {
-    console.log("Book with such id already exists"); // handle the error
-    event.preventDefault(); // don't abort the transaction
-    event.stopPropagation(); // don't bubble error up, "chew" it
+požadavek.onerror = function(událost) {
+  if (požadavek.error.name == "ConstraintError") {
+    console.log("Kniha s tímto id již existuje"); // zpracování chyby
+    událost.preventDefault(); // nezrušíme transakci
+    událost.stopPropagation(); // nenecháme chybu probublat výš, „pohltíme“ ji
   } else {
-    // do nothing
-    // transaction will be aborted
-    // we can take care of error in transaction.onabort
+    // neděláme nic
+    // transakce bude zrušena
+    // o chybu se můžeme postarat v transakce.onabort
   }
 };
 ```
 
-## Searching
+## Hledání
 
-There are two main types of search in an object store:
+V objektovém úložišti existují dva hlavní druhy hledání:
 
-1. By a key value or a key range. In our "books" storage that would be a value or range of values of `book.id`.
-2. By another object field, e.g. `book.price`. This required an additional data structure, named "index".
+1. Podle hodnoty nebo rozsahu hodnot klíče. V našem úložišti „knihy“ by to byla hodnota nebo rozsah hodnot `kniha.id`.
+2. Podle jiného objektového pole, např. `kniha.cena`. To vyžaduje další datovou strukturu, zvanou „index“.
 
-### By key
+### Podle klíče
 
-First let's deal with the first type of search: by key.
+Nejprve probereme první druh hledání: podle klíče.
 
-Searching methods support both exact key values and so-called "ranges of values" -- [IDBKeyRange](https://www.w3.org/TR/IndexedDB/#keyrange) objects that specify an acceptable "key range".
+Vyhledávací metody podporují jak přesné hodnoty klíče, tak tzv. „rozsahy hodnot“ -- objekty [IDBKeyRange](https://www.w3.org/TR/IndexedDB/#keyrange), které specifikují hledaný „rozsah klíče“.
 
-`IDBKeyRange` objects are created using following calls:
+Objekty `IDBKeyRange` se vytvářejí pomocí následujících volání:
 
-- `IDBKeyRange.lowerBound(lower, [open])` means: `≥lower` (or `>lower` if `open` is true)
-- `IDBKeyRange.upperBound(upper, [open])` means: `≤upper` (or `<upper` if `open` is true)
-- `IDBKeyRange.bound(lower, upper, [lowerOpen], [upperOpen])` means: between `lower` and `upper`. If the open flags is true, the corresponding key is not included in the range.
-- `IDBKeyRange.only(key)` -- a range that consists of only one `key`, rarely used.
+- `IDBKeyRange.lowerBound(nejmenší, [otevřeně])` znamená: `≥nejmenší` (nebo `>nejmenší`, pokud `otevřeně` je true)
+- `IDBKeyRange.upperBound(největší, [otevřeně])` znamená: `≤největší` (nebo `<největší`, pokud `otevřeně` je true)
+- `IDBKeyRange.bound(nejmenší, největší, [nejmenšíOtevřeně], [největšíOtevřeně])` znamená: mezi `nejmenší` a `největší`. Pokud je některý přepínač otevřenosti true, není příslušný klíč do rozsahu zahrnut.
+- `IDBKeyRange.only(klíč)` -- rozsah tvořený jediným klíčem `klíč`, používá se málokdy.
 
-We'll see practical examples of using them very soon.
+Praktické příklady jejich použití velmi brzy uvidíme.
 
-To perform the actual search, there are following methods. They accept a `query` argument that can be either an exact key or a key range:
+K provádění samotného hledání slouží následující metody. Přijímají argument `dotaz`, kterým může být přesná hodnota nebo rozsah hodnot klíče:
 
-- `store.get(query)` -- search for the first value by a key or a range.
-- `store.getAll([query], [count])` -- search for all values, limit by `count` if given.
-- `store.getKey(query)` -- search for the first key that satisfies the query, usually a range.
-- `store.getAllKeys([query], [count])` -- search for all keys that satisfy the query, usually a range, up to `count` if given.
-- `store.count([query])` -- get the total count of keys that satisfy the query, usually a range.
+- `store.get(dotaz)` -- hledá první hodnotu podle klíče nebo rozsahu.
+- `store.getAll([dotaz], [počet])` -- hledá všechny hodnoty, pokud je uveden `počet`, hledá jich jen uvedený počet.
+- `store.getKey(dotaz)` -- hledá první klíč, který odpovídá dotazu, dotazem je zpravidla rozsah.
+- `store.getAllKeys([dotaz], [počet])` -- hledá všechny klíče, které odpovídají dotazu, dotazem je zpravidla rozsah, pokud je uveden `počet`, hledá jich jen uvedený počet.
+- `store.počet([dotaz])` -- vrátí celkový počet klíčů, které odpovídají dotazu, dotazem je zpravidla rozsah.
 
-For instance, we have a lot of books in our store. Remember, the `id` field is the key, so all these methods can search by `id`.
+V našem úložišti máme například spoustu knih. Nezapomeňte, že klíčem je pole `id`, takže všechny tyto metody hledají podle `id`.
 
-Request examples:
-
-```js
-// get one book
-books.get('js')
-
-// get books with 'css' <= id <= 'html'
-books.getAll(IDBKeyRange.bound('css', 'html'))
-
-// get books with id < 'html'
-books.getAll(IDBKeyRange.upperBound('html', true))
-
-// get all books
-books.getAll()
-
-// get all keys, where id > 'js'
-books.getAllKeys(IDBKeyRange.lowerBound('js', true))
-```
-
-```smart header="Object store is always sorted"
-An object store sorts values by key internally.
-
-So requests that return many values always return them in sorted by key order.
-```
-
-### By a field using an index
-
-To search by other object fields, we need to create an additional data structure named "index".
-
-An index is an "add-on" to the store that tracks a given object field. For each value of that field, it stores a list of keys for objects that have that value. There will be a more detailed picture below.
-
-The syntax:
+Příklady požadavků:
 
 ```js
-objectStore.createIndex(name, keyPath, [options]);
+// vrátí jednu knihu
+knihy.get('js')
+
+// vrátí knihy s 'css' <= id <= 'html'
+knihy.getAll(IDBKeyRange.bound('css', 'html'))
+
+// vrátí knihy s id < 'html'
+knihy.getAll(IDBKeyRange.upperBound('html', true))
+
+// vrátí všechny knihy
+knihy.getAll()
+
+// vrátí všechny klíče, u nichž id > 'js'
+knihy.getAllKeys(IDBKeyRange.lowerBound('js', true))
 ```
 
-- **`name`** -- index name,
-- **`keyPath`** -- path to the object field that the index should track (we're going to search by that field),
-- **`option`** -- an optional object with properties:
-  - **`unique`** -- if true, then there may be only one object in the store with the given value at the `keyPath`. The index will enforce that by generating an error if we try to add a duplicate.
-  - **`multiEntry`** -- only used if the value on `keyPath` is an array. In that case, by default, the index will treat the whole array as the key. But if `multiEntry` is true, then the index will keep a list of store objects for each value in that array. So array members become index keys.
+```smart header="Objektové úložiště je vždy seřazené"
+V objektovém úložišti jsou hodnoty interně seřazeny podle klíčů.
 
-In our example, we store books keyed by `id`.
+Požadavek, který vrátí více hodnot, je tedy vrací vždy seřazené podle klíče.
+```
 
-Let's say we want to search by `price`.
+### Podle pole s použitím indexu
 
-First, we need to create an index. It must be done in `upgradeneeded`, just like an object store:
+Pro hledání podle jiných objektových polí musíme vytvořit další datovou strukturu nazvanou „index“.
+
+Index je „přídavek“ do úložiště, který sleduje zadané objektové pole a pro každou hodnotu tohoto pole si ukládá seznam klíčů objektů, které mají tuto hodnotu. Podrobnější obrázek bude následovat.
+
+Syntaxe:
 
 ```js
-openRequest.onupgradeneeded = function() {
-  // we must create the index here, in versionchange transaction
-  let books = db.createObjectStore('books', {keyPath: 'id'});
+objectStore.createIndex(název, cestaKeKlíči, [volby]);
+```
+
+- **`název`** -- název indexu,
+- **`cestaKeKlíči`** -- cesta k objektovému poli, které má index sledovat (podle tohoto pole se chystáme hledat),
+- **`volby`** -- nepovinný objekt s těmito vlastnostmi:
+  - **`unique`** -- pokud je true, pak v úložišti může být jen jeden objekt se zadanou hodnotou v `cestaKeKlíči`. Index to zajistí tak, že pokud se pokusíme přidat další objekt se stejnou hodnotou, vygeneruje chybu.
+  - **`multiEntry`** -- používá se jen tehdy, když hodnotou `cestaKeKlíči` je pole. Standardně v takovém případě bude index s celým polem zacházet jako s klíčem. Pokud však `multiEntry` je true, pak si index bude udržovat seznam uložených objektů pro každou hodnotu v tomto poli. Klíči indexu se tedy stanou prvky pole.
+
+V našem příkladu ukládáme knihy podle klíče `id`.
+
+Řekněme, že chceme hledat podle pole `cena`.
+
+Nejprve musíme vytvořit index. To musíme provést v `upgradeneeded`, stejně jako vytvoření objektového úložiště:
+
+```js
+požadavekOtevření.onupgradeneeded = function() {
+  // index musíme vytvořit zde, v transakci typu versionchange
+  let knihy = db.createObjectStore('knihy', {keyPath: 'id'});
 *!*
-  let index = books.createIndex('price_idx', 'price');
+  let index = knihy.createIndex('cena_idx', 'cena');
 */!*
 };
 ```
 
-- The index will track `price` field.
-- The price is not unique, there may be multiple books with the same price, so we don't set `unique` option.
-- The price is not an array, so `multiEntry` flag is not applicable.
+- Index bude sledovat pole `cena`.
+- Cena není unikátní, může existovat více knih se stejnou cenou, takže volbu `unique` nenastavíme.
+- Cena není pole, takže přepínač `multiEntry` není aplikovatelný.
 
-Imagine that our `inventory` has 4 books. Here's the picture that shows exactly what the `index` is:
+Představme si, že náš `inventář` obsahuje 4 knihy. Následující obrázek přesně zobrazuje, co je `index`:
 
 ![](indexeddb-index.svg)
 
-As said, the index for each value of `price` (second argument) keeps the list of keys that have that price.
+Jak bylo řečeno, index si pro každou hodnotu pole `cena` (druhý argument) uchovává seznam klíčů, které mají tuto cenu.
 
-The index keeps itself up to date automatically, we don't have to care about it.
+Index se automaticky aktualizuje, o to se starat nemusíme.
 
-Now, when we want to search for a given price, we simply apply the same search methods to the index:
+Když nyní chceme hledat podle zadané ceny, můžeme na index jednoduše aplikovat stejné hledací metody:
 
 ```js
-let transaction = db.transaction("books"); // readonly
-let books = transaction.objectStore("books");
-let priceIndex = books.index("price_idx");
+let transakce = db.transaction("knihy"); // jen pro čtení
+let knihy = transakce.objectStore("knihy");
+let indexPodleCeny = knihy.index("cena_idx");
 
 *!*
-let request = priceIndex.getAll(10);
+let požadavek = indexPodleCeny.getAll(10);
 */!*
 
-request.onsuccess = function() {
-  if (request.result !== undefined) {
-    console.log("Books", request.result); // array of books with price=10
+požadavek.onsuccess = function() {
+  if (požadavek.result !== undefined) {
+    console.log("Knihy", požadavek.result); // pole knih s cena=10
   } else {
-    console.log("No such books");
+    console.log("Žádná taková kniha není");
   }
 };
 ```
 
-We can also use `IDBKeyRange` to create ranges and looks for cheap/expensive books:
+Můžeme také pomocí `IDBKeyRange` vytvořit rozsah a hledat levné nebo drahé knihy:
 
 ```js
-// find books where price <= 5
-let request = priceIndex.getAll(IDBKeyRange.upperBound(5));
+// najdeme knihy, jejichž cena <= 5
+let požadavek = indexPodleCeny.getAll(IDBKeyRange.upperBound(5));
 ```
 
-Indexes are internally sorted by the tracked object field, `price` in our case. So when we do the search, the results are also sorted by `price`.
+Indexy jsou vnitřně řazeny podle sledovaného objektového pole, v našem případě `cena`. Když tedy provádíme hledání, budou výsledky také seřazeny podle pole `cena`.
 
-## Deleting from store
+## Mazání z úložiště
 
-The `delete` method looks up values to delete by a query, the call format is similar to `getAll`:
+Metoda `delete` vyhledá hodnoty podle dotazu a smaže je. Formát jejího volání je podobný `getAll`:
 
-- **`delete(query)`** -- delete matching values by query.
+- **`delete(dotaz)`** -- smaže hodnoty, které odpovídají dotazu.
 
-For instance:
+Příklad:
 
 ```js
-// delete the book with id='js'
-books.delete('js');
+// smaže knihu s id='js'
+knihy.delete('js');
 ```
 
-If we'd like to delete books based on a price or another object field, then we should first find the key in the index, and then call `delete`:
+Pokud chceme smazat knihy podle ceny nebo jiného objektového pole, měli bychom napřed najít klíč v indexu a pak volat `delete`:
 
 ```js
-// find the key where price = 5
-let request = priceIndex.getKey(5);
+// najdeme klíč, kde cena = 5
+let požadavek = indexPodleCeny.getKey(5);
 
-request.onsuccess = function() {
-  let id = request.result;
-  let deleteRequest = books.delete(id);
+požadavek.onsuccess = function() {
+  let id = požadavek.result;
+  let požadavekSmazání = knihy.delete(id);
 };
 ```
 
-To delete everything:
+Smazání veškerého obsahu:
 
 ```js
-books.clear(); // clear the storage.
+knihy.clear(); // vyprázdní celé úložiště.
 ```
 
-## Cursors
+## Kurzory
 
-Methods like `getAll/getAllKeys` return an array of keys/values.
+Metody jako `getAll/getAllKeys` vracejí pole klíčů/hodnot.
 
-But an object storage can be huge, bigger than the available memory. Then `getAll` will fail to get all records as an array.
+Objektové úložiště však může být obrovské, větší než dostupná paměť. Pak `getAll` nedokáže vrátit všechny záznamy jako pole.
 
-What to do?
+Co můžeme dělat?
 
-Cursors provide the means to work around that.
+Způsob, jak to překonat, poskytují kurzory.
 
-**A *cursor* is a special object that traverses the object storage, given a query, and returns one key/value at a time, thus saving memory.**
+***Kurzor* je speciální objekt, který prochází objektové úložiště podle zadaného dotazu a vrací vždy jeden klíč/hodnotu současně, čímž šetří paměť.**
 
-As an object store is sorted internally by key, a cursor walks the store in key order (ascending by default).
+Protože objektové úložiště je interně seřazeno podle klíče, kurzor je prochází v pořadí podle klíčů (standardně vzestupně).
 
-The syntax:
+Syntaxe:
 
 ```js
-// like getAll, but with a cursor:
-let request = store.openCursor(query, [direction]);
+// podobně jako getAll, ale s kurzorem:
+let požadavek = úložiště.openCursor(dotaz, [směr]);
 
-// to get keys, not values (like getAllKeys): store.openKeyCursor
+// chceme-li získat klíče a ne hodnoty (jako getAllKeys): úložiště.openKeyCursor
 ```
 
-- **`query`** is a key or a key range, same as for `getAll`.
-- **`direction`** is an optional argument, which order to use:
-  - `"next"` -- the default, the cursor walks up from the record with the lowest key.
-  - `"prev"` -- the reverse order: down from the record with the biggest key.
-  - `"nextunique"`, `"prevunique"` -- same as above, but skip records with the same key (only for cursors over indexes, e.g. for multiple books with price=5 only the first one will be returned).
+- **`dotaz`** je klíč nebo rozsah klíčů, stejný jako u `getAll`.
+- **`směr`** je nepovinný argument, který specifikuje pořadí:
+  - `"next"` -- standardní, kurzor prochází záznamy nahoru od toho s nejnižším klíčem.
+  - `"prev"` -- obrácené pořadí: směrem dolů od záznamu s nejvyšším klíčem.
+  - `"nextunique"`, `"prevunique"` -- stejné jako výše uvedené, ale záznamy se stejným klíčem se přeskakují (jen pro kurzory nad indexy, např. při více knihách s cena=5 bude vrácena jen první).
 
-**The main difference of the cursor is that `request.onsuccess` triggers multiple times: once for each result.**
+**Hlavním rozdílem kurzoru je, že `požadavek.onsuccess` se spustí vícekrát: pro každý výsledek jednou.**
 
-Here's an example of how to use a cursor:
+Následuje příklad, jak používat kurzor:
 
 ```js
-let transaction = db.transaction("books");
-let books = transaction.objectStore("books");
+let transakce = db.transaction("knihy");
+let knihy = transakce.objectStore("knihy");
 
-let request = books.openCursor();
+let požadavek = knihy.openCursor();
 
-// called for each book found by the cursor
-request.onsuccess = function() {
-  let cursor = request.result;
-  if (cursor) {
-    let key = cursor.key; // book key (id field)
-    let value = cursor.value; // book object
-    console.log(key, value);
-    cursor.continue();
+// volá se pro každou knihu, kterou kurzor najde
+požadavek.onsuccess = function() {
+  let kurzor = požadavek.result;
+  if (kurzor) {
+    let klíč = kurzor.key; // klíč knihy (pole id)
+    let hodnota = kurzor.value; // objekt knihy
+    console.log(klíč, hodnota);
+    kurzor.continue();
   } else {
-    console.log("No more books");
+    console.log("Další knihy už nejsou");
   }
 };
 ```
 
-The main cursor methods are:
+Hlavní metody kurzoru jsou:
 
-- `advance(count)` -- advance the cursor `count` times, skipping values.
-- `continue([key])` -- advance the cursor to the next value in range matching (or immediately after `key` if given).
+- `advance(počet)` -- posune kurzor o `počet` kroků, přeskakuje hodnoty.
+- `continue([klíč])` -- při hledání podle rozsahu posune kurzor k další hodnotě (nebo hned za `klíč`, pokud je uveden).
 
-Whether there are more values matching the cursor or not -- `onsuccess` gets called, and then in `result` we can get the cursor pointing to the next record, or `undefined`.
+Ať existují další hodnoty odpovídající kurzoru nebo ne, je vyvolán `onsuccess` a z jeho `result` pak můžeme získat kurzor ukazující na další záznam nebo `undefined`.
 
-In the example above the cursor was made for the object store.
+V uvedeném příkladu byl kurzor vytvořen pro objektové úložiště.
 
-But we also can make a cursor over an index. As we remember, indexes allow to search by an object field. Cursors over indexes do precisely the same as over object stores -- they save memory by returning one value at a time.
+Můžeme však také vytvořit kurzor nad indexem. Jak si pamatujeme, indexy nám umožňují hledat podle objektového pole. Kurzory nad indexy provádějí přesně totéž jako nad objektovými úložišti -- šetří paměť tím, že vracejí jednu hodnotu za druhou.
 
-For cursors over indexes, `cursor.key` is the index key (e.g. price), and we should use `cursor.primaryKey` property for the object key:
+V kurzorech nad indexy je `kurzor.key` klíč indexu (např. cena) a pro objektový klíč bychom měli použít vlastnost `kurzor.primaryKey`:
 
 ```js
-let request = priceIdx.openCursor(IDBKeyRange.upperBound(5));
+let požadavek = indexPodleCeny.openCursor(IDBKeyRange.upperBound(5));
 
-// called for each record
-request.onsuccess = function() {
-  let cursor = request.result;
-  if (cursor) {
-    let primaryKey = cursor.primaryKey; // next object store key (id field)
-    let value = cursor.value; // next object store object (book object)
-    let key = cursor.key; // next index key (price)
-    console.log(key, value);
-    cursor.continue();
+// volá se pro každý záznam
+požadavek.onsuccess = function() {
+  let kurzor = požadavek.result;
+  if (kurzor) {
+    let primárníKlíč = kurzor.primaryKey; // další klíč objektového úložiště (pole id)
+    let hodnota = kurzor.value; // další objekt v úložišti (objekt knihy)
+    let klíč = kurzor.key; // další klíč indexu (cena)
+    console.log(klíč, hodnota);
+    kurzor.continue();
   } else {
-    console.log("No more books");
+    console.log("Další knihy už nejsou");
   }
 };
 ```
 
-## Promise wrapper
+## Příslibový obal
 
-Adding `onsuccess/onerror` to every request is quite a cumbersome task. Sometimes we can make our life easier by using event delegation, e.g. set handlers on the whole transactions, but `async/await` is much more convenient.
+Přidávat `onsuccess/onerror` do každého požadavku je poměrně těžkopádný úkol. Někdy si můžeme usnadnit život použitím delegování událostí, např. nastavit handlery pro celou transakci, ale mnohem vhodnější je použít `async/await`.
 
-Let's use a thin promise wrapper <https://github.com/jakearchibald/idb> further in this chapter. It creates a global `idb` object with [promisified](info:promisify) IndexedDB methods.
+Dále v této kapitole budeme používat krátký příslibový obal <https://github.com/jakearchibald/idb>, který vytváří globální objekt `idb` s [promisifikovanými](info:promisify) metodami IndexedDB.
 
-Then, instead of `onsuccess/onerror` we can write like this:
+Pak můžeme místo `onsuccess/onerror` psát takto:
 
 ```js
 let db = await idb.openDB('store', 1, db => {
   if (db.oldVersion == 0) {
-    // perform the initialization
-    db.createObjectStore('books', {keyPath: 'id'});
+    // provedeme inicializaci
+    db.createObjectStore('knihy', {keyPath: 'id'});
   }
 });
 
-let transaction = db.transaction('books', 'readwrite');
-let books = transaction.objectStore('books');
+let transakce = db.transaction('knihy', 'readwrite');
+let knihy = transaction.objectStore('knihy');
 
 try {
-  await books.add(...);
-  await books.add(...);
+  await knihy.add(...);
+  await knihy.add(...);
 
-  await transaction.complete;
+  await transakce.complete;
 
-  console.log('jsbook saved');
+  console.log('jsbook uložena');
 } catch(err) {
-  console.log('error', err.message);
+  console.log('chyba', err.message);
 }
 ```
 
-So we have all the sweet "plain async code" and "try..catch" stuff.
+Máme tedy celý hezký „čistě asynchronní kód“ a blok „try..catch“.
 
-### Error handling
+### Ošetření chyb
 
-If we don't catch an error, then it falls through, till the closest outer `try..catch`.
+Pokud nezachytíme chybu, propadne ven k nejbližšímu vnějšímu `try..catch`.
 
-An uncaught error becomes an "unhandled promise rejection" event on `window` object.
+Nezachycená chyba se stane událostí „neošetřeného zamítnutí příslibu“ na objektu `window`.
 
-We can handle such errors like this:
+Takové chyby můžeme ošetřit následovně:
 
 ```js
-window.addEventListener('unhandledrejection', event => {
-  let request = event.target; // IndexedDB native request object
-  let error = event.reason; //  Unhandled error object, same as request.error
-  ...report about the error...
+window.addEventListener('unhandledrejection', událost => {
+  let požadavek = událost.target; // objekt nativního požadavku IndexedDB
+  let error = událost.reason; // objekt neošetřené chyby, totéž jako požadavek.error
+  ...hlášení chyby...
 });
 ```
 
-### "Inactive transaction" pitfall
+### Past „neaktivní transakce“
 
-As we already know, a transaction auto-commits as soon as the browser is done with the current code and microtasks. So if we put a *macrotask* like `fetch` in the middle of a transaction, then the transaction won't wait for it to finish. It just auto-commits. So the next request in it would fail.
+Jak už víme, transakce se automaticky provede hned, jakmile prohlížeč dokončí běh aktuálního kódu a mikroúloh. Když tedy doprostřed transakce umístíme *makroúlohu*, např. `fetch`, transakce nebude čekat na její dokončení a automaticky se provede. Příští požadavek v ní tedy selže.
 
-For a promise wrapper and `async/await` the situation is the same.
+U příslibového obalu a `async/await` je situace stejná.
 
-Here's an example of `fetch` in the middle of the transaction:
+Následuje příklad `fetch` uprostřed transakce:
 
 ```js
-let transaction = db.transaction("inventory", "readwrite");
-let inventory = transaction.objectStore("inventory");
+let transakce = db.transaction("inventář", "readwrite");
+let inventář = transakce.objectStore("inventář");
 
-await inventory.add({ id: 'js', price: 10, created: new Date() });
+await inventář.add({ id: 'js', cena: 10, vytvořeno: new Date() });
 
 await fetch(...); // (*)
 
-await inventory.add({ id: 'js', price: 10, created: new Date() }); // Error
+await inventář.add({ id: 'js', cena: 10, vytvořeno: new Date() }); // Chyba
 ```
 
-The next `inventory.add` after `fetch` `(*)` fails with an "inactive transaction" error, because the transaction is already committed and closed at that time.
+Příští `inventář.add` po `fetch` `(*)` spadne s chybou „neaktivní transakce“, protože transakce již v tom okamžiku byla provedena a uzavřena.
 
-The workaround is the same as when working with native IndexedDB: either make a new transaction or just split things apart.
+Způsob, jak to obejít, je stejný jako při práci s nativním IndexedDB: buď vytvořit novou transakci, nebo jen oddělit operace.
 
-1. Prepare the data and fetch all that's needed first.
-2. Then save in the database.
+1. Napřed připravit data a stáhnout vše, co je potřeba.
+2. Pak ukládat do databáze.
 
-### Getting native objects
+### Získávání nativních objektů
 
-Internally, the wrapper performs a native IndexedDB request, adding `onerror/onsuccess` to it, and returns a promise that rejects/resolves with the result.
+Obal interně provádí nativní požadavek IndexedDB, přidává do něj `onerror/onsuccess` a vrací příslib, který bude zamítnut nebo splněn s výsledkem.
 
-That works fine most of the time. The examples are at the lib page <https://github.com/jakearchibald/idb>.
+Ve většině případů to funguje správně. Příklady najdete na stránce knihovny <https://github.com/jakearchibald/idb>.
 
-In few rare cases, when we need the original `request` object, we can access it as `promise.request` property of the promise:
+V některých vzácných případech, kdy potřebujeme původní objekt `požadavek`, k němu můžeme přistupovat přes vlastnost příslibu `příslib.request`:
 
 ```js
-let promise = books.add(book); // get a promise (don't await for its result)
+let příslib = knihy.add(kniha); // získáme příslib (nečekáme na jeho výsledek)
 
-let request = promise.request; // native request object
-let transaction = request.transaction; // native transaction object
+let požadavek = příslib.request; // objekt nativního požadavku
+let transakce = požadavek.transaction; // objekt nativní transakce
 
-// ...do some native IndexedDB voodoo...
+// ...provedeme nějaké voodoo s nativní IndexedDB...
 
-let result = await promise; // if still needed
+let výsledek = await příslib; // pokud je stále potřeba
 ```
 
-## Summary
+## Shrnutí
 
-IndexedDB can be thought of as a "localStorage on steroids". It's a simple key-value database, powerful enough for offline apps, yet simple to use.
+IndexedDB můžeme považovat za „localStorage na steroidech“. Je to jednoduchá databáze klíč-hodnota, dostatečně silná pro offline aplikace, ale stále jednoduchá na používání.
 
-The best manual is the specification, [the current one](https://www.w3.org/TR/IndexedDB-2/) is 2.0, but few methods from [3.0](https://w3c.github.io/IndexedDB/) (it's not much different) are partially supported.
+Nejlepší manuál je specifikace, [aktuální](https://www.w3.org/TR/IndexedDB-2/) je verze 2.0, ale částečně podporuje i několik metod z [3.0](https://w3c.github.io/IndexedDB/) (není mezi nimi velký rozdíl).
 
-The basic usage can be described with a few phrases:
+Základní použití můžeme popsat v několika větách:
 
-1. Get a promise wrapper like [idb](https://github.com/jakearchibald/idb).
-2. Open a database: `idb.openDb(name, version, onupgradeneeded)`
-    - Create object storages and indexes in `onupgradeneeded` handler or perform version update if needed.
-3. For requests:
-    - Create transaction `db.transaction('books')` (readwrite if needed).
-    - Get the object store `transaction.objectStore('books')`.
-4. Then, to search by a key, call methods on the object store directly.
-    - To search by an object field, create an index.
-5. If the data does not fit in memory, use a cursor.
+1. Získáme příslibový obal, např. [idb](https://github.com/jakearchibald/idb).
+2. Otevřeme databázi: `idb.openDb(název, verze, onupgradeneeded)`
+    - V handleru `onupgradeneeded` vytvoříme objektová úložiště a indexy nebo provedeme aktualizaci verze, je-li zapotřebí.
+3. Pro požadavky:
+    - Vytvoříme transakci `db.transaction('knihy')` (`readwrite`, je-li zapotřebí čtení i zápis).
+    - Získáme objektové úložiště `transaction.objectStore('knihy')`.
+4. Pak pro hledání podle klíče voláme přímo metody objektového úložiště.
+    - Pro hledání podle pole objektu vytvoříme index.
+5. Pokud se data nevejdou do paměti, použijeme kurzor.
 
-Here's a small demo app:
+Následuje malá demo aplikace:
 
-[codetabs src="books" current="index.html"]
+[codetabs src="knihy" current="index.html"]

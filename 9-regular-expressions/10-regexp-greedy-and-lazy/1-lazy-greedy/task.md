@@ -1,6 +1,6 @@
-# A match for /d+? d+?/
+# Shoda s /d+? d+?/
 
-What's the match here?
+Jaká je tady shoda?
 
 ```js
 alert( "123 456".match(/\d+? \d+?/g) ); // ?

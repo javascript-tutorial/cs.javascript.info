@@ -1,134 +1,134 @@
-# Lookahead and lookbehind
+# Dopředné a zpětné nahlédnutí
 
-Sometimes we need to find only those matches for a pattern that are followed or preceded by another pattern.
+Někdy potřebujeme najít jen ty shody se vzorem, které se nacházejí před nebo za jiným vzorem.
 
-There's a special syntax for that, called "lookahead" and "lookbehind", together referred to as "lookaround".
+K tomu existuje speciální syntaxe, nazývaná „dopředné nahlédnutí“ („lookahead“) a „zpětné nahlédnutí“ („lookbehind“). Obě společně se nazývají „nahlédnutí“ („lookaround“).
 
-For the start, let's find the price from the string like `subject:1 turkey costs 30€`. That is: a number, followed by `subject:€` sign.
+Pro začátek najděme cenu v řetězci, např. `subject:1 krocan stojí 30€`. To znamená: číslo, po němž následuje znak `subject:€`.
 
-## Lookahead
+## Dopředné nahlédnutí
 
-The syntax is: `pattern:X(?=Y)`, it means "look for `pattern:X`, but match only if followed by `pattern:Y`". There may be any pattern instead of `pattern:X` and `pattern:Y`.
+Syntaxe je: `pattern:X(?=Y)`, znamená „najdi `pattern:X`, ale jen pokud za ním následuje `pattern:Y`“. Na místě `pattern:X` a `pattern:Y` může být libovolný vzor.
 
-For an integer number followed by `subject:€`, the regexp will be `pattern:\d+(?=€)`:
-
-```js run
-let str = "1 turkey costs 30€";
-
-alert( str.match(/\d+(?=€)/) ); // 30, the number 1 is ignored, as it's not followed by €
-```
-
-Please note: the lookahead is merely a test, the contents of the parentheses `pattern:(?=...)` is not included in the result `match:30`.
-
-When we look for `pattern:X(?=Y)`, the regular expression engine finds `pattern:X` and then checks if there's `pattern:Y` immediately after it. If it's not so, then the potential match is skipped, and the search continues.
-
-More complex tests are possible, e.g. `pattern:X(?=Y)(?=Z)` means:
-
-1. Find `pattern:X`.
-2. Check if `pattern:Y` is immediately after `pattern:X` (skip if isn't).
-3. Check if `pattern:Z` is also immediately after `pattern:X` (skip if isn't).
-4. If both tests passed, then the `pattern:X` is a match, otherwise continue searching.
-
-In other words, such pattern means that we're looking for `pattern:X` followed by `pattern:Y` and `pattern:Z` at the same time.
-
-That's only possible if patterns `pattern:Y` and `pattern:Z` aren't mutually exclusive.
-
-For example, `pattern:\d+(?=\s)(?=.*30)` looks for `pattern:\d+` that is followed by a space `pattern:(?=\s)`, and there's `30` somewhere after it `pattern:(?=.*30)`:
+Pro celé číslo následované znakem `subject:€` bude regulární výraz `pattern:\d+(?=€)`:
 
 ```js run
-let str = "1 turkey costs 30€";
+let řetězec = "1 krocan stojí 30€";
 
-alert( str.match(/\d+(?=\s)(?=.*30)/) ); // 1
+alert( řetězec.match(/\d+(?=€)/) ); // 30, číslo 1 se ignoruje, neboť po něm nenásleduje €
 ```
 
-In our string that exactly matches the number `1`.
+Prosíme všimněte si, že nahlédnutí je pouhý test, obsah závorek `pattern:(?=...)` nebude do výsledku `match:30` zahrnut.
 
-## Negative lookahead
+Když hledáme `pattern:X(?=Y)`, motor regulárních výrazů najde `pattern:X` a pak ověří, zda okamžitě za ním následuje `pattern:Y`. Pokud ne, potenciální shoda se přeskočí a hledání pokračuje.
 
-Let's say that we want a quantity instead, not a price from the same string. That's a number `pattern:\d+`, NOT followed by `subject:€`.
+Jsou možné i složitější testy, např. `pattern:X(?=Y)(?=Z)` znamená:
 
-For that, a negative lookahead can be applied.
+1. Najdi `pattern:X`.
+2. Ověř, zda `pattern:Y` je okamžitě za `pattern:X` (pokud ne, přeskoč ho).
+3. Ověř, zda `pattern:Z` je také okamžitě za `pattern:X` (pokud ne, přeskoč ho).
+4. Pokud oba testy prošly, je `pattern:X` shoda, jinak pokračuj v hledání.
 
-The syntax is: `pattern:X(?!Y)`, it means "search `pattern:X`, but only if not followed by `pattern:Y`".
+Jinými slovy, takový vzor znamená, že hledáme `pattern:X`, po němž následují současně `pattern:Y` a `pattern:Z`.
+
+To je možné jen tehdy, pokud se vzory `pattern:Y` a `pattern:Z` navzájem nevylučují.
+
+Například `pattern:\d+(?=\s)(?=.*30)` hledá `pattern:\d+`, po němž následuje mezera `pattern:(?=\s)` a někde za ním je `30` `pattern:(?=.*30)`:
 
 ```js run
-let str = "2 turkeys cost 60€";
+let řetězec = "1 krocan stojí 30€";
 
-alert( str.match(/\d+\b(?!€)/g) ); // 2 (the price is not matched)
+alert( řetězec.match(/\d+(?=\s)(?=.*30)/) ); // 1
 ```
 
-## Lookbehind
+V našem řetězci tomu přesně odpovídá číslo `1`.
 
-```warn header="Lookbehind browser compatibility"
-Please Note: Lookbehind is not supported in non-V8 browsers, such as Safari, Internet Explorer.
-```
+## Negativní dopředné hledání
 
-Lookahead allows to add a condition for "what follows".
+Řekněme, že chceme ve stejném řetězci hledat množství, ne cenu. To znamená číslo `pattern:\d+`, po němž NENÁSLEDUJE `subject:€`.
 
-Lookbehind is similar, but it looks behind. That is, it allows to match a pattern only if there's something before it.
+K tomu můžeme použít negativní dopředné hledání.
 
-The syntax is:
-- Positive lookbehind: `pattern:(?<=Y)X`, matches `pattern:X`, but only if there's  `pattern:Y` before it.
-- Negative lookbehind: `pattern:(?<!Y)X`, matches `pattern:X`, but only if there's no `pattern:Y` before it.
-
-For example, let's change the price to US dollars. The dollar sign is usually before the number, so to look for `$30` we'll use `pattern:(?<=\$)\d+` -- an amount preceded by `subject:$`:
+Syntaxe je: `pattern:X(?!Y)`, znamená „najdi `pattern:X`, ale jen pokud za ním nenásleduje `pattern:Y`“.
 
 ```js run
-let str = "1 turkey costs $30";
+let řetězec = "2 krocani stojí 60€";
 
-// the dollar sign is escaped \$
-alert( str.match(/(?<=\$)\d+/) ); // 30 (skipped the sole number)
+alert( řetězec.match(/\d+\b(?!€)/g) ); // 2 (cena neodpovídá)
 ```
 
-And, if we need the quantity -- a number, not preceded by `subject:$`, then we can use a negative lookbehind `pattern:(?<!\$)\d+`:
+## Zpětné hledání
+
+```warn header="Kompatibilita prohlížečů se zpětným hledáním"
+Prosíme všimněte si: Zpětné hledání není podporováno v prohlížečích, které nejsou postaveny na V8, např. Safari nebo Internet Explorer.
+```
+
+Dopředné hledání umožňuje přidat podmínku pro to, „co následuje“.
+
+Zpětné hledání funguje podobně, ale dívá se dozadu. To znamená, že umožňuje najít vzor jen tehdy, pokud je něco před ním.
+
+Syntaxe je:
+- Pozitivní zpětné hledání: `pattern:(?<=Y)X`, najde `pattern:X`, ale jen pokud před ním je `pattern:Y`.
+- Negativní zpětné hledání: `pattern:(?<!Y)X`, najde `pattern:X`, ale jen pokud před ním není `pattern:Y`.
+
+Změňme například cenu na americké dolary. Znak dolaru se obvykle uvádí před číslem, takže pro hledání `$30` použijeme `pattern:(?<=\$)\d+` -- číslo, před kterým je `subject:$`:
 
 ```js run
-let str = "2 turkeys cost $60";
+let řetězec = "1 krocan stojí $30";
 
-alert( str.match(/(?<!\$)\b\d+/g) ); // 2 (the price is not matched)
+// znak dolaru je za únikovým znakem \$
+alert( řetězec.match(/(?<=\$)\d+/) ); // 30 (samostatné číslo přeskočíme)
 ```
 
-## Capturing groups
-
-Generally, the contents inside lookaround parentheses does not become a part of the result.
-
-E.g. in the pattern `pattern:\d+(?=€)`, the `pattern:€` sign doesn't get captured as a part of the match. That's natural: we look for a number `pattern:\d+`, while `pattern:(?=€)` is just a test that it should be followed by `subject:€`.
-
-But in some situations we might want to capture the lookaround expression as well, or a part of it. That's possible. Just wrap that part into additional parentheses.
-
-In the example below the currency sign `pattern:(€|kr)` is captured, along with the amount:
+A pokud potřebujeme množství -- číslo, před nímž není `subject:$`, můžeme použít negativní zpětné hledání `pattern:(?<!\$)\d+`:
 
 ```js run
-let str = "1 turkey costs 30€";
-let regexp = /\d+(?=(€|kr))/; // extra parentheses around €|kr
+let řetězec = "2 krocani stojí $60";
 
-alert( str.match(regexp) ); // 30, €
+alert( řetězec.match(/(?<!\$)\b\d+/g) ); // 2 (cena neodpovídá)
 ```
 
-And here's the same for lookbehind:
+## Zachytávací skupiny
+
+Obsah uvnitř závorek obklopujících nahlédnutí se obvykle nestává součástí výsledku.
+
+Například ve vzoru `pattern:\d+(?=€)` nebude znak `pattern:€` zachycen jako součást shody. To je přirozené: hledáme číslo `pattern:\d+`, zatímco `pattern:(?=€)` je jen test, že by po něm mělo následovat `subject:€`.
+
+V některých situacích však můžeme chtít zachytit i nahlížený výraz nebo jeho část. I to je možné. Jednoduše uzavřeme tuto část do dalších závorek.
+
+V následujícím příkladu je znak měny `pattern:(€|kr)` zachycen společně s částkou:
 
 ```js run
-let str = "1 turkey costs $30";
-let regexp = /(?<=(\$|£))\d+/;
+let řetězec = "1 krocan stojí 30€";
+let rv = /\d+(?=(€|kr))/; // další závorky kolem €|kr
 
-alert( str.match(regexp) ); // 30, $
+alert( řetězec.match(rv) ); // 30, €
 ```
 
-## Summary
+A zde je totéž pro zpětné nahlédnutí:
 
-Lookahead and lookbehind (commonly referred to as "lookaround") are useful when we'd like to match something depending on the context before/after it.
+```js run
+let řetězec = "1 krocan stojí $30";
+let rv = /(?<=(\$|£))\d+/;
 
-For simple regexps we can do the similar thing manually. That is: match everything, in any context, and then filter by context in the loop.
+alert( řetězec.match(rv) ); // 30, $
+```
 
-Remember, `str.match` (without flag `pattern:g`) and `str.matchAll` (always) return matches as arrays with `index` property, so we know where exactly in the text it is, and can check the context.
+## Shrnutí
 
-But generally lookaround is more convenient.
+Dopředné a zpětné nahlédnutí (společně nazývaná „nahlédnutí“) jsou užitečná, když chceme najít něco, co závisí na kontextu před/za sebou.
 
-Lookaround types:
+U jednoduchých regulárních výrazů můžeme něco podobného udělat ručně. To znamená: najít všechno v jakémkoli kontextu a pak výsledky filtrovat podle kontextu v cyklu.
 
-| Pattern            | type             | matches |
+Nezapomeňte, že `řetězec.match` (bez příznaku `pattern:g`) a `řetězec.matchAll` (vždy) vrátí shody jako pole s vlastností `index`, takže přesně víme, kde v textu se shoda nachází, a můžeme zkontrolovat kontext.
+
+Nahlédnutí je však obecně vhodnější.
+
+Druhy nahlédnutí:
+
+| Vzor               | Typ              | Najde   |
 |--------------------|------------------|---------|
-| `X(?=Y)`   | Positive lookahead | `pattern:X` if followed by `pattern:Y` |
-| `X(?!Y)`   | Negative lookahead | `pattern:X` if not followed by `pattern:Y` |
-| `(?<=Y)X` |  Positive lookbehind | `pattern:X` if after `pattern:Y` |
-| `(?<!Y)X` | Negative lookbehind | `pattern:X` if not after `pattern:Y` |
+| `X(?=Y)`   | Pozitivní dopředné nahlédnutí | `pattern:X`, pokud za ním je `pattern:Y` |
+| `X(?!Y)`   | Negativní dopředné nahlédnutí | `pattern:X`, pokud za ním není `pattern:Y` |
+| `(?<=Y)X` |  Pozitivní zpětné nahlédnutí | `pattern:X`, pokud před ním je `pattern:Y` |
+| `(?<!Y)X` | Negativní zpětné nahlédnutí | `pattern:X`, pokud před ním není `pattern:Y` |

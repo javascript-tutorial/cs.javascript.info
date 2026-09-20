@@ -2,12 +2,12 @@ importance: 5
 
 ---
 
-# Animate the ball bouncing to the right
+# Animace míče skákajícího doprava
 
-Make the ball bounce to the right. Like this:
+Zařiďte, aby míč skákal doprava. Takto:
 
 [iframe height=250 src="solution"]
 
-Write the animation code. The distance to the left is `100px`.
+Napište kód animace. Vzdálenost zleva je `100px`.
 
-Take the solution of the previous task <info:task/animate-ball> as the source.
+Jako zdroj použijte řešení předchozí úlohy <info:task/animate-ball>.
