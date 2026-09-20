@@ -8,7 +8,7 @@ Například:
 [url]http://google.com[/url]
 ```
 
-BB-značky lze vnořit do sebe. Značka však nemůže být vnořena do sebe sama, například:
+BB-značky lze vnořit do sebe. Značka však nemůže být vnořena do stejné značky, například:
 
 ```
 Běžné:

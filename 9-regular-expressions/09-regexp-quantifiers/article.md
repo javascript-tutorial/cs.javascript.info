@@ -24,7 +24,7 @@ Přesný počet: `pattern:{5}`
     Abychom vyloučili delší čísla, můžeme přidat `\b`: `pattern:\b\d{5}\b`.
 
 Rozsah: `pattern:{3,5}`, shoda 3-5krát
-: Abychom našli čísla o délce 3 až 5 číslic, můžeme uvést hraniční hodnoty do složených závorek: `pattern:\d{3,5}`
+: Abychom našli čísla o délce 3 až 5 číslic, můžeme uvést do složených závorek hraniční hodnoty: `pattern:\d{3,5}`
 
     ```js run
     alert( "Není mi 12, ale 1234 let".match(/\d{3,5}/) ); // "1234"

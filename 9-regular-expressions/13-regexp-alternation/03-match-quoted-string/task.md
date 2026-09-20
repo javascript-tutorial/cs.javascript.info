@@ -10,7 +10,7 @@ let řetězec = "Tak jako \"tady\".";
 
 Prosíme všimněte si, že uvozovky za únikovým znakem `subject:\"` neukončují řetězec.
 
-Měli bychom tedy hledat od jedněch uvozovek ke druhým, ale po cestě ignorovat uvozovky za únikovým znakem.
+Měli bychom tedy hledat od prvních uvozovek ke druhým, ale po cestě ignorovat uvozovky za únikovým znakem.
 
 To je klíčová součást úlohy, jinak by byla triviální.
 

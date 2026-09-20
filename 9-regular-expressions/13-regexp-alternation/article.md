@@ -4,7 +4,7 @@ Alternace je v regulárních výrazech pojem, který ve skutečnosti znamená je
 
 V regulárním výrazu je označován znakem svislé čáry `pattern:|`.
 
-Například potřebujeme najít programovací jazyky: HTML, PHP, Java nebo JavaScript.
+Například potřebujeme najít názvy programovacích jazyků: HTML, PHP, Java nebo JavaScript.
 
 Odpovídající regulární výraz: `pattern:html|php|java(script)?`.
 
@@ -51,7 +51,7 @@ Když spojíme hodiny a minuty dohromady, získáme vzor: `pattern:[01]\d|2[0-3]
 
 Jsme téměř hotovi, ale je tu problém. Alternace `pattern:|` se nyní děje mezi `pattern:[01]\d` a `pattern:2[0-3]:[0-5]\d`.
 
-To znamená: minuty jsou přidány jako druhá varianta alternace, zde je jasný obrázek:
+To znamená, že minuty jsou přidány jako druhá varianta alternace, zde je to jasně vidět:
 
 ```
 [01]\d  |  2[0-3]:[0-5]\d

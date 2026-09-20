@@ -1,6 +1,6 @@
 # Zachytávací skupiny
 
-Část vzoru můžeme uzavřít do závorek `pattern:(...)`. To se nazývá „zachytávací skupina“.
+Část vzoru můžeme uzavřít do závorek `pattern:(...)`. Tato část se pak nazývá „zachytávací skupina“.
 
 Má dva efekty:
 
@@ -323,7 +323,7 @@ alert( řetězec.replace(rv, '$<den>.$<měsíc>.$<rok>') );
 
 ## Nezachytávací skupiny s ?:
 
-Někdy potřebujeme závorky, abychom správně aplikovali kvantifikátor, ale nechceme mít jejich obsah ve výsledcích.
+Někdy potřebujeme závorky k tomu, abychom správně aplikovali kvantifikátor, ale jejich obsah nechceme mít ve výsledcích.
 
 Skupinu můžeme vyloučit z výsledků uvedením `pattern:?:` na jejím začátku.
 

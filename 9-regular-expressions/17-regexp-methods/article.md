@@ -6,9 +6,9 @@ V tomto článku probereme do hloubky různé metody, které pracují s regulár
 
 Metoda `řetězec.match(rv)` najde shody regulárního výrazu `rv` v řetězci `řetězec`.
 
-Pracuje ve 3 režimech:
+Pracuje ve třech režimech:
 
-1. Jestliže `rv` neobsahuje příznak `pattern:g`, pak vrátí první shodu jako pole se zachytávacími skupinami a vlastnostmi `index` (pozice shody), `input` (vstupní řetězec, je roven `řetězec`):
+1. Jestliže `rv` neobsahuje příznak `pattern:g`, pak metoda vrátí první shodu jako pole se zachytávacími skupinami a vlastnostmi `index` (pozice shody), `input` (vstupní řetězec, je roven `řetězec`):
 
     ```js run
     let řetězec = "Mám rád JavaScript";
@@ -24,7 +24,7 @@ Pracuje ve 3 režimech:
     alert( výsledek.input );  // Mám rád JavaScript (zdrojový řetězec)
     ```
 
-2. Jestliže `rv` obsahuje příznak `pattern:g`, pak vrátí pole všech shod jako řetězce, bez zachytávacích skupin a dalších detailů.
+2. Jestliže `rv` obsahuje příznak `pattern:g`, pak metoda vrátí pole všech shod jako řetězce, bez zachytávacích skupin a dalších detailů.
     ```js run
     let řetězec = "Mám rád JavaScript";
 
@@ -34,7 +34,7 @@ Pracuje ve 3 režimech:
     alert( výsledek.length ); // 1
     ```
 
-3. Jestliže žádné shody nejsou, bez ohledu na přítomnost příznaku `pattern:g` vrátí `null`.
+3. Jestliže žádné shody nejsou, metoda bez ohledu na přítomnost příznaku `pattern:g` vrátí `null`.
 
     To je důležitý detail. Pokud nenastanou žádné shody, neobdržíme prázdné pole, ale `null`. Je snadné na to zapomenout a udělat chybu, například:
 
@@ -86,7 +86,7 @@ alert( prvníShoda.index );  // 0
 alert( prvníShoda.input );  // <h1>Ahoj, světe!</h1>
 ```
 
-Pokud k procházení shod z metody `matchAll` použijeme cyklus `for..of`, nebudeme už `Array.from` potřebovat.
+Pokud budeme procházet shody z metody `matchAll` pomocí cyklu `for..of`, nebudeme už `Array.from` potřebovat.
 
 ## řetězec.split(rv|podřetězec, limit)
 
@@ -174,7 +174,7 @@ Funkce bude volána s argumenty `funkce(shoda, p1, p2, ..., pn, pozice, vstup, s
 4. `vstup` -- zdrojový řetězec,
 5. `skupiny` -- objekt s pojmenovanými skupinami.
 
-Pokud regulární výraz neobsahuje závorky, pak jsou argumenty pouze 3: `funkce(řetězec, pozice, vstup)`.
+Pokud regulární výraz neobsahuje závorky, pak jsou argumenty pouze tři: `funkce(řetězec, pozice, vstup)`.
 
 Například převeďme všechny shody na velká písmena:
 

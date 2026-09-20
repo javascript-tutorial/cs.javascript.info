@@ -1,6 +1,6 @@
 # Najděte celou značku
 
-Napište reguální výraz, který najde značku `<style...>`. Měl by najít celou značku: nemusí mít žádné atributy `<style>` nebo jich může mít několik `<style type="..." id="...">`.
+Napište regulární výraz, který najde značku `<style...>`. Měl by najít celou značku: nemusí mít žádné atributy `<style>` nebo jich může mít několik `<style type="..." id="...">`.
 
 ...Tento RV by však neměl najít `<styler>`!
 

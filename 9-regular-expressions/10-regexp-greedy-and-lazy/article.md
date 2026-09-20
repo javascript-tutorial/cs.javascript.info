@@ -88,7 +88,7 @@ Z tohoto obyčejného vysvětlení není jasné, proč tento RV selhal. Proto vy
 
 To není pravděpodobně to, co jsme očekávali, ale takhle to funguje.
 
-**V hltavém (greedy) režimu (standardně) se kvantifikovaný znak opakuje tolikrát, kolikrát je to možné.**
+**V hltavém (greedy) režimu (standardním) se kvantifikovaný znak opakuje tolikrát, kolikrát je to možné.**
 
 Motor RV přidává do shody s `pattern:.+` tolik znaků, kolik může, a pak shodu zkracuje po jednom znaku, dokud zbytek vzoru nesouhlasí.
 
@@ -217,7 +217,7 @@ let rv = /<a href=".*" class="doc">/g;
 alert( řetězec.match(rv) ); // <a href="link1" class="doc">... <a href="link2" class="doc">
 ```
 
-Nyní je výsledek nesprávný ze stejného důvodu jako v našem příkladu s „čarodějnicí“. Kvantifikátor `pattern:.*` vzal příliš mnoho znaků.
+Nyní je výsledek nesprávný ze stejného důvodu jako v našem příkladu s „čarodějnicí“ („witch“). Kvantifikátor `pattern:.*` vzal příliš mnoho znaků.
 
 Shoda vypadá takto:
 

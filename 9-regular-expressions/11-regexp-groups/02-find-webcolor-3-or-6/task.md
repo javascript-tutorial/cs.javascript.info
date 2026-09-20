@@ -11,4 +11,4 @@ let řetězec = "color: #3f3; background-color: #AA00ef; and: #abcd";
 alert( řetězec.match(rv) ); // #3f3 #AA00ef
 ```
 
-P.S. Hexadecimálních číslic by mělo být přesně 3 nebo 6. Hodnoty se 4 číslicemi, např. `#abcd`, by se neměly shodovat.
+P.S. Počet hexadecimálních číslic by měl být přesně 3 nebo 6. Hodnoty se 4 číslicemi, např. `#abcd`, by se neměly shodovat.

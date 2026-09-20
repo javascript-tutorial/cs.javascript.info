@@ -153,8 +153,8 @@ Motor regulárních výrazů provádí následující:
 Je mnoho způsobů, jak rozdělit posloupnost číslic `123456789` na čísla. Abychom byli přesní, je jich <code>2<sup>n</sup>-1</code>, kde `n` je délka posloupnosti.
 
 - Pro `123456789` máme `n=9`, což dává 511 kombinací.
-- Pro delší posloupnost s `n=20` existuje přibližně milión (1048575) kombinací.
-- Pro `n=30` je jich tisíckrát více (1073741823 kombinací).
+- Pro delší posloupnost s `n=20` existuje přibližně milión (1 048 575) kombinací.
+- Pro `n=30` je jich tisíckrát více (1 073 741 823 kombinací).
 
 Právě testování každé z nich je důvod, proč hledání trvá tak dlouho.
 
