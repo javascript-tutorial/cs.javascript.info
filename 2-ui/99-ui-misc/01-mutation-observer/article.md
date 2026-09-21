@@ -128,9 +128,9 @@ Takový úryvek v HTML vypadá následovně:
 ...
 ```
 
-Pro lepší čitelnost a současně pro zkrášlení budeme na našich stránkách používat JavaScriptovou knihovnu pro zvýraznění syntaxe, např. [Prism.js](https://prismjs.com/). Abychom pro uvedený úryvek kódu zajistili zvýraznění syntaxe touto knihovnou, voláme funkci `Prism.highlightElem(pre)`, která prozkoumá obsah takových elementů `pre` a přidá do nich speciální značky a styly pro barevné zvýraznění syntaxe podobně, jak vidíte v příkladech zde na této stránce.
+Pro lepší čitelnost a současně pro zkrášlení budeme na našich stránkách používat JavaScriptovou knihovnu pro zvýraznění syntaxe, např. [Prism.js](https://prismjs.com/). Abychom pro uvedený úryvek kódu zajistili zvýraznění syntaxe touto knihovnou, voláme funkci `Prism.highlightElement(pre)`, která prozkoumá obsah takových elementů `pre` a přidá do nich speciální značky a styly pro barevné zvýraznění syntaxe podobně, jak vidíte v příkladech zde na této stránce.
 
-Kdy přesně bychom měli spustit tuto zvýrazňovací metodu? Můžeme to udělat v události `DOMContentLoaded` nebo umístit skript na konec stránky. V té chvíli je náš DOM připraven a my můžeme najít elementy `pre[class*="language"]` a zavolat na nich `Prism.highlightElem`:
+Kdy přesně bychom měli spustit tuto zvýrazňovací metodu? Můžeme to udělat v události `DOMContentLoaded` nebo umístit skript na konec stránky. V té chvíli je náš DOM připraven a my můžeme najít elementy `pre[class*="language"]` a zavolat na nich `Prism.highlightElement`:
 
 ```js
 // zvýrazní všechny úryvky kódu na stránce
@@ -146,7 +146,7 @@ let článek = /* stáhneme nový obsah ze serveru */
 článekElem.innerHTML = článek;
 ```
 
-Nový HTML `článek` může obsahovat úryvky kódu. Musíme na ně volat `Prism.highlightElem`, jinak nebudou zvýrazněny.
+Nový HTML `článek` může obsahovat úryvky kódu. Musíme na ně volat `Prism.highlightElement`, jinak nebudou zvýrazněny.
 
 **Kdy a kde volat `Prism.highlightElement` pro dynamicky načtený článek?**
 
